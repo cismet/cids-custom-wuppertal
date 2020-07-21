@@ -16,22 +16,16 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import org.apache.log4j.Logger;
 
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.Converter;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.JXHyperlink;
-import org.jdesktop.swingx.JXTable;
 
 import org.openide.util.NbBundle;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -39,37 +33,36 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import de.cismet.cids.annotations.AggregationRenderer;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
@@ -113,7 +106,6 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
-        bindingGroup = new BindingGroup();
 
         panTitle = new JPanel();
         lblTitle = new JLabel();
@@ -123,9 +115,13 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jToggleButton1 = new JToggleButton();
         jToggleButton2 = new JToggleButton();
         jToggleButton3 = new JToggleButton();
+        jToggleButton4 = new JToggleButton();
+        jToggleButton5 = new JToggleButton();
         filler66 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         buttonGroup1 = new ButtonGroup();
         panMainCard = new JPanel();
+        panCardFlaeche = new JPanel();
+        alboFlaecheMainPanel1 = new AlboFlaecheMainPanel(isEditable());
         panCardMassnahmen = new JPanel();
         jTabbedPane2 = new JTabbedPane();
         jPanel37 = new JPanel();
@@ -272,6 +268,9 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jLabel19 = new JLabel();
         jComboBox6 = new JComboBox<>();
         jFormattedTextField2 = new JFormattedTextField();
+        jLabel45 = new JLabel();
+        jComboBox32 = new JComboBox<>();
+        jFormattedTextField16 = new JFormattedTextField();
         jLabel22 = new JLabel();
         jComboBox7 = new JComboBox<>();
         jFormattedTextField3 = new JFormattedTextField();
@@ -287,30 +286,12 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jLabel26 = new JLabel();
         jComboBox11 = new JComboBox<>();
         jFormattedTextField7 = new JFormattedTextField();
-        jLabel39 = new JLabel();
         jLabel27 = new JLabel();
         jComboBox12 = new JComboBox<>();
         jFormattedTextField8 = new JFormattedTextField();
-        jLabel28 = new JLabel();
-        jComboBox13 = new JComboBox<>();
-        jFormattedTextField9 = new JFormattedTextField();
-        jLabel29 = new JLabel();
-        jComboBox14 = new JComboBox<>();
-        jFormattedTextField10 = new JFormattedTextField();
-        jLabel40 = new JLabel();
         jLabel30 = new JLabel();
         jComboBox15 = new JComboBox<>();
         jFormattedTextField11 = new JFormattedTextField();
-        jLabel31 = new JLabel();
-        jComboBox16 = new JComboBox<>();
-        jFormattedTextField12 = new JFormattedTextField();
-        jLabel32 = new JLabel();
-        jComboBox17 = new JComboBox<>();
-        jFormattedTextField13 = new JFormattedTextField();
-        jLabel33 = new JLabel();
-        jComboBox18 = new JComboBox<>();
-        jFormattedTextField14 = new JFormattedTextField();
-        jLabel41 = new JLabel();
         jLabel34 = new JLabel();
         jComboBox19 = new JComboBox<>();
         jFormattedTextField15 = new JFormattedTextField();
@@ -318,207 +299,65 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         filler10 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         filler12 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         filler53 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        panCardFlaeche = new JPanel();
-        jPanel6 = new JPanel();
-        jLabel1 = new JLabel();
-        jTextField1 = new JTextField();
-        jLabel2 = new JLabel();
-        jTextField2 = new JTextField();
-        jLabel3 = new JLabel();
-        jTextField3 = new JTextField();
-        jLabel4 = new JLabel();
-        jTextField4 = new JTextField();
-        filler55 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        filler54 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler56 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        filler57 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler58 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        filler59 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler60 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        jLabel58 = new JLabel();
-        jXHyperlink1 = new JXHyperlink();
-        panLinks = new JPanel();
-        panAllgemeines = new JPanel();
-        jLabel12 = new JLabel();
-        jFormattedTextField1 = new JFormattedTextField();
-        jLabel35 = new JLabel();
-        jFormattedTextField16 = new JFormattedTextField();
-        jLabel10 = new JLabel();
-        jCheckBox6 = new JCheckBox();
-        jLabel38 = new JLabel();
-        jCheckBox7 = new JCheckBox();
-        filler15 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler16 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        panEigenschaften = new JPanel();
-        jLabel45 = new JLabel();
-        jCheckBox8 = new JCheckBox();
-        jLabel46 = new JLabel();
-        jCheckBox9 = new JCheckBox();
-        jLabel47 = new JLabel();
-        jCheckBox10 = new JCheckBox();
-        jLabel48 = new JLabel();
-        jCheckBox11 = new JCheckBox();
-        jLabel49 = new JLabel();
-        jCheckBox12 = new JCheckBox();
-        filler17 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler18 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        panBeschreibung = new JPanel();
-        jLabel13 = new JLabel();
-        jComboBox1 = new DefaultBindableScrollableComboBox();
-        jLabel14 = new JLabel();
-        jComboBox2 = new DefaultBindableScrollableComboBox();
-        jLabel15 = new JLabel();
-        jComboBox3 = new DefaultBindableScrollableComboBox();
-        filler9 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler8 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        panRechts = new JPanel();
-        panOrt = new JPanel();
-        jPanel8 = new JPanel();
-        jLabel16 = new JLabel();
-        jComboBox4 = new JComboBox<>();
-        jLabel17 = new JLabel();
-        jTextField5 = new JTextField();
-        filler43 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler44 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler45 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler46 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        mappingComponent1 = new MappingComponent();
-        jPanel9 = new JPanel();
-        jLabel37 = new JLabel();
-        jTextField7 = new JTextField();
-        jLabel18 = new JLabel();
-        jComboBox5 = new JComboBox<>();
-        filler41 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler42 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        panBPlaene = new JPanel();
-        jScrollPane6 = new JScrollPane();
-        jList2 = new JList<>();
-        filler62 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        panMitte = new JPanel();
-        panNutzung = new JPanel();
+        panCardBemerkung = new JPanel();
         jScrollPane8 = new JScrollPane();
-        jXTable3 = new JXTable();
-        panNutzung1 = new JPanel();
-        jScrollPane9 = new JScrollPane();
-        jXTable4 = new JXTable();
-        panSpezifisch = new JPanel();
-        panStandort = new JPanel();
-        jPanel13 = new JPanel();
-        jScrollPane3 = new JScrollPane();
-        jList1 = new JList<>();
-        jPanel10 = new JPanel();
-        jPanel14 = new JPanel();
-        jLabel55 = new JLabel();
-        jTextField8 = new JTextField();
-        jLabel5 = new JLabel();
-        filler20 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        jScrollPane4 = new JScrollPane();
-        jTextArea1 = new JTextArea();
-        jLabel57 = new JLabel();
-        jTextField10 = new JTextField();
-        filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler19 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        jPanel16 = new JPanel();
-        jLabel50 = new JLabel();
-        jPanel48 = new JPanel();
-        jFormattedTextField17 = new JFormattedTextField();
-        filler63 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        jLabel51 = new JLabel();
-        jFormattedTextField18 = new JFormattedTextField();
-        jLabel6 = new JLabel();
-        filler22 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        jScrollPane5 = new JScrollPane();
-        jTextArea2 = new JTextArea();
-        filler23 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler24 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        jPanel15 = new JPanel();
-        jScrollPane2 = new JScrollPane();
-        jXTable2 = new JXTable();
-        filler61 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler21 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler26 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        panSchadensfall = new JPanel();
-        jPanel18 = new JPanel();
-        jLabel52 = new JLabel();
-        jComboBox23 = new JComboBox<>();
-        filler25 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler28 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler29 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        panAltablagerung = new JPanel();
-        jPanel11 = new JPanel();
-        jPanel12 = new JPanel();
-        jLabel42 = new JLabel();
-        jComboBox20 = new JComboBox<>();
-        jLabel43 = new JLabel();
-        jComboBox21 = new JComboBox<>();
-        jLabel44 = new JLabel();
-        jComboBox22 = new JComboBox<>();
-        filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler7 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        jPanel17 = new JPanel();
-        jScrollPane1 = new JScrollPane();
-        jXTable1 = new JXTable();
-        filler27 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        panImmisions = new JPanel();
-        jPanel19 = new JPanel();
-        jLabel53 = new JLabel();
-        jComboBox24 = new JComboBox<>();
-        filler30 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler31 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler32 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        panOhneVerdacht = new JPanel();
-        jPanel20 = new JPanel();
-        jLabel54 = new JLabel();
-        panBewirtschaftungsschaden = new JPanel();
-        jPanel21 = new JPanel();
-        jLabel56 = new JLabel();
-        jComboBox25 = new JComboBox<>();
-        filler33 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler34 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler35 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        panMaterialaufbringung = new JPanel();
-        jPanel22 = new JPanel();
-        jPanel23 = new JPanel();
-        jLabel59 = new JLabel();
-        jComboBox26 = new JComboBox<>();
-        jLabel60 = new JLabel();
-        jComboBox27 = new JComboBox<>();
-        jLabel61 = new JLabel();
-        jComboBox28 = new JComboBox<>();
-        filler36 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler37 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        jPanel24 = new JPanel();
-        jLabel62 = new JLabel();
-        jCheckBox1 = new JCheckBox();
-        jLabel63 = new JLabel();
-        jFormattedTextField19 = new JFormattedTextField();
-        jCheckBox3 = new JCheckBox();
-        jLabel65 = new JLabel();
-        filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
-        jCheckBox2 = new JCheckBox();
-        jLabel64 = new JLabel();
-        jFormattedTextField20 = new JFormattedTextField();
-        filler39 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler40 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        filler38 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767));
+        jPanel1 = new JPanel();
+        jPanel2 = new JPanel();
+        filler18 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        jTextArea4 = new JTextArea();
+        jPanel3 = new JPanel();
+        jButton2 = new JButton();
         filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        jButton1 = new JButton();
+        jPanel58 = new JPanel();
+        filler54 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        jTextArea5 = new JTextArea();
+        jPanel59 = new JPanel();
+        jButton9 = new JButton();
+        filler55 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        jButton10 = new JButton();
+        jPanel60 = new JPanel();
+        filler57 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        jTextArea6 = new JTextArea();
+        jPanel61 = new JPanel();
+        jButton11 = new JButton();
+        filler59 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        jButton12 = new JButton();
+        filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        filler15 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        jPanel4 = new JPanel();
+        jScrollPane7 = new JScrollPane();
+        jTextArea3 = new JTextArea();
+        jButton3 = new JButton();
+        panCardAktionen = new JPanel();
+        filler74 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        filler73 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        jButton7 = new JButton();
+        jButton8 = new JButton();
+        jButton17 = new JButton();
+        jButton18 = new JButton();
 
         final FormListener formListener = new FormListener();
 
+        panTitle.setName("panTitle"); // NOI18N
         panTitle.setOpaque(false);
         panTitle.setLayout(new GridBagLayout());
 
         lblTitle.setFont(new Font("Tahoma", 1, 14)); // NOI18N
         lblTitle.setForeground(new Color(255, 255, 255));
         lblTitle.setText("Altlastenkataster - Fläche");
+        lblTitle.setName("lblTitle");                // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
+        panFooter.setName("panFooter"); // NOI18N
         panFooter.setOpaque(false);
         panFooter.setLayout(new GridBagLayout());
+
+        filler65.setName("filler65"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -526,55 +365,93 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         panFooter.add(filler65, gridBagConstraints);
 
         panButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
+        panButtons.setName("panButtons"); // NOI18N
         panButtons.setOpaque(false);
         panButtons.setLayout(new GridLayout(1, 0, 10, 0));
 
         buttonGroup1.add(jToggleButton1);
-        jToggleButton1.setText("Flächeninformationen");
+        jToggleButton1.setText("Fläche");
+        jToggleButton1.setName("jToggleButton1"); // NOI18N
         jToggleButton1.addActionListener(formListener);
         panButtons.add(jToggleButton1);
 
         buttonGroup1.add(jToggleButton2);
         jToggleButton2.setText("Arbeitsstand");
+        jToggleButton2.setName("jToggleButton2"); // NOI18N
         jToggleButton2.addActionListener(formListener);
         panButtons.add(jToggleButton2);
 
         buttonGroup1.add(jToggleButton3);
         jToggleButton3.setText("Maßnahmen");
+        jToggleButton3.setName("jToggleButton3"); // NOI18N
         jToggleButton3.addActionListener(formListener);
         panButtons.add(jToggleButton3);
+
+        buttonGroup1.add(jToggleButton4);
+        jToggleButton4.setText("Bemerkung");
+        jToggleButton4.setName("jToggleButton4"); // NOI18N
+        jToggleButton4.addActionListener(formListener);
+        panButtons.add(jToggleButton4);
+
+        buttonGroup1.add(jToggleButton5);
+        jToggleButton5.setText("Aktionen");
+        jToggleButton5.setName("jToggleButton5"); // NOI18N
+        jToggleButton5.addActionListener(formListener);
+        panButtons.add(jToggleButton5);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panFooter.add(panButtons, gridBagConstraints);
+
+        filler66.setName("filler66"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         panFooter.add(filler66, gridBagConstraints);
 
+        setName("Form"); // NOI18N
         setOpaque(false);
         setLayout(new GridBagLayout());
 
+        panMainCard.setName("panMainCard"); // NOI18N
         panMainCard.setOpaque(false);
         panMainCard.setLayout(new CardLayout());
 
+        panCardFlaeche.setName("panCardFlaeche"); // NOI18N
+        panCardFlaeche.setOpaque(false);
+        panCardFlaeche.setLayout(new BorderLayout());
+
+        alboFlaecheMainPanel1.setName("alboFlaecheMainPanel1"); // NOI18N
+        alboFlaecheMainPanel1.setOpaque(false);
+        alboFlaecheMainPanel1.setLayout(new GridBagLayout());
+        panCardFlaeche.add(alboFlaecheMainPanel1, BorderLayout.CENTER);
+
+        panMainCard.add(panCardFlaeche, "flaeche");
+
+        panCardMassnahmen.setName("panCardMassnahmen"); // NOI18N
         panCardMassnahmen.setOpaque(false);
         panCardMassnahmen.setLayout(new GridBagLayout());
 
+        jTabbedPane2.setName("jTabbedPane2"); // NOI18N
+
+        jPanel37.setName("jPanel37"); // NOI18N
         jPanel37.setOpaque(false);
         jPanel37.setLayout(new GridBagLayout());
 
+        jPanel38.setName("jPanel38"); // NOI18N
         jPanel38.setOpaque(false);
         jPanel38.setLayout(new GridBagLayout());
 
         jPanel26.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel7.border.title"))); // NOI18N
+        jPanel26.setName("jPanel26");                                                                        // NOI18N
         jPanel26.setOpaque(false);
         jPanel26.setLayout(new GridBagLayout());
 
         jLabel67.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel67.text")); // NOI18N
+        jLabel67.setName("jLabel67");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -584,6 +461,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox38.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox38.text")); // NOI18N
         jCheckBox38.setContentAreaFilled(false);
+        jCheckBox38.setName("jCheckBox38");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -593,6 +471,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox39.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox39.text")); // NOI18N
         jCheckBox39.setContentAreaFilled(false);
+        jCheckBox39.setName("jCheckBox39");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -602,6 +481,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox40.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox40.text")); // NOI18N
         jCheckBox40.setContentAreaFilled(false);
+        jCheckBox40.setName("jCheckBox40");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -611,6 +491,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox41.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox41.text")); // NOI18N
         jCheckBox41.setContentAreaFilled(false);
+        jCheckBox41.setName("jCheckBox41");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -620,6 +501,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox42.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox42.text")); // NOI18N
         jCheckBox42.setContentAreaFilled(false);
+        jCheckBox42.setName("jCheckBox42");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -629,6 +511,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox43.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox43.text")); // NOI18N
         jCheckBox43.setContentAreaFilled(false);
+        jCheckBox43.setName("jCheckBox43");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -638,6 +521,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox46.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox46.text")); // NOI18N
         jCheckBox46.setContentAreaFilled(false);
+        jCheckBox46.setName("jCheckBox46");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -647,6 +531,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox44.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox44.text")); // NOI18N
         jCheckBox44.setContentAreaFilled(false);
+        jCheckBox44.setName("jCheckBox44");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -656,6 +541,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox45.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox45.text")); // NOI18N
         jCheckBox45.setContentAreaFilled(false);
+        jCheckBox45.setName("jCheckBox45");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -665,6 +551,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox47.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox47.text")); // NOI18N
         jCheckBox47.setContentAreaFilled(false);
+        jCheckBox47.setName("jCheckBox47");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -674,6 +561,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox48.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox48.text")); // NOI18N
         jCheckBox48.setContentAreaFilled(false);
+        jCheckBox48.setName("jCheckBox48");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -683,12 +571,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox49.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox49.text")); // NOI18N
         jCheckBox49.setContentAreaFilled(false);
+        jCheckBox49.setName("jCheckBox49");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel26.add(jCheckBox49, gridBagConstraints);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -697,6 +588,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jPanel26.add(jSeparator1, gridBagConstraints);
 
         jLabel68.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel68.text")); // NOI18N
+        jLabel68.setName("jLabel68");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -706,6 +598,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox50.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox50.text")); // NOI18N
         jCheckBox50.setContentAreaFilled(false);
+        jCheckBox50.setName("jCheckBox50");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -715,6 +608,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox51.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox51.text")); // NOI18N
         jCheckBox51.setContentAreaFilled(false);
+        jCheckBox51.setName("jCheckBox51");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -724,6 +618,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox52.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox52.text")); // NOI18N
         jCheckBox52.setContentAreaFilled(false);
+        jCheckBox52.setName("jCheckBox52");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -733,12 +628,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox53.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox53.text")); // NOI18N
         jCheckBox53.setContentAreaFilled(false);
+        jCheckBox53.setName("jCheckBox53");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel26.add(jCheckBox53, gridBagConstraints);
+
+        filler48.setName("filler48"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -760,16 +658,19 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel37.add(jPanel38, gridBagConstraints);
 
+        jPanel39.setName("jPanel39"); // NOI18N
         jPanel39.setOpaque(false);
         jPanel39.setLayout(new GridBagLayout());
 
         jPanel27.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel8.border.title"))); // NOI18N
+        jPanel27.setName("jPanel27");                                                                        // NOI18N
         jPanel27.setOpaque(false);
         jPanel27.setLayout(new GridBagLayout());
 
         jCheckBox54.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox54.text")); // NOI18N
         jCheckBox54.setContentAreaFilled(false);
+        jCheckBox54.setName("jCheckBox54");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -779,6 +680,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox55.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox55.text")); // NOI18N
         jCheckBox55.setContentAreaFilled(false);
+        jCheckBox55.setName("jCheckBox55");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -788,6 +690,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox56.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox56.text")); // NOI18N
         jCheckBox56.setContentAreaFilled(false);
+        jCheckBox56.setName("jCheckBox56");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -797,6 +700,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox57.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox57.text")); // NOI18N
         jCheckBox57.setContentAreaFilled(false);
+        jCheckBox57.setName("jCheckBox57");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -806,6 +710,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox58.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox58.text")); // NOI18N
         jCheckBox58.setContentAreaFilled(false);
+        jCheckBox58.setName("jCheckBox58");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -815,6 +720,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox59.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox59.text")); // NOI18N
         jCheckBox59.setContentAreaFilled(false);
+        jCheckBox59.setName("jCheckBox59");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -824,6 +730,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox60.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox60.text")); // NOI18N
         jCheckBox60.setContentAreaFilled(false);
+        jCheckBox60.setName("jCheckBox60");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -833,6 +740,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox61.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox61.text")); // NOI18N
         jCheckBox61.setContentAreaFilled(false);
+        jCheckBox61.setName("jCheckBox61");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -842,6 +750,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox62.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox62.text")); // NOI18N
         jCheckBox62.setContentAreaFilled(false);
+        jCheckBox62.setName("jCheckBox62");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -851,6 +760,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox63.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox63.text")); // NOI18N
         jCheckBox63.setContentAreaFilled(false);
+        jCheckBox63.setName("jCheckBox63");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -860,6 +770,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox64.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox64.text")); // NOI18N
         jCheckBox64.setContentAreaFilled(false);
+        jCheckBox64.setName("jCheckBox64");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -869,6 +780,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox65.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox65.text")); // NOI18N
         jCheckBox65.setContentAreaFilled(false);
+        jCheckBox65.setName("jCheckBox65");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -878,6 +790,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox66.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox66.text")); // NOI18N
         jCheckBox66.setContentAreaFilled(false);
+        jCheckBox66.setName("jCheckBox66");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -887,6 +800,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox67.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox67.text")); // NOI18N
         jCheckBox67.setContentAreaFilled(false);
+        jCheckBox67.setName("jCheckBox67");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -904,17 +818,21 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jPanel28.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel23.border.title"))); // NOI18N
+        jPanel28.setName("jPanel28");                                                                         // NOI18N
         jPanel28.setOpaque(false);
         jPanel28.setLayout(new GridBagLayout());
 
         jCheckBox68.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox68.text")); // NOI18N
         jCheckBox68.setContentAreaFilled(false);
+        jCheckBox68.setName("jCheckBox68");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel28.add(jCheckBox68, gridBagConstraints);
+
+        filler47.setName("filler47"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -939,19 +857,23 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jTabbedPane2.addTab("Maßnahme", jPanel37);
 
+        jPanel29.setName("jPanel29"); // NOI18N
         jPanel29.setOpaque(false);
         jPanel29.setLayout(new GridBagLayout());
 
+        jPanel31.setName("jPanel31"); // NOI18N
         jPanel31.setOpaque(false);
         jPanel31.setLayout(new GridBagLayout());
 
         jPanel30.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel28.border.title"))); // NOI18N
+        jPanel30.setName("jPanel30");                                                                         // NOI18N
         jPanel30.setOpaque(false);
         jPanel30.setLayout(new GridBagLayout());
 
         jCheckBox14.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox14.text")); // NOI18N
         jCheckBox14.setContentAreaFilled(false);
+        jCheckBox14.setName("jCheckBox14");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -961,6 +883,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox15.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox15.text")); // NOI18N
         jCheckBox15.setContentAreaFilled(false);
+        jCheckBox15.setName("jCheckBox15");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -970,6 +893,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox16.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox16.text")); // NOI18N
         jCheckBox16.setContentAreaFilled(false);
+        jCheckBox16.setName("jCheckBox16");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -979,6 +903,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox17.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox17.text")); // NOI18N
         jCheckBox17.setContentAreaFilled(false);
+        jCheckBox17.setName("jCheckBox17");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -988,6 +913,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox18.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox18.text")); // NOI18N
         jCheckBox18.setContentAreaFilled(false);
+        jCheckBox18.setName("jCheckBox18");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1004,11 +930,13 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jPanel32.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel29.border.title"))); // NOI18N
+        jPanel32.setName("jPanel32");                                                                         // NOI18N
         jPanel32.setOpaque(false);
         jPanel32.setLayout(new GridBagLayout());
 
         jCheckBox19.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox19.text")); // NOI18N
         jCheckBox19.setContentAreaFilled(false);
+        jCheckBox19.setName("jCheckBox19");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1018,6 +946,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox20.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox20.text")); // NOI18N
         jCheckBox20.setContentAreaFilled(false);
+        jCheckBox20.setName("jCheckBox20");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1027,12 +956,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox21.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox21.text")); // NOI18N
         jCheckBox21.setContentAreaFilled(false);
+        jCheckBox21.setName("jCheckBox21");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel32.add(jCheckBox21, gridBagConstraints);
+
+        filler13.setName("filler13"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1054,16 +986,19 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel29.add(jPanel31, gridBagConstraints);
 
+        jPanel33.setName("jPanel33"); // NOI18N
         jPanel33.setOpaque(false);
         jPanel33.setLayout(new GridBagLayout());
 
         jPanel34.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel30.border.title"))); // NOI18N
+        jPanel34.setName("jPanel34");                                                                         // NOI18N
         jPanel34.setOpaque(false);
         jPanel34.setLayout(new GridBagLayout());
 
         jCheckBox22.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox22.text")); // NOI18N
         jCheckBox22.setContentAreaFilled(false);
+        jCheckBox22.setName("jCheckBox22");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1073,6 +1008,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox23.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox23.text")); // NOI18N
         jCheckBox23.setContentAreaFilled(false);
+        jCheckBox23.setName("jCheckBox23");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1082,6 +1018,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox24.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox24.text")); // NOI18N
         jCheckBox24.setContentAreaFilled(false);
+        jCheckBox24.setName("jCheckBox24");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1098,11 +1035,13 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jPanel35.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel33.border.title"))); // NOI18N
+        jPanel35.setName("jPanel35");                                                                         // NOI18N
         jPanel35.setOpaque(false);
         jPanel35.setLayout(new GridBagLayout());
 
         jCheckBox25.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox25.text")); // NOI18N
         jCheckBox25.setContentAreaFilled(false);
+        jCheckBox25.setName("jCheckBox25");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1112,6 +1051,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox26.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox26.text")); // NOI18N
         jCheckBox26.setContentAreaFilled(false);
+        jCheckBox26.setName("jCheckBox26");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1128,11 +1068,13 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jPanel36.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel34.border.title"))); // NOI18N
+        jPanel36.setName("jPanel36");                                                                         // NOI18N
         jPanel36.setOpaque(false);
         jPanel36.setLayout(new GridBagLayout());
 
         jCheckBox27.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox27.text")); // NOI18N
         jCheckBox27.setContentAreaFilled(false);
+        jCheckBox27.setName("jCheckBox27");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1142,12 +1084,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox28.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox28.text")); // NOI18N
         jCheckBox28.setContentAreaFilled(false);
+        jCheckBox28.setName("jCheckBox28");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel36.add(jCheckBox28, gridBagConstraints);
+
+        filler14.setName("filler14"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1169,15 +1114,18 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel29.add(jPanel33, gridBagConstraints);
 
+        jPanel40.setName("jPanel40"); // NOI18N
         jPanel40.setOpaque(false);
         jPanel40.setLayout(new GridBagLayout());
 
         jPanel41.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel36.border.title"))); // NOI18N
+        jPanel41.setName("jPanel41");                                                                         // NOI18N
         jPanel41.setOpaque(false);
         jPanel41.setLayout(new GridBagLayout());
 
         jLabel66.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel66.text")); // NOI18N
+        jLabel66.setName("jLabel66");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1187,6 +1135,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox29.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox29.text")); // NOI18N
         jCheckBox29.setContentAreaFilled(false);
+        jCheckBox29.setName("jCheckBox29");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1196,6 +1145,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox30.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox30.text")); // NOI18N
         jCheckBox30.setContentAreaFilled(false);
+        jCheckBox30.setName("jCheckBox30");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1205,6 +1155,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox36.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox36.text")); // NOI18N
         jCheckBox36.setContentAreaFilled(false);
+        jCheckBox36.setName("jCheckBox36");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1214,6 +1165,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox31.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox31.text")); // NOI18N
         jCheckBox31.setContentAreaFilled(false);
+        jCheckBox31.setName("jCheckBox31");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1223,6 +1175,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox32.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox32.text")); // NOI18N
         jCheckBox32.setContentAreaFilled(false);
+        jCheckBox32.setName("jCheckBox32");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1232,6 +1185,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox33.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox33.text")); // NOI18N
         jCheckBox33.setContentAreaFilled(false);
+        jCheckBox33.setName("jCheckBox33");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1241,6 +1195,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox34.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox34.text")); // NOI18N
         jCheckBox34.setContentAreaFilled(false);
+        jCheckBox34.setName("jCheckBox34");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1250,6 +1205,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox35.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox35.text")); // NOI18N
         jCheckBox35.setContentAreaFilled(false);
+        jCheckBox35.setName("jCheckBox35");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1259,6 +1215,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox37.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox37.text")); // NOI18N
         jCheckBox37.setContentAreaFilled(false);
+        jCheckBox37.setName("jCheckBox37");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1275,6 +1232,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox4.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox4.text")); // NOI18N
         jCheckBox4.setContentAreaFilled(false);
+        jCheckBox4.setName("jCheckBox4");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1284,6 +1242,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox5.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox5.text")); // NOI18N
         jCheckBox5.setContentAreaFilled(false);
+        jCheckBox5.setName("jCheckBox5");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1293,12 +1252,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox13.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox13.text")); // NOI18N
         jCheckBox13.setContentAreaFilled(false);
+        jCheckBox13.setName("jCheckBox13");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanel40.add(jCheckBox13, gridBagConstraints);
+
+        filler49.setName("filler49"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1312,20 +1274,24 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel29.add(jPanel40, gridBagConstraints);
 
-        jTabbedPane2.addTab("Sicherungsmaßnahmen", jPanel29);
+        jTabbedPane2.addTab("Dekontaminationsmaßnahmen", jPanel29);
 
+        jPanel42.setName("jPanel42"); // NOI18N
         jPanel42.setOpaque(false);
         jPanel42.setLayout(new GridBagLayout());
 
+        jPanel43.setName("jPanel43"); // NOI18N
         jPanel43.setOpaque(false);
         jPanel43.setLayout(new GridBagLayout());
 
         jPanel44.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel24.border.title"))); // NOI18N
+        jPanel44.setName("jPanel44");                                                                         // NOI18N
         jPanel44.setOpaque(false);
         jPanel44.setLayout(new GridBagLayout());
 
         jLabel69.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel69.text")); // NOI18N
+        jLabel69.setName("jLabel69");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1335,6 +1301,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox80.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox80.text")); // NOI18N
         jCheckBox80.setContentAreaFilled(false);
+        jCheckBox80.setName("jCheckBox80");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1344,6 +1311,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox107.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox107.text")); // NOI18N
         jCheckBox107.setContentAreaFilled(false);
+        jCheckBox107.setName("jCheckBox107");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1353,6 +1321,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox108.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox108.text")); // NOI18N
         jCheckBox108.setContentAreaFilled(false);
+        jCheckBox108.setName("jCheckBox108");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1362,12 +1331,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox109.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox109.text")); // NOI18N
         jCheckBox109.setContentAreaFilled(false);
+        jCheckBox109.setName("jCheckBox109");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel44.add(jCheckBox109, gridBagConstraints);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1376,6 +1348,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jPanel44.add(jSeparator2, gridBagConstraints);
 
         jLabel70.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel70.text")); // NOI18N
+        jLabel70.setName("jLabel70");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1385,6 +1358,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox110.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox110.text")); // NOI18N
         jCheckBox110.setContentAreaFilled(false);
+        jCheckBox110.setName("jCheckBox110");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1394,12 +1368,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox111.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox111.text")); // NOI18N
         jCheckBox111.setContentAreaFilled(false);
+        jCheckBox111.setName("jCheckBox111");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel44.add(jCheckBox111, gridBagConstraints);
+
+        jSeparator4.setName("jSeparator4"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1408,6 +1385,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jPanel44.add(jSeparator4, gridBagConstraints);
 
         jLabel73.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel73.text")); // NOI18N
+        jLabel73.setName("jLabel73");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1417,6 +1395,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox112.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox112.text")); // NOI18N
         jCheckBox112.setContentAreaFilled(false);
+        jCheckBox112.setName("jCheckBox112");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1426,12 +1405,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox113.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox113.text")); // NOI18N
         jCheckBox113.setContentAreaFilled(false);
+        jCheckBox113.setName("jCheckBox113");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel44.add(jCheckBox113, gridBagConstraints);
+
+        filler50.setName("filler50"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1453,16 +1435,19 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel42.add(jPanel43, gridBagConstraints);
 
+        jPanel45.setName("jPanel45"); // NOI18N
         jPanel45.setOpaque(false);
         jPanel45.setLayout(new GridBagLayout());
 
         jPanel46.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel40.border.title"))); // NOI18N
+        jPanel46.setName("jPanel46");                                                                         // NOI18N
         jPanel46.setOpaque(false);
         jPanel46.setLayout(new GridBagLayout());
 
         jCheckBox85.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox85.text")); // NOI18N
         jCheckBox85.setContentAreaFilled(false);
+        jCheckBox85.setName("jCheckBox85");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1472,6 +1457,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox86.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox86.text")); // NOI18N
         jCheckBox86.setContentAreaFilled(false);
+        jCheckBox86.setName("jCheckBox86");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1481,6 +1467,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox87.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox87.text")); // NOI18N
         jCheckBox87.setContentAreaFilled(false);
+        jCheckBox87.setName("jCheckBox87");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1490,6 +1477,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox114.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox114.text")); // NOI18N
         jCheckBox114.setContentAreaFilled(false);
+        jCheckBox114.setName("jCheckBox114");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1506,11 +1494,13 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jPanel49.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel41.border.title"))); // NOI18N
+        jPanel49.setName("jPanel49");                                                                         // NOI18N
         jPanel49.setOpaque(false);
         jPanel49.setLayout(new GridBagLayout());
 
         jCheckBox88.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox88.text")); // NOI18N
         jCheckBox88.setContentAreaFilled(false);
+        jCheckBox88.setName("jCheckBox88");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1520,6 +1510,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox89.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox89.text")); // NOI18N
         jCheckBox89.setContentAreaFilled(false);
+        jCheckBox89.setName("jCheckBox89");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1529,12 +1520,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox90.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox90.text")); // NOI18N
         jCheckBox90.setContentAreaFilled(false);
+        jCheckBox90.setName("jCheckBox90");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel49.add(jCheckBox90, gridBagConstraints);
+
+        filler51.setName("filler51"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1556,15 +1550,18 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel42.add(jPanel45, gridBagConstraints);
 
+        jPanel50.setName("jPanel50"); // NOI18N
         jPanel50.setOpaque(false);
         jPanel50.setLayout(new GridBagLayout());
 
         jPanel51.setBorder(BorderFactory.createTitledBorder(
                 NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel42.border.title"))); // NOI18N
+        jPanel51.setName("jPanel51");                                                                         // NOI18N
         jPanel51.setOpaque(false);
         jPanel51.setLayout(new GridBagLayout());
 
         jLabel71.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel71.text")); // NOI18N
+        jLabel71.setName("jLabel71");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1574,6 +1571,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox91.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox91.text")); // NOI18N
         jCheckBox91.setContentAreaFilled(false);
+        jCheckBox91.setName("jCheckBox91");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1583,6 +1581,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox92.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox92.text")); // NOI18N
         jCheckBox92.setContentAreaFilled(false);
+        jCheckBox92.setName("jCheckBox92");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1592,6 +1591,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox93.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox93.text")); // NOI18N
         jCheckBox93.setContentAreaFilled(false);
+        jCheckBox93.setName("jCheckBox93");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1601,6 +1601,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox94.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox94.text")); // NOI18N
         jCheckBox94.setContentAreaFilled(false);
+        jCheckBox94.setName("jCheckBox94");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1610,6 +1611,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox95.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox95.text")); // NOI18N
         jCheckBox95.setContentAreaFilled(false);
+        jCheckBox95.setName("jCheckBox95");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1619,6 +1621,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox96.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox96.text")); // NOI18N
         jCheckBox96.setContentAreaFilled(false);
+        jCheckBox96.setName("jCheckBox96");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1628,6 +1631,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox97.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox97.text")); // NOI18N
         jCheckBox97.setContentAreaFilled(false);
+        jCheckBox97.setName("jCheckBox97");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1637,6 +1641,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox98.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox98.text")); // NOI18N
         jCheckBox98.setContentAreaFilled(false);
+        jCheckBox98.setName("jCheckBox98");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1646,12 +1651,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox99.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox99.text")); // NOI18N
         jCheckBox99.setContentAreaFilled(false);
+        jCheckBox99.setName("jCheckBox99");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel51.add(jCheckBox99, gridBagConstraints);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1660,6 +1668,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jPanel51.add(jSeparator3, gridBagConstraints);
 
         jLabel72.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel72.text")); // NOI18N
+        jLabel72.setName("jLabel72");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1669,6 +1678,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox103.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox103.text")); // NOI18N
         jCheckBox103.setContentAreaFilled(false);
+        jCheckBox103.setName("jCheckBox103");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1678,12 +1688,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox104.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox104.text")); // NOI18N
         jCheckBox104.setContentAreaFilled(false);
+        jCheckBox104.setName("jCheckBox104");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel51.add(jCheckBox104, gridBagConstraints);
+
+        filler52.setName("filler52"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1705,16 +1718,19 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         jPanel42.add(jPanel50, gridBagConstraints);
 
-        jTabbedPane2.addTab("Dekontaminationsmaßnahmen", jPanel42);
+        jTabbedPane2.addTab("Sicherungsmaßnahmen", jPanel42);
 
+        jPanel52.setName("jPanel52"); // NOI18N
         jPanel52.setOpaque(false);
         jPanel52.setLayout(new GridBagLayout());
 
+        jPanel53.setName("jPanel53"); // NOI18N
         jPanel53.setOpaque(false);
         jPanel53.setLayout(new GridBagLayout());
 
         jCheckBox100.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox100.text")); // NOI18N
         jCheckBox100.setContentAreaFilled(false);
+        jCheckBox100.setName("jCheckBox100");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1724,6 +1740,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox101.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox101.text")); // NOI18N
         jCheckBox101.setContentAreaFilled(false);
+        jCheckBox101.setName("jCheckBox101");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1733,6 +1750,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox102.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox102.text")); // NOI18N
         jCheckBox102.setContentAreaFilled(false);
+        jCheckBox102.setName("jCheckBox102");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1742,6 +1760,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox105.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox105.text")); // NOI18N
         jCheckBox105.setContentAreaFilled(false);
+        jCheckBox105.setName("jCheckBox105");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1751,12 +1770,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jCheckBox106.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox106.text")); // NOI18N
         jCheckBox106.setContentAreaFilled(false);
+        jCheckBox106.setName("jCheckBox106");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         jPanel53.add(jCheckBox106, gridBagConstraints);
+
+        filler64.setName("filler64"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1781,14 +1803,24 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panCardMassnahmen.add(jTabbedPane2, gridBagConstraints);
+        jTabbedPane2.setUI(new BasicTabbedPaneUI() {
+
+                @Override
+                protected void paintContentBorder(final Graphics g, final int tabPlacement, final int selectedIndex) {
+                }
+            });
 
         panMainCard.add(panCardMassnahmen, "massnahmen");
 
+        panCardArbeitsstand.setName("panCardArbeitsstand"); // NOI18N
         panCardArbeitsstand.setOpaque(false);
         panCardArbeitsstand.setLayout(new GridBagLayout());
 
+        panArbeitsstand.setName("panArbeitsstand"); // NOI18N
         panArbeitsstand.setOpaque(false);
         panArbeitsstand.setLayout(new GridBagLayout());
+
+        filler3.setName("filler3"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1797,6 +1829,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jLabel21.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel21.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel21.text")); // NOI18N
+        jLabel21.setName("jLabel21");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1805,18 +1838,23 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         jLabel20.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel20.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel20.text")); // NOI18N
+        jLabel20.setName("jLabel20");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel20, gridBagConstraints);
 
-        jLabel19.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel19.text")); // NOI18N
+        jLabel19.setText("Erfassungsbewertung:");
+        jLabel19.setName("jLabel19"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel19, gridBagConstraints);
+
+        jComboBox6.setModel(new DefaultComboBoxModel<>(new String[] { " ", "laufend", "abgeschlossen" }));
+        jComboBox6.setName("jComboBox6"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1827,18 +1865,50 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField2.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField2.text")); // NOI18N
+        jFormattedTextField2.setName("jFormattedTextField2");       // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jFormattedTextField2, gridBagConstraints);
 
+        jLabel45.setText("Historische Nutzungsrecherche:");
+        jLabel45.setName("jLabel45"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panArbeitsstand.add(jLabel45, gridBagConstraints);
+
+        jComboBox32.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox32.setName("jComboBox32"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panArbeitsstand.add(jComboBox32, gridBagConstraints);
+
+        jFormattedTextField16.setText(NbBundle.getMessage(
+                AlboFlaecheEditor.class,
+                "AlboFlaecheInfoPanel.jFormattedTextField2.text")); // NOI18N
+        jFormattedTextField16.setName("jFormattedTextField16");     // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panArbeitsstand.add(jFormattedTextField16, gridBagConstraints);
+
         jLabel22.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel22.text")); // NOI18N
+        jLabel22.setName("jLabel22");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel22, gridBagConstraints);
+
+        jComboBox7.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox7.setName("jComboBox7"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1849,6 +1919,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField3.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField3.text")); // NOI18N
+        jFormattedTextField3.setName("jFormattedTextField3");       // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1856,11 +1927,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         panArbeitsstand.add(jFormattedTextField3, gridBagConstraints);
 
         jLabel23.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel23.text")); // NOI18N
+        jLabel23.setName("jLabel23");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel23, gridBagConstraints);
+
+        jComboBox8.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox8.setName("jComboBox8"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1871,6 +1946,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField4.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField4.text")); // NOI18N
+        jFormattedTextField4.setName("jFormattedTextField4");       // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1878,11 +1954,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         panArbeitsstand.add(jFormattedTextField4, gridBagConstraints);
 
         jLabel24.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel24.text")); // NOI18N
+        jLabel24.setName("jLabel24");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel24, gridBagConstraints);
+
+        jComboBox9.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox9.setName("jComboBox9"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1893,6 +1973,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField5.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField5.text")); // NOI18N
+        jFormattedTextField5.setName("jFormattedTextField5");       // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1900,11 +1981,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         panArbeitsstand.add(jFormattedTextField5, gridBagConstraints);
 
         jLabel25.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel25.text")); // NOI18N
+        jLabel25.setName("jLabel25");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel25, gridBagConstraints);
+
+        jComboBox10.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox10.setName("jComboBox10"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1915,6 +2000,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField6.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField6.text")); // NOI18N
+        jFormattedTextField6.setName("jFormattedTextField6");       // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1922,11 +2008,15 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         panArbeitsstand.add(jFormattedTextField6, gridBagConstraints);
 
         jLabel26.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel26.text")); // NOI18N
+        jLabel26.setName("jLabel26");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel26, gridBagConstraints);
+
+        jComboBox11.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox11.setName("jComboBox11"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1937,26 +2027,23 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField7.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField7.text")); // NOI18N
+        jFormattedTextField7.setName("jFormattedTextField7");       // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jFormattedTextField7, gridBagConstraints);
 
-        jLabel39.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel39.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel39, gridBagConstraints);
-
         jLabel27.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel27.text")); // NOI18N
+        jLabel27.setName("jLabel27");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel27, gridBagConstraints);
+
+        jComboBox12.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox12.setName("jComboBox12"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1967,70 +2054,23 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField8.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField8.text")); // NOI18N
+        jFormattedTextField8.setName("jFormattedTextField8");       // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jFormattedTextField8, gridBagConstraints);
 
-        jLabel28.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel28.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel28, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jComboBox13, gridBagConstraints);
-
-        jFormattedTextField9.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField9.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jFormattedTextField9, gridBagConstraints);
-
-        jLabel29.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel29.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel29, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jComboBox14, gridBagConstraints);
-
-        jFormattedTextField10.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField10.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jFormattedTextField10, gridBagConstraints);
-
-        jLabel40.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel40.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel40, gridBagConstraints);
-
         jLabel30.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel30.text")); // NOI18N
+        jLabel30.setName("jLabel30");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel30, gridBagConstraints);
+
+        jComboBox15.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox15.setName("jComboBox15"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -2041,92 +2081,23 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField11.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField11.text")); // NOI18N
+        jFormattedTextField11.setName("jFormattedTextField11");      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jFormattedTextField11, gridBagConstraints);
 
-        jLabel31.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel31.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel31, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jComboBox16, gridBagConstraints);
-
-        jFormattedTextField12.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField12.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jFormattedTextField12, gridBagConstraints);
-
-        jLabel32.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel32.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel32, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jComboBox17, gridBagConstraints);
-
-        jFormattedTextField13.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField13.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jFormattedTextField13, gridBagConstraints);
-
-        jLabel33.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel33.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel33, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jComboBox18, gridBagConstraints);
-
-        jFormattedTextField14.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField14.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jFormattedTextField14, gridBagConstraints);
-
-        jLabel41.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel41.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panArbeitsstand.add(jLabel41, gridBagConstraints);
-
         jLabel34.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel34.text")); // NOI18N
+        jLabel34.setName("jLabel34");                                                                         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel34, gridBagConstraints);
+
+        jComboBox19.setModel(new DefaultComboBoxModel<>(new String[] { "", "laufend", "abgeschlossen" }));
+        jComboBox19.setName("jComboBox19"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -2137,22 +2108,29 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jFormattedTextField15.setText(NbBundle.getMessage(
                 AlboFlaecheEditor.class,
                 "AlboFlaecheInfoPanel.jFormattedTextField15.text")); // NOI18N
+        jFormattedTextField15.setName("jFormattedTextField15");      // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panArbeitsstand.add(jFormattedTextField15, gridBagConstraints);
+
+        filler11.setName("filler11"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panArbeitsstand.add(filler11, gridBagConstraints);
+
+        filler10.setName("filler10"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 150;
         panArbeitsstand.add(filler10, gridBagConstraints);
+
+        filler12.setName("filler12"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -2166,6 +2144,8 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panCardArbeitsstand.add(panArbeitsstand, gridBagConstraints);
+
+        filler53.setName("filler53"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -2176,1589 +2156,340 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
 
         panMainCard.add(panCardArbeitsstand, "arbeitsstand");
 
-        panCardFlaeche.setOpaque(false);
-        panCardFlaeche.setLayout(new GridBagLayout());
+        panCardBemerkung.setName("panCardBemerkung"); // NOI18N
+        panCardBemerkung.setOpaque(false);
+        panCardBemerkung.setLayout(new GridBagLayout());
 
-        jPanel6.setOpaque(false);
-        jPanel6.setLayout(new GridBagLayout());
+        jScrollPane8.setName("jScrollPane8"); // NOI18N
+        jScrollPane8.setOpaque(false);
 
-        jLabel1.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel1.text")); // NOI18N
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new GridBagLayout());
+
+        jPanel2.setBorder(BorderFactory.createTitledBorder("Datum und Urheber ?"));
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new GridBagLayout());
+
+        filler18.setName("filler18"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 2);
-        jPanel6.add(jLabel1, gridBagConstraints);
-
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.nummer_landesregistrier}"),
-                jTextField1,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel6.add(jTextField1, gridBagConstraints);
+        jPanel2.add(filler18, gridBagConstraints);
 
-        jLabel2.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel2.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 2);
-        jPanel6.add(jLabel2, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.nummer_laufende}"),
-                jTextField2,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel6.add(jTextField2, gridBagConstraints);
-
-        jLabel3.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel3.text")); // NOI18N
+        jTextArea4.setEditable(false);
+        jTextArea4.setColumns(20);
+        jTextArea4.setLineWrap(true);
+        jTextArea4.setRows(5);
+        jTextArea4.setText(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+        jTextArea4.setWrapStyleWord(true);
+        jTextArea4.setName("jTextArea4"); // NOI18N
+        jTextArea4.setOpaque(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel6.add(jLabel3, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(jTextArea4, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.nummer_erhebung}"),
-                jTextField3,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new GridBagLayout());
 
+        jButton2.setText("editieren");
+        jButton2.setName("jButton2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel6.add(jTextField3, gridBagConstraints);
+        jPanel3.add(jButton2, gridBagConstraints);
 
-        jLabel4.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel4.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 10, 2, 2);
-        jPanel6.add(jLabel4, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.nummer_alt}"),
-                jTextField4,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel6.add(jTextField4, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel6.add(filler55, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 1.0;
-        jPanel6.add(filler54, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel6.add(filler56, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.weightx = 1.0;
-        jPanel6.add(filler57, gridBagConstraints);
+        filler4.setName("filler4"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel6.add(filler58, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(filler4, gridBagConstraints);
+
+        jButton1.setText("entfernen");
+        jButton1.setName("jButton1"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(jButton1, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 1.0;
-        jPanel6.add(filler59, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel6.add(filler60, gridBagConstraints);
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        jPanel2.add(jPanel3, gridBagConstraints);
 
-        jLabel58.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel58.text")); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(jPanel2, gridBagConstraints);
+
+        jPanel58.setBorder(BorderFactory.createTitledBorder("Datum und Urheber ?"));
+        jPanel58.setName("jPanel58"); // NOI18N
+        jPanel58.setOpaque(false);
+        jPanel58.setLayout(new GridBagLayout());
+
+        filler54.setName("filler54"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel6.add(jLabel58, gridBagConstraints);
-
-        jXHyperlink1.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jXHyperlink1.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel6.add(jXHyperlink1, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panCardFlaeche.add(jPanel6, gridBagConstraints);
+        jPanel58.add(filler54, gridBagConstraints);
 
-        panLinks.setOpaque(false);
-        panLinks.setLayout(new GridBagLayout());
-
-        panAllgemeines.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.panAllgemeines.border.title"))); // NOI18N
-        panAllgemeines.setOpaque(false);
-        panAllgemeines.setLayout(new GridBagLayout());
-
-        jLabel12.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel12.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jLabel12, gridBagConstraints);
-
-        jFormattedTextField1.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField1.text")); // NOI18N
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.jahr_von}"),
-                jFormattedTextField1,
-                BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jFormattedTextField1, gridBagConstraints);
-
-        jLabel35.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel35.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jLabel35, gridBagConstraints);
-
-        jFormattedTextField16.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField16.text")); // NOI18N
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.jahr_bis}"),
-                jFormattedTextField16,
-                BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jFormattedTextField16, gridBagConstraints);
-
-        jLabel10.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel10.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jLabel10, gridBagConstraints);
-
-        jCheckBox6.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox6.text")); // NOI18N
-        jCheckBox6.setContentAreaFilled(false);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.keine_zuordnung_moeglich}"),
-                jCheckBox6,
-                BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jCheckBox6, gridBagConstraints);
-
-        jLabel38.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel38.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jLabel38, gridBagConstraints);
-
-        jCheckBox7.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox7.text")); // NOI18N
-        jCheckBox7.setContentAreaFilled(false);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.flaeche_unterdruecken}"),
-                jCheckBox7,
-                BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(jCheckBox7, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(filler15, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 150;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAllgemeines.add(filler16, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panLinks.add(panAllgemeines, gridBagConstraints);
-
-        panEigenschaften.setBorder(BorderFactory.createTitledBorder(""));
-        panEigenschaften.setOpaque(false);
-        panEigenschaften.setLayout(new GridBagLayout());
-
-        jLabel45.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel45.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jLabel45, gridBagConstraints);
-
-        jCheckBox8.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox8.text")); // NOI18N
-        jCheckBox8.setContentAreaFilled(false);
-        jCheckBox8.setHorizontalAlignment(SwingConstants.CENTER);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.teilflaeche}"),
-                jCheckBox8,
-                BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jCheckBox8, gridBagConstraints);
-
-        jLabel46.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel46.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jLabel46, gridBagConstraints);
-
-        jCheckBox9.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox9.text")); // NOI18N
-        jCheckBox9.setContentAreaFilled(false);
-        jCheckBox9.setHorizontalAlignment(SwingConstants.CENTER);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.gesamtflaeche}"),
-                jCheckBox9,
-                BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jCheckBox9, gridBagConstraints);
-
-        jLabel47.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel47.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jLabel47, gridBagConstraints);
-
-        jCheckBox10.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox10.text")); // NOI18N
-        jCheckBox10.setContentAreaFilled(false);
-        jCheckBox10.setHorizontalAlignment(SwingConstants.CENTER);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.kommune_land_bund}"),
-                jCheckBox10,
-                BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jCheckBox10, gridBagConstraints);
-
-        jLabel48.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel48.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jLabel48, gridBagConstraints);
-
-        jCheckBox11.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox11.text")); // NOI18N
-        jCheckBox11.setContentAreaFilled(false);
-        jCheckBox11.setHorizontalAlignment(SwingConstants.CENTER);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.gewerbliche_wirtschaft}"),
-                jCheckBox11,
-                BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jCheckBox11, gridBagConstraints);
-
-        jLabel49.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel49.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jLabel49, gridBagConstraints);
-
-        jCheckBox12.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox12.text")); // NOI18N
-        jCheckBox12.setContentAreaFilled(false);
-        jCheckBox12.setHorizontalAlignment(SwingConstants.CENTER);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.privat}"),
-                jCheckBox12,
-                BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(jCheckBox12, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(filler17, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        panEigenschaften.add(filler18, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panLinks.add(panEigenschaften, gridBagConstraints);
-
-        panBeschreibung.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.panBeschreibung.border.title"))); // NOI18N
-        panBeschreibung.setOpaque(false);
-        panBeschreibung.setLayout(new GridBagLayout());
-
-        jLabel13.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel13.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(jLabel13, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_flaechenart}"),
-                jComboBox1,
-                BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(jComboBox1, gridBagConstraints);
-
-        jLabel14.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel14.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(jLabel14, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cids.beab.fk_flaechenstatus}"),
-                jComboBox2,
-                BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(jComboBox2, gridBagConstraints);
-
-        jLabel15.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel15.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(jLabel15, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_flaechenzuordnung}"),
-                jComboBox3,
-                BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(jComboBox3, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(filler9, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 250;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschreibung.add(filler8, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panLinks.add(panBeschreibung, gridBagConstraints);
-
+        jTextArea5.setEditable(false);
+        jTextArea5.setColumns(20);
+        jTextArea5.setLineWrap(true);
+        jTextArea5.setRows(5);
+        jTextArea5.setText(
+            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?");
+        jTextArea5.setWrapStyleWord(true);
+        jTextArea5.setName("jTextArea5"); // NOI18N
+        jTextArea5.setOpaque(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panCardFlaeche.add(panLinks, gridBagConstraints);
-
-        panRechts.setOpaque(false);
-        panRechts.setLayout(new GridBagLayout());
-
-        panOrt.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.panOrt.border.title"))); // NOI18N
-        panOrt.setOpaque(false);
-        panOrt.setLayout(new GridBagLayout());
-
-        jPanel8.setOpaque(false);
-        jPanel8.setLayout(new GridBagLayout());
-
-        jLabel16.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel16.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(jLabel16, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${fk_strasse}"),
-                jComboBox4,
-                BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(jComboBox4, gridBagConstraints);
-
-        jLabel17.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel17.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(jLabel17, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.hausnummer}"),
-                jTextField5,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(jTextField5, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(filler43, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(filler44, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(filler45, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 25;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel8.add(filler46, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        panOrt.add(jPanel8, gridBagConstraints);
-
-        mappingComponent1.setMaximumSize(new Dimension(300, 150));
-        mappingComponent1.setMinimumSize(new Dimension(300, 150));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panOrt.add(mappingComponent1, gridBagConstraints);
+        jPanel58.add(jTextArea5, gridBagConstraints);
 
-        jPanel9.setOpaque(false);
-        jPanel9.setLayout(new GridBagLayout());
+        jPanel59.setName("jPanel59"); // NOI18N
+        jPanel59.setOpaque(false);
+        jPanel59.setLayout(new GridBagLayout());
 
-        jLabel37.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel37.text")); // NOI18N
+        jButton9.setText("editieren");
+        jButton9.setName("jButton9"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel9.add(jLabel37, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.ortsuebliche_bezeichnung}"),
-                jTextField7,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel9.add(jTextField7, gridBagConstraints);
+        jPanel59.add(jButton9, gridBagConstraints);
 
-        jLabel18.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel18.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel9.add(jLabel18, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_geom}"),
-                jComboBox5,
-                BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel9.add(jComboBox5, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel9.add(filler41, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel9.add(filler42, gridBagConstraints);
-
+        filler55.setName("filler55"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        panOrt.add(jPanel9, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panRechts.add(panOrt, gridBagConstraints);
+        jPanel59.add(filler55, gridBagConstraints);
 
-        panBPlaene.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.panBPlaene.border.title"))); // NOI18N
-        panBPlaene.setOpaque(false);
-        panBPlaene.setLayout(new GridBagLayout());
-
-        jList2.setModel(new AbstractListModel<String>() {
-
-                String[] strings = { "1241 - Bahnhof Heubruch", "1242 - Am Walde", "1243 V - Nahversorgung Osterbaum" };
-
-                @Override
-                public int getSize() {
-                    return strings.length;
-                }
-                @Override
-                public String getElementAt(final int i) {
-                    return strings[i];
-                }
-            });
-        jList2.setVisibleRowCount(5);
-        jScrollPane6.setViewportView(jList2);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panBPlaene.add(jScrollPane6, gridBagConstraints);
-
+        jButton10.setText("entfernen");
+        jButton10.setName("jButton10"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panRechts.add(panBPlaene, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 80;
-        panRechts.add(filler62, gridBagConstraints);
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel59.add(jButton10, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        panCardFlaeche.add(panRechts, gridBagConstraints);
-
-        panMitte.setOpaque(false);
-        panMitte.setLayout(new GridBagLayout());
-
-        panNutzung.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.panNutzung.border.title"))); // NOI18N
-        panNutzung.setOpaque(false);
-        panNutzung.setLayout(new GridBagLayout());
-
-        jXTable3.setModel(new DefaultTableModel(
-                new Object[][] {},
-                new String[] { "Nutzung", "Objekt", "Attribut-1", "Attribut-2" }));
-        jScrollPane8.setViewportView(jXTable3);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panNutzung.add(jScrollPane8, gridBagConstraints);
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        jPanel58.add(jPanel59, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMitte.add(panNutzung, gridBagConstraints);
+        jPanel1.add(jPanel58, gridBagConstraints);
 
-        panNutzung1.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.panNutzung1.border.title"))); // NOI18N
-        panNutzung1.setOpaque(false);
-        panNutzung1.setLayout(new GridBagLayout());
+        jPanel60.setBorder(BorderFactory.createTitledBorder("Datum und Urheber ?"));
+        jPanel60.setName("jPanel60"); // NOI18N
+        jPanel60.setOpaque(false);
+        jPanel60.setLayout(new GridBagLayout());
 
-        jXTable4.setModel(new DefaultTableModel(
-                new Object[][] {},
-                new String[] { "Nutzung", "Objekt", "Attribut-1", "Attribut-2" }));
-        jScrollPane9.setViewportView(jXTable4);
-
+        filler57.setName("filler57"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panNutzung1.add(jScrollPane9, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMitte.add(panNutzung1, gridBagConstraints);
+        jPanel60.add(filler57, gridBagConstraints);
 
+        jTextArea6.setEditable(false);
+        jTextArea6.setColumns(20);
+        jTextArea6.setLineWrap(true);
+        jTextArea6.setRows(5);
+        jTextArea6.setText(
+            "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?");
+        jTextArea6.setWrapStyleWord(true);
+        jTextArea6.setName("jTextArea6"); // NOI18N
+        jTextArea6.setOpaque(false);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel60.add(jTextArea6, gridBagConstraints);
+
+        jPanel61.setName("jPanel61"); // NOI18N
+        jPanel61.setOpaque(false);
+        jPanel61.setLayout(new GridBagLayout());
+
+        jButton11.setText("editieren");
+        jButton11.setName("jButton11"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel61.add(jButton11, gridBagConstraints);
+
+        filler59.setName("filler59"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        panCardFlaeche.add(panMitte, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        jPanel61.add(filler59, gridBagConstraints);
 
-        panSpezifisch.setOpaque(false);
-        panSpezifisch.setLayout(new CardLayout());
+        jButton12.setText("entfernen");
+        jButton12.setName("jButton12"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel61.add(jButton12, gridBagConstraints);
 
-        panStandort.setOpaque(false);
-        panStandort.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        jPanel60.add(jPanel61, gridBagConstraints);
 
-        jPanel13.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel13.border.title"))); // NOI18N
-        jPanel13.setOpaque(false);
-        jPanel13.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(jPanel60, gridBagConstraints);
 
-        jList1.setModel(new AbstractListModel<String>() {
+        filler1.setName("filler1"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 99;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(filler1, gridBagConstraints);
 
-                String[] strings = { "1", "2", "3", "4" };
+        jScrollPane8.setViewportView(jPanel1);
 
-                @Override
-                public int getSize() {
-                    return strings.length;
-                }
-                @Override
-                public String getElementAt(final int i) {
-                    return strings[i];
-                }
-            });
-        jScrollPane3.setViewportView(jList1);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panCardBemerkung.add(jScrollPane8, gridBagConstraints);
+        jScrollPane8.getViewport().setOpaque(false);
 
+        filler15.setName("filler15"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 100;
+        panCardBemerkung.add(filler15, gridBagConstraints);
+
+        jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setOpaque(false);
+        jPanel4.setLayout(new GridBagLayout());
+
+        jScrollPane7.setName("jScrollPane7"); // NOI18N
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jTextArea3.setName("jTextArea3"); // NOI18N
+        jScrollPane7.setViewportView(jTextArea3);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel4.add(jScrollPane7, gridBagConstraints);
+
+        jButton3.setText("Übernehmen");
+        jButton3.setName("jButton3"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        jPanel4.add(jButton3, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panCardBemerkung.add(jPanel4, gridBagConstraints);
+
+        panMainCard.add(panCardBemerkung, "bemerkung");
+
+        panCardAktionen.setName("panCardAktionen"); // NOI18N
+        panCardAktionen.setOpaque(false);
+        panCardAktionen.setLayout(new GridBagLayout());
+
+        filler74.setName("filler74"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 99;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        panCardAktionen.add(filler74, gridBagConstraints);
+
+        filler73.setName("filler73"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel13.add(jScrollPane3, gridBagConstraints);
+        panCardAktionen.add(filler73, gridBagConstraints);
 
-        jPanel10.setOpaque(false);
-        jPanel10.setLayout(new GridBagLayout());
-
-        jPanel14.setOpaque(false);
-        jPanel14.setLayout(new GridBagLayout());
-
-        jLabel55.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel55.text")); // NOI18N
+        jButton7.setText("Neue Landesregistriern-Nummer");
+        jButton7.setName("jButton7"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel14.add(jLabel55, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
+        panCardAktionen.add(jButton7, gridBagConstraints);
 
-        jTextField8.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jTextField8.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel14.add(jTextField8, gridBagConstraints);
-
-        jLabel5.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel5.text")); // NOI18N
+        jButton8.setText("Gesamtfläche <-> Teilfäche");
+        jButton8.setName("jButton8"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel14.add(jLabel5, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
+        panCardAktionen.add(jButton8, gridBagConstraints);
+
+        jButton17.setText("Flächenart ändern");
+        jButton17.setName("jButton17"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel14.add(filler20, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
+        panCardAktionen.add(jButton17, gridBagConstraints);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(2);
-        jScrollPane4.setViewportView(jTextArea1);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel14.add(jScrollPane4, gridBagConstraints);
-
-        jLabel57.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel57.text")); // NOI18N
+        jButton18.setText("Export");
+        jButton18.setName("jButton18"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel14.add(jLabel57, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
+        panCardAktionen.add(jButton18, gridBagConstraints);
 
-        jTextField10.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jTextField10.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel14.add(jTextField10, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel14.add(filler6, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.weightx = 1.0;
-        jPanel14.add(filler19, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel10.add(jPanel14, gridBagConstraints);
-
-        jPanel16.setOpaque(false);
-        jPanel16.setLayout(new GridBagLayout());
-
-        jLabel50.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel50.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel16.add(jLabel50, gridBagConstraints);
-
-        jPanel48.setOpaque(false);
-        jPanel48.setLayout(new GridBagLayout());
-
-        jFormattedTextField17.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField17.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel48.add(jFormattedTextField17, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 20;
-        jPanel48.add(filler63, gridBagConstraints);
-
-        jLabel51.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel51.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel48.add(jLabel51, gridBagConstraints);
-
-        jFormattedTextField18.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField18.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel48.add(jFormattedTextField18, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel16.add(jPanel48, gridBagConstraints);
-
-        jLabel6.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel6.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel16.add(jLabel6, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel16.add(filler22, gridBagConstraints);
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(3);
-        jScrollPane5.setViewportView(jTextArea2);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel16.add(jScrollPane5, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel16.add(filler23, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.weightx = 1.0;
-        jPanel16.add(filler24, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel10.add(jPanel16, gridBagConstraints);
-
-        jPanel15.setOpaque(false);
-        jPanel15.setLayout(new GridBagLayout());
-
-        jXTable2.setModel(new DefaultTableModel(
-                new Object[][] {},
-                new String[] { "WZ-Nummer", "Wirtschaftszweig", "Ausgabe", "Maßgeblicher WZ", "Erhebungsklasse" }) {
-
-                Class[] types = new Class[] { String.class, String.class, Integer.class, Boolean.class, Object.class };
-
-                @Override
-                public Class getColumnClass(final int columnIndex) {
-                    return types[columnIndex];
-                }
-            });
-        jXTable2.setRowHeight(18);
-        jScrollPane2.setViewportView(jXTable2);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel15.add(jScrollPane2, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel10.add(jPanel15, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 130;
-        jPanel10.add(filler61, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel13.add(jPanel10, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-        jPanel13.add(filler21, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panStandort.add(jPanel13, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panStandort.add(filler26, gridBagConstraints);
-
-        panSpezifisch.add(panStandort, "card2");
-
-        panSchadensfall.setOpaque(false);
-        panSchadensfall.setLayout(new GridBagLayout());
-
-        jPanel18.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel18.border.title"))); // NOI18N
-        jPanel18.setOpaque(false);
-        jPanel18.setLayout(new GridBagLayout());
-
-        jLabel52.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel52.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel18.add(jLabel52, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel18.add(jComboBox23, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        jPanel18.add(filler25, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        jPanel18.add(filler28, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panSchadensfall.add(jPanel18, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panSchadensfall.add(filler29, gridBagConstraints);
-
-        panSpezifisch.add(panSchadensfall, "card2");
-
-        panAltablagerung.setOpaque(false);
-        panAltablagerung.setLayout(new GridBagLayout());
-
-        jPanel11.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel11.border.title"))); // NOI18N
-        jPanel11.setOpaque(false);
-        jPanel11.setLayout(new GridBagLayout());
-
-        jPanel12.setOpaque(false);
-        jPanel12.setLayout(new GridBagLayout());
-
-        jLabel42.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel42.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel12.add(jLabel42, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel12.add(jComboBox20, gridBagConstraints);
-
-        jLabel43.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel43.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel12.add(jLabel43, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel12.add(jComboBox21, gridBagConstraints);
-
-        jLabel44.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel44.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel12.add(jLabel44, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel12.add(jComboBox22, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel12.add(filler5, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        jPanel12.add(filler7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel11.add(jPanel12, gridBagConstraints);
-
-        jPanel17.setLayout(new GridBagLayout());
-
-        jXTable1.setModel(new DefaultTableModel(
-                new Object[][] {},
-                new String[] { "Abfallherkunft", "Überwiegende Abfallherkunft" }) {
-
-                Class[] types = new Class[] { Object.class, Boolean.class };
-
-                @Override
-                public Class getColumnClass(final int columnIndex) {
-                    return types[columnIndex];
-                }
-            });
-        jXTable1.setRowHeight(18);
-        jScrollPane1.setViewportView(jXTable1);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel17.add(jScrollPane1, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel11.add(jPanel17, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panAltablagerung.add(jPanel11, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panAltablagerung.add(filler27, gridBagConstraints);
-
-        panSpezifisch.add(panAltablagerung, "card2");
-
-        panImmisions.setOpaque(false);
-        panImmisions.setLayout(new GridBagLayout());
-
-        jPanel19.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel19.border.title"))); // NOI18N
-        jPanel19.setOpaque(false);
-        jPanel19.setLayout(new GridBagLayout());
-
-        jLabel53.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel53.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel19.add(jLabel53, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel19.add(jComboBox24, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        jPanel19.add(filler30, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        jPanel19.add(filler31, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panImmisions.add(jPanel19, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panImmisions.add(filler32, gridBagConstraints);
-
-        panSpezifisch.add(panImmisions, "card2");
-
-        panOhneVerdacht.setOpaque(false);
-        panOhneVerdacht.setLayout(new GridBagLayout());
-
-        jPanel20.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel20.border.title"))); // NOI18N
-        jPanel20.setOpaque(false);
-        jPanel20.setLayout(new GridBagLayout());
-
-        jLabel54.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel54.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel54.text")); // NOI18N
-        jLabel54.setHorizontalTextPosition(SwingConstants.CENTER);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel20.add(jLabel54, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panOhneVerdacht.add(jPanel20, gridBagConstraints);
-
-        panSpezifisch.add(panOhneVerdacht, "card2");
-
-        panBewirtschaftungsschaden.setOpaque(false);
-        panBewirtschaftungsschaden.setLayout(new GridBagLayout());
-
-        jPanel21.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel21.border.title"))); // NOI18N
-        jPanel21.setOpaque(false);
-        jPanel21.setLayout(new GridBagLayout());
-
-        jLabel56.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel56.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel21.add(jLabel56, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel21.add(jComboBox25, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        jPanel21.add(filler33, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        jPanel21.add(filler34, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panBewirtschaftungsschaden.add(jPanel21, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panBewirtschaftungsschaden.add(filler35, gridBagConstraints);
-
-        panSpezifisch.add(panBewirtschaftungsschaden, "card2");
-
-        panMaterialaufbringung.setOpaque(false);
-        panMaterialaufbringung.setLayout(new GridBagLayout());
-
-        jPanel22.setBorder(BorderFactory.createTitledBorder(
-                NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jPanel12.border.title"))); // NOI18N
-        jPanel22.setOpaque(false);
-        jPanel22.setLayout(new GridBagLayout());
-
-        jPanel23.setOpaque(false);
-        jPanel23.setLayout(new GridBagLayout());
-
-        jLabel59.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel59.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel23.add(jLabel59, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel23.add(jComboBox26, gridBagConstraints);
-
-        jLabel60.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel60.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel23.add(jLabel60, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel23.add(jComboBox27, gridBagConstraints);
-
-        jLabel61.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel61.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel23.add(jLabel61, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel23.add(jComboBox28, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        jPanel23.add(filler36, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.weightx = 1.0;
-        jPanel23.add(filler37, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel22.add(jPanel23, gridBagConstraints);
-
-        jPanel24.setOpaque(false);
-        jPanel24.setLayout(new GridBagLayout());
-
-        jLabel62.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel62.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel62.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jLabel62, gridBagConstraints);
-
-        jCheckBox1.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox1.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jCheckBox1, gridBagConstraints);
-
-        jLabel63.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel63.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jLabel63, gridBagConstraints);
-
-        jFormattedTextField19.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField19.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jFormattedTextField19, gridBagConstraints);
-
-        jCheckBox3.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox3.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jCheckBox3, gridBagConstraints);
-
-        jLabel65.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel65.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel65.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jLabel65, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        jPanel24.add(filler2, gridBagConstraints);
-
-        jCheckBox2.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jCheckBox2.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jCheckBox2, gridBagConstraints);
-
-        jLabel64.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "AlboFlaecheInfoPanel.jLabel64.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jLabel64, gridBagConstraints);
-
-        jFormattedTextField20.setText(NbBundle.getMessage(
-                AlboFlaecheEditor.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField20.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanel24.add(jFormattedTextField20, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel24.add(filler39, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        jPanel24.add(filler40, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel22.add(jPanel24, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panMaterialaufbringung.add(jPanel22, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panMaterialaufbringung.add(filler38, gridBagConstraints);
-
-        panSpezifisch.add(panMaterialaufbringung, "card2");
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panCardFlaeche.add(panSpezifisch, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 130;
-        panCardFlaeche.add(filler4, gridBagConstraints);
-
-        panMainCard.add(panCardFlaeche, "flaeche");
+        panMainCard.add(panCardAktionen, "aktionen");
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -3766,8 +2497,6 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panMainCard, gridBagConstraints);
-
-        bindingGroup.bind();
     }
 
     /**
@@ -3791,6 +2520,10 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
                 AlboFlaecheEditor.this.jToggleButton2ActionPerformed(evt);
             } else if (evt.getSource() == jToggleButton3) {
                 AlboFlaecheEditor.this.jToggleButton3ActionPerformed(evt);
+            } else if (evt.getSource() == jToggleButton4) {
+                AlboFlaecheEditor.this.jToggleButton4ActionPerformed(evt);
+            } else if (evt.getSource() == jToggleButton5) {
+                AlboFlaecheEditor.this.jToggleButton5ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -3804,74 +2537,45 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private CardLayout cardLayout;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private AlboFlaecheMainPanel alboFlaecheMainPanel1;
     private ButtonGroup buttonGroup1;
+    private Box.Filler filler1;
     private Box.Filler filler10;
     private Box.Filler filler11;
     private Box.Filler filler12;
     private Box.Filler filler13;
     private Box.Filler filler14;
     private Box.Filler filler15;
-    private Box.Filler filler16;
-    private Box.Filler filler17;
     private Box.Filler filler18;
-    private Box.Filler filler19;
-    private Box.Filler filler2;
-    private Box.Filler filler20;
-    private Box.Filler filler21;
-    private Box.Filler filler22;
-    private Box.Filler filler23;
-    private Box.Filler filler24;
-    private Box.Filler filler25;
-    private Box.Filler filler26;
-    private Box.Filler filler27;
-    private Box.Filler filler28;
-    private Box.Filler filler29;
     private Box.Filler filler3;
-    private Box.Filler filler30;
-    private Box.Filler filler31;
-    private Box.Filler filler32;
-    private Box.Filler filler33;
-    private Box.Filler filler34;
-    private Box.Filler filler35;
-    private Box.Filler filler36;
-    private Box.Filler filler37;
-    private Box.Filler filler38;
-    private Box.Filler filler39;
     private Box.Filler filler4;
-    private Box.Filler filler40;
-    private Box.Filler filler41;
-    private Box.Filler filler42;
-    private Box.Filler filler43;
-    private Box.Filler filler44;
-    private Box.Filler filler45;
-    private Box.Filler filler46;
     private Box.Filler filler47;
     private Box.Filler filler48;
     private Box.Filler filler49;
-    private Box.Filler filler5;
     private Box.Filler filler50;
     private Box.Filler filler51;
     private Box.Filler filler52;
     private Box.Filler filler53;
     private Box.Filler filler54;
     private Box.Filler filler55;
-    private Box.Filler filler56;
     private Box.Filler filler57;
-    private Box.Filler filler58;
     private Box.Filler filler59;
-    private Box.Filler filler6;
-    private Box.Filler filler60;
-    private Box.Filler filler61;
-    private Box.Filler filler62;
-    private Box.Filler filler63;
     private Box.Filler filler64;
     private Box.Filler filler65;
     private Box.Filler filler66;
-    private Box.Filler filler7;
-    private Box.Filler filler8;
-    private Box.Filler filler9;
-    private JCheckBox jCheckBox1;
-    private JCheckBox jCheckBox10;
+    private Box.Filler filler73;
+    private Box.Filler filler74;
+    private JButton jButton1;
+    private JButton jButton10;
+    private JButton jButton11;
+    private JButton jButton12;
+    private JButton jButton17;
+    private JButton jButton18;
+    private JButton jButton2;
+    private JButton jButton3;
+    private JButton jButton7;
+    private JButton jButton8;
+    private JButton jButton9;
     private JCheckBox jCheckBox100;
     private JCheckBox jCheckBox101;
     private JCheckBox jCheckBox102;
@@ -3882,13 +2586,11 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JCheckBox jCheckBox107;
     private JCheckBox jCheckBox108;
     private JCheckBox jCheckBox109;
-    private JCheckBox jCheckBox11;
     private JCheckBox jCheckBox110;
     private JCheckBox jCheckBox111;
     private JCheckBox jCheckBox112;
     private JCheckBox jCheckBox113;
     private JCheckBox jCheckBox114;
-    private JCheckBox jCheckBox12;
     private JCheckBox jCheckBox13;
     private JCheckBox jCheckBox14;
     private JCheckBox jCheckBox15;
@@ -3896,7 +2598,6 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JCheckBox jCheckBox17;
     private JCheckBox jCheckBox18;
     private JCheckBox jCheckBox19;
-    private JCheckBox jCheckBox2;
     private JCheckBox jCheckBox20;
     private JCheckBox jCheckBox21;
     private JCheckBox jCheckBox22;
@@ -3907,7 +2608,6 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JCheckBox jCheckBox27;
     private JCheckBox jCheckBox28;
     private JCheckBox jCheckBox29;
-    private JCheckBox jCheckBox3;
     private JCheckBox jCheckBox30;
     private JCheckBox jCheckBox31;
     private JCheckBox jCheckBox32;
@@ -3940,7 +2640,6 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JCheckBox jCheckBox57;
     private JCheckBox jCheckBox58;
     private JCheckBox jCheckBox59;
-    private JCheckBox jCheckBox6;
     private JCheckBox jCheckBox60;
     private JCheckBox jCheckBox61;
     private JCheckBox jCheckBox62;
@@ -3950,15 +2649,12 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JCheckBox jCheckBox66;
     private JCheckBox jCheckBox67;
     private JCheckBox jCheckBox68;
-    private JCheckBox jCheckBox7;
-    private JCheckBox jCheckBox8;
     private JCheckBox jCheckBox80;
     private JCheckBox jCheckBox85;
     private JCheckBox jCheckBox86;
     private JCheckBox jCheckBox87;
     private JCheckBox jCheckBox88;
     private JCheckBox jCheckBox89;
-    private JCheckBox jCheckBox9;
     private JCheckBox jCheckBox90;
     private JCheckBox jCheckBox91;
     private JCheckBox jCheckBox92;
@@ -3969,65 +2665,27 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JCheckBox jCheckBox97;
     private JCheckBox jCheckBox98;
     private JCheckBox jCheckBox99;
-    private JComboBox<String> jComboBox1;
     private JComboBox<String> jComboBox10;
     private JComboBox<String> jComboBox11;
     private JComboBox<String> jComboBox12;
-    private JComboBox<String> jComboBox13;
-    private JComboBox<String> jComboBox14;
     private JComboBox<String> jComboBox15;
-    private JComboBox<String> jComboBox16;
-    private JComboBox<String> jComboBox17;
-    private JComboBox<String> jComboBox18;
     private JComboBox<String> jComboBox19;
-    private JComboBox<String> jComboBox2;
-    private JComboBox<String> jComboBox20;
-    private JComboBox<String> jComboBox21;
-    private JComboBox<String> jComboBox22;
-    private JComboBox<String> jComboBox23;
-    private JComboBox<String> jComboBox24;
-    private JComboBox<String> jComboBox25;
-    private JComboBox<String> jComboBox26;
-    private JComboBox<String> jComboBox27;
-    private JComboBox<String> jComboBox28;
-    private JComboBox<String> jComboBox3;
-    private JComboBox<String> jComboBox4;
-    private JComboBox<String> jComboBox5;
+    private JComboBox<String> jComboBox32;
     private JComboBox<String> jComboBox6;
     private JComboBox<String> jComboBox7;
     private JComboBox<String> jComboBox8;
     private JComboBox<String> jComboBox9;
-    private JFormattedTextField jFormattedTextField1;
-    private JFormattedTextField jFormattedTextField10;
     private JFormattedTextField jFormattedTextField11;
-    private JFormattedTextField jFormattedTextField12;
-    private JFormattedTextField jFormattedTextField13;
-    private JFormattedTextField jFormattedTextField14;
     private JFormattedTextField jFormattedTextField15;
     private JFormattedTextField jFormattedTextField16;
-    private JFormattedTextField jFormattedTextField17;
-    private JFormattedTextField jFormattedTextField18;
-    private JFormattedTextField jFormattedTextField19;
     private JFormattedTextField jFormattedTextField2;
-    private JFormattedTextField jFormattedTextField20;
     private JFormattedTextField jFormattedTextField3;
     private JFormattedTextField jFormattedTextField4;
     private JFormattedTextField jFormattedTextField5;
     private JFormattedTextField jFormattedTextField6;
     private JFormattedTextField jFormattedTextField7;
     private JFormattedTextField jFormattedTextField8;
-    private JFormattedTextField jFormattedTextField9;
-    private JLabel jLabel1;
-    private JLabel jLabel10;
-    private JLabel jLabel12;
-    private JLabel jLabel13;
-    private JLabel jLabel14;
-    private JLabel jLabel15;
-    private JLabel jLabel16;
-    private JLabel jLabel17;
-    private JLabel jLabel18;
     private JLabel jLabel19;
-    private JLabel jLabel2;
     private JLabel jLabel20;
     private JLabel jLabel21;
     private JLabel jLabel22;
@@ -4036,47 +2694,9 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JLabel jLabel25;
     private JLabel jLabel26;
     private JLabel jLabel27;
-    private JLabel jLabel28;
-    private JLabel jLabel29;
-    private JLabel jLabel3;
     private JLabel jLabel30;
-    private JLabel jLabel31;
-    private JLabel jLabel32;
-    private JLabel jLabel33;
     private JLabel jLabel34;
-    private JLabel jLabel35;
-    private JLabel jLabel37;
-    private JLabel jLabel38;
-    private JLabel jLabel39;
-    private JLabel jLabel4;
-    private JLabel jLabel40;
-    private JLabel jLabel41;
-    private JLabel jLabel42;
-    private JLabel jLabel43;
-    private JLabel jLabel44;
     private JLabel jLabel45;
-    private JLabel jLabel46;
-    private JLabel jLabel47;
-    private JLabel jLabel48;
-    private JLabel jLabel49;
-    private JLabel jLabel5;
-    private JLabel jLabel50;
-    private JLabel jLabel51;
-    private JLabel jLabel52;
-    private JLabel jLabel53;
-    private JLabel jLabel54;
-    private JLabel jLabel55;
-    private JLabel jLabel56;
-    private JLabel jLabel57;
-    private JLabel jLabel58;
-    private JLabel jLabel59;
-    private JLabel jLabel6;
-    private JLabel jLabel60;
-    private JLabel jLabel61;
-    private JLabel jLabel62;
-    private JLabel jLabel63;
-    private JLabel jLabel64;
-    private JLabel jLabel65;
     private JLabel jLabel66;
     private JLabel jLabel67;
     private JLabel jLabel68;
@@ -4085,27 +2705,13 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JLabel jLabel71;
     private JLabel jLabel72;
     private JLabel jLabel73;
-    private JList<String> jList1;
-    private JList<String> jList2;
-    private JPanel jPanel10;
-    private JPanel jPanel11;
-    private JPanel jPanel12;
-    private JPanel jPanel13;
-    private JPanel jPanel14;
-    private JPanel jPanel15;
-    private JPanel jPanel16;
-    private JPanel jPanel17;
-    private JPanel jPanel18;
-    private JPanel jPanel19;
-    private JPanel jPanel20;
-    private JPanel jPanel21;
-    private JPanel jPanel22;
-    private JPanel jPanel23;
-    private JPanel jPanel24;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
     private JPanel jPanel26;
     private JPanel jPanel27;
     private JPanel jPanel28;
     private JPanel jPanel29;
+    private JPanel jPanel3;
     private JPanel jPanel30;
     private JPanel jPanel31;
     private JPanel jPanel32;
@@ -4116,6 +2722,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JPanel jPanel37;
     private JPanel jPanel38;
     private JPanel jPanel39;
+    private JPanel jPanel4;
     private JPanel jPanel40;
     private JPanel jPanel41;
     private JPanel jPanel42;
@@ -4123,88 +2730,55 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JPanel jPanel44;
     private JPanel jPanel45;
     private JPanel jPanel46;
-    private JPanel jPanel48;
     private JPanel jPanel49;
     private JPanel jPanel50;
     private JPanel jPanel51;
     private JPanel jPanel52;
     private JPanel jPanel53;
-    private JPanel jPanel6;
-    private JPanel jPanel8;
-    private JPanel jPanel9;
-    private JScrollPane jScrollPane1;
-    private JScrollPane jScrollPane2;
-    private JScrollPane jScrollPane3;
-    private JScrollPane jScrollPane4;
-    private JScrollPane jScrollPane5;
-    private JScrollPane jScrollPane6;
+    private JPanel jPanel58;
+    private JPanel jPanel59;
+    private JPanel jPanel60;
+    private JPanel jPanel61;
+    private JScrollPane jScrollPane7;
     private JScrollPane jScrollPane8;
-    private JScrollPane jScrollPane9;
     private JSeparator jSeparator1;
     private JSeparator jSeparator2;
     private JSeparator jSeparator3;
     private JSeparator jSeparator4;
     private JTabbedPane jTabbedPane2;
-    private JTextArea jTextArea1;
-    private JTextArea jTextArea2;
-    private JTextField jTextField1;
-    private JTextField jTextField10;
-    private JTextField jTextField2;
-    private JTextField jTextField3;
-    private JTextField jTextField4;
-    private JTextField jTextField5;
-    private JTextField jTextField7;
-    private JTextField jTextField8;
+    private JTextArea jTextArea3;
+    private JTextArea jTextArea4;
+    private JTextArea jTextArea5;
+    private JTextArea jTextArea6;
     private JToggleButton jToggleButton1;
     private JToggleButton jToggleButton2;
     private JToggleButton jToggleButton3;
-    private JXHyperlink jXHyperlink1;
-    private JXTable jXTable1;
-    private JXTable jXTable2;
-    private JXTable jXTable3;
-    private JXTable jXTable4;
+    private JToggleButton jToggleButton4;
+    private JToggleButton jToggleButton5;
     private JLabel lblTitle;
-    private MappingComponent mappingComponent1;
-    private JPanel panAllgemeines;
-    private JPanel panAltablagerung;
     private JPanel panArbeitsstand;
-    private JPanel panBPlaene;
-    private JPanel panBeschreibung;
-    private JPanel panBewirtschaftungsschaden;
     private JPanel panButtons;
+    private JPanel panCardAktionen;
     private JPanel panCardArbeitsstand;
+    private JPanel panCardBemerkung;
     private JPanel panCardFlaeche;
     private JPanel panCardMassnahmen;
-    private JPanel panEigenschaften;
     private JPanel panFooter;
-    private JPanel panImmisions;
-    private JPanel panLinks;
     private JPanel panMainCard;
-    private JPanel panMaterialaufbringung;
-    private JPanel panMitte;
-    private JPanel panNutzung;
-    private JPanel panNutzung1;
-    private JPanel panOhneVerdacht;
-    private JPanel panOrt;
-    private JPanel panRechts;
-    private JPanel panSchadensfall;
-    private JPanel panSpezifisch;
-    private JPanel panStandort;
     private JPanel panTitle;
-    private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form CoolThemaRenderer.
+     * Creates a new AlboFlaecheEditor object.
      */
     public AlboFlaecheEditor() {
         this(true);
     }
 
     /**
-     * Creates new form CoolThemaRenderer.
+     * Creates a new AlboFlaecheEditor object.
      *
      * @param  editable  DOCUMENT ME!
      */
@@ -4215,9 +2789,12 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+    public final void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+
+        this.alboFlaecheMainPanel1.initWithConnectionContext(connectionContext);
+
         this.cardLayout = (CardLayout)panMainCard.getLayout();
     }
 
@@ -4243,15 +2820,16 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
+//        bindingGroup.unbind();
         if (cidsBean != null) {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cidsBean,
-                getConnectionContext());
+//            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+//                bindingGroup,
+//                cidsBean,
+//                getConnectionContext());
             this.cidsBean = cidsBean;
-            bindingGroup.bind();
+//            bindingGroup.bind();
         }
+        alboFlaecheMainPanel1.setCidsBean(cidsBean);
     }
 
     /**
@@ -4289,6 +2867,24 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private void jToggleButton3ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
         cardLayout.show(panMainCard, "massnahmen");
     }                                                                   //GEN-LAST:event_jToggleButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jToggleButton4ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton4ActionPerformed
+        cardLayout.show(panMainCard, "bemerkung");
+    }                                                                   //GEN-LAST:event_jToggleButton4ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jToggleButton5ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton5ActionPerformed
+        cardLayout.show(panMainCard, "aktionen");
+    }                                                                   //GEN-LAST:event_jToggleButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -4345,6 +2941,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
      */
     @Override
     public void dispose() {
+        alboFlaecheMainPanel1.dispose();
 //        bindingGroup.unbind();
     }
 
@@ -4355,6 +2952,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
      */
     @Override
     public void editorClosed(final EditorClosedEvent event) {
+        alboFlaecheMainPanel1.editorClosed(event);
     }
 
     /**
@@ -4385,7 +2983,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
             true,
             "albo_flaeche",
             1,
-            800,
-            600);
+            1200,
+            800);
     }
 }
