@@ -456,45 +456,45 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         cardLayout.show(panMainCard, "flaeche");
-    }                                                                   //GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton2ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton2ActionPerformed
+    private void jToggleButton2ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         cardLayout.show(panMainCard, "arbeitsstand");
-    }                                                                   //GEN-LAST:event_jToggleButton2ActionPerformed
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton3ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
+    private void jToggleButton3ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
         cardLayout.show(panMainCard, "massnahmen");
-    }                                                                   //GEN-LAST:event_jToggleButton3ActionPerformed
+    }//GEN-LAST:event_jToggleButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton4ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton4ActionPerformed
+    private void jToggleButton4ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
         cardLayout.show(panMainCard, "bemerkung");
-    }                                                                   //GEN-LAST:event_jToggleButton4ActionPerformed
+    }//GEN-LAST:event_jToggleButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton5ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton5ActionPerformed
+    private void jToggleButton5ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton5ActionPerformed
         cardLayout.show(panMainCard, "aktionen");
-    }                                                                   //GEN-LAST:event_jToggleButton5ActionPerformed
+    }//GEN-LAST:event_jToggleButton5ActionPerformed
 
     /**
      * DOCUMENT ME!

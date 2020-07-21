@@ -18,6 +18,10 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
+import de.cismet.cids.dynamics.CidsBean;
+
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -28,7 +32,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheMainDescriptionPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
 
     //~ Methods ----------------------------------------------------------------
 
@@ -300,7 +304,7 @@ public class AlboFlaecheMainDescriptionPanel extends AbstractAlboFlaechePanel {
         @Override
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == cbFlaechenart) {
-                AlboFlaecheMainDescriptionPanel.this.cbFlaechenartActionPerformed(evt);
+                AlboFlaecheMainBeschreibungPanel.this.cbFlaechenartActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -336,7 +340,7 @@ public class AlboFlaecheMainDescriptionPanel extends AbstractAlboFlaechePanel {
     /**
      * Creates a new AlboFlaecheMainDescriptionPanel object.
      */
-    public AlboFlaecheMainDescriptionPanel() {
+    public AlboFlaecheMainBeschreibungPanel() {
         initComponents();
     }
 
@@ -345,7 +349,7 @@ public class AlboFlaecheMainDescriptionPanel extends AbstractAlboFlaechePanel {
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheMainDescriptionPanel(final boolean editable) {
+    public AlboFlaecheMainBeschreibungPanel(final boolean editable) {
         super(editable);
     }
 
@@ -366,10 +370,10 @@ public class AlboFlaecheMainDescriptionPanel extends AbstractAlboFlaechePanel {
      * @param  evt  DOCUMENT ME!
      */
     private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
-        final String selected = (String)cbFlaechenart.getSelectedItem();
+        final CidsBean selected = (CidsBean)cbFlaechenart.getSelectedItem();
 
         if (null != selected) {
-            switch (selected) {
+            switch ((String)selected.getProperty("schluessel")) {
                 case "Altstandort": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "standort");
                     break;
@@ -413,6 +417,10 @@ public class AlboFlaecheMainDescriptionPanel extends AbstractAlboFlaechePanel {
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+        }
     }
 
     @Override

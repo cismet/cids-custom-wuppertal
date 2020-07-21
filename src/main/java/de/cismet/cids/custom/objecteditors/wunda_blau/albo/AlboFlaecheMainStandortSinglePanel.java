@@ -151,7 +151,7 @@ public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel
 
         jTextField8.setName("jTextField8"); // NOI18N
 
-        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.betriebsname}"),
@@ -186,6 +186,15 @@ public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel
         jTextArea1.setColumns(20);
         jTextArea1.setRows(2);
         jTextArea1.setName("jTextArea1"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.addressbuch_adresse}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         jScrollPane4.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -205,6 +214,15 @@ public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel
         jPanel14.add(jLabel57, gridBagConstraints);
 
         jTextField10.setName("jTextField10"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.adressbuch_branche}"),
+                jTextField10,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -250,6 +268,15 @@ public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel
         jPanel48.setLayout(new java.awt.GridBagLayout());
 
         jFormattedTextField17.setName("jFormattedTextField17"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_von}"),
+                jFormattedTextField17,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -273,6 +300,15 @@ public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel
         jPanel48.add(jLabel51, gridBagConstraints);
 
         jFormattedTextField18.setName("jFormattedTextField18"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_bis}"),
+                jFormattedTextField18,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -306,6 +342,15 @@ public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel
         jTextArea2.setColumns(20);
         jTextArea2.setRows(3);
         jTextArea2.setName("jTextArea2"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkungen}"),
+                jTextArea2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         jScrollPane5.setViewportView(jTextArea2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -361,6 +406,17 @@ public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel
             });
         jXTable2.setName("jXTable2"); // NOI18N
         jXTable2.setRowHeight(18);
+
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.arr_wirtschaftszweige}");
+        final org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJTableBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        jXTable2);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         jScrollPane2.setViewportView(jXTable2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

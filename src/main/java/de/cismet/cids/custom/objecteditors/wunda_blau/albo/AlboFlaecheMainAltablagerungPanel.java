@@ -14,7 +14,11 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -74,11 +78,11 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
 
         jPanel12 = new javax.swing.JPanel();
         jLabel42 = new javax.swing.JLabel();
-        jComboBox20 = new javax.swing.JComboBox<>();
+        jComboBox20 = new DefaultBindableScrollableComboBox();
         jLabel43 = new javax.swing.JLabel();
-        jComboBox21 = new javax.swing.JComboBox<>();
+        jComboBox21 = new DefaultBindableScrollableComboBox();
         jLabel44 = new javax.swing.JLabel();
-        jComboBox22 = new javax.swing.JComboBox<>();
+        jComboBox22 = new DefaultBindableScrollableComboBox();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -211,6 +215,17 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
             });
         jXTable1.setName("jXTable1"); // NOI18N
         jXTable1.setRowHeight(18);
+
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.arr_abfallherkuenfte}");
+        final org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJTableBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        jXTable1);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         jScrollPane1.setViewportView(jXTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -239,6 +254,10 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
     public final void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+        }
     }
 
     @Override

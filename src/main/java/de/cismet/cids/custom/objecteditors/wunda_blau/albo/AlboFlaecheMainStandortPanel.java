@@ -14,7 +14,10 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.editors.EditorClosedEvent;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -162,16 +165,35 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
+    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
         alboFlaecheMainStandortSinglePanel1.setCidsBean(null);
-    }                                                                                 //GEN-LAST:event_jList1ValueChanged
+    }//GEN-LAST:event_jList1ValueChanged
 
     @Override
     public final void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        
+        alboFlaecheMainStandortSinglePanel1.initWithConnectionContext(connectionContext);
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+        }
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        alboFlaecheMainStandortSinglePanel1.dispose();        
+    }
+
+    @Override
+    public void editorClosed(EditorClosedEvent event) {
+        super.editorClosed(event);
+        
+        alboFlaecheMainStandortSinglePanel1.editorClosed(event);
+    }    
+    
     @Override
     protected BindingGroup getBindingGroup() {
         return bindingGroup;

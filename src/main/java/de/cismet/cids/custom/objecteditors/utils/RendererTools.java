@@ -78,25 +78,27 @@ public class RendererTools {
      * @param  baseProp      DOCUMENT ME!
      */
     public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
-        final List<Binding> bindings = bindingGroup.getBindings();
-        for (final Binding binding : bindings) {
-            if ((binding != null) && (binding.getTargetObject() instanceof JComponent)) {
-                final JComponent target = (JComponent)binding.getTargetObject();
-                final ELProperty p = (ELProperty)binding.getSourceProperty();
+        if (bindingGroup != null) {
+            final List<Binding> bindings = bindingGroup.getBindings();
+            for (final Binding binding : bindings) {
+                if ((binding != null) && (binding.getTargetObject() instanceof JComponent)) {
+                    final JComponent target = (JComponent)binding.getTargetObject();
+                    final ELProperty p = (ELProperty)binding.getSourceProperty();
 
-                try {
-                    final Field expressionField = p.getClass().getDeclaredField("expression"); // NOI18N
-                    expressionField.setAccessible(true);
+                    try {
+                        final Field expressionField = p.getClass().getDeclaredField("expression"); // NOI18N
+                        expressionField.setAccessible(true);
 
-                    final ValueExpressionImpl valueExpression = (ValueExpressionImpl)expressionField.get(p);
+                        final ValueExpressionImpl valueExpression = (ValueExpressionImpl)expressionField.get(p);
 
-                    final String expr = valueExpression.getExpressionString();
-                    if (expr.substring(2, expr.length() - 1).startsWith(baseProp + ".")) {
-                        makeReadOnly(target);
+                        final String expr = valueExpression.getExpressionString();
+                        if (expr.substring(2, expr.length() - 1).startsWith(baseProp + ".")) {
+                            makeReadOnly(target);
+                        }
+                    } catch (final IllegalAccessException | IllegalArgumentException | NoSuchFieldException
+                                | SecurityException ex) {
+                        LOG.warn("", ex);
                     }
-                } catch (final IllegalAccessException | IllegalArgumentException | NoSuchFieldException
-                            | SecurityException ex) {
-                    LOG.warn("", ex);
                 }
             }
         }

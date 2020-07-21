@@ -14,7 +14,11 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -65,7 +69,7 @@ public class AlboFlaecheMainImmisionPanel extends AbstractAlboFlaechePanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jLabel53 = new javax.swing.JLabel();
-        jComboBox24 = new javax.swing.JComboBox<>();
+        jComboBox24 = new DefaultBindableScrollableComboBox();
         filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -128,6 +132,10 @@ public class AlboFlaecheMainImmisionPanel extends AbstractAlboFlaechePanel {
     public final void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+        }
     }
 
     @Override

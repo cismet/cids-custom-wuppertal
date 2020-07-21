@@ -16,6 +16,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import java.awt.Graphics;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.EditorClosedEvent;
@@ -166,6 +168,10 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         panSicherung.initWithConnectionContext(connectionContext);
         panDekontamination.initWithConnectionContext(connectionContext);
         panSchutzUndBeschraenkung.initWithConnectionContext(connectionContext);
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+        }
     }
 
     @Override

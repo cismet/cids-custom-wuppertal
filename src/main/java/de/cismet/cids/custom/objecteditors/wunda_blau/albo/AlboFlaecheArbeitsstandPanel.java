@@ -16,6 +16,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
+
 import de.cismet.connectioncontext.ConnectionContext;
 
 /**
@@ -105,34 +107,34 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         jLabel21 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        jComboBox6 = new DefaultBindableScrollableComboBox();
         jFormattedTextField2 = new javax.swing.JFormattedTextField();
         jLabel45 = new javax.swing.JLabel();
-        jComboBox32 = new javax.swing.JComboBox<>();
+        jComboBox32 = new DefaultBindableScrollableComboBox();
         jFormattedTextField16 = new javax.swing.JFormattedTextField();
         jLabel22 = new javax.swing.JLabel();
-        jComboBox7 = new javax.swing.JComboBox<>();
+        jComboBox7 = new DefaultBindableScrollableComboBox();
         jFormattedTextField3 = new javax.swing.JFormattedTextField();
         jLabel23 = new javax.swing.JLabel();
-        jComboBox8 = new javax.swing.JComboBox<>();
+        jComboBox8 = new DefaultBindableScrollableComboBox();
         jFormattedTextField4 = new javax.swing.JFormattedTextField();
         jLabel24 = new javax.swing.JLabel();
-        jComboBox9 = new javax.swing.JComboBox<>();
+        jComboBox9 = new DefaultBindableScrollableComboBox();
         jFormattedTextField5 = new javax.swing.JFormattedTextField();
         jLabel25 = new javax.swing.JLabel();
-        jComboBox10 = new javax.swing.JComboBox<>();
+        jComboBox10 = new DefaultBindableScrollableComboBox();
         jFormattedTextField6 = new javax.swing.JFormattedTextField();
         jLabel26 = new javax.swing.JLabel();
-        jComboBox11 = new javax.swing.JComboBox<>();
+        jComboBox11 = new DefaultBindableScrollableComboBox();
         jFormattedTextField7 = new javax.swing.JFormattedTextField();
         jLabel27 = new javax.swing.JLabel();
-        jComboBox12 = new javax.swing.JComboBox<>();
+        jComboBox12 = new DefaultBindableScrollableComboBox();
         jFormattedTextField8 = new javax.swing.JFormattedTextField();
         jLabel30 = new javax.swing.JLabel();
-        jComboBox15 = new javax.swing.JComboBox<>();
+        jComboBox15 = new DefaultBindableScrollableComboBox();
         jFormattedTextField11 = new javax.swing.JFormattedTextField();
         jLabel34 = new javax.swing.JLabel();
-        jComboBox19 = new javax.swing.JComboBox<>();
+        jComboBox19 = new DefaultBindableScrollableComboBox();
         jFormattedTextField15 = new javax.swing.JFormattedTextField();
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),

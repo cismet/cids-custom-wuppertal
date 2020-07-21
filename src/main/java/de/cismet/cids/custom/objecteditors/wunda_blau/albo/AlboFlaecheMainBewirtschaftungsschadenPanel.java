@@ -14,7 +14,11 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -24,7 +28,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheBewirtschaftungsschadenPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainBewirtschaftungsschadenPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler33;
@@ -39,7 +43,7 @@ public class AlboFlaecheBewirtschaftungsschadenPanel extends AbstractAlboFlaeche
     /**
      * Creates a new AlboFlaecheXXXPanel object.
      */
-    public AlboFlaecheBewirtschaftungsschadenPanel() {
+    public AlboFlaecheMainBewirtschaftungsschadenPanel() {
         initComponents();
     }
 
@@ -48,7 +52,7 @@ public class AlboFlaecheBewirtschaftungsschadenPanel extends AbstractAlboFlaeche
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheBewirtschaftungsschadenPanel(final boolean editable) {
+    public AlboFlaecheMainBewirtschaftungsschadenPanel(final boolean editable) {
         super(editable);
     }
 
@@ -65,7 +69,7 @@ public class AlboFlaecheBewirtschaftungsschadenPanel extends AbstractAlboFlaeche
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jLabel56 = new javax.swing.JLabel();
-        jComboBox25 = new javax.swing.JComboBox<>();
+        jComboBox25 = new DefaultBindableScrollableComboBox();
         filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -128,6 +132,10 @@ public class AlboFlaecheBewirtschaftungsschadenPanel extends AbstractAlboFlaeche
     public final void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+        }
     }
 
     @Override
