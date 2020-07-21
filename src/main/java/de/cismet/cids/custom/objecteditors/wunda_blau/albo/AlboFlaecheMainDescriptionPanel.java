@@ -28,7 +28,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheDescriptionPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainDescriptionPanel extends AbstractAlboFlaechePanel {
 
     //~ Methods ----------------------------------------------------------------
 
@@ -300,7 +300,7 @@ public class AlboFlaecheDescriptionPanel extends AbstractAlboFlaechePanel {
         @Override
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == cbFlaechenart) {
-                AlboFlaecheDescriptionPanel.this.cbFlaechenartActionPerformed(evt);
+                AlboFlaecheMainDescriptionPanel.this.cbFlaechenartActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -334,9 +334,9 @@ public class AlboFlaecheDescriptionPanel extends AbstractAlboFlaechePanel {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form AlboFlaecheDescriptionPanel.
+     * Creates a new AlboFlaecheMainDescriptionPanel object.
      */
-    public AlboFlaecheDescriptionPanel() {
+    public AlboFlaecheMainDescriptionPanel() {
         initComponents();
     }
 
@@ -345,7 +345,7 @@ public class AlboFlaecheDescriptionPanel extends AbstractAlboFlaechePanel {
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheDescriptionPanel(final boolean editable) {
+    public AlboFlaecheMainDescriptionPanel(final boolean editable) {
         super(editable);
     }
 

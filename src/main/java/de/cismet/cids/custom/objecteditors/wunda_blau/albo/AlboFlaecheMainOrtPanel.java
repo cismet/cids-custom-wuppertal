@@ -24,7 +24,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheOrtPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
 
     //~ Methods ----------------------------------------------------------------
 
@@ -315,7 +315,7 @@ public class AlboFlaecheOrtPanel extends AbstractAlboFlaechePanel {
         @Override
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == jComboBox31) {
-                AlboFlaecheOrtPanel.this.jComboBox31ActionPerformed(evt);
+                AlboFlaecheMainOrtPanel.this.jComboBox31ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -351,9 +351,9 @@ public class AlboFlaecheOrtPanel extends AbstractAlboFlaechePanel {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheXXXPanel object.
+     * Creates a new AlboFlaecheMainOrtPanel object.
      */
-    public AlboFlaecheOrtPanel() {
+    public AlboFlaecheMainOrtPanel() {
         initComponents();
     }
 
@@ -362,7 +362,7 @@ public class AlboFlaecheOrtPanel extends AbstractAlboFlaechePanel {
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheOrtPanel(final boolean editable) {
+    public AlboFlaecheMainOrtPanel(final boolean editable) {
         super(editable);
     }
 

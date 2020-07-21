@@ -12,7 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
+import org.apache.log4j.Logger;
+
 import org.jdesktop.beansbinding.BindingGroup;
+
+import de.cismet.cids.custom.objecteditors.wunda_blau.AlboFlaecheEditor;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -33,6 +37,10 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 public abstract class AbstractAlboFlaechePanel extends javax.swing.JPanel implements DisposableCidsBeanStore,
     EditorSaveListener,
     ConnectionContextStore {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    protected static final Logger LOG = Logger.getLogger(AlboFlaecheEditor.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -109,10 +117,12 @@ public abstract class AbstractAlboFlaechePanel extends javax.swing.JPanel implem
                 getBindingGroup().unbind();
             }
             if (cidsBean != null) {
-                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                    getBindingGroup(),
-                    cidsBean,
-                    getConnectionContext());
+                if (getBindingGroup() != null) {
+                    DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                        getBindingGroup(),
+                        cidsBean,
+                        getConnectionContext());
+                }
                 this.cidsBean = cidsBean;
                 if (getBindingGroup() != null) {
                     getBindingGroup().bind();

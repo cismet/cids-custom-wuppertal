@@ -29,19 +29,19 @@ import de.cismet.connectioncontext.ConnectionContext;
 public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheAltablagerungPanel
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel
         alboFlaecheAltablagerungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBewirtschaftungsschadenPanel
         alboFlaecheBewirtschaftungsschadenPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheDescriptionPanel
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainDescriptionPanel
         alboFlaecheDescriptionPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheImmisionPanel alboFlaecheImmisionPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMaterialaufbringungPanel
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainImmisionPanel alboFlaecheImmisionPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel
         alboFlaecheMaterialaufbringungPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheOrtPanel alboFlaecheOrtPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheSchadensfallPanel
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel alboFlaecheOrtPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainSchadensfallPanel
         alboFlaecheSchadensfallPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheStandortPanel alboFlaecheStandortPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel alboFlaecheStandortPanel1;
     private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler28;
     private javax.swing.Box.Filler filler32;
@@ -145,10 +145,10 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panLinks = new javax.swing.JPanel();
         panBeschreibung = new javax.swing.JPanel();
         alboFlaecheDescriptionPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheDescriptionPanel(isEditable());
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainDescriptionPanel(isEditable());
         panRechts = new javax.swing.JPanel();
         panOrt = new javax.swing.JPanel();
-        alboFlaecheOrtPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheOrtPanel(
+        alboFlaecheOrtPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel(
                 isEditable());
         panBPlaene = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -159,26 +159,26 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panSpezifisch = new javax.swing.JPanel();
         panStandort = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        alboFlaecheStandortPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheStandortPanel(
-                false);
+        alboFlaecheStandortPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel(false);
         panSchadensfall = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
         alboFlaecheSchadensfallPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheSchadensfallPanel(false);
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainSchadensfallPanel(false);
         filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
         panAltablagerung = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         alboFlaecheAltablagerungPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheAltablagerungPanel(isEditable());
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel(isEditable());
         filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
         panImmision = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        alboFlaecheImmisionPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheImmisionPanel(
-                isEditable());
+        alboFlaecheImmisionPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainImmisionPanel(isEditable());
         filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
@@ -193,7 +193,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panMaterialaufbringung = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
         alboFlaecheMaterialaufbringungPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMaterialaufbringungPanel(isEditable());
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel(
+                isEditable());
         filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));

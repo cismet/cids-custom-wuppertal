@@ -24,7 +24,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler2;
@@ -55,9 +55,9 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheXXXPanel object.
+     * Creates a new AlboFlaecheMainMaterialaufbringungPanel object.
      */
-    public AlboFlaecheMaterialaufbringungPanel() {
+    public AlboFlaecheMainMaterialaufbringungPanel() {
         initComponents();
     }
 
@@ -66,7 +66,7 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheMaterialaufbringungPanel(final boolean editable) {
+    public AlboFlaecheMainMaterialaufbringungPanel(final boolean editable) {
         super(editable);
     }
 

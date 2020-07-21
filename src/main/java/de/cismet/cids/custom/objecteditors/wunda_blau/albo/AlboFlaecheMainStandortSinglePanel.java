@@ -14,6 +14,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import de.cismet.cids.dynamics.CidsBean;
+
 import de.cismet.connectioncontext.ConnectionContext;
 
 /**
@@ -22,12 +24,11 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainStandortSinglePanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler19;
     private javax.swing.Box.Filler filler20;
-    private javax.swing.Box.Filler filler21;
     private javax.swing.Box.Filler filler22;
     private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler24;
@@ -42,14 +43,11 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel48;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jTextArea1;
@@ -63,9 +61,9 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheXXXPanel object.
+     * Creates a new AlboFlaecheMainStandortSinglePanel object.
      */
-    public AlboFlaecheStandortPanel() {
+    public AlboFlaecheMainStandortSinglePanel() {
         initComponents();
     }
 
@@ -74,7 +72,7 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheStandortPanel(final boolean editable) {
+    public AlboFlaecheMainStandortSinglePanel(final boolean editable) {
         super(editable);
     }
 
@@ -90,9 +88,6 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jPanel10 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
         jTextField8 = new javax.swing.JTextField();
@@ -137,43 +132,10 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
 
         setName("Form"); // NOI18N
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
-
-        jScrollPane3.setName("jScrollPane3"); // NOI18N
-
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-
-                String[] strings = { "1) 1940-1956", "2) 1956-1957", "3) 1957-1999", "4) 1999-2020" };
-
-                @Override
-                public int getSize() {
-                    return strings.length;
-                }
-                @Override
-                public String getElementAt(final int i) {
-                    return strings[i];
-                }
-            });
-        jList1.setName("jList1"); // NOI18N
-        jScrollPane3.setViewportView(jList1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(jScrollPane3, gridBagConstraints);
-
-        jPanel10.setName("jPanel10"); // NOI18N
-        jPanel10.setOpaque(false);
-        jPanel10.setLayout(new java.awt.GridBagLayout());
 
         jPanel14.setName("jPanel14"); // NOI18N
         jPanel14.setOpaque(false);
@@ -269,7 +231,7 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel10.add(jPanel14, gridBagConstraints);
+        add(jPanel14, gridBagConstraints);
 
         jPanel16.setName("jPanel16"); // NOI18N
         jPanel16.setOpaque(false);
@@ -373,7 +335,7 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel10.add(jPanel16, gridBagConstraints);
+        add(jPanel16, gridBagConstraints);
 
         jPanel15.setName("jPanel15"); // NOI18N
         jPanel15.setOpaque(false);
@@ -417,29 +379,21 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel10.add(jPanel15, gridBagConstraints);
+        add(jPanel15, gridBagConstraints);
 
         filler61.setName("filler61"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 130;
-        jPanel10.add(filler61, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        add(jPanel10, gridBagConstraints);
-
-        filler21.setName("filler21"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-        add(filler21, gridBagConstraints);
+        add(filler61, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        super.setCidsBean(cidsBean);
+    }
 
     @Override
     public final void initWithConnectionContext(final ConnectionContext connectionContext) {

@@ -24,7 +24,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheImmisionPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainImmisionPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler30;
@@ -37,9 +37,9 @@ public class AlboFlaecheImmisionPanel extends AbstractAlboFlaechePanel {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheXXXPanel object.
+     * Creates a new AlboFlaecheMainImmisionPanel object.
      */
-    public AlboFlaecheImmisionPanel() {
+    public AlboFlaecheMainImmisionPanel() {
         initComponents();
     }
 
@@ -48,7 +48,7 @@ public class AlboFlaecheImmisionPanel extends AbstractAlboFlaechePanel {
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheImmisionPanel(final boolean editable) {
+    public AlboFlaecheMainImmisionPanel(final boolean editable) {
         super(editable);
     }
 

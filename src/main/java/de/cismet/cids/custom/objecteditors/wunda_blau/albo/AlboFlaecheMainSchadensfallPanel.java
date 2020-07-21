@@ -22,7 +22,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheSchadensfallPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainSchadensfallPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler25;
@@ -35,9 +35,9 @@ public class AlboFlaecheSchadensfallPanel extends AbstractAlboFlaechePanel {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheXXXPanel object.
+     * Creates a new AlboFlaecheMainSchadensfallPanel object.
      */
-    public AlboFlaecheSchadensfallPanel() {
+    public AlboFlaecheMainSchadensfallPanel() {
         initComponents();
     }
 
@@ -46,7 +46,7 @@ public class AlboFlaecheSchadensfallPanel extends AbstractAlboFlaechePanel {
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheSchadensfallPanel(final boolean editable) {
+    public AlboFlaecheMainSchadensfallPanel(final boolean editable) {
         super(editable);
     }
 
