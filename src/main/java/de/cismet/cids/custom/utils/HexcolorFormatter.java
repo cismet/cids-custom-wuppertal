@@ -37,7 +37,7 @@ public class HexcolorFormatter extends DefaultFormatter {
 
     @Override
     public Object stringToValue(final String string) throws ParseException {
-        if (string == null) {
+        if ((string == null) || string.trim().isEmpty()) {
             return null;
         } else if (string.matches("^#[a-fA-F0-9]{0,6}$")) {
             return string.toUpperCase();
