@@ -123,12 +123,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         jPanel23.setOpaque(false);
         jPanel23.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel59,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel59.text")); // NOI18N
-        jLabel59.setName("jLabel59");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel59, "Art:");
+        jLabel59.setName("jLabel59"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -152,12 +148,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel23.add(jComboBox26, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel60,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel60.text")); // NOI18N
-        jLabel60.setName("jLabel60");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel60, "Verfüllkategorie:");
+        jLabel60.setName("jLabel60"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -181,12 +173,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel23.add(jComboBox27, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel61,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel61.text")); // NOI18N
-        jLabel61.setName("jLabel61");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel61, "Erhebungsklasse:");
+        jLabel61.setName("jLabel61"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -237,12 +225,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         jPanel24.setLayout(new java.awt.GridBagLayout());
 
         jLabel62.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel62,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel62.text")); // NOI18N
-        jLabel62.setName("jLabel62");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel62, "<html><b>Verwertung in technischen Bauwerken");
+        jLabel62.setName("jLabel62"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 5;
@@ -250,12 +234,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jLabel62, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox1,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jCheckBox1.text")); // NOI18N
-        jCheckBox1.setName("jCheckBox1");                 // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "RCL Material");
+        jCheckBox1.setName("jCheckBox1"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -274,22 +254,15 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jCheckBox1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel63,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel63.text")); // NOI18N
-        jLabel63.setName("jLabel63");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel63, "Mächtigkeit (RCL):");
+        jLabel63.setName("jLabel63"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jLabel63, gridBagConstraints);
 
-        jFormattedTextField19.setText(org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField19.text")); // NOI18N
-        jFormattedTextField19.setName("jFormattedTextField19");      // NOI18N
+        jFormattedTextField19.setName("jFormattedTextField19"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -305,12 +278,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jFormattedTextField19, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox3,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jCheckBox3.text")); // NOI18N
-        jCheckBox3.setName("jCheckBox3");                 // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, "Industrielle Nebenprodukte");
+        jCheckBox3.setName("jCheckBox3"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -330,12 +299,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         jPanel24.add(jCheckBox3, gridBagConstraints);
 
         jLabel65.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel65,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel65.text")); // NOI18N
-        jLabel65.setName("jLabel65");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel65, "<html><b>Bodenähnliche Verwertung");
+        jLabel65.setName("jLabel65"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 5;
@@ -349,12 +314,8 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel24.add(filler2, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox2,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jCheckBox2.text")); // NOI18N
-        jCheckBox2.setName("jCheckBox2");                 // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, "Bodenänhliche Verwertung");
+        jCheckBox2.setName("jCheckBox2"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -371,22 +332,15 @@ public class AlboFlaecheMaterialaufbringungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jCheckBox2, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel64,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel64.text")); // NOI18N
-        jLabel64.setName("jLabel64");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel64, "Mächtigkeit (Boden):");
+        jLabel64.setName("jLabel64"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jLabel64, gridBagConstraints);
 
-        jFormattedTextField20.setText(org.openide.util.NbBundle.getMessage(
-                AlboFlaecheMaterialaufbringungPanel.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField20.text")); // NOI18N
-        jFormattedTextField20.setName("jFormattedTextField20");      // NOI18N
+        jFormattedTextField20.setName("jFormattedTextField20"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,

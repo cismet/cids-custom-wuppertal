@@ -213,10 +213,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         jPanel7.setOpaque(false);
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel75,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheMainPanel.class, "AlboFlaecheInfoPanel.jLabel58.text")); // NOI18N
-        jLabel75.setName("jLabel75");                                                                                // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel75, "Vorgang:");
+        jLabel75.setName("jLabel75"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -224,10 +222,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 2, 10, 2);
         jPanel7.add(jLabel75, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jXHyperlink2,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheMainPanel.class, "AlboFlaecheInfoPanel.jXHyperlink1.text")); // NOI18N
-        jXHyperlink2.setName("jXHyperlink2");                                                                            // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jXHyperlink2, "14, Hängeordner A-0897a, Regal 17");
+        jXHyperlink2.setName("jXHyperlink2"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -247,10 +243,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         jPanel25.setOpaque(false);
         jPanel25.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel7,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheMainPanel.class, "AlboFlaecheInfoPanel.jLabel2.text")); // NOI18N
-        jLabel7.setName("jLabel7");                                                                                 // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, "Geodaten-ID:");
+        jLabel7.setName("jLabel7"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -332,10 +326,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jTextField9, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel8,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheMainPanel.class, "AlboFlaecheInfoPanel.jLabel3.text")); // NOI18N
-        jLabel8.setName("jLabel8");                                                                                 // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, "Erhebungs-Nr.:");
+        jLabel8.setName("jLabel8"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -344,10 +336,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jLabel8, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel9,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheMainPanel.class, "AlboFlaecheInfoPanel.jLabel1.text")); // NOI18N
-        jLabel9.setName("jLabel9");                                                                                 // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, "Landesregistrier-Nr.:");
+        jLabel9.setName("jLabel9"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -419,11 +409,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panRechts.setOpaque(false);
         panRechts.setLayout(new java.awt.GridBagLayout());
 
-        panOrt.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.panOrt.border.title"))); // NOI18N
-        panOrt.setName("panOrt");                                  // NOI18N
+        panOrt.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Ort"));
+        panOrt.setName("panOrt"); // NOI18N
         panOrt.setOpaque(false);
         panOrt.setLayout(new java.awt.GridBagLayout());
 
@@ -439,11 +426,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panRechts.add(panOrt, gridBagConstraints);
 
-        panBPlaene.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.panBPlaene.border.title"))); // NOI18N
-        panBPlaene.setName("panBPlaene");                              // NOI18N
+        panBPlaene.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>BPläne"));
+        panBPlaene.setName("panBPlaene"); // NOI18N
         panBPlaene.setOpaque(false);
         panBPlaene.setLayout(new java.awt.GridBagLayout());
 
@@ -490,7 +474,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panStandort.setOpaque(false);
         panStandort.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Standort"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Standort"));
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -516,11 +500,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panSchadensfall.setOpaque(false);
         panSchadensfall.setLayout(new java.awt.GridBagLayout());
 
-        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.jPanel18.border.title"))); // NOI18N
-        jPanel18.setName("jPanel18");                                // NOI18N
+        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Schadensfall"));
+        jPanel18.setName("jPanel18"); // NOI18N
         jPanel18.setOpaque(false);
         jPanel18.setLayout(new java.awt.GridBagLayout());
 
@@ -554,11 +535,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panAltablagerung.setOpaque(false);
         panAltablagerung.setLayout(new java.awt.GridBagLayout());
 
-        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.jPanel11.border.title"))); // NOI18N
-        jPanel11.setName("jPanel11");                                // NOI18N
+        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Altablagerung"));
+        jPanel11.setName("jPanel11"); // NOI18N
         jPanel11.setOpaque(false);
         jPanel11.setLayout(new java.awt.GridBagLayout());
 
@@ -592,11 +570,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panImmision.setOpaque(false);
         panImmision.setLayout(new java.awt.GridBagLayout());
 
-        jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.jPanel19.border.title"))); // NOI18N
-        jPanel19.setName("jPanel19");                                // NOI18N
+        jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Immision/Überschwemm. Fläche"));
+        jPanel19.setName("jPanel19"); // NOI18N
         jPanel19.setOpaque(false);
         jPanel19.setLayout(new java.awt.GridBagLayout());
 
@@ -630,11 +605,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panBewirtschaftungsschaden.setOpaque(false);
         panBewirtschaftungsschaden.setLayout(new java.awt.GridBagLayout());
 
-        jPanel21.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.jPanel21.border.title"))); // NOI18N
-        jPanel21.setName("jPanel21");                                // NOI18N
+        jPanel21.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Bewirtschaftungsschaden"));
+        jPanel21.setName("jPanel21"); // NOI18N
         jPanel21.setOpaque(false);
         jPanel21.setLayout(new java.awt.GridBagLayout());
 
@@ -668,11 +640,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panMaterialaufbringung.setOpaque(false);
         panMaterialaufbringung.setLayout(new java.awt.GridBagLayout());
 
-        jPanel22.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.jPanel12.border.title"))); // NOI18N
-        jPanel22.setName("jPanel22");                                // NOI18N
+        jPanel22.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Unsachgemäße Materialaufbringung"));
+        jPanel22.setName("jPanel22"); // NOI18N
         jPanel22.setOpaque(false);
         jPanel22.setLayout(new java.awt.GridBagLayout());
 
@@ -706,20 +675,17 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panOhneVerdacht.setOpaque(false);
         panOhneVerdacht.setLayout(new java.awt.GridBagLayout());
 
-        jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    AlboFlaecheMainPanel.class,
-                    "AlboFlaecheInfoPanel.jPanel20.border.title"))); // NOI18N
-        jPanel20.setName("jPanel20");                                // NOI18N
+        jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Untersucht ohne Verdacht"));
+        jPanel20.setName("jPanel20"); // NOI18N
         jPanel20.setOpaque(false);
         jPanel20.setLayout(new java.awt.GridBagLayout());
 
         jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel54,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheMainPanel.class, "AlboFlaecheInfoPanel.jLabel54.text")); // NOI18N
+            "<html><b><big>Fläche wurde ohne Anfangsverdacht untersucht.");
         jLabel54.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel54.setName("jLabel54");                                                                                // NOI18N
+        jLabel54.setName("jLabel54"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

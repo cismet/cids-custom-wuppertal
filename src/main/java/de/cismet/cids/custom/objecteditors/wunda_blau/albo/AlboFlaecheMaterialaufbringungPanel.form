@@ -35,9 +35,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel59">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel59.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Art:"/>
             <Property name="name" type="java.lang.String" value="jLabel59" noResource="true"/>
           </Properties>
           <Constraints>
@@ -64,9 +62,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel60">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel60.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Verf&#xfc;llkategorie:"/>
             <Property name="name" type="java.lang.String" value="jLabel60" noResource="true"/>
           </Properties>
           <Constraints>
@@ -93,9 +89,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel61">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel61.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Erhebungsklasse:"/>
             <Property name="name" type="java.lang.String" value="jLabel61" noResource="true"/>
           </Properties>
           <Constraints>
@@ -170,9 +164,7 @@
         <Component class="javax.swing.JLabel" name="jLabel62">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel62.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Verwertung in technischen Bauwerken"/>
             <Property name="name" type="java.lang.String" value="jLabel62" noResource="true"/>
           </Properties>
           <Constraints>
@@ -183,9 +175,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBox1">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="RCL Material"/>
             <Property name="name" type="java.lang.String" value="jCheckBox1" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -202,9 +192,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel63">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel63.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="M&#xe4;chtigkeit (RCL):"/>
             <Property name="name" type="java.lang.String" value="jLabel63" noResource="true"/>
           </Properties>
           <Constraints>
@@ -215,9 +203,6 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField19">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jFormattedTextField19.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField19" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -231,9 +216,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBox3">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jCheckBox3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Industrielle Nebenprodukte"/>
             <Property name="name" type="java.lang.String" value="jCheckBox3" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -251,9 +234,7 @@
         <Component class="javax.swing.JLabel" name="jLabel65">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel65.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Boden&#xe4;hnliche Verwertung"/>
             <Property name="name" type="java.lang.String" value="jLabel65" noResource="true"/>
           </Properties>
           <Constraints>
@@ -280,9 +261,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBox2">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jCheckBox2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Boden&#xe4;nhliche Verwertung"/>
             <Property name="name" type="java.lang.String" value="jCheckBox2" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -296,9 +275,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel64">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel64.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="M&#xe4;chtigkeit (Boden):"/>
             <Property name="name" type="java.lang.String" value="jLabel64" noResource="true"/>
           </Properties>
           <Constraints>
@@ -309,9 +286,6 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField20">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jFormattedTextField20.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField20" noResource="true"/>
           </Properties>
           <BindingProperties>

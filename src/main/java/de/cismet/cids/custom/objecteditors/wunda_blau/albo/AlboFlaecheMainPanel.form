@@ -48,9 +48,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel75">
               <Properties>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel58.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="Vorgang:"/>
                 <Property name="name" type="java.lang.String" value="jLabel75" noResource="true"/>
               </Properties>
               <Constraints>
@@ -61,9 +59,7 @@
             </Component>
             <Component class="org.jdesktop.swingx.JXHyperlink" name="jXHyperlink2">
               <Properties>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jXHyperlink1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="14, H&#xe4;ngeordner A-0897a, Regal 17"/>
                 <Property name="name" type="java.lang.String" value="jXHyperlink2" noResource="true"/>
               </Properties>
               <Constraints>
@@ -89,9 +85,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="Geodaten-ID:"/>
                 <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
               </Properties>
               <Constraints>
@@ -185,9 +179,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Erhebungs-Nr.:"/>
             <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
           </Properties>
           <Constraints>
@@ -198,9 +190,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Landesregistrier-Nr.:"/>
             <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
           </Properties>
           <Constraints>
@@ -303,9 +293,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="&lt;html&gt;&lt;b&gt;Ort">
-                  <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.panOrt.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </TitledBorder>
+                <TitledBorder title="&lt;html&gt;&lt;b&gt;Ort"/>
               </Border>
             </Property>
             <Property name="name" type="java.lang.String" value="panOrt" noResource="true"/>
@@ -338,9 +326,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="&lt;html&gt;&lt;b&gt;BPl&#xe4;ne">
-                  <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.panBPlaene.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </TitledBorder>
+                <TitledBorder title="&lt;html&gt;&lt;b&gt;BPl&#xe4;ne"/>
               </Border>
             </Property>
             <Property name="name" type="java.lang.String" value="panBPlaene" noResource="true"/>
@@ -430,7 +416,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Standort"/>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Standort"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
@@ -478,9 +464,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Schadensfall">
-                      <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jPanel18.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </TitledBorder>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Schadensfall"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel18" noResource="true"/>
@@ -544,9 +528,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Altablagerung">
-                      <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jPanel11.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </TitledBorder>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Altablagerung"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel11" noResource="true"/>
@@ -610,9 +592,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Immision/&#xdc;berschwemm. Fl&#xe4;che">
-                      <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jPanel19.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </TitledBorder>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Immision/&#xdc;berschwemm. Fl&#xe4;che"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel19" noResource="true"/>
@@ -676,9 +656,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Bewirtschaftungsschaden">
-                      <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jPanel21.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </TitledBorder>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Bewirtschaftungsschaden"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel21" noResource="true"/>
@@ -742,9 +720,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Unsachgem&#xe4;&#xdf;e Materialaufbringung">
-                      <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jPanel12.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </TitledBorder>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Unsachgem&#xe4;&#xdf;e Materialaufbringung"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel22" noResource="true"/>
@@ -808,9 +784,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Untersucht ohne Verdacht">
-                      <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jPanel20.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </TitledBorder>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Untersucht ohne Verdacht"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel20" noResource="true"/>
@@ -827,9 +801,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel54">
                   <Properties>
                     <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel54.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </Property>
+                    <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;&lt;big&gt;Fl&#xe4;che wurde ohne Anfangsverdacht untersucht."/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="name" type="java.lang.String" value="jLabel54" noResource="true"/>
                   </Properties>

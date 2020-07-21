@@ -22,9 +22,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel56">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel56.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
+        <Property name="text" type="java.lang.String" value="Art:"/>
         <Property name="name" type="java.lang.String" value="jLabel56" noResource="true"/>
       </Properties>
       <Constraints>

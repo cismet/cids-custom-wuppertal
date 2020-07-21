@@ -82,9 +82,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel12">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
+        <Property name="text" type="java.lang.String" value="Jahr von:"/>
         <Property name="name" type="java.lang.String" value="jLabel12" noResource="true"/>
       </Properties>
       <Constraints>
@@ -108,9 +106,6 @@
       <SubComponents>
         <Component class="javax.swing.JFormattedTextField" name="txtJahrVon">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jFormattedTextField17.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="txtJahrVon" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -140,9 +135,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel74">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel51.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Jahr bis:"/>
             <Property name="name" type="java.lang.String" value="jLabel74" noResource="true"/>
           </Properties>
           <Constraints>
@@ -153,9 +146,6 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="txtJahrBis">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jFormattedTextField18.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="txtJahrBis" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -171,9 +161,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel14">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel14.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
+        <Property name="text" type="java.lang.String" value="Status der Fl&#xe4;che:"/>
         <Property name="name" type="java.lang.String" value="jLabel14" noResource="true"/>
       </Properties>
       <Constraints>
@@ -201,9 +189,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel15">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel15.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
+        <Property name="text" type="java.lang.String" value="Fl&#xe4;chenzuordnung zu:"/>
         <Property name="name" type="java.lang.String" value="jLabel15" noResource="true"/>
       </Properties>
       <Constraints>
@@ -231,9 +217,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="AlboFlaecheInfoPanel.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
+        <Property name="text" type="java.lang.String" value="Alte Nummer:"/>
         <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
       </Properties>
       <Constraints>

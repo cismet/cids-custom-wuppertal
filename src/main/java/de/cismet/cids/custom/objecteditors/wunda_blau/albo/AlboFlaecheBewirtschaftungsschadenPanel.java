@@ -77,12 +77,8 @@ public class AlboFlaecheBewirtschaftungsschadenPanel extends AbstractAlboFlaeche
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel56,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheBewirtschaftungsschadenPanel.class,
-                "AlboFlaecheInfoPanel.jLabel56.text")); // NOI18N
-        jLabel56.setName("jLabel56");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel56, "Art:");
+        jLabel56.setName("jLabel56"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

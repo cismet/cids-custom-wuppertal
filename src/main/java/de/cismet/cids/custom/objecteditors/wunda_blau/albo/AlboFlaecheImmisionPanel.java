@@ -77,10 +77,8 @@ public class AlboFlaecheImmisionPanel extends AbstractAlboFlaechePanel {
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel53,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheImmisionPanel.class, "AlboFlaecheInfoPanel.jLabel53.text")); // NOI18N
-        jLabel53.setName("jLabel53");                                                                                    // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel53, "Art:");
+        jLabel53.setName("jLabel53"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

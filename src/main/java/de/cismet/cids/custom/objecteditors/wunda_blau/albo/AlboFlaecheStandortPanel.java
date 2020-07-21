@@ -179,10 +179,8 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         jPanel14.setOpaque(false);
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel55,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheStandortPanel.class, "AlboFlaecheInfoPanel.jLabel55.text")); // NOI18N
-        jLabel55.setName("jLabel55");                                                                                    // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel55, "Betriebsname:");
+        jLabel55.setName("jLabel55"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -206,10 +204,8 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel14.add(jTextField8, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel5,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheStandortPanel.class, "AlboFlaecheInfoPanel.jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5");                                                                                     // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, "Adressbuch-Adresse:");
+        jLabel5.setName("jLabel5"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -238,20 +234,15 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel14.add(jScrollPane4, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel57,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheStandortPanel.class, "AlboFlaecheInfoPanel.jLabel57.text")); // NOI18N
-        jLabel57.setName("jLabel57");                                                                                    // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel57, "Adressbuch-Branche:");
+        jLabel57.setName("jLabel57"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel14.add(jLabel57, gridBagConstraints);
 
-        jTextField10.setText(org.openide.util.NbBundle.getMessage(
-                AlboFlaecheStandortPanel.class,
-                "AlboFlaecheInfoPanel.jTextField10.text")); // NOI18N
-        jTextField10.setName("jTextField10");               // NOI18N
+        jTextField10.setName("jTextField10"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -284,10 +275,8 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         jPanel16.setOpaque(false);
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel50,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheStandortPanel.class, "AlboFlaecheInfoPanel.jLabel50.text")); // NOI18N
-        jLabel50.setName("jLabel50");                                                                                    // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel50, "Jahr von:");
+        jLabel50.setName("jLabel50"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -298,10 +287,7 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         jPanel48.setOpaque(false);
         jPanel48.setLayout(new java.awt.GridBagLayout());
 
-        jFormattedTextField17.setText(org.openide.util.NbBundle.getMessage(
-                AlboFlaecheStandortPanel.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField17.text")); // NOI18N
-        jFormattedTextField17.setName("jFormattedTextField17");      // NOI18N
+        jFormattedTextField17.setName("jFormattedTextField17"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -315,10 +301,8 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.ipadx = 20;
         jPanel48.add(filler63, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel51,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheStandortPanel.class, "AlboFlaecheInfoPanel.jLabel51.text")); // NOI18N
-        jLabel51.setName("jLabel51");                                                                                    // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel51, "Jahr bis:");
+        jLabel51.setName("jLabel51"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -326,10 +310,7 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel48.add(jLabel51, gridBagConstraints);
 
-        jFormattedTextField18.setText(org.openide.util.NbBundle.getMessage(
-                AlboFlaecheStandortPanel.class,
-                "AlboFlaecheInfoPanel.jFormattedTextField18.text")); // NOI18N
-        jFormattedTextField18.setName("jFormattedTextField18");      // NOI18N
+        jFormattedTextField18.setName("jFormattedTextField18"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -343,10 +324,8 @@ public class AlboFlaecheStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         jPanel16.add(jPanel48, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel6,
-            org.openide.util.NbBundle.getMessage(AlboFlaecheStandortPanel.class, "AlboFlaecheInfoPanel.jLabel6.text")); // NOI18N
-        jLabel6.setName("jLabel6");                                                                                     // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, "Bemerkungen:");
+        jLabel6.setName("jLabel6"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

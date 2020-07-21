@@ -97,12 +97,8 @@ public class AlboFlaecheAltablagerungPanel extends AbstractAlboFlaechePanel {
         jPanel12.setOpaque(false);
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel42,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheAltablagerungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel42.text")); // NOI18N
-        jLabel42.setName("jLabel42");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel42, "Stilllegung:");
+        jLabel42.setName("jLabel42"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -126,12 +122,8 @@ public class AlboFlaecheAltablagerungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel12.add(jComboBox20, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel43,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheAltablagerungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel43.text")); // NOI18N
-        jLabel43.setName("jLabel43");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel43, "Verfüllkategorie:");
+        jLabel43.setName("jLabel43"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -155,12 +147,8 @@ public class AlboFlaecheAltablagerungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel12.add(jComboBox21, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel44,
-            org.openide.util.NbBundle.getMessage(
-                AlboFlaecheAltablagerungPanel.class,
-                "AlboFlaecheInfoPanel.jLabel44.text")); // NOI18N
-        jLabel44.setName("jLabel44");                   // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel44, "Abfallherkunft:");
+        jLabel44.setName("jLabel44"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
