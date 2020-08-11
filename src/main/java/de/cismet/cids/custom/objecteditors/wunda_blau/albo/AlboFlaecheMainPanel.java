@@ -31,14 +31,20 @@ import de.cismet.connectioncontext.ConnectionContext;
 public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel alboFlaecheAltablagerungPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBeschreibungPanel alboFlaecheBeschreibungPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel alboFlaecheBewirtschaftungsschadenPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainImmisionPanel alboFlaecheImmisionPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel alboFlaecheMaterialaufbringungPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel
+        alboFlaecheAltablagerungPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBeschreibungPanel
+        alboFlaecheBeschreibungPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel
+        alboFlaecheBewirtschaftungsschadenPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainImmissionPanel alboFlaecheImmisionPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel
+        alboFlaecheMaterialaufbringungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel alboFlaecheOrtPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainSchadensfallPanel alboFlaecheSchadensfallPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel alboFlaecheStandortPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainSchadensfallPanel
+        alboFlaecheSchadensfallPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortePanel
+        alboFlaecheStandortePanel1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler27;
@@ -48,15 +54,12 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.Box.Filler filler38;
     private javax.swing.Box.Filler filler56;
     private javax.swing.Box.Filler filler58;
-    private javax.swing.Box.Filler filler62;
     private javax.swing.Box.Filler filler69;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel75;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel18;
@@ -64,16 +67,11 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel25;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField9;
-    private org.jdesktop.swingx.JXHyperlink jXHyperlink2;
     private javax.swing.JPanel panAltablagerung;
-    private javax.swing.JPanel panBPlaene;
     private javax.swing.JPanel panBeschreibung;
     private javax.swing.JPanel panBewirtschaftungsschaden;
     private javax.swing.JPanel panImmision;
@@ -120,190 +118,141 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         panTop = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel75 = new javax.swing.JLabel();
-        jXHyperlink2 = new org.jdesktop.swingx.JXHyperlink();
-        jPanel25 = new javax.swing.JPanel();
+        if (isEditable()) {
+            jLabel8 = new javax.swing.JLabel();
+        }
+        if (isEditable()) {
+            jTextField9 = new javax.swing.JTextField();
+        }
+        jLabel9 = new javax.swing.JLabel();
+        jTextField11 = new javax.swing.JTextField();
+        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         jLabel7 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jTextField12 = new javax.swing.JTextField();
-        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        filler58 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jTextField9 = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
-        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        filler58 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         panLinks = new javax.swing.JPanel();
         panBeschreibung = new javax.swing.JPanel();
-        alboFlaecheBeschreibungPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBeschreibungPanel(isEditable());
+        alboFlaecheBeschreibungPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBeschreibungPanel(isEditable());
         panRechts = new javax.swing.JPanel();
         panOrt = new javax.swing.JPanel();
-        alboFlaecheOrtPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel(isEditable());
-        panBPlaene = new javax.swing.JPanel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
-        filler62 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        alboFlaecheOrtPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel(
+                isEditable());
         panSpezifisch = new javax.swing.JPanel();
         panStandort = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        alboFlaecheStandortPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel(false);
+        alboFlaecheStandortePanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortePanel(isEditable());
         panSchadensfall = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
-        alboFlaecheSchadensfallPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainSchadensfallPanel(false);
-        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        alboFlaecheSchadensfallPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainSchadensfallPanel(isEditable());
+        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
         panAltablagerung = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
-        alboFlaecheAltablagerungPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel(isEditable());
-        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        alboFlaecheAltablagerungPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel(isEditable());
+        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
         panImmision = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        alboFlaecheImmisionPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainImmisionPanel(isEditable());
-        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        alboFlaecheImmisionPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainImmissionPanel(isEditable());
+        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
         panBewirtschaftungsschaden = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
-        alboFlaecheBewirtschaftungsschadenPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel(isEditable());
-        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        alboFlaecheBewirtschaftungsschadenPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel(
+                isEditable());
+        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
         panMaterialaufbringung = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
-        alboFlaecheMaterialaufbringungPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel(isEditable());
-        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        alboFlaecheMaterialaufbringungPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel(
+                isEditable());
+        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
         panOhneVerdacht = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         jLabel54 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
 
         setName("Form"); // NOI18N
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        panTop.setName("panTop"); // NOI18N
         panTop.setOpaque(false);
-        panTop.setLayout(new java.awt.GridBagLayout());
 
-        jPanel7.setName("jPanel7"); // NOI18N
-        jPanel7.setOpaque(false);
-        jPanel7.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel75, "Vorgang:");
-        jLabel75.setName("jLabel75"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 10);
-        jPanel7.add(jLabel75, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jXHyperlink2, "14, Hängeordner A-0897a, Regal 17");
-        jXHyperlink2.setName("jXHyperlink2"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel7.add(jXHyperlink2, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        panTop.add(jPanel7, gridBagConstraints);
-
-        jPanel25.setName("jPanel25"); // NOI18N
-        jPanel25.setOpaque(false);
-        jPanel25.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, "Geodaten-ID:");
-        jLabel7.setName("jLabel7"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
-        jPanel25.add(jLabel7, gridBagConstraints);
-
-        jTextField6.setEditable(false);
-        jTextField6.setName("jTextField6"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
-        jPanel25.add(jTextField6, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "Lfd. Nummer:");
-        jLabel10.setName("jLabel10"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel25.add(jLabel10, gridBagConstraints);
-
-        jTextField12.setEditable(false);
-        jTextField12.setName("jTextField12"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel25.add(jTextField12, gridBagConstraints);
-
-        filler56.setName("filler56"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 1.0;
-        jPanel25.add(filler56, gridBagConstraints);
-
-        filler58.setName("filler58"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 75;
-        gridBagConstraints.weightx = 1.0;
-        jPanel25.add(filler58, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        panTop.add(jPanel25, gridBagConstraints);
-
-        jTextField9.setEditable(false);
-        jTextField9.setName("jTextField9"); // NOI18N
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.erhebungsnummer}"), jTextField9, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_ONCE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${UIClassID}"),
+                panTop,
+                org.jdesktop.beansbinding.BeanProperty.create("name"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(jTextField9, gridBagConstraints);
+        panTop.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, "Erhebungs-Nr.:");
-        jLabel8.setName("jLabel8"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(jLabel8, gridBagConstraints);
+        if (isEditable()) {
+            org.openide.awt.Mnemonics.setLocalizedText(jLabel8, "Erhebungs-Nr.:");
+            jLabel8.setName("jLabel8"); // NOI18N
+        }
+        if (isEditable()) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+            panTop.add(jLabel8, gridBagConstraints);
+        }
+
+        if (isEditable()) {
+            jTextField9.setEditable(false);
+            jTextField9.setName("jTextField9"); // NOI18N
+
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.erhebungsnummer}"),
+                    jTextField9,
+                    org.jdesktop.beansbinding.BeanProperty.create("text"));
+            bindingGroup.addBinding(binding);
+        }
+        if (isEditable()) {
+        }
+        if (isEditable()) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+            panTop.add(jTextField9, gridBagConstraints);
+        }
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, "Landesregistrier-Nr.:");
         jLabel9.setName("jLabel9"); // NOI18N
@@ -317,6 +266,15 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         jTextField11.setEditable(false);
         jTextField11.setName("jTextField11"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.landesregistriernummer}"),
+                jTextField11,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -334,6 +292,81 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panTop.add(filler69, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, "Geodaten-ID:");
+        jLabel7.setName("jLabel7"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
+        panTop.add(jLabel7, gridBagConstraints);
+
+        jTextField6.setEditable(false);
+        jTextField6.setName("jTextField6"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geodaten_id}"),
+                jTextField6,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
+        panTop.add(jTextField6, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "Lfd. Nummer:");
+        jLabel10.setName("jLabel10"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        panTop.add(jLabel10, gridBagConstraints);
+
+        jTextField12.setEditable(false);
+        jTextField12.setName("jTextField12"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"),
+                jTextField12,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        panTop.add(jTextField12, gridBagConstraints);
+
+        filler56.setName("filler56"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.weightx = 1.0;
+        panTop.add(filler56, gridBagConstraints);
+
+        filler58.setName("filler58"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 75;
+        gridBagConstraints.weightx = 1.0;
+        panTop.add(filler58, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -383,48 +416,20 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         alboFlaecheOrtPanel1.setName("alboFlaecheOrtPanel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panOrt.add(alboFlaecheOrtPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panRechts.add(panOrt, gridBagConstraints);
-
-        panBPlaene.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>BPläne"));
-        panBPlaene.setName("panBPlaene"); // NOI18N
-        panBPlaene.setOpaque(false);
-        panBPlaene.setLayout(new java.awt.GridBagLayout());
-
-        jScrollPane6.setName("jScrollPane6"); // NOI18N
-
-        jList2.setName("jList2"); // NOI18N
-        jList2.setVisibleRowCount(5);
-        jScrollPane6.setViewportView(jList2);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panBPlaene.add(jScrollPane6, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panRechts.add(panBPlaene, gridBagConstraints);
-
-        filler62.setName("filler62"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 80;
-        panRechts.add(filler62, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -446,13 +451,13 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        alboFlaecheStandortPanel1.setName("alboFlaecheStandortPanel1"); // NOI18N
+        alboFlaecheStandortePanel1.setName("alboFlaecheStandortePanel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(alboFlaecheStandortPanel1, gridBagConstraints);
+        jPanel1.add(alboFlaecheStandortePanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -648,7 +653,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         jPanel20.setLayout(new java.awt.GridBagLayout());
 
         jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel54, "<html><b><big>Fläche wurde ohne Anfangsverdacht untersucht.");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel54,
+            "<html><b><big>Fläche wurde ohne Anfangsverdacht untersucht.");
         jLabel54.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel54.setName("jLabel54"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -695,7 +702,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         add(filler2, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
@@ -704,12 +711,14 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheBeschreibungPanel1.setCidsBean(cidsBean);
         alboFlaecheOrtPanel1.setCidsBean(cidsBean);
 
-        alboFlaecheStandortPanel1.setCidsBean(cidsBean);
-        alboFlaecheSchadensfallPanel1.setCidsBean(cidsBean);
-        alboFlaecheImmisionPanel1.setCidsBean(cidsBean);
-        alboFlaecheMaterialaufbringungPanel1.setCidsBean(cidsBean);
-        alboFlaecheBewirtschaftungsschadenPanel1.setCidsBean(cidsBean);
-        alboFlaecheAltablagerungPanel1.setCidsBean(cidsBean);
+        alboFlaecheStandortePanel1.setCidsBean(cidsBean);
+
+        alboFlaecheSchadensfallPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_schadensfall"));
+        alboFlaecheImmisionPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_immission"));
+        alboFlaecheMaterialaufbringungPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_materialaufbringung"));
+        alboFlaecheBewirtschaftungsschadenPanel1.setCidsBean((CidsBean)cidsBean.getProperty(
+                "fk_bewirtschaftungsschaden"));
+        alboFlaecheAltablagerungPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_altablagerung"));
     }
 
     @Override
@@ -719,7 +728,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheBeschreibungPanel1.dispose();
         alboFlaecheOrtPanel1.dispose();
 
-        alboFlaecheStandortPanel1.dispose();
+        alboFlaecheStandortePanel1.dispose();
         alboFlaecheSchadensfallPanel1.dispose();
         alboFlaecheImmisionPanel1.dispose();
         alboFlaecheMaterialaufbringungPanel1.dispose();
@@ -734,7 +743,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheBeschreibungPanel1.editorClosed(event);
         alboFlaecheOrtPanel1.editorClosed(event);
 
-        alboFlaecheStandortPanel1.editorClosed(event);
+        alboFlaecheStandortePanel1.editorClosed(event);
         alboFlaecheSchadensfallPanel1.editorClosed(event);
         alboFlaecheImmisionPanel1.editorClosed(event);
         alboFlaecheMaterialaufbringungPanel1.editorClosed(event);
@@ -750,7 +759,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheBeschreibungPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheOrtPanel1.initWithConnectionContext(connectionContext);
 
-        alboFlaecheStandortPanel1.initWithConnectionContext(connectionContext);
+        alboFlaecheStandortePanel1.initWithConnectionContext(connectionContext);
         alboFlaecheSchadensfallPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheImmisionPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheMaterialaufbringungPanel1.initWithConnectionContext(connectionContext);

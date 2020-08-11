@@ -14,15 +14,21 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.beansbinding.ELProperty;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -53,8 +59,11 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmen
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -76,7 +85,8 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @version  $Revision$, $Date$
  */
 @AggregationRenderer
-public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore,
+public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
+    DisposableCidsBeanStore,
     TitleComponentProvider,
     FooterComponentProvider,
     BorderProvider,
@@ -96,6 +106,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
+        bindingGroup = new BindingGroup();
 
         panTitle = new JPanel();
         lblTitle = new JLabel();
@@ -126,16 +137,20 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         jButton17 = new JButton();
         jButton18 = new JButton();
 
-        final FormListener formListener = new FormListener();
+        FormListener formListener = new FormListener();
 
         panTitle.setName("panTitle"); // NOI18N
         panTitle.setOpaque(false);
         panTitle.setLayout(new GridBagLayout());
 
-        lblTitle.setFont(new Font("Tahoma", 1, 14)); // NOI18N
         lblTitle.setForeground(new Color(255, 255, 255));
-        lblTitle.setText("Altlastenkataster - Fläche");
-        lblTitle.setName("lblTitle");                // NOI18N
+        lblTitle.setName("lblTitle"); // NOI18N
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: ${cidsBean.erhebungsnummer}"), lblTitle, BeanProperty.create("text"));
+        binding.setSourceNullValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: -");
+        binding.setSourceUnreadableValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: <i>[Fehler]");
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -302,36 +317,32 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panMainCard, gridBagConstraints);
+
+        bindingGroup.bind();
     }
 
-    /**
-     * Code for dispatching events from components to event handlers.
-     *
-     * @version  $Revision$, $Date$
-     */
+    // Code for dispatching events from components to event handlers.
+
     private class FormListener implements ActionListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
+        FormListener() {}
+        public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == jToggleButton1) {
                 AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton2) {
+            }
+            else if (evt.getSource() == jToggleButton2) {
                 AlboFlaecheEditor.this.jToggleButton2ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton3) {
+            }
+            else if (evt.getSource() == jToggleButton3) {
                 AlboFlaecheEditor.this.jToggleButton3ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton4) {
+            }
+            else if (evt.getSource() == jToggleButton4) {
                 AlboFlaecheEditor.this.jToggleButton4ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton5) {
+            }
+            else if (evt.getSource() == jToggleButton5) {
                 AlboFlaecheEditor.this.jToggleButton5ActionPerformed(evt);
             }
         }
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     //~ Instance fields --------------------------------------------------------
 
@@ -370,6 +381,7 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
     private JPanel panMainCard;
     private AlboFlaecheMassnahmenPanel panMassnahmen;
     private JPanel panTitle;
+    private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -427,14 +439,14 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-//        bindingGroup.unbind();
+        bindingGroup.unbind();
         if (cidsBean != null) {
-//            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-//                bindingGroup,
-//                cidsBean,
-//                getConnectionContext());
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                cidsBean,
+                getConnectionContext());
             this.cidsBean = cidsBean;
-//            bindingGroup.bind();
+            bindingGroup.bind();
         }
         panMain.setCidsBean(cidsBean);
         panArbeitsstand.setCidsBean(cidsBean);
@@ -597,9 +609,18 @@ public class AlboFlaecheEditor extends JPanel implements DisposableCidsBeanStore
             "WUNDA_BLAU",
             null,
             true,
-            "albo_flaeche",
-            1,
+            "ALBO_FLAECHE",
+            16521,
             1200,
             800);
+    }
+
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
+    public void setTitle(final String title) {
     }
 }

@@ -78,11 +78,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel37 = new javax.swing.JPanel();
         panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenMainPanel(isEditable());
-        jPanel29 = new javax.swing.JPanel();
+        jPanel42 = new javax.swing.JPanel();
         panDekontamination =
             new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel(
                 isEditable());
-        jPanel42 = new javax.swing.JPanel();
+        jPanel29 = new javax.swing.JPanel();
         panSicherung = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel(
                 isEditable());
         jPanel52 = new javax.swing.JPanel();
@@ -105,23 +105,23 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
 
         jTabbedPane2.addTab("Maßnahme", jPanel37);
 
-        jPanel29.setName("jPanel29"); // NOI18N
-        jPanel29.setOpaque(false);
-        jPanel29.setLayout(new java.awt.BorderLayout());
-
-        panDekontamination.setName("panDekontamination"); // NOI18N
-        jPanel29.add(panDekontamination, java.awt.BorderLayout.CENTER);
-
-        jTabbedPane2.addTab("Dekontaminationsmaßnahmen", jPanel29);
-
         jPanel42.setName("jPanel42"); // NOI18N
         jPanel42.setOpaque(false);
         jPanel42.setLayout(new java.awt.BorderLayout());
 
-        panSicherung.setName("panSicherung"); // NOI18N
-        jPanel42.add(panSicherung, java.awt.BorderLayout.CENTER);
+        panDekontamination.setName("panDekontamination"); // NOI18N
+        jPanel42.add(panDekontamination, java.awt.BorderLayout.CENTER);
 
         jTabbedPane2.addTab("Sicherungsmaßnahmen", jPanel42);
+
+        jPanel29.setName("jPanel29"); // NOI18N
+        jPanel29.setOpaque(false);
+        jPanel29.setLayout(new java.awt.BorderLayout());
+
+        panSicherung.setName("panSicherung"); // NOI18N
+        jPanel29.add(panSicherung, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane2.addTab("Dekontaminationsmaßnahmen", jPanel29);
 
         jPanel52.setName("jPanel52"); // NOI18N
         jPanel52.setOpaque(false);
@@ -154,8 +154,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         super.setCidsBean(cidsBean);
 
         panMain.setCidsBean(cidsBean);
-        panSicherung.setCidsBean(cidsBean);
         panDekontamination.setCidsBean(cidsBean);
+        panSicherung.setCidsBean(cidsBean);
         panSchutzUndBeschraenkung.setCidsBean(cidsBean);
     }
 
@@ -165,8 +165,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         initComponents();
 
         panMain.initWithConnectionContext(connectionContext);
-        panSicherung.initWithConnectionContext(connectionContext);
         panDekontamination.initWithConnectionContext(connectionContext);
+        panSicherung.initWithConnectionContext(connectionContext);
         panSchutzUndBeschraenkung.initWithConnectionContext(connectionContext);
 
         if (!isEditable()) {
@@ -179,8 +179,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         super.dispose();
 
         panMain.dispose();
-        panSicherung.dispose();
         panDekontamination.dispose();
+        panSicherung.dispose();
         panSchutzUndBeschraenkung.dispose();
     }
 
@@ -189,8 +189,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         super.editorClosed(event);
 
         panMain.editorClosed(event);
-        panSicherung.editorClosed(event);
         panDekontamination.editorClosed(event);
+        panSicherung.editorClosed(event);
         panSchutzUndBeschraenkung.editorClosed(event);
     }
 

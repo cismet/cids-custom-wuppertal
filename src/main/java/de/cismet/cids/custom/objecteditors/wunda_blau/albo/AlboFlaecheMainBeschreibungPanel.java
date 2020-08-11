@@ -52,6 +52,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         cbFlaechenart = new DefaultBindableScrollableComboBox();
         jLabel12 = new javax.swing.JLabel();
         jPanel54 = new javax.swing.JPanel();
+        jLabel75 = new javax.swing.JLabel();
         txtJahrVon = new javax.swing.JFormattedTextField();
         filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -62,6 +63,12 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         cbFlaechenstatus = new DefaultBindableScrollableComboBox();
         jLabel15 = new javax.swing.JLabel();
         cbFlaechenzuordnung = new DefaultBindableScrollableComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstVorgaenge = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
         txtAlteNummer = new javax.swing.JTextField();
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
@@ -90,7 +97,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_flaechentyp}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_typ}"),
                 cbFlaechentyp,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -101,6 +108,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechentyp, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)cbFlaechentyp).setNullable(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel13, "Art der Fläche:");
         jLabel13.setName("jLabel13"); // NOI18N
@@ -115,7 +123,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_flaechenart}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"),
                 cbFlaechenart,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -127,7 +135,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenart, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, "Jahr von:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, "Jahr");
         jLabel12.setName("jLabel12"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -139,6 +147,16 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jPanel54.setOpaque(false);
         jPanel54.setLayout(new java.awt.GridBagLayout());
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel75, "von:");
+        jLabel75.setName("jLabel75"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel54.add(jLabel75, gridBagConstraints);
+
+        txtJahrVon.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         txtJahrVon.setName("txtJahrVon"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -150,7 +168,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -158,31 +176,32 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
 
         filler68.setName("filler68"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 20;
         jPanel54.add(filler68, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel74, "Jahr bis:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel74, "bis:");
         jLabel74.setName("jLabel74"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel54.add(jLabel74, gridBagConstraints);
 
+        txtJahrBis.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         txtJahrBis.setName("txtJahrBis"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_bisn}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_bis}"),
                 txtJahrBis,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -208,7 +227,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_flaechenstatus}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_status}"),
                 cbFlaechenstatus,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -232,7 +251,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_flaechenzuordnung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zuordnung}"),
                 cbFlaechenzuordnung,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -242,6 +261,37 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenzuordnung, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, "Vorgänge:");
+        jLabel5.setName("jLabel5"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        add(jLabel5, gridBagConstraints);
+
+        filler10.setName("filler10"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 25;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        add(filler10, gridBagConstraints);
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        lstVorgaenge.setName("lstVorgaenge"); // NOI18N
+        jScrollPane1.setViewportView(lstVorgaenge);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        add(jScrollPane1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, "Alte Nummer:");
         jLabel4.setName("jLabel4"); // NOI18N
@@ -272,7 +322,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(filler9, gridBagConstraints);
 
@@ -318,6 +367,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechentyp;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
+    private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler68;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
@@ -327,8 +377,12 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
     private javax.swing.JPanel jPanel54;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> lstVorgaenge;
     private javax.swing.JTextField txtAlteNummer;
     private javax.swing.JFormattedTextField txtJahrBis;
     private javax.swing.JFormattedTextField txtJahrVon;
@@ -364,45 +418,49 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         this.panSpezifisch = panSpezifisch;
     }
 
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        super.setCidsBean(cidsBean);
+        updateDetailsPanel();
+    }
+
     /**
      * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
      */
-    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
+    private void updateDetailsPanel() {
         final CidsBean selected = (CidsBean)cbFlaechenart.getSelectedItem();
 
         if (null != selected) {
             switch ((String)selected.getProperty("schluessel")) {
-                case "Altstandort": {
+                case "altstandort": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "standort");
                     break;
                 }
-                case "Altablagerung": {
+                case "altablagerung": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "altablagerung");
                     break;
                 }
-                case "Betriebsstandort": {
+                case "betriebsstandort": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "standort");
                     break;
                 }
-                case "Schadensfall": {
+                case "schadensfall": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "schadensfall");
                     break;
                 }
-                case "Immisions- / Überschwemmungsfälle": {
+                case "immission": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "immissions");
                     break;
                 }
-                case "Unsachgemäße Materialaufbringung": {
+                case "materialaufbringung": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "materialaufbringung");
                     break;
                 }
-                case "Bewirtschaftungsschaden": {
+                case "bewirtschaftungsschaden": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "bewirtschaftungsschaden");
                     break;
                 }
-                case "Untersuchung ohne Verdacht": {
+                case "ohne_verdacht": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "ohneVerdacht");
                     break;
                 }
@@ -411,7 +469,16 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                 }
             }
         }
-    } //GEN-LAST:event_cbFlaechenartActionPerformed
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
+        updateDetailsPanel();
+    }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
@@ -420,6 +487,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
 
         if (!isEditable()) {
             RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+            RendererTools.makeReadOnly(lstVorgaenge);
         }
     }
 

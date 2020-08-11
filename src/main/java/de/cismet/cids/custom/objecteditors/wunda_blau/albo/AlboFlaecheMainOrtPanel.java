@@ -14,15 +14,25 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import Sirius.server.middleware.types.MetaClass;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import org.jdesktop.beansbinding.BindingGroup;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
-
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.StyledFeature;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -46,37 +56,89 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        jPanel8 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        if (isEditable()) {
+            jLabel38 = new javax.swing.JLabel();
+        }
+        if (isEditable()) {
+            jComboBox31 = new DefaultCismapGeometryComboBoxEditor(isEditable());
+        }
         jLabel16 = new javax.swing.JLabel();
-        jComboBox4 = new DefaultBindableScrollableComboBox();
+        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+                strassennameSearch,
+                strassennameSearch.getRepresentationPattern(),
+                strassennameSearch.getRepresentationFields());
         jLabel17 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
-        filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler44 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jPanel9 = new javax.swing.JPanel();
-        jLabel35 = new javax.swing.JLabel();
-        jComboBox30 = new DefaultBindableScrollableComboBox();
+        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
+        jPanel8 = new javax.swing.JPanel();
         jLabel37 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        jComboBox5 = new DefaultBindableScrollableComboBox(mcGemarkung);
-        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jLabel38 = new javax.swing.JLabel();
-        jComboBox31 = new DefaultCismapGeometryComboBoxEditor();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
-        FormListener formListener = new FormListener();
+        final FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel8.setName("jPanel8"); // NOI18N
-        jPanel8.setOpaque(false);
-        jPanel8.setLayout(new java.awt.GridBagLayout());
+        jPanel9.setName("jPanel9"); // NOI18N
+        jPanel9.setOpaque(false);
+        jPanel9.setLayout(new java.awt.GridBagLayout());
+
+        if (isEditable()) {
+            org.openide.awt.Mnemonics.setLocalizedText(jLabel38, "Geometrie:");
+        }
+        if (isEditable()) {
+            jLabel38.setName("jLabel38"); // NOI18N
+        }
+        if (isEditable()) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+            jPanel9.add(jLabel38, gridBagConstraints);
+        }
+
+        if (isEditable()) {
+            jComboBox31.setName("jComboBox31"); // NOI18N
+        }
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"),
+                jComboBox31,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setConverter(isEditable() ? ((DefaultCismapGeometryComboBoxEditor)jComboBox31).getConverter() : null);
+        bindingGroup.addBinding(binding);
+
+        if (isEditable()) {
+            jComboBox31.addActionListener(formListener);
+        }
+        if (isEditable()) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+            jPanel9.add(jComboBox31, gridBagConstraints);
+        }
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Straße:");
         jLabel16.setName("jLabel16"); // NOI18N
@@ -84,31 +146,41 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel8.add(jLabel16, gridBagConstraints);
+        jPanel9.add(jLabel16, gridBagConstraints);
 
         jComboBox4.setName("jComboBox4"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_strasse}"), jComboBox4, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_strasse}"),
+                jComboBox4,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel8.add(jComboBox4, gridBagConstraints);
+        jPanel9.add(jComboBox4, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, "Hausnummer:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, "Haus-Nr:");
         jLabel17.setName("jLabel17"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel8.add(jLabel17, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
+        jPanel9.add(jLabel17, gridBagConstraints);
 
         jTextField5.setName("jTextField5"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"), jTextField5, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                jTextField5,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -116,105 +188,7 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel8.add(jTextField5, gridBagConstraints);
-
-        filler43.setName("filler43"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(filler43, gridBagConstraints);
-
-        filler44.setName("filler44"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        jPanel8.add(filler44, gridBagConstraints);
-
-        filler45.setName("filler45"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(filler45, gridBagConstraints);
-
-        filler46.setName("filler46"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 40;
-        gridBagConstraints.weightx = 1.0;
-        jPanel8.add(filler46, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        add(jPanel8, gridBagConstraints);
-
-        jPanel9.setName("jPanel9"); // NOI18N
-        jPanel9.setOpaque(false);
-        jPanel9.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel35, "Marker:");
-        jLabel35.setName("jLabel35"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jLabel35, gridBagConstraints);
-
-        jComboBox30.setName("jComboBox30"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ortsmarker}"), jComboBox30, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jComboBox30, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel37, "Ortsübliche Bezeichnung:");
-        jLabel37.setName("jLabel37"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jLabel37, gridBagConstraints);
-
-        jTextField7.setName("jTextField7"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ortsuebliche_bezeichnung}"), jTextField7, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jTextField7, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel18, "Gemarkung:");
-        jLabel18.setName("jLabel18"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jLabel18, gridBagConstraints);
-
-        jComboBox5.setName("jComboBox5"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jComboBox5, gridBagConstraints);
+        jPanel9.add(jTextField5, gridBagConstraints);
 
         filler41.setName("filler41"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -230,57 +204,115 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         jPanel9.add(filler42, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel38, "Geometrie:");
-        jLabel38.setName("jLabel38"); // NOI18N
+        filler46.setName("filler46"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.weightx = 1.0;
+        jPanel9.add(filler46, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jLabel38, gridBagConstraints);
-
-        jComboBox31.setName("jComboBox31"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_geom}"), jComboBox31, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        jComboBox31.addActionListener(formListener);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(jComboBox31, gridBagConstraints);
+        add(jPanel9, gridBagConstraints);
 
+        mappingComponent1.setMaximumSize(new java.awt.Dimension(300, 100));
+        mappingComponent1.setMinimumSize(new java.awt.Dimension(300, 100));
+        mappingComponent1.setName("mappingComponent1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        add(jPanel9, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        add(mappingComponent1, gridBagConstraints);
 
-        filler1.setName("filler1"); // NOI18N
+        jPanel8.setName("jPanel8"); // NOI18N
+        jPanel8.setOpaque(false);
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel37, "Ortsübliche Bezeichnung:");
+        jLabel37.setName("jLabel37"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel8.add(jLabel37, gridBagConstraints);
+
+        jTextField7.setName("jTextField7"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ortsuebliche_bezeichnung}"),
+                jTextField7,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel8.add(jTextField7, gridBagConstraints);
+
+        filler43.setName("filler43"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel8.add(filler43, gridBagConstraints);
+
+        filler45.setName("filler45"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel8.add(filler45, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(filler1, gridBagConstraints);
+        add(jPanel8, gridBagConstraints);
 
         bindingGroup.bind();
     }
 
-    // Code for dispatching events from components to event handlers.
-
+    /**
+     * Code for dispatching events from components to event handlers.
+     *
+     * @version  $Revision$, $Date$
+     */
     private class FormListener implements java.awt.event.ActionListener {
-        FormListener() {}
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+        /**
+         * Creates a new FormListener object.
+         */
+        FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == jComboBox31) {
                 AlboFlaecheMainOrtPanel.this.jComboBox31ActionPerformed(evt);
             }
         }
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
+
+    public static final String STRASSENNAME_TOSTRING_TEMPLATE = "%s";
+    public static final String[] STRASSENNAME_TOSTRING_FIELDS = {
+            StrAdrStrasseLightweightSearch.Subject.NAME.toString()
+        };
+    public static final String STRASSENSCHLUESSEL_TOSTRING_TEMPLATE = "%s";
+    public static final String[] STRASSENSCHLUESSEL_TOSTRING_FIELDS = {
+            StrAdrStrasseLightweightSearch.Subject.SCHLUESSEL.toString()
+        };
 
     //~ Instance fields --------------------------------------------------------
 
@@ -289,29 +321,28 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     // Variables declaration - do not modify
 
     // </editor-fold>
+    private final StrAdrStrasseLightweightSearch strassennameSearch = new StrAdrStrasseLightweightSearch(
+            StrAdrStrasseLightweightSearch.Subject.NAME,
+            STRASSENNAME_TOSTRING_TEMPLATE,
+            STRASSENNAME_TOSTRING_FIELDS);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler41;
     private javax.swing.Box.Filler filler42;
     private javax.swing.Box.Filler filler43;
-    private javax.swing.Box.Filler filler44;
     private javax.swing.Box.Filler filler45;
     private javax.swing.Box.Filler filler46;
-    private javax.swing.JComboBox<String> jComboBox30;
     private javax.swing.JComboBox<String> jComboBox31;
     private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField7;
+    private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -337,16 +368,70 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
 
     /**
      * DOCUMENT ME!
+     */
+    private void initMap() {
+        if (getCidsBean() != null) {
+            final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
+            try {
+                final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
+                            ClientAlkisConf.getInstance().getGeoBuffer()
+                                    * 2));
+
+                final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
+                mappingModel.addHome(new XBoundingBox(
+                        box.getX1(),
+                        box.getY1(),
+                        box.getX2(),
+                        box.getY2(),
+                        ClientAlkisConf.getInstance().getSrsService(),
+                        true));
+                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                            ClientAlkisConf.getInstance().getMapCallString()));
+                swms.setName("Verkehrszeichen");
+
+                // add the raster layer to the model
+                mappingModel.addLayer(swms);
+                // set the model
+                mappingComponent1.setMappingModel(mappingModel);
+                // interaction mode
+                mappingComponent1.gotoInitialBoundingBox();
+                mappingComponent1.setInteractionMode(MappingComponent.ZOOM);
+                // finally when all configurations are done ...
+                mappingComponent1.unlock();
+            } catch (final Exception ex) {
+                LOG.warn("could not init Map !", ex);
+            }
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshGeomFeatures() {
+        mappingComponent1.getFeatureCollection().removeAllFeatures();
+        if (getCidsBean() != null) {
+            final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
+            if (geom != null) {
+                final StyledFeature dsf = new DefaultStyledFeature();
+                dsf.setGeometry(geom);
+                mappingComponent1.getFeatureCollection().addFeature(dsf);
+            }
+        }
+    }
+    /**
+     * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jComboBox31ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox31ActionPerformed
+    private void jComboBox31ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox31ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox31ActionPerformed
+    } //GEN-LAST:event_jComboBox31ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
+        initMap();
+        refreshGeomFeatures();
     }
 
     @Override
@@ -360,9 +445,8 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         }
 
         initComponents();
-        
+
         if (!isEditable()) {
-            RendererTools.makeReadOnly(jComboBox5);
             RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
         }
     }
@@ -376,6 +460,8 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     public void dispose() {
         super.dispose();
 
-        ((DefaultCismapGeometryComboBoxEditor)jComboBox31).dispose();
+        if (isEditable()) {
+            ((DefaultCismapGeometryComboBoxEditor)jComboBox31).dispose();
+        }
     }
 }

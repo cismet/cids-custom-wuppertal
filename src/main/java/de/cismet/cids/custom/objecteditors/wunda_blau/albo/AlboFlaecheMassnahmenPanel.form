@@ -65,15 +65,15 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="jPanel29">
+        <Container class="javax.swing.JPanel" name="jPanel42">
           <Properties>
-            <Property name="name" type="java.lang.String" value="jPanel29" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="jPanel42" noResource="true"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Dekontaminationsma&#xdf;nahmen">
-                <Property name="tabTitle" type="java.lang.String" value="Dekontaminationsma&#xdf;nahmen"/>
+              <JTabbedPaneConstraints tabName="Sicherungsma&#xdf;nahmen">
+                <Property name="tabTitle" type="java.lang.String" value="Sicherungsma&#xdf;nahmen"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -95,15 +95,15 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="jPanel42">
+        <Container class="javax.swing.JPanel" name="jPanel29">
           <Properties>
-            <Property name="name" type="java.lang.String" value="jPanel42" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="jPanel29" noResource="true"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Sicherungsma&#xdf;nahmen">
-                <Property name="tabTitle" type="java.lang.String" value="Sicherungsma&#xdf;nahmen"/>
+              <JTabbedPaneConstraints tabName="Dekontaminationsma&#xdf;nahmen">
+                <Property name="tabTitle" type="java.lang.String" value="Dekontaminationsma&#xdf;nahmen"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

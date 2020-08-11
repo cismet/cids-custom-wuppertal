@@ -49,7 +49,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox26" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${fk_art}" target="jComboBox26" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_art}" target="jComboBox26" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -77,7 +77,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox27" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${fk_verfuellkategorie}" target="jComboBox27" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_verfuellkategorie}" target="jComboBox27" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -105,7 +105,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox28" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${fk_erhebungsklasse}" target="jComboBox28" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_erhebungsklasse}" target="jComboBox28" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -179,6 +179,7 @@
         <Component class="javax.swing.JCheckBox" name="jCheckBox1">
           <Properties>
             <Property name="text" type="java.lang.String" value="RCL Material"/>
+            <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="jCheckBox1" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -220,6 +221,7 @@
         <Component class="javax.swing.JCheckBox" name="jCheckBox3">
           <Properties>
             <Property name="text" type="java.lang.String" value="Industrielle Nebenprodukte"/>
+            <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="jCheckBox3" noResource="true"/>
           </Properties>
           <BindingProperties>
@@ -265,6 +267,7 @@
         <Component class="javax.swing.JCheckBox" name="jCheckBox2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Boden&#xe4;nhliche Verwertung"/>
+            <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="jCheckBox2" noResource="true"/>
           </Properties>
           <BindingProperties>

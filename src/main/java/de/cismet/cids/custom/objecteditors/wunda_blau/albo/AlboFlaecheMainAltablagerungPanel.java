@@ -12,12 +12,17 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
+import Sirius.server.middleware.types.MetaClass;
+
 import org.jdesktop.beansbinding.BindingGroup;
+
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultBindableComboboxCellEditor;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -29,40 +34,6 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @version  $Revision$, $Date$
  */
 public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel {
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.JComboBox<String> jComboBox20;
-    private javax.swing.JComboBox<String> jComboBox21;
-    private javax.swing.JComboBox<String> jComboBox22;
-    private javax.swing.JLabel jLabel42;
-    private javax.swing.JLabel jLabel43;
-    private javax.swing.JLabel jLabel44;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel17;
-    private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.swingx.JXTable jXTable1;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
-
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new AlboFlaecheMainAltablagerungPanel object.
-     */
-    public AlboFlaecheMainAltablagerungPanel() {
-        initComponents();
-    }
-
-    /**
-     * Creates a new AlboFlaecheXXXPanel object.
-     *
-     * @param  editable  DOCUMENT ME!
-     */
-    public AlboFlaecheMainAltablagerungPanel(final boolean editable) {
-        super(editable);
-    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -92,6 +63,17 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         jPanel17 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jXTable1 = new org.jdesktop.swingx.JXTable();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+
+        final FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -151,7 +133,7 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel12.add(jComboBox21, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel44, "Abfallherkunft:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel44, "Erhebungsklasse");
         jLabel44.setName("jLabel44"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -164,7 +146,7 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_abfallherkunft}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_erhebungsklasse}"),
                 jComboBox22,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -198,23 +180,15 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         add(jPanel12, gridBagConstraints);
 
         jPanel17.setName("jPanel17"); // NOI18N
+        jPanel17.setOpaque(false);
         jPanel17.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jXTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {},
-                new String[] { "Abfallherkunft", "Überwiegende Abfallherkunft" }) {
-
-                Class[] types = new Class[] { java.lang.Object.class, java.lang.Boolean.class };
-
-                @Override
-                public Class getColumnClass(final int columnIndex) {
-                    return types[columnIndex];
-                }
-            });
+        jXTable1.setModel(new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AltablagerungAbfallherkunftTableModel(
+                isEditable()));
         jXTable1.setName("jXTable1"); // NOI18N
-        jXTable1.setRowHeight(18);
+        jXTable1.setRowHeight(5);
 
         final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
                 "${cidsBean.arr_abfallherkuenfte}");
@@ -234,20 +208,171 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         gridBagConstraints.weighty = 1.0;
         jPanel17.add(jScrollPane1, gridBagConstraints);
 
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
+        jButton1.setName("jButton1");                                                                // NOI18N
+        jButton1.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        jPanel1.add(jButton1, gridBagConstraints);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
+        jButton2.setName("jButton2");                                                                   // NOI18N
+        jButton2.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel1.add(jButton2, gridBagConstraints);
+
+        filler1.setName("filler1"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel17.add(jPanel1, gridBagConstraints);
+        jPanel1.setVisible(isEditable());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel17, gridBagConstraints);
 
+        filler2.setName("filler2"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(filler2, gridBagConstraints);
+
         bindingGroup.bind();
+    }
+
+    /**
+     * Code for dispatching events from components to event handlers.
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class FormListener implements java.awt.event.ActionListener {
+
+        /**
+         * Creates a new FormListener object.
+         */
+        FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final java.awt.event.ActionEvent evt) {
+            if (evt.getSource() == jButton1) {
+                AlboFlaecheMainAltablagerungPanel.this.jButton1ActionPerformed(evt);
+            } else if (evt.getSource() == jButton2) {
+                AlboFlaecheMainAltablagerungPanel.this.jButton2ActionPerformed(evt);
+            }
+        }
     } // </editor-fold>//GEN-END:initComponents
+
+    //~ Instance fields --------------------------------------------------------
+
+    private MetaClass mcAltablagerungAbfallherkunft;
+    private MetaClass mcAbfallherkunft;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox20;
+    private javax.swing.JComboBox<String> jComboBox21;
+    private javax.swing.JComboBox<String> jComboBox22;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JScrollPane jScrollPane1;
+    private org.jdesktop.swingx.JXTable jXTable1;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new AlboFlaecheMainAltablagerungPanel object.
+     */
+    public AlboFlaecheMainAltablagerungPanel() {
+        initComponents();
+    }
+
+    /**
+     * Creates a new AlboFlaecheXXXPanel object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public AlboFlaecheMainAltablagerungPanel(final boolean editable) {
+        super(editable);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        new SwingWorker<CidsBean, Void>() {
+
+                @Override
+                protected CidsBean doInBackground() throws Exception {
+                    return mcAltablagerungAbfallherkunft.getEmptyInstance(getConnectionContext()).getBean();
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        ((AltablagerungAbfallherkunftTableModel)jXTable1.getModel()).add(get());
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }.execute();
+    } //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        ((AltablagerungAbfallherkunftTableModel)jXTable1.getModel()).remove(
+            ((AltablagerungAbfallherkunftTableModel)jXTable1.getModel()).getCidsBean(jXTable1.getSelectedRow()));
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
+
+        ((AltablagerungAbfallherkunftTableModel)jXTable1.getModel()).setCidsBeans((cidsBean != null)
+                ? cidsBean.getBeanCollectionProperty("n_altablagerung_abfallherkuenfte") : null);
     }
 
     @Override
@@ -255,6 +380,20 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         super.initWithConnectionContext(connectionContext);
         initComponents();
 
+        try {
+            mcAltablagerungAbfallherkunft = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "ALBO_ALTABLAGERUNG_ABFALLHERKUNFT",
+                    getConnectionContext());
+            mcAbfallherkunft = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "ALBO_ABFALLHERKUNFT",
+                    getConnectionContext());
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+
+        jXTable1.setDefaultEditor(CidsBean.class, new DefaultBindableComboboxCellEditor(mcAbfallherkunft));
         if (!isEditable()) {
             RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
         }

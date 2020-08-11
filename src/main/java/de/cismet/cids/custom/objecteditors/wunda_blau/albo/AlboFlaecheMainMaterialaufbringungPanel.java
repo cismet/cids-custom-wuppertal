@@ -140,7 +140,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${fk_art}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"),
                 jComboBox26,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -165,7 +165,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${fk_verfuellkategorie}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_verfuellkategorie}"),
                 jComboBox27,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -190,7 +190,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${fk_erhebungsklasse}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_erhebungsklasse}"),
                 jComboBox28,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -239,6 +239,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         jPanel24.add(jLabel62, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "RCL Material");
+        jCheckBox1.setContentAreaFilled(false);
         jCheckBox1.setName("jCheckBox1"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -283,6 +284,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         jPanel24.add(jFormattedTextField19, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, "Industrielle Nebenprodukte");
+        jCheckBox3.setContentAreaFilled(false);
         jCheckBox3.setName("jCheckBox3"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -319,6 +321,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         jPanel24.add(filler2, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, "Bodenänhliche Verwertung");
+        jCheckBox2.setContentAreaFilled(false);
         jCheckBox2.setName("jCheckBox2"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(

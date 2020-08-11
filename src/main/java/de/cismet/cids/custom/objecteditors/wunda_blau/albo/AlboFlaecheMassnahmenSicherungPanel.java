@@ -29,64 +29,61 @@ import de.cismet.connectioncontext.ConnectionContext;
 public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler50;
-    private javax.swing.Box.Filler filler51;
-    private javax.swing.Box.Filler filler52;
-    private javax.swing.JCheckBox jCheckBox103;
-    private javax.swing.JCheckBox jCheckBox104;
-    private javax.swing.JCheckBox jCheckBox107;
-    private javax.swing.JCheckBox jCheckBox108;
-    private javax.swing.JCheckBox jCheckBox109;
-    private javax.swing.JCheckBox jCheckBox110;
-    private javax.swing.JCheckBox jCheckBox111;
-    private javax.swing.JCheckBox jCheckBox112;
-    private javax.swing.JCheckBox jCheckBox113;
-    private javax.swing.JCheckBox jCheckBox114;
-    private javax.swing.JCheckBox jCheckBox80;
-    private javax.swing.JCheckBox jCheckBox85;
-    private javax.swing.JCheckBox jCheckBox86;
-    private javax.swing.JCheckBox jCheckBox87;
-    private javax.swing.JCheckBox jCheckBox88;
-    private javax.swing.JCheckBox jCheckBox89;
-    private javax.swing.JCheckBox jCheckBox90;
-    private javax.swing.JCheckBox jCheckBox91;
-    private javax.swing.JCheckBox jCheckBox92;
-    private javax.swing.JCheckBox jCheckBox93;
-    private javax.swing.JCheckBox jCheckBox94;
-    private javax.swing.JCheckBox jCheckBox95;
-    private javax.swing.JCheckBox jCheckBox96;
-    private javax.swing.JCheckBox jCheckBox97;
-    private javax.swing.JCheckBox jCheckBox98;
-    private javax.swing.JCheckBox jCheckBox99;
-    private javax.swing.JLabel jLabel69;
-    private javax.swing.JLabel jLabel70;
-    private javax.swing.JLabel jLabel71;
-    private javax.swing.JLabel jLabel72;
-    private javax.swing.JLabel jLabel73;
-    private javax.swing.JPanel jPanel43;
-    private javax.swing.JPanel jPanel44;
-    private javax.swing.JPanel jPanel45;
-    private javax.swing.JPanel jPanel46;
-    private javax.swing.JPanel jPanel49;
-    private javax.swing.JPanel jPanel50;
-    private javax.swing.JPanel jPanel51;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.Box.Filler filler13;
+    private javax.swing.Box.Filler filler14;
+    private javax.swing.Box.Filler filler49;
+    private javax.swing.JCheckBox jCheckBox13;
+    private javax.swing.JCheckBox jCheckBox14;
+    private javax.swing.JCheckBox jCheckBox15;
+    private javax.swing.JCheckBox jCheckBox16;
+    private javax.swing.JCheckBox jCheckBox17;
+    private javax.swing.JCheckBox jCheckBox18;
+    private javax.swing.JCheckBox jCheckBox19;
+    private javax.swing.JCheckBox jCheckBox20;
+    private javax.swing.JCheckBox jCheckBox21;
+    private javax.swing.JCheckBox jCheckBox22;
+    private javax.swing.JCheckBox jCheckBox23;
+    private javax.swing.JCheckBox jCheckBox24;
+    private javax.swing.JCheckBox jCheckBox25;
+    private javax.swing.JCheckBox jCheckBox26;
+    private javax.swing.JCheckBox jCheckBox27;
+    private javax.swing.JCheckBox jCheckBox28;
+    private javax.swing.JCheckBox jCheckBox29;
+    private javax.swing.JCheckBox jCheckBox30;
+    private javax.swing.JCheckBox jCheckBox31;
+    private javax.swing.JCheckBox jCheckBox32;
+    private javax.swing.JCheckBox jCheckBox33;
+    private javax.swing.JCheckBox jCheckBox34;
+    private javax.swing.JCheckBox jCheckBox35;
+    private javax.swing.JCheckBox jCheckBox36;
+    private javax.swing.JCheckBox jCheckBox37;
+    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JPanel jPanel30;
+    private javax.swing.JPanel jPanel31;
+    private javax.swing.JPanel jPanel32;
+    private javax.swing.JPanel jPanel33;
+    private javax.swing.JPanel jPanel34;
+    private javax.swing.JPanel jPanel35;
+    private javax.swing.JPanel jPanel36;
+    private javax.swing.JPanel jPanel40;
+    private javax.swing.JPanel jPanel41;
+    private javax.swing.JPanel jPanel47;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheMassnahmenSicherungPanel object.
+     * Creates a new AlboFlaecheXXXPanel object.
      */
     public AlboFlaecheMassnahmenSicherungPanel() {
         initComponents();
     }
 
     /**
-     * Creates a new AlboFlaecheXXXPanel object.
+     * Creates a new AlboFlaecheMassnahmenDekontaminationPanel object.
      *
      * @param  editable  DOCUMENT ME!
      */
@@ -106,54 +103,51 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        jPanel43 = new javax.swing.JPanel();
-        jPanel44 = new javax.swing.JPanel();
-        jLabel69 = new javax.swing.JLabel();
-        jCheckBox80 = new javax.swing.JCheckBox();
-        jCheckBox107 = new javax.swing.JCheckBox();
-        jCheckBox108 = new javax.swing.JCheckBox();
-        jCheckBox109 = new javax.swing.JCheckBox();
-        jSeparator2 = new javax.swing.JSeparator();
-        jLabel70 = new javax.swing.JLabel();
-        jCheckBox110 = new javax.swing.JCheckBox();
-        jCheckBox111 = new javax.swing.JCheckBox();
-        jSeparator4 = new javax.swing.JSeparator();
-        jLabel73 = new javax.swing.JLabel();
-        jCheckBox112 = new javax.swing.JCheckBox();
-        jCheckBox113 = new javax.swing.JCheckBox();
-        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        jPanel31 = new javax.swing.JPanel();
+        jPanel30 = new javax.swing.JPanel();
+        jCheckBox14 = new javax.swing.JCheckBox();
+        jCheckBox15 = new javax.swing.JCheckBox();
+        jCheckBox16 = new javax.swing.JCheckBox();
+        jCheckBox17 = new javax.swing.JCheckBox();
+        jCheckBox18 = new javax.swing.JCheckBox();
+        jPanel32 = new javax.swing.JPanel();
+        jCheckBox19 = new javax.swing.JCheckBox();
+        jCheckBox20 = new javax.swing.JCheckBox();
+        jCheckBox21 = new javax.swing.JCheckBox();
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        jPanel45 = new javax.swing.JPanel();
-        jPanel46 = new javax.swing.JPanel();
-        jCheckBox85 = new javax.swing.JCheckBox();
-        jCheckBox86 = new javax.swing.JCheckBox();
-        jCheckBox87 = new javax.swing.JCheckBox();
-        jCheckBox114 = new javax.swing.JCheckBox();
-        jPanel49 = new javax.swing.JPanel();
-        jCheckBox88 = new javax.swing.JCheckBox();
-        jCheckBox89 = new javax.swing.JCheckBox();
-        jCheckBox90 = new javax.swing.JCheckBox();
-        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        jPanel33 = new javax.swing.JPanel();
+        jPanel34 = new javax.swing.JPanel();
+        jCheckBox22 = new javax.swing.JCheckBox();
+        jCheckBox23 = new javax.swing.JCheckBox();
+        jCheckBox24 = new javax.swing.JCheckBox();
+        jPanel35 = new javax.swing.JPanel();
+        jCheckBox25 = new javax.swing.JCheckBox();
+        jCheckBox26 = new javax.swing.JCheckBox();
+        jPanel36 = new javax.swing.JPanel();
+        jCheckBox27 = new javax.swing.JCheckBox();
+        jCheckBox28 = new javax.swing.JCheckBox();
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        jPanel50 = new javax.swing.JPanel();
-        jPanel51 = new javax.swing.JPanel();
-        jLabel71 = new javax.swing.JLabel();
-        jCheckBox91 = new javax.swing.JCheckBox();
-        jCheckBox92 = new javax.swing.JCheckBox();
-        jCheckBox93 = new javax.swing.JCheckBox();
-        jCheckBox94 = new javax.swing.JCheckBox();
-        jCheckBox95 = new javax.swing.JCheckBox();
-        jCheckBox96 = new javax.swing.JCheckBox();
-        jCheckBox97 = new javax.swing.JCheckBox();
-        jCheckBox98 = new javax.swing.JCheckBox();
-        jCheckBox99 = new javax.swing.JCheckBox();
-        jSeparator3 = new javax.swing.JSeparator();
-        jLabel72 = new javax.swing.JLabel();
-        jCheckBox103 = new javax.swing.JCheckBox();
-        jCheckBox104 = new javax.swing.JCheckBox();
-        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        jPanel40 = new javax.swing.JPanel();
+        jPanel41 = new javax.swing.JPanel();
+        jLabel66 = new javax.swing.JLabel();
+        jCheckBox29 = new javax.swing.JCheckBox();
+        jCheckBox30 = new javax.swing.JCheckBox();
+        jCheckBox36 = new javax.swing.JCheckBox();
+        jCheckBox31 = new javax.swing.JCheckBox();
+        jCheckBox32 = new javax.swing.JCheckBox();
+        jCheckBox33 = new javax.swing.JCheckBox();
+        jCheckBox34 = new javax.swing.JCheckBox();
+        jCheckBox35 = new javax.swing.JCheckBox();
+        jCheckBox37 = new javax.swing.JCheckBox();
+        jPanel47 = new javax.swing.JPanel();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckBox13 = new javax.swing.JCheckBox();
+        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
 
@@ -161,33 +155,25 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel43.setName("jPanel43"); // NOI18N
-        jPanel43.setOpaque(false);
-        jPanel43.setLayout(new java.awt.GridBagLayout());
+        jPanel31.setName("jPanel31"); // NOI18N
+        jPanel31.setOpaque(false);
+        jPanel31.setLayout(new java.awt.GridBagLayout());
 
-        jPanel44.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Aushub und Bodenbehandlung"));
-        jPanel44.setName("jPanel44"); // NOI18N
-        jPanel44.setOpaque(false);
-        jPanel44.setLayout(new java.awt.GridBagLayout());
+        jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                "<html><b>Einschließungsverfahren / Abdeckung"));
+        jPanel30.setName("jPanel30"); // NOI18N
+        jPanel30.setOpaque(false);
+        jPanel30.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel69, "<html>Thermische Verfahren:");
-        jLabel69.setName("jLabel69"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jLabel69, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox80, "<html>Verbrennung");
-        jCheckBox80.setContentAreaFilled(false);
-        jCheckBox80.setName("jCheckBox80"); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox14, "<html>Oberflächenabdichtung");
+        jCheckBox14.setContentAreaFilled(false);
+        jCheckBox14.setName("jCheckBox14"); // NOI18N
 
         final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_1}"),
-                jCheckBox80,
+                jCheckBox14,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
@@ -198,402 +184,99 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox80, gridBagConstraints);
+        jPanel30.add(jCheckBox14, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox107, "<html>Pyrolyse");
-        jCheckBox107.setContentAreaFilled(false);
-        jCheckBox107.setName("jCheckBox107"); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox15, "<html>Oberflächenabdeckung");
+        jCheckBox15.setContentAreaFilled(false);
+        jCheckBox15.setName("jCheckBox15"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox107, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox108, "<html>Vakuumdestillation");
-        jCheckBox108.setContentAreaFilled(false);
-        jCheckBox108.setName("jCheckBox108"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox108, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox109, "<html>Desorption mit Wasserdruck");
-        jCheckBox109.setContentAreaFilled(false);
-        jCheckBox109.setName("jCheckBox109"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox109, gridBagConstraints);
-
-        jSeparator2.setName("jSeparator2"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jSeparator2, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel70, "<html>Wasch- und Extraktionsverfahren:");
-        jLabel70.setName("jLabel70"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jLabel70, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox110, "<html>Waschverfahren");
-        jCheckBox110.setContentAreaFilled(false);
-        jCheckBox110.setName("jCheckBox110"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox110, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox111, "<html>Extraktionsverfahren");
-        jCheckBox111.setContentAreaFilled(false);
-        jCheckBox111.setName("jCheckBox111"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox111, gridBagConstraints);
-
-        jSeparator4.setName("jSeparator4"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jSeparator4, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel73, "<html>Bilogische Verfahren:");
-        jLabel73.setName("jLabel73"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jLabel73, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox112, "<html>Mieten");
-        jCheckBox112.setContentAreaFilled(false);
-        jCheckBox112.setName("jCheckBox112"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox112, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox113, "<html>Bioreaktor");
-        jCheckBox113.setContentAreaFilled(false);
-        jCheckBox113.setName("jCheckBox113"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel44.add(jCheckBox113, gridBagConstraints);
-
-        filler50.setName("filler50"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel44.add(filler50, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel43.add(jPanel44, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(jPanel43, gridBagConstraints);
-
-        jPanel45.setName("jPanel45"); // NOI18N
-        jPanel45.setOpaque(false);
-        jPanel45.setLayout(new java.awt.GridBagLayout());
-
-        jPanel46.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                "<html><b>Bodenbehandlung ohne Aushub (In-situ-Verfahren in der (un)gesättigten Zone"));
-        jPanel46.setName("jPanel46"); // NOI18N
-        jPanel46.setOpaque(false);
-        jPanel46.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox85, "<html>Mikrobiologische Verfahren");
-        jCheckBox85.setContentAreaFilled(false);
-        jCheckBox85.setName("jCheckBox85"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel46.add(jCheckBox85, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox86, "<html>Physikalische Verfahren (Bodenwäsche...)");
-        jCheckBox86.setContentAreaFilled(false);
-        jCheckBox86.setName("jCheckBox86"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel46.add(jCheckBox86, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox87, "<html>Elektrokinetische Verfahren");
-        jCheckBox87.setContentAreaFilled(false);
-        jCheckBox87.setName("jCheckBox87"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel46.add(jCheckBox87, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox114, "<html>Phytoextraktion / Phytosanierung");
-        jCheckBox114.setContentAreaFilled(false);
-        jCheckBox114.setName("jCheckBox114"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel46.add(jCheckBox114, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel45.add(jPanel46, gridBagConstraints);
-
-        jPanel49.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Pneumatische Verfahren"));
-        jPanel49.setName("jPanel49"); // NOI18N
-        jPanel49.setOpaque(false);
-        jPanel49.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox88, "<html>Bodenluftsanierung");
-        jCheckBox88.setContentAreaFilled(false);
-        jCheckBox88.setName("jCheckBox88"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel49.add(jCheckBox88, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox89, "<html>Deponiegasabsaugung (Fassung und Behandlung)");
-        jCheckBox89.setContentAreaFilled(false);
-        jCheckBox89.setName("jCheckBox89"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel49.add(jCheckBox89, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox90, "<html>Sonstige pneumatische Verfahren");
-        jCheckBox90.setContentAreaFilled(false);
-        jCheckBox90.setName("jCheckBox90"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel49.add(jCheckBox90, gridBagConstraints);
-
-        filler51.setName("filler51"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel49.add(filler51, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel45.add(jPanel49, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(jPanel45, gridBagConstraints);
-
-        jPanel50.setName("jPanel50"); // NOI18N
-        jPanel50.setOpaque(false);
-        jPanel50.setLayout(new java.awt.GridBagLayout());
-
-        jPanel51.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Verfahren für das Grundwasser"));
-        jPanel51.setName("jPanel51"); // NOI18N
-        jPanel51.setOpaque(false);
-        jPanel51.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel71, "Fassung on-site-Behandlung");
-        jLabel71.setName("jLabel71"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jLabel71, gridBagConstraints);
+        jPanel30.add(jCheckBox15, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox91,
-            "<html>Mechanische Trennverfahren und chem.-phys. Vorbehandlung");
-        jCheckBox91.setContentAreaFilled(false);
-        jCheckBox91.setName("jCheckBox91"); // NOI18N
+            jCheckBox16,
+            "<html>Versiegelung (z.B. Verkehrsflächen, Gebäude, etc.)");
+        jCheckBox16.setContentAreaFilled(false);
+        jCheckBox16.setName("jCheckBox16"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox91, gridBagConstraints);
+        jPanel30.add(jCheckBox16, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox92, "<html>Strippung und Adsorption an Aktivkohle");
-        jCheckBox92.setContentAreaFilled(false);
-        jCheckBox92.setName("jCheckBox92"); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox17, "<html>Vertikale Abdichtung (z.B. Dichtwände)");
+        jCheckBox17.setContentAreaFilled(false);
+        jCheckBox17.setName("jCheckBox17"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox92, gridBagConstraints);
+        jPanel30.add(jCheckBox17, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox93, "<html>Direktadsorption an Aktivkohle");
-        jCheckBox93.setContentAreaFilled(false);
-        jCheckBox93.setName("jCheckBox93"); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox18, "<html>Nachträgliche Basisabdichtung");
+        jCheckBox18.setContentAreaFilled(false);
+        jCheckBox18.setName("jCheckBox18"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox93, gridBagConstraints);
+        jPanel30.add(jCheckBox18, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox94, "<html>Chemische Oxidation");
-        jCheckBox94.setContentAreaFilled(false);
-        jCheckBox94.setName("jCheckBox94"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel31.add(jPanel30, gridBagConstraints);
+
+        jPanel32.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Gesicherte Umlagerung"));
+        jPanel32.setName("jPanel32"); // NOI18N
+        jPanel32.setOpaque(false);
+        jPanel32.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox19, "<html>Oberflächenabdichtung");
+        jCheckBox19.setContentAreaFilled(false);
+        jCheckBox19.setName("jCheckBox19"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox94, gridBagConstraints);
+        jPanel32.add(jCheckBox19, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox95, "<html>Ionenaustausch");
-        jCheckBox95.setContentAreaFilled(false);
-        jCheckBox95.setName("jCheckBox95"); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox20, "Oberflächenabdeckung");
+        jCheckBox20.setContentAreaFilled(false);
+        jCheckBox20.setName("jCheckBox20"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox95, gridBagConstraints);
+        jPanel32.add(jCheckBox20, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox96, "<html>Membranverfahren");
-        jCheckBox96.setContentAreaFilled(false);
-        jCheckBox96.setName("jCheckBox96"); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox21, "<html>Basisabdichtung");
+        jCheckBox21.setContentAreaFilled(false);
+        jCheckBox21.setName("jCheckBox21"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox96, gridBagConstraints);
+        jPanel32.add(jCheckBox21, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox97, "Biologische Verfahren");
-        jCheckBox97.setContentAreaFilled(false);
-        jCheckBox97.setName("jCheckBox97"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox97, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox98, "Neutralisation");
-        jCheckBox98.setContentAreaFilled(false);
-        jCheckBox98.setName("jCheckBox98"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox98, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox99, "Sonstige Aufbereitungsverfahren nach Abpumpen");
-        jCheckBox99.setContentAreaFilled(false);
-        jCheckBox99.setName("jCheckBox99"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox99, gridBagConstraints);
-
-        jSeparator3.setName("jSeparator3"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jSeparator3, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel72, "In-situ-Behandlung:");
-        jLabel72.setName("jLabel72"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jLabel72, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox103, "In-situ-Behandlung ENA");
-        jCheckBox103.setContentAreaFilled(false);
-        jCheckBox103.setName("jCheckBox103"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox103, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox104, "Sonstige hydraulische In-Situ-Verfahren");
-        jCheckBox104.setContentAreaFilled(false);
-        jCheckBox104.setName("jCheckBox104"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel51.add(jCheckBox104, gridBagConstraints);
-
-        filler52.setName("filler52"); // NOI18N
+        filler13.setName("filler13"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel51.add(filler52, gridBagConstraints);
+        jPanel32.add(filler13, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -601,13 +284,322 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel50.add(jPanel51, gridBagConstraints);
+        jPanel31.add(jPanel32, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(jPanel50, gridBagConstraints);
+        add(jPanel31, gridBagConstraints);
+
+        jPanel33.setName("jPanel33"); // NOI18N
+        jPanel33.setOpaque(false);
+        jPanel33.setLayout(new java.awt.GridBagLayout());
+
+        jPanel34.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                "<html><b>Immobilisierungsverfahren (In-situ / on-site)"));
+        jPanel34.setName("jPanel34"); // NOI18N
+        jPanel34.setOpaque(false);
+        jPanel34.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox22,
+            "<html>Physikalische Wirkungsweise (u.a. Verfestigung)");
+        jCheckBox22.setContentAreaFilled(false);
+        jCheckBox22.setName("jCheckBox22"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel34.add(jCheckBox22, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox23,
+            "<html>Chemische Wirkungsweise (u.a. chemische Reaktion)");
+        jCheckBox23.setContentAreaFilled(false);
+        jCheckBox23.setName("jCheckBox23"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel34.add(jCheckBox23, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox24, "<html>Chemisch-physikalische Wirkungsweise");
+        jCheckBox24.setContentAreaFilled(false);
+        jCheckBox24.setName("jCheckBox24"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel34.add(jCheckBox24, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel33.add(jPanel34, gridBagConstraints);
+
+        jPanel35.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Pneumatische Verfahren"));
+        jPanel35.setName("jPanel35"); // NOI18N
+        jPanel35.setOpaque(false);
+        jPanel35.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox25, "<html>Gasdränagen");
+        jCheckBox25.setContentAreaFilled(false);
+        jCheckBox25.setName("jCheckBox25"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel35.add(jCheckBox25, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox26, "<html>Bodenluftdränagen");
+        jCheckBox26.setContentAreaFilled(false);
+        jCheckBox26.setName("jCheckBox26"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel35.add(jCheckBox26, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel33.add(jPanel35, gridBagConstraints);
+
+        jPanel36.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Sonstige Verfahren"));
+        jPanel36.setName("jPanel36"); // NOI18N
+        jPanel36.setOpaque(false);
+        jPanel36.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox27, "<html>Phytostabilisierung");
+        jCheckBox27.setContentAreaFilled(false);
+        jCheckBox27.setName("jCheckBox27"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel36.add(jCheckBox27, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox28, "<html>Andere Verfahren");
+        jCheckBox28.setContentAreaFilled(false);
+        jCheckBox28.setName("jCheckBox28"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel36.add(jCheckBox28, gridBagConstraints);
+
+        filler14.setName("filler14"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel36.add(filler14, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel33.add(jPanel36, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jPanel33, gridBagConstraints);
+
+        jPanel40.setName("jPanel40"); // NOI18N
+        jPanel40.setOpaque(false);
+        jPanel40.setLayout(new java.awt.GridBagLayout());
+
+        jPanel41.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                "<html><b>Verfahren für das Grundwasser (Verhinderung einer Schadstoffausbreitung)"));
+        jPanel41.setName("jPanel41"); // NOI18N
+        jPanel41.setOpaque(false);
+        jPanel41.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel66, "<html>Fassung und on-site Behandlung:");
+        jLabel66.setName("jLabel66"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jLabel66, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox29,
+            "<html>Mechanische Trennverfahren und chem.-phys. Vorbehandlung (Phasentrennung, Fällung, Flockung, ???)");
+        jCheckBox29.setContentAreaFilled(false);
+        jCheckBox29.setName("jCheckBox29"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox29, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox30, "<html>Strippung und Adsorption an Aktivkohle");
+        jCheckBox30.setContentAreaFilled(false);
+        jCheckBox30.setName("jCheckBox30"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox30, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox36, "<html>Direktadsorption an Aktivkohle");
+        jCheckBox36.setContentAreaFilled(false);
+        jCheckBox36.setName("jCheckBox36"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox36, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox31, "<html>Chemische Oxidation");
+        jCheckBox31.setContentAreaFilled(false);
+        jCheckBox31.setName("jCheckBox31"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox31, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox32, "<html>Ionenaustausch");
+        jCheckBox32.setContentAreaFilled(false);
+        jCheckBox32.setName("jCheckBox32"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox32, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox33, "<html>Membranverfahren");
+        jCheckBox33.setContentAreaFilled(false);
+        jCheckBox33.setName("jCheckBox33"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox33, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox34, "<html>Biologische Verfahren");
+        jCheckBox34.setContentAreaFilled(false);
+        jCheckBox34.setName("jCheckBox34"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox34, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox35, "<html>Neutralisation");
+        jCheckBox35.setContentAreaFilled(false);
+        jCheckBox35.setName("jCheckBox35"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox35, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox37, "<html>Sonstige Aufbereitungsverfahren nach Abpumpen");
+        jCheckBox37.setContentAreaFilled(false);
+        jCheckBox37.setName("jCheckBox37"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel41.add(jCheckBox37, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel40.add(jPanel41, gridBagConstraints);
+
+        jPanel47.setBorder(javax.swing.BorderFactory.createTitledBorder("<html>"));
+        jPanel47.setName("jPanel47"); // NOI18N
+        jPanel47.setOpaque(false);
+        jPanel47.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox4,
+            "<html><b>In-situ-Behandlung (Enhanced Natural Attenuation -ENA, Airsparing)");
+        jCheckBox4.setContentAreaFilled(false);
+        jCheckBox4.setName("jCheckBox4"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel47.add(jCheckBox4, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox5,
+            "<html><b>Durchströmte Wände (Reaktionswände, Reinigungswände)");
+        jCheckBox5.setContentAreaFilled(false);
+        jCheckBox5.setName("jCheckBox5"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel47.add(jCheckBox5, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox13, "<html><b>Sonstige Sicherungsverfaren ohne Behandlung");
+        jCheckBox13.setContentAreaFilled(false);
+        jCheckBox13.setName("jCheckBox13"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel47.add(jCheckBox13, gridBagConstraints);
+
+        filler49.setName("filler49"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel47.add(filler49, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel40.add(jPanel47, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jPanel40, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -615,16 +607,16 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+        }
     }
 
     @Override
     public final void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
-        }
     }
 
     @Override
