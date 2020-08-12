@@ -27,7 +27,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
@@ -62,13 +61,10 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
 
     //~ Instance fields --------------------------------------------------------
 
-    private HashMap<Double, HashMap<String, Object>> billingInformation;
-    private CidsBean kundeBean;
-    private BigDecimal totalSum;
-    private BigDecimal mwstValue;
-    private Date[] fromDate_tillDate;
-    private Collection<CidsBean> billingsBeans;
-    private boolean isRechnungsanlage;
+    private final CidsBean kundeBean;
+    private final Date[] fromDate_tillDate;
+    private final Collection<CidsBean> billingsBeans;
+    private final boolean isRechnungsanlage;
     private int amountTotalDownloads = 0;
     private int amountWithCosts = 0;
     private int amountWithoutCosts = 0;
@@ -118,7 +114,6 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
         this.billingsBeans = billingsBeans;
         this.panel = panel;
         this.showBillingWithoutCostInReport = showBillingWithoutCostInReport;
-        totalSum = generateStatisticsForTheReport(billingsBeans);
         this.billingDoneListener = billingDoneListener;
         this.connectionContext = connectionContext;
     }
@@ -129,55 +124,71 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
      * DOCUMENT ME!
      */
     public void print() {
-        final Object[] mwst0 = new Object[3];
-        final Object[] kataster_mwst0 = new Object[3];
-        final Object[] baulasten_mwst0 = new Object[3];
-        final Object[] mwst19 = new Object[3];
+        BigDecimal bruttoGesamt = new BigDecimal(0.0);
+        BigDecimal nettoGesamt = new BigDecimal(0.0);
+        BigDecimal katasterNetto = new BigDecimal(0.0);
+        BigDecimal katasterBrutto = new BigDecimal(0.0);
+        BigDecimal baulastenNetto = new BigDecimal(0.0);
+        BigDecimal baulastenBrutto = new BigDecimal(0.0);
+        BigDecimal nettoMitMwst = new BigDecimal(0.0);
+        BigDecimal bruttoMitMwst = new BigDecimal(0.0);
+        BigDecimal nettoOhneMwst = new BigDecimal(0.0);
+        BigDecimal bruttoOhneMwst = new BigDecimal(0.0);
 
-        final Collection<CidsBean> filteredBuchungen_mwst0 = new ArrayList<CidsBean>();
-        final Collection<CidsBean> filteredBuchungen_kataster_mwst0 = new ArrayList<CidsBean>();
-        final Collection<CidsBean> filteredBuchungen_baulasten_mwst0 = new ArrayList<CidsBean>();
-        boolean noData = true;
-        if (billingInformation.containsKey(0d)) {
-            final HashMap<String, Object> mwst_information_0 = billingInformation.get(0d);
-            final Collection<CidsBean> billings = (Collection<CidsBean>)mwst_information_0.get("billings");
-            filteredBuchungen_mwst0.addAll(billings);
-            BigDecimal katasterNetto = new BigDecimal(0.0);
-            BigDecimal katasterBrutto = new BigDecimal(0.0);
-            BigDecimal baulastenNetto = new BigDecimal(0.0);
-            BigDecimal baulastenBrutto = new BigDecimal(0.0);
-            for (final CidsBean billing : billings) {
-                if ("bla".equals(billing.getProperty("produktkey"))
-                            || "blab_be".equals(billing.getProperty("produktkey"))) {
-                    filteredBuchungen_baulasten_mwst0.add(billing);
-                    baulastenNetto = baulastenNetto.add(new BigDecimal((Double)billing.getProperty("netto_summe")));
-                    baulastenBrutto = baulastenBrutto.add(new BigDecimal((Double)billing.getProperty("brutto_summe")));
+        final Collection<CidsBean> unfilteredBillings = new ArrayList<>();
+        final Collection<CidsBean> filteredBillingsOhneMwst = new ArrayList<>();
+        final Collection<CidsBean> filteredBillingsKatasterOhneMwst = new ArrayList<>();
+        final Collection<CidsBean> filteredBillingsBaulastenOhneMwst = new ArrayList<>();
+        final Collection<CidsBean> filteredBillingsMitMwst = new ArrayList<>();
+
+        // calculate the netto sum of every mwst_satz
+        unfilteredBillings.addAll(billingsBeans);
+        for (final CidsBean billing : unfilteredBillings) {
+            final Double nettoSumme = (Double)billing.getProperty("netto_summe");
+            final Double bruttoSumme = (Double)billing.getProperty("brutto_summe");
+            final Double mwstSatz = (Double)billing.getProperty("mwst_satz");
+
+            if (showBillingWithoutCostInReport || (nettoSumme > 0)) {
+                nettoGesamt = (nettoSumme != null) ? nettoGesamt.add(new BigDecimal(nettoSumme)) : nettoOhneMwst;
+                bruttoGesamt = (bruttoSumme != null) ? bruttoGesamt.add(new BigDecimal(bruttoSumme)) : bruttoOhneMwst;
+
+                // add the billing and sums to the right MwSt-category
+                final boolean mitMwst = (mwstSatz != null) && !mwstSatz.equals(new Double(0));
+                if (mitMwst) {
+                    filteredBillingsMitMwst.add(billing);
+                    nettoMitMwst = (nettoSumme != null) ? nettoMitMwst.add(new BigDecimal(nettoSumme)) : nettoMitMwst;
+                    bruttoMitMwst = (bruttoSumme != null) ? bruttoMitMwst.add(new BigDecimal(bruttoSumme))
+                                                          : bruttoMitMwst;
                 } else {
-                    filteredBuchungen_kataster_mwst0.add(billing);
-                    katasterNetto = katasterNetto.add(new BigDecimal((Double)billing.getProperty("netto_summe")));
-                    katasterBrutto = katasterBrutto.add(new BigDecimal((Double)billing.getProperty("brutto_summe")));
+                    filteredBillingsOhneMwst.add(billing);
+                    nettoOhneMwst = (nettoSumme != null) ? nettoOhneMwst.add(new BigDecimal(nettoSumme))
+                                                         : nettoOhneMwst;
+                    bruttoOhneMwst = (bruttoSumme != null) ? bruttoOhneMwst.add(new BigDecimal(bruttoSumme))
+                                                           : bruttoOhneMwst;
                 }
             }
-            mwst0[1] = (BigDecimal)mwst_information_0.get("netto_summe");
-            mwst0[2] = (BigDecimal)mwst_information_0.get("brutto_summe");
-            kataster_mwst0[1] = katasterNetto;
-            kataster_mwst0[2] = katasterBrutto;
-            baulasten_mwst0[1] = baulastenNetto;
-            baulasten_mwst0[2] = baulastenBrutto;
-            noData = false;
+
+            setCountersDependingOnVerwendungszweck(billing);
         }
-        mwst0[0] = filteredBuchungen_mwst0;
-        kataster_mwst0[0] = filteredBuchungen_kataster_mwst0;
-        baulasten_mwst0[0] = filteredBuchungen_baulasten_mwst0;
-        final Collection<CidsBean> filteredBuchungen_mwst19 = new ArrayList<CidsBean>();
-        if (billingInformation.containsKey(19d)) {
-            final HashMap<String, Object> mwst_information_19 = billingInformation.get(19d);
-            filteredBuchungen_mwst19.addAll((Collection<CidsBean>)billingInformation.get(19d).get("billings"));
-            mwst19[1] = (BigDecimal)mwst_information_19.get("netto_summe");
-            mwst19[2] = (BigDecimal)mwst_information_19.get("brutto_summe");
-            noData = false;
+
+        for (final CidsBean billing : filteredBillingsOhneMwst) {
+            final boolean istBaulast = "bla".equals(billing.getProperty("produktkey"))
+                        || "blab_be".equals(billing.getProperty("produktkey"));
+            if (istBaulast) {
+                filteredBillingsBaulastenOhneMwst.add(billing);
+                baulastenNetto = baulastenNetto.add(new BigDecimal((Double)billing.getProperty("netto_summe")));
+                baulastenBrutto = baulastenBrutto.add(new BigDecimal((Double)billing.getProperty("brutto_summe")));
+            } else {
+                filteredBillingsKatasterOhneMwst.add(billing);
+                katasterNetto = katasterNetto.add(new BigDecimal((Double)billing.getProperty("netto_summe")));
+                katasterBrutto = katasterBrutto.add(new BigDecimal((Double)billing.getProperty("brutto_summe")));
+            }
         }
-        mwst19[0] = filteredBuchungen_mwst19;
+
+        final boolean noData = filteredBillingsOhneMwst.isEmpty()
+                    && filteredBillingsKatasterOhneMwst.isEmpty()
+                    && filteredBillingsBaulastenOhneMwst.isEmpty()
+                    && filteredBillingsMitMwst.isEmpty();
 
         if (noData && !isRechnungsanlage) {
             // the report is an empty Buchungsbeleg
@@ -193,14 +204,22 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
         } else {
             final BillingBuchungsbelegReport report = new BillingBuchungsbelegReport(
                     kundeBean,
-                    mwst0,
-                    kataster_mwst0,
-                    baulasten_mwst0,
-                    mwst19,
+                    filteredBillingsOhneMwst,
+                    nettoOhneMwst,
+                    bruttoOhneMwst,
+                    filteredBillingsKatasterOhneMwst,
+                    katasterNetto,
+                    katasterBrutto,
+                    filteredBillingsBaulastenOhneMwst,
+                    baulastenNetto,
+                    baulastenBrutto,
+                    filteredBillingsMitMwst,
+                    nettoMitMwst,
+                    bruttoMitMwst,
+                    nettoGesamt,
+                    bruttoGesamt,
                     fromDate_tillDate[0],
                     fromDate_tillDate[1],
-                    mwstValue,
-                    totalSum,
                     isRechnungsanlage,
                     amountTotalDownloads,
                     amountWithCosts,
@@ -220,83 +239,6 @@ public class PrintBillingReportForCustomer implements ConnectionContextProvider 
             report.setDownloadObserver(downloadFinishedObserver);
             report.generateReport();
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   billingBeans  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private BigDecimal generateStatisticsForTheReport(final Collection<CidsBean> billingBeans) {
-        final HashMap<BigDecimal, BigDecimal> mwstSatz_nettoSum = new HashMap<BigDecimal, BigDecimal>();
-        billingInformation = new HashMap<Double, HashMap<String, Object>>();
-
-        // calculate the netto sum of every mwst_satz
-        for (final CidsBean billing : billingBeans) {
-            BigDecimal netto_summe;
-            BigDecimal mwst_satz;
-
-            final Double netto_summe_bean = (Double)billing.getProperty("netto_summe");
-            if (netto_summe_bean != null) {
-                netto_summe = new BigDecimal(netto_summe_bean.toString());
-            } else {
-                netto_summe = new BigDecimal("0");
-            }
-
-            final Double mwst_satz_bean = (Double)billing.getProperty("mwst_satz");
-            if ((mwst_satz_bean != null) && !mwst_satz_bean.equals(new Double(0))) {
-                mwst_satz = new BigDecimal(mwst_satz_bean.toString());
-            } else {
-                mwst_satz = new BigDecimal("0");
-            }
-
-            if (mwstSatz_nettoSum.containsKey(mwst_satz)) {
-                final BigDecimal subtotal = mwstSatz_nettoSum.get(mwst_satz);
-                final BigDecimal newSubtotal = subtotal.add(netto_summe);
-                mwstSatz_nettoSum.put(mwst_satz, newSubtotal);
-            } else {
-                mwstSatz_nettoSum.put(mwst_satz, netto_summe);
-            }
-
-            if (showBillingWithoutCostInReport || (netto_summe.compareTo(new BigDecimal("0")) > 0)) {
-                // add the billing to the right MwSt-category
-                if (!billingInformation.containsKey(mwst_satz.doubleValue())) {
-                    final HashMap<String, Object> information = new HashMap<String, Object>();
-                    final Collection<CidsBean> billings = new ArrayList<CidsBean>();
-                    billings.add(billing);
-                    information.put("billings", billings);
-                    billingInformation.put(mwst_satz.doubleValue(), information);
-                } else {
-                    ((Collection)billingInformation.get(mwst_satz.doubleValue()).get("billings")).add(billing);
-                }
-            }
-
-            setCountersDependingOnVerwendungszweck(billing);
-        }
-
-        // calculate the brutto sum from each netto_sum
-        totalSum = new BigDecimal("0");
-        mwstValue = new BigDecimal("0");
-        for (final BigDecimal mwst_satz : mwstSatz_nettoSum.keySet()) {
-            final BigDecimal nettoSum = mwstSatz_nettoSum.get(mwst_satz);
-            // billing information might not contain any billings for a type of MwSt. if
-            // showBillingWithoutCostInReport is false
-            if (billingInformation.containsKey(mwst_satz.doubleValue())) {
-                billingInformation.get(mwst_satz.doubleValue()).put("netto_summe", nettoSum);
-
-                // calculate: bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100))
-                final BigDecimal percent = mwst_satz.divide(new BigDecimal("100"));
-                mwstValue = nettoSum.multiply(percent);
-                mwstValue = mwstValue.setScale(2, BigDecimal.ROUND_HALF_UP);
-                BigDecimal bruttoSum = nettoSum.add(mwstValue);
-                bruttoSum = bruttoSum.setScale(2, BigDecimal.ROUND_HALF_UP);
-                totalSum = totalSum.add(bruttoSum);
-                billingInformation.get(mwst_satz.doubleValue()).put("brutto_summe", bruttoSum);
-            }
-        }
-        return totalSum;
     }
 
     /**
