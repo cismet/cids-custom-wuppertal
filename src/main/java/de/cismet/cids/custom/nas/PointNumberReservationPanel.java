@@ -694,7 +694,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
                                         protokollPane.setBusy(false);
                                         return;
                                     }
-                                    pnrDialog.setResult(result);
+
                                     protokollPane.addMessage("Ok.", Styles.SUCCESS);
                                     pnrDialog.setSuccess();
                                     protokollPane.setBusy(false);
