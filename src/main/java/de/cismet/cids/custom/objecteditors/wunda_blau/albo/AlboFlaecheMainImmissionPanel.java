@@ -31,8 +31,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 public class AlboFlaecheMainImmissionPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler30;
-    private javax.swing.Box.Filler filler31;
     private javax.swing.JComboBox<String> jComboBox24;
     private javax.swing.JLabel jLabel53;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -70,12 +68,6 @@ public class AlboFlaecheMainImmissionPanel extends AbstractAlboFlaechePanel {
 
         jLabel53 = new javax.swing.JLabel();
         jComboBox24 = new DefaultBindableScrollableComboBox();
-        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -105,20 +97,6 @@ public class AlboFlaecheMainImmissionPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jComboBox24, gridBagConstraints);
-
-        filler30.setName("filler30"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        add(filler30, gridBagConstraints);
-
-        filler31.setName("filler31"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        add(filler31, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents

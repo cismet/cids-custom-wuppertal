@@ -16,6 +16,13 @@ import Sirius.server.middleware.types.MetaClass;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import java.awt.CardLayout;
+import java.awt.Component;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
+
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -53,11 +60,9 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jPanel10 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         alboFlaecheMainStandortPanel1 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel(isEditable());
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
 
         final FormListener formListener = new FormListener();
 
@@ -108,7 +113,6 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
                         this,
                         eLProperty,
                         jList1);
-        jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create("${jahr_von} - ${jahr_bis}"));
         bindingGroup.addBinding(jListBinding);
 
         jList1.addListSelectionListener(formListener);
@@ -124,7 +128,11 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
 
         jPanel10.setName("jPanel10"); // NOI18N
         jPanel10.setOpaque(false);
-        jPanel10.setLayout(new java.awt.GridBagLayout());
+        jPanel10.setLayout(new java.awt.CardLayout());
+
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setOpaque(false);
+        jPanel10.add(jPanel2, "null");
 
         alboFlaecheMainStandortPanel1.setName("alboFlaecheMainStandortPanel1"); // NOI18N
 
@@ -143,26 +151,15 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel10.add(alboFlaecheMainStandortPanel1, gridBagConstraints);
+        jPanel10.add(alboFlaecheMainStandortPanel1, "standort");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         add(jPanel10, gridBagConstraints);
-
-        filler21.setName("filler21"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
-        add(filler21, gridBagConstraints);
 
         bindingGroup.bind();
     }
@@ -205,12 +202,12 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel
         alboFlaecheMainStandortPanel1;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler21;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JList<CidsBean> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane3;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -240,15 +237,6 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
-        alboFlaecheMainStandortPanel1.setCidsBean(null);
-    }                                                                                 //GEN-LAST:event_jList1ValueChanged
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         getCidsBean().getBeanCollectionProperty("n_standorte")
                 .add(mcStandort.getEmptyInstance(getConnectionContext()).getBean());
@@ -263,21 +251,61 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
         getCidsBean().getBeanCollectionProperty("n_standorte").remove(jList1.getSelectedValue());
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
+        ((CardLayout)jPanel10.getLayout()).show(jPanel10, (jList1.getSelectedValue() == null) ? "null" : "standort");
+    }                                                                                 //GEN-LAST:event_jList1ValueChanged
+
     @Override
     public final void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-
-        alboFlaecheMainStandortPanel1.initWithConnectionContext(connectionContext);
-
         if (!isEditable()) {
             RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
         }
 
+        jList1.setCellRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final JLabel component = (JLabel)super.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    ((JLabel)component).setOpaque(false);
+                    component.setBackground(jList1.getBackground());
+                    if ((value != null) && (value instanceof CidsBean)) {
+                        final Integer jahrVon = (Integer)((CidsBean)value).getProperty("jahr_von");
+                        final Integer jahrBis = (Integer)((CidsBean)value).getProperty("jahr_bis");
+                        component.setText(
+                            String.format(
+                                "%04d - %04d",
+                                (jahrVon != null) ? jahrVon : 0,
+                                (jahrBis != null) ? jahrBis : 0));
+                        component.setToolTipText((String)((CidsBean)value).getProperty("name"));
+                    } else {
+                        component.setText("");
+                    }
+                    return component;
+                }
+            });
+
+        alboFlaecheMainStandortPanel1.initWithConnectionContext(connectionContext);
+
         try {
             mcStandort = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
-                    "ALBO_STANDROT",
+                    "ALBO_STANDORT",
                     getConnectionContext());
         } catch (final Exception ex) {
             LOG.error(ex, ex);

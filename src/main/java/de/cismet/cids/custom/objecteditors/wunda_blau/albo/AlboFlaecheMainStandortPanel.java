@@ -13,10 +13,18 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.JXTable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.utils.CidsBeansTableModel;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -28,6 +36,27 @@ import de.cismet.connectioncontext.ConnectionContext;
  */
 public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String[] COLUMN_PROPERTIES = new String[] {
+            "schluessel",
+            "name",
+            "massgebliche_branchengruppe",
+            "fk_erhebungsklasse.name"
+        };
+    private static final String[] COLUMN_NAMES = new String[] {
+            "WZ-Nummer",
+            "Wirtschaftszweig",
+            "maßgeblicher Branchengruppe",
+            "Erhebungsklasse"
+        };
+    private static final Class[] COLUMN_CLASSES = new Class[] {
+            String.class,
+            String.class,
+            Boolean.class,
+            CidsBean.class
+        };
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler19;
     private javax.swing.Box.Filler filler20;
@@ -35,7 +64,6 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
     private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler24;
     private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler61;
     private javax.swing.Box.Filler filler63;
     private javax.swing.JFormattedTextField jFormattedTextField17;
     private javax.swing.JFormattedTextField jFormattedTextField18;
@@ -132,10 +160,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
                 new java.awt.Dimension(32767, 0));
         jPanel15 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jXTable2 = new org.jdesktop.swingx.JXTable();
-        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        jXTable2 = new DroppedBeansTable();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -158,7 +183,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.betriebsname}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
                 jTextField8,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -194,7 +219,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.addressbuch_adresse}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.adressbuch_adresse}"),
                 jTextArea1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -361,7 +386,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkungen}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
                 jTextArea2,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -403,35 +428,9 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jXTable2.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {},
-                new String[] { "WZ-Nummer", "Wirtschaftszweig", "Maßgeblicher WZ", "Erhebungsklasse" }) {
-
-                Class[] types = new Class[] {
-                        java.lang.String.class,
-                        java.lang.String.class,
-                        java.lang.Boolean.class,
-                        java.lang.Object.class
-                    };
-
-                @Override
-                public Class getColumnClass(final int columnIndex) {
-                    return types[columnIndex];
-                }
-            });
+        jXTable2.setModel(new StandortWirtschaftszweigTableModel());
         jXTable2.setName("jXTable2"); // NOI18N
-        jXTable2.setRowHeight(5);
-
-        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.arr_wirtschaftszweige}");
-        final org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJTableBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        jXTable2);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
+        jXTable2.setVisibleRowCount(5);
         jScrollPane2.setViewportView(jXTable2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -452,18 +451,17 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel15, gridBagConstraints);
 
-        filler61.setName("filler61"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 130;
-        add(filler61, gridBagConstraints);
-
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
+        if (jXTable2 != null) {
+            ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).setCidsBeans((getCidsBean() != null)
+                    ? getCidsBean().getBeanCollectionProperty(
+                        "arr_wirtschaftszweige") : null);
+        }
     }
 
     @Override
@@ -471,13 +469,74 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         super.initWithConnectionContext(connectionContext);
         initComponents();
 
-        if (!isEditable()) {
+        if (isEditable()) {
+            try {
+                new CidsBeanDropTarget(jXTable2);
+            } catch (final Exception ex) {
+                LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
+            }
+        } else {
             RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+            RendererTools.makeReadOnly(jXTable2);
         }
     }
 
     @Override
     protected BindingGroup getBindingGroup() {
         return bindingGroup;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
+    private void beansDroppedIntoListener(final List<CidsBean> beans) {
+        if (isEditable()) {
+            final List<CidsBean> flaecheBeans = ((StandortWirtschaftszweigTableModel)jXTable2.getModel())
+                        .getCidsBeans();
+            for (final CidsBean wirtschaftszweigBean : beans) {
+                if (
+                    wirtschaftszweigBean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                                "albo_wirtschaftszweig")
+                            && !flaecheBeans.contains(wirtschaftszweigBean)) {
+                    ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).add(wirtschaftszweigBean);
+                }
+            }
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class StandortWirtschaftszweigTableModel extends CidsBeansTableModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new StandortWirtschaftszweigTableModel object.
+         */
+        public StandortWirtschaftszweigTableModel() {
+            super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DroppedBeansTable extends JXTable implements CidsBeanDropListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+            beansDroppedIntoListener(beans);
+        }
     }
 }

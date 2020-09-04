@@ -14,7 +14,6 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.AutoBinding;
@@ -42,7 +41,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -137,7 +138,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         jButton17 = new JButton();
         jButton18 = new JButton();
 
-        FormListener formListener = new FormListener();
+        final FormListener formListener = new FormListener();
 
         panTitle.setName("panTitle"); // NOI18N
         panTitle.setOpaque(false);
@@ -146,7 +147,13 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         lblTitle.setForeground(new Color(255, 255, 255));
         lblTitle.setName("lblTitle"); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: ${cidsBean.erhebungsnummer}"), lblTitle, BeanProperty.create("text"));
+        final Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create(
+                    "<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: ${cidsBean.erhebungsnummer}"),
+                lblTitle,
+                BeanProperty.create("text"));
         binding.setSourceNullValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: -");
         binding.setSourceUnreadableValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: <i>[Fehler]");
         bindingGroup.addBinding(binding);
@@ -321,28 +328,34 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         bindingGroup.bind();
     }
 
-    // Code for dispatching events from components to event handlers.
-
+    /**
+     * Code for dispatching events from components to event handlers.
+     *
+     * @version  $Revision$, $Date$
+     */
     private class FormListener implements ActionListener {
-        FormListener() {}
-        public void actionPerformed(ActionEvent evt) {
+
+        /**
+         * Creates a new FormListener object.
+         */
+        FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == jToggleButton1) {
                 AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
-            }
-            else if (evt.getSource() == jToggleButton2) {
+            } else if (evt.getSource() == jToggleButton2) {
                 AlboFlaecheEditor.this.jToggleButton2ActionPerformed(evt);
-            }
-            else if (evt.getSource() == jToggleButton3) {
+            } else if (evt.getSource() == jToggleButton3) {
                 AlboFlaecheEditor.this.jToggleButton3ActionPerformed(evt);
-            }
-            else if (evt.getSource() == jToggleButton4) {
+            } else if (evt.getSource() == jToggleButton4) {
                 AlboFlaecheEditor.this.jToggleButton4ActionPerformed(evt);
-            }
-            else if (evt.getSource() == jToggleButton5) {
+            } else if (evt.getSource() == jToggleButton5) {
                 AlboFlaecheEditor.this.jToggleButton5ActionPerformed(evt);
             }
         }
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     //~ Instance fields --------------------------------------------------------
 
@@ -439,7 +452,10 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        bindingGroup.unbind();
+        try {
+            bindingGroup.unbind();
+        } catch (final Exception ex) {
+        }
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
@@ -468,45 +484,45 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
         cardLayout.show(panMainCard, "flaeche");
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }                                                                   //GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton2ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+    private void jToggleButton2ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton2ActionPerformed
         cardLayout.show(panMainCard, "arbeitsstand");
-    }//GEN-LAST:event_jToggleButton2ActionPerformed
+    }                                                                   //GEN-LAST:event_jToggleButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton3ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
+    private void jToggleButton3ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
         cardLayout.show(panMainCard, "massnahmen");
-    }//GEN-LAST:event_jToggleButton3ActionPerformed
+    }                                                                   //GEN-LAST:event_jToggleButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton4ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
+    private void jToggleButton4ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton4ActionPerformed
         cardLayout.show(panMainCard, "bemerkung");
-    }//GEN-LAST:event_jToggleButton4ActionPerformed
+    }                                                                   //GEN-LAST:event_jToggleButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton5ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton5ActionPerformed
+    private void jToggleButton5ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton5ActionPerformed
         cardLayout.show(panMainCard, "aktionen");
-    }//GEN-LAST:event_jToggleButton5ActionPerformed
+    }                                                                   //GEN-LAST:event_jToggleButton5ActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -49,7 +49,7 @@
             <Property name="name" type="java.lang.String" value="jTextField8" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.betriebsname}" target="jTextField8" targetPath="text" updateStrategy="0" immediately="false">
+            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.name}" target="jTextField8" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
             </BindingProperty>
           </BindingProperties>
@@ -108,9 +108,7 @@
                 <Property name="name" type="java.lang.String" value="jTextArea1" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.addressbuch_adresse}" target="jTextArea1" targetPath="text" updateStrategy="0" immediately="false">
-                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                </BindingProperty>
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.adressbuch_adresse}" target="jTextArea1" targetPath="text" updateStrategy="0" immediately="false"/>
               </BindingProperties>
             </Component>
           </SubComponents>
@@ -131,9 +129,7 @@
             <Property name="name" type="java.lang.String" value="jTextField10" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.adressbuch_branche}" target="jTextField10" targetPath="text" updateStrategy="0" immediately="false">
-              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-            </BindingProperty>
+            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.adressbuch_branche}" target="jTextField10" targetPath="text" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -333,7 +329,7 @@
                 <Property name="name" type="java.lang.String" value="jTextArea2" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkungen}" target="jTextArea2" targetPath="text" updateStrategy="0" immediately="false">
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="jTextArea2" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                 </BindingProperty>
               </BindingProperties>
@@ -404,40 +400,19 @@
           <SubComponents>
             <Component class="org.jdesktop.swingx.JXTable" name="jXTable2">
               <Properties>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="4" rowCount="0">
-                    <Column editable="true" title="WZ-Nummer" type="java.lang.String"/>
-                    <Column editable="true" title="Wirtschaftszweig" type="java.lang.String"/>
-                    <Column editable="true" title="Ma&#xdf;geblicher WZ" type="java.lang.Boolean"/>
-                    <Column editable="true" title="Erhebungsklasse" type="java.lang.Object"/>
-                  </Table>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new StandortWirtschaftszweigTableModel()" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jXTable2" noResource="true"/>
-                <Property name="rowHeight" type="int" value="5"/>
+                <Property name="visibleRowCount" type="int" value="5"/>
               </Properties>
-              <BindingProperties>
-                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_wirtschaftszweige}" target="jXTable2" targetPath="elements" updateStrategy="0" immediately="true"/>
-              </BindingProperties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DroppedBeansTable()"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.Box$Filler" name="filler61">
-      <Properties>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[0, 32767]"/>
-        </Property>
-        <Property name="name" type="java.lang.String" value="filler61" noResource="true"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.VerticalGlue"/>
-      </AuxValues>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-          <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="130" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
-        </Constraint>
-      </Constraints>
-    </Component>
   </SubComponents>
 </Form>

@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
+package de.cismet.cids.custom.utils;
 
 import org.apache.log4j.Logger;
 
@@ -26,26 +26,48 @@ import de.cismet.cids.dynamics.CidsBean;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AltablagerungAbfallherkunftTableModel extends AbstractTableModel {
-
-    //~ Static fields/initializers ---------------------------------------------
-
-    protected static final Logger LOG = Logger.getLogger(AltablagerungAbfallherkunftTableModel.class);
+public class CidsBeansTableModel extends AbstractTableModel {
 
     //~ Instance fields --------------------------------------------------------
 
+    private final Class[] columnClasses;
+    private final String[] columnNames;
+    private final String[] columnProperties;
+    private final boolean[] columnEditable;
+
     private List<CidsBean> cidsBeans;
-    private final boolean editable;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AltablagerungAbfallherkunftTableModel object.
+     * Creates a new CidsBeansTableModel object.
      *
-     * @param  editable  DOCUMENT ME!
+     * @param  columnProperties  DOCUMENT ME!
+     * @param  columnNames       DOCUMENT ME!
+     * @param  columnClasses     DOCUMENT ME!
      */
-    public AltablagerungAbfallherkunftTableModel(final boolean editable) {
-        this.editable = editable;
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses) {
+        this(columnProperties, columnNames, columnClasses, null);
+    }
+
+    /**
+     * Creates a new CidsBeansTableModel object.
+     *
+     * @param  columnProperties  DOCUMENT ME!
+     * @param  columnNames       DOCUMENT ME!
+     * @param  columnClasses     DOCUMENT ME!
+     * @param  columnEditable    DOCUMENT ME!
+     */
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses,
+            final boolean[] columnEditable) {
+        this.columnProperties = columnProperties;
+        this.columnNames = columnNames;
+        this.columnClasses = columnClasses;
+        this.columnEditable = columnEditable;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -102,16 +124,24 @@ public class AltablagerungAbfallherkunftTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(final int columnIndex) {
-        if (columnIndex == 0) {
-            return "Abfallherkunft";
-        } else {
-            return "überwiegend";
+        if ((columnIndex < 0) || (columnIndex >= columnNames.length)) {
+            return null;
         }
+        return columnNames[columnIndex];
     }
 
     @Override
     public boolean isCellEditable(final int rowIndex, final int columnIndex) {
-        return editable;
+        if ((columnEditable == null) || (columnIndex < 0) || (columnIndex >= columnEditable.length)) {
+            return false;
+        }
+        final CidsBean cidsBean = getCidsBean(rowIndex);
+
+        if (cidsBean != null) {
+            return columnEditable[columnIndex];
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -121,7 +151,7 @@ public class AltablagerungAbfallherkunftTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 2;
+        return columnProperties.length;
     }
 
     /**
@@ -136,43 +166,17 @@ public class AltablagerungAbfallherkunftTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(final int row, final int column) {
-        final CidsBean cidsBean = getCidsBean(row);
-        if (column == 0) {
-            return cidsBean.getProperty("fk_abfallherkunft");
-        } else {
-            return cidsBean.getProperty("ueberwiegend");
+    public Object getValueAt(final int rowIndex, final int columnIndex) {
+        if ((columnIndex < 0) || (columnIndex >= columnProperties.length)) {
+            return null;
         }
-    }
+        final CidsBean cidsBean = getCidsBean(rowIndex);
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  value   DOCUMENT ME!
-     * @param  row     DOCUMENT ME!
-     * @param  column  DOCUMENT ME!
-     */
-    @Override
-    public void setValueAt(final Object value, final int row, final int column) {
-        if ((column != 0) && (column != 1)) {
-            return;
-        }
-
-        final CidsBean cidsBean = getCidsBean(row);
-        if (column == 0) {
-            try {
-                cidsBean.setProperty("fk_abfallherkunft", value);
-            } catch (Exception ex) {
-                LOG.error(ex, ex);
-            }
+        if (cidsBean != null) {
+            return cidsBean.getProperty(columnProperties[columnIndex]);
         } else {
-            try {
-                cidsBean.setProperty("ueberwiegend", value);
-            } catch (Exception ex) {
-                LOG.error(ex, ex);
-            }
+            return null;
         }
-        fireTableRowsUpdated(row, row);
     }
 
     /**
@@ -184,10 +188,9 @@ public class AltablagerungAbfallherkunftTableModel extends AbstractTableModel {
      */
     @Override
     public Class<?> getColumnClass(final int columnIndex) {
-        if (columnIndex == 0) {
-            return CidsBean.class;
-        } else {
-            return Boolean.class;
+        if ((columnIndex < 0) || (columnIndex >= columnClasses.length)) {
+            return null;
         }
+        return columnClasses[columnIndex];
     }
 }

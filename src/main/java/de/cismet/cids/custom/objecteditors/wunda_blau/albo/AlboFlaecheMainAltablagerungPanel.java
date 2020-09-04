@@ -69,9 +69,6 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
 
         final FormListener formListener = new FormListener();
 
@@ -188,18 +185,6 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         jXTable1.setModel(new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AltablagerungAbfallherkunftTableModel(
                 isEditable()));
         jXTable1.setName("jXTable1"); // NOI18N
-        jXTable1.setRowHeight(5);
-
-        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.arr_abfallherkuenfte}");
-        final org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJTableBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        jXTable1);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
         jScrollPane1.setViewportView(jXTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -251,16 +236,6 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel17, gridBagConstraints);
 
-        filler2.setName("filler2"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(filler2, gridBagConstraints);
-
         bindingGroup.bind();
     }
 
@@ -294,7 +269,6 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler7;
     private javax.swing.JButton jButton1;
@@ -396,6 +370,7 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         jXTable1.setDefaultEditor(CidsBean.class, new DefaultBindableComboboxCellEditor(mcAbfallherkunft));
         if (!isEditable()) {
             RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+            RendererTools.makeReadOnly(jXTable1);
         }
     }
 

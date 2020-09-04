@@ -29,8 +29,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 public class AlboFlaecheMainSchadensfallPanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler25;
-    private javax.swing.Box.Filler filler28;
     private javax.swing.JComboBox<String> jComboBox23;
     private javax.swing.JLabel jLabel52;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -68,12 +66,6 @@ public class AlboFlaecheMainSchadensfallPanel extends AbstractAlboFlaechePanel {
 
         jLabel52 = new javax.swing.JLabel();
         jComboBox23 = new DefaultBindableScrollableComboBox();
-        filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -103,20 +95,6 @@ public class AlboFlaecheMainSchadensfallPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jComboBox23, gridBagConstraints);
-
-        filler25.setName("filler25"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        add(filler25, gridBagConstraints);
-
-        filler28.setName("filler28"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        add(filler28, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents

@@ -32,10 +32,6 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler36;
-    private javax.swing.Box.Filler filler37;
-    private javax.swing.Box.Filler filler39;
-    private javax.swing.Box.Filler filler40;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -93,12 +89,6 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         jComboBox27 = new DefaultBindableScrollableComboBox();
         jLabel61 = new javax.swing.JLabel();
         jComboBox28 = new DefaultBindableScrollableComboBox();
-        filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
         jPanel24 = new javax.swing.JPanel();
         jLabel62 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
@@ -112,12 +102,6 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         jCheckBox2 = new javax.swing.JCheckBox();
         jLabel64 = new javax.swing.JLabel();
         jFormattedTextField20 = new javax.swing.JFormattedTextField();
-        filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -202,21 +186,6 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel23.add(jComboBox28, gridBagConstraints);
 
-        filler36.setName("filler36"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        jPanel23.add(filler36, gridBagConstraints);
-
-        filler37.setName("filler37"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.weightx = 1.0;
-        jPanel23.add(filler37, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -280,6 +249,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jFormattedTextField19, gridBagConstraints);
 
@@ -362,21 +332,6 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel24.add(jFormattedTextField20, gridBagConstraints);
-
-        filler39.setName("filler39"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel24.add(filler39, gridBagConstraints);
-
-        filler40.setName("filler40"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        jPanel24.add(filler40, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
