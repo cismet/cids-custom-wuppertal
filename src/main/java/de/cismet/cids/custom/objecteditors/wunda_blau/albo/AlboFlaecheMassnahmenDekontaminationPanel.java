@@ -121,9 +121,7 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         jLabel73 = new javax.swing.JLabel();
         jCheckBox112 = new javax.swing.JCheckBox();
         jCheckBox113 = new javax.swing.JCheckBox();
-        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jPanel45 = new javax.swing.JPanel();
         jPanel46 = new javax.swing.JPanel();
         jCheckBox85 = new javax.swing.JCheckBox();
@@ -134,9 +132,7 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         jCheckBox88 = new javax.swing.JCheckBox();
         jCheckBox89 = new javax.swing.JCheckBox();
         jCheckBox90 = new javax.swing.JCheckBox();
-        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jPanel50 = new javax.swing.JPanel();
         jPanel51 = new javax.swing.JPanel();
         jLabel71 = new javax.swing.JLabel();
@@ -153,9 +149,7 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         jLabel72 = new javax.swing.JLabel();
         jCheckBox103 = new javax.swing.JCheckBox();
         jCheckBox104 = new javax.swing.JCheckBox();
-        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -183,12 +177,7 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         jCheckBox80.setContentAreaFilled(false);
         jCheckBox80.setName("jCheckBox80"); // NOI18N
 
-        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_1}"),
-                jCheckBox80,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__th_verbrenn}"), jCheckBox80, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -203,6 +192,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox107, "<html>Pyrolyse");
         jCheckBox107.setContentAreaFilled(false);
         jCheckBox107.setName("jCheckBox107"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__th_pyrolyse}"), jCheckBox107, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -213,6 +208,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox108, "<html>Vakuumdestillation");
         jCheckBox108.setContentAreaFilled(false);
         jCheckBox108.setName("jCheckBox108"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__th_vakuumdest}"), jCheckBox108, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -223,6 +224,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox109, "<html>Desorption mit Wasserdruck");
         jCheckBox109.setContentAreaFilled(false);
         jCheckBox109.setName("jCheckBox109"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__th_desorpt_wasserd}"), jCheckBox109, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -250,6 +257,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox110, "<html>Waschverfahren");
         jCheckBox110.setContentAreaFilled(false);
         jCheckBox110.setName("jCheckBox110"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__we_waschver}"), jCheckBox110, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -260,6 +273,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox111, "<html>Extraktionsverfahren");
         jCheckBox111.setContentAreaFilled(false);
         jCheckBox111.setName("jCheckBox111"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__we_extrakt_verf}"), jCheckBox111, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -287,6 +306,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox112, "<html>Mieten");
         jCheckBox112.setContentAreaFilled(false);
         jCheckBox112.setName("jCheckBox112"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__bv_mieten}"), jCheckBox112, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -297,6 +322,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox113, "<html>Bioreaktor");
         jCheckBox113.setContentAreaFilled(false);
         jCheckBox113.setName("jCheckBox113"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__bv_bioreaktor}"), jCheckBox113, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -330,8 +361,7 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         jPanel45.setOpaque(false);
         jPanel45.setLayout(new java.awt.GridBagLayout());
 
-        jPanel46.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                "<html><b>Bodenbehandlung ohne Aushub (In-situ-Verfahren in der (un)gesättigten Zone"));
+        jPanel46.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Bodenbehandlung ohne Aushub (In-situ-Verfahren in der (un)gesättigten Zone"));
         jPanel46.setName("jPanel46"); // NOI18N
         jPanel46.setOpaque(false);
         jPanel46.setLayout(new java.awt.GridBagLayout());
@@ -339,6 +369,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox85, "<html>Mikrobiologische Verfahren");
         jCheckBox85.setContentAreaFilled(false);
         jCheckBox85.setName("jCheckBox85"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__ba_mik_bio_insitu}"), jCheckBox85, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -349,6 +385,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox86, "<html>Physikalische Verfahren (Bodenwäsche...)");
         jCheckBox86.setContentAreaFilled(false);
         jCheckBox86.setName("jCheckBox86"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__ba_insitu_bodenw}"), jCheckBox86, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -359,6 +401,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox87, "<html>Elektrokinetische Verfahren");
         jCheckBox87.setContentAreaFilled(false);
         jCheckBox87.setName("jCheckBox87"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__ba_elektrokinet}"), jCheckBox87, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -369,6 +417,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox114, "<html>Phytoextraktion / Phytosanierung");
         jCheckBox114.setContentAreaFilled(false);
         jCheckBox114.setName("jCheckBox114"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__ba_phytoext_san}"), jCheckBox114, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -391,6 +445,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox88, "<html>Bodenluftsanierung");
         jCheckBox88.setContentAreaFilled(false);
         jCheckBox88.setName("jCheckBox88"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__pv_bodenluft_san}"), jCheckBox88, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -401,6 +461,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox89, "<html>Deponiegasabsaugung (Fassung und Behandlung)");
         jCheckBox89.setContentAreaFilled(false);
         jCheckBox89.setName("jCheckBox89"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__pv_deponieentgas}"), jCheckBox89, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -411,6 +477,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox90, "<html>Sonstige pneumatische Verfahren");
         jCheckBox90.setContentAreaFilled(false);
         jCheckBox90.setName("jCheckBox90"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__pv_sonst_pneum}"), jCheckBox90, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -458,11 +530,15 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel51.add(jLabel71, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox91,
-            "<html>Mechanische Trennverfahren und chem.-phys. Vorbehandlung");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox91, "<html>Mechanische Trennverfahren und chem.-phys. Vorbehandlung");
         jCheckBox91.setContentAreaFilled(false);
         jCheckBox91.setName("jCheckBox91"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_mech_trennverf}"), jCheckBox91, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -473,6 +549,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox92, "<html>Strippung und Adsorption an Aktivkohle");
         jCheckBox92.setContentAreaFilled(false);
         jCheckBox92.setName("jCheckBox92"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_stripp_adsorp_akt}"), jCheckBox92, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -483,6 +565,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox93, "<html>Direktadsorption an Aktivkohle");
         jCheckBox93.setContentAreaFilled(false);
         jCheckBox93.setName("jCheckBox93"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_direktadsorp_akt}"), jCheckBox93, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -493,6 +581,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox94, "<html>Chemische Oxidation");
         jCheckBox94.setContentAreaFilled(false);
         jCheckBox94.setName("jCheckBox94"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_chem_oxid}"), jCheckBox94, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -503,6 +597,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox95, "<html>Ionenaustausch");
         jCheckBox95.setContentAreaFilled(false);
         jCheckBox95.setName("jCheckBox95"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_ionenaustausch}"), jCheckBox95, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -513,6 +613,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox96, "<html>Membranverfahren");
         jCheckBox96.setContentAreaFilled(false);
         jCheckBox96.setName("jCheckBox96"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_membran}"), jCheckBox96, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -523,6 +629,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox97, "Biologische Verfahren");
         jCheckBox97.setContentAreaFilled(false);
         jCheckBox97.setName("jCheckBox97"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_biol_verf}"), jCheckBox97, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -533,6 +645,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox98, "Neutralisation");
         jCheckBox98.setContentAreaFilled(false);
         jCheckBox98.setName("jCheckBox98"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_neutralisation}"), jCheckBox98, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -543,6 +661,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox99, "Sonstige Aufbereitungsverfahren nach Abpumpen");
         jCheckBox99.setContentAreaFilled(false);
         jCheckBox99.setName("jCheckBox99"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__fb_sonst_aufbereit}"), jCheckBox99, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -570,6 +694,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox103, "In-situ-Behandlung ENA");
         jCheckBox103.setContentAreaFilled(false);
         jCheckBox103.setName("jCheckBox103"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__insitu_beh_ena}"), jCheckBox103, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -580,6 +710,12 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox104, "Sonstige hydraulische In-Situ-Verfahren");
         jCheckBox104.setContentAreaFilled(false);
         jCheckBox104.setName("jCheckBox104"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_dekontamination__sonst_hydr_insitu}"), jCheckBox104, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -610,7 +746,7 @@ public class AlboFlaecheMassnahmenDekontaminationPanel extends AbstractAlboFlaec
         add(jPanel50, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {

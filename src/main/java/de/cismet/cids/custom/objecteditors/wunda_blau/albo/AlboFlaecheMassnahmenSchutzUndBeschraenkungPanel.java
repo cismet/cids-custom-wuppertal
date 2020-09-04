@@ -75,9 +75,7 @@ public class AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel extends AbstractAl
         jCheckBox102 = new javax.swing.JCheckBox();
         jCheckBox105 = new javax.swing.JCheckBox();
         jCheckBox106 = new javax.swing.JCheckBox();
-        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -88,18 +86,11 @@ public class AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel extends AbstractAl
         jPanel53.setOpaque(false);
         jPanel53.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox100,
-            "<html>Einschränkung der baulischen zweckgebundenen Nutzung");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox100, "<html>Einschränkung der baulischen zweckgebundenen Nutzung");
         jCheckBox100.setContentAreaFilled(false);
         jCheckBox100.setName("jCheckBox100"); // NOI18N
 
-        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_1}"),
-                jCheckBox100,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_schutzbeschraenkung__einschraenk_nutz}"), jCheckBox100, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -111,11 +102,15 @@ public class AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel extends AbstractAl
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel53.add(jCheckBox100, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox101,
-            "<html>Anordnung / Empfehlung hinsichtlich der Nutzung von Grund- und Oberflächenwasser für Trinkwasserzwecke, Bewässerung oder für allgemeinen Gebrauch");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox101, "<html>Anordnung / Empfehlung hinsichtlich der Nutzung von Grund- und Oberflächenwasser für Trinkwasserzwecke, Bewässerung oder für allgemeinen Gebrauch");
         jCheckBox101.setContentAreaFilled(false);
         jCheckBox101.setName("jCheckBox101"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_schutzbeschraenkung__anord_empf_nutz}"), jCheckBox101, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -123,11 +118,15 @@ public class AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel extends AbstractAl
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel53.add(jCheckBox101, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox102,
-            "<html>Anordnung / Empfehlung hinsichtlich Bodenbewirtschaftung (z.B. Kalkung zur pH-Wert-Anhebung)");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox102, "<html>Anordnung / Empfehlung hinsichtlich Bodenbewirtschaftung (z.B. Kalkung zur pH-Wert-Anhebung)");
         jCheckBox102.setContentAreaFilled(false);
         jCheckBox102.setName("jCheckBox102"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_schutzbeschraenkung__anord_empf_b_bewirt}"), jCheckBox102, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -135,11 +134,15 @@ public class AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel extends AbstractAl
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel53.add(jCheckBox102, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox105,
-            "<html>Anordnung / Empfehlung hinsichtlich von Lebens- oder Futtermittel-Anbau und/oder Verwendung");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox105, "<html>Anordnung / Empfehlung hinsichtlich von Lebens- oder Futtermittel-Anbau und/oder Verwendung");
         jCheckBox105.setContentAreaFilled(false);
         jCheckBox105.setName("jCheckBox105"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_schutzbeschraenkung__anord_empf_lebensm}"), jCheckBox105, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -147,11 +150,15 @@ public class AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel extends AbstractAl
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel53.add(jCheckBox105, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox106,
-            "Sonstiges (z.B. Einzäunung, Bepflanzung, Kellerbelüftung, Gaswarngeräte)");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox106, "Sonstiges (z.B. Einzäunung, Bepflanzung, Kellerbelüftung, Gaswarngeräte)");
         jCheckBox106.setContentAreaFilled(false);
         jCheckBox106.setName("jCheckBox106"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_schutzbeschraenkung__sonstiges}"), jCheckBox106, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -175,7 +182,7 @@ public class AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel extends AbstractAl
         add(jPanel53, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
