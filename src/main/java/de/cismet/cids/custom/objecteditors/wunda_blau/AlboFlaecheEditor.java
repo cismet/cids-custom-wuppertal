@@ -41,14 +41,10 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-
-import de.cismet.cids.annotations.AggregationRenderer;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -78,14 +74,10 @@ import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
- * de.cismet.cids.objectrenderer.CoolThemaRenderer.
+ * DOCUMENT ME!
  *
- * <p>Renderer for the "Thema"-theme</p>
- *
- * @author   srichter
  * @version  $Revision$, $Date$
  */
-@AggregationRenderer
 public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     DisposableCidsBeanStore,
     TitleComponentProvider,
@@ -456,7 +448,57 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
             bindingGroup.unbind();
         } catch (final Exception ex) {
         }
+
         if (cidsBean != null) {
+            if (isEditable()) {
+                if (cidsBean.getProperty("fk_massnahme") == null) {
+                    try {
+                        cidsBean.setProperty(
+                            "fk_massnahme",
+                            CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "ALBO_MASSNAHME", getConnectionContext())
+                                        .getEmptyInstance(getConnectionContext()).getBean());
+                    } catch (final Exception ex) {
+                        LOG.fatal(ex, ex);
+                    }
+                }
+                if (cidsBean.getProperty("fk_massnahme_dekontamination") == null) {
+                    try {
+                        cidsBean.setProperty(
+                            "fk_massnahme_dekontamination",
+                            CidsBean.getMetaClassFromTableName(
+                                "WUNDA_BLAU",
+                                "ALBO_MASSNAHME_DEKONTAMINATION",
+                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
+                    } catch (final Exception ex) {
+                        LOG.fatal(ex, ex);
+                    }
+                }
+                if (cidsBean.getProperty("fk_massnahme_sicherung") == null) {
+                    try {
+                        cidsBean.setProperty(
+                            "fk_massnahme_sicherung",
+                            CidsBean.getMetaClassFromTableName(
+                                "WUNDA_BLAU",
+                                "ALBO_MASSNAHME_SICHERUNG",
+                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
+                    } catch (final Exception ex) {
+                        LOG.fatal(ex, ex);
+                    }
+                }
+                if (cidsBean.getProperty("fk_massnahme_schutzbeschraenkung") == null) {
+                    try {
+                        cidsBean.setProperty(
+                            "fk_massnahme_schutzbeschraenkung",
+                            CidsBean.getMetaClassFromTableName(
+                                "WUNDA_BLAU",
+                                "ALBO_MASSNAHME_SCHUTZBESCHRAENKUNG",
+                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
+                    } catch (final Exception ex) {
+                        LOG.fatal(ex, ex);
+                    }
+                }
+            }
+
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 cidsBean,

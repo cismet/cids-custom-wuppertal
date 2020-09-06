@@ -69,7 +69,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox80" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__th_verbrenn}" target="jCheckBox80" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.th_verbrenn}" target="jCheckBox80" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -87,7 +87,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox107" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__th_pyrolyse}" target="jCheckBox107" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.th_pyrolyse}" target="jCheckBox107" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -105,7 +105,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox108" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__th_vakuumdest}" target="jCheckBox108" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.th_vakuumdest}" target="jCheckBox108" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -123,7 +123,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox109" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__th_desorpt_wasserd}" target="jCheckBox109" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.th_desorpt_wasserd}" target="jCheckBox109" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -162,7 +162,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox110" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__we_waschver}" target="jCheckBox110" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.we_waschver}" target="jCheckBox110" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -180,7 +180,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox111" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__we_extrakt_verf}" target="jCheckBox111" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.we_extrakt_verf}" target="jCheckBox111" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -219,7 +219,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox112" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__bv_mieten}" target="jCheckBox112" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.bv_mieten}" target="jCheckBox112" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -237,7 +237,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox113" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__bv_bioreaktor}" target="jCheckBox113" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.bv_bioreaktor}" target="jCheckBox113" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -306,7 +306,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox85" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__ba_mik_bio_insitu}" target="jCheckBox85" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_mik_bio_insitu}" target="jCheckBox85" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -324,7 +324,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox86" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__ba_insitu_bodenw}" target="jCheckBox86" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_insitu_bodenw}" target="jCheckBox86" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -342,7 +342,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox87" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__ba_elektrokinet}" target="jCheckBox87" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_elektrokinet}" target="jCheckBox87" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -360,7 +360,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox114" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__ba_phytoext_san}" target="jCheckBox114" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_phytoext_san}" target="jCheckBox114" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -398,7 +398,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox88" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__pv_bodenluft_san}" target="jCheckBox88" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.pv_bodenluft_san}" target="jCheckBox88" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -416,7 +416,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox89" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__pv_deponieentgas}" target="jCheckBox89" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.pv_deponieentgas}" target="jCheckBox89" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -434,7 +434,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox90" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__pv_sonst_pneum}" target="jCheckBox90" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.pv_sonst_pneum}" target="jCheckBox90" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -514,7 +514,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox91" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_mech_trennverf}" target="jCheckBox91" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_mech_trennverf}" target="jCheckBox91" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -532,7 +532,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox92" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_stripp_adsorp_akt}" target="jCheckBox92" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_stripp_adsorp_akt}" target="jCheckBox92" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -550,7 +550,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox93" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_direktadsorp_akt}" target="jCheckBox93" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_direktadsorp_akt}" target="jCheckBox93" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -568,7 +568,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox94" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_chem_oxid}" target="jCheckBox94" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_chem_oxid}" target="jCheckBox94" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -586,7 +586,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox95" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_ionenaustausch}" target="jCheckBox95" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_ionenaustausch}" target="jCheckBox95" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -604,7 +604,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox96" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_membran}" target="jCheckBox96" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_membran}" target="jCheckBox96" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -622,7 +622,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox97" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_biol_verf}" target="jCheckBox97" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_biol_verf}" target="jCheckBox97" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -640,7 +640,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox98" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_neutralisation}" target="jCheckBox98" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_neutralisation}" target="jCheckBox98" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -658,7 +658,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox99" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__fb_sonst_aufbereit}" target="jCheckBox99" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.fb_sonst_aufbereit}" target="jCheckBox99" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -697,7 +697,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox103" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__insitu_beh_ena}" target="jCheckBox103" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.insitu_beh_ena}" target="jCheckBox103" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>
@@ -715,7 +715,7 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox104" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.massnahme_dekontamination__sonst_hydr_insitu}" target="jCheckBox104" targetPath="selected" updateStrategy="0" immediately="false">
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sonst_hydr_insitu}" target="jCheckBox104" targetPath="selected" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="boolean" value="false"/>
                   <Property name="incompletePathValue" type="boolean" value="false"/>
                 </BindingProperty>

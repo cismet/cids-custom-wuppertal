@@ -114,7 +114,9 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox19 = new javax.swing.JCheckBox();
         jCheckBox20 = new javax.swing.JCheckBox();
         jCheckBox21 = new javax.swing.JCheckBox();
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel33 = new javax.swing.JPanel();
         jPanel34 = new javax.swing.JPanel();
         jCheckBox22 = new javax.swing.JCheckBox();
@@ -126,7 +128,9 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jPanel36 = new javax.swing.JPanel();
         jCheckBox27 = new javax.swing.JCheckBox();
         jCheckBox28 = new javax.swing.JCheckBox();
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel40 = new javax.swing.JPanel();
         jPanel41 = new javax.swing.JPanel();
         jLabel66 = new javax.swing.JLabel();
@@ -143,7 +147,9 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox5 = new javax.swing.JCheckBox();
         jCheckBox13 = new javax.swing.JCheckBox();
-        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -153,7 +159,8 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jPanel31.setOpaque(false);
         jPanel31.setLayout(new java.awt.GridBagLayout());
 
-        jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Einschließungsverfahren / Abdeckung"));
+        jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                "<html><b>Einschließungsverfahren / Abdeckung"));
         jPanel30.setName("jPanel30"); // NOI18N
         jPanel30.setOpaque(false);
         jPanel30.setLayout(new java.awt.GridBagLayout());
@@ -162,7 +169,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox14.setContentAreaFilled(false);
         jCheckBox14.setName("jCheckBox14"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__ea_oberfl_abdicht}"), jCheckBox14, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ea_oberfl_abdicht}"),
+                jCheckBox14,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -178,7 +190,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox15.setContentAreaFilled(false);
         jCheckBox15.setName("jCheckBox15"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__ea_oberfl_abdeck}"), jCheckBox15, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ea_oberfl_abdeck}"),
+                jCheckBox15,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -190,11 +207,18 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel30.add(jCheckBox15, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox16, "<html>Versiegelung (z.B. Verkehrsflächen, Gebäude, etc.)");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox16,
+            "<html>Versiegelung (z.B. Verkehrsflächen, Gebäude, etc.)");
         jCheckBox16.setContentAreaFilled(false);
         jCheckBox16.setName("jCheckBox16"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__ea_versiegelung}"), jCheckBox16, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ea_versiegelung}"),
+                jCheckBox16,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -210,7 +234,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox17.setContentAreaFilled(false);
         jCheckBox17.setName("jCheckBox17"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__ea_vertikal_abdicht}"), jCheckBox17, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ea_vertikal_abdicht}"),
+                jCheckBox17,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -226,7 +255,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox18.setContentAreaFilled(false);
         jCheckBox18.setName("jCheckBox18"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__ea_nacht_b_abdicht}"), jCheckBox18, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ea_nacht_b_abdicht}"),
+                jCheckBox18,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -254,7 +288,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox19.setContentAreaFilled(false);
         jCheckBox19.setName("jCheckBox19"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__gu_oberfl_abdicht}"), jCheckBox19, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gu_oberfl_abdicht}"),
+                jCheckBox19,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -270,7 +309,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox20.setContentAreaFilled(false);
         jCheckBox20.setName("jCheckBox20"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__gu_oberfl_abdeck}"), jCheckBox20, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gu_oberfl_abdeck}"),
+                jCheckBox20,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -286,7 +330,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox21.setContentAreaFilled(false);
         jCheckBox21.setName("jCheckBox21"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__gu_basisabdicht}"), jCheckBox21, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gu_basisabdicht}"),
+                jCheckBox21,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -324,16 +373,24 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jPanel33.setOpaque(false);
         jPanel33.setLayout(new java.awt.GridBagLayout());
 
-        jPanel34.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Immobilisierungsverfahren (In-situ / on-site)"));
+        jPanel34.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                "<html><b>Immobilisierungsverfahren (In-situ / on-site)"));
         jPanel34.setName("jPanel34"); // NOI18N
         jPanel34.setOpaque(false);
         jPanel34.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox22, "<html>Physikalische Wirkungsweise (u.a. Verfestigung)");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox22,
+            "<html>Physikalische Wirkungsweise (u.a. Verfestigung)");
         jCheckBox22.setContentAreaFilled(false);
         jCheckBox22.setName("jCheckBox22"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__iv_physikal_wirk_w}"), jCheckBox22, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.iv_physikal_wirk_w}"),
+                jCheckBox22,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -345,11 +402,18 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel34.add(jCheckBox22, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox23, "<html>Chemische Wirkungsweise (u.a. chemische Reaktion)");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox23,
+            "<html>Chemische Wirkungsweise (u.a. chemische Reaktion)");
         jCheckBox23.setContentAreaFilled(false);
         jCheckBox23.setName("jCheckBox23"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__iv_chem_wirk_w}"), jCheckBox23, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.iv_chem_wirk_w}"),
+                jCheckBox23,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -365,7 +429,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox24.setContentAreaFilled(false);
         jCheckBox24.setName("jCheckBox24"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__iv_chem_phys_wirk_w}"), jCheckBox24, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.iv_chem_phys_wirk_w}"),
+                jCheckBox24,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -393,7 +462,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox25.setContentAreaFilled(false);
         jCheckBox25.setName("jCheckBox25"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__pv_gasdraenagen}"), jCheckBox25, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pv_gasdraenagen}"),
+                jCheckBox25,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -409,7 +483,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox26.setContentAreaFilled(false);
         jCheckBox26.setName("jCheckBox26"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__pv_b_l_draenagen}"), jCheckBox26, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pv_b_l_draenagen}"),
+                jCheckBox26,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -437,7 +516,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox27.setContentAreaFilled(false);
         jCheckBox27.setName("jCheckBox27"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__sv_phytostab}"), jCheckBox27, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sv_phytostab}"),
+                jCheckBox27,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -453,7 +537,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox28.setContentAreaFilled(false);
         jCheckBox28.setName("jCheckBox28"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__sv_andere}"), jCheckBox28, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sv_andere}"),
+                jCheckBox28,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -491,7 +580,8 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jPanel40.setOpaque(false);
         jPanel40.setLayout(new java.awt.GridBagLayout());
 
-        jPanel41.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Verfahren für das Grundwasser (Verhinderung einer Schadstoffausbreitung)"));
+        jPanel41.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                "<html><b>Verfahren für das Grundwasser (Verhinderung einer Schadstoffausbreitung)"));
         jPanel41.setName("jPanel41"); // NOI18N
         jPanel41.setOpaque(false);
         jPanel41.setLayout(new java.awt.GridBagLayout());
@@ -505,11 +595,18 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel41.add(jLabel66, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox29, "<html>Mechanische Trennverfahren und chem.-phys. Vorbehandlung (Phasentrennung, Fällung, Flockung, ???)");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox29,
+            "<html>Mechanische Trennverfahren und chem.-phys. Vorbehandlung (Phasentrennung, Fällung, Flockung, ???)");
         jCheckBox29.setContentAreaFilled(false);
         jCheckBox29.setName("jCheckBox29"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_mech_trennverf}"), jCheckBox29, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_mech_trennverf}"),
+                jCheckBox29,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -525,7 +622,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox30.setContentAreaFilled(false);
         jCheckBox30.setName("jCheckBox30"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_stripp_adsorp_akt}"), jCheckBox30, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_stripp_adsorp_akt}"),
+                jCheckBox30,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -541,7 +643,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox36.setContentAreaFilled(false);
         jCheckBox36.setName("jCheckBox36"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_direktadsorp_akt}"), jCheckBox36, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_direktadsorp_akt}"),
+                jCheckBox36,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -557,7 +664,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox31.setContentAreaFilled(false);
         jCheckBox31.setName("jCheckBox31"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_chem_oxid}"), jCheckBox31, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_chem_oxid}"),
+                jCheckBox31,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -573,7 +685,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox32.setContentAreaFilled(false);
         jCheckBox32.setName("jCheckBox32"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_ionenaustausch}"), jCheckBox32, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_ionenaustausch}"),
+                jCheckBox32,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -589,7 +706,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox33.setContentAreaFilled(false);
         jCheckBox33.setName("jCheckBox33"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_membran}"), jCheckBox33, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_membran}"),
+                jCheckBox33,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -605,7 +727,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox34.setContentAreaFilled(false);
         jCheckBox34.setName("jCheckBox34"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_biol_verf}"), jCheckBox34, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_biol_verf}"),
+                jCheckBox34,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -621,7 +748,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox35.setContentAreaFilled(false);
         jCheckBox35.setName("jCheckBox35"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_neutralisation}"), jCheckBox35, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_neutralisation}"),
+                jCheckBox35,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -637,7 +769,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox37.setContentAreaFilled(false);
         jCheckBox37.setName("jCheckBox37"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__fb_sonst_aufbereit}"), jCheckBox37, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fb_sonst_aufbereit}"),
+                jCheckBox37,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -661,11 +798,18 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jPanel47.setOpaque(false);
         jPanel47.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox4, "<html><b>In-situ-Behandlung (Enhanced Natural Attenuation -ENA, Airsparing)");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox4,
+            "<html><b>In-situ-Behandlung (Enhanced Natural Attenuation -ENA, Airsparing)");
         jCheckBox4.setContentAreaFilled(false);
         jCheckBox4.setName("jCheckBox4"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__hv_insitu_behand_ena}"), jCheckBox4, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hv_insitu_behand_ena}"),
+                jCheckBox4,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -677,11 +821,18 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel47.add(jCheckBox4, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox5, "<html><b>Durchströmte Wände (Reaktionswände, Reinigungswände)");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jCheckBox5,
+            "<html><b>Durchströmte Wände (Reaktionswände, Reinigungswände)");
         jCheckBox5.setContentAreaFilled(false);
         jCheckBox5.setName("jCheckBox5"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__hv_durchstroemte_w}"), jCheckBox5, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hv_durchstroemte_w}"),
+                jCheckBox5,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -697,7 +848,12 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         jCheckBox13.setContentAreaFilled(false);
         jCheckBox13.setName("jCheckBox13"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.massnahme_sicherung__hv_sonst_insitu}"), jCheckBox13, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hv_sonst_insitu}"),
+                jCheckBox13,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -732,7 +888,7 @@ public class AlboFlaecheMassnahmenSicherungPanel extends AbstractAlboFlaechePane
         add(jPanel40, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
