@@ -40,6 +40,7 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
@@ -123,6 +124,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             STRASSENNAME_TOSTRING_FIELDS);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JButton btnReport;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -159,6 +161,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
     private org.jdesktop.swingx.JXTable jXTable1;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panTitle;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -195,6 +198,8 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         panTitle = new javax.swing.JPanel();
+        lblTitle = new javax.swing.JLabel();
+        btnReport = new javax.swing.JButton();
         panFooter = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -251,6 +256,51 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         panTitle.setName("panTitle"); // NOI18N
         panTitle.setLayout(new java.awt.GridBagLayout());
 
+        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitle.setName("lblTitle"); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "<html><body><h2><nobr>Altlastenkataster - Vorgang: ${cidsBean.import_id}"),
+                lblTitle,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("<html><body><h2><nobr>Altlastenkataster - Vorgang: -");
+        binding.setSourceUnreadableValue("<html><body><h2><nobr>Altlastenkataster - Vorgang: <i>[Fehler]");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panTitle.add(lblTitle, gridBagConstraints);
+
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/printer.png")));                                    // NOI18N
+        btnReport.setText(org.openide.util.NbBundle.getMessage(AlboVorgangEditor.class, "TreppeEditor.btnReport.text")); // NOI18N
+        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
+                AlboVorgangEditor.class,
+                "TreppeEditor.btnReport.toolTipText"));                                                                  // NOI18N
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.setName("btnReport");                                                                                  // NOI18N
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panTitle.add(btnReport, gridBagConstraints);
+
         panFooter.setName("panFooter"); // NOI18N
         panFooter.setLayout(new java.awt.GridBagLayout());
 
@@ -278,7 +328,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
         jComboBox4.setName("jComboBox4"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_strasse}"),
@@ -738,6 +788,15 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                     .gotoMetaObjectNode(new MetaObjectNode(bplanBean), false);
         }
     }                                                                      //GEN-LAST:event_jList1MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        AlboReportGenerator.startVorgangReportDownload(getCidsBean(), this, getConnectionContext());
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public CidsBean getCidsBean() {

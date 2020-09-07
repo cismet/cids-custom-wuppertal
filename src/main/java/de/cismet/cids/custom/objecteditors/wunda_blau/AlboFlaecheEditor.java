@@ -24,6 +24,8 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.beansbinding.ELProperty;
 
+import org.openide.util.NbBundle;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -38,6 +40,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -52,6 +55,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheArbeitssta
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkungenPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
+import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -103,6 +107,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
         panTitle = new JPanel();
         lblTitle = new JLabel();
+        btnReport = new JButton();
         panFooter = new JPanel();
         filler65 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         panButtons = new JPanel();
@@ -155,6 +160,21 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
+
+        btnReport.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png")));         // NOI18N
+        btnReport.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.text"));               // NOI18N
+        btnReport.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.setName("btnReport");                                                                               // NOI18N
+        btnReport.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panTitle.add(btnReport, gridBagConstraints);
 
         panFooter.setName("panFooter"); // NOI18N
         panFooter.setOpaque(false);
@@ -345,6 +365,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 AlboFlaecheEditor.this.jToggleButton4ActionPerformed(evt);
             } else if (evt.getSource() == jToggleButton5) {
                 AlboFlaecheEditor.this.jToggleButton5ActionPerformed(evt);
+            } else if (evt.getSource() == btnReport) {
+                AlboFlaecheEditor.this.btnReportActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -358,6 +380,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private CardLayout cardLayout;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JButton btnReport;
     private ButtonGroup buttonGroup1;
     private Box.Filler filler65;
     private Box.Filler filler66;
@@ -565,6 +588,15 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private void jToggleButton5ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton5ActionPerformed
         cardLayout.show(panMainCard, "aktionen");
     }                                                                   //GEN-LAST:event_jToggleButton5ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        AlboReportGenerator.startFlaecheReportDownload(getCidsBean(), this, getConnectionContext());
+    }                                                              //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
