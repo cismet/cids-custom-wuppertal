@@ -12,14 +12,28 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
+import Sirius.navigator.connection.SessionManager;
+
+import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import javax.swing.SwingWorker;
+
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -44,7 +58,10 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler41;
     private javax.swing.JComboBox<String> jComboBox31;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel38;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel9;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -91,6 +108,9 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -162,6 +182,31 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(mappingComponent1, gridBagConstraints);
 
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Gemarkung:");
+        jLabel1.setName("jLabel1"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "-");
+        jLabel2.setName("jLabel2"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jLabel2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        add(jPanel1, gridBagConstraints);
+
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
@@ -212,10 +257,63 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         if (getCidsBean() != null) {
             final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
             if (geom != null) {
+                final BufferingGeosearch search = new BufferingGeosearch();
+                search.setValidClasses(Arrays.asList(
+                        ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            "alkis_landparcel",
+                            getConnectionContext())));
+                search.setGeometry(geom);
+
+                jLabel2.setText("<html><i>wird gesucht...");
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            // Suche ausführen
+                            final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                        .customServerSearch(
+                                            SessionManager.getSession().getUser(),
+                                            search,
+                                            getConnectionContext());
+                            if ((mons != null) && !mons.isEmpty()) {
+                                final MetaObjectNode mon = mons.toArray(new MetaObjectNode[0])[0];
+
+                                final MetaObject mo = SessionManager.getProxy()
+                                            .getMetaObject(mon.getObjectId(),
+                                                mon.getClassId(),
+                                                mon.getDomain(),
+                                                getConnectionContext());
+                                final CidsBean gemarkungBean = mo.getBean();
+                                return gemarkungBean;
+                            } else {
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                final CidsBean gemarkungBean = get();
+                                if (gemarkungBean != null) {
+                                    jLabel2.setText((String)gemarkungBean.getProperty("gemarkung"));
+                                } else {
+                                    jLabel2.setText("-");
+                                }
+                            } catch (final Exception ex) {
+                                LOG.warn("Geom Search Error.", ex);
+                            }
+                        }
+                    }.execute();
+
                 final StyledFeature dsf = new DefaultStyledFeature();
                 dsf.setGeometry(geom);
                 mappingComponent1.getFeatureCollection().addFeature(dsf);
+            } else {
+                jLabel2.setText("-");
             }
+        } else {
+            jLabel2.setText("-");
         }
     }
 
