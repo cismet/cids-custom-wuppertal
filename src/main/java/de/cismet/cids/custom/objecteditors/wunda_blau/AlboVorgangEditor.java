@@ -263,7 +263,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create(
-                    "<html><body><h2><nobr>Altlastenkataster - Vorgang: ${cidsBean.import_id}"),
+                    "<html><body><h2><nobr>Altlastenkataster - Vorgang: ${cidsBean.schluessel}"),
                 lblTitle,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("<html><body><h2><nobr>Altlastenkataster - Vorgang: -");
@@ -415,8 +415,8 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel2.add(jTextField5, gridBagConstraints);
 
-        jLabel1.setText("Vorgang:"); // NOI18N
-        jLabel1.setName("jLabel1");  // NOI18N
+        jLabel1.setText("Schlüssel:"); // NOI18N
+        jLabel1.setName("jLabel1");    // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -433,7 +433,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.import_id}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
                 jTextField1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -606,6 +606,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel7.add(jComboBox28, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)jComboBox28).setNullable(true);
 
         jLabel2.setText("Regal-Nr.:"); // NOI18N
         jLabel2.setName("jLabel2");    // NOI18N
@@ -851,7 +852,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     @Override
     public String getTitle() {
-        return String.format("Altlastenkataster - Vorgang: %d", (Integer)cidsBean.getProperty("import_id"));
+        return String.format("Altlastenkataster - Vorgang: %s", (String)cidsBean.getProperty("schluessel"));
     }
 
     @Override

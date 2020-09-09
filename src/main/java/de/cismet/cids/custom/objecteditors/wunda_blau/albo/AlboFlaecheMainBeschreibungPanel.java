@@ -82,7 +82,12 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         jLabel4 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         txtAlteNummer = new javax.swing.JTextField();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         final FormListener formListener = new FormListener();
 
@@ -112,6 +117,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenart, gridBagConstraints);
 
@@ -136,6 +142,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenstatus, gridBagConstraints);
 
@@ -160,6 +167,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenzuordnung, gridBagConstraints);
 
@@ -342,6 +350,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         add(jPanel1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, "Alte Nummer:");
@@ -352,6 +361,10 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jLabel4, gridBagConstraints);
+
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         txtAlteNummer.setName("txtAlteNummer"); // NOI18N
 
@@ -364,10 +377,46 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(txtAlteNummer, gridBagConstraints);
+
+        filler1.setName("filler1"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(filler1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Fläche kann gelöscht werden");
+        jCheckBox1.setContentAreaFilled(false);
+        jCheckBox1.setName("jCheckBox1"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loeschen}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jCheckBox1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        add(txtAlteNummer, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        add(jPanel2, gridBagConstraints);
 
         bindingGroup.bind();
     }
@@ -415,9 +464,11 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JComboBox<String> cbFlaechenart;
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler42;
     private javax.swing.Box.Filler filler46;
     private javax.swing.Box.Filler filler68;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -430,6 +481,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JLabel jLabel74;
     private javax.swing.JLabel jLabel75;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel54;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField7;

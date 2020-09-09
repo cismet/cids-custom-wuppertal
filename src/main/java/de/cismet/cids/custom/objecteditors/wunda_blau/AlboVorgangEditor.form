@@ -17,7 +17,7 @@
             <Property name="name" type="java.lang.String" value="lblTitle" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="text" source="Form" sourcePath="&lt;html&gt;&lt;body&gt;&lt;h2&gt;&lt;nobr&gt;Altlastenkataster - Vorgang: ${cidsBean.import_id}" target="lblTitle" targetPath="text" updateStrategy="0" immediately="false">
+            <BindingProperty name="text" source="Form" sourcePath="&lt;html&gt;&lt;body&gt;&lt;h2&gt;&lt;nobr&gt;Altlastenkataster - Vorgang: ${cidsBean.schluessel}" target="lblTitle" targetPath="text" updateStrategy="0" immediately="false">
               <Property name="nullValue" type="java.lang.String" value="&lt;html&gt;&lt;body&gt;&lt;h2&gt;&lt;nobr&gt;Altlastenkataster - Vorgang: -"/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;html&gt;&lt;body&gt;&lt;h2&gt;&lt;nobr&gt;Altlastenkataster - Vorgang: &lt;i&gt;[Fehler]"/>
             </BindingProperty>
@@ -226,7 +226,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Vorgang:" noResource="true"/>
+                <Property name="text" type="java.lang.String" value="Schl&#xfc;ssel:" noResource="true"/>
                 <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
               </Properties>
               <Constraints>
@@ -253,7 +253,7 @@
                     <Property name="name" type="java.lang.String" value="jTextField1" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="text" source="Form" sourcePath="${cidsBean.import_id}" target="jTextField1" targetPath="text" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="text" source="Form" sourcePath="${cidsBean.schluessel}" target="jTextField1" targetPath="text" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -445,6 +445,7 @@
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_art}" target="jComboBox28" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox28).setNullable(true);"/>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>

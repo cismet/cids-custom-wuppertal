@@ -109,7 +109,7 @@ public class AlboReportGenerator {
                 final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
                     new AlboReportVorgangDataSourceGenerator(vorgangBean, connectionContext);
 
-                final String vorgang = Integer.toString((Integer)vorgangBean.getProperty("import_id"));
+                final String vorgang = (String)vorgangBean.getProperty("schluessel");
                 DownloadManager.instance()
                         .add(new JasperReportDownload(
                                 jasperReport,

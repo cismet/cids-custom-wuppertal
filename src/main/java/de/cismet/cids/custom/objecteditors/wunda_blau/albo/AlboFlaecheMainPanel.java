@@ -747,22 +747,22 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     } // </editor-fold>//GEN-END:initComponents
 
     private static final String[] COLUMN_PROPERTIES = new String[] {
-            "import_id",
+            "schluessel",
             "regal_nummer",
             "fk_art.name",
             "ordner_nummer"
         };
     private static final String[] COLUMN_NAMES = new String[] {
-            "Vorgang-ID",
+            "Vorgang",
             "Regal",
             "Ordner-Art",
             "Ordner-Nummer"
         };
     private static final Class[] COLUMN_CLASSES = new Class[] {
-            Integer.class, // Vorgang-Id
-            String.class,  // Regal
-            String.class,  // Ordner-Nummer
-            String.class,  // Ordner-Art
+            String.class, // Schlüssel
+            String.class, // Regal
+            String.class, // Ordner-Nummer
+            String.class, // Ordner-Art
         };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
