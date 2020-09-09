@@ -2289,7 +2289,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         try {
           // if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                 if (cidsBean.getProperty(FIELD__STADTBEZIRK) == null || cidsBean.getProperty(FIELD__STADTBEZIRK).toString().equals("[]")){              
-                    LOG.warn("No motiv specified. Skip persisting.");
+                    LOG.warn("No sbz specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(StrAdrStrasseEditor.class, BUNDLE_NOSTADTBEZIRK));
                 }
             //}
@@ -2382,10 +2382,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 //            lblStrasseVon.setText(getStreetNeighbour(FIELD__LAGE_VON));
   //          lblStrasseBis.setText(getStreetNeighbour(FIELD__LAGE_BIS));
             bindingGroup.bind();
+            setAmtStr();
             setReadOnly();
             setMotiv();
             setOrgan();
-            setAmtStr();
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -2418,48 +2418,48 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             RendererTools.makeReadOnly(cbBeschlussE); 
             RendererTools.makeReadOnly(txtLageVon);
             RendererTools.makeReadOnly(txtLageBis);
-            //txtLageBis.setEnabled(false);
-            //txtLageVon.setEnabled(false);
             RendererTools.makeReadOnly(cbMotiv);
-            //cbMotiv.setVisible(false);
             RendererTools.makeReadOnly(lstKmQuadrat);
             panButtonsKmQuadrat.setVisible(isEditor);
             RendererTools.makeReadOnly(lstStadtbezirk);
             panButtonsStadtbezirk.setVisible(isEditor);
-            //RendererTools.makeReadOnly(txtDatum);
+            RendererTools.makeReadOnly(taBemerkung);
+        } else {
+           if(this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                //Wird anstatt der ComBox angezeigt, also für neue nicht benötigt
+                lblStrasse.setVisible(false);
+                RendererTools.makeReadOnly(dcEntnenndat);
+                RendererTools.makeReadOnly(cbBeschlussE); 
+           }else{
+                RendererTools.makeReadOnly(txtName);
+                RendererTools.makeReadOnly(cbSchluessel);
+                RendererTools.makeReadOnly(dcBenenndat);
+                RendererTools.makeReadOnly(cbBeschlussB); 
+                RendererTools.makeReadOnly(cbMotiv);
+                cbMotiv.setVisible(false);
+                if (cidsBean.getProperty(FIELD__ENTDAT)!= null){
+                    RendererTools.makeReadOnly(cbGeom);
+                    RendererTools.makeReadOnly(cbGeomBBox);
+                    RendererTools.makeReadOnly(dcEntnenndat);
+                    RendererTools.makeReadOnly(cbBeschlussE); 
+                    RendererTools.makeReadOnly(dcEntnenndat);
+                    RendererTools.makeReadOnly(cbBeschlussE); 
+                    RendererTools.makeReadOnly(txtLageVon);
+                    RendererTools.makeReadOnly(txtLageBis);
+                    RendererTools.makeReadOnly(lstKmQuadrat);
+                    panButtonsKmQuadrat.setVisible(false);
+                    RendererTools.makeReadOnly(lstStadtbezirk);
+                    panButtonsStadtbezirk.setVisible(false);
+                } else {
+                    if (!isAmt){//setAmtStr muss in setCidsBean zuerst aufgerufen werden.
+                        RendererTools.makeReadOnly(cbBeschlussE); 
+                        RendererTools.makeReadOnly(dcEntnenndat);
+                        RendererTools.makeReadOnly(txtLageVon);
+                        RendererTools.makeReadOnly(txtLageBis);
+                    }
+                }
+            }
         }
-        
-        if ((isEditor)&&(cidsBean.getProperty(FIELD__ENTDAT)!= null||this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW)){
-            RendererTools.makeReadOnly(dcEntnenndat);
-            RendererTools.makeReadOnly(cbBeschlussE); 
-        }
-        if(isEditor && this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
-            RendererTools.makeReadOnly(txtName);
-            RendererTools.makeReadOnly(cbSchluessel);
-           // RendererTools.makeReadOnly(cbGeom);
-            //RendererTools.makeReadOnly(cbGeomBBox);
-            RendererTools.makeReadOnly(dcBenenndat);
-            RendererTools.makeReadOnly(cbBeschlussB); 
-            RendererTools.makeReadOnly(cbMotiv);
-            cbMotiv.setVisible(false);
-        }
-        if(isEditor && this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            lblStrasse.setVisible(false);
-        }
-        if ((isEditor)&&(cidsBean.getProperty(FIELD__ENTDAT)!= null)){
-            RendererTools.makeReadOnly(txtLageVon);
-            RendererTools.makeReadOnly(txtLageBis);
-            RendererTools.makeReadOnly(lstKmQuadrat);
-            panButtonsKmQuadrat.setVisible(false);
-            RendererTools.makeReadOnly(lstStadtbezirk);
-            panButtonsStadtbezirk.setVisible(false);
-            RendererTools.makeReadOnly(dcEntnenndat);
-            RendererTools.makeReadOnly(cbBeschlussE); 
-        }
-         if ((isEditor)&&(cidsBean.getProperty(FIELD__ENTDAT)!= null)){
-            RendererTools.makeReadOnly(cbGeom);
-            RendererTools.makeReadOnly(cbGeomBBox);
-         }
     }
 
     public void setOrgan(){
