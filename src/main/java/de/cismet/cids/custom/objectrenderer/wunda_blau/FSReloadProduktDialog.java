@@ -153,9 +153,9 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -182,6 +182,9 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
                     final ServerActionParameter<Integer> paramStep = new ServerActionParameter<>(
                             FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.STEP_TO_EXECUTE.toString(),
                             FormSolutionsBestellungHandler.STATUS_PRODUKT);
+                    final ServerActionParameter<Boolean> paramRepair = new ServerActionParameter<>(
+                            FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.REPAIR_ERRORS.toString(),
+                            Boolean.TRUE);
 
                     try {
                         SessionManager.getConnection()
@@ -191,7 +194,8 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
                                     (Object)null,
                                     getConnectionContext(),
                                     paramMon,
-                                    paramStep);
+                                    paramStep,
+                                    paramRepair);
                     } catch (final ConnectionException ex3) {
                         LOG.error(ex3, ex3);
                     }
