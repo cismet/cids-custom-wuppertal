@@ -102,7 +102,7 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>6.3.9</version>
+                <version>6.3.10</version>
                 <type>jar</type>
             </dependency>
             <dependency>
@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.21</version>
+                <version>6.21-SNAPSHOT</version>
                 <type>jar</type>
             </dependency>
             
