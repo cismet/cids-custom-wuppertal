@@ -181,7 +181,10 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
                             Arrays.asList(mon));
                     final ServerActionParameter<Integer> paramStep = new ServerActionParameter<>(
                             FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.STEP_TO_EXECUTE.toString(),
-                            FormSolutionsBestellungHandler.STATUS_PRODUKT);
+                            FormSolutionsBestellungHandler.STATUS_PRUEFUNG);
+                    final ServerActionParameter<Boolean> paramRepair = new ServerActionParameter<>(
+                            FormSolutionServerNewStuffAvailableAction.PARAMETER_TYPE.REPAIR_ERRORS.toString(),
+                            Boolean.TRUE);
 
                     try {
                         SessionManager.getConnection()
@@ -191,7 +194,8 @@ public class FSReloadProduktDialog extends javax.swing.JDialog implements Connec
                                     (Object)null,
                                     getConnectionContext(),
                                     paramMon,
-                                    paramStep);
+                                    paramStep,
+                                    paramRepair);
                     } catch (final ConnectionException ex3) {
                         LOG.error(ex3, ex3);
                     }
