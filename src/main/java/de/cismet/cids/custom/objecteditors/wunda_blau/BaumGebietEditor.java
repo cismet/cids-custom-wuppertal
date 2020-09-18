@@ -97,7 +97,6 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungNextSchluesselSearch;
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -198,7 +197,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JDialog dlgAddPfand;
     private JDialog dlgAddStecker;
     private JDialog dlgAddZugang;
-    private KkVerfahrenKompensationEditor edMeldung;
     private Box.Filler filler3;
     private JLabel jLabel13;
     private JPanel jPanel1;
@@ -234,6 +232,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panLage;
     private JPanel panMeldung;
     private JPanel panMeldungenMain;
+    private JPanel panMeldungpan;
     private JPanel panMenButtonsPfand;
     private JPanel panMenButtonsStecker;
     private JPanel panMenButtonsZugang;
@@ -417,7 +416,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             lblMeldung = new JLabel();
             jPanel9 = new JPanel();
             panMeldungenMain = new JPanel();
-            edMeldung = new KkVerfahrenKompensationEditor(isEditor);
+            panMeldungpan = new BaumMeldungPanel(isEditor, getConnectionContext());
 
             dlgAddZugang.setTitle("Zugangsart");
             dlgAddZugang.setModal(true);
@@ -1174,7 +1173,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         GroupLayout jPanel9Layout = new GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 283, Short.MAX_VALUE)
+            .addGap(0, 623, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 1, Short.MAX_VALUE)
@@ -1193,13 +1192,21 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panMeldungenMain.setOpaque(false);
         panMeldungenMain.setLayout(new GridBagLayout());
 
-        edMeldung.setOpaque(false);
+        GroupLayout panMeldungpanLayout = new GroupLayout(panMeldungpan);
+        panMeldungpan.setLayout(panMeldungpanLayout);
+        panMeldungpanLayout.setHorizontalGroup(panMeldungpanLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 694, Short.MAX_VALUE)
+        );
+        panMeldungpanLayout.setVerticalGroup(panMeldungpanLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 329, Short.MAX_VALUE)
+        );
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panMeldungenMain.add(edMeldung, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
+        panMeldungenMain.add(panMeldungpan, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1220,6 +1227,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -1357,14 +1365,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      * @param  edMeldungBean  DOCUMENT ME!
      */
     private void setEdMeldungBean(final CidsBean edMeldungBean) {
-        edMeldung.setCidsBean(edMeldungBean);
+        //edMeldung.setCidsBean(edMeldungBean);
     }
 
     /**
      * DOCUMENT ME!
      */
     private void refreshLabels() {
-        final CidsBean bean = edMeldung.getCidsBean();
+        /*final CidsBean bean = edMeldung.getCidsBean();
 
         if (bean != null) {
             lblMeldung.setText("Meldung: " + toString(bean.getProperty("schluessel")) + "  "
@@ -1376,7 +1384,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         if (edMeldung.getCidsBean() != null) {
             lstMeldungen.setSelectedValue(edMeldung.getCidsBean(), true);
-        }
+        }*/
     }
 
     private String toString(final Object o) {
@@ -1409,7 +1417,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private void btnAddLaufendeMeldungActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeMeldungActionPerformed
         try {
             final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(
-                "kk_meldung",
+                "baum_meldung",
                 getConnectionContext());
             final String schluessel = getSchluessel();
 
@@ -1418,11 +1426,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 JOptionPane.showMessageDialog(
                     this,
                     NbBundle.getMessage(
-                        KkVerfahrenEditor.class,
-                        "KkVerfahrenEditor.btnAddLaufendeNummer1ActionPerformed.message"),
+                        BaumGebietEditor.class,
+                        "BaumGebietEditor.btnAddLaufendeNummer1ActionPerformed.message"),
                     NbBundle.getMessage(
-                        KkVerfahrenEditor.class,
-                        "KkVerfahrenEditor.btnAddLaufendeNummer1ActionPerformed.title"),
+                        BaumGebietEditor.class,
+                        "BaumGebietEditor.btnAddLaufendeNummer1ActionPerformed.title"),
                     JOptionPane.ERROR_MESSAGE);
 
                 return;
@@ -1430,12 +1438,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
             bean.setProperty("schluessel", schluessel);
 
-            cidsBean.addCollectionElement("kompensationen", bean);
+            cidsBean.addCollectionElement("meldungen", bean);
             ((CustomJListModel)lstMeldungen.getModel()).refresh();
             lstMeldungen.setSelectedValue(bean, true);
             lstMeldungenValueChanged(null);
         } catch (Exception e) {
-            LOG.error("Cannot add new kk_kompensation object", e);
+            LOG.error("Cannot add new BaumGebiet object", e);
         }
     }//GEN-LAST:event_btnAddLaufendeMeldungActionPerformed
 
@@ -1443,10 +1451,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         final Object selectedObject = lstMeldungen.getSelectedValue();
 
         if (selectedObject instanceof CidsBean) {
-            final List<CidsBean> kompensationBeans = cidsBean.getBeanCollectionProperty("kompensationen");
+            final List<CidsBean> meldungBeans = cidsBean.getBeanCollectionProperty("meldungen");
 
-            if (kompensationBeans != null) {
-                kompensationBeans.remove((CidsBean)selectedObject);
+            if (meldungBeans != null) {
+                meldungBeans.remove((CidsBean)selectedObject);
                 ((CustomJListModel)lstMeldungen.getModel()).refresh();
                 lstMeldungen.getSelectionModel().clearSelection();
                 lstMeldungenValueChanged(null);
