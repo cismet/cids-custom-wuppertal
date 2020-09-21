@@ -349,7 +349,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panTop.add(cbFlaechentyp, gridBagConstraints);
         ((DefaultBindableScrollableComboBox)cbFlaechentyp).setNullable(true);
 
+        jScrollPane4.setMinimumSize(new java.awt.Dimension(26, 100));
         jScrollPane4.setName("jScrollPane4"); // NOI18N
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(2, 100));
 
         jXTable1.setModel(new FlaecheVorgangTableModel());
         jXTable1.setName("jXTable1"); // NOI18N
@@ -412,6 +414,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         jPanel9.setOpaque(false);
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(26, 66));
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         jList2.setName("jList2"); // NOI18N

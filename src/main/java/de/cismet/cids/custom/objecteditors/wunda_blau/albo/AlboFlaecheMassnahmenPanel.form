@@ -65,9 +65,9 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="jPanel42">
+        <Container class="javax.swing.JPanel" name="jPanel29">
           <Properties>
-            <Property name="name" type="java.lang.String" value="jPanel42" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="jPanel29" noResource="true"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Constraints>
@@ -80,12 +80,12 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
           <SubComponents>
-            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel" name="panDekontamination">
+            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel" name="panSicherung">
               <Properties>
-                <Property name="name" type="java.lang.String" value="panDekontamination" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="panSicherung" noResource="true"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel(isEditable())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel(isEditable())"/>
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -95,9 +95,9 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="jPanel29">
+        <Container class="javax.swing.JPanel" name="jPanel42">
           <Properties>
-            <Property name="name" type="java.lang.String" value="jPanel29" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="jPanel42" noResource="true"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Constraints>
@@ -110,12 +110,12 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
           <SubComponents>
-            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel" name="panSicherung">
+            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel" name="panDekontamination">
               <Properties>
-                <Property name="name" type="java.lang.String" value="panSicherung" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="panDekontamination" noResource="true"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel(isEditable())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel(isEditable())"/>
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">

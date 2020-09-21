@@ -38,11 +38,9 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel jPanel42;
     private javax.swing.JPanel jPanel52;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel
-        panDekontamination;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel panDekontamination;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenMainPanel panMain;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel
-        panSchutzUndBeschraenkung;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel panSchutzUndBeschraenkung;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel panSicherung;
     // End of variables declaration//GEN-END:variables
 
@@ -73,22 +71,17 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        final java.awt.GridBagConstraints gridBagConstraints;
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel37 = new javax.swing.JPanel();
         panMain = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenMainPanel(isEditable());
-        jPanel42 = new javax.swing.JPanel();
-        panDekontamination =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel(
-                isEditable());
         jPanel29 = new javax.swing.JPanel();
-        panSicherung = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel(
-                isEditable());
+        panSicherung = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSicherungPanel(isEditable());
+        jPanel42 = new javax.swing.JPanel();
+        panDekontamination = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenDekontaminationPanel(isEditable());
         jPanel52 = new javax.swing.JPanel();
-        panSchutzUndBeschraenkung =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel(
-                isEditable());
+        panSchutzUndBeschraenkung = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenSchutzUndBeschraenkungPanel(isEditable());
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -105,15 +98,6 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
 
         jTabbedPane2.addTab("Maßnahme", jPanel37);
 
-        jPanel42.setName("jPanel42"); // NOI18N
-        jPanel42.setOpaque(false);
-        jPanel42.setLayout(new java.awt.BorderLayout());
-
-        panDekontamination.setName("panDekontamination"); // NOI18N
-        jPanel42.add(panDekontamination, java.awt.BorderLayout.CENTER);
-
-        jTabbedPane2.addTab("Sicherungsmaßnahmen", jPanel42);
-
         jPanel29.setName("jPanel29"); // NOI18N
         jPanel29.setOpaque(false);
         jPanel29.setLayout(new java.awt.BorderLayout());
@@ -121,7 +105,16 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         panSicherung.setName("panSicherung"); // NOI18N
         jPanel29.add(panSicherung, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane2.addTab("Dekontaminationsmaßnahmen", jPanel29);
+        jTabbedPane2.addTab("Sicherungsmaßnahmen", jPanel29);
+
+        jPanel42.setName("jPanel42"); // NOI18N
+        jPanel42.setOpaque(false);
+        jPanel42.setLayout(new java.awt.BorderLayout());
+
+        panDekontamination.setName("panDekontamination"); // NOI18N
+        jPanel42.add(panDekontamination, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane2.addTab("Dekontaminationsmaßnahmen", jPanel42);
 
         jPanel52.setName("jPanel52"); // NOI18N
         jPanel52.setOpaque(false);
@@ -141,13 +134,10 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jTabbedPane2, gridBagConstraints);
-        jTabbedPane2.setUI(new javax.swing.plaf.basic.BasicTabbedPaneUI() {
-
-                @Override
-                protected void paintContentBorder(final Graphics g, final int tabPlacement, final int selectedIndex) {
-                }
-            });
-    } // </editor-fold>//GEN-END:initComponents
+        jTabbedPane2.setUI(new javax.swing.plaf.basic.BasicTabbedPaneUI(){
+            protected void paintContentBorder(Graphics g,int tabPlacement,int selectedIndex){}
+        });
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {

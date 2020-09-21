@@ -29,6 +29,7 @@ import org.openide.util.NbBundle;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -36,6 +37,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -45,7 +48,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -109,31 +112,23 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         lblTitle = new JLabel();
         btnReport = new JButton();
         panFooter = new JPanel();
-        filler65 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        btnBack = new JButton();
         panButtons = new JPanel();
-        jToggleButton1 = new JToggleButton();
-        jToggleButton2 = new JToggleButton();
-        jToggleButton3 = new JToggleButton();
-        jToggleButton4 = new JToggleButton();
-        jToggleButton5 = new JToggleButton();
-        filler66 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        jLabel3 = new JLabel();
+        btnForward = new JButton();
+        filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         buttonGroup1 = new ButtonGroup();
         panMainCard = new JPanel();
         panCardFlaeche = new JPanel();
         panMain = new AlboFlaecheMainPanel(isEditable());
+        panCardArbeitsstandUndBemerkungen = new JPanel();
+        panBemerkungen = new AlboFlaecheBemerkungenPanel(isEditable());
+        panArbeitsstand = new AlboFlaecheArbeitsstandPanel(isEditable());
         panCardMassnahmen = new JPanel();
         panMassnahmen = new AlboFlaecheMassnahmenPanel(isEditable());
-        panCardArbeitsstand = new JPanel();
-        panArbeitsstand = new AlboFlaecheArbeitsstandPanel(isEditable());
-        panCardBemerkung = new JPanel();
-        panBemerkungen = new AlboFlaecheBemerkungenPanel(isEditable());
-        panCardAktionen = new JPanel();
-        filler74 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        filler73 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        jButton7 = new JButton();
-        jButton8 = new JButton();
-        jButton17 = new JButton();
-        jButton18 = new JButton();
 
         final FormListener formListener = new FormListener();
 
@@ -180,59 +175,80 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panFooter.setOpaque(false);
         panFooter.setLayout(new GridBagLayout());
 
-        filler65.setName("filler65"); // NOI18N
+        filler1.setName("filler1"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        panFooter.add(filler65, gridBagConstraints);
+        panFooter.add(filler1, gridBagConstraints);
+
+        btnBack.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setEnabled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setMaximumSize(new Dimension(30, 30));
+        btnBack.setMinimumSize(new Dimension(30, 30));
+        btnBack.setName("btnBack");                                                                                     // NOI18N
+        btnBack.setPreferredSize(new Dimension(30, 30));
+        btnBack.setPressedIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png")));               // NOI18N
+        btnBack.setRolloverIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));                   // NOI18N
+        btnBack.addActionListener(formListener);
+        panFooter.add(btnBack, new GridBagConstraints());
 
         panButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
         panButtons.setName("panButtons"); // NOI18N
         panButtons.setOpaque(false);
         panButtons.setLayout(new GridLayout(1, 0, 10, 0));
 
-        buttonGroup1.add(jToggleButton1);
-        jToggleButton1.setText("Fläche");
-        jToggleButton1.setName("jToggleButton1"); // NOI18N
-        jToggleButton1.addActionListener(formListener);
-        panButtons.add(jToggleButton1);
+        jLabel1.setForeground(new Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel1.setText("<html><body><center><b><h3>Fläche");
+        jLabel1.setName("jLabel1"); // NOI18N
+        jLabel1.addMouseListener(formListener);
+        panButtons.add(jLabel1);
 
-        buttonGroup1.add(jToggleButton2);
-        jToggleButton2.setText("Arbeitsstand");
-        jToggleButton2.setName("jToggleButton2"); // NOI18N
-        jToggleButton2.addActionListener(formListener);
-        panButtons.add(jToggleButton2);
+        jLabel2.setForeground(new Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel2.setText("<html><body><center><b><h3>Arbeitsstand & Bemerkung");
+        jLabel2.setEnabled(false);
+        jLabel2.setName("jLabel2"); // NOI18N
+        jLabel2.addMouseListener(formListener);
+        panButtons.add(jLabel2);
 
-        buttonGroup1.add(jToggleButton3);
-        jToggleButton3.setText("Maßnahmen");
-        jToggleButton3.setName("jToggleButton3"); // NOI18N
-        jToggleButton3.addActionListener(formListener);
-        panButtons.add(jToggleButton3);
-
-        buttonGroup1.add(jToggleButton4);
-        jToggleButton4.setText("Bemerkung");
-        jToggleButton4.setName("jToggleButton4"); // NOI18N
-        jToggleButton4.addActionListener(formListener);
-        panButtons.add(jToggleButton4);
-
-        buttonGroup1.add(jToggleButton5);
-        jToggleButton5.setText("Aktionen");
-        jToggleButton5.setName("jToggleButton5"); // NOI18N
-        jToggleButton5.addActionListener(formListener);
-        panButtons.add(jToggleButton5);
+        jLabel3.setForeground(new Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel3.setText("<html><body><center><b><h3>Maßnahmen");
+        jLabel3.setEnabled(false);
+        jLabel3.setName("jLabel3"); // NOI18N
+        jLabel3.addMouseListener(formListener);
+        panButtons.add(jLabel3);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panFooter.add(panButtons, gridBagConstraints);
 
-        filler66.setName("filler66"); // NOI18N
+        btnForward.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setBorder(null);
+        btnForward.setBorderPainted(false);
+        btnForward.setContentAreaFilled(false);
+        btnForward.setFocusPainted(false);
+        btnForward.setMaximumSize(new Dimension(30, 30));
+        btnForward.setMinimumSize(new Dimension(30, 30));
+        btnForward.setName("btnForward");                                                          // NOI18N
+        btnForward.setPreferredSize(new Dimension(30, 30));
+        btnForward.addActionListener(formListener);
+        panFooter.add(btnForward, new GridBagConstraints());
+
+        filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        panFooter.add(filler66, gridBagConstraints);
+        panFooter.add(filler2, gridBagConstraints);
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -251,6 +267,27 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
         panMainCard.add(panCardFlaeche, "flaeche");
 
+        panCardArbeitsstandUndBemerkungen.setName("panCardArbeitsstandUndBemerkungen"); // NOI18N
+        panCardArbeitsstandUndBemerkungen.setOpaque(false);
+        panCardArbeitsstandUndBemerkungen.setLayout(new GridBagLayout());
+
+        panBemerkungen.setName("panBemerkungen"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panCardArbeitsstandUndBemerkungen.add(panBemerkungen, gridBagConstraints);
+
+        panArbeitsstand.setName("panArbeitsstand"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panCardArbeitsstandUndBemerkungen.add(panArbeitsstand, gridBagConstraints);
+
+        panMainCard.add(panCardArbeitsstandUndBemerkungen, "arbeitsstand");
+
         panCardMassnahmen.setName("panCardMassnahmen"); // NOI18N
         panCardMassnahmen.setOpaque(false);
         panCardMassnahmen.setLayout(new BorderLayout());
@@ -259,76 +296,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panCardMassnahmen.add(panMassnahmen, BorderLayout.CENTER);
 
         panMainCard.add(panCardMassnahmen, "massnahmen");
-
-        panCardArbeitsstand.setName("panCardArbeitsstand"); // NOI18N
-        panCardArbeitsstand.setOpaque(false);
-        panCardArbeitsstand.setLayout(new BorderLayout());
-
-        panArbeitsstand.setName("panArbeitsstand"); // NOI18N
-        panCardArbeitsstand.add(panArbeitsstand, BorderLayout.CENTER);
-
-        panMainCard.add(panCardArbeitsstand, "arbeitsstand");
-
-        panCardBemerkung.setName("panCardBemerkung"); // NOI18N
-        panCardBemerkung.setOpaque(false);
-        panCardBemerkung.setLayout(new BorderLayout());
-
-        panBemerkungen.setName("panBemerkungen"); // NOI18N
-        panCardBemerkung.add(panBemerkungen, BorderLayout.CENTER);
-
-        panMainCard.add(panCardBemerkung, "bemerkung");
-
-        panCardAktionen.setName("panCardAktionen"); // NOI18N
-        panCardAktionen.setOpaque(false);
-        panCardAktionen.setLayout(new GridBagLayout());
-
-        filler74.setName("filler74"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 99;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        panCardAktionen.add(filler74, gridBagConstraints);
-
-        filler73.setName("filler73"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        panCardAktionen.add(filler73, gridBagConstraints);
-
-        jButton7.setText("Neue Landesregistriern-Nummer");
-        jButton7.setName("jButton7"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
-        panCardAktionen.add(jButton7, gridBagConstraints);
-
-        jButton8.setText("Gesamtfläche <-> Teilfäche");
-        jButton8.setName("jButton8"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
-        panCardAktionen.add(jButton8, gridBagConstraints);
-
-        jButton17.setText("Flächenart ändern");
-        jButton17.setName("jButton17"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
-        panCardAktionen.add(jButton17, gridBagConstraints);
-
-        jButton18.setText("Export");
-        jButton18.setName("jButton18"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
-        panCardAktionen.add(jButton18, gridBagConstraints);
-
-        panMainCard.add(panCardAktionen, "aktionen");
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -345,7 +312,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      *
      * @version  $Revision$, $Date$
      */
-    private class FormListener implements ActionListener {
+    private class FormListener implements ActionListener, MouseListener {
 
         /**
          * Creates a new FormListener object.
@@ -355,19 +322,40 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
         @Override
         public void actionPerformed(final ActionEvent evt) {
-            if (evt.getSource() == jToggleButton1) {
-                AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton2) {
-                AlboFlaecheEditor.this.jToggleButton2ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton3) {
-                AlboFlaecheEditor.this.jToggleButton3ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton4) {
-                AlboFlaecheEditor.this.jToggleButton4ActionPerformed(evt);
-            } else if (evt.getSource() == jToggleButton5) {
-                AlboFlaecheEditor.this.jToggleButton5ActionPerformed(evt);
-            } else if (evt.getSource() == btnReport) {
+            if (evt.getSource() == btnReport) {
                 AlboFlaecheEditor.this.btnReportActionPerformed(evt);
+            } else if (evt.getSource() == btnBack) {
+                AlboFlaecheEditor.this.btnBackActionPerformed(evt);
+            } else if (evt.getSource() == btnForward) {
+                AlboFlaecheEditor.this.btnForwardActionPerformed(evt);
             }
+        }
+
+        @Override
+        public void mouseClicked(final MouseEvent evt) {
+            if (evt.getSource() == jLabel1) {
+                AlboFlaecheEditor.this.jLabel1MouseClicked(evt);
+            } else if (evt.getSource() == jLabel2) {
+                AlboFlaecheEditor.this.jLabel2MouseClicked(evt);
+            } else if (evt.getSource() == jLabel3) {
+                AlboFlaecheEditor.this.jLabel3MouseClicked(evt);
+            }
+        }
+
+        @Override
+        public void mouseEntered(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mouseExited(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mousePressed(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mouseReleased(final MouseEvent evt) {
         }
     } // </editor-fold>//GEN-END:initComponents
 
@@ -380,28 +368,20 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private CardLayout cardLayout;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton btnReport;
+    private JButton btnBack;
+    private JButton btnForward;
+    JButton btnReport;
     private ButtonGroup buttonGroup1;
-    private Box.Filler filler65;
-    private Box.Filler filler66;
-    private Box.Filler filler73;
-    private Box.Filler filler74;
-    private JButton jButton17;
-    private JButton jButton18;
-    private JButton jButton7;
-    private JButton jButton8;
-    private JToggleButton jToggleButton1;
-    private JToggleButton jToggleButton2;
-    private JToggleButton jToggleButton3;
-    private JToggleButton jToggleButton4;
-    private JToggleButton jToggleButton5;
+    private Box.Filler filler1;
+    private Box.Filler filler2;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
     private JLabel lblTitle;
     private AlboFlaecheArbeitsstandPanel panArbeitsstand;
     private AlboFlaecheBemerkungenPanel panBemerkungen;
     private JPanel panButtons;
-    private JPanel panCardAktionen;
-    private JPanel panCardArbeitsstand;
-    private JPanel panCardBemerkung;
+    private JPanel panCardArbeitsstandUndBemerkungen;
     private JPanel panCardFlaeche;
     private JPanel panCardMassnahmen;
     private JPanel panFooter;
@@ -533,6 +513,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panArbeitsstand.setCidsBean(cidsBean);
         panMassnahmen.setCidsBean(cidsBean);
         panBemerkungen.setCidsBean(cidsBean);
+        
+        updateFooterControls();        
     }
 
     /**
@@ -549,54 +531,125 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
-        cardLayout.show(panMainCard, "flaeche");
-    }                                                                   //GEN-LAST:event_jToggleButton1ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jToggleButton2ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton2ActionPerformed
-        cardLayout.show(panMainCard, "arbeitsstand");
-    }                                                                   //GEN-LAST:event_jToggleButton2ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jToggleButton3ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton3ActionPerformed
-        cardLayout.show(panMainCard, "massnahmen");
-    }                                                                   //GEN-LAST:event_jToggleButton3ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jToggleButton4ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton4ActionPerformed
-        cardLayout.show(panMainCard, "bemerkung");
-    }                                                                   //GEN-LAST:event_jToggleButton4ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jToggleButton5ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton5ActionPerformed
-        cardLayout.show(panMainCard, "aktionen");
-    }                                                                   //GEN-LAST:event_jToggleButton5ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         AlboReportGenerator.startFlaecheReportDownload(getCidsBean(), this, getConnectionContext());
-    }                                                              //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnBackActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        cardLayout.previous(panMainCard);
+        updateFooterControls();
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnForwardActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+        cardLayout.next(panMainCard);
+        updateFooterControls();
+    }//GEN-LAST:event_btnForwardActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jLabel1MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        cardLayout.show(panMainCard, "flaeche");
+        updateFooterControls();
+    }//GEN-LAST:event_jLabel1MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jLabel2MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        cardLayout.show(panMainCard, "arbeitsstand");
+        updateFooterControls();
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jLabel3MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        cardLayout.show(panMainCard, "massnahmen");
+        updateFooterControls();
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateFooterControls() {
+        for (final Component card : panMainCard.getComponents()) {
+            if (card.isVisible()) {
+                btnBack.setEnabled(!panCardFlaeche.equals(card));
+                jLabel1.setEnabled(!panCardFlaeche.equals(card));
+                jLabel2.setEnabled(!panCardArbeitsstandUndBemerkungen.equals(card));
+                jLabel3.setEnabled(!panCardMassnahmen.equals(card));
+                btnForward.setEnabled(!panCardMassnahmen.equals(card));
+            }
+        }
+
+        int countMassnahme = 0;
+        final CidsBean massnahme = (cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_massnahme") : null;
+        if (massnahme != null) {
+            for (final String property : massnahme.getPropertyNames()) {
+                final Object value = massnahme.getProperty(property);
+                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
+                    countMassnahme++;
+                }
+            }
+        }
+        int countMassnahmeSicherung = 0;
+        final CidsBean massnahmeSicherung = (cidsBean != null)
+            ? (CidsBean)cidsBean.getProperty("fk_massnahme_sicherung") : null;
+        if (massnahmeSicherung != null) {
+            for (final String property : massnahmeSicherung.getPropertyNames()) {
+                final Object value = massnahmeSicherung.getProperty(property);
+                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
+                    countMassnahmeSicherung++;
+                }
+            }
+        }
+        int countMassnahmeDekontamination = 0;
+        final CidsBean massnahmeDekontamination = (cidsBean != null)
+            ? (CidsBean)cidsBean.getProperty("fk_massnahme_dekontamination") : null;
+        if (massnahmeDekontamination != null) {
+            for (final String property : massnahmeDekontamination.getPropertyNames()) {
+                final Object value = massnahmeDekontamination.getProperty(property);
+                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
+                    countMassnahmeDekontamination++;
+                }
+            }
+        }
+        int countMassnahmeSchutzbeschraenkung = 0;
+        final CidsBean massnahmeSchutzbeschraenkung = (cidsBean != null)
+            ? (CidsBean)cidsBean.getProperty("fk_massnahme_schutzbeschraenkung") : null;
+        if (massnahmeSchutzbeschraenkung != null) {
+            for (final String property : massnahmeSchutzbeschraenkung.getPropertyNames()) {
+                final Object value = massnahmeSchutzbeschraenkung.getProperty(property);
+                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
+                    countMassnahmeSchutzbeschraenkung++;
+                }
+            }
+        }
+
+        jLabel3.setText(String.format(
+                "<html><body><center><b><h3>Maßnahmen</b> <i>(%d/%d/%d/%d)",
+                countMassnahme,
+                countMassnahmeSicherung,
+                countMassnahmeDekontamination,
+                countMassnahmeSchutzbeschraenkung));
+    }
 
     /**
      * DOCUMENT ME!

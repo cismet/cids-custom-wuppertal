@@ -100,7 +100,9 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
         add(jPanel1, gridBagConstraints);
         jPanel1.setVisible(isEditable());
 
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(100, 26));
         jScrollPane3.setName("jScrollPane3"); // NOI18N
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(100, 130));
 
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setName("jList1"); // NOI18N

@@ -178,7 +178,7 @@
             <Property name="name" type="java.lang.String" value="jFormattedTextField19" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="Form" sourcePath="${maechtigkeit_rcl}" target="jFormattedTextField19" targetPath="value" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.maechtigkeit_rcl}" target="jFormattedTextField19" targetPath="value" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -263,7 +263,7 @@
             <Property name="name" type="java.lang.String" value="jFormattedTextField20" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="Form" sourcePath="${maechtigkeit_boden}" target="jFormattedTextField20" targetPath="value" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.maechtigkeit_boden}" target="jFormattedTextField20" targetPath="value" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
