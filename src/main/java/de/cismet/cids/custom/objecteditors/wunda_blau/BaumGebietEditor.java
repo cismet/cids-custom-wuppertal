@@ -97,15 +97,26 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValues;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import de.cismet.cids.custom.wunda_blau.search.server.KkKompensationNextSchluesselSearch;
+import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cids.server.search.AbstractCidsServerSearch;
+import java.awt.Component;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.time.Instant;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
+import org.openide.util.WeakListeners;
 /**
  * DOCUMENT ME!
  *
@@ -118,7 +129,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
-
+    private final ListSelectionListener messSelL = new MeldungSelectionListener();
     
     public static final String GEOMTYPE = "Point";
     public static final int FOTO_WIDTH = 150;
@@ -177,35 +188,35 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton btnAddLaufendeMeldung;
     private JButton btnAddLaufendeNummerMeldung;
+    private JButton btnAddNewMeldung;
     private JButton btnCopyBaulast;
+    private JButton btnMenAbortMeldung;
     private JButton btnMenAbortPfand;
     private JButton btnMenAbortStecker;
-    private JButton btnMenAbortZugang;
+    private JButton btnMenOkMeldung;
     private JButton btnMenOkPfand;
     private JButton btnMenOkStecker;
-    private JButton btnMenOkZugang;
     private JButton btnPasteBaulast;
-    private JButton btnRemoveLaufendeMeldung;
     private JButton btnRemoveLaufendeNummerMeldung;
+    private JButton btnRemoveMeldung;
     private JComboBox cbGeom;
     private JComboBox cbPfand;
     private DefaultBindableReferenceCombo cbStatus;
     private JComboBox cbStecker;
-    private JComboBox cbZugang;
+    private DefaultBindableDateChooser dcMeldung;
+    private JDialog dlgAddMeldung;
     private JDialog dlgAddPfand;
     private JDialog dlgAddStecker;
-    private JDialog dlgAddZugang;
     private Box.Filler filler3;
     private JLabel jLabel13;
     private JPanel jPanel1;
     private JPanel jPanel8;
     private JPanel jPanel9;
     private JLabel lblAktenzeichen;
+    private JLabel lblAuswaehlenMeldung;
     private JLabel lblAuswaehlenPfand;
     private JLabel lblAuswaehlenStecker;
-    private JLabel lblAuswaehlenZugang;
     private JLabel lblBemerkung;
     private JLabel lblGeom;
     private JLabel lblHnr;
@@ -217,13 +228,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblStrasse;
     private JList lstLaufendeNummernMeldung;
     private JList lstMeldungen;
+    private JPanel panAddMeldung;
     private JPanel panAddPfand;
     private JPanel panAddStecker;
-    private JPanel panAddZugang;
     private JPanel panBemerkung;
     private JPanel panContent;
-    private JPanel panControlsLaufendeMeldungen;
     private JPanel panControlsLaufendeNummernMeldung;
+    private JPanel panControlsNewMeldungen;
     private JPanel panDaten;
     private JPanel panFiller;
     private JPanel panFillerUnten;
@@ -233,9 +244,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panMeldung;
     private JPanel panMeldungenMain;
     private JPanel panMeldungpan;
+    private JPanel panMenButtonsMeldung;
     private JPanel panMenButtonsPfand;
     private JPanel panMenButtonsStecker;
-    private JPanel panMenButtonsZugang;
     private DefaultPreviewMapPanel panPreviewMap;
     private JPanel panZusatz;
     private RoundedPanel rpKarte;
@@ -250,6 +261,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private SemiRoundedPanel semiRoundedPanel5;
     private SemiRoundedPanel semiRoundedPanel7;
     private JSeparator sepStatus;
+    private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JTextArea taBemerkung;
     private JTextField txtAktenzeichen;
     private JTextField txtHnr;
@@ -300,11 +312,32 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     checkName();
                 }
             });
+        lstMeldungen.setCellRenderer(new DefaultListCellRenderer() {
 
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        newValue = bean.getProperty("datum");
+
+                        if (newValue == null) {
+                            newValue = "unbenannt";
+                        }
+                    }
+
+                    return super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
+                }
+            });
         
 
-        dlgAddZugang.pack();
-        dlgAddZugang.getRootPane().setDefaultButton(btnMenOkZugang);
+        dlgAddMeldung.pack();
+        dlgAddMeldung.getRootPane().setDefaultButton(btnMenOkMeldung);
         dlgAddStecker.pack();
         dlgAddStecker.getRootPane().setDefaultButton(btnMenOkStecker);
         dlgAddPfand.pack();
@@ -314,6 +347,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         }
         setReadOnly();
+         lstMeldungen.addListSelectionListener(WeakListeners.create(
+                ListSelectionListener.class,
+                messSelL,
+                lstMeldungen));
     }
 
     /**
@@ -326,17 +363,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        dlgAddZugang = new JDialog();
-        panAddZugang = new JPanel();
-        lblAuswaehlenZugang = new JLabel();
-        final MetaObject[] zugang = ObjectRendererUtils.getLightweightMetaObjectsForTable("emobrad_zugangsart", new String[]{"name"}, getConnectionContext());
-        if(zugang != null) {
-            Arrays.sort(zugang);
-            cbZugang = new JComboBox(zugang);
-        }
-        panMenButtonsZugang = new JPanel();
-        btnMenAbortZugang = new JButton();
-        btnMenOkZugang = new JButton();
+        dlgAddMeldung = new JDialog();
+        panAddMeldung = new JPanel();
+        lblAuswaehlenMeldung = new JLabel();
+        panMenButtonsMeldung = new JPanel();
+        btnMenAbortMeldung = new JButton();
+        btnMenOkMeldung = new JButton();
+        dcMeldung = new DefaultBindableDateChooser();
         dlgAddStecker = new JDialog();
         panAddStecker = new JPanel();
         lblAuswaehlenStecker = new JLabel();
@@ -368,6 +401,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             btnRemoveLaufendeNummerMeldung = new JButton();
             btnCopyBaulast = new JButton();
             btnPasteBaulast = new JButton();
+            sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
             panFillerUnten = new JPanel();
             panContent = new RoundedPanel();
             jPanel1 = new JPanel();
@@ -408,9 +442,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             semiRoundedPanel4 = new SemiRoundedPanel();
             lblMeldungen = new JLabel();
             jPanel8 = new JPanel();
-            panControlsLaufendeMeldungen = new JPanel();
-            btnAddLaufendeMeldung = new JButton();
-            btnRemoveLaufendeMeldung = new JButton();
+            panControlsNewMeldungen = new JPanel();
+            btnAddNewMeldung = new JButton();
+            btnRemoveMeldung = new JButton();
             rpMeldunginfo = new RoundedPanel();
             semiRoundedPanel5 = new SemiRoundedPanel();
             lblMeldung = new JLabel();
@@ -418,28 +452,22 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             panMeldungenMain = new JPanel();
             panMeldungpan = new BaumMeldungPanel(isEditor, getConnectionContext());
 
-            dlgAddZugang.setTitle("Zugangsart");
-            dlgAddZugang.setModal(true);
+            dlgAddMeldung.setTitle("Zugangsart");
+            dlgAddMeldung.setModal(true);
 
-            panAddZugang.setLayout(new GridBagLayout());
+            panAddMeldung.setLayout(new GridBagLayout());
 
-            lblAuswaehlenZugang.setText("Bitte Zugangsart auswählen:");
+            lblAuswaehlenMeldung.setText("Bitte Meldungsdatum auswählen:");
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-            panAddZugang.add(lblAuswaehlenZugang, gridBagConstraints);
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-            panAddZugang.add(cbZugang, gridBagConstraints);
+            panAddMeldung.add(lblAuswaehlenMeldung, gridBagConstraints);
 
-            panMenButtonsZugang.setLayout(new GridBagLayout());
+            panMenButtonsMeldung.setLayout(new GridBagLayout());
 
-            btnMenAbortZugang.setText("Abbrechen");
-            btnMenAbortZugang.addActionListener(new ActionListener() {
+            btnMenAbortMeldung.setText("Abbrechen");
+            btnMenAbortMeldung.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
-                    btnMenAbortZugangActionPerformed(evt);
+                    btnMenAbortMeldungActionPerformed(evt);
                 }
             });
             gridBagConstraints = new GridBagConstraints();
@@ -447,12 +475,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             gridBagConstraints.gridy = 0;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-            panMenButtonsZugang.add(btnMenAbortZugang, gridBagConstraints);
+            panMenButtonsMeldung.add(btnMenAbortMeldung, gridBagConstraints);
 
-            btnMenOkZugang.setText("Ok");
-            btnMenOkZugang.addActionListener(new ActionListener() {
+            btnMenOkMeldung.setText("Ok");
+            btnMenOkMeldung.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
-                    btnMenOkZugangActionPerformed(evt);
+                    btnMenOkMeldungActionPerformed(evt);
                 }
             });
             gridBagConstraints = new GridBagConstraints();
@@ -460,15 +488,22 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             gridBagConstraints.gridy = 0;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-            panMenButtonsZugang.add(btnMenOkZugang, gridBagConstraints);
+            panMenButtonsMeldung.add(btnMenOkMeldung, gridBagConstraints);
 
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 2;
             gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-            panAddZugang.add(panMenButtonsZugang, gridBagConstraints);
+            panAddMeldung.add(panMenButtonsMeldung, gridBagConstraints);
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.insets = new Insets(2, 4, 2, 2);
+            panAddMeldung.add(dcMeldung, gridBagConstraints);
 
-            dlgAddZugang.getContentPane().add(panAddZugang, BorderLayout.CENTER);
+            dlgAddMeldung.getContentPane().add(panAddMeldung, BorderLayout.CENTER);
 
             dlgAddStecker.setTitle("Steckerverbindung");
             dlgAddStecker.setModal(true);
@@ -1078,8 +1113,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanel4.setLayout(new GridBagLayout());
 
         lblMeldungen.setForeground(new Color(255, 255, 255));
-        lblMeldungen.setText(NbBundle.getMessage(BaumGebietEditor.class, "KkVerfahrenEditor.jLabel14.text")); // NOI18N
-        lblMeldungen.setToolTipText("");
+        lblMeldungen.setText(NbBundle.getMessage(BaumGebietEditor.class, "BaumGebietEditor.lblMeldungen.text")); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -1107,45 +1141,45 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         rpMeldungliste.add(semiRoundedPanel4, gridBagConstraints);
 
-        panControlsLaufendeMeldungen.setOpaque(false);
-        panControlsLaufendeMeldungen.setLayout(new GridBagLayout());
+        panControlsNewMeldungen.setOpaque(false);
+        panControlsNewMeldungen.setLayout(new GridBagLayout());
 
-        btnAddLaufendeMeldung.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddLaufendeMeldung.setMaximumSize(new Dimension(39, 20));
-        btnAddLaufendeMeldung.setMinimumSize(new Dimension(39, 20));
-        btnAddLaufendeMeldung.setPreferredSize(new Dimension(39, 25));
-        btnAddLaufendeMeldung.addActionListener(new ActionListener() {
+        btnAddNewMeldung.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewMeldung.setMaximumSize(new Dimension(39, 20));
+        btnAddNewMeldung.setMinimumSize(new Dimension(39, 20));
+        btnAddNewMeldung.setPreferredSize(new Dimension(39, 25));
+        btnAddNewMeldung.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                btnAddLaufendeMeldungActionPerformed(evt);
+                btnAddNewMeldungActionPerformed(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsLaufendeMeldungen.add(btnAddLaufendeMeldung, gridBagConstraints);
+        panControlsNewMeldungen.add(btnAddNewMeldung, gridBagConstraints);
 
-        btnRemoveLaufendeMeldung.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveLaufendeMeldung.setMaximumSize(new Dimension(39, 20));
-        btnRemoveLaufendeMeldung.setMinimumSize(new Dimension(39, 20));
-        btnRemoveLaufendeMeldung.setPreferredSize(new Dimension(39, 25));
-        btnRemoveLaufendeMeldung.addActionListener(new ActionListener() {
+        btnRemoveMeldung.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveMeldung.setMaximumSize(new Dimension(39, 20));
+        btnRemoveMeldung.setMinimumSize(new Dimension(39, 20));
+        btnRemoveMeldung.setPreferredSize(new Dimension(39, 25));
+        btnRemoveMeldung.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                btnRemoveLaufendeMeldungActionPerformed(evt);
+                btnRemoveMeldungActionPerformed(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsLaufendeMeldungen.add(btnRemoveLaufendeMeldung, gridBagConstraints);
+        panControlsNewMeldungen.add(btnRemoveMeldung, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        rpMeldungliste.add(panControlsLaufendeMeldungen, gridBagConstraints);
+        rpMeldungliste.add(panControlsNewMeldungen, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1162,7 +1196,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanel5.setLayout(new GridBagLayout());
 
         lblMeldung.setForeground(new Color(255, 255, 255));
-        lblMeldung.setText(NbBundle.getMessage(BaumGebietEditor.class, "KkVerfahrenEditor.lblFlaeche.text")); // NOI18N
+        lblMeldung.setText(NbBundle.getMessage(BaumGebietEditor.class, "BaumGebietEditor.lblMeldung.text")); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         semiRoundedPanel5.add(lblMeldung, gridBagConstraints);
@@ -1259,31 +1293,53 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortZugangActionPerformed
-        dlgAddZugang.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortZugangActionPerformed
+    private void btnMenAbortMeldungActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortMeldungActionPerformed
+        dlgAddMeldung.setVisible(false);
+    }//GEN-LAST:event_btnMenAbortMeldungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkZugangActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkZugangActionPerformed
+    private void btnMenOkMeldungActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkMeldungActionPerformed
         try {
-            final Object selItem = cbZugang.getSelectedItem();
-            if (selItem instanceof MetaObject) {
-                cidsBean = TableUtils.addBeanToCollectionWithMessage(StaticSwingTools.getParentFrame(this),
-                        cidsBean,
-                        FIELD__NAME,
-                        ((MetaObject)selItem).getBean());
-                sortListNew(FIELD__NAME);
+            final CidsBean beanMeldung = CidsBeanSupport.createNewCidsBeanFromTableName(
+                "baum_meldung",
+                getConnectionContext());
+            final int gebietId = cidsBean.getPrimaryKeyValue();
+            beanMeldung.setProperty("n_gebiet", cidsBean);
+            
+            final java.util.Date selDate = dcMeldung.getDate();
+            java.util.Calendar cal = Calendar.getInstance();
+            cal.setTime(selDate);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            java.sql.Date beanDate = new java.sql.Date(cal.getTime().getTime());
+            
+            beanMeldung.setProperty("datum", beanDate);
+            final List<CidsBean> beanList = (List<CidsBean>) lstMeldungen.getModel();
+            beanList.add(beanMeldung);
+            final DefaultListModel<CidsBean> dlmMeldungen = new DefaultListModel<CidsBean>();
+            //final CustomJListModel<CidsBean> dlmMeldungen = new DefaultListModel<CidsBean>();
+            final List<CidsBean> c = cidsBean.getBeanCollectionProperty("datum");
+            dlmMeldungen.setSize(c.size());
+            for (int i = 0; i < c.size(); ++i) {
+                dlmMeldungen.addElement(beanList.get(i));
             }
+            lstMeldungen.setModel(dlmMeldungen);
+            //((DivBeanTable)lstMeldungen.getModel()).addBean(beanMeldung);
+            //((CustomJListModel)lstMeldungen.getModel()).refresh(); //
+            lstMeldungen.setSelectedValue(beanMeldung, true);
+            lstMeldungenValueChanged(null);
         } catch (Exception ex) {
             LOG.error(ex, ex);
         } finally {
-            dlgAddZugang.setVisible(false);
+            dlgAddMeldung.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkZugangActionPerformed
+    }//GEN-LAST:event_btnMenOkMeldungActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1372,7 +1428,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      * DOCUMENT ME!
      */
     private void refreshLabels() {
-        /*final CidsBean bean = edMeldung.getCidsBean();
+    /*    final CidsBean bean = edMeldung.getCidsBean();
 
         if (bean != null) {
             lblMeldung.setText("Meldung: " + toString(bean.getProperty("schluessel")) + "  "
@@ -1394,29 +1450,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             return String.valueOf(o);
         }
     }
-    private String getSchluessel() {
-        try {
-            final AbstractCidsServerSearch search = new BaumMeldungNextSchluesselSearch();
-            final List res = (List)SessionManager.getProxy()
-                        .customServerSearch(SessionManager.getSession().getUser(),
-                                search,
-                                getConnectionContext());
-
-            if ((res != null) && (res.size() == 1) && (res.get(0) != null)) {
-                return res.get(0).toString();
-            } else {
-                LOG.error("Cannot retrieve meldung object");
-            }
-        } catch (Exception e) {
-            LOG.error("Error while retrieving meldung object", e);
-        }
-
-        return null;
-    }
+   
     
-    private void btnAddLaufendeMeldungActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeMeldungActionPerformed
+    private void btnAddNewMeldungActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewMeldungActionPerformed
         try {
-            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(
+            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumGebietEditor.this), dlgAddMeldung, true);
+        /*    final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(
                 "baum_meldung",
                 getConnectionContext());
             final String schluessel = getSchluessel();
@@ -1441,13 +1480,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             cidsBean.addCollectionElement("meldungen", bean);
             ((CustomJListModel)lstMeldungen.getModel()).refresh();
             lstMeldungen.setSelectedValue(bean, true);
-            lstMeldungenValueChanged(null);
+            lstMeldungenValueChanged(null);*/
         } catch (Exception e) {
             LOG.error("Cannot add new BaumGebiet object", e);
         }
-    }//GEN-LAST:event_btnAddLaufendeMeldungActionPerformed
+    }//GEN-LAST:event_btnAddNewMeldungActionPerformed
 
-    private void btnRemoveLaufendeMeldungActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveLaufendeMeldungActionPerformed
+    private void btnRemoveMeldungActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveMeldungActionPerformed
         final Object selectedObject = lstMeldungen.getSelectedValue();
 
         if (selectedObject instanceof CidsBean) {
@@ -1460,7 +1499,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 lstMeldungenValueChanged(null);
             }
         }
-    }//GEN-LAST:event_btnRemoveLaufendeMeldungActionPerformed
+    }//GEN-LAST:event_btnRemoveMeldungActionPerformed
 
     private void lstLaufendeNummernMeldungValueChanged(ListSelectionEvent evt) {//GEN-FIRST:event_lstLaufendeNummernMeldungValueChanged
 
@@ -1607,11 +1646,24 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 this.cidsBean.addPropertyChangeListener(this);
             }
             
-            // Damit die moeglichen Muenzen fuer den Pfand sortiert in der Liste erscheinen.
-          /*  final List<CidsBean> pfandCol = CidsBeanSupport.getBeanCollectionFromProperty(
-                    cidsBean,
-                    FIELD__NAME);
-            Collections.sort(pfandCol, AlphanumComparator.getInstance());*/
+            //  Damit die Termine fuer die Meldungen sortiert in der Liste erscheinen.
+            final String myWhere = " where "
+                    + "n_gebiet"
+                    + " = "
+                    + cidsBean.getPrimaryKeyValue();
+            final MetaObject[] metaObjectMeldungen = getOtherTableValues("baum_meldung", myWhere, getConnectionContext());
+            //final List<CidsBean> c = cidsBean.getBeanCollectionProperty("berechnungen");
+           
+            final DefaultListModel<CidsBean> dlmMeldungen = new DefaultListModel<CidsBean>();
+            //final CustomJListModel<CidsBean> dlmMeldungen = new DefaultListModel<CidsBean>();
+            dlmMeldungen.setSize(metaObjectMeldungen.length);
+            for (int i = 0; i < metaObjectMeldungen.length; ++i) {
+                dlmMeldungen.addElement(metaObjectMeldungen[i].getBean());
+            }
+            lstMeldungen.setModel(dlmMeldungen);
+            lstMeldungen.setSelectedIndex(1);
+        
+            
 
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
@@ -1620,7 +1672,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 cb,
                 getConnectionContext());
             setMapWindow();
+            
             bindingGroup.bind();
+         /*   lstMeldungen.setModel(new CustomJListModel("meldungen"));
+            if (lstMeldungen.getModel().getSize() > 0) {
+                lstMeldungen.setSelectedIndex(0);
+            }*/
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -1658,8 +1715,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
                 @Override
                 public int compare(final CidsBean o1, final CidsBean o2) {
-                    final String o1String = String.valueOf(o1.getProperty("schluessel"));
-                    final String o2String = String.valueOf(o2.getProperty("schluessel"));
+                    final String o1String = String.valueOf(o1.getProperty("datum"));
+                    final String o2String = String.valueOf(o2.getProperty("datum"));
 
                     try {
                         final Integer o1Int = Integer.parseInt(o1String);
@@ -1780,7 +1837,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void dispose() {
         super.dispose();
-        dlgAddZugang.dispose();
+        dlgAddMeldung.dispose();
         dlgAddStecker.dispose();
         dlgAddPfand.dispose();
         if (this.isEditor) {
@@ -1807,6 +1864,23 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         // To change body of generated methods, choose Tools | Templates.
         if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
             setMapWindow();
+        }
+    }
+    
+     private final class MeldungSelectionListener implements ListSelectionListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void valueChanged(final ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting()) {
+                final CidsBean bean = (CidsBean)lstMeldungen.getSelectedValue();
+                if (bean == null) {
+                    throw new IllegalStateException("no calculation selected, this is illegal"); // NOI18N
+                }
+                //BaumMeldungPanel.se
+                //oab_berechnungEditor.setCidsBean(bean);
+            }
         }
     }
     /**
