@@ -46,7 +46,7 @@
         <Component class="javax.swing.JLabel" name="jLabel21">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Stand"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Arbeitstand"/>
             <Property name="name" type="java.lang.String" value="jLabel21" noResource="true"/>
           </Properties>
           <Constraints>
@@ -83,7 +83,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox6" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_1}" target="jComboBox6" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_erfassung}" target="jComboBox6" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -99,6 +99,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField2" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_erfassung}" target="jFormattedTextField2" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -121,7 +128,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox32" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_2}" target="jComboBox32" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_historischenutzungsrecherche}" target="jComboBox32" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -137,6 +144,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField16" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_historischenutzungsrecherche}" target="jFormattedTextField16" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -159,7 +173,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox7" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_3}" target="jComboBox7" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_orientierendeuntersuchung}" target="jComboBox7" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -175,6 +189,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField3" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_orientierendeuntersuchung}" target="jFormattedTextField3" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -197,7 +218,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox8" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_4}" target="jComboBox8" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_gefaehrdungsabschaetzung}" target="jComboBox8" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -213,6 +234,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField4" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_gefaehrdungsabschaetzung}" target="jFormattedTextField4" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -235,7 +263,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox9" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_5}" target="jComboBox9" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_sanierungsuntersuchung}" target="jComboBox9" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -251,6 +279,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField5" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_sanierungsuntersuchung}" target="jFormattedTextField5" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -273,7 +308,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox10" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_6}" target="jComboBox10" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_sanierungsplan}" target="jComboBox10" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -289,6 +324,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField6" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_sanierungsplan}" target="jFormattedTextField6" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -311,7 +353,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox11" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_7}" target="jComboBox11" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_sanierung}" target="jComboBox11" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -327,6 +369,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField7" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_sanierung}" target="jFormattedTextField7" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -349,7 +398,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox12" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_8}" target="jComboBox12" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_schutzundbegrenzung}" target="jComboBox12" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -365,6 +414,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField8" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_schutzundbegrenzung}" target="jFormattedTextField8" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -387,7 +443,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox15" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_9}" target="jComboBox15" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_ueberwachung}" target="jComboBox15" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -403,6 +459,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField11" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_ueberwachung}" target="jFormattedTextField11" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -425,7 +488,7 @@
             <Property name="name" type="java.lang.String" value="jComboBox19" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.arbeitsstand_10}" target="jComboBox19" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_arbeitsstand_nachsorge}" target="jComboBox19" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -441,6 +504,13 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jFormattedTextField15" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_nachsorge}" target="jFormattedTextField15" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new LongNumberConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
+          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="2" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>

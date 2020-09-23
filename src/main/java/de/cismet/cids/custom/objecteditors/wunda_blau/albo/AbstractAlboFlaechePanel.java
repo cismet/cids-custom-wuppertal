@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.AlboFlaecheEditor;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -103,7 +104,13 @@ public abstract class AbstractAlboFlaechePanel extends javax.swing.JPanel implem
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+        initGui();
     }
+
+    /**
+     * DOCUMENT ME!
+     */
+    protected abstract void initGui();
 
     @Override
     public ConnectionContext getConnectionContext() {
@@ -126,6 +133,9 @@ public abstract class AbstractAlboFlaechePanel extends javax.swing.JPanel implem
                 this.cidsBean = cidsBean;
                 if (getBindingGroup() != null) {
                     getBindingGroup().bind();
+                }
+                if (!isEditable()) {
+                    RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
                 }
             }
         }

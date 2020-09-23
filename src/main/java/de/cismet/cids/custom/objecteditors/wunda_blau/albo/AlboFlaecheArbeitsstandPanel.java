@@ -14,11 +14,9 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
-import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
-
-import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -89,6 +87,11 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected void initGui() {
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -165,7 +168,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(filler3, gridBagConstraints);
 
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel21, "<html><b>Stand");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel21, "<html><b>Arbeitstand");
         jLabel21.setName("jLabel21"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -195,7 +198,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_1}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_erfassung}"),
                 jComboBox6,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -208,6 +211,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox6, gridBagConstraints);
 
         jFormattedTextField2.setName("jFormattedTextField2"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_erfassung}"),
+                jFormattedTextField2,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -227,7 +240,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_2}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_historischenutzungsrecherche}"),
                 jComboBox32,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -240,6 +253,17 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox32, gridBagConstraints);
 
         jFormattedTextField16.setName("jFormattedTextField16"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create(
+                    "${cidsBean.jahr_arbeitsstand_historischenutzungsrecherche}"),
+                jFormattedTextField16,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -259,7 +283,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_3}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_orientierendeuntersuchung}"),
                 jComboBox7,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -272,6 +296,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox7, gridBagConstraints);
 
         jFormattedTextField3.setName("jFormattedTextField3"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_orientierendeuntersuchung}"),
+                jFormattedTextField3,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -291,7 +325,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_4}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_gefaehrdungsabschaetzung}"),
                 jComboBox8,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -304,6 +338,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox8, gridBagConstraints);
 
         jFormattedTextField4.setName("jFormattedTextField4"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_gefaehrdungsabschaetzung}"),
+                jFormattedTextField4,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -323,7 +367,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_5}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_sanierungsuntersuchung}"),
                 jComboBox9,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -336,6 +380,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox9, gridBagConstraints);
 
         jFormattedTextField5.setName("jFormattedTextField5"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_sanierungsuntersuchung}"),
+                jFormattedTextField5,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -355,7 +409,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_6}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_sanierungsplan}"),
                 jComboBox10,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -368,6 +422,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox10, gridBagConstraints);
 
         jFormattedTextField6.setName("jFormattedTextField6"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_sanierungsplan}"),
+                jFormattedTextField6,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -387,7 +451,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_7}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_sanierung}"),
                 jComboBox11,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -400,6 +464,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox11, gridBagConstraints);
 
         jFormattedTextField7.setName("jFormattedTextField7"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_sanierung}"),
+                jFormattedTextField7,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -419,7 +493,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_8}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_schutzundbegrenzung}"),
                 jComboBox12,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -432,6 +506,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox12, gridBagConstraints);
 
         jFormattedTextField8.setName("jFormattedTextField8"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_schutzundbegrenzung}"),
+                jFormattedTextField8,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -451,7 +535,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_9}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_ueberwachung}"),
                 jComboBox15,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -464,6 +548,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox15, gridBagConstraints);
 
         jFormattedTextField11.setName("jFormattedTextField11"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_ueberwachung}"),
+                jFormattedTextField11,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -483,7 +577,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arbeitsstand_10}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_arbeitsstand_nachsorge}"),
                 jComboBox19,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -496,6 +590,16 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         panArbeitsstand.add(jComboBox19, gridBagConstraints);
 
         jFormattedTextField15.setName("jFormattedTextField15"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_nachsorge}"),
+                jFormattedTextField15,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -543,17 +647,6 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
-
-    @Override
-    public void setCidsBean(final CidsBean cidsBean) {
-        super.setCidsBean(cidsBean);
-    }
-
-    @Override
-    public final void initWithConnectionContext(final ConnectionContext connectionContext) {
-        super.initWithConnectionContext(connectionContext);
-        initComponents();
-    }
 
     @Override
     protected BindingGroup getBindingGroup() {

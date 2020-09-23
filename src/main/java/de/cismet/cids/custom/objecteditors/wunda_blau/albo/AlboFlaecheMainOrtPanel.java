@@ -26,7 +26,6 @@ import java.util.Collection;
 
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
@@ -44,8 +43,6 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-
-import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -86,6 +83,11 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected void initGui() {
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -322,17 +324,6 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         super.setCidsBean(cidsBean);
         initMap();
         refreshGeomFeatures();
-    }
-
-    @Override
-    public final void initWithConnectionContext(final ConnectionContext connectionContext) {
-        super.initWithConnectionContext(connectionContext);
-
-        initComponents();
-
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
-        }
     }
 
     @Override

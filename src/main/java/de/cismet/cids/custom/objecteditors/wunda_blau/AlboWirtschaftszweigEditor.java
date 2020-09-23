@@ -329,6 +329,11 @@ public class AlboWirtschaftszweigEditor extends javax.swing.JPanel implements Ci
                 cidsBean,
                 getConnectionContext());
             this.cidsBean = cidsBean;
+
+            if (!isEditable()) {
+                RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+            }
+
             bindingGroup.bind();
         }
     }
@@ -360,9 +365,7 @@ public class AlboWirtschaftszweigEditor extends javax.swing.JPanel implements Ci
 
         initComponents();
 
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
-        } else {
+        if (isEditable()) {
             AutoCompleteDecorator.decorate(jComboBox24);
         }
     }

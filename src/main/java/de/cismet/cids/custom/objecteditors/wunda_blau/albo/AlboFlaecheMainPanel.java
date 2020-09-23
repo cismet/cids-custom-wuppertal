@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -199,7 +200,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jLabel8, gridBagConstraints);
 
-        jTextField9.setEditable(false);
         jTextField9.setName("jTextField9"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -229,7 +229,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jLabel9, gridBagConstraints);
 
-        jTextField11.setEditable(false);
         jTextField11.setName("jTextField11"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -267,7 +266,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
         panTop.add(jLabel7, gridBagConstraints);
 
-        jTextField6.setEditable(false);
         jTextField6.setName("jTextField6"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -295,7 +293,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jLabel10, gridBagConstraints);
 
-        jTextField12.setEditable(false);
         jTextField12.setName("jTextField12"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -768,6 +765,10 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
             String.class, // Ordner-Art
         };
 
+    //~ Instance fields --------------------------------------------------------
+
+    private boolean unlocked = false;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel
         alboFlaecheAltablagerungPanel1;
@@ -851,6 +852,24 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    protected void initGui() {
+        initComponents();
+
+        alboFlaecheBeschreibungPanel1.setMainPanel(this);
+        alboFlaecheBeschreibungPanel1.setPanSpezifisch(panSpezifisch);
+
+        if (isEditable()) {
+            try {
+                new CidsBeanDropTarget(jXTable1);
+            } catch (final Exception ex) {
+                LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
+            }
+        }
+        RendererTools.makeReadOnly(jXTable1);
+        RendererTools.makeReadOnly(jList2);
+    }
+
     /**
      * DOCUMENT ME!
      *
@@ -882,22 +901,59 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        setUnlocked((cidsBean != null) && (MetaObject.NEW == cidsBean.getMetaObject().getStatus()));
         super.setCidsBean(cidsBean);
 
         alboFlaecheBeschreibungPanel1.setCidsBean(cidsBean);
         alboFlaecheOrtPanel1.setCidsBean(cidsBean);
 
-        alboFlaecheStandortePanel1.setCidsBean(cidsBean);
-
-        alboFlaecheSchadensfallPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_schadensfall"));
-        alboFlaecheImmisionPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_immission"));
-        alboFlaecheMaterialaufbringungPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_materialaufbringung"));
-        alboFlaecheBewirtschaftungsschadenPanel1.setCidsBean((CidsBean)cidsBean.getProperty(
-                "fk_bewirtschaftungsschaden"));
-        alboFlaecheAltablagerungPanel1.setCidsBean((CidsBean)cidsBean.getProperty("fk_altablagerung"));
+        updateCidsBeanOfFkPanels();
 
         searchVorgaenge();
         searchBplaene();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void updateCidsBeanOfFkPanels() {
+        final CidsBean cidsBean = getCidsBean();
+        alboFlaecheStandortePanel1.setCidsBean(cidsBean);
+
+        alboFlaecheSchadensfallPanel1.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty(
+                "fk_schadensfall") : null);
+        alboFlaecheImmisionPanel1.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_immission")
+                                                                 : null);
+        alboFlaecheMaterialaufbringungPanel1.setCidsBean((cidsBean != null)
+                ? (CidsBean)cidsBean.getProperty("fk_materialaufbringung") : null);
+        alboFlaecheBewirtschaftungsschadenPanel1.setCidsBean((cidsBean != null)
+                ? (CidsBean)cidsBean.getProperty("fk_bewirtschaftungsschaden") : null);
+        alboFlaecheAltablagerungPanel1.setCidsBean((cidsBean != null)
+                ? (CidsBean)cidsBean.getProperty("fk_altablagerung") : null);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  unlocked  DOCUMENT ME!
+     */
+    public void setUnlocked(final boolean unlocked) {
+        this.unlocked = isEditable() ? unlocked : false;
+        alboFlaecheBeschreibungPanel1.setUnlocked(unlocked);
+        updateLockedFields();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateLockedFields() {
+        if (isEditable()) {
+            RendererTools.makeReadOnly(jTextField6, !unlocked);
+            RendererTools.makeReadOnly(jTextField9, !unlocked);
+            RendererTools.makeReadOnly(jTextField11, !unlocked);
+            RendererTools.makeReadOnly(jTextField12, !unlocked);
+            RendererTools.makeReadOnly(cbFlaechentyp, !unlocked);
+        }
     }
 
     @Override
@@ -931,34 +987,29 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     }
 
     @Override
+    public boolean prepareForSave() {
+        return super.prepareForSave()
+                    && alboFlaecheBeschreibungPanel1.prepareForSave()
+                    && alboFlaecheOrtPanel1.prepareForSave()
+                    && alboFlaecheStandortePanel1.prepareForSave()
+                    && alboFlaecheSchadensfallPanel1.prepareForSave()
+                    && alboFlaecheImmisionPanel1.prepareForSave()
+                    && alboFlaecheMaterialaufbringungPanel1.prepareForSave()
+                    && alboFlaecheBewirtschaftungsschadenPanel1.prepareForSave()
+                    && alboFlaecheAltablagerungPanel1.prepareForSave();
+    }
+
+    @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
-        initComponents();
-
         alboFlaecheBeschreibungPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheOrtPanel1.initWithConnectionContext(connectionContext);
-
         alboFlaecheStandortePanel1.initWithConnectionContext(connectionContext);
         alboFlaecheSchadensfallPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheImmisionPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheMaterialaufbringungPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheBewirtschaftungsschadenPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheAltablagerungPanel1.initWithConnectionContext(connectionContext);
-
-        alboFlaecheBeschreibungPanel1.setPanSpezifisch(panSpezifisch);
-
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
-        } else {
-            try {
-                new CidsBeanDropTarget(jXTable1);
-            } catch (final Exception ex) {
-                LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
-            }
-        }
-        RendererTools.makeReadOnly(cbFlaechentyp);
-        RendererTools.makeReadOnly(jXTable1);
-        RendererTools.makeReadOnly(jList2);
     }
 
     @Override

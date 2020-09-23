@@ -23,8 +23,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.EditorClosedEvent;
@@ -236,39 +234,20 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        getCidsBean().getBeanCollectionProperty("n_standorte")
-                .add(mcStandort.getEmptyInstance(getConnectionContext()).getBean());
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
-        getCidsBean().getBeanCollectionProperty("n_standorte").remove(jList1.getSelectedValue());
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
-        ((CardLayout)jPanel10.getLayout()).show(jPanel10, (jList1.getSelectedValue() == null) ? "null" : "standort");
-    }                                                                                 //GEN-LAST:event_jList1ValueChanged
 
     @Override
-    public final void initWithConnectionContext(final ConnectionContext connectionContext) {
-        super.initWithConnectionContext(connectionContext);
-        initComponents();
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+    protected void initGui() {
+        try {
+            mcStandort = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "ALBO_STANDORT",
+                    getConnectionContext());
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
         }
+
+        initComponents();
 
         jList1.setCellRenderer(new DefaultListCellRenderer() {
 
@@ -301,18 +280,41 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
                     return component;
                 }
             });
-
-        alboFlaecheMainStandortPanel1.initWithConnectionContext(connectionContext);
-
-        try {
-            mcStandort = CidsBean.getMetaClassFromTableName(
-                    "WUNDA_BLAU",
-                    "ALBO_STANDORT",
-                    getConnectionContext());
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
     }
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        super.initWithConnectionContext(connectionContext);
+        alboFlaecheMainStandortPanel1.initWithConnectionContext(getConnectionContext());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        getCidsBean().getBeanCollectionProperty("n_standorte")
+                .add(mcStandort.getEmptyInstance(getConnectionContext()).getBean());
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        getCidsBean().getBeanCollectionProperty("n_standorte").remove(jList1.getSelectedValue());
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
+        ((CardLayout)jPanel10.getLayout()).show(jPanel10, (jList1.getSelectedValue() == null) ? "null" : "standort");
+    }                                                                                 //GEN-LAST:event_jList1ValueChanged
 
     @Override
     public void dispose() {

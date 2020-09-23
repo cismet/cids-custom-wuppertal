@@ -14,13 +14,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-
-import de.cismet.cids.dynamics.CidsBean;
-
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
-
-import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -55,6 +49,11 @@ public class AlboFlaecheMainImmissionPanel extends AbstractAlboFlaechePanel {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected void initGui() {
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -100,21 +99,6 @@ public class AlboFlaecheMainImmissionPanel extends AbstractAlboFlaechePanel {
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
-
-    @Override
-    public void setCidsBean(final CidsBean cidsBean) {
-        super.setCidsBean(cidsBean);
-    }
-
-    @Override
-    public final void initWithConnectionContext(final ConnectionContext connectionContext) {
-        super.initWithConnectionContext(connectionContext);
-        initComponents();
-
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
-        }
-    }
 
     @Override
     protected BindingGroup getBindingGroup() {

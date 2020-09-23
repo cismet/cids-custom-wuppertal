@@ -45,6 +45,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -53,7 +55,6 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 /**
  * DOCUMENT ME!
@@ -110,65 +111,105 @@ public class RendererTools {
      * @param  comp  DOCUMENT ME!
      */
     public static void makeReadOnly(final JComponent comp) {
+        makeReadOnly(comp, true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   comp      DOCUMENT ME!
+     * @param   readOnly  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
+     */
+    public static void makeReadOnly(final JComponent comp, final boolean readOnly) {
         if (comp instanceof JTextComponent) {
             final JTextComponent tComp = (JTextComponent)comp;
-            tComp.setEditable(false);
-            tComp.setOpaque(false);
-            tComp.setBorder(null);
+            tComp.setEditable(!readOnly);
+            tComp.setOpaque(!readOnly);
+            if (readOnly) {
+                tComp.setBorder(new ReadOnlyEmtpyBorder(tComp.getBorder()));
+            } else if (tComp.getBorder() instanceof ReadOnlyEmtpyBorder) {
+                tComp.setBorder((ReadOnlyEmtpyBorder)tComp.getBorder());
+            }
         } else if (comp instanceof JScrollPane) {
             final JScrollPane jsp = (JScrollPane)comp;
-            jsp.setOpaque(false);
-            jsp.getViewport().setOpaque(false);
+            jsp.setOpaque(!readOnly);
+            jsp.getViewport().setOpaque(!false);
         } else if (comp instanceof JComboBox) {
             final JComboBox cb = (JComboBox)comp;
-            cb.setEnabled(false);
-            cb.setRenderer(new CustomListCellRenderer((ListCellRenderer)cb.getRenderer()));
+            cb.setEnabled(!readOnly);
+            if (readOnly) {
+                cb.setRenderer(new CustomListCellRenderer((ListCellRenderer)cb.getRenderer()));
+            } else if (cb.getRenderer() instanceof CustomListCellRenderer) {
+                cb.setRenderer(((CustomListCellRenderer)cb.getRenderer()).getOrigRenderer());
+            }
         } else if (comp instanceof JSpinner) {
             final JSpinner sp = (JSpinner)comp;
-            sp.setOpaque(false);
-            sp.setBorder(null);
-            sp.getEditor().setOpaque(false);
-            ((JSpinner.DefaultEditor)sp.getEditor()).getTextField().setOpaque(false);
+            if (readOnly) {
+                sp.setOpaque(false);
+                sp.setBorder(null);
+                sp.getEditor().setOpaque(false);
+                ((JSpinner.DefaultEditor)sp.getEditor()).getTextField().setOpaque(false);
+            } else {
+                throw new RuntimeException("JSpinner not supported yet");
+            }
         } else if (comp instanceof DefaultBindableDateChooser) {
             final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
-            dc.setEditable(false);
-            ((Component)dc.getComponents()[1]).setVisible(false);
-            ((JFormattedTextField)dc.getComponents()[0]).setOpaque(false);
-            ((JFormattedTextField)dc.getComponents()[0]).setBorder(null);
+            if (readOnly) {
+                dc.setEditable(false);
+                ((Component)dc.getComponents()[1]).setVisible(false);
+                ((JFormattedTextField)dc.getComponents()[0]).setOpaque(false);
+                ((JFormattedTextField)dc.getComponents()[0]).setBorder(null);
+            } else {
+                throw new RuntimeException("DefaultBindableDateChooser not supported yet");
+            }
         } else if (comp instanceof JCheckBox) {
-            ((JCheckBox)comp).setUI(new BasicCheckBoxUI() {
+            if (readOnly) {
+                ((JCheckBox)comp).setUI(new BasicCheckBoxUI() {
 
-                    @Override
-                    protected BasicButtonListener createButtonListener(final AbstractButton b) {
-                        return null;
-                    }
-                });
+                        @Override
+                        protected BasicButtonListener createButtonListener(final AbstractButton b) {
+                            return null;
+                        }
+                    });
+            } else {
+                throw new RuntimeException("JCheckBox not supported yet");
+            }
         } else if (comp instanceof JXTable) {
-            final JXTable jxt = (JXTable)comp;
-            jxt.setEditable(false);
-            ((DefaultTableRenderer)jxt.getDefaultRenderer(Object.class)).setBackground(new Color(0, 0, 0, 0));
-            jxt.setOpaque(false);
-            jxt.setGridColor(Color.GRAY);
-            jxt.setBackground(new Color(0, 0, 0, 0));
+            if (readOnly) {
+                final JXTable jxt = (JXTable)comp;
+                jxt.setEditable(false);
+                ((DefaultTableRenderer)jxt.getDefaultRenderer(Object.class)).setBackground(new Color(0, 0, 0, 0));
+                jxt.setOpaque(false);
+                jxt.setGridColor(Color.GRAY);
+                jxt.setBackground(new Color(0, 0, 0, 0));
+            } else {
+                throw new RuntimeException("JXTable not supported yet");
+            }
         } else if (comp instanceof JList) {
-            final JList jl = (JList)comp;
-            jl.setOpaque(false);
-            jl.setCellRenderer(new DefaultListCellRenderer() {
+            if (readOnly) {
+                final JList jl = (JList)comp;
+                jl.setOpaque(false);
+                jl.setCellRenderer(new DefaultListCellRenderer() {
 
-                    @Override
-                    public Component getListCellRendererComponent(final JList<?> list,
-                            final Object value,
-                            final int index,
-                            final boolean isSelected,
-                            final boolean cellHasFocus) {
-                        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                        // setForeground(Color.WHITE);
-                        setOpaque(isSelected);
-                        return this;
-                    }
-                });
+                        @Override
+                        public Component getListCellRendererComponent(final JList<?> list,
+                                final Object value,
+                                final int index,
+                                final boolean isSelected,
+                                final boolean cellHasFocus) {
+                            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                            // setForeground(Color.WHITE);
+                            setOpaque(isSelected);
+                            return this;
+                        }
+                    });
+            } else {
+                throw new RuntimeException("JList not supported yet");
+            }
         } else if (comp != null) {
-            comp.setEnabled(false);
+            comp.setEnabled(!readOnly);
         }
     }
 
@@ -412,6 +453,41 @@ public class RendererTools {
                 }
                 evt.consume();
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class ReadOnlyEmtpyBorder extends EmptyBorder {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final Border origBorder;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ReadOnlyEmtpyBorder object.
+         *
+         * @param  origBorder  DOCUMENT ME!
+         */
+        public ReadOnlyEmtpyBorder(final Border origBorder) {
+            super(0, 0, 0, 0);
+            this.origBorder = origBorder;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Border getOrigBorder() {
+            return origBorder;
         }
     }
 }

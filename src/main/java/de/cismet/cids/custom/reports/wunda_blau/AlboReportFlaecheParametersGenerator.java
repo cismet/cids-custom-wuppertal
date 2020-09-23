@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import de.cismet.cids.custom.objecteditors.utils.AlboProperties;
+import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -50,7 +50,7 @@ public class AlboReportFlaecheParametersGenerator implements JasperReportDownloa
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             AlboReportFlaecheParametersGenerator.class);
     private static final String GEO_FIELD__PROPERTY = "fk_geom.geo_field";
-    private static final AlboProperties PROPERTIES = AlboProperties.getInstance();
+    private static final ClientAlboProperties PROPERTIES = ClientAlboProperties.getInstance();
 
     //~ Enums ------------------------------------------------------------------
 
@@ -104,7 +104,8 @@ public class AlboReportFlaecheParametersGenerator implements JasperReportDownloa
     public Map generateParamters() {
         final Map<String, Object> parameters = new HashMap<>();
 
-        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(AlboProperties.getInstance().getFlaecheMapUrl()));
+        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
+                    ClientAlboProperties.getInstance().getFlaecheMapUrl()));
 
         final Geometry geometry = (Geometry)flaecheBean.getProperty(GEO_FIELD__PROPERTY);
         if (geometry == null) {

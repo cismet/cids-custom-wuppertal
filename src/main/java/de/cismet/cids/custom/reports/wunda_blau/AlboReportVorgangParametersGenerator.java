@@ -14,7 +14,7 @@ package de.cismet.cids.custom.reports.wunda_blau;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.cismet.cids.custom.objecteditors.utils.AlboProperties;
+import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -36,7 +36,7 @@ public class AlboReportVorgangParametersGenerator implements JasperReportDownloa
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             AlboReportVorgangParametersGenerator.class);
-    private static final AlboProperties PROPERTIES = AlboProperties.getInstance();
+    private static final ClientAlboProperties PROPERTIES = ClientAlboProperties.getInstance();
 
     //~ Instance fields --------------------------------------------------------
 

@@ -94,7 +94,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField9">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="jTextField9" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -119,7 +118,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField11">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="jTextField11" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -160,7 +158,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField6">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="jTextField6" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -185,7 +182,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField12">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="jTextField12" noResource="true"/>
               </Properties>
               <BindingProperties>

@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
+import Sirius.server.middleware.types.MetaObject;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.jdesktop.beansbinding.BindingGroup;
@@ -20,15 +22,13 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
-
-import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -60,11 +60,11 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jPanel54 = new javax.swing.JPanel();
         jLabel75 = new javax.swing.JLabel();
         txtJahrVon = new javax.swing.JFormattedTextField();
+        jLabel74 = new javax.swing.JLabel();
+        txtJahrBis = new javax.swing.JFormattedTextField();
         filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
-        jLabel74 = new javax.swing.JLabel();
-        txtJahrBis = new javax.swing.JFormattedTextField();
         jLabel37 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
@@ -201,28 +201,22 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_von}"),
                 txtJahrVon,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel54.add(txtJahrVon, gridBagConstraints);
-
-        filler68.setName("filler68"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 20;
-        jPanel54.add(filler68, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel74, "bis:");
         jLabel74.setName("jLabel74"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
         jPanel54.add(jLabel74, gridBagConstraints);
 
         txtJahrBis.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
@@ -235,14 +229,23 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_bis}"),
                 txtJahrBis,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel54.add(txtJahrBis, gridBagConstraints);
+
+        filler68.setName("filler68"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.weightx = 1.0;
+        jPanel54.add(filler68, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -460,6 +463,10 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
             STRASSENNAME_TOSTRING_TEMPLATE,
             STRASSENNAME_TOSTRING_FIELDS);
 
+    private boolean unlocked = false;
+
+    private AlboFlaecheMainPanel mainPanel;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbFlaechenart;
     private javax.swing.JComboBox<String> cbFlaechenstatus;
@@ -511,6 +518,11 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    protected void initGui() {
+        initComponents();
+    }
+
     /**
      * DOCUMENT ME!
      *
@@ -520,11 +532,141 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         this.panSpezifisch = panSpezifisch;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mainPanel  DOCUMENT ME!
+     */
+    public void setMainPanel(final AlboFlaecheMainPanel mainPanel) {
+        this.mainPanel = mainPanel;
+    }
+
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        setUnlocked((cidsBean != null) && (MetaObject.NEW == cidsBean.getMetaObject().getStatus()));
         super.setCidsBean(cidsBean);
-        updateDetailsPanel();
+
         refreshStrCbo();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateArtFk() {
+        if (isEditable()) {
+            final CidsBean cidsBean = getCidsBean();
+            if (cidsBean.getProperty("fk_art.schluessel") != null) {
+                try {
+                    switch ((String)cidsBean.getProperty("fk_art.schluessel")) {
+                        case "altablagerung": {
+                            if (cidsBean.getProperty("fk_altablagerung") == null) {
+                                cidsBean.setProperty(
+                                    "fk_altablagerung",
+                                    CidsBean.createNewCidsBeanFromTableName(
+                                        "WUNDA_BLAU",
+                                        "ALBO_ALTABLAGERUNG",
+                                        getConnectionContext()));
+                            }
+                        }
+                        break;
+                        case "bewirtschaftungsschaden": {
+                            if (cidsBean.getProperty("fk_bewirtschaftungsschaden") == null) {
+                                cidsBean.setProperty(
+                                    "fk_bewirtschaftungsschaden",
+                                    CidsBean.createNewCidsBeanFromTableName(
+                                        "WUNDA_BLAU",
+                                        "ALBO_BEWIRTSCHAFTUNGSSCHADEN",
+                                        getConnectionContext()));
+                            }
+                        }
+                        break;
+                        case "immission": {
+                            if (cidsBean.getProperty("fk_immission") == null) {
+                                cidsBean.setProperty(
+                                    "fk_immission",
+                                    CidsBean.createNewCidsBeanFromTableName(
+                                        "WUNDA_BLAU",
+                                        "ALBO_IMMISSION",
+                                        getConnectionContext()));
+                            }
+                        }
+                        break;
+                        case "materialaufbringung": {
+                            if (cidsBean.getProperty("fk_materialaufbringung") == null) {
+                                cidsBean.setProperty(
+                                    "fk_materialaufbringung",
+                                    CidsBean.createNewCidsBeanFromTableName(
+                                        "WUNDA_BLAU",
+                                        "ALBO_MATERIALAUFBRINGUNG",
+                                        getConnectionContext()));
+                            }
+                        }
+                        break;
+                        case "schadensfall": {
+                            if (cidsBean.getProperty("fk_schadensfall") == null) {
+                                cidsBean.setProperty(
+                                    "fk_schadensfall",
+                                    CidsBean.createNewCidsBeanFromTableName(
+                                        "WUNDA_BLAU",
+                                        "ALBO_SCHADENSFALL",
+                                        getConnectionContext()));
+                            }
+                        }
+                        break;
+                    }
+
+                    mainPanel.updateCidsBeanOfFkPanels();
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean prepareForSave() {
+        final CidsBean cidsBean = getCidsBean();
+        try {
+            if (!"altablagerung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
+                cidsBean.setProperty("fk_altablagerung", null);
+            }
+            if (!"bewirtschaftungsschaden".equals(cidsBean.getProperty("fk_art.schluessel"))) {
+                cidsBean.setProperty("fk_bewirtschaftungsschaden", null);
+            }
+            if (!"immission".equals(cidsBean.getProperty("fk_art.schluessel"))) {
+                cidsBean.setProperty("fk_immission", null);
+            }
+            if (!"materialaufbringung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
+                cidsBean.setProperty("fk_materialaufbringung", null);
+            }
+            if (!"schadensfall".equals(cidsBean.getProperty("fk_art.schluessel"))) {
+                cidsBean.setProperty("fk_schadensfall", null);
+            }
+            return true;
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  unlocked  DOCUMENT ME!
+     */
+    public void setUnlocked(final boolean unlocked) {
+        this.unlocked = isEditable() ? unlocked : false;
+        updateLockedFields();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateLockedFields() {
+        if (isEditable()) {
+            cbFlaechenart.setEnabled(unlocked);
+            // RendererTools.makeReadOnly(cbFlaechenart, !unlocked);
+        }
     }
 
     /**
@@ -580,18 +722,9 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
      * @param  evt  DOCUMENT ME!
      */
     private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
+        updateArtFk();
         updateDetailsPanel();
     }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
-
-    @Override
-    public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        super.initWithConnectionContext(connectionContext);
-        initComponents();
-
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
-        }
-    }
 
     /**
      * DOCUMENT ME!

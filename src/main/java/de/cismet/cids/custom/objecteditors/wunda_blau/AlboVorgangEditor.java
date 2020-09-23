@@ -814,6 +814,10 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 getConnectionContext());
             this.cidsBean = cidsBean;
             bindingGroup.bind();
+
+            if (!isEditable()) {
+                RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+            }
         }
         ((VorgangFlaecheTableModel)jXTable1.getModel()).setCidsBeans((cidsBean != null)
                 ? cidsBean.getBeanCollectionProperty("arr_flaechen") : null);
@@ -866,8 +870,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
             }
             AutoCompleteDecorator.decorate(jComboBox4);
-        } else {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
         }
         RendererTools.makeReadOnly(jList1);
         RendererTools.makeReadOnly(jXTable1);

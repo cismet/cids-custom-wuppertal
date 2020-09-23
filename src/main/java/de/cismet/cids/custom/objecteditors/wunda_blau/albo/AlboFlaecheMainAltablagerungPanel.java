@@ -25,8 +25,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableComboboxCellEditor;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
-import de.cismet.connectioncontext.ConnectionContext;
-
 /**
  * DOCUMENT ME!
  *
@@ -307,6 +305,31 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    protected void initGui() {
+        initComponents();
+
+        try {
+            mcAltablagerungAbfallherkunft = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "ALBO_ALTABLAGERUNG_ABFALLHERKUNFT",
+                    getConnectionContext());
+            mcAbfallherkunft = CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "ALBO_ABFALLHERKUNFT",
+                    getConnectionContext());
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+
+        jXTable1.setDefaultEditor(CidsBean.class, new DefaultBindableComboboxCellEditor(mcAbfallherkunft));
+
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
+            RendererTools.makeReadOnly(jXTable1);
+        }
+    }
+
     /**
      * DOCUMENT ME!
      *
@@ -344,34 +367,8 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
-
         ((AltablagerungAbfallherkunftTableModel)jXTable1.getModel()).setCidsBeans((cidsBean != null)
                 ? cidsBean.getBeanCollectionProperty("n_altablagerung_abfallherkuenfte") : null);
-    }
-
-    @Override
-    public final void initWithConnectionContext(final ConnectionContext connectionContext) {
-        super.initWithConnectionContext(connectionContext);
-        initComponents();
-
-        try {
-            mcAltablagerungAbfallherkunft = CidsBean.getMetaClassFromTableName(
-                    "WUNDA_BLAU",
-                    "ALBO_ALTABLAGERUNG_ABFALLHERKUNFT",
-                    getConnectionContext());
-            mcAbfallherkunft = CidsBean.getMetaClassFromTableName(
-                    "WUNDA_BLAU",
-                    "ALBO_ABFALLHERKUNFT",
-                    getConnectionContext());
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-        }
-
-        jXTable1.setDefaultEditor(CidsBean.class, new DefaultBindableComboboxCellEditor(mcAbfallherkunft));
-        if (!isEditable()) {
-            RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
-            RendererTools.makeReadOnly(jXTable1);
-        }
     }
 
     @Override
