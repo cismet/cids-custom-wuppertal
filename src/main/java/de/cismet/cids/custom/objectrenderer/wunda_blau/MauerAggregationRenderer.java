@@ -36,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -68,6 +69,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
  * DOCUMENT ME!
  *
@@ -92,6 +95,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
 
     //~ Instance fields --------------------------------------------------------
 
+    private Collection<CidsBean> cidsBeans;
     private List<CidsBeanWrapper> cidsBeanWrappers;
     private CidsBeanWrapper selectedCidsBeanWrapper;
     private MauerTableModel tableModel;
@@ -103,13 +107,17 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     private javax.swing.JLayeredPane jLayeredPane1;
     private org.jdesktop.swingx.JXHyperlink jxlHauptinfo;
     private org.jdesktop.swingx.JXHyperlink jxlKatasterblatt;
+    private org.jdesktop.swingx.JXHyperlink jxlKatasterblatt1;
     private javax.swing.JLabel lblHeaderMauern;
     private javax.swing.JLabel lblheaderProdutke;
+    private javax.swing.JLabel lblheaderProdutke1;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderMauern;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderProducts;
+    private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderProducts1;
     private javax.swing.JPanel pnlMap;
     private de.cismet.tools.gui.RoundedPanel pnlMauern;
     private de.cismet.tools.gui.RoundedPanel pnlProducts;
+    private de.cismet.tools.gui.RoundedPanel pnlProducts1;
     private javax.swing.JScrollPane scpMauern;
     private javax.swing.JTable tblMauern;
     // End of variables declaration//GEN-END:variables
@@ -170,6 +178,10 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         lblheaderProdutke = new javax.swing.JLabel();
         jxlKatasterblatt = new org.jdesktop.swingx.JXHyperlink();
         jxlHauptinfo = new org.jdesktop.swingx.JXHyperlink();
+        pnlProducts1 = new de.cismet.tools.gui.RoundedPanel();
+        pnlHeaderProducts1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblheaderProdutke1 = new javax.swing.JLabel();
+        jxlKatasterblatt1 = new org.jdesktop.swingx.JXHyperlink();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -178,7 +190,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
         add(pnlMap, gridBagConstraints);
@@ -198,11 +210,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         pnlHeaderMauernLayout.setHorizontalGroup(
             pnlHeaderMauernLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                201,
+                168,
                 Short.MAX_VALUE).addGroup(
                 pnlHeaderMauernLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                    pnlHeaderMauernLayout.createSequentialGroup().addGap(0, 28, Short.MAX_VALUE).addComponent(
-                        lblHeaderMauern).addGap(0, 28, Short.MAX_VALUE))));
+                    pnlHeaderMauernLayout.createSequentialGroup().addGap(0, 23, Short.MAX_VALUE).addComponent(
+                        lblHeaderMauern).addGap(0, 23, Short.MAX_VALUE))));
         pnlHeaderMauernLayout.setVerticalGroup(
             pnlHeaderMauernLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
@@ -262,11 +274,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         pnlHeaderProductsLayout.setHorizontalGroup(
             pnlHeaderProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                202,
+                169,
                 Short.MAX_VALUE).addGroup(
                 pnlHeaderProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                    pnlHeaderProductsLayout.createSequentialGroup().addGap(0, 67, Short.MAX_VALUE).addComponent(
-                        lblheaderProdutke).addGap(0, 67, Short.MAX_VALUE))));
+                    pnlHeaderProductsLayout.createSequentialGroup().addGap(0, 56, Short.MAX_VALUE).addComponent(
+                        lblheaderProdutke).addGap(0, 56, Short.MAX_VALUE))));
         pnlHeaderProductsLayout.setVerticalGroup(
             pnlHeaderProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
@@ -327,6 +339,64 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
         add(pnlProducts, gridBagConstraints);
+
+        pnlProducts1.setLayout(new java.awt.GridBagLayout());
+
+        pnlHeaderProducts1.setBackground(java.awt.Color.darkGray);
+
+        lblheaderProdutke1.setForeground(new java.awt.Color(255, 255, 255));
+        lblheaderProdutke1.setText(org.openide.util.NbBundle.getMessage(
+                MauerAggregationRenderer.class,
+                "MauerAggregationRenderer.lblheaderProdutke1.text")); // NOI18N
+
+        final javax.swing.GroupLayout pnlHeaderProducts1Layout = new javax.swing.GroupLayout(pnlHeaderProducts1);
+        pnlHeaderProducts1.setLayout(pnlHeaderProducts1Layout);
+        pnlHeaderProducts1Layout.setHorizontalGroup(
+            pnlHeaderProducts1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                169,
+                Short.MAX_VALUE).addGroup(
+                pnlHeaderProducts1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                    pnlHeaderProducts1Layout.createSequentialGroup().addGap(0, 62, Short.MAX_VALUE).addComponent(
+                        lblheaderProdutke1).addGap(0, 62, Short.MAX_VALUE))));
+        pnlHeaderProducts1Layout.setVerticalGroup(
+            pnlHeaderProducts1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                16,
+                Short.MAX_VALUE).addGroup(
+                pnlHeaderProducts1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                    pnlHeaderProducts1Layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(
+                        lblheaderProdutke1).addGap(0, 0, Short.MAX_VALUE))));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlProducts1.add(pnlHeaderProducts1, gridBagConstraints);
+
+        jxlKatasterblatt1.setText(org.openide.util.NbBundle.getMessage(
+                MauerAggregationRenderer.class,
+                "MauerAggregationRenderer.jxlKatasterblatt1.text")); // NOI18N
+        jxlKatasterblatt1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxlKatasterblatt1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(7, 10, 10, 10);
+        pnlProducts1.add(jxlKatasterblatt1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
+        add(pnlProducts1, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -370,9 +440,19 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         tblMauern.clearSelection();
     }                                                                      //GEN-LAST:event_tblMauernFocusLost
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jxlKatasterblatt1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlKatasterblatt1ActionPerformed
+        final JDialog dialog = ObjectsPersmissionsProviderPanel.createNewDialog(getCidsBeans(), getConnectionContext());
+        StaticSwingTools.showDialog(this, dialog, true);
+    }                                                                                     //GEN-LAST:event_jxlKatasterblatt1ActionPerformed
+
     @Override
     public Collection<CidsBean> getCidsBeans() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return cidsBeans;
     }
 
     /**
@@ -416,10 +496,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     }
 
     @Override
-    public void setCidsBeans(final Collection<CidsBean> beans) {
-        if (beans != null) {
-            cidsBeanWrappers = new LinkedList<CidsBeanWrapper>();
-            for (final CidsBean bean : beans) {
+    public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
+        this.cidsBeans = cidsBeans;
+        if (cidsBeans != null) {
+            cidsBeanWrappers = new LinkedList<>();
+            for (final CidsBean bean : cidsBeans) {
                 cidsBeanWrappers.add(new CidsBeanWrapper(bean, true));
             }
             int colorIndex = 0;
