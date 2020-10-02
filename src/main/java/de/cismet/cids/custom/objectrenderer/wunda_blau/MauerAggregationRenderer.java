@@ -446,7 +446,14 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void jxlKatasterblatt1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlKatasterblatt1ActionPerformed
-        final JDialog dialog = ObjectsPersmissionsProviderPanel.createNewDialog(getCidsBeans(), getConnectionContext());
+        final ObjectsPersmissionsProviderPanel.Option[] options = new ObjectsPersmissionsProviderPanel.Option[] {
+                ObjectsPersmissionsProviderPanel.Option.DISABLE_READ,
+                ObjectsPersmissionsProviderPanel.Option.DISABLE_USER_PERMISSIONS
+            };
+        final JDialog dialog = ObjectsPersmissionsProviderPanel.createNewDialog(
+                getCidsBeans(),
+                options,
+                getConnectionContext());
         StaticSwingTools.showDialog(this, dialog, true);
     }                                                                                     //GEN-LAST:event_jxlKatasterblatt1ActionPerformed
 

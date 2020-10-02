@@ -12,8 +12,6 @@
  */
 package de.cismet.cids.custom.utils;
 
-import org.apache.log4j.Logger;
-
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -33,7 +31,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
     private final Class[] columnClasses;
     private final String[] columnNames;
     private final String[] columnProperties;
-    private final boolean[] columnEditable;
+    private final Boolean[] columnEditable;
 
     private List<CidsBean> cidsBeans;
 
@@ -63,7 +61,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
     public CidsBeansTableModel(final String[] columnProperties,
             final String[] columnNames,
             final Class[] columnClasses,
-            final boolean[] columnEditable) {
+            final Boolean[] columnEditable) {
         this.columnProperties = columnProperties;
         this.columnNames = columnNames;
         this.columnClasses = columnClasses;
