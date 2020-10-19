@@ -50,6 +50,15 @@ public class CustomListCellRenderer extends DefaultListCellRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ListCellRenderer getOrigRenderer() {
+        return origRenderer;
+    }
+
     @Override
     public Component getListCellRendererComponent(final JList list,
             final Object value,
