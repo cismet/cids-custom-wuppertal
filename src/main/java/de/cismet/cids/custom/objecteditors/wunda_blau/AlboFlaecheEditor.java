@@ -775,6 +775,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      */
     @Override
     public boolean prepareForSave() {
+        if (cidsBean.getProperty("loeschen") == null) {
+            try {
+                cidsBean.setProperty("loeschen", false);
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+                return false;
+            }
+        }
         return panMain.prepareForSave()
                     && panArbeitsstand.prepareForSave()
                     && panMassnahmen.prepareForSave()

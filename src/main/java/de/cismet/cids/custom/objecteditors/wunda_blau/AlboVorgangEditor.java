@@ -49,6 +49,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
@@ -64,7 +66,9 @@ import de.cismet.connectioncontext.ConnectionContextStore;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRenderer, ConnectionContextStore {
+public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+    ConnectionContextStore,
+    EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -975,6 +979,23 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     @Override
     public void setTitle(final String string) {
+    }
+
+    @Override
+    public void editorClosed(final EditorClosedEvent ece) {
+    }
+
+    @Override
+    public boolean prepareForSave() {
+        if (cidsBean.getProperty("loeschen") == null) {
+            try {
+                cidsBean.setProperty("loeschen", false);
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+                return false;
+            }
+        }
+        return true;
     }
 
     //~ Inner Classes ----------------------------------------------------------
