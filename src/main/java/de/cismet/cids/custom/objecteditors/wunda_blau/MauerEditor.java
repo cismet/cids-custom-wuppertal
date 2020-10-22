@@ -3477,6 +3477,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES, true);
         }
     }
+    
+    private boolean filterLastFromType = false;
 
     /**
      * DOCUMENT ME!
@@ -3495,8 +3497,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         public MassnahmenTableModel getModel() {
             return (MassnahmenTableModel)jXTable1.getModel();
         }
+        
         @Override
         public boolean include(final RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+            if (!filterLastFromType) {
+                return true;
+            }
             final List<CidsBean> cidsBeans = getModel().getCidsBeans();
             if (cidsBeans == null) {
                 return false;
