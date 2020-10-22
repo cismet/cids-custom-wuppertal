@@ -30,15 +30,22 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 
+import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -53,6 +60,8 @@ import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.reports.wunda_blau.MauernReportGenerator;
+import de.cismet.cids.custom.utils.CidsBeansTable;
+import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.MauerNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -88,6 +97,30 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     TitleComponentProvider,
     BorderProvider,
     ConnectionContextStore {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String[] COLUMN_PROPERTIES = new String[] {
+            "wann",
+            "fk_art",
+            "fk_objekt",
+            "beschreibung",
+            "ziel"
+        };
+    private static final String[] COLUMN_NAMES = new String[] {
+            "Eintragung",
+            "Maßnahme",
+            "An",
+            "Beschreibung",
+            "Am/Bis"
+        };
+    private static final Class[] COLUMN_CLASSES = new Class[] {
+            Date.class,
+            CidsBean.class,
+            CidsBean.class,
+            String.class,
+            Date.class
+        };
 
     //~ Instance fields --------------------------------------------------------
 
@@ -125,6 +158,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private de.cismet.cids.editors.DefaultBindableDateChooser dcLetztePruefung;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcNaechstePruefung;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo dcSanierung;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
@@ -139,9 +175,11 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
@@ -149,6 +187,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane15;
+    private javax.swing.JScrollPane jScrollPane16;
     private javax.swing.JScrollPane jScrollPane17;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -158,6 +197,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
+    private org.jdesktop.swingx.JXTable jXTable1;
     private javax.swing.JScrollPane jspAllgemeineInfos;
     private javax.swing.JLabel lblBauwerksbuchfertigstellung;
     private javax.swing.JLabel lblBeschreibungGelaender;
@@ -324,6 +364,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        jXTable1.setRowFilter(new LastFromTypeRowFilter());
         if (editable) {
             pnlLeft.setPreferredSize(new Dimension(500, 900));
         }
@@ -641,6 +682,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jScrollPane15 = new javax.swing.JScrollPane();
         taSanMassnahmeGruendung2 = new javax.swing.JTextArea();
         cbEingriffVerformung = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane16 = new javax.swing.JScrollPane();
+        jXTable1 = new CidsBeansTable(isEditable());
+        jPanel8 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         webDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(
                 editable,
                 "url_mauern",
@@ -1804,7 +1854,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 0.5;
@@ -2976,14 +3025,78 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedScrollPanel.add(jScrollPane3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlCard1.add(roundedScrollPanel, gridBagConstraints);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        jXTable1.setModel(new MassnahmenTableModel());
+        jScrollPane16.setViewportView(jXTable1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel4.add(jScrollPane16, gridBagConstraints);
+
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jButton2, gridBagConstraints);
+
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel8.add(jButton3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel8.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel4.add(jPanel8, gridBagConstraints);
+        jPanel8.setVisible(isEditable());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlCard1.add(jPanel4, gridBagConstraints);
 
         add(pnlCard1, "card1");
 
@@ -3005,46 +3118,74 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }                                                                             //GEN-LAST:event_btnImagesActionPerformed
+    }//GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         cardLayout.show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }                                                                           //GEN-LAST:event_btnInfoActionPerformed
+    }//GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tfStaerke_untenActionPerformed
+    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStaerke_untenActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_tfStaerke_untenActionPerformed
+    }//GEN-LAST:event_tfStaerke_untenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         final Collection<CidsBean> c = new LinkedList<>();
         c.add(cidsBean);
         MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this, getConnectionContext());
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            final CidsBean massnahmeBean = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "mauer_massnahme",
+                    getConnectionContext());
+            ((MassnahmenTableModel)jXTable1.getModel()).add(massnahmeBean);
+        } catch (final Exception ex) {
+            log.error(ex, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        final CidsBean massnahmeBean = ((MassnahmenTableModel)jXTable1.getModel()).getCidsBean(
+                jXTable1.getSelectedRow());
+        ((MassnahmenTableModel)jXTable1.getModel()).remove(massnahmeBean);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3082,6 +3223,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
                         + ((lagebez != null) ? lagebez : "");
             lblTitle.setText(this.title);
+            ((MassnahmenTableModel)jXTable1.getModel()).setCidsBeans(cidsBean.getBeanCollectionProperty(
+                    "n_massnahmen"));
         }
         bindingGroup.bind();
         final LayoutManager layout = getLayout();
@@ -3112,6 +3255,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         }
         this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix") + title;
         lblTitle.setText(this.title);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isEditable() {
+        return editable;
     }
 
     /**
@@ -3306,6 +3458,70 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                             - length) <= maxCharacters) {
                 super.replace(fb, offs, length, str, a);
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class MassnahmenTableModel extends CidsBeansTableModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new VorgangFlaecheTableModel object.
+         */
+        public MassnahmenTableModel() {
+            super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES, true);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class LastFromTypeRowFilter extends RowFilter<TableModel, Integer> {
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public MassnahmenTableModel getModel() {
+            return (MassnahmenTableModel)jXTable1.getModel();
+        }
+        @Override
+        public boolean include(final RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+            final List<CidsBean> cidsBeans = getModel().getCidsBeans();
+            if (cidsBeans == null) {
+                return false;
+            }
+            final Map<String, CidsBean> lastFrom = new HashMap<>();
+            final CidsBean filterBean = cidsBeans.get(entry.getIdentifier());
+            if (filterBean != null) {
+                for (final CidsBean massnahmeBean : cidsBeans) {
+                    final CidsBean artBean = (massnahmeBean != null) ? (CidsBean)massnahmeBean.getProperty("fk_art")
+                                                                     : null;
+                    final String artSchlussel = (artBean != null) ? (String)artBean.getProperty("schluessel") : null;
+                    final CidsBean lastBean = (artSchlussel != null) ? lastFrom.get(artSchlussel) : null;
+                    if (lastBean == null) {
+                        lastFrom.put(artSchlussel, massnahmeBean);
+                    } else {
+                        final Date compareDate = (massnahmeBean != null) ? (Date)massnahmeBean.getProperty("ziel")
+                                                                         : null;
+                        final Date lastDate = (Date)lastBean.getProperty("wann");
+                        if ((compareDate != null) && compareDate.after(lastDate)) {
+                            lastFrom.put(artSchlussel, massnahmeBean);
+                        }
+                    }
+                }
+            }
+            return (filterBean == null) || lastFrom.containsValue(filterBean);
         }
     }
 }
