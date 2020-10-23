@@ -15,6 +15,8 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.middleware.types.MetaClass;
+
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -130,6 +132,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private boolean editable;
     private CardLayout cardLayout;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
+    private boolean filterLastFromType = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImages;
@@ -364,6 +368,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+
         jXTable1.setRowFilter(new LastFromTypeRowFilter());
         if (editable) {
             pnlLeft.setPreferredSize(new Dimension(500, 900));
@@ -3118,53 +3123,53 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }//GEN-LAST:event_btnImagesActionPerformed
+    }                                                                             //GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
         cardLayout.show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }//GEN-LAST:event_btnInfoActionPerformed
+    }                                                                           //GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStaerke_untenActionPerformed
+    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tfStaerke_untenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfStaerke_untenActionPerformed
+    } //GEN-LAST:event_tfStaerke_untenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         final Collection<CidsBean> c = new LinkedList<>();
         c.add(cidsBean);
         MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this, getConnectionContext());
-    }//GEN-LAST:event_btnReportActionPerformed
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         try {
             final CidsBean massnahmeBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
@@ -3174,18 +3179,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         } catch (final Exception ex) {
             log.error(ex, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final CidsBean massnahmeBean = ((MassnahmenTableModel)jXTable1.getModel()).getCidsBean(
                 jXTable1.getSelectedRow());
         ((MassnahmenTableModel)jXTable1.getModel()).remove(massnahmeBean);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3477,8 +3482,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES, true);
         }
     }
-    
-    private boolean filterLastFromType = false;
 
     /**
      * DOCUMENT ME!
@@ -3497,7 +3500,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         public MassnahmenTableModel getModel() {
             return (MassnahmenTableModel)jXTable1.getModel();
         }
-        
+
         @Override
         public boolean include(final RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
             if (!filterLastFromType) {
