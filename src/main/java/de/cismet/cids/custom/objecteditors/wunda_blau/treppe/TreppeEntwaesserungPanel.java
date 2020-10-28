@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau;
+package de.cismet.cids.custom.objecteditors.wunda_blau.treppe;
 
 import Sirius.server.middleware.types.MetaClass;
 
@@ -159,15 +159,9 @@ public class TreppeEntwaesserungPanel extends javax.swing.JPanel implements Cids
         final JPanel panBeschreibungContent6 = new JPanel();
         final JPanel jPanel29 = new JPanel();
         final JLabel jLabel79 = new JLabel();
-        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(
-                MC__ENTWAESSERUNG_ART,
-                true,
-                false);
+        defaultBindableReferenceCombo4 = new DefaultBindableReferenceCombo(MC__ENTWAESSERUNG_ART, true, false);
         final JLabel jLabel80 = new JLabel();
-        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(
-                MC__ENTWAESSERUNG_ABLEITUNG,
-                true,
-                false);
+        defaultBindableReferenceCombo5 = new DefaultBindableReferenceCombo(MC__ENTWAESSERUNG_ABLEITUNG, true, false);
         final JLabel jLabel78 = new JLabel();
         final JPanel jPanel2 = new JPanel();
         final JScrollPane jScrollPane7 = new JScrollPane();
