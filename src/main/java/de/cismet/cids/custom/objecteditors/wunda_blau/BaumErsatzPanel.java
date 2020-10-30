@@ -295,6 +295,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         dcBis.setName("dcBis"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__BIS + "}"), dcBis, BeanProperty.create("date"));
+        binding.setConverter(dcBis.getConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -322,6 +323,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             cbGeom.setName("cbGeom"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__GEOM + "}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
 
         }
@@ -417,6 +419,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         chSelbst.setName("chSelbst"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__SELBST + "}"), chSelbst, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -727,6 +731,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         dcDatum.setName("dcDatum"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__DATUM + "}"), dcDatum, BeanProperty.create("date"));
+        binding.setConverter(dcDatum.getConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1001,28 +1006,36 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
      */
     public void setMapWindow() {
         final CidsBean cb = this.getCidsBean();
-        try {
-            final Double bufferMeter = EmobConfProperties.getInstance().getBufferMeter();
-            if (cb.getProperty(FIELD__GEOM) != null) {
-                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-            } else {
-                final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                final BoundingBox initialBoundingBox;
-                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                            .getInitialBoundingBox();
-                final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
+        if (cb != null){
+            try {
+                Double bufferMeter = 0.0;
+                try{
+                    bufferMeter = EmobConfProperties.getInstance().getBufferMeter();
+                } catch (final Exception ex) {
+                    Exceptions.printStackTrace(ex);
+                    LOG.warn("Get no conf properties.", ex);
+                }
+                if (cb.getProperty(FIELD__GEOM) != null) {
+                    panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
+                } else {
+                    final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
+                    final BoundingBox initialBoundingBox;
+                    initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
+                                .getInitialBoundingBox();
+                    final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
 
-                final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                        CidsBeanSupport.DOMAIN_NAME,
-                        TABLE_GEOM,
-                        getConnectionContext());
-                final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
+                    final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            TABLE_GEOM,
+                            getConnectionContext());
+                    final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
+                    newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
+                    panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
+                }
+            } catch (final Exception ex) {
+                Exceptions.printStackTrace(ex);
+                LOG.warn("Map window not set.", ex);
             }
-        } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
-            LOG.warn("Map window not set.", ex);
         }
     }
 }

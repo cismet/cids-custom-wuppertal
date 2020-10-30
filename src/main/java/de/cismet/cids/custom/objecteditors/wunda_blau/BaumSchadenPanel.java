@@ -137,7 +137,6 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     public static final String FIELD__SCHNITT = "genehm_schnitt";               // baum_schaden
     public static final String FIELD__ID = "id";                                // baum_ersatz
     
-    public static final String FIELD__GEOREFERENZ = "fk_geom";                      // baum_schaden
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_schaden_geom
     
@@ -358,7 +357,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeom.setName("cbGeom"); // NOI18N
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__GEOM + "}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
 
         }
@@ -1223,47 +1223,11 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
-    }
-
-     
-    @Override
-    public void dispose() {
-        bindingGroup.unbind();
-        cidsBean = null;
-    }
-
-    @Override
-    public CidsBean getCidsBean() {
-        return this.cidsBean;
-    }
-
-    @Override
-    public void setCidsBean(CidsBean cidsBean) {
-        if (isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
-        }
-        bindingGroup.unbind();
-        this.cidsBean = cidsBean;
-        if (this.cidsBean != null){
-            setErsatzBeans(cidsBean.getBeanCollectionProperty(FIELD__ERSATZ));   
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                this.cidsBean,
-                getConnectionContext());
-        }
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
         
-        
-        
-        setMapWindow();
-        bindingGroup.bind();
-        
-        if (ersatzBeans != null) {
-            lstErsatz.setSelectedIndex(0);
-        }
+        //super.initWithConnectionContext(connectionContext);
+        //initComponents();
+
         lstErsatz.setCellRenderer(new DefaultListCellRenderer() {
 
                 @Override
@@ -1287,6 +1251,53 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                     return compoTeil;
                 }
             });
+        
+        
+        if (isEditor) {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOM);
+        }
+        //setReadOnly();
+
+    }
+    
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+     
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+        cidsBean = null;
+        if (this.isEditor) {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        }
+    }
+
+    @Override
+    public CidsBean getCidsBean() {
+        return this.cidsBean;
+    }
+
+    @Override
+    public void setCidsBean(CidsBean cidsBean) {
+        bindingGroup.unbind();
+        this.cidsBean = cidsBean;
+        if (this.cidsBean != null){
+            setErsatzBeans(cidsBean.getBeanCollectionProperty(FIELD__ERSATZ));   
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                this.cidsBean,
+                getConnectionContext());
+        }
+        setMapWindow();
+        bindingGroup.bind();
+        
+        if (ersatzBeans != null) {
+            lstErsatz.setSelectedIndex(0);
+        }
+        
     }
     /**
      * DOCUMENT ME!
@@ -1309,28 +1320,36 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
      */
     public void setMapWindow() {
         final CidsBean cb = this.getCidsBean();
-        try {
-            final Double bufferMeter = EmobConfProperties.getInstance().getBufferMeter();
-            if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-            } else {
-                final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                final BoundingBox initialBoundingBox;
-                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                            .getInitialBoundingBox();
-                final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
+        if (cb != null){
+            try {
+                Double bufferMeter = 0.0;
+                try{
+                    bufferMeter = EmobConfProperties.getInstance().getBufferMeter();
+                } catch (final Exception ex) {
+                    Exceptions.printStackTrace(ex);
+                    LOG.warn("Get no conf properties.", ex);
+                }
+                if (cb.getProperty(FIELD__GEOM) != null) {
+                    panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
+                } else {
+                    final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
+                    final BoundingBox initialBoundingBox;
+                    initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
+                                .getInitialBoundingBox();
+                    final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
 
-                final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                        CidsBeanSupport.DOMAIN_NAME,
-                        TABLE_GEOM,
-                        getConnectionContext());
-                final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
-            }
-        } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
-            LOG.warn("Map window not set.", ex);
+                    final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            TABLE_GEOM,
+                            getConnectionContext());
+                    final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
+                    newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
+                    panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
+                }
+            } catch (final Exception ex) {
+                Exceptions.printStackTrace(ex);
+                LOG.warn("Map window not set.", ex);
+            } 
         }
     }
 }

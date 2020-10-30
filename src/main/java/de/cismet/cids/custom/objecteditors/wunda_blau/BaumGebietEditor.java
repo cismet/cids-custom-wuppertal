@@ -1031,8 +1031,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panMeldungenMain.add(baumMeldungPanel, gridBagConstraints);
 

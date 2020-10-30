@@ -437,7 +437,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.weighty = 1.0;
         panMeldung.add(scpBemerkung, gridBagConstraints);
 
-        panOrtstermin.setMinimumSize(new Dimension(297, 148));
+        panOrtstermin.setMinimumSize(new Dimension(297, 230));
         panOrtstermin.setName("panOrtstermin"); // NOI18N
         panOrtstermin.setOpaque(false);
         panOrtstermin.setPreferredSize(new Dimension(337, 230));
@@ -492,7 +492,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new GridBagConstraints();
@@ -582,7 +582,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -667,7 +667,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new GridBagConstraints();
@@ -786,12 +786,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         panMeldung.add(panSchaden, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        add(panMeldung, gridBagConstraints);
+        add(panMeldung, new GridBagConstraints());
 
         filler3.setName("filler3"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
