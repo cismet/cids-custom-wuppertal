@@ -56,6 +56,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 
+import de.cismet.cids.custom.butler.ButlerDownload;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
@@ -74,8 +75,10 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
  * DOCUMENT ME!
@@ -1202,27 +1205,32 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
         if (result == null) {
             return;
         }
-        PointNumberDownload download;
+        final Download download;
+        final String jobname;
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         CismapBroker.getInstance().getMappingComponent())) {
-            final String jobname = (!DownloadManagerDialog.getInstance().getJobName().equals(""))
+            jobname = (!DownloadManagerDialog.getInstance().getJobName().equals(""))
                 ? DownloadManagerDialog.getInstance().getJobName() : null;
-            download = new PointNumberDownload(
-                    result,
-                    "Punktnummer Download",
-                    jobname,
-                    protokollAnrPrefix
-                            + "_"
-                            + protokollAnr);
         } else {
-            download = new PointNumberDownload(
-                    result,
-                    "Punktnummer Download",
-                    "",
-                    protokollAnrPrefix
-                            + "_"
-                            + protokollAnr);
+            jobname = "";
         }
+        final ArrayList<Download> downloads = new ArrayList<>();
+        downloads.add(new PointNumberTxtDownload(
+                result,
+                "Punktnummer Download (TXT)",
+                jobname,
+                protokollAnrPrefix
+                        + "_"
+                        + protokollAnr));
+        downloads.add(new PointNumberXmlDownload(
+                result,
+                "Punktnummer Download (XML)",
+                jobname,
+                protokollAnrPrefix
+                        + "_"
+                        + protokollAnr));
+        download = new MultipleDownload(downloads,
+                "Punktnummer Download");
 
         DownloadManager.instance().add(download);
         hasBeenDownloadedOrIgnoredYet = true;
@@ -1861,6 +1869,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                                     nbz,
                                     on1,
                                     on2);
+                if (result != null) {
+                    res.setRawResult(result.getRawResult());
+                }
                 if ((result != null) && !result.isSuccessfull()) {
                     res.setSuccessful(false);
                     res.setProtokoll(result.getProtokoll());
@@ -2018,6 +2029,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
                                 (Object)null,
                                 getConnectionContext(),
                                 allSaps.toArray(new ServerActionParameter[0]));
+            if (result != null) {
+                res.setRawResult(result.getRawResult());
+            }
             if ((result != null) && !result.isSuccessfull()) {
                 res.setSuccessful(false);
                 res.setProtokoll(result.getProtokoll());

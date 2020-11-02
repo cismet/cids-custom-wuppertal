@@ -65,14 +65,16 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.RetrievalServiceLayer;
 import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.capabilities.CapabilitiesCache;
 import de.cismet.cismap.commons.features.DefaultXStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.SlidableWMSServiceLayerGroup;
 import de.cismet.cismap.commons.raster.wms.WMSServiceLayer;
-import de.cismet.cismap.commons.wms.capabilities.Layer;
-import de.cismet.cismap.commons.wms.capabilities.WMSCapabilities;
-import de.cismet.cismap.commons.wms.capabilities.WMSCapabilitiesFactory;
+
+import de.cismet.commons.wms.capabilities.Layer;
+import de.cismet.commons.wms.capabilities.WMSCapabilities;
+import de.cismet.commons.wms.capabilities.WMSCapabilitiesFactory;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -551,7 +553,7 @@ public class OabUtilities {
             throw new IllegalArgumentException("no argument must be null"); // NOI18N
         }
 
-        final WMSCapabilitiesFactory capFactory = new WMSCapabilitiesFactory();
+        final WMSCapabilitiesFactory capFactory = new WMSCapabilitiesFactory(CapabilitiesCache.getInstance());
         final WMSCapabilities caps;
         try {
             caps = capFactory.createCapabilities(capabilities);
