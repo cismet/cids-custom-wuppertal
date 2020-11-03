@@ -67,7 +67,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeEntwaesserungPanel.lblHeaderAllgemein7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeEntwaesserungPanel.lblHeaderAllgemein7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblHeaderAllgemein7" noResource="true"/>
                   </Properties>
@@ -103,7 +103,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel79">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeEntwaesserungPanel.jLabel79.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeEntwaesserungPanel.jLabel79.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel79" noResource="true"/>
                       </Properties>
@@ -133,7 +133,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel80">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeEntwaesserungPanel.jLabel80.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeEntwaesserungPanel.jLabel80.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel80" noResource="true"/>
                       </Properties>
@@ -163,7 +163,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel78">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeEntwaesserungPanel.jLabel78.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeEntwaesserungPanel.jLabel78.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="verticalAlignment" type="int" value="1"/>
                         <Property name="name" type="java.lang.String" value="jLabel78" noResource="true"/>
@@ -272,7 +272,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
-        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel" name="treppeBauteilZustandKostenPanel1">
+        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeBauteilZustandKostenPanel" name="treppeBauteilZustandKostenPanel1">
           <Properties>
             <Property name="name" type="java.lang.String" value="treppeBauteilZustandKostenPanel1" noResource="true"/>
           </Properties>
@@ -280,7 +280,7 @@
             <BindingProperty name="cidsBean" source="Form" sourcePath="${cidsBean.zustand}" target="treppeBauteilZustandKostenPanel1" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBauteilZustandKostenPanel(editable)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeBauteilZustandKostenPanel(editable)"/>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
           </AuxValues>
           <Constraints>

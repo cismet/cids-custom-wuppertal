@@ -1036,7 +1036,7 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeBeschreibungPanel" name="treppeBeschreibungPanel1">
+                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeBeschreibungPanel" name="treppeBeschreibungPanel1">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="treppeBeschreibungPanel1" noResource="true"/>
                   </Properties>
@@ -1071,7 +1071,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeLaeufePanel" name="treppeLaeufePanel1">
+                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeLaeufePanel" name="treppeLaeufePanel1">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="treppeLaeufePanel1" noResource="true"/>
                   </Properties>
@@ -1107,7 +1107,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppePodestePanel" name="treppePodestePanel1">
+                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppePodestePanel" name="treppePodestePanel1">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="treppePodestePanel1" noResource="true"/>
                   </Properties>
@@ -1143,7 +1143,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeLeitelementePanel" name="treppeLeitelementePanel1">
+                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeLeitelementePanel" name="treppeLeitelementePanel1">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="treppeLeitelementePanel1" noResource="true"/>
                   </Properties>
@@ -1179,7 +1179,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeHandlaeufePanel" name="treppeHandlaeufePanel2">
+                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeHandlaeufePanel" name="treppeHandlaeufePanel2">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="treppeHandlaeufePanel2" noResource="true"/>
                   </Properties>
@@ -1215,7 +1215,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEntwaesserungPanel" name="treppeEntwaesserung1">
+                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeEntwaesserungPanel" name="treppeEntwaesserung1">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="treppeEntwaesserung1" noResource="true"/>
                   </Properties>
@@ -1251,7 +1251,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.TreppeStuetzmauernPanel" name="treppeStuetzmauernPanel1">
+                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeStuetzmauernPanel" name="treppeStuetzmauernPanel1">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="treppeStuetzmauernPanel1" noResource="true"/>
                   </Properties>

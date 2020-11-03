@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau;
+package de.cismet.cids.custom.objecteditors.wunda_blau.treppe;
 
 import org.apache.log4j.Logger;
 
@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -46,11 +47,11 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppePodestePanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
+public class TreppeLaeufePanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(TreppePodestePanel.class);
+    private static final Logger LOG = Logger.getLogger(TreppeLaeufePanel.class);
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -63,10 +64,10 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
 
         final JScrollPane jScrollPane1 = new JScrollPane();
         jPanel1 = new JPanel();
-        filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         if (netbeansDesignDummy) {
-            treppePodestPanel2 = new TreppePodestPanel(getConnectionContext());
+            treppeLaufPanel1 = new TreppeLaufPanel(getConnectionContext());
         }
+        filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         btnAddArt1 = new JButton();
 
         final FormListener formListener = new FormListener();
@@ -83,22 +84,23 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new GridBagLayout());
 
+        if (netbeansDesignDummy) {
+            treppeLaufPanel1.setName("treppeLaufPanel1"); // NOI18N
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new Insets(0, 0, 10, 0);
+            jPanel1.add(treppeLaufPanel1, gridBagConstraints);
+        }
+
         filler1.setName("filler1"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(filler1, gridBagConstraints);
-
-        if (netbeansDesignDummy) {
-            treppePodestPanel2.setName("treppePodestPanel2"); // NOI18N
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.weightx = 1.0;
-            jPanel1.add(treppePodestPanel2, gridBagConstraints);
-        }
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -118,7 +120,7 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHEAST;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         add(btnAddArt1, gridBagConstraints);
     }
@@ -139,7 +141,7 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
         @Override
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddArt1) {
-                TreppePodestePanel.this.btnAddArt1ActionPerformed(evt);
+                TreppeLaeufePanel.this.btnAddArt1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -155,45 +157,45 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
     JButton btnAddArt1;
     Box.Filler filler1;
     JPanel jPanel1;
-    TreppePodestPanel treppePodestPanel2;
+    TreppeLaufPanel treppeLaufPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new TreppePodestePanel object.
+     * Creates a new TreppeLaeufePanel object.
      */
-    public TreppePodestePanel() {
+    public TreppeLaeufePanel() {
         this(ConnectionContext.createDeprecated());
     }
 
     /**
-     * Creates a new TreppePodestePanel object.
+     * Creates a new TreppeLaeufePanel object.
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppePodestePanel(final ConnectionContext connectionContext) {
+    public TreppeLaeufePanel(final ConnectionContext connectionContext) {
         this(true, true, connectionContext);
     }
 
     /**
-     * Creates a new TreppePodestePanel object.
+     * Creates a new TreppeLaeufePanel object.
      *
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppePodestePanel(final boolean editable, final ConnectionContext connectionContext) {
+    public TreppeLaeufePanel(final boolean editable, final ConnectionContext connectionContext) {
         this(editable, false, connectionContext);
     }
 
     /**
-     * Creates new form TreppePodestePanel.
+     * Creates a new TreppeLaeufePanel object.
      *
      * @param  editable             DOCUMENT ME!
      * @param  netbeansDesignDummy  DOCUMENT ME!
      * @param  connectionContext    DOCUMENT ME!
      */
-    public TreppePodestePanel(final boolean editable,
+    public TreppeLaeufePanel(final boolean editable,
             final boolean netbeansDesignDummy,
             final ConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
@@ -218,7 +220,7 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
         if (cidsBeans != null) {
             Collections.sort(cidsBeans, new TreppeEditor.TeilementComparator("nummer"));
             for (final CidsBean cidsBean : cidsBeans) {
-                addPodestPanel(cidsBean);
+                addLaufPanel(cidsBean);
             }
         }
     }
@@ -228,7 +230,7 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
      *
      * @param  cidsBean  DOCUMENT ME!
      */
-    private void addPodestPanel(final CidsBean cidsBean) {
+    private void addLaufPanel(final CidsBean cidsBean) {
         jPanel1.remove(filler1);
         final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -241,9 +243,9 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
 
                 @Override
                 protected JPanel doInBackground() throws Exception {
-                    final TreppePodestPanel panel = new TreppePodestPanel(editable, getConnectionContext());
+                    final TreppeLaufPanel panel = new TreppeLaufPanel(editable, getConnectionContext());
                     panel.setCidsBean(cidsBean);
-                    panel.setParent(TreppePodestePanel.this);
+                    panel.setParent(TreppeLaeufePanel.this);
                     return panel;
                 }
 
@@ -262,9 +264,9 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
 
                         jPanel1.repaint();
                     } catch (final Exception ex) {
-                        final String message = "Fehler beim Hinzufügen des Podests.";
+                        final String message = "Fehler beim Hinzufügen des TreppenLaufs.";
                         LOG.error(message, ex);
-                        ObjectRendererUtils.showExceptionWindowToUser(message, ex, TreppePodestePanel.this);
+                        ObjectRendererUtils.showExceptionWindowToUser(message, ex, TreppeLaeufePanel.this);
                     }
                 }
             }.execute();
@@ -275,7 +277,7 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
      *
      * @param  panel  DOCUMENT ME!
      */
-    public void removePodestPanel(final TreppePodestPanel panel) {
+    public void removeLaufPanel(final TreppeLaufPanel panel) {
         if (panel != null) {
             cidsBeans.remove(panel.getCidsBean());
             jPanel1.remove(panel);
@@ -301,15 +303,15 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
         try {
             final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
-                    "TREPPE_PODEST",
+                    "TREPPE_TREPPENLAUF",
                     getConnectionContext());
             cidsBean.setProperty(
                 "zustand",
                 CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND", getConnectionContext()));
-            addPodestPanel(cidsBean);
+            addLaufPanel(cidsBean);
             cidsBeans.add(cidsBean);
         } catch (final Exception ex) {
-            final String message = "Fehler beim Erzeugen des Podests.";
+            final String message = "Fehler beim Erzeugen des Handlaufs.";
             LOG.error(message, ex);
             ObjectRendererUtils.showExceptionWindowToUser(message, ex, this);
         }
@@ -318,8 +320,8 @@ public class TreppePodestePanel extends javax.swing.JPanel implements Disposable
     @Override
     public void dispose() {
         for (final Component comp : jPanel1.getComponents()) {
-            if (comp instanceof TreppePodestPanel) {
-                final TreppePodestPanel panel = (TreppePodestPanel)comp;
+            if (comp instanceof TreppeLaufPanel) {
+                final TreppeLaufPanel panel = (TreppeLaufPanel)comp;
                 panel.dispose();
                 jPanel1.remove(panel);
             }
