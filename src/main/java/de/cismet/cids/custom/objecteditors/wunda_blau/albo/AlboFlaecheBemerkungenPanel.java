@@ -80,7 +80,9 @@ public class AlboFlaecheBemerkungenPanel extends AbstractAlboFlaechePanel {
         jScrollPane7.setName("jScrollPane7"); // NOI18N
 
         jTextArea3.setColumns(20);
+        jTextArea3.setLineWrap(true);
         jTextArea3.setRows(5);
+        jTextArea3.setWrapStyleWord(true);
         jTextArea3.setName("jTextArea3"); // NOI18N
 
         final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(

@@ -251,7 +251,9 @@
             <Component class="javax.swing.JTextArea" name="jTextArea1">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
+                <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="2"/>
+                <Property name="wrapStyleWord" type="boolean" value="true"/>
                 <Property name="name" type="java.lang.String" value="jTextArea1" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -480,7 +482,9 @@
             <Component class="javax.swing.JTextArea" name="jTextArea2">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
+                <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="3"/>
+                <Property name="wrapStyleWord" type="boolean" value="true"/>
                 <Property name="name" type="java.lang.String" value="jTextArea2" noResource="true"/>
               </Properties>
               <BindingProperties>
