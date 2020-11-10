@@ -97,10 +97,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField2">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField2" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_erfassung}" target="jFormattedTextField2" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -142,10 +147,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField16">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField16" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_historischenutzungsrecherche}" target="jFormattedTextField16" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -187,10 +197,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField3">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField3" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_orientierendeuntersuchung}" target="jFormattedTextField3" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -232,10 +247,13 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField4">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField4" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_gefaehrdungsabschaetzung}" target="jFormattedTextField4" targetPath="value" updateStrategy="0" immediately="false">
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_gefaehrdungsabnschaetzung}" target="jFormattedTextField4" targetPath="value" updateStrategy="0" immediately="false">
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -277,10 +295,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField5">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField5" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_sanierungsuntersuchung}" target="jFormattedTextField5" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -322,10 +345,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField6">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField6" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_sanierungsplan}" target="jFormattedTextField6" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -367,10 +395,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField7">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField7" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_sanierung}" target="jFormattedTextField7" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -412,10 +445,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField8">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField8" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_schutzundbegrenzung}" target="jFormattedTextField8" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -457,10 +495,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField11">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField11" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_ueberwachung}" target="jFormattedTextField11" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
@@ -502,10 +545,15 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField15">
           <Properties>
+            <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+              <Format format="###0" subtype="-1" type="0"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jFormattedTextField15" noResource="true"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="value" source="Form" sourcePath="${cidsBean.jahr_arbeitsstand_nachsorge}" target="jFormattedTextField15" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="new LongNumberConverter()" type="code"/>
               </Property>
