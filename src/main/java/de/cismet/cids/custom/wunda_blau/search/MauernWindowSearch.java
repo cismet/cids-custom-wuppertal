@@ -118,11 +118,9 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
-    private MetaClass mcGewerk;
+    private MetaClass mcMassnahmeArt;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbGewerkDurchge;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbGewerkDurchzu;
     private javax.swing.JCheckBox cbMapSearch;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcBauwerksbegehBis;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcBauwerksbegehVon;
@@ -134,12 +132,9 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private de.cismet.cids.editors.DefaultBindableDateChooser dcDurchzuSanVon;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcPruefBis;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcPruefVon;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -153,6 +148,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAnsicht;
     private javax.swing.JLabel lblBausubstanz;
+    private javax.swing.JLabel lblFiller1;
     private javax.swing.JLabel lblFiller2;
     private javax.swing.JLabel lblFiller3;
     private javax.swing.JLabel lblFiller5;
@@ -238,9 +234,9 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         try {
-            mcGewerk = ClassCacheMultiple.getMetaClass(
+            mcMassnahmeArt = ClassCacheMultiple.getMetaClass(
                     CidsBeanSupport.DOMAIN_NAME,
-                    "MAUER_MASSNAHME_OBJEKT",
+                    "MAUER_MASSNAHME_ART",
                     getConnectionContext());
         } catch (final Exception ex) {
             LOG.error(ex, ex);
@@ -445,13 +441,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         dcBauwerksbegehVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
         lblPruefTil4 = new javax.swing.JLabel();
         dcBauwerksbegehBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        cbGewerkDurchge = new de.cismet.cids.editors.DefaultBindableReferenceCombo(mcGewerk, true, false);
-        cbGewerkDurchzu = new de.cismet.cids.editors.DefaultBindableReferenceCombo(mcGewerk, true, false);
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        lblFiller1 = new javax.swing.JLabel();
         pnlButtons = new javax.swing.JPanel();
         cbMapSearch = new javax.swing.JCheckBox();
         pnlHoehe = new javax.swing.JPanel();
@@ -1212,44 +1202,16 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlPruefung.add(dcBauwerksbegehBis, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlPruefung.add(cbGewerkDurchge, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlPruefung.add(cbGewerkDurchzu, gridBagConstraints);
 
-        jLabel12.setText(org.openide.util.NbBundle.getMessage(
+        lblFiller1.setText(org.openide.util.NbBundle.getMessage(
                 MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel12.text")); // NOI18N
+                "MauernWindowSearch.lblFiller1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlPruefung.add(jLabel12, gridBagConstraints);
-
-        jLabel13.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel13.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlPruefung.add(jLabel13, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        pnlPruefung.add(filler1, gridBagConstraints);
+        pnlPruefung.add(lblFiller1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1498,15 +1460,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         appendMassnahmeFilterProp(dcBauwerksbesichtigBis, PropertyKeys.MASSNAHME_BAUWERKSBESICHTIGUNG_BIS, filterProps);
         appendMassnahmeFilterProp(dcBauwerksbegehVon, PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_VON, filterProps);
         appendMassnahmeFilterProp(dcBauwerksbegehBis, PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_BIS, filterProps);
-
-        filterProps.put(
-            PropertyKeys.MASSNAHME_GEWERK_DURCHGE,
-            (cbGewerkDurchge.getSelectedItem() != null)
-                ? ((CidsBean)cbGewerkDurchge.getSelectedItem()).getMetaObject().getId() : null);
-        filterProps.put(
-            PropertyKeys.MASSNAHME_GEWERK_DURCHZU,
-            (cbGewerkDurchzu.getSelectedItem() != null)
-                ? ((CidsBean)cbGewerkDurchzu.getSelectedItem()).getMetaObject().getId() : null);
 
         return new CidsMauernSearchStatement(
                 eigentuemer,
