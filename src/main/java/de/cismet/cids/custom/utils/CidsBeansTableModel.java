@@ -73,7 +73,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
             final String[] columnNames,
             final Class[] columnClasses,
             final Boolean[] columnEditable) {
-        this(columnProperties, columnNames, columnClasses, columnEditable, true);
+        this(columnProperties, columnNames, columnClasses, true);
     }
 
     /**

@@ -119,34 +119,22 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             "fk_art",
             "fk_objekt",
             "beschreibung",
-            "ziel",
-            "erledigt"
+            "ziel"
         };
     private static final String[] COLUMN_NAMES = new String[] {
             "Eintragung",
             "Maßnahme",
-            "Gewerk",
+            "An",
             "Beschreibung",
-            "Termin",
-            "Erledigt"
+            "Am/Bis"
         };
     private static final Class[] COLUMN_CLASSES = new Class[] {
             Date.class,
             CidsBean.class,
             CidsBean.class,
             String.class,
-            Date.class,
-            Boolean.class
+            Date.class
         };
-    private static final Boolean[] COLUMN_EDITABLES = new Boolean[] {
-            false,
-            true,
-            true,
-            true,
-            true,
-            true
-        };
-
     private static final Color ROT = new Color(255, 0, 60);
     private static final Color GELB = new Color(250, 190, 40);
     private static final Color GRUEN = new Color(0, 193, 118);
@@ -2928,7 +2916,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
          * Creates a new VorgangFlaecheTableModel object.
          */
         public MassnahmenTableModel() {
-            super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES, COLUMN_EDITABLES);
+            super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES, true);
         }
     }
 
