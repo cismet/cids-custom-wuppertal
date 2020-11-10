@@ -265,7 +265,9 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         jScrollPane4.setName("jScrollPane4"); // NOI18N
 
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(2);
+        jTextArea1.setWrapStyleWord(true);
         jTextArea1.setName("jTextArea1"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -435,7 +437,9 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
         jTextArea2.setColumns(20);
+        jTextArea2.setLineWrap(true);
         jTextArea2.setRows(3);
+        jTextArea2.setWrapStyleWord(true);
         jTextArea2.setName("jTextArea2"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
