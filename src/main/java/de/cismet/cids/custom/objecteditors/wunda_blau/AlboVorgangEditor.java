@@ -856,6 +856,10 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     @Override
     public void dispose() {
+        bindingGroup.unbind();
+        cidsBean = null;
+        ((VorgangFlaecheTableModel)jXTable1.getModel()).clear();
+        ((DefaultListModel<CidsBean>)jList1.getModel()).clear();
     }
 
     @Override

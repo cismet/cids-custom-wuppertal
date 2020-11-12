@@ -138,6 +138,13 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     /**
      * DOCUMENT ME!
+     */
+    public void clear() {
+        setCidsBeans(null);
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param   row  DOCUMENT ME!
      *
