@@ -958,8 +958,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
     @Override
     public void dispose() {
-        super.dispose();
-
         alboFlaecheBeschreibungPanel1.dispose();
         alboFlaecheOrtPanel1.dispose();
 
@@ -969,6 +967,10 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheMaterialaufbringungPanel1.dispose();
         alboFlaecheBewirtschaftungsschadenPanel1.dispose();
         alboFlaecheAltablagerungPanel1.dispose();
+
+        ((FlaecheVorgangTableModel)jXTable1.getModel()).clear();
+        ((DefaultListModel<CidsBean>)jList2.getModel()).clear();
+        super.dispose();
     }
 
     @Override
@@ -1023,43 +1025,45 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private void searchVorgaenge() {
         jXTable1.setModel(new FlaecheVorgangTableModel());
 
-        new SwingWorker<List<CidsBean>, Void>() {
+        if (getCidsBean() != null) {
+            new SwingWorker<List<CidsBean>, Void>() {
 
-                @Override
-                protected List<CidsBean> doInBackground() throws Exception {
-                    final AlboVorgangSearch search = new AlboVorgangSearch();
-                    search.setFlaecheId((Integer)getCidsBean().getProperty("id"));
+                    @Override
+                    protected List<CidsBean> doInBackground() throws Exception {
+                        final AlboVorgangSearch search = new AlboVorgangSearch();
+                        search.setFlaecheId((Integer)getCidsBean().getProperty("id"));
 
-                    final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(),
-                                        search,
-                                        getConnectionContext());
+                        final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            search,
+                                            getConnectionContext());
 
-                    if (mons == null) {
-                        return null;
+                        if (mons == null) {
+                            return null;
+                        }
+
+                        final List<CidsBean> beans = new ArrayList<>();
+                        for (final MetaObjectNode mon : mons) {
+                            beans.add(SessionManager.getProxy().getMetaObject(
+                                    mon.getObjectId(),
+                                    mon.getClassId(),
+                                    "WUNDA_BLAU",
+                                    getConnectionContext()).getBean());
+                        }
+                        return beans;
                     }
 
-                    final List<CidsBean> beans = new ArrayList<>();
-                    for (final MetaObjectNode mon : mons) {
-                        beans.add(SessionManager.getProxy().getMetaObject(
-                                mon.getObjectId(),
-                                mon.getClassId(),
-                                "WUNDA_BLAU",
-                                getConnectionContext()).getBean());
+                    @Override
+                    protected void done() {
+                        try {
+                            final List<CidsBean> beans = get();
+                            ((FlaecheVorgangTableModel)jXTable1.getModel()).setCidsBeans(beans);
+                        } catch (final Exception ex) {
+                            LOG.fatal(ex, ex);
+                        }
                     }
-                    return beans;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        final List<CidsBean> beans = get();
-                        ((FlaecheVorgangTableModel)jXTable1.getModel()).setCidsBeans(beans);
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
-                    }
-                }
-            }.execute();
+                }.execute();
+        }
     }
 
     /**
@@ -1067,48 +1071,50 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      */
     private void searchBplaene() {
         jList2.setModel(new DefaultListModel<CidsBean>());
-        new SwingWorker<List<CidsBean>, Void>() {
+        if (getCidsBean() != null) {
+            new SwingWorker<List<CidsBean>, Void>() {
 
-                @Override
-                protected List<CidsBean> doInBackground() throws Exception {
-                    final BplaeneSearch search = new BplaeneSearch();
+                    @Override
+                    protected List<CidsBean> doInBackground() throws Exception {
+                        final BplaeneSearch search = new BplaeneSearch();
 
-                    final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
-                    search.setGeom(geom);
+                        final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
+                        search.setGeom(geom);
 
-                    final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(),
-                                        search,
-                                        getConnectionContext());
+                        final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            search,
+                                            getConnectionContext());
 
-                    if (mons == null) {
-                        return null;
-                    }
-                    final List<CidsBean> beans = new ArrayList<>();
-                    for (final MetaObjectNode mon : mons) {
-                        beans.add(SessionManager.getProxy().getMetaObject(
-                                mon.getObjectId(),
-                                mon.getClassId(),
-                                "WUNDA_BLAU",
-                                getConnectionContext()).getBean());
-                    }
-                    return beans;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        final List<CidsBean> beans = get();
-                        if (beans != null) {
-                            for (final CidsBean bean : beans) {
-                                ((DefaultListModel<CidsBean>)jList2.getModel()).addElement(bean);
-                            }
+                        if (mons == null) {
+                            return null;
                         }
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
+                        final List<CidsBean> beans = new ArrayList<>();
+                        for (final MetaObjectNode mon : mons) {
+                            beans.add(SessionManager.getProxy().getMetaObject(
+                                    mon.getObjectId(),
+                                    mon.getClassId(),
+                                    "WUNDA_BLAU",
+                                    getConnectionContext()).getBean());
+                        }
+                        return beans;
                     }
-                }
-            }.execute();
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final List<CidsBean> beans = get();
+                            if (beans != null) {
+                                for (final CidsBean bean : beans) {
+                                    ((DefaultListModel<CidsBean>)jList2.getModel()).addElement(bean);
+                                }
+                            }
+                        } catch (final Exception ex) {
+                            LOG.fatal(ex, ex);
+                        }
+                    }
+                }.execute();
+        }
     }
     /**
      * DOCUMENT ME!

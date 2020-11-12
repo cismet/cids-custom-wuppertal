@@ -122,7 +122,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         jLabel3 = new JLabel();
         btnForward = new JButton();
         filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        buttonGroup1 = new ButtonGroup();
         panMainCard = new JPanel();
         panCardFlaeche = new JPanel();
         panMain = new AlboFlaecheMainPanel(isEditable());
@@ -401,7 +400,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private JButton btnBack;
     private JButton btnForward;
     JButton btnReport;
-    private ButtonGroup buttonGroup1;
     private Box.Filler filler1;
     private Box.Filler filler2;
     private JLabel jLabel1;
@@ -752,7 +750,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panArbeitsstand.dispose();
         panMassnahmen.dispose();
         panBemerkungen.dispose();
-//        bindingGroup.unbind();
+        bindingGroup.unbind();
+        cidsBean = null;
     }
 
     /**
