@@ -1039,7 +1039,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         permissionBean.setProperty(PROPERTY_CLASS_ID, classId);
         permissionBean.setProperty(
             PROPERTY_GROUP_NAME,
-            optByGroupName.isSelected() ? txtGroupName.getText() : null);
+            optByGroupName.isSelected() ? (enableAllGroups ? txtGroupName.getText() : jComboBox1.getSelectedItem())
+                                        : null);
         permissionBean.setProperty(
             PROPERTY_USER_NAME,
             optByUserName.isSelected() ? txtUserName.getText() : null);
