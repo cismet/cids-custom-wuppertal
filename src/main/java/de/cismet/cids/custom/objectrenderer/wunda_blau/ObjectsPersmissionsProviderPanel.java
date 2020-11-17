@@ -13,6 +13,9 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
+import Sirius.navigator.types.treenode.ObjectTreeNode;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -27,10 +30,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -40,7 +45,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.ObjectsPermissionsSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.CidsBeanList;
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -83,22 +89,24 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         //~ Enum constants -----------------------------------------------------
 
         READ_ONLY, DISABLE_GROUP_PERMISSIONS, DISABLE_USER_PERMISSIONS, DISABLE_ALL_FROM_CLASS, DISABLE_READ,
-        DISABLE_WRITE, DISABLE_TIMESTAMPS
+        DISABLE_WRITE, DISABLE_TIMESTAMPS, DISABLE_CLASS_SELECTION, ONLY_CONFATTR_GROUPS
     }
 
     //~ Instance fields --------------------------------------------------------
 
-    private final List<String> columnProperties;
-    private final List<String> columnNames;
-    private final List<Class> columnClasses;
-    private final List<Boolean> columnEditable;
+    private final List<String> columnProperties = new ArrayList<>();
+    private final List<String> columnNames = new ArrayList<>();
+    private final List<Class> columnClasses = new ArrayList<>();
+    // private final List<Boolean> columnEditable = new ArrayList<>();
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     private final Map<Integer, MetaClass> classesMap = new HashMap<>();
     private final Map<String, CidsBean> objectsMap = new HashMap<>();
     private final Collection<CidsBean> permissionBeansToDelete = new ArrayList<>();
+    private final Collection<String> groupNames = new ArrayList<>();
 
+    private final boolean enableClassSelection;
     private final boolean enableEdit;
     private final boolean enableGroupPermission;
     private final boolean enableUserPermission;
@@ -106,12 +114,11 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     private final boolean enableReadPermission;
     private final boolean enableWritePermission;
     private final boolean enableTimestamps;
+    private final boolean enableAllGroups;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreatePermission;
     private javax.swing.JButton btnDeletePermission;
-    private javax.swing.JButton btnPersist;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<MetaClass> cbClasses;
@@ -122,7 +129,7 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     private org.jdesktop.swingx.JXDatePicker dpTsEnd;
     private org.jdesktop.swingx.JXDatePicker dpTsStart;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JDialog jDialog1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -131,18 +138,16 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lblGroupName;
     private javax.swing.JLabel lblUserName;
     private javax.swing.JList<CidsBean> lstObjects;
     private javax.swing.JRadioButton optAllClassObjects;
+    private javax.swing.JRadioButton optAllListObjects;
     private javax.swing.JRadioButton optByGroupName;
     private javax.swing.JRadioButton optByUserName;
     private javax.swing.JRadioButton optOnlySelectedObjects;
@@ -155,12 +160,21 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new ObjectsPersmissionsProviderPanel object.
+     */
+    public ObjectsPersmissionsProviderPanel() {
+        this(null);
+    }
+
+    /**
      * Creates new form ObjectsPersmissionProviderPanel.
      *
      * @param  options  DOCUMENT ME!
      */
     public ObjectsPersmissionsProviderPanel(final Option... options) {
+        boolean enableAllGroups = true;
         boolean enableEdit = true;
+        boolean enableClassSelection = true;
         boolean enableGroupPermission = true;
         boolean enableUserPermission = true;
         boolean enableAllFromClass = true;
@@ -194,6 +208,14 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
                         enableWritePermission = false;
                     }
                     break;
+                    case DISABLE_CLASS_SELECTION: {
+                        enableClassSelection = false;
+                    }
+                    break;
+                    case ONLY_CONFATTR_GROUPS: {
+                        enableAllGroups = false;
+                    }
+                    break;
                 }
             }
         }
@@ -204,57 +226,61 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         this.enableReadPermission = enableReadPermission;
         this.enableWritePermission = enableWritePermission;
         this.enableTimestamps = enableTimestamps;
+        this.enableClassSelection = enableClassSelection;
 
-        columnProperties = new ArrayList<>();
-        columnNames = new ArrayList<>();
-        columnClasses = new ArrayList<>();
-        columnEditable = new ArrayList<>();
-
-        columnProperties.add(PROPERTY_CLASS_NAME);
-        columnNames.add("Klasse");
-        columnClasses.add(String.class);
-        columnEditable.add(false);
+        if (enableClassSelection) {
+            columnProperties.add(PROPERTY_CLASS_NAME);
+            columnNames.add("Klasse");
+            columnClasses.add(String.class);
+            // columnEditable.add(false);
+        }
 
         columnProperties.add(PROPERTY_OBJECT_NAME);
-        columnNames.add("Objekt");
+        columnNames.add("Objekt-Bezeichnung");
         columnClasses.add(CidsBean.class);
-        columnEditable.add(false);
+        // columnEditable.add(false);
 
-        columnProperties.add(PROPERTY_GROUP_NAME);
-        columnNames.add("Gruppe");
-        columnClasses.add(String.class);
-        columnEditable.add(false);
+        if (enableGroupPermission) {
+            columnProperties.add(PROPERTY_GROUP_NAME);
+            columnNames.add("Gruppe");
+            columnClasses.add(String.class);
+            // columnEditable.add(false);
+        }
 
-        columnProperties.add(PROPERTY_USER_NAME);
-        columnNames.add("Benutzer");
-        columnClasses.add(String.class);
-        columnEditable.add(false);
+        if (enableUserPermission) {
+            columnProperties.add(PROPERTY_USER_NAME);
+            columnNames.add("Benutzer");
+            columnClasses.add(String.class);
+            // columnEditable.add(false);
+        }
 
         if (this.enableReadPermission) {
             columnProperties.add(PROPERTY_READ);
             columnNames.add("Lesen");
             columnClasses.add(Boolean.class);
-            columnEditable.add(false);
+            // columnEditable.add(false);
         }
 
         if (this.enableWritePermission) {
             columnProperties.add(PROPERTY_WRITE);
             columnNames.add("Schreiben");
             columnClasses.add(Boolean.class);
-            columnEditable.add(false);
+            // columnEditable.add(false);
         }
 
         if (this.enableTimestamps) {
             columnProperties.add(PROPERTY_TS_START);
             columnNames.add("Gültig ab");
             columnClasses.add(Timestamp.class);
-            columnEditable.add(false);
+            // columnEditable.add(false);
 
             columnProperties.add(PROPERTY_TS_END);
             columnNames.add("Gültig bis");
             columnClasses.add(Timestamp.class);
-            columnEditable.add(false);
+            // columnEditable.add(false);
         }
+
+        this.enableAllGroups = enableAllGroups;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -271,26 +297,24 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
-        jDialog1 = new javax.swing.JDialog();
-        jPanel8 = new javax.swing.JPanel();
-        jPanel7 = this;
-        jPanel6 = new javax.swing.JPanel();
-        btnPersist = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
+        optOnlySelectedObjects = new javax.swing.JRadioButton();
+        optAllListObjects = new javax.swing.JRadioButton();
         optAllClassObjects = new javax.swing.JRadioButton();
         cbClasses = new javax.swing.JComboBox<>();
-        optOnlySelectedObjects = new javax.swing.JRadioButton();
-        jSeparator1 = new javax.swing.JSeparator();
         jPanel10 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        lstObjects = new DropAwareJList();
+        jPanel6 = new javax.swing.JPanel();
         lblGroupName = new javax.swing.JLabel();
         optByGroupName = new javax.swing.JRadioButton();
         lblUserName = new javax.swing.JLabel();
         optByUserName = new javax.swing.JRadioButton();
         txtGroupName = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
         txtUserName = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
         jPanel11 = new javax.swing.JPanel();
@@ -306,75 +330,10 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         btnCreatePermission = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        lstObjects = new CidsBeanList();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPermissions = new org.jdesktop.swingx.JXTable();
         btnDeletePermission = new javax.swing.JButton();
-
-        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.jDialog1.title")); // NOI18N
-        jDialog1.setMinimumSize(new java.awt.Dimension(1000, 500));
-        jDialog1.setModal(true);
-        jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        jPanel8.setLayout(new java.awt.GridBagLayout());
-
-        jPanel7.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel8.add(jPanel7, gridBagConstraints);
-
-        jPanel6.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnPersist,
-            org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.btnPersist.text")); // NOI18N
-        btnPersist.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnPersistActionPerformed(evt);
-                }
-            });
-        jPanel6.add(btnPersist);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnCancel,
-            org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.btnCancel.text")); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnCancelActionPerformed(evt);
-                }
-            });
-        jPanel6.add(btnCancel);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel8.add(jPanel6, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jDialog1.getContentPane().add(jPanel8, gridBagConstraints);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -389,6 +348,49 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jPanel9.setLayout(new java.awt.GridBagLayout());
+
+        buttonGroup1.add(optOnlySelectedObjects);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            optOnlySelectedObjects,
+            org.openide.util.NbBundle.getMessage(
+                ObjectsPersmissionsProviderPanel.class,
+                "ObjectsPersmissionsProviderPanel.optOnlySelectedObjects.text")); // NOI18N
+        optOnlySelectedObjects.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optOnlySelectedObjectsActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel9.add(optOnlySelectedObjects, gridBagConstraints);
+
+        buttonGroup1.add(optAllListObjects);
+        optAllListObjects.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            optAllListObjects,
+            org.openide.util.NbBundle.getMessage(
+                ObjectsPersmissionsProviderPanel.class,
+                "ObjectsPersmissionsProviderPanel.optAllListObjects.text")); // NOI18N
+        optAllListObjects.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optAllListObjectsActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel9.add(optAllListObjects, gridBagConstraints);
 
         buttonGroup1.add(optAllClassObjects);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -405,7 +407,6 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -428,48 +429,69 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel9.add(cbClasses, gridBagConstraints);
-
-        buttonGroup1.add(optOnlySelectedObjects);
-        optOnlySelectedObjects.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            optOnlySelectedObjects,
-            org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.optOnlySelectedObjects.text")); // NOI18N
-        optOnlySelectedObjects.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optOnlySelectedObjectsActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel9.add(optOnlySelectedObjects, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jPanel9, gridBagConstraints);
+
+        jPanel10.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel4.add(jSeparator1, gridBagConstraints);
+        jPanel4.add(jPanel10, gridBagConstraints);
 
-        jPanel10.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel2.add(jPanel4, gridBagConstraints);
+
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 100));
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 100));
+        jScrollPane3.setRequestFocusEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                optOnlySelectedObjects,
+                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
+                lstObjects,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        lstObjects.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+
+                @Override
+                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
+                    lstObjectsValueChanged(evt);
+                }
+            });
+        jScrollPane3.setViewportView(lstObjects);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jScrollPane3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jPanel2, gridBagConstraints);
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    ObjectsPersmissionsProviderPanel.class,
+                    "ObjectsPersmissionsProviderPanel.jPanel6.border.title"))); // NOI18N
+        jPanel6.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblGroupName,
@@ -478,10 +500,10 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
                 "ObjectsPersmissionsProviderPanel.lblGroupName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel10.add(lblGroupName, gridBagConstraints);
+        jPanel6.add(lblGroupName, gridBagConstraints);
 
         buttonGroup2.add(optByGroupName);
         optByGroupName.setSelected(true);
@@ -499,10 +521,10 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel10.add(optByGroupName, gridBagConstraints);
+        jPanel6.add(optByGroupName, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblUserName,
@@ -511,10 +533,10 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
                 "ObjectsPersmissionsProviderPanel.lblUserName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel10.add(lblUserName, gridBagConstraints);
+        jPanel6.add(lblUserName, gridBagConstraints);
 
         buttonGroup2.add(optByUserName);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -531,10 +553,10 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel10.add(optByUserName, gridBagConstraints);
+        jPanel6.add(optByUserName, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -553,11 +575,19 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel10.add(txtGroupName, gridBagConstraints);
+        jPanel6.add(txtGroupName, gridBagConstraints);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(groupNames.toArray(new String[0])));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel6.add(jComboBox1, gridBagConstraints);
 
         txtUserName.setText(org.openide.util.NbBundle.getMessage(
                 ObjectsPersmissionsProviderPanel.class,
@@ -580,23 +610,19 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel10.add(txtUserName, gridBagConstraints);
-
+        jPanel6.add(txtUserName, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jPanel10, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel4.add(jSeparator3, gridBagConstraints);
+        jPanel6.add(jSeparator3, gridBagConstraints);
 
         jPanel11.setLayout(new java.awt.GridBagLayout());
 
@@ -658,15 +684,19 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jPanel11, gridBagConstraints);
+        jPanel6.add(jPanel11, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel4.add(jSeparator2, gridBagConstraints);
+        jPanel6.add(jSeparator2, gridBagConstraints);
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
@@ -739,46 +769,18 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jPanel5, gridBagConstraints);
+        jPanel6.add(jPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        jPanel2.add(jPanel4, gridBagConstraints);
-
-        jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 100));
-        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 100));
-        jScrollPane3.setRequestFocusEnabled(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                optOnlySelectedObjects,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                lstObjects,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        lstObjects.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
-                    lstObjectsValueChanged(evt);
-                }
-            });
-        jScrollPane3.setViewportView(lstObjects);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jScrollPane3, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jPanel2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        jPanel1.add(jPanel6, gridBagConstraints);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
@@ -787,6 +789,7 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         tblPermissions.setModel(new ObjectsPermissionsTableModel());
+        tblPermissions.setEditable(false);
         jScrollPane1.setViewportView(tblPermissions);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -820,6 +823,7 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -838,11 +842,22 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     /**
      * DOCUMENT ME!
      *
-     * @param  evt  DOCUMENT ME!
+     * @param  confAttr  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
-        jDialog1.dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    public void setGroupConfAttr(final String confAttr) {
+        groupNames.clear();
+        try {
+            final String groupsString = SessionManager.getProxy()
+                        .getConfigAttr(SessionManager.getSession().getUser(), confAttr, getConnectionContext());
+            if (groupsString != null) {
+                for (final String groupString : groupsString.split("\n")) {
+                    groupNames.add(groupString.trim());
+                }
+            }
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -856,7 +871,7 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     /**
      * DOCUMENT ME!
      */
-    private void persistPermissions() {
+    public void persistPermissions() {
         final Collection<CidsBean> allPermissionBeansToPersist = new ArrayList<>();
         allPermissionBeansToPersist.addAll(getPermissionsTableModel().getCidsBeans());
         allPermissionBeansToPersist.addAll(getPermissionBeansToDelete());
@@ -919,38 +934,21 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPersistActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPersistActionPerformed
-        new SwingWorker<Void, Void>() {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    persistPermissions();
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    jDialog1.dispose();
-                }
-            }.execute();
-    } //GEN-LAST:event_btnPersistActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void btnDeletePermissionActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeletePermissionActionPerformed
+        final Collection<CidsBean> collectedBeans = new ArrayList<>();
         for (final int row : tblPermissions.getSelectedRows()) {
             final CidsBean selectedPermissionBean = getPermissionsTableModel().getCidsBean(row);
             if (selectedPermissionBean != null) {
-                permissionBeansToDelete.add(selectedPermissionBean);
-                final MetaObject permissionMo = selectedPermissionBean.getMetaObject();
-                if (permissionMo != null) {
-                    permissionMo.setStatus(MetaObject.TO_DELETE);
-                    permissionMo.setChanged(true);
-                    getPermissionsTableModel().remove(selectedPermissionBean);
-                }
+                collectedBeans.add(selectedPermissionBean);
+            }
+        }
+        permissionBeansToDelete.addAll(collectedBeans);
+        for (final CidsBean collectedBean : collectedBeans) {
+            final MetaObject permissionMo = collectedBean.getMetaObject();
+            if (permissionMo != null) {
+                permissionMo.setStatus(MetaObject.TO_DELETE);
+                permissionMo.setChanged(true);
+                getPermissionsTableModel().remove(collectedBean);
             }
         }
     }                                                                                       //GEN-LAST:event_btnDeletePermissionActionPerformed
@@ -1075,6 +1073,7 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
      */
     private void optAllClassObjectsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optAllClassObjectsActionPerformed
         lstObjects.setSelectedIndices(new int[0]);
+        cbClasses.setSelectedIndex(0);
         refreshAddButton();
     }                                                                                      //GEN-LAST:event_optAllClassObjectsActionPerformed
 
@@ -1158,17 +1157,32 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void optAllListObjectsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optAllListObjectsActionPerformed
+        cbClasses.setSelectedItem(null);
+        refreshAddButton();
+    }                                                                                     //GEN-LAST:event_optAllListObjectsActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void refreshAddButton() {
         final boolean objectsSelected = (optOnlySelectedObjects.isSelected()
                         && !lstObjects.getSelectedValuesList().isEmpty())
                     || (enableAllFromClass && optAllClassObjects.isSelected()
                         && (cbClasses.getSelectedItem() != null));
-        final boolean targetSelected = (enableGroupPermission && optByGroupName.isSelected()
-                        && (txtGroupName.getText() != null)
-                        && !txtGroupName.getText().trim().isEmpty())
-                    || (enableUserPermission && optByUserName.isSelected() && (txtUserName.getText() != null)
-                        && !txtUserName.getText().trim().isEmpty());
+        // final boolean groupSelected = enableAllGroups ? ;
+        final boolean groupSelected = (enableGroupPermission && optByGroupName.isSelected()
+                        && enableAllGroups)
+            ? ((txtGroupName.getText() != null)
+                        && !txtGroupName.getText().trim().isEmpty()) : (jComboBox1.getSelectedItem() != null);
+        final boolean userSelected = enableUserPermission && optByUserName.isSelected()
+                    && (txtUserName.getText() != null)
+                    && !txtUserName.getText().trim().isEmpty();
+
+        final boolean targetSelected = groupSelected || userSelected;
         final boolean permissionTypeSelected = (enableReadPermission && chkRead.isSelected())
                     || (enableWritePermission && chkWrite.isSelected());
         btnCreatePermission.setEnabled(objectsSelected && targetSelected && permissionTypeSelected);
@@ -1192,17 +1206,29 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         LOG.fatal(message, ex);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isEnableEdit() {
+        return enableEdit;
+    }
+
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+
+        new CidsBeanDropTarget((DropAwareJList)lstObjects);
 
         optAllClassObjects.setVisible(enableAllFromClass);
         cbClasses.setVisible(enableAllFromClass);
 
         lblGroupName.setVisible(enableGroupPermission);
         optByGroupName.setVisible(enableGroupPermission);
-        txtGroupName.setVisible(enableGroupPermission);
+        txtGroupName.setVisible(enableGroupPermission && enableAllGroups);
+        jComboBox1.setVisible(enableGroupPermission && !enableAllGroups);
 
         lblUserName.setVisible(enableUserPermission);
         optByUserName.setVisible(enableUserPermission);
@@ -1213,7 +1239,6 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
         jPanel4.setVisible(enableEdit);
         btnDeletePermission.setVisible(enableEdit);
-        btnPersist.setVisible(enableEdit);
 
         chkWrite.setSelected(!enableReadPermission);
         chkRead.setSelected(!enableWritePermission);
@@ -1232,6 +1257,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         optByUserName.setSelected(!enableGroupPermission);
         optByGroupName.setSelected(!enableUserPermission);
 
+        cbClasses.setVisible(enableClassSelection);
+
         tblPermissions.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
                 @Override
@@ -1244,6 +1271,133 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     /**
      * DOCUMENT ME!
      */
+    public void reloadPermissions() {
+        final DefaultMetaTreeNode[] nodes = ComponentRegistry.getRegistry()
+                    .getActiveCatalogue()
+                    .getSelectedNodesArray();
+        new SwingWorker<List<CidsBean>, Void>() {
+
+                @Override
+                protected List<CidsBean> doInBackground() throws Exception {
+                    final List<CidsBean> beans = new ArrayList<>();
+                    for (final DefaultMetaTreeNode node : nodes) {
+                        if (node instanceof ObjectTreeNode) {
+                            final ObjectTreeNode otn = (ObjectTreeNode)node;
+                            if (classesMap.containsKey(otn.getClassID())) {
+                                beans.add(otn.getMetaObject().getBean());
+                            }
+                        }
+                    }
+                    return beans;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final List<CidsBean> beans = get();
+                        final DefaultListModel<CidsBean> lstModel = (DefaultListModel)lstObjects.getModel();
+                        for (final CidsBean bean : beans) {
+                            if (!((DefaultListModel)lstObjects.getModel()).contains(bean)) {
+                                lstModel.addElement(bean);
+                            }
+                        }
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }.execute();
+        new SwingWorker<List<CidsBean>, Void>() {
+
+                @Override
+                protected List<CidsBean> doInBackground() throws Exception {
+                    final ObjectsPermissionsSearch permSearch = new ObjectsPermissionsSearch(new MetaObjectNode(
+                                "WUNDA_BLAU",
+                                -1,
+                                CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "MAUER", getConnectionContext())
+                                            .getId()));
+                    final Collection<MetaObjectNode> permissionMons = SessionManager.getProxy()
+                                .customServerSearch(permSearch, getConnectionContext());
+                    final List<CidsBean> permissionBeans = new ArrayList<>();
+                    for (final MetaObjectNode permissionMon : permissionMons) {
+                        final MetaObject permissionMo = SessionManager.getConnection()
+                                    .getMetaObject(SessionManager.getSession().getUser(),
+                                        permissionMon.getObjectId(),
+                                        permissionMon.getClassId(),
+                                        permissionMon.getDomain(),
+                                        getConnectionContext());
+                        if (permissionMo != null) {
+                            permissionBeans.add(permissionMo.getBean());
+                        }
+                    }
+                    return permissionBeans;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final List<CidsBean> permissionBeans = get();
+                        getPermissionsTableModel().setCidsBeans(permissionBeans);
+                        reloadObjects(permissionBeans);
+                    } catch (final Exception ex) {
+                        error("error while searching permission beans", ex);
+                    }
+                }
+            }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  permissionBeans  DOCUMENT ME!
+     */
+    private void reloadObjects(final List<CidsBean> permissionBeans) {
+        new SwingWorker<Collection<MetaObject>, Void>() {
+
+                @Override
+                protected Collection<MetaObject> doInBackground() throws Exception {
+                    final Collection<MetaObject> mos = new ArrayList<>();
+                    for (final CidsBean permissionBean : permissionBeans) {
+                        final Integer classId = (Integer)permissionBean.getProperty("class_id");
+                        final Integer objectId = (Integer)permissionBean.getProperty("object_id");
+                        if (objectId != null) {
+                            final MetaObject mo = SessionManager.getProxy()
+                                        .getMetaObject(
+                                            objectId,
+                                            classId,
+                                            SessionManager.getSession().getConnectionInfo().getUserDomain(),
+                                            getConnectionContext());
+                            mos.add(mo);
+                        }
+                    }
+                    return mos;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final Collection<MetaObject> mos = get();
+                        for (final MetaObject mo : mos) {
+                            objectsMap.put(createObjectKey(mo.getId(), mo.getClassID()), mo.getBean());
+                        }
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                    getPermissionsTableModel().fireTableDataChanged();
+                }
+            }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void cleanup() {
+        objectsMap.clear();
+        permissionBeansToDelete.clear();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     private void refreshRemoveButton() {
         btnDeletePermission.setEnabled(tblPermissions.getSelectedRowCount() > 0);
     }
@@ -1251,21 +1405,20 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     /**
      * DOCUMENT ME!
      *
-     * @param   cidsBeans          DOCUMENT ME!
-     * @param   options            DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
+     * @param  metaClasses  DOCUMENT ME!
      */
-    public static JDialog createNewDialog(final Collection<CidsBean> cidsBeans,
-            final Option[] options,
-            final ConnectionContext connectionContext) {
-        final ObjectsPersmissionsProviderPanel panel = new ObjectsPersmissionsProviderPanel((options != null) ? options
-                                                                                                              : null);
-        panel.initWithConnectionContext(connectionContext);
-        panel.setCidsBeans(cidsBeans);
-        panel.jDialog1.pack();
-        return panel.jDialog1;
+    public void setMetaClasses(final Collection<MetaClass> metaClasses) {
+        final DefaultComboBoxModel<MetaClass> classesCbModel = new DefaultComboBoxModel<>();
+        for (final MetaClass metaClass : metaClasses) {
+            classesMap.put(metaClass.getID(), metaClass);
+            if (classesCbModel.getIndexOf(metaClass) < 0) {
+                classesCbModel.addElement(metaClass);
+            }
+        }
+        cbClasses.setModel(classesCbModel);
+        if (classesCbModel.getSize() > 0) {
+            cbClasses.setSelectedIndex(0);
+        }
     }
 
     /**
@@ -1275,66 +1428,19 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
      */
     public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
         final DefaultListModel<CidsBean> objectsListModel = new DefaultListModel<>();
-        final DefaultComboBoxModel<MetaClass> classesCbModel = new DefaultComboBoxModel<>();
-        final Collection<MetaObjectNode> objectMons = new ArrayList<>();
-        classesMap.clear();
-        objectsMap.clear();
-        permissionBeansToDelete.clear();
         if (cidsBeans != null) {
             for (final CidsBean cidsBean : cidsBeans) {
                 if (cidsBean != null) {
-                    final MetaObjectNode objectMon = new MetaObjectNode(cidsBean);
-                    objectMons.add(objectMon);
-                    objectsMap.put(createObjectKey(objectMon.getObjectId(), objectMon.getClassId()), cidsBean);
-                    objectsListModel.addElement(cidsBean);
                     final MetaClass metaClass = cidsBean.getMetaObject().getMetaClass();
-                    classesMap.put(metaClass.getID(), metaClass);
-                    if (classesCbModel.getIndexOf(metaClass) < 0) {
-                        classesCbModel.addElement(metaClass);
+                    if (classesMap.containsKey(metaClass.getID())) {
+                        final MetaObjectNode objectMon = new MetaObjectNode(cidsBean);
+                        objectsMap.put(createObjectKey(objectMon.getObjectId(), objectMon.getClassId()), cidsBean);
+                        objectsListModel.addElement(cidsBean);
                     }
                 }
             }
         }
         lstObjects.setModel(objectsListModel);
-        cbClasses.setModel(classesCbModel);
-        cbClasses.setSelectedIndex(0);
-
-        if (!objectMons.isEmpty()) {
-            new SwingWorker<List<CidsBean>, Void>() {
-
-                    @Override
-                    protected List<CidsBean> doInBackground() throws Exception {
-                        final ObjectsPermissionsSearch permSearch = new ObjectsPermissionsSearch(objectMons);
-                        final Collection<MetaObjectNode> permissionMons = SessionManager.getProxy()
-                                    .customServerSearch(permSearch, getConnectionContext());
-                        final List<CidsBean> permissionBeans = new ArrayList<>();
-                        for (final MetaObjectNode permissionMon : permissionMons) {
-                            final MetaObject permissionMo = SessionManager.getConnection()
-                                        .getMetaObject(SessionManager.getSession().getUser(),
-                                            permissionMon.getObjectId(),
-                                            permissionMon.getClassId(),
-                                            permissionMon.getDomain(),
-                                            getConnectionContext());
-                            if (permissionMo != null) {
-                                permissionBeans.add(permissionMo.getBean());
-                            }
-                        }
-                        return permissionBeans;
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            final List<CidsBean> permissionBeans = get();
-                            getPermissionsTableModel().setCidsBeans(permissionBeans);
-                        } catch (final Exception ex) {
-                            error("error while searching permission beans", ex);
-                        }
-                    }
-                }.execute();
-        } else {
-            getPermissionsTableModel().setCidsBeans(null);
-        }
     }
 
     @Override
@@ -1372,7 +1478,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
             super(columnProperties.toArray(new String[0]),
                 columnNames.toArray(new String[0]),
                 columnClasses.toArray(new Class[0]),
-                columnEditable.toArray(new Boolean[0]));
+                // columnEditable.toArray(new Boolean[0])
+                false);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1398,11 +1505,76 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
                         return (metaClass != null) ? metaClass.getName() : null;
                     }
                     case PROPERTY_OBJECT_NAME: {
-                        return objecBean;
+                        return (objectId != null) ? ((objecBean != null) ? objecBean : "<html><i>wird geladen...")
+                                                  : "<html><i>Alle";
                     }
                 }
             }
             return super.getValueAt(rowIndex, columnIndex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DropAwareJList extends JList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DropAwareJList object.
+         */
+        public DropAwareJList() {
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  dataModel  DOCUMENT ME!
+         */
+        public DropAwareJList(final ListModel dataModel) {
+            super(dataModel);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Object[] listData) {
+            super(listData);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Vector listData) {
+            super(listData);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  beans  DOCUMENT ME!
+         */
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+            try {
+                for (final CidsBean dropped : beans) {
+                    if ((dropped != null) && classesMap.containsKey(dropped.getMetaObject().getClassID())
+                                && !((DefaultListModel)lstObjects.getModel()).contains(dropped)) {
+                        ((DefaultListModel)lstObjects.getModel()).addElement(dropped);
+                    }
+                }
+            } catch (Exception ex) {
+                LOG.error("Problem when adding the DroppedBeans", ex);
+            }
         }
     }
 }
