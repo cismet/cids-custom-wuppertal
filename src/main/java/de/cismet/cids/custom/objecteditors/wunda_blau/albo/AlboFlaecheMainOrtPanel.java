@@ -333,10 +333,10 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
 
     @Override
     public void dispose() {
-        super.dispose();
-
         if (isEditable()) {
             ((DefaultCismapGeometryComboBoxEditor)jComboBox31).dispose();
         }
+        mappingComponent1.dispose();
+        super.dispose();
     }
 }

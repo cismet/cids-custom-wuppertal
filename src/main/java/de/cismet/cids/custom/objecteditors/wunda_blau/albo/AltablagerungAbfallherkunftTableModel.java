@@ -52,6 +52,13 @@ public class AltablagerungAbfallherkunftTableModel extends AbstractTableModel {
 
     /**
      * DOCUMENT ME!
+     */
+    public void clear() {
+        setCidsBeans(null);
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param  cidsBeans  DOCUMENT ME!
      */

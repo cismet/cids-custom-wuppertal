@@ -807,12 +807,14 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
      * DOCUMENT ME!
      */
     private void refreshStrCbo() {
-        final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
         if (getCidsBean() != null) {
-            strassennameSearch.setSortDistanceLimit(10);
-            strassennameSearch.setGeom(geom);
+            final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
+            if (getCidsBean() != null) {
+                strassennameSearch.setSortDistanceLimit(10);
+                strassennameSearch.setGeom(geom);
+            }
+            ((FastBindableReferenceCombo)jComboBox4).refreshModel();
         }
-        ((FastBindableReferenceCombo)jComboBox4).refreshModel();
     }
 
     @Override
