@@ -688,7 +688,8 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      */
     private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).remove(
-            ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).getCidsBean(jXTable2.getSelectedRow()));
+            ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).getCidsBean(
+                jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow())));
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**

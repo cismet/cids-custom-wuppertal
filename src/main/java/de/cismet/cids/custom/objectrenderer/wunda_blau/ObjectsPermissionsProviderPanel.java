@@ -57,11 +57,11 @@ import de.cismet.connectioncontext.ConnectionContextStore;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel implements ConnectionContextStore {
+public class ObjectsPermissionsProviderPanel extends javax.swing.JPanel implements ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient Logger LOG = Logger.getLogger(ObjectsPersmissionsProviderPanel.class);
+    private static final transient Logger LOG = Logger.getLogger(ObjectsPermissionsProviderPanel.class);
     private static final String TABLE_PERMISSIONS = "CS_OBJECTPERMISSIONS";
     private static final String TABLE_COLLECTOR = "CS_OBJECTPERMISSIONS_COLLECTOR";
 
@@ -162,7 +162,7 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     /**
      * Creates a new ObjectsPersmissionsProviderPanel object.
      */
-    public ObjectsPersmissionsProviderPanel() {
+    public ObjectsPermissionsProviderPanel() {
         this(null);
     }
 
@@ -171,7 +171,7 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
      *
      * @param  options  DOCUMENT ME!
      */
-    public ObjectsPersmissionsProviderPanel(final Option... options) {
+    public ObjectsPermissionsProviderPanel(final Option... options) {
         boolean enableAllGroups = true;
         boolean enableEdit = true;
         boolean enableClassSelection = true;
@@ -341,8 +341,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
-                    ObjectsPersmissionsProviderPanel.class,
-                    "ObjectsPersmissionsProviderPanel.jPanel2.border.title"))); // NOI18N
+                    ObjectsPermissionsProviderPanel.class,
+                    "ObjectsPermissionsProviderPanel.jPanel2.border.title"))); // NOI18N
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -353,8 +353,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             optOnlySelectedObjects,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.optOnlySelectedObjects.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.optOnlySelectedObjects.text")); // NOI18N
         optOnlySelectedObjects.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -375,8 +375,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             optAllListObjects,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.optAllListObjects.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.optAllListObjects.text")); // NOI18N
         optAllListObjects.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -396,8 +396,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             optAllClassObjects,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.optAllClassObjects.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.optAllClassObjects.text")); // NOI18N
         optAllClassObjects.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -489,15 +489,15 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
-                    ObjectsPersmissionsProviderPanel.class,
-                    "ObjectsPersmissionsProviderPanel.jPanel6.border.title"))); // NOI18N
+                    ObjectsPermissionsProviderPanel.class,
+                    "ObjectsPermissionsProviderPanel.jPanel6.border.title"))); // NOI18N
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblGroupName,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.lblGroupName.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.lblGroupName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -510,8 +510,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             optByGroupName,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.optByGroupName.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.optByGroupName.text")); // NOI18N
         optByGroupName.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -529,8 +529,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             lblUserName,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.lblUserName.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.lblUserName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -542,8 +542,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             optByUserName,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.optByUserName.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.optByUserName.text")); // NOI18N
         optByUserName.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -590,8 +590,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         jPanel6.add(jComboBox1, gridBagConstraints);
 
         txtUserName.setText(org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.txtUserName.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.txtUserName.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -661,8 +661,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             chkTsStart,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.chkTsStart.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.chkTsStart.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -673,8 +673,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             chkTsEnd,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.chkTsEnd.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.chkTsEnd.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -703,8 +703,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             chkRead,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.chkRead.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.chkRead.text")); // NOI18N
         chkRead.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -722,8 +722,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             chkWrite,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.chkWrite.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.chkWrite.text")); // NOI18N
         chkWrite.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -748,8 +748,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             btnCreatePermission,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.btnCreatePermission.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.btnCreatePermission.text")); // NOI18N
         btnCreatePermission.setEnabled(false);
         btnCreatePermission.addActionListener(new java.awt.event.ActionListener() {
 
@@ -784,8 +784,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
-                    ObjectsPersmissionsProviderPanel.class,
-                    "ObjectsPersmissionsProviderPanel.jPanel3.border.title"))); // NOI18N
+                    ObjectsPermissionsProviderPanel.class,
+                    "ObjectsPermissionsProviderPanel.jPanel3.border.title"))); // NOI18N
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         tblPermissions.setModel(new ObjectsPermissionsTableModel());
@@ -804,8 +804,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
         org.openide.awt.Mnemonics.setLocalizedText(
             btnDeletePermission,
             org.openide.util.NbBundle.getMessage(
-                ObjectsPersmissionsProviderPanel.class,
-                "ObjectsPersmissionsProviderPanel.btnDeletePermission.text")); // NOI18N
+                ObjectsPermissionsProviderPanel.class,
+                "ObjectsPermissionsProviderPanel.btnDeletePermission.text")); // NOI18N
         btnDeletePermission.setEnabled(false);
         btnDeletePermission.addActionListener(new java.awt.event.ActionListener() {
 
@@ -937,7 +937,8 @@ public class ObjectsPersmissionsProviderPanel extends javax.swing.JPanel impleme
     private void btnDeletePermissionActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeletePermissionActionPerformed
         final Collection<CidsBean> collectedBeans = new ArrayList<>();
         for (final int row : tblPermissions.getSelectedRows()) {
-            final CidsBean selectedPermissionBean = getPermissionsTableModel().getCidsBean(row);
+            final CidsBean selectedPermissionBean = getPermissionsTableModel().getCidsBean(tblPermissions.getRowSorter()
+                            .convertRowIndexToModel(row));
             if (selectedPermissionBean != null) {
                 collectedBeans.add(selectedPermissionBean);
             }

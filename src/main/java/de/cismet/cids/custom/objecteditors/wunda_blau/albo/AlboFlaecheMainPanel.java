@@ -878,7 +878,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jXTable1MouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean vorgangBean = ((FlaecheVorgangTableModel)jXTable1.getModel()).getCidsBean(
-                    jXTable1.getSelectedRow());
+                    jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
             ComponentRegistry.getRegistry()
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(vorgangBean), false);

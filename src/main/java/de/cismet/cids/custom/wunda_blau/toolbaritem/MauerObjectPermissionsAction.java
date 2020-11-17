@@ -17,7 +17,7 @@ import java.net.URL;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import de.cismet.cids.custom.objectrenderer.wunda_blau.MauerObjectsPersmissionsProviderDialog;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.MauerObjectsPermissionsProviderDialog;
 
 import de.cismet.cids.navigator.utils.CidsClientToolbarItem;
 
@@ -85,9 +85,9 @@ public class MauerObjectPermissionsAction extends AbstractAction implements Cids
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        MauerObjectsPersmissionsProviderDialog.getInstance().setCidsBeans(null);
+        MauerObjectsPermissionsProviderDialog.getInstance().setCidsBeans(null);
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
-            MauerObjectsPersmissionsProviderDialog.getInstance(),
+            MauerObjectsPermissionsProviderDialog.getInstance(),
             true);
     }
 

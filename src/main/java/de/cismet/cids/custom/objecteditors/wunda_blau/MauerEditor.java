@@ -2527,8 +2527,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
-        final CidsBean massnahmeBean = ((MassnahmenTableModel)jXTable1.getModel()).getCidsBean(
-                jXTable1.getSelectedRow());
+        final CidsBean massnahmeBean = ((MassnahmenTableModel)jXTable1.getModel()).getCidsBean(jXTable1.getRowSorter()
+                        .convertRowIndexToModel(
+                            jXTable1.getSelectedRow()));
         ((MassnahmenTableModel)jXTable1.getModel()).remove(massnahmeBean);
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
