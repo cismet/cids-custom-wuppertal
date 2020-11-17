@@ -35,24 +35,24 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class MauerObjectsPersmissionsProviderDialog extends javax.swing.JDialog implements ConnectionContextProvider {
+public class MauerObjectsPermissionsProviderDialog extends javax.swing.JDialog implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient Logger LOG = Logger.getLogger(MauerObjectsPersmissionsProviderDialog.class);
+    private static final transient Logger LOG = Logger.getLogger(MauerObjectsPermissionsProviderDialog.class);
 
     //~ Instance fields --------------------------------------------------------
 
     private final ConnectionContext connectionContext = ConnectionContext.create(
             AbstractConnectionContext.Category.STATIC,
-            MauerObjectsPersmissionsProviderDialog.class.getSimpleName());
+            MauerObjectsPermissionsProviderDialog.class.getSimpleName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnPersist;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
-    private de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPersmissionsProviderPanel
+    private de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel
         objectsPersmissionsProviderPanel1;
         // End of variables declaration//GEN-END:variables
 
@@ -64,7 +64,7 @@ public class MauerObjectsPersmissionsProviderDialog extends javax.swing.JDialog 
      * @param  parent  DOCUMENT ME!
      * @param  modal   DOCUMENT ME!
      */
-    private MauerObjectsPersmissionsProviderDialog(final java.awt.Frame parent, final boolean modal) {
+    private MauerObjectsPermissionsProviderDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
         objectsPersmissionsProviderPanel1.setGroupConfAttr("objectpermissions.groups.mauern");
@@ -108,21 +108,21 @@ public class MauerObjectsPersmissionsProviderDialog extends javax.swing.JDialog 
         jPanel6 = new javax.swing.JPanel();
         btnPersist = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        final ObjectsPersmissionsProviderPanel.Option[] options = new ObjectsPersmissionsProviderPanel.Option[] {
-                ObjectsPersmissionsProviderPanel.Option.ONLY_CONFATTR_GROUPS,
-                ObjectsPersmissionsProviderPanel.Option.DISABLE_CLASS_SELECTION,
-                ObjectsPersmissionsProviderPanel.Option.DISABLE_READ,
-                ObjectsPersmissionsProviderPanel.Option.DISABLE_USER_PERMISSIONS
+        final de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel.Option[] options =
+            new de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel.Option[] {
+                de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel.Option.ONLY_CONFATTR_GROUPS,
+                de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel.Option.DISABLE_CLASS_SELECTION,
+                de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel.Option.DISABLE_READ,
+                de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel.Option.DISABLE_USER_PERMISSIONS
             };
         objectsPersmissionsProviderPanel1 =
-            new de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPersmissionsProviderPanel(options);
+            new de.cismet.cids.custom.objectrenderer.wunda_blau.ObjectsPermissionsProviderPanel(options);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(
-                MauerObjectsPersmissionsProviderDialog.class,
-                "MauerObjectsPersmissionsProviderDialog.title")); // NOI18N
+                MauerObjectsPermissionsProviderDialog.class,
+                "MauerObjectsPermissionsProviderDialog.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(800, 400));
-        setPreferredSize(new java.awt.Dimension(800, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
@@ -132,8 +132,8 @@ public class MauerObjectsPersmissionsProviderDialog extends javax.swing.JDialog 
         org.openide.awt.Mnemonics.setLocalizedText(
             btnPersist,
             org.openide.util.NbBundle.getMessage(
-                MauerObjectsPersmissionsProviderDialog.class,
-                "MauerObjectsPersmissionsProviderDialog.btnPersist.text")); // NOI18N
+                MauerObjectsPermissionsProviderDialog.class,
+                "MauerObjectsPermissionsProviderDialog.btnPersist.text")); // NOI18N
         btnPersist.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -146,8 +146,8 @@ public class MauerObjectsPersmissionsProviderDialog extends javax.swing.JDialog 
         org.openide.awt.Mnemonics.setLocalizedText(
             btnCancel,
             org.openide.util.NbBundle.getMessage(
-                MauerObjectsPersmissionsProviderDialog.class,
-                "MauerObjectsPersmissionsProviderDialog.btnCancel.text")); // NOI18N
+                MauerObjectsPermissionsProviderDialog.class,
+                "MauerObjectsPermissionsProviderDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -215,7 +215,7 @@ public class MauerObjectsPersmissionsProviderDialog extends javax.swing.JDialog 
      *
      * @return  DOCUMENT ME!
      */
-    public static MauerObjectsPersmissionsProviderDialog getInstance() {
+    public static MauerObjectsPermissionsProviderDialog getInstance() {
         return LazyInitialiser.INSTANCE;
     }
 
@@ -240,8 +240,7 @@ public class MauerObjectsPersmissionsProviderDialog extends javax.swing.JDialog 
 
         //~ Static fields/initializers -----------------------------------------
 
-        private static final MauerObjectsPersmissionsProviderDialog INSTANCE =
-            new MauerObjectsPersmissionsProviderDialog(
+        private static final MauerObjectsPermissionsProviderDialog INSTANCE = new MauerObjectsPermissionsProviderDialog(
                 StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
                 false);
 
