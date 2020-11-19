@@ -50,6 +50,7 @@ public class StrAdrConfProperties {
     private final String stringBenenn;
     private final String stringEntnenn;
     private final String stringBenennGross;
+    private final String stringForbiddenKeys;
     
     //~ Constructors -----------------------------------------------------------
 
@@ -63,6 +64,7 @@ public class StrAdrConfProperties {
         stringBenenn = readProperty(properties, "LISTE_BENENN", null);
         stringEntnenn = readProperty(properties, "LISTE_ENTNENN", null);
         stringBenennGross = readProperty(properties, "LISTE_BENENN_GROSS", null);
+        stringForbiddenKeys = readProperty(properties, "LISTE_FORBIDDEN_KEYS", null);
     }
 
     //~ Methods ----------------------------------------------------------------

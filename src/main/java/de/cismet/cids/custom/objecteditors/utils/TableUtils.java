@@ -94,6 +94,8 @@ public class TableUtils {
             if (myClass != null) {
                 final StringBuffer myQuery = new StringBuffer("select ").append(myClass.getId())
                             .append(", ")
+                            .append(myClass.getName())
+                            .append(".")
                             .append(myClass.getPrimaryKey())
                             .append(" from ")
                             .append(myClass.getTableName())
