@@ -210,6 +210,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox6, gridBagConstraints);
 
+        jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField2.setName("jFormattedTextField2"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -218,6 +220,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_erfassung}"),
                 jFormattedTextField2,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -252,6 +256,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox32, gridBagConstraints);
 
+        jFormattedTextField16.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField16.setName("jFormattedTextField16"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -261,6 +267,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                     "${cidsBean.jahr_arbeitsstand_historischenutzungsrecherche}"),
                 jFormattedTextField16,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -295,6 +303,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox7, gridBagConstraints);
 
+        jFormattedTextField3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField3.setName("jFormattedTextField3"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -303,6 +313,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_orientierendeuntersuchung}"),
                 jFormattedTextField3,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -337,12 +349,14 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox8, gridBagConstraints);
 
+        jFormattedTextField4.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField4.setName("jFormattedTextField4"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_gefaehrdungsabschaetzung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_gefaehrdungsabnschaetzung}"),
                 jFormattedTextField4,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
         binding.setConverter(new LongNumberConverter());
@@ -379,6 +393,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox9, gridBagConstraints);
 
+        jFormattedTextField5.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField5.setName("jFormattedTextField5"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -387,6 +403,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_sanierungsuntersuchung}"),
                 jFormattedTextField5,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -421,6 +439,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox10, gridBagConstraints);
 
+        jFormattedTextField6.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField6.setName("jFormattedTextField6"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -429,6 +449,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_sanierungsplan}"),
                 jFormattedTextField6,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -463,6 +485,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox11, gridBagConstraints);
 
+        jFormattedTextField7.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField7.setName("jFormattedTextField7"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -471,6 +495,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_sanierung}"),
                 jFormattedTextField7,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -505,6 +531,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox12, gridBagConstraints);
 
+        jFormattedTextField8.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField8.setName("jFormattedTextField8"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -513,6 +541,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_schutzundbegrenzung}"),
                 jFormattedTextField8,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -547,6 +577,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox15, gridBagConstraints);
 
+        jFormattedTextField11.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField11.setName("jFormattedTextField11"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -555,6 +587,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_ueberwachung}"),
                 jFormattedTextField11,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -589,6 +623,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jComboBox19, gridBagConstraints);
 
+        jFormattedTextField15.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         jFormattedTextField15.setName("jFormattedTextField15"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -597,6 +633,8 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_arbeitsstand_nachsorge}"),
                 jFormattedTextField15,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(new LongNumberConverter());
         bindingGroup.addBinding(binding);
 

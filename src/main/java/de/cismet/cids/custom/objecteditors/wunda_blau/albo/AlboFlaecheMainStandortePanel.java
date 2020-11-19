@@ -20,6 +20,7 @@ import java.awt.CardLayout;
 import java.awt.Component;
 
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
@@ -318,8 +319,9 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
 
     @Override
     public void dispose() {
-        super.dispose();
+        setCidsBean(null);
         alboFlaecheMainStandortPanel1.dispose();
+        super.dispose();
     }
 
     @Override
