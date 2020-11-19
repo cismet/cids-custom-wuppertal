@@ -42,7 +42,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -60,6 +59,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkunge
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -79,6 +80,8 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -112,6 +115,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panTitle = new JPanel();
         lblTitle = new JLabel();
         jToggleButton1 = new JToggleButton();
+        btnReport1 = new JButton();
         btnReport = new JButton();
         panFooter = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
@@ -131,7 +135,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panCardMassnahmen = new JPanel();
         panMassnahmen = new AlboFlaecheMassnahmenPanel(isEditable());
 
-        final FormListener formListener = new FormListener();
+        FormListener formListener = new FormListener();
 
         panTitle.setName("panTitle"); // NOI18N
         panTitle.setOpaque(false);
@@ -140,13 +144,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         lblTitle.setForeground(new Color(255, 255, 255));
         lblTitle.setName("lblTitle"); // NOI18N
 
-        final Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create(
-                    "<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: ${cidsBean.erhebungsnummer}"),
-                lblTitle,
-                BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: ${cidsBean.erhebungsnummer}"), lblTitle, BeanProperty.create("text"));
         binding.setSourceNullValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: -");
         binding.setSourceUnreadableValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: <i>[Fehler]");
         bindingGroup.addBinding(binding);
@@ -157,38 +155,44 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
-        jToggleButton1.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock.png")));      // NOI18N
+        jToggleButton1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock.png"))); // NOI18N
         jToggleButton1.setBorderPainted(false);
         jToggleButton1.setContentAreaFilled(false);
         jToggleButton1.setFocusPainted(false);
-        jToggleButton1.setName("jToggleButton1");                                                          // NOI18N
-        jToggleButton1.setRolloverIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_edit.png"))); // NOI18N
-        jToggleButton1.setRolloverSelectedIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_go.png")));   // NOI18N
-        jToggleButton1.setSelectedIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_open.png"))); // NOI18N
+        jToggleButton1.setName("jToggleButton1"); // NOI18N
+        jToggleButton1.setRolloverIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_edit.png"))); // NOI18N
+        jToggleButton1.setRolloverSelectedIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_go.png"))); // NOI18N
+        jToggleButton1.setSelectedIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_open.png"))); // NOI18N
         jToggleButton1.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(jToggleButton1, gridBagConstraints);
         jToggleButton1.setVisible(isEditable());
 
-        btnReport.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png")));         // NOI18N
-        btnReport.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.text"));               // NOI18N
+        btnReport1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/table_export.png"))); // NOI18N
+        btnReport1.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
+        btnReport1.setBorderPainted(false);
+        btnReport1.setContentAreaFilled(false);
+        btnReport1.setFocusPainted(false);
+        btnReport1.setName("btnReport1"); // NOI18N
+        btnReport1.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panTitle.add(btnReport1, gridBagConstraints);
+
+        btnReport.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
         btnReport.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
         btnReport.setBorderPainted(false);
         btnReport.setContentAreaFilled(false);
         btnReport.setEnabled(false);
         btnReport.setFocusPainted(false);
-        btnReport.setName("btnReport");                                                                               // NOI18N
+        btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -212,12 +216,10 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         btnBack.setFocusPainted(false);
         btnBack.setMaximumSize(new Dimension(30, 30));
         btnBack.setMinimumSize(new Dimension(30, 30));
-        btnBack.setName("btnBack");                                                                                     // NOI18N
+        btnBack.setName("btnBack"); // NOI18N
         btnBack.setPreferredSize(new Dimension(30, 30));
-        btnBack.setPressedIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png")));               // NOI18N
-        btnBack.setRolloverIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));                   // NOI18N
+        btnBack.setPressedIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
         btnBack.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -256,15 +258,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panFooter.add(panButtons, gridBagConstraints);
 
-        btnForward.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
         btnForward.setBorder(null);
         btnForward.setBorderPainted(false);
         btnForward.setContentAreaFilled(false);
         btnForward.setFocusPainted(false);
         btnForward.setMaximumSize(new Dimension(30, 30));
         btnForward.setMinimumSize(new Dimension(30, 30));
-        btnForward.setName("btnForward");                                                          // NOI18N
+        btnForward.setName("btnForward"); // NOI18N
         btnForward.setPreferredSize(new Dimension(30, 30));
         btnForward.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -334,59 +335,52 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         bindingGroup.bind();
     }
 
-    /**
-     * Code for dispatching events from components to event handlers.
-     *
-     * @version  $Revision$, $Date$
-     */
+    // Code for dispatching events from components to event handlers.
+
     private class FormListener implements ActionListener, MouseListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
+        FormListener() {}
+        public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == jToggleButton1) {
                 AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
-            } else if (evt.getSource() == btnReport) {
+            }
+            else if (evt.getSource() == btnReport1) {
+                AlboFlaecheEditor.this.btnReport1ActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnReport) {
                 AlboFlaecheEditor.this.btnReportActionPerformed(evt);
-            } else if (evt.getSource() == btnBack) {
+            }
+            else if (evt.getSource() == btnBack) {
                 AlboFlaecheEditor.this.btnBackActionPerformed(evt);
-            } else if (evt.getSource() == btnForward) {
+            }
+            else if (evt.getSource() == btnForward) {
                 AlboFlaecheEditor.this.btnForwardActionPerformed(evt);
             }
         }
 
-        @Override
-        public void mouseClicked(final MouseEvent evt) {
+        public void mouseClicked(MouseEvent evt) {
             if (evt.getSource() == jLabel1) {
                 AlboFlaecheEditor.this.jLabel1MouseClicked(evt);
-            } else if (evt.getSource() == jLabel2) {
+            }
+            else if (evt.getSource() == jLabel2) {
                 AlboFlaecheEditor.this.jLabel2MouseClicked(evt);
-            } else if (evt.getSource() == jLabel3) {
+            }
+            else if (evt.getSource() == jLabel3) {
                 AlboFlaecheEditor.this.jLabel3MouseClicked(evt);
             }
         }
 
-        @Override
-        public void mouseEntered(final MouseEvent evt) {
+        public void mouseEntered(MouseEvent evt) {
         }
 
-        @Override
-        public void mouseExited(final MouseEvent evt) {
+        public void mouseExited(MouseEvent evt) {
         }
 
-        @Override
-        public void mousePressed(final MouseEvent evt) {
+        public void mousePressed(MouseEvent evt) {
         }
 
-        @Override
-        public void mouseReleased(final MouseEvent evt) {
+        public void mouseReleased(MouseEvent evt) {
         }
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     //~ Instance fields --------------------------------------------------------
 
@@ -400,6 +394,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private JButton btnBack;
     private JButton btnForward;
     JButton btnReport;
+    JButton btnReport1;
     private Box.Filler filler1;
     private Box.Filler filler2;
     private JLabel jLabel1;
@@ -483,48 +478,12 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
         if (cidsBean != null) {
             if (isEditable()) {
-                if (cidsBean.getProperty("fk_massnahme") == null) {
+                if (cidsBean.getProperty("fk_massnahmen") == null) {
                     try {
                         cidsBean.setProperty(
-                            "fk_massnahme",
-                            CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "ALBO_MASSNAHME", getConnectionContext())
+                            "fk_massnahmen",
+                            CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "ALBO_MASSNAHMEN", getConnectionContext())
                                         .getEmptyInstance(getConnectionContext()).getBean());
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
-                    }
-                }
-                if (cidsBean.getProperty("fk_massnahme_dekontamination") == null) {
-                    try {
-                        cidsBean.setProperty(
-                            "fk_massnahme_dekontamination",
-                            CidsBean.getMetaClassFromTableName(
-                                "WUNDA_BLAU",
-                                "ALBO_MASSNAHME_DEKONTAMINATION",
-                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
-                    }
-                }
-                if (cidsBean.getProperty("fk_massnahme_sicherung") == null) {
-                    try {
-                        cidsBean.setProperty(
-                            "fk_massnahme_sicherung",
-                            CidsBean.getMetaClassFromTableName(
-                                "WUNDA_BLAU",
-                                "ALBO_MASSNAHME_SICHERUNG",
-                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
-                    }
-                }
-                if (cidsBean.getProperty("fk_massnahme_schutzbeschraenkung") == null) {
-                    try {
-                        cidsBean.setProperty(
-                            "fk_massnahme_schutzbeschraenkung",
-                            CidsBean.getMetaClassFromTableName(
-                                "WUNDA_BLAU",
-                                "ALBO_MASSNAHME_SCHUTZBESCHRAENKUNG",
-                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
                     } catch (final Exception ex) {
                         LOG.fatal(ex, ex);
                     }
@@ -560,70 +519,94 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         AlboReportGenerator.startFlaecheReportDownload(getCidsBean(), this, getConnectionContext());
-    }                                                              //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         cardLayout.previous(panMainCard);
         updateFooterControls();
-    }                                                            //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.next(panMainCard);
         updateFooterControls();
-    }                                                               //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jLabel1MouseClicked(final MouseEvent evt) { //GEN-FIRST:event_jLabel1MouseClicked
+    private void jLabel1MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         cardLayout.show(panMainCard, "flaeche");
         updateFooterControls();
-    }                                                        //GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_jLabel1MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jLabel2MouseClicked(final MouseEvent evt) { //GEN-FIRST:event_jLabel2MouseClicked
+    private void jLabel2MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         cardLayout.show(panMainCard, "arbeitsstand");
         updateFooterControls();
-    }                                                        //GEN-LAST:event_jLabel2MouseClicked
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jLabel3MouseClicked(final MouseEvent evt) { //GEN-FIRST:event_jLabel3MouseClicked
+    private void jLabel3MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         cardLayout.show(panMainCard, "massnahmen");
         updateFooterControls();
-    }                                                        //GEN-LAST:event_jLabel3MouseClicked
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         if (isEditable()) {
             panMain.setUnlocked(jToggleButton1.isSelected());
         }
-    }                                                                   //GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReport1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnReport1ActionPerformed
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        CismapBroker.getInstance().getMappingComponent())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+            DownloadManager.instance()
+                    .add(
+                        new ByteArrayActionDownload(
+                            AlboExportServerAction.TASK_NAME,
+                            null,
+                            null,
+                            "Schnittstellen-Export",
+                            jobname,
+                            "export",
+                            ".csv",
+                            getConnectionContext()));
+        }
+    }//GEN-LAST:event_btnReport1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -638,57 +621,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 btnForward.setEnabled(!panCardMassnahmen.equals(card));
             }
         }
-
-        int countMassnahme = 0;
-        final CidsBean massnahme = (cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_massnahme") : null;
-        if (massnahme != null) {
-            for (final String property : massnahme.getPropertyNames()) {
-                final Object value = massnahme.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahme++;
-                }
-            }
-        }
-        int countMassnahmeSicherung = 0;
-        final CidsBean massnahmeSicherung = (cidsBean != null)
-            ? (CidsBean)cidsBean.getProperty("fk_massnahme_sicherung") : null;
-        if (massnahmeSicherung != null) {
-            for (final String property : massnahmeSicherung.getPropertyNames()) {
-                final Object value = massnahmeSicherung.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahmeSicherung++;
-                }
-            }
-        }
-        int countMassnahmeDekontamination = 0;
-        final CidsBean massnahmeDekontamination = (cidsBean != null)
-            ? (CidsBean)cidsBean.getProperty("fk_massnahme_dekontamination") : null;
-        if (massnahmeDekontamination != null) {
-            for (final String property : massnahmeDekontamination.getPropertyNames()) {
-                final Object value = massnahmeDekontamination.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahmeDekontamination++;
-                }
-            }
-        }
-        int countMassnahmeSchutzbeschraenkung = 0;
-        final CidsBean massnahmeSchutzbeschraenkung = (cidsBean != null)
-            ? (CidsBean)cidsBean.getProperty("fk_massnahme_schutzbeschraenkung") : null;
-        if (massnahmeSchutzbeschraenkung != null) {
-            for (final String property : massnahmeSchutzbeschraenkung.getPropertyNames()) {
-                final Object value = massnahmeSchutzbeschraenkung.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahmeSchutzbeschraenkung++;
-                }
-            }
-        }
-
-        jLabel3.setText(String.format(
-                "<html><body><center><b><h3>Maßnahmen</b> <i>(%d/%d/%d/%d)",
-                countMassnahme,
-                countMassnahmeSicherung,
-                countMassnahmeDekontamination,
-                countMassnahmeSchutzbeschraenkung));
     }
 
     /**
