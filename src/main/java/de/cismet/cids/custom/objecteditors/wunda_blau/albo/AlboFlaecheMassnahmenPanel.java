@@ -155,10 +155,12 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
-        panMain.setCidsBean((CidsBean)cidsBean.getProperty("fk_massnahme"));
-        panDekontamination.setCidsBean((CidsBean)cidsBean.getProperty("fk_massnahme_dekontamination"));
-        panSicherung.setCidsBean((CidsBean)cidsBean.getProperty("fk_massnahme_sicherung"));
-        panSchutzUndBeschraenkung.setCidsBean((CidsBean)cidsBean.getProperty("fk_massnahme_schutzbeschraenkung"));
+        panMain.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_massnahme") : null);
+        panDekontamination.setCidsBean((cidsBean != null)
+                ? (CidsBean)cidsBean.getProperty("fk_massnahme_dekontamination") : null);
+        panSicherung.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_massnahme_sicherung") : null);
+        panSchutzUndBeschraenkung.setCidsBean((cidsBean != null)
+                ? (CidsBean)cidsBean.getProperty("fk_massnahme_schutzbeschraenkung") : null);
     }
 
     @Override

@@ -756,6 +756,12 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         }
     }
 
+    @Override
+    public void dispose() {
+        ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).clear();
+        super.dispose();
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**

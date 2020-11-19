@@ -330,6 +330,12 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         }
     }
 
+    @Override
+    public void dispose() {
+        ((AltablagerungAbfallherkunftTableModel)jXTable1.getModel()).clear();
+        super.dispose();
+    }
+
     /**
      * DOCUMENT ME!
      *
