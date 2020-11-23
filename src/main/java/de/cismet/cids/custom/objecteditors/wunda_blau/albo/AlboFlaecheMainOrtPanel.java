@@ -21,11 +21,14 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import java.awt.Color;
+
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.featurerenderer.wunda_blau.AlboFlaecheFeatureRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
@@ -310,6 +313,16 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
 
                 final StyledFeature dsf = new DefaultStyledFeature();
                 dsf.setGeometry(geom);
+                try {
+                    final AlboFlaecheFeatureRenderer renderer = new AlboFlaecheFeatureRenderer();
+                    renderer.setMetaObject(getCidsBean().getMetaObject());
+                    renderer.assign();
+                    dsf.setFillingPaint(renderer.getFillingStyle());
+                    dsf.setTransparency(renderer.getTransparency());
+                    dsf.setLinePaint(renderer.getLinePaint());
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
+                }
                 mappingComponent1.getFeatureCollection().addFeature(dsf);
             } else {
                 jLabel2.setText("-");
