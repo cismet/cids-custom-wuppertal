@@ -82,6 +82,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.orbit.OrbitControlFeature;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.VzkatStandortNextSchluesselServerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -2870,9 +2871,35 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
         this.standortBean = standortBean;
 
-        txtTitle.setText((standortBean != null) ? getTitle() : null);
-
         if (standortBean != null) {
+            if (MetaObject.NEW == standortBean.getMetaObject().getStatus()) {
+                new SwingWorker<Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            final Collection<Integer> result = SessionManager.getProxy()
+                                        .customServerSearch(new VzkatStandortNextSchluesselServerSearch(),
+                                            getConnectionContext());
+                            if ((result != null) && !result.isEmpty()) {
+                                final Integer schluessel = result.iterator().next();
+                                standortBean.setProperty("import_id", schluessel);
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                txtTitle.setText(getTitle());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                        }
+                    }.execute();
+            } else {
+                txtTitle.setText(getTitle());
+            }
+
             bindingGroup.bind();
 
             initMap();
@@ -2885,6 +2912,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 jxhOVBW.setVisible(false);
                 jxhOVFW.setVisible(false);
             }
+        } else {
+            txtTitle.setText(null);
         }
     }
 
@@ -2956,6 +2985,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 LOG.error(ex, ex);
             }
         }
+        if (errorOccured) {
+            return false;
+        }
         for (final CidsBean schildBean : deletedSchildBeans) {
             try {
                 schildBean.delete();
@@ -2965,7 +2997,31 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 LOG.error(ex, ex);
             }
         }
-        return !errorOccured;
+        if (errorOccured) {
+            return false;
+        }
+
+        if (MetaObject.NEW == standortBean.getMetaObject().getStatus()) {
+            final Integer schluesselBefore = (Integer)standortBean.getProperty("import_id");
+            try {
+                final Collection<Integer> result = SessionManager.getProxy()
+                            .customServerSearch(new VzkatStandortNextSchluesselServerSearch(), getConnectionContext());
+                if ((result != null) && !result.isEmpty()) {
+                    final Integer schluessel = result.iterator().next();
+                    if (schluessel == null) {
+                        return false;
+                    }
+                    if (!schluessel.equals(schluesselBefore)) {
+                        // todo warning and asking if continue saving with new schluessel
+                    }
+                    standortBean.setProperty("import_id", schluessel);
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
