@@ -1575,25 +1575,25 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXDatePicker1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXDatePicker1ActionPerformed
+    private void jXDatePicker1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker1ActionPerformed
         reloadShilder();
-    }                                                                                 //GEN-LAST:event_jXDatePicker1ActionPerformed
+    }//GEN-LAST:event_jXDatePicker1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         addSchildPanel(null);
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrassenschluesselActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrassenschluesselActionPerformed
+    private void cbStrassenschluesselActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrassenschluesselActionPerformed
         if (comboboxesInited && cbStrassenschluesselEnabled) {
             synchronized (this) {
                 try {
@@ -1607,14 +1607,14 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             }
         }
         updateSelectedStrassenschluessel();
-    }                                                                                        //GEN-LAST:event_cbStrassenschluesselActionPerformed
+    }//GEN-LAST:event_cbStrassenschluesselActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrassennameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrassennameActionPerformed
+    private void cbStrassennameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrassennameActionPerformed
         if (comboboxesInited && cbStrassennameEnabled) {
             synchronized (this) {
                 try {
@@ -1627,14 +1627,14 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 }
             }
         }
-    }                                                                                  //GEN-LAST:event_cbStrassennameActionPerformed
+    }//GEN-LAST:event_cbStrassennameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
+    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeomActionPerformed
         if (editable) {
             SwingUtilities.invokeLater(new Runnable() {
 
@@ -1655,16 +1655,16 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                     }
                 });
         }
-    } //GEN-LAST:event_cbGeomActionPerformed
+    }//GEN-LAST:event_cbGeomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVCenterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVCenterActionPerformed
+    private void jxhOVCenterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhOVCenterActionPerformed
         handleViewGeom(OvDirection.CENTER);
-    }                                                                               //GEN-LAST:event_jxhOVCenterActionPerformed
+    }//GEN-LAST:event_jxhOVCenterActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -2115,9 +2115,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVFWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVFWActionPerformed
+    private void jxhOVFWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhOVFWActionPerformed
         handleViewGeom(OvDirection.FORWARDS);
-    }                                                                           //GEN-LAST:event_jxhOVFWActionPerformed
+    }//GEN-LAST:event_jxhOVFWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -2138,9 +2138,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVBWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhOVBWActionPerformed
+    private void jxhOVBWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhOVBWActionPerformed
         handleViewGeom(OvDirection.BACKWARDS);
-    }                                                                           //GEN-LAST:event_jxhOVBWActionPerformed
+    }//GEN-LAST:event_jxhOVBWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -2182,60 +2182,60 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVCenterMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVCenterMouseEntered
+    private void jxhOVCenterMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVCenterMouseEntered
         showOvPreviewFeature(OvDirection.CENTER, true);
         showOvPreviewImage(OvDirection.CENTER, true);
-    }                                                                           //GEN-LAST:event_jxhOVCenterMouseEntered
+    }//GEN-LAST:event_jxhOVCenterMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVCenterMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVCenterMouseExited
+    private void jxhOVCenterMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVCenterMouseExited
         showOvPreviewFeature(OvDirection.CENTER, false);
         showOvPreviewImage(OvDirection.CENTER, false);
-    }                                                                          //GEN-LAST:event_jxhOVCenterMouseExited
+    }//GEN-LAST:event_jxhOVCenterMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVBWMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVBWMouseEntered
+    private void jxhOVBWMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVBWMouseEntered
         showOvPreviewFeature(OvDirection.BACKWARDS, true);
         showOvPreviewImage(OvDirection.BACKWARDS, true);
-    }                                                                       //GEN-LAST:event_jxhOVBWMouseEntered
+    }//GEN-LAST:event_jxhOVBWMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVFWMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVFWMouseEntered
+    private void jxhOVFWMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVFWMouseEntered
         showOvPreviewFeature(OvDirection.FORWARDS, true);
         showOvPreviewImage(OvDirection.FORWARDS, true);
-    }                                                                       //GEN-LAST:event_jxhOVFWMouseEntered
+    }//GEN-LAST:event_jxhOVFWMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVBWMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVBWMouseExited
+    private void jxhOVBWMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVBWMouseExited
         showOvPreviewFeature(OvDirection.BACKWARDS, false);
         showOvPreviewImage(OvDirection.BACKWARDS, false);
-    }                                                                      //GEN-LAST:event_jxhOVBWMouseExited
+    }//GEN-LAST:event_jxhOVBWMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxhOVFWMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jxhOVFWMouseExited
+    private void jxhOVFWMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jxhOVFWMouseExited
         showOvPreviewFeature(OvDirection.FORWARDS, false);
         showOvPreviewImage(OvDirection.FORWARDS, false);
-    }                                                                      //GEN-LAST:event_jxhOVFWMouseExited
+    }//GEN-LAST:event_jxhOVFWMouseExited
 
     /**
      * DOCUMENT ME!
@@ -2354,97 +2354,97 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPreviewMaximizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPreviewMaximizeActionPerformed
+    private void btnPreviewMaximizeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviewMaximizeActionPerformed
         maximizedButtonClicked();
-    }                                                                                      //GEN-LAST:event_btnPreviewMaximizeActionPerformed
+    }//GEN-LAST:event_btnPreviewMaximizeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPreviewUploadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPreviewUploadActionPerformed
+    private void btnPreviewUploadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviewUploadActionPerformed
         uploadButtonClicked();
-    }                                                                                    //GEN-LAST:event_btnPreviewUploadActionPerformed
+    }//GEN-LAST:event_btnPreviewUploadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFullMinimizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFullMinimizeActionPerformed
+    private void btnFullMinimizeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFullMinimizeActionPerformed
         minimizedButtonClicked();
-    }                                                                                   //GEN-LAST:event_btnFullMinimizeActionPerformed
+    }//GEN-LAST:event_btnFullMinimizeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFullUploadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFullUploadActionPerformed
+    private void btnFullUploadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFullUploadActionPerformed
         uploadButtonClicked();
-    }                                                                                 //GEN-LAST:event_btnFullUploadActionPerformed
+    }//GEN-LAST:event_btnFullUploadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPreviewNextActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPreviewNextActionPerformed
+    private void btnPreviewNextActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviewNextActionPerformed
         nextButtonClicked();
-    }                                                                                  //GEN-LAST:event_btnPreviewNextActionPerformed
+    }//GEN-LAST:event_btnPreviewNextActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPreviewPrevActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPreviewPrevActionPerformed
+    private void btnPreviewPrevActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviewPrevActionPerformed
         previousButtonClicked();
-    }                                                                                  //GEN-LAST:event_btnPreviewPrevActionPerformed
+    }//GEN-LAST:event_btnPreviewPrevActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFullPrevActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFullPrevActionPerformed
+    private void btnFullPrevActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFullPrevActionPerformed
         previousButtonClicked();
-    }                                                                               //GEN-LAST:event_btnFullPrevActionPerformed
+    }//GEN-LAST:event_btnFullPrevActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFullNextActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFullNextActionPerformed
+    private void btnFullNextActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFullNextActionPerformed
         nextButtonClicked();
-    }                                                                               //GEN-LAST:event_btnFullNextActionPerformed
+    }//GEN-LAST:event_btnFullNextActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jComboBox1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         ((CardLayout)panUploadIconOld.getLayout()).show(panUploadIconOld, (String)jComboBox1.getSelectedItem());
-    }                                                                              //GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jDialog1.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final Integer standortImportId = (Integer)standortBean.getProperty("import_id");
         final Richtung richtung;
         if (jComboBox1.getSelectedItem() != null) {
@@ -2511,7 +2511,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                     }
                 }.execute();
         }
-    } //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3001,7 +3001,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             return false;
         }
 
-        if (MetaObject.NEW == standortBean.getMetaObject().getStatus()) {
+        if (standortBean != null && MetaObject.NEW == standortBean.getMetaObject().getStatus()) {
             final Integer schluesselBefore = (Integer)standortBean.getProperty("import_id");
             try {
                 final Collection<Integer> result = SessionManager.getProxy()
