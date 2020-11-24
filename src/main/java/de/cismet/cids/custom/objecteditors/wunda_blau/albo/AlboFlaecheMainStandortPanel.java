@@ -678,7 +678,12 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      * @param  evt  DOCUMENT ME!
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        StaticSwingTools.showDialog(this, jDialog1, true);
+        jComboBox27.setSelectedItem(null);
+        ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen");
+        final CidsBean selected = (CidsBean)jComboBox27.getSelectedItem();
+        if (selected != null) {
+            ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).add(selected);
+        }
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
