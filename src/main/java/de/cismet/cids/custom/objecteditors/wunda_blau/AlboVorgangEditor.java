@@ -799,7 +799,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      * @param  evt  DOCUMENT ME!
      */
     private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jXTable1MouseClicked
-        if (evt.getClickCount() == 2) {
+        if (isEditable() && (evt.getClickCount() == 2)) {
             final CidsBean flaecheBean = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBean(
                     jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
             ComponentRegistry.getRegistry()
@@ -1058,17 +1058,19 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     @Override
     public boolean prepareForSave() {
-        try {
-            final String newSchluessel = getNewSchluessel();
-            if (!newSchluessel.equals(getCidsBean().getProperty("schluessel"))) {
-                // TODO warnung das neuer schluessel generiert wurde.
-                // abfrage ob abbrechen oder mit neuem schluessel speichern.
-                getCidsBean().setProperty("schluessel", newSchluessel);
-                // return false;
+        if (MetaObject.NEW == cidsBean.getMetaObject().getStatus()) {
+            try {
+                final String newSchluessel = getNewSchluessel();
+                if (!newSchluessel.equals(getCidsBean().getProperty("schluessel"))) {
+                    // TODO warnung das neuer schluessel generiert wurde.
+                    // abfrage ob abbrechen oder mit neuem schluessel speichern.
+                    getCidsBean().setProperty("schluessel", newSchluessel);
+                    // return false;
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+                return false;
             }
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
-            return false;
         }
         if (cidsBean.getProperty("loeschen") == null) {
             try {
