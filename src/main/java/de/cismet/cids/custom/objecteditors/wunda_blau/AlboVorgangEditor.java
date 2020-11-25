@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -24,6 +25,8 @@ import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import org.openide.util.Exceptions;
 
 import java.awt.Component;
 
@@ -42,6 +45,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangNextSchluesselServerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
@@ -136,6 +140,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox102;
     private javax.swing.JCheckBox jCheckBox103;
     private javax.swing.JComboBox<String> jComboBox28;
@@ -226,6 +231,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jPanel4 = new javax.swing.JPanel();
         jCheckBox102 = new javax.swing.JCheckBox();
         jCheckBox103 = new javax.swing.JCheckBox();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jXTable1 = new DroppedBeansTable();
@@ -496,6 +502,28 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel4.add(jCheckBox103, gridBagConstraints);
+
+        jCheckBox1.setText("unterdrücken");
+        jCheckBox1.setContentAreaFilled(false);
+        jCheckBox1.setName("jCheckBox1"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loeschen}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel4.add(jCheckBox1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -771,7 +799,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      * @param  evt  DOCUMENT ME!
      */
     private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jXTable1MouseClicked
-        if (evt.getClickCount() == 2) {
+        if (isEditable() && (evt.getClickCount() == 2)) {
             final CidsBean flaecheBean = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBean(
                     jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
             ComponentRegistry.getRegistry()
@@ -808,6 +836,25 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private String getNewSchluessel() throws Exception {
+        final Collection<Integer> maxSchluessels = SessionManager.getProxy()
+                    .customServerSearch(new AlboVorgangNextSchluesselServerSearch(), getConnectionContext());
+        if ((maxSchluessels != null) && !maxSchluessels.isEmpty()) {
+            final Integer maxSchluessel = maxSchluessels.iterator().next();
+            if (maxSchluessel != null) {
+                return String.valueOf(maxSchluessel + 1);
+            }
+        }
+        return "1";
+    }
+
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
@@ -819,9 +866,29 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             this.cidsBean = cidsBean;
             bindingGroup.bind();
 
+            if (MetaObject.NEW == cidsBean.getMetaObject().getStatus()) {
+                new SwingWorker<String, Void>() {
+
+                        @Override
+                        protected String doInBackground() throws Exception {
+                            return getNewSchluessel();
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                final String newSchluessel = get();
+                                getCidsBean().setProperty("schluessel", newSchluessel);
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                        }
+                    }.execute();
+            }
             if (!isEditable()) {
                 RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
             }
+            RendererTools.makeReadOnly(jTextField1);
         }
         ((VorgangFlaecheTableModel)jXTable1.getModel()).setCidsBeans((cidsBean != null)
                 ? cidsBean.getBeanCollectionProperty("arr_flaechen") : null);
@@ -991,6 +1058,20 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     @Override
     public boolean prepareForSave() {
+        if (MetaObject.NEW == cidsBean.getMetaObject().getStatus()) {
+            try {
+                final String newSchluessel = getNewSchluessel();
+                if (!newSchluessel.equals(getCidsBean().getProperty("schluessel"))) {
+                    // TODO warnung das neuer schluessel generiert wurde.
+                    // abfrage ob abbrechen oder mit neuem schluessel speichern.
+                    getCidsBean().setProperty("schluessel", newSchluessel);
+                    // return false;
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+                return false;
+            }
+        }
         if (cidsBean.getProperty("loeschen") == null) {
             try {
                 cidsBean.setProperty("loeschen", false);
