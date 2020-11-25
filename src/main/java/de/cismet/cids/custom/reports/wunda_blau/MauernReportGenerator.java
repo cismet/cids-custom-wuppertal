@@ -56,7 +56,7 @@ public class MauernReportGenerator {
                 public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b, connectionContext));
+                        reportBeans.add(new MauernReportBean(b, false, connectionContext));
                     }
                     boolean ready;
                     do {
@@ -104,7 +104,7 @@ public class MauernReportGenerator {
                 public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b, connectionContext));
+                        reportBeans.add(new MauernReportBean(b, true, connectionContext));
                     }
                     boolean ready;
                     do {

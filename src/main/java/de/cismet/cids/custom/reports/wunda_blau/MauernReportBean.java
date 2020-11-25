@@ -29,16 +29,19 @@ public class MauernReportBean extends ReportBeanWithMapAndImages {
      * Creates a new MauernReportBean object.
      *
      * @param  mauer              DOCUMENT ME!
+     * @param  beanOnly           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public MauernReportBean(final CidsBean mauer, final ConnectionContext connectionContext) {
+    public MauernReportBean(final CidsBean mauer, final boolean beanOnly, final ConnectionContext connectionContext) {
         super(
             mauer,
-            "georeferenz.geo_field",
-            "bilder",
-            "url",
-            java.util.ResourceBundle.getBundle(
-                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"),
+            beanOnly ? null : "georeferenz.geo_field",
+            beanOnly ? null : "bilder",
+            beanOnly ? null : "url",
+            beanOnly
+                ? null
+                : java.util.ResourceBundle.getBundle("de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString(
+                    "map_url"),
             connectionContext);
     }
 
