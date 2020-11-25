@@ -48,16 +48,23 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             ReportBeanWithMapAndImages.class);
-    private static String WEB_DAV_DIRECTORY;
-    private static String WEB_DAV_USER;
-    private static String WEB_DAV_PASSWORD;
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ImageState imgState0 = new ImageState();
-    private final ImageState imgState1 = new ImageState();
+    private final ImageState imgState0;
+    private final ImageState imgState1;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ReportBeanWithMapAndImages object.
+     *
+     * @param  cidsBean           DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public ReportBeanWithMapAndImages(final CidsBean cidsBean, final ConnectionContext connectionContext) {
+        this(cidsBean, null, null, null, null, connectionContext);
+    }
 
     /**
      * Creates a new MauernBeanWithMapAndImages object.
@@ -76,36 +83,44 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
             final String mapUrl,
             final ConnectionContext connectionContext) {
         super(cidsBean, geomProp, mapUrl, connectionContext);
-        final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
-        String pass = webDavBundle.getString("password");
 
-        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-            pass = PasswordEncrypter.decryptString(pass);
-        }
-
-        WEB_DAV_PASSWORD = pass;
-        WEB_DAV_USER = webDavBundle.getString("user");
-        WEB_DAV_DIRECTORY = webDavBundle.getString(davUrlProp);
-        final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(),
-                WEB_DAV_USER,
-                WEB_DAV_PASSWORD,
-                false);
-
-        final List<CidsBean> images = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, imgsProp);
-        final StringBuilder url0Builder = new StringBuilder();
-
-        final StringBuilder url1Builder = new StringBuilder();
-        for (final CidsBean b : images) {
-            final Integer nr = (Integer)b.getProperty("laufende_nummer");
-            if (nr == 1) {
-                url0Builder.append(b.getProperty("url.object_name").toString());
-            } else if (nr == 2) {
-                url1Builder.append(b.getProperty("url.object_name").toString());
+        final List<CidsBean> images = (imgsProp != null)
+            ? CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, imgsProp) : null;
+        if (images != null) {
+            final StringBuilder url0Builder = new StringBuilder();
+            final StringBuilder url1Builder = new StringBuilder();
+            for (final CidsBean b : images) {
+                final Integer nr = (Integer)b.getProperty("laufende_nummer");
+                if (nr == 1) {
+                    url0Builder.append(b.getProperty("url.object_name").toString());
+                } else if (nr == 2) {
+                    url1Builder.append(b.getProperty("url.object_name").toString());
+                }
             }
-        }
 
-        loadImage(url0Builder.toString(), imgState0, webDavHelper);
-        loadImage(url1Builder.toString(), imgState1, webDavHelper);
+            final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
+            String pass = webDavBundle.getString("password");
+
+            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
+                pass = PasswordEncrypter.decryptString(pass);
+            }
+
+            final String webDavPassword = pass;
+            final String webDavUser = webDavBundle.getString("user");
+            final String webDavDirectory = webDavBundle.getString(davUrlProp);
+            final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(),
+                    webDavUser,
+                    webDavPassword,
+                    false);
+
+            imgState0 = new ImageState();
+            imgState1 = new ImageState();
+            loadImage(url0Builder.toString(), imgState0, webDavHelper, webDavDirectory);
+            loadImage(url1Builder.toString(), imgState1, webDavHelper, webDavDirectory);
+        } else {
+            imgState0 = null;
+            imgState1 = null;
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -113,11 +128,15 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
     /**
      * DOCUMENT ME!
      *
-     * @param  url           DOCUMENT ME!
-     * @param  imgState      DOCUMENT ME!
-     * @param  webDavHelper  DOCUMENT ME!
+     * @param  url              DOCUMENT ME!
+     * @param  imgState         DOCUMENT ME!
+     * @param  webDavHelper     DOCUMENT ME!
+     * @param  webDavDirectory  DOCUMENT ME!
      */
-    private void loadImage(final String url, final ImageState imgState, final WebDavHelper webDavHelper) {
+    private void loadImage(final String url,
+            final ImageState imgState,
+            final WebDavHelper webDavHelper,
+            final String webDavDirectory) {
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -129,7 +148,7 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
                         }
                         final InputStream iStream = webDavHelper.getFileFromWebDAV(
                                 url,
-                                WEB_DAV_DIRECTORY,
+                                webDavDirectory,
                                 getConnectionContext());
                         final Image img = ImageIO.read(iStream);
                         if (img == null) {
@@ -150,7 +169,7 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
      * @return  DOCUMENT ME!
      */
     public Image getImg0() {
-        return imgState0.getImg();
+        return (imgState0 != null) ? imgState0.getImg() : null;
     }
 
     /**
@@ -159,7 +178,9 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
      * @param  img0  DOCUMENT ME!
      */
     public void setImg0(final Image img0) {
-        this.imgState0.setImg(img0);
+        if (imgState0 != null) {
+            imgState0.setImg(img0);
+        }
     }
 
     /**
@@ -168,7 +189,7 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
      * @return  DOCUMENT ME!
      */
     public Image getImg1() {
-        return imgState1.getImg();
+        return (imgState1 != null) ? imgState1.getImg() : null;
     }
 
     /**
@@ -177,7 +198,9 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
      * @param  img1  DOCUMENT ME!
      */
     public void setImg1(final Image img1) {
-        this.imgState1.setImg(img1);
+        if (imgState1 != null) {
+            imgState1.setImg(img1);
+        }
     }
 
     /**
@@ -187,8 +210,8 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
      */
     @Override
     public boolean isReadyToProceed() {
-        return super.isReadyToProceed() && ((imgState0.getImg() != null) || imgState0.isError())
-                    && ((imgState1.getImg() != null) || imgState1.isError());
+        return super.isReadyToProceed() && ((imgState0 == null) || (imgState0.getImg() != null) || imgState0.isError())
+                    && ((imgState1 == null) || (imgState1.getImg() != null) || imgState1.isError());
     }
 
     //~ Inner Classes ----------------------------------------------------------
