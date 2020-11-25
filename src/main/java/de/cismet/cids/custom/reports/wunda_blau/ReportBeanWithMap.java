@@ -72,9 +72,7 @@ public class ReportBeanWithMap implements ConnectionContextProvider {
         this.cidsBean = cidsBean;
         this.connectionContext = connectionContext;
 
-        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(mapUrl));
-
-        final Geometry g = (Geometry)cidsBean.getProperty(geomProp);
+        final Geometry g = (geomProp != null) ? (Geometry)cidsBean.getProperty(geomProp) : null;
         if (g == null) {
             mapError = true;
             LOG.info("Geometry is null. Can not create a map for the mauer katasterblatt report");
@@ -85,6 +83,7 @@ public class ReportBeanWithMap implements ConnectionContextProvider {
             dsf.setLinePaint(Color.RED);
             dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
 
+            final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(mapUrl));
             final HeadlessMapProvider mapProvider = new HeadlessMapProvider();
             mapProvider.addLayer(s);
             mapProvider.addFeature(dsf);
