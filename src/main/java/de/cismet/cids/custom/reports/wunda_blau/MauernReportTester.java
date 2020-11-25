@@ -57,7 +57,7 @@ public class MauernReportTester {
         final MauernReportBean[] mauern = new MauernReportBean[beans.length];
         int i = 0;
         for (final CidsBean b : beans) {
-            final MauernReportBean x = new MauernReportBean(b, ConnectionContext.createDeprecated());
+            final MauernReportBean x = new MauernReportBean(b, false, ConnectionContext.createDeprecated());
             mauern[i++] = x;
             LOG.fatal(b.getMOString());
         }
