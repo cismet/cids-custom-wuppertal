@@ -129,11 +129,7 @@ public class MauerObjectsPermissionsProviderDialog extends javax.swing.JDialog i
 
         jPanel6.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnPersist,
-            org.openide.util.NbBundle.getMessage(
-                MauerObjectsPermissionsProviderDialog.class,
-                "MauerObjectsPermissionsProviderDialog.btnPersist.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnPersist, "Speichern");
         btnPersist.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override

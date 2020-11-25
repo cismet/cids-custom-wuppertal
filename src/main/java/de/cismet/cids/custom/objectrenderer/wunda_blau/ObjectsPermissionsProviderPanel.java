@@ -960,8 +960,13 @@ public class ObjectsPermissionsProviderPanel extends javax.swing.JPanel implemen
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreatePermissionActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreatePermissionActionPerformed
-        if (optOnlySelectedObjects.isSelected()) {
-            final Collection<CidsBean> allSelectedObjectBeans = new ArrayList<>(lstObjects.getSelectedValuesList());
+        if (optOnlySelectedObjects.isSelected() || optAllListObjects.isSelected()) {
+            final Collection<CidsBean> allSelectedObjectBeans = new ArrayList<>();
+            if (optOnlySelectedObjects.isSelected()) {
+                allSelectedObjectBeans.addAll(lstObjects.getSelectedValuesList());
+            } else if (optAllListObjects.isSelected()) {
+                allSelectedObjectBeans.addAll(objectsMap.values());
+            }
 
             final Map<String, Collection<CidsBean>> objectBeansPerDomain = new HashMap<>();
             for (final CidsBean objectBean : allSelectedObjectBeans) {
@@ -1173,7 +1178,8 @@ public class ObjectsPermissionsProviderPanel extends javax.swing.JPanel implemen
         final boolean objectsSelected = (optOnlySelectedObjects.isSelected()
                         && !lstObjects.getSelectedValuesList().isEmpty())
                     || (enableAllFromClass && optAllClassObjects.isSelected()
-                        && (cbClasses.getSelectedItem() != null));
+                        && (cbClasses.getSelectedItem() != null))
+                    || (optAllListObjects.isSelected() && (lstObjects.getModel().getSize() > 0));
         // final boolean groupSelected = enableAllGroups ? ;
         final boolean groupSelected = (enableGroupPermission && optByGroupName.isSelected()
                         && enableAllGroups)
@@ -1236,7 +1242,9 @@ public class ObjectsPermissionsProviderPanel extends javax.swing.JPanel implemen
         txtUserName.setVisible(enableUserPermission);
 
         chkRead.setVisible(enableReadPermission);
+        chkRead.setEnabled(enableWritePermission);
         chkWrite.setVisible(enableWritePermission);
+        chkWrite.setEnabled(enableReadPermission);
 
         jPanel4.setVisible(enableEdit);
         btnDeletePermission.setVisible(enableEdit);
@@ -1296,12 +1304,13 @@ public class ObjectsPermissionsProviderPanel extends javax.swing.JPanel implemen
                 protected void done() {
                     try {
                         final List<CidsBean> beans = get();
-                        final DefaultListModel<CidsBean> lstModel = (DefaultListModel)lstObjects.getModel();
-                        for (final CidsBean bean : beans) {
-                            if (!((DefaultListModel)lstObjects.getModel()).contains(bean)) {
-                                lstModel.addElement(bean);
-                            }
-                        }
+                        setCidsBeans(beans);
+//                        final DefaultListModel<CidsBean> lstModel = (DefaultListModel)lstObjects.getModel();
+//                        for (final CidsBean bean : beans) {
+//                            if (!((DefaultListModel)lstObjects.getModel()).contains(bean)) {
+//                                lstModel.addElement(bean);
+//                            }
+//                        }
                     } catch (final Exception ex) {
                         LOG.error(ex, ex);
                     }

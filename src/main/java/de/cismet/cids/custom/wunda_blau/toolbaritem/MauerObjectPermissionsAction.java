@@ -85,7 +85,6 @@ public class MauerObjectPermissionsAction extends AbstractAction implements Cids
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        MauerObjectsPermissionsProviderDialog.getInstance().setCidsBeans(null);
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
             MauerObjectsPermissionsProviderDialog.getInstance(),
             true);
