@@ -1873,12 +1873,12 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
                 }else{
                     if (cidsBean.getProperty(FIELD__SCHLUESSEL) != null) {
                         if (isAmt){
-                            if(!(Arrays.asList(StrAdrConfProperties.getInstance().getStringBenennGross().split(",")).contains(cidsBean.getProperty(FIELD__BESCHLUSS_B_NAME).toString()))){
+                            if(!(Arrays.asList(StrAdrConfProperties.getInstance().getStringBenenn().split(",")).contains(cidsBean.getProperty(FIELD__BESCHLUSS_B_NAME).toString()))){
                                 LOG.warn("Wrong beschluss_b specified. Skip persisting.");
                                 errorMessage.append(NbBundle.getMessage(StrAdrStrasseEditor.class, BUNDLE_WRONGBESCHLUSS));
                             }
                         } else{
-                            if(!(Arrays.asList(StrAdrConfProperties.getInstance().getStringBenenn().split(",")).contains(cidsBean.getProperty(FIELD__BESCHLUSS_B_NAME).toString()))){
+                            if(!(Arrays.asList(StrAdrConfProperties.getInstance().getStringBenennGross().split(",")).contains(cidsBean.getProperty(FIELD__BESCHLUSS_B_NAME).toString()))){
                                 LOG.warn("Wrong beschluss_b specified. Skip persisting.");
                                 errorMessage.append(NbBundle.getMessage(StrAdrStrasseEditor.class, BUNDLE_WRONGBESCHLUSS));
                             }
@@ -2239,9 +2239,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             checkSBZ();
             checkKMQ();
             checkGeom();
-        }
-        if (evt.getPropertyName().equals(FIELD__ENTDAT)) {
-            setAmtStr();
         }
     }
    
