@@ -41,17 +41,17 @@ public class StrAdrConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(StrAdrConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            StrAdrConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    
     private final Double bufferMeter;
     private final String stringBenenn;
     private final String stringEntnenn;
     private final String stringBenennGross;
     private final String stringForbiddenKeys;
-    
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -120,7 +120,8 @@ public class StrAdrConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.STRADR_CONF_PROPERTIES.getValue(),
