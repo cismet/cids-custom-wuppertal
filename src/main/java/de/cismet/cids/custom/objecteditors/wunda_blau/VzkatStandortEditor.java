@@ -15,6 +15,8 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
+import com.google.common.base.Strings;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineSegment;
 import com.vividsolutions.jts.geom.Point;
@@ -3037,7 +3039,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             try {
                 standortBean.setProperty(
                     "strassenschluessel",
-                    (selectedStrAdrAddresse != null) ? (String)selectedStrAdrAddresse.getProperty("strasse") : null);
+                    (selectedStrAdrAddresse != null)
+                        ? (String)selectedStrAdrAddresse.getProperty("schluessel.schluessel") : null);
             } catch (final Exception ex) {
                 LOG.fatal(ex, ex);
             }
