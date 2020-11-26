@@ -130,7 +130,9 @@ public abstract class AbstractAlboFlaechePanel extends javax.swing.JPanel implem
                         cidsBean,
                         getConnectionContext());
                 }
-                this.cidsBean = cidsBean;
+            }
+            this.cidsBean = cidsBean;
+            if (cidsBean != null) {
                 if (getBindingGroup() != null) {
                     getBindingGroup().bind();
                 }
@@ -143,6 +145,7 @@ public abstract class AbstractAlboFlaechePanel extends javax.swing.JPanel implem
 
     @Override
     public void dispose() {
+        setCidsBean(null);
     }
 
     @Override
