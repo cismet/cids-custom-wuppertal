@@ -27,7 +27,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
@@ -68,6 +67,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.ComboPopup;
@@ -82,6 +82,7 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.orbit.OrbitControlFeature;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.VzkatStandortNextSchluesselServerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -104,7 +105,6 @@ import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-import de.cismet.cismap.commons.util.DnDUtils;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -1636,10 +1636,26 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      */
     private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
         if (editable) {
-            refreshGeomFeatures();
-            mappingComponent1.zoomToFeatureCollection();
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
+                        refreshGeomFeatures();
+                        new SwingWorker<Void, Void>() {
+
+                            @Override
+                            protected Void doInBackground() throws Exception {
+                                strassennameSearch.setGeom(geom);
+                                cbStrassenname.refreshModel();
+                                return null;
+                            }
+                        }.execute();
+                        mappingComponent1.zoomToFeatureCollection();
+                    }
+                });
         }
-    }                                                                          //GEN-LAST:event_cbGeomActionPerformed
+    } //GEN-LAST:event_cbGeomActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1770,6 +1786,81 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     /**
      * DOCUMENT ME!
      */
+    private void refreshImageButtons() {
+        final Map<CidsBean, List> richtungBeanMap = createRichtungsLists(schildBeans);
+        panFullIcon.removeAll();
+        panFullIcon.add(lblFullIconVorne);
+        panFullIcon.add(lblFullIconHinten);
+        panFullIcon.add(lblFullIconSonstige);
+        panPreviewIcon.removeAll();
+        panPreviewIcon.add(lblPreviewIconVorne);
+        panPreviewIcon.add(lblPreviewIconHinten);
+        panPreviewIcon.add(lblPreviewIconSonstige);
+        if (richtungBeanMap != null) {
+            final Set<CidsBean> richtungBeans = richtungBeanMap.keySet();
+            boolean vorneExists = false;
+            boolean hintenExists = false;
+            boolean sonstigeExists = false;
+            int count = 0;
+            if ((richtungBeans != null) && !richtungBeans.isEmpty()) {
+                for (final CidsBean richtungBean : richtungBeans) {
+                    if (richtungBean != null) {
+                        if ("vorne".equals(richtungBean.getProperty("schluessel"))) {
+                            vorneExists = true;
+                            count++;
+                        } else if ("hinten".equals(richtungBean.getProperty("schluessel"))) {
+                            hintenExists = true;
+                            count++;
+                        } else if ("sonstige".equals(richtungBean.getProperty("schluessel"))) {
+                            sonstigeExists = true;
+                            count++;
+                        }
+                    }
+                }
+
+                if (!vorneExists) {
+                    lblFullIconVorne.setVisible(false);
+                    lblPreviewIconVorne.setVisible(false);
+                    panFullIcon.remove(lblFullIconVorne);
+                    panPreviewIcon.remove(lblPreviewIconVorne);
+                }
+                if (!hintenExists) {
+                    lblFullIconHinten.setVisible(false);
+                    lblPreviewIconHinten.setVisible(false);
+                    panFullIcon.remove(lblFullIconHinten);
+                    panPreviewIcon.remove(lblPreviewIconHinten);
+                }
+                if (!sonstigeExists) {
+                    lblFullIconSonstige.setVisible(false);
+                    lblPreviewIconSonstige.setVisible(false);
+                    panFullIcon.remove(lblFullIconSonstige);
+                    panPreviewIcon.remove(lblPreviewIconSonstige);
+                }
+            }
+
+            final String first = vorneExists ? "vorne"
+                                             : (hintenExists ? "hinten" : (sonstigeExists ? "sonstige" : "vorne"));
+            ((CardLayout)panFullIcon.getLayout()).show(panFullIcon, first);
+            ((CardLayout)panPreviewIcon.getLayout()).show(panPreviewIcon, first);
+
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        updateRichtung();
+                    }
+                });
+
+            btnFullNext.setVisible(count > 1);
+            btnPreviewNext.setVisible(count > 1);
+            btnFullPrev.setVisible(count > 1);
+            btnPreviewPrev.setVisible(count > 1);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     private void loadImages() {
         if (standortBean != null) {
             loadOvPreview(OvDirection.BACKWARDS);
@@ -1779,51 +1870,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             loadImages(Richtung.VORNE);
             loadImages(Richtung.HINTEN);
             loadImages(Richtung.SONSTIGE);
-
-            final Map<CidsBean, List> richtungBeanMap = createRichtungsLists(schildBeans);
-            if (richtungBeanMap != null) {
-                final Set<CidsBean> richtungBeans = richtungBeanMap.keySet();
-                boolean vorneExists = false;
-                boolean hintenExists = false;
-                boolean sonstigeExists = false;
-                int count = 0;
-                if ((richtungBeans != null) && !richtungBeans.isEmpty()) {
-                    for (final CidsBean richtungBean : richtungBeans) {
-                        if (richtungBean != null) {
-                            if ("vorne".equals(richtungBean.getProperty("schluessel"))) {
-                                vorneExists = true;
-                                count++;
-                            } else if ("hinten".equals(richtungBean.getProperty("schluessel"))) {
-                                hintenExists = true;
-                                count++;
-                            } else if ("sonstige".equals(richtungBean.getProperty("schluessel"))) {
-                                sonstigeExists = true;
-                                count++;
-                            }
-                        }
-                    }
-
-                    if (!vorneExists) {
-                        panFullIcon.remove(lblFullIconVorne);
-                        panPreviewIcon.remove(lblPreviewIconVorne);
-                    } else if (!hintenExists) {
-                        panFullIcon.remove(lblFullIconHinten);
-                        panPreviewIcon.remove(lblPreviewIconHinten);
-                    } else if (!sonstigeExists) {
-                        panFullIcon.remove(lblFullIconSonstige);
-                        panPreviewIcon.remove(lblPreviewIconSonstige);
-                    }
-                    updateRichtung();
-                }
-
-                ((CardLayout)panPreviewIcon.getLayout()).first(panPreviewIcon);
-                ((CardLayout)panFullIcon.getLayout()).first(panFullIcon);
-
-                btnFullNext.setVisible(count > 1);
-                btnPreviewNext.setVisible(count > 1);
-                btnFullPrev.setVisible(count > 1);
-                btnPreviewPrev.setVisible(count > 1);
-            }
         }
     }
 
@@ -2505,6 +2551,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 protected void done() {
                     refreshSchildPanels();
                     loadImages();
+                    refreshImageButtons();
                     jButton3.setEnabled(true);
                 }
             }.execute();
@@ -2542,6 +2589,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
             jScrollPane1.scrollRectToVisible(component.getBounds());
         }
+
+        refreshImageButtons();
     }
 
     /**
@@ -2822,9 +2871,35 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
         this.standortBean = standortBean;
 
-        txtTitle.setText((standortBean != null) ? getTitle() : null);
-
         if (standortBean != null) {
+            if (MetaObject.NEW == standortBean.getMetaObject().getStatus()) {
+                new SwingWorker<Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            final Collection<Integer> result = SessionManager.getProxy()
+                                        .customServerSearch(new VzkatStandortNextSchluesselServerSearch(),
+                                            getConnectionContext());
+                            if ((result != null) && !result.isEmpty()) {
+                                final Integer schluessel = result.iterator().next();
+                                standortBean.setProperty("import_id", schluessel);
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                txtTitle.setText(getTitle());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                        }
+                    }.execute();
+            } else {
+                txtTitle.setText(getTitle());
+            }
+
             bindingGroup.bind();
 
             initMap();
@@ -2837,6 +2912,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 jxhOVBW.setVisible(false);
                 jxhOVFW.setVisible(false);
             }
+        } else {
+            txtTitle.setText(null);
         }
     }
 
@@ -2908,6 +2985,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 LOG.error(ex, ex);
             }
         }
+        if (errorOccured) {
+            return false;
+        }
         for (final CidsBean schildBean : deletedSchildBeans) {
             try {
                 schildBean.delete();
@@ -2917,7 +2997,31 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                 LOG.error(ex, ex);
             }
         }
-        return !errorOccured;
+        if (errorOccured) {
+            return false;
+        }
+
+        if ((standortBean != null) && (MetaObject.NEW == standortBean.getMetaObject().getStatus())) {
+            final Integer schluesselBefore = (Integer)standortBean.getProperty("import_id");
+            try {
+                final Collection<Integer> result = SessionManager.getProxy()
+                            .customServerSearch(new VzkatStandortNextSchluesselServerSearch(), getConnectionContext());
+                if ((result != null) && !result.isEmpty()) {
+                    final Integer schluessel = result.iterator().next();
+                    if (schluessel == null) {
+                        return false;
+                    }
+                    if (!schluessel.equals(schluesselBefore)) {
+                        // todo warning and asking if continue saving with new schluessel
+                    }
+                    standortBean.setProperty("import_id", schluessel);
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
