@@ -427,7 +427,7 @@
                       <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
                         <CompoundBorder>
                           <Border PropertyName="outside" info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                            <TitledBorder title="Eigent&#xfc;mer ist"/>
+                            <TitledBorder title="Eigent&#xfc;mer Anrede ist"/>
                           </Border>
                           <Border PropertyName="inside" info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                             <EmptyBorder bottom="4" left="4" right="4" top="4"/>

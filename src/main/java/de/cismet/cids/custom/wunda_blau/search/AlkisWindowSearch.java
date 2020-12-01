@@ -530,7 +530,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panEingabeEigentuemer.add(jLabel8, gridBagConstraints);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"),
+                javax.swing.BorderFactory.createTitledBorder("Eigentümer Anrede ist"),
                 javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
