@@ -26,8 +26,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import org.openide.util.Exceptions;
-
 import java.awt.Component;
 
 import java.text.DecimalFormat;
@@ -43,8 +41,10 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangNextSchluesselServerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
@@ -139,7 +139,9 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox102;
     private javax.swing.JCheckBox jCheckBox103;
@@ -161,6 +163,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -238,7 +241,12 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 32767));
+        jPanel9 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel7 = new javax.swing.JPanel();
         jLabel61 = new javax.swing.JLabel();
         jComboBox28 = new DefaultBindableScrollableComboBox();
@@ -580,6 +588,27 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.gridy = 2;
         jPanel5.add(filler4, gridBagConstraints);
 
+        jPanel9.setName("jPanel9"); // NOI18N
+        jPanel9.setOpaque(false);
+        jPanel9.setLayout(new java.awt.GridBagLayout());
+
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
+        jButton3.setName("jButton3");                                                                // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel9.add(jButton3, gridBagConstraints);
+        jButton3.setVisible(isEditable());
+
         jButton2.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
         jButton2.setName("jButton2");                                                                   // NOI18N
@@ -591,12 +620,23 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(jButton2, gridBagConstraints);
+        jPanel9.add(jButton2, gridBagConstraints);
         jButton2.setVisible(isEditable());
+
+        filler7.setName("filler7"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel9.add(filler7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel5.add(jPanel9, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -830,6 +870,20 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         AlboReportGenerator.startVorgangReportDownload(getCidsBean(), this, getConnectionContext());
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        final CidsBean flaecheBean = (CidsBean)ComboBoxFilterDialog.showForSearch(new AlboFlaecheLightweightSearch(),
+                "Erhebungsfläche auswählen",
+                getConnectionContext());
+        if (flaecheBean != null) {
+            ((VorgangFlaecheTableModel)jXTable1.getModel()).add(flaecheBean);
+        }
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {

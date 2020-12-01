@@ -363,7 +363,7 @@ public class AlboWirtschaftszweigEditor extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        ComboBoxFilterDialog.showForCombobox(jComboBox24);
+        ComboBoxFilterDialog.showForCombobox(jComboBox24, getConnectionContext());
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     @Override

@@ -14,6 +14,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import javax.swing.JFrame;
 
+import de.cismet.connectioncontext.ConnectionContext;
+
 /**
  * DOCUMENT ME!
  *
@@ -1693,7 +1695,7 @@ public class ComboBoxFilterTest extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        ComboBoxFilterDialog.showForCombobox(jComboBox1);
+        ComboBoxFilterDialog.showForCombobox(jComboBox1, ConnectionContext.createDeprecated());
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**

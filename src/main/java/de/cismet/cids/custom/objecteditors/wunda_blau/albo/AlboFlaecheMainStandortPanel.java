@@ -32,8 +32,6 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
-import de.cismet.tools.gui.StaticSwingTools;
-
 /**
  * DOCUMENT ME!
  *
@@ -679,7 +677,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         jComboBox27.setSelectedItem(null);
-        ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen");
+        ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen", getConnectionContext());
         final CidsBean selected = (CidsBean)jComboBox27.getSelectedItem();
         if (selected != null) {
             ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).add(selected);
