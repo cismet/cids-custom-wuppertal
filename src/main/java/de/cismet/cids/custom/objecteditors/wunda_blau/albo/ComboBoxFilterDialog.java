@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 
 import java.util.Arrays;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -29,7 +30,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.cismet.cids.custom.wunda_blau.search.server.FilterableSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.AbstractMonToLwmoSearch;
 
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
@@ -49,14 +50,13 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
     //~ Instance fields --------------------------------------------------------
 
     private final JComboBox comboBox;
-    private final FilterableSearch search;
+    private final AbstractMonToLwmoSearch search;
 
     private final ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cbSearch;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -69,11 +69,18 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
 
     /**
      * Creates a new ComboBoxFilterDialog object.
+     */
+    public ComboBoxFilterDialog() {
+        this(null, null, null, ConnectionContext.createDummy());
+    }
+
+    /**
+     * Creates a new ComboBoxFilterDialog object.
      *
      * @param  search             DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public ComboBoxFilterDialog(final FilterableSearch search, final ConnectionContext connectionContext) {
+    public ComboBoxFilterDialog(final AbstractMonToLwmoSearch search, final ConnectionContext connectionContext) {
         this(null, search, null, connectionContext);
     }
 
@@ -94,7 +101,7 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
      * @param  title              DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public ComboBoxFilterDialog(final FilterableSearch search,
+    public ComboBoxFilterDialog(final AbstractMonToLwmoSearch search,
             final String title,
             final ConnectionContext connectionContext) {
         this(null, search, title, connectionContext);
@@ -121,7 +128,7 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
      * @param  connectionContext  DOCUMENT ME!
      */
     public ComboBoxFilterDialog(final JComboBox comboBox,
-            final FilterableSearch search,
+            final AbstractMonToLwmoSearch search,
             final String title,
             final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
@@ -161,11 +168,38 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
                 }
             });
 
-        getSelectionTableModel().fireTableDataChanged();
         getRootPane().setDefaultButton(btnApply);
+        refresh();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void refresh() {
+        if (search != null) {
+            cbSearch.setModel(new DefaultComboBoxModel<String>(new String[] { "Objekte werden geladen..." }));
+            new SwingWorker<Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        ((FastBindableReferenceCombo)cbSearch).setMetaClassFromTableName(search.getDomain(),
+                            search.getTableName());
+                        ((FastBindableReferenceCombo)cbSearch).refreshModel();
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        getSelectionTableModel().fireTableDataChanged();
+                        txtFilter.requestFocus();
+                    }
+                }.execute();
+        } else {
+            getSelectionTableModel().fireTableDataChanged();
+        }
+    }
 
     @Override
     public ConnectionContext getConnectionContext() {
@@ -238,7 +272,6 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
         jPanel2 = new javax.swing.JPanel();
         btnApply = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        btnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
@@ -251,6 +284,13 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
         table.setShowHorizontalLines(false);
         table.setShowVerticalLines(false);
         table.setTableHeader(null);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    tableMouseClicked(evt);
+                }
+            });
         table.addKeyListener(new java.awt.event.KeyAdapter() {
 
                 @Override
@@ -263,8 +303,8 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
@@ -321,28 +361,9 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         jPanel1.add(jPanel2, gridBagConstraints);
-
-        btnSearch.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png")));                      // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnSearch,
-            org.openide.util.NbBundle.getMessage(ComboBoxFilterDialog.class, "ComboBoxFilterDialog.btnSearch.text")); // NOI18N
-        btnSearch.setMaximumSize(new java.awt.Dimension(36, 36));
-        btnSearch.setMinimumSize(new java.awt.Dimension(36, 36));
-        btnSearch.setPreferredSize(new java.awt.Dimension(36, 36));
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnSearchActionPerformed(evt);
-                }
-            });
-        jPanel1.add(btnSearch, new java.awt.GridBagConstraints());
-        btnSearch.setVisible(search != null);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -437,33 +458,41 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSearchActionPerformed
-        search.setFilter(txtFilter.getText());
-        new SwingWorker<Void, Void>() {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    ((FastBindableReferenceCombo)cbSearch).setMetaClassFromTableName(search.getDomain(),
-                        search.getTableName());
-                    ((FastBindableReferenceCombo)cbSearch).refreshModel();
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    getSelectionTableModel().fireTableDataChanged();
-                }
-            }.execute();
-    } //GEN-LAST:event_btnSearchActionPerformed
+    private void tableMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tableMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (getTable().getSelectedRow() >= 0) {
+                final RowSorter rowSorter = getRowSorter();
+                getComboBox().setSelectedIndex(rowSorter.convertRowIndexToModel(getTable().getSelectedRow()));
+                dispose();
+            }
+        }
+    }                                                                     //GEN-LAST:event_tableMouseClicked
 
     /**
      * DOCUMENT ME!
      *
-     * @param  comboBox           DOCUMENT ME!
-     * @param  connectionContext  DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
-    public static void showForCombobox(final JComboBox comboBox, final ConnectionContext connectionContext) {
-        showForCombobox(comboBox, null, connectionContext);
+    public Object showAndGetSelected() {
+        if (getComboBox().getSelectedItem() != null) {
+            table.requestFocus();
+        } else {
+            txtFilter.requestFocus();
+        }
+        StaticSwingTools.showDialog(getParent(), this, true);
+        return (getComboBox() != null) ? getComboBox().getSelectedItem() : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   comboBox           DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Object showForCombobox(final JComboBox comboBox, final ConnectionContext connectionContext) {
+        return showForCombobox(comboBox, null, connectionContext);
     }
 
     /**
@@ -478,9 +507,7 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
     public static Object showForCombobox(final JComboBox comboBox,
             final String title,
             final ConnectionContext connectionContext) {
-        final ComboBoxFilterDialog dialog = new ComboBoxFilterDialog(comboBox, title, connectionContext);
-        StaticSwingTools.showDialog(dialog, true);
-        return (dialog.getComboBox() != null) ? dialog.getComboBox().getSelectedItem() : null;
+        return new ComboBoxFilterDialog(comboBox, title, connectionContext).showAndGetSelected();
     }
 
     /**
@@ -492,12 +519,10 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
      *
      * @return  DOCUMENT ME!
      */
-    public static Object showForSearch(final FilterableSearch search,
+    public static Object showForSearch(final AbstractMonToLwmoSearch search,
             final String title,
             final ConnectionContext connectionContext) {
-        final ComboBoxFilterDialog dialog = new ComboBoxFilterDialog(search, title, connectionContext);
-        StaticSwingTools.showDialog(dialog, true);
-        return (dialog.getComboBox() != null) ? dialog.getComboBox().getSelectedItem() : null;
+        return new ComboBoxFilterDialog(search, title, connectionContext).showAndGetSelected();
     }
 
     //~ Inner Classes ----------------------------------------------------------

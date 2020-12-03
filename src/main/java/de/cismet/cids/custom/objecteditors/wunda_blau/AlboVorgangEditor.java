@@ -41,7 +41,6 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
@@ -133,6 +132,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton btnReport;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialog1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -213,6 +213,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         lblTitle = new javax.swing.JLabel();
         btnReport = new javax.swing.JButton();
         panFooter = new javax.swing.JPanel();
+        comboBoxFilterDialog1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(
+                null,
+                new AlboFlaecheLightweightSearch(),
+                "Erhebungsfläche auswählen",
+                getConnectionContext());
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
@@ -321,6 +326,8 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
         panFooter.setName("panFooter"); // NOI18N
         panFooter.setLayout(new java.awt.GridBagLayout());
+
+        comboBoxFilterDialog1.setName("comboBoxFilterDialog1"); // NOI18N
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -877,10 +884,9 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      * @param  evt  DOCUMENT ME!
      */
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
-        final CidsBean flaecheBean = (CidsBean)ComboBoxFilterDialog.showForSearch(new AlboFlaecheLightweightSearch(),
-                "Erhebungsfläche auswählen",
-                getConnectionContext());
-        if (flaecheBean != null) {
+        final Object selectedItem = comboBoxFilterDialog1.showAndGetSelected();
+        if (selectedItem instanceof CidsBean) {
+            final CidsBean flaecheBean = (CidsBean)selectedItem;
             ((VorgangFlaecheTableModel)jXTable1.getModel()).add(flaecheBean);
         }
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
