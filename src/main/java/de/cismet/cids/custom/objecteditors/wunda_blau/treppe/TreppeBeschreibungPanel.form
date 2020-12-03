@@ -41,7 +41,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.lblHeaderAllgemein1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.lblHeaderAllgemein1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="name" type="java.lang.String" value="lblHeaderAllgemein1" noResource="true"/>
           </Properties>
@@ -91,7 +91,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel84">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel84.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel84.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel84" noResource="true"/>
                   </Properties>
@@ -104,7 +104,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
                   </Properties>
@@ -146,7 +146,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel2">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
                       </Properties>
@@ -159,7 +159,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel7">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
                       </Properties>
@@ -175,7 +175,7 @@
                           <Format format="#0000" subtype="-1" type="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jFormattedTextField1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jFormattedTextField1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jFormattedTextField1" noResource="true"/>
                       </Properties>
@@ -201,7 +201,7 @@
                           <Format format="#00000" subtype="-1" type="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jFormattedTextField2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jFormattedTextField2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jFormattedTextField2" noResource="true"/>
                       </Properties>
@@ -256,7 +256,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
                   </Properties>
@@ -298,7 +298,7 @@
                     <Component class="javax.swing.JLabel" name="lblGeom">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor" preCode="if(editable){" postCode="}">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.lblGeom.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.lblGeom.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="lblGeom" noResource="true" preCode="if(editable){" postCode="}"/>
                       </Properties>
@@ -370,7 +370,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
                   </Properties>
@@ -399,7 +399,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel5">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
                   </Properties>
@@ -425,7 +425,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox11">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="10"/>
@@ -449,7 +449,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox2">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="10"/>
@@ -491,7 +491,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel43">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel43.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel43.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel43" noResource="true"/>
                   </Properties>
@@ -504,7 +504,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel45">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel45.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel45.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel45" noResource="true"/>
                   </Properties>
@@ -546,7 +546,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel47">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel47.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel47.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel47" noResource="true"/>
                       </Properties>
@@ -591,7 +591,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel46">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel46.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel46.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel46" noResource="true"/>
                       </Properties>
@@ -622,7 +622,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel44">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel44.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel44.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel44" noResource="true"/>
                   </Properties>
@@ -651,7 +651,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel8">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
                   </Properties>
@@ -664,7 +664,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel9">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
                   </Properties>
@@ -677,7 +677,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel10">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
                   </Properties>
@@ -703,7 +703,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox3">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox3" noResource="true"/>
@@ -726,7 +726,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel14">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel14.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel14.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel14" noResource="true"/>
                       </Properties>
@@ -756,7 +756,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox4">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox4" noResource="true"/>
@@ -779,7 +779,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel15">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel15.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel15.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel15" noResource="true"/>
                       </Properties>
@@ -809,7 +809,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox5">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox5" noResource="true"/>
@@ -832,7 +832,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel16">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel16.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel16.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel16" noResource="true"/>
                       </Properties>
@@ -864,7 +864,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel20">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel20.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel20.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel20" noResource="true"/>
                   </Properties>
@@ -895,7 +895,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel21">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel21.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel21.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel21" noResource="true"/>
                   </Properties>
@@ -926,7 +926,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel11">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel11" noResource="true"/>
                   </Properties>
@@ -939,7 +939,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel19">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel19.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel19.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel19" noResource="true"/>
                   </Properties>
@@ -969,7 +969,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox6">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox6" noResource="true"/>
@@ -987,7 +987,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox8">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox8" noResource="true"/>
@@ -1005,7 +1005,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox10">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox10" noResource="true"/>
@@ -1023,7 +1023,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox7">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox7" noResource="true"/>
@@ -1041,7 +1041,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox9">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="jCheckBox9" noResource="true"/>
@@ -1061,7 +1061,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel6">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
                   </Properties>
@@ -1074,7 +1074,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel17">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel17.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel17.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel17" noResource="true"/>
                   </Properties>
@@ -1087,7 +1087,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel12">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel12" noResource="true"/>
                   </Properties>
@@ -1173,7 +1173,7 @@
                     <Component class="javax.swing.JCheckBox" name="jCheckBox1">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="10"/>
@@ -1197,7 +1197,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel13">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel13.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel13.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel13" noResource="true"/>
                       </Properties>
@@ -1210,7 +1210,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel18">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel18.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel18.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel18" noResource="true"/>
                       </Properties>
@@ -1223,7 +1223,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel85">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel85.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel85.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel85" noResource="true"/>
                       </Properties>
@@ -1331,7 +1331,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel49">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel49.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel49.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel49" noResource="true"/>
                       </Properties>
@@ -1344,7 +1344,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel48">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel48.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel48.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel48" noResource="true"/>
                       </Properties>
@@ -1375,7 +1375,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel50">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel50.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel50.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel50" noResource="true"/>
                   </Properties>
@@ -1388,7 +1388,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel51">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel51.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel51.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="jLabel51" noResource="true"/>
                   </Properties>
@@ -1414,7 +1414,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel52">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel52.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel52.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel52" noResource="true"/>
                       </Properties>
@@ -1427,7 +1427,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel53">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="TreppeBeschreibungPanel.jLabel53.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/treppe/Bundle.properties" key="TreppeBeschreibungPanel.jLabel53.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="jLabel53" noResource="true"/>
                       </Properties>

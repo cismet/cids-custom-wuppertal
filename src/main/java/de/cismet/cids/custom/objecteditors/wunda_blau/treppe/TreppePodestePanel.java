@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau;
+package de.cismet.cids.custom.objecteditors.wunda_blau.treppe;
 
 import org.apache.log4j.Logger;
 
@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -46,11 +47,11 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
+public class TreppePodestePanel extends javax.swing.JPanel implements Disposable, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(TreppeHandlaeufePanel.class);
+    private static final Logger LOG = Logger.getLogger(TreppePodestePanel.class);
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -65,7 +66,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
         jPanel1 = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         if (netbeansDesignDummy) {
-            treppeHandlaufPanel1 = new TreppeHandlaufPanel();
+            treppePodestPanel2 = new TreppePodestPanel(getConnectionContext());
         }
         btnAddArt1 = new JButton();
 
@@ -93,11 +94,11 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
         jPanel1.add(filler1, gridBagConstraints);
 
         if (netbeansDesignDummy) {
-            treppeHandlaufPanel1.setName("treppeHandlaufPanel1"); // NOI18N
+            treppePodestPanel2.setName("treppePodestPanel2"); // NOI18N
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 1.0;
-            jPanel1.add(treppeHandlaufPanel1, gridBagConstraints);
+            jPanel1.add(treppePodestPanel2, gridBagConstraints);
         }
 
         jScrollPane1.setViewportView(jPanel1);
@@ -119,8 +120,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTHEAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 0, 0);
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         add(btnAddArt1, gridBagConstraints);
     }
 
@@ -140,7 +140,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
         @Override
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddArt1) {
-                TreppeHandlaeufePanel.this.btnAddArt1ActionPerformed(evt);
+                TreppePodestePanel.this.btnAddArt1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -156,45 +156,45 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
     JButton btnAddArt1;
     Box.Filler filler1;
     JPanel jPanel1;
-    TreppeHandlaufPanel treppeHandlaufPanel1;
+    TreppePodestPanel treppePodestPanel2;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new TreppeHandlaeufePanel object.
+     * Creates a new TreppePodestePanel object.
      */
-    public TreppeHandlaeufePanel() {
+    public TreppePodestePanel() {
         this(ConnectionContext.createDeprecated());
     }
 
     /**
-     * Creates a new TreppeHandlaeufePanel object.
+     * Creates a new TreppePodestePanel object.
      *
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel(final ConnectionContext connectionContext) {
+    public TreppePodestePanel(final ConnectionContext connectionContext) {
         this(true, true, connectionContext);
     }
 
     /**
-     * Creates a new TreppeHandlaeufePanel object.
+     * Creates a new TreppePodestePanel object.
      *
      * @param  editable           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel(final boolean editable, final ConnectionContext connectionContext) {
+    public TreppePodestePanel(final boolean editable, final ConnectionContext connectionContext) {
         this(editable, false, connectionContext);
     }
 
     /**
-     * Creates new form TreppeHandlaeufePanel.
+     * Creates new form TreppePodestePanel.
      *
      * @param  editable             DOCUMENT ME!
      * @param  netbeansDesignDummy  DOCUMENT ME!
      * @param  connectionContext    DOCUMENT ME!
      */
-    public TreppeHandlaeufePanel(final boolean editable,
+    public TreppePodestePanel(final boolean editable,
             final boolean netbeansDesignDummy,
             final ConnectionContext connectionContext) {
         this.netbeansDesignDummy = netbeansDesignDummy;
@@ -205,11 +205,6 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
-    }
 
     /**
      * DOCUMENT ME!
@@ -224,7 +219,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
         if (cidsBeans != null) {
             Collections.sort(cidsBeans, new TreppeEditor.TeilementComparator("nummer"));
             for (final CidsBean cidsBean : cidsBeans) {
-                addHandlaufPanel(cidsBean);
+                addPodestPanel(cidsBean);
             }
         }
     }
@@ -234,7 +229,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      *
      * @param  cidsBean  DOCUMENT ME!
      */
-    private void addHandlaufPanel(final CidsBean cidsBean) {
+    private void addPodestPanel(final CidsBean cidsBean) {
         jPanel1.remove(filler1);
         final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -247,9 +242,9 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
 
                 @Override
                 protected JPanel doInBackground() throws Exception {
-                    final TreppeHandlaufPanel panel = new TreppeHandlaufPanel(editable);
+                    final TreppePodestPanel panel = new TreppePodestPanel(editable, getConnectionContext());
                     panel.setCidsBean(cidsBean);
-                    panel.setParent(TreppeHandlaeufePanel.this);
+                    panel.setParent(TreppePodestePanel.this);
                     return panel;
                 }
 
@@ -260,17 +255,17 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
 
                         final GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
                         gridBagConstraints.gridx = 0;
+                        gridBagConstraints.gridy = cidsBeans.indexOf(cidsBean);
                         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                         gridBagConstraints.weightx = 1.0;
-                        gridBagConstraints.gridy = cidsBeans.indexOf(cidsBean);
                         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
                         jPanel1.add(panel, gridBagConstraints);
 
                         jPanel1.repaint();
                     } catch (final Exception ex) {
-                        final String message = "Fehler beim Hinzufügen des Handlaufs.";
+                        final String message = "Fehler beim Hinzufügen des Podests.";
                         LOG.error(message, ex);
-                        ObjectRendererUtils.showExceptionWindowToUser(message, ex, TreppeHandlaeufePanel.this);
+                        ObjectRendererUtils.showExceptionWindowToUser(message, ex, TreppePodestePanel.this);
                     }
                 }
             }.execute();
@@ -281,7 +276,7 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
      *
      * @param  panel  DOCUMENT ME!
      */
-    public void removeHandlaufPanel(final TreppeHandlaufPanel panel) {
+    public void removePodestPanel(final TreppePodestPanel panel) {
         if (panel != null) {
             cidsBeans.remove(panel.getCidsBean());
             jPanel1.remove(panel);
@@ -307,15 +302,15 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
         try {
             final CidsBean cidsBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
-                    "TREPPE_HANDLAUF",
+                    "TREPPE_PODEST",
                     getConnectionContext());
             cidsBean.setProperty(
                 "zustand",
                 CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "TREPPE_ZUSTAND", getConnectionContext()));
-            addHandlaufPanel(cidsBean);
+            addPodestPanel(cidsBean);
             cidsBeans.add(cidsBean);
         } catch (final Exception ex) {
-            final String message = "Fehler beim Erzeugen des Handlaufs.";
+            final String message = "Fehler beim Erzeugen des Podests.";
             LOG.error(message, ex);
             ObjectRendererUtils.showExceptionWindowToUser(message, ex, this);
         }
@@ -324,11 +319,16 @@ public class TreppeHandlaeufePanel extends javax.swing.JPanel implements Disposa
     @Override
     public void dispose() {
         for (final Component comp : jPanel1.getComponents()) {
-            if (comp instanceof TreppeHandlaufPanel) {
-                final TreppeHandlaufPanel panel = (TreppeHandlaufPanel)comp;
+            if (comp instanceof TreppePodestPanel) {
+                final TreppePodestPanel panel = (TreppePodestPanel)comp;
                 panel.dispose();
                 jPanel1.remove(panel);
             }
         }
+    }
+
+    @Override
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }
