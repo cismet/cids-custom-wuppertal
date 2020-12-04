@@ -21,6 +21,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
@@ -31,6 +32,10 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
+
+import de.cismet.tools.BrowserLauncher;
+
+import static de.cismet.cids.custom.objecteditors.wunda_blau.albo.AbstractAlboFlaechePanel.LOG;
 
 /**
  * DOCUMENT ME!
@@ -103,15 +108,14 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         jPanel16 = new javax.swing.JPanel();
-        jLabel50 = new javax.swing.JLabel();
         jPanel48 = new javax.swing.JPanel();
-        jLabel52 = new javax.swing.JLabel();
         jFormattedTextField17 = new javax.swing.JFormattedTextField();
         jLabel51 = new javax.swing.JLabel();
         jFormattedTextField18 = new javax.swing.JFormattedTextField();
         filler63 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         jLabel6 = new javax.swing.JLabel();
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -124,6 +128,9 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jPanel5 = new javax.swing.JPanel();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
         jPanel15 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jXTable2 = new DroppedBeansTable();
@@ -336,25 +343,9 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         jPanel16.setOpaque(false);
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel50, "Jahr");
-        jLabel50.setName("jLabel50"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel16.add(jLabel50, gridBagConstraints);
-
         jPanel48.setName("jPanel48"); // NOI18N
         jPanel48.setOpaque(false);
         jPanel48.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel52, "von:");
-        jLabel52.setName("jLabel52"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel48.add(jLabel52, gridBagConstraints);
 
         jFormattedTextField17.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
                 new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
@@ -372,7 +363,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel48.add(jFormattedTextField17, gridBagConstraints);
 
@@ -400,7 +391,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel48.add(jFormattedTextField18, gridBagConstraints);
 
@@ -412,7 +403,17 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         jPanel48.add(filler63, gridBagConstraints);
 
+        jXHyperlink1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cismap/commons/gui/infowidgets/res/info.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jXHyperlink1, "Klassifikationsserver");
+        jXHyperlink1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jXHyperlink1.setName("jXHyperlink1");                                                       // NOI18N
+        jXHyperlink1.addActionListener(formListener);
+        jPanel48.add(jXHyperlink1, new java.awt.GridBagConstraints());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanel16.add(jPanel48, gridBagConstraints);
@@ -421,6 +422,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         jLabel6.setName("jLabel6"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -471,6 +473,33 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.ipadx = 200;
         gridBagConstraints.weightx = 1.0;
         jPanel16.add(filler24, gridBagConstraints);
+
+        jPanel5.setName("jPanel5"); // NOI18N
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel50, "Jahr");
+        jLabel50.setName("jLabel50"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel5.add(jLabel50, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel52, "von:");
+        jLabel52.setName("jLabel52"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel5.add(jLabel52, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel16.add(jPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -572,6 +601,8 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
                 AlboFlaecheMainStandortPanel.this.jButton3ActionPerformed(evt);
             } else if (evt.getSource() == jButton4) {
                 AlboFlaecheMainStandortPanel.this.jButton4ActionPerformed(evt);
+            } else if (evt.getSource() == jXHyperlink1) {
+                AlboFlaecheMainStandortPanel.this.jXHyperlink1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -615,6 +646,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel48;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
@@ -622,6 +654,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField8;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
     private org.jdesktop.swingx.JXTable jXTable2;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -722,6 +755,19 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      */
     private void jComboBox27ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox27ActionPerformed
     }                                                                               //GEN-LAST:event_jComboBox27ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        try {
+            BrowserLauncher.openURL(ClientAlboProperties.getInstance().getWz_klassifikation_link());
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
