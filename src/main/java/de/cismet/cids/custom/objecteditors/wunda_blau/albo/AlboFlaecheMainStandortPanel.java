@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import Sirius.server.middleware.types.MetaClass;
-import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
 
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
@@ -22,6 +21,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
@@ -708,65 +708,65 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         jComboBox27.setSelectedItem(null);
         ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen", getConnectionContext());
         final CidsBean selected = (CidsBean)jComboBox27.getSelectedItem();
         if (selected != null) {
             ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).add(selected);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).remove(
             ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).getCidsBean(jXTable2.getSelectedRow()));
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
 
         jDialog1.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    } //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         jDialog1.setVisible(false);
         ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).add((CidsBean)jComboBox27.getSelectedItem());
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jComboBox27ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox27ActionPerformed
-    }//GEN-LAST:event_jComboBox27ActionPerformed
+    private void jComboBox27ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jComboBox27ActionPerformed
+    }                                                                               //GEN-LAST:event_jComboBox27ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
         try {
             BrowserLauncher.openURL(ClientAlboProperties.getInstance().getWz_klassifikation_link());
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
-    }//GEN-LAST:event_jXHyperlink1ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
