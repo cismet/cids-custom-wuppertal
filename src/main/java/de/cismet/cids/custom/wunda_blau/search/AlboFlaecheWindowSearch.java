@@ -24,17 +24,23 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -86,30 +92,44 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
     private boolean geoSearchEnabled;
     private ImageIcon icon;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
+    private final Collection<AlboFlaecheArtWindowSearch> artInfoPanels = new ArrayList<>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox<String> cbFlaechenart;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JComboBox<String> cbFlaechenstatus;
+    private javax.swing.JComboBox<String> cbFlaechentyp;
+    private javax.swing.JComboBox<String> cbFlaechenzuordnung;
     private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JLabel lblFiller6;
     private javax.swing.JPanel pnlButtons;
+    private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlPruefung;
-    private javax.swing.JPanel pnlScrollPane;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -203,17 +223,32 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        pnlScrollPane = new javax.swing.JPanel();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        pnlMain = new javax.swing.JPanel();
         pnlPruefung = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        cbFlaechenart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+        jLabel15 = new javax.swing.JLabel();
+        cbFlaechentyp = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
                     CidsBeanSupport.DOMAIN_NAME,
-                    "albo_flaechenart",
+                    "albo_flaechentyp",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel13 = new javax.swing.JLabel();
+        cbFlaechenstatus = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_flaechenstatus",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel14 = new javax.swing.JLabel();
+        cbFlaechenzuordnung = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_flaechenzuordnung",
                     getConnectionContext()),
                 true,
                 false);
@@ -224,12 +259,6 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        pnlButtons = new javax.swing.JPanel();
-        cbMapSearch = new javax.swing.JCheckBox();
-        lblFiller6 = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0));
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
@@ -237,88 +266,142 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        jPanel5 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        cbMapSearch = new javax.swing.JCheckBox();
+        pnlButtons = new javax.swing.JPanel();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
 
         setName("Form"); // NOI18N
         setPreferredSize(new java.awt.Dimension(70, 20));
-        setLayout(new java.awt.BorderLayout());
+        setLayout(new java.awt.GridBagLayout());
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        pnlScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
-        pnlScrollPane.setLayout(new java.awt.GridBagLayout());
+        pnlMain.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        pnlMain.setName("pnlMain"); // NOI18N
+        pnlMain.setLayout(new java.awt.GridBagLayout());
 
         pnlPruefung.setBorder(javax.swing.BorderFactory.createTitledBorder("Suche nach Flächen mit:"));
         pnlPruefung.setName("pnlPruefung"); // NOI18N
         pnlPruefung.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Erhebnungsnummer:");
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setText("<html>Erhebnungsnummer: <i>*");
         jLabel1.setName("jLabel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlPruefung.add(jLabel1, gridBagConstraints);
+        jPanel3.add(jLabel1, gridBagConstraints);
 
         jTextField1.setName("jTextField1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlPruefung.add(jTextField1, gridBagConstraints);
+        jPanel3.add(jTextField1, gridBagConstraints);
 
-        jLabel2.setText("Vorgang-Nummer:");
+        jLabel2.setText("<html>Vorgangsnummer: <i>*");
         jLabel2.setName("jLabel2"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlPruefung.add(jLabel2, gridBagConstraints);
+        jPanel3.add(jLabel2, gridBagConstraints);
 
         jTextField2.setName("jTextField2"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlPruefung.add(jTextField2, gridBagConstraints);
+        jPanel3.add(jTextField2, gridBagConstraints);
 
-        jLabel13.setText("Flächenart:");
+        jLabel15.setText("Flächentyp:");
+        jLabel15.setName("jLabel15"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(jLabel15, gridBagConstraints);
+
+        cbFlaechentyp.setName("cbFlaechentyp"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(cbFlaechentyp, gridBagConstraints);
+
+        jLabel13.setText("Flächenstatus:");
         jLabel13.setName("jLabel13"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlPruefung.add(jLabel13, gridBagConstraints);
+        jPanel3.add(jLabel13, gridBagConstraints);
 
-        cbFlaechenart.setName("cbFlaechenart"); // NOI18N
+        cbFlaechenstatus.setName("cbFlaechenstatus"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlPruefung.add(cbFlaechenart, gridBagConstraints);
+        jPanel3.add(cbFlaechenstatus, gridBagConstraints);
 
-        jLabel3.setText("<html><i>Das Zeichen '%' kann als Platzhalter verwendet werden.");
-        jLabel3.setName("jLabel3"); // NOI18N
+        jLabel14.setText("Flächenzuordnung:");
+        jLabel14.setName("jLabel14"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(jLabel14, gridBagConstraints);
+
+        cbFlaechenzuordnung.setName("cbFlaechenzuordnung"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlPruefung.add(jLabel3, gridBagConstraints);
+        jPanel3.add(cbFlaechenzuordnung, gridBagConstraints);
+
+        jLabel3.setText("<html><i>(*) Das Zeichen '%' kann als Platzhalter verwendet werden.");
+        jLabel3.setName("jLabel3"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(jLabel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        pnlPruefung.add(jPanel3, gridBagConstraints);
 
         filler1.setName("filler1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         pnlPruefung.add(filler1, gridBagConstraints);
@@ -327,59 +410,13 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         pnlPruefung.add(filler3, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
-        pnlScrollPane.add(pnlPruefung, gridBagConstraints);
-        pnlPruefung.getAccessibleContext().setAccessibleName("Verkehrszeichen");
-
-        pnlButtons.setName("pnlButtons"); // NOI18N
-        pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
-        pnlScrollPane.add(pnlButtons, gridBagConstraints);
-
-        cbMapSearch.setText("Nur im aktuellen Kartenausschnitt suchen");
-        cbMapSearch.setName("cbMapSearch"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
-        pnlScrollPane.add(cbMapSearch, gridBagConstraints);
-
-        lblFiller6.setName("lblFiller6"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        pnlScrollPane.add(lblFiller6, gridBagConstraints);
-
-        filler2.setName("filler2"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        pnlScrollPane.add(filler2, gridBagConstraints);
-
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setText("Suchmodus:");
         jLabel4.setName("jLabel4"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -419,15 +456,155 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlPruefung.add(jPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlMain.add(pnlPruefung, gridBagConstraints);
+        pnlPruefung.getAccessibleContext().setAccessibleName("Verkehrszeichen");
+
+        filler5.setName("filler5"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        pnlMain.add(filler5, gridBagConstraints);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Flächenartspezifische Suche:"));
+        jPanel5.setName("jPanel5"); // NOI18N
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 20);
-        pnlScrollPane.add(jPanel1, gridBagConstraints);
+        jPanel5.add(jPanel2, gridBagConstraints);
 
-        jScrollPane1.setViewportView(pnlScrollPane);
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
+        jButton3.setName("jButton3");                                                                // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
-    } // </editor-fold>//GEN-END:initComponents
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel5.add(jButton3, gridBagConstraints);
+
+        jLabel5.setText("Bedingung hinzufügen");
+        jLabel5.setName("jLabel5"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel5.add(jLabel5, gridBagConstraints);
+
+        jPanel6.setName("jPanel6"); // NOI18N
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        filler8.setName("filler8"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel6.add(filler8, gridBagConstraints);
+
+        buttonGroup2.add(jRadioButton5);
+        jRadioButton5.setSelected(true);
+        jRadioButton5.setText("und");
+        jRadioButton5.setName("jRadioButton5"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel6.add(jRadioButton5, gridBagConstraints);
+
+        buttonGroup2.add(jRadioButton6);
+        jRadioButton6.setText("oder");
+        jRadioButton6.setName("jRadioButton6"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel6.add(jRadioButton6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel5.add(jPanel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlMain.add(jPanel5, gridBagConstraints);
+
+        cbMapSearch.setText("Nur im aktuellen Kartenausschnitt suchen");
+        cbMapSearch.setName("cbMapSearch"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlMain.add(cbMapSearch, gridBagConstraints);
+
+        pnlButtons.setName("pnlButtons"); // NOI18N
+        pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlMain.add(pnlButtons, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        add(pnlMain, gridBagConstraints);
+
+        filler6.setName("filler6"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 1.0;
+        add(filler6, gridBagConstraints);
+    }                               // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        artInfoPanels.add(new AlboFlaecheArtWindowSearch(this));
+        refreshArtInfoPanels();
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     @Override
     public JComponent getSearchWindowComponent() {
@@ -462,17 +639,31 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
             transformedBoundingBox = null;
         }
 
-        final CidsBean selectedArt = (CidsBean)((DefaultBindableReferenceCombo)cbFlaechenart).getSelectedItem();
+        final AlboFlaecheSearch.FlaecheSearchInfo searchInfo = new AlboFlaecheSearch.FlaecheSearchInfo();
+        searchInfo.setSearchModeMain(jRadioButton1.isSelected() ? AlboFlaecheSearch.SearchMode.AND
+                                                                : AlboFlaecheSearch.SearchMode.OR);
+        searchInfo.setSearchModeArt(jRadioButton5.isSelected() ? AlboFlaecheSearch.SearchMode.AND
+                                                               : AlboFlaecheSearch.SearchMode.OR);
+        searchInfo.setGeometry(transformedBoundingBox);
+        searchInfo.setErhebungsNummer(jTextField1.getText());
+        searchInfo.setVorgangSchluessel(jTextField2.getText());
+        searchInfo.setStatusSchluessel((cbFlaechenstatus.getSelectedItem() instanceof CidsBean)
+                ? (String)((CidsBean)cbFlaechenstatus.getSelectedItem()).getProperty("schluessel") : null);
+        searchInfo.setTypSchluessel((cbFlaechentyp.getSelectedItem() instanceof CidsBean)
+                ? (String)((CidsBean)cbFlaechentyp.getSelectedItem()).getProperty("schluessel") : null);
+        searchInfo.setZuordnungSchluessel((cbFlaechenzuordnung.getSelectedItem() instanceof CidsBean)
+                ? (String)((CidsBean)cbFlaechenzuordnung.getSelectedItem()).getProperty("schluessel") : null);
+        searchInfo.setArtInfos(createArtInfos());
 
-        final AlboFlaecheSearch.SearchMode mode = jRadioButton1.isSelected() ? AlboFlaecheSearch.SearchMode.AND
-                                                                             : AlboFlaecheSearch.SearchMode.OR;
-        final AlboFlaecheSearch search = new AlboFlaecheSearch(mode);
-        search.setGeometry(transformedBoundingBox);
-        search.setErhebungsNummer(jTextField1.getText());
-        search.setVorgangSchluessel(jTextField2.getText());
-        search.setArtId((selectedArt != null) ? selectedArt.getMetaObject().getId() : null);
+        return new AlboFlaecheSearch(searchInfo);
+    }
 
-        return search;
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  searchInfo  DOCUMENT ME!
+     */
+    public void initFromSeachInfo(final AlboFlaecheSearch.FlaecheSearchInfo searchInfo) {
     }
 
     /**
@@ -498,6 +689,81 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
     @Override
     public MetaObjectNodeServerSearch assembleSearch() {
         return getServerSearch();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshArtInfoPanels() {
+        SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    jPanel2.removeAll();
+                    int count = 0;
+                    for (final AlboFlaecheArtWindowSearch artInfoPanel : artInfoPanels) {
+                        final int artNumber = ++count;
+                        artInfoPanel.setName(String.format("artPanel%d", artNumber)); // NOI18N
+
+                        final JPanel panel = new JPanel();
+                        panel.setBorder(
+                            javax.swing.BorderFactory.createTitledBorder(
+                                String.format("Flächenart-Bedingung %d", artNumber)));
+                        panel.setLayout(new java.awt.GridBagLayout());
+
+                        {
+                            final GridBagConstraints gridBagConstraints = new GridBagConstraints();
+                            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                            gridBagConstraints.weightx = 1.0;
+                            gridBagConstraints.weighty = 1.0;
+                            gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+                            panel.add(artInfoPanel, gridBagConstraints);
+                        }
+
+                        {
+                            final GridBagConstraints gridBagConstraints = new GridBagConstraints();
+                            gridBagConstraints.gridx = 0;
+                            gridBagConstraints.gridy = -1;
+                            gridBagConstraints.gridheight = 3;
+                            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                            gridBagConstraints.weightx = 1.0;
+                            gridBagConstraints.weighty = 1.0;
+                            jPanel2.add(panel, gridBagConstraints);
+                        }
+                    }
+                    pnlMain.revalidate();
+                }
+            });
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<AlboFlaecheSearch.ArtInfo> createArtInfos() {
+        final Collection<AlboFlaecheSearch.ArtInfo> artInfos = new ArrayList<>();
+        for (final Component comp : jPanel2.getComponents()) {
+            if (comp instanceof JPanel) {
+                for (final Component subComp : ((JPanel)comp).getComponents()) {
+                    if (subComp instanceof AlboFlaecheArtWindowSearch) {
+                        artInfos.add(((AlboFlaecheArtWindowSearch)subComp).createArtInfo());
+                    }
+                }
+            }
+        }
+        return artInfos;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  artPanel  DOCUMENT ME!
+     */
+    public void removeArtPanel(final AlboFlaecheArtWindowSearch artPanel) {
+        artInfoPanels.remove(artPanel);
+
+        refreshArtInfoPanels();
     }
 
     @Override
