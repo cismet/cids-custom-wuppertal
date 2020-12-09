@@ -225,6 +225,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private Richtung richtung;
     private File uploadFile = null;
 
+    private boolean mapInitialized = false;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFullMinimize;
     private javax.swing.JButton btnFullNext;
@@ -1651,7 +1653,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                                 return null;
                             }
                         }.execute();
-                        mappingComponent1.zoomToFeatureCollection();
                     }
                 });
         }
@@ -2902,7 +2903,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
             bindingGroup.bind();
 
-            initMap();
             refreshStrassenComboboxes();
             refreshGeomFeatures();
 
@@ -3052,9 +3052,22 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         if (standortBean != null) {
             final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
             if (geom != null) {
+                if (!mapInitialized) {
+                    initMap();
+                }
                 final StyledFeature dsf = new DefaultStyledFeature();
                 dsf.setGeometry(geom);
                 mappingComponent1.getFeatureCollection().addFeature(dsf);
+                final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
+                            ClientAlkisConf.getInstance().getGeoBuffer()
+                                    * 2));
+                SwingUtilities.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            mappingComponent1.gotoBoundingBoxWithoutHistory(box);
+                        }
+                    });
             }
         }
     }
@@ -3062,38 +3075,42 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     /**
      * DOCUMENT ME!
      */
-    private void initMap() {
-        if (standortBean != null) {
+    private synchronized void initMap() {
+        if ((standortBean != null) && !mapInitialized) {
             final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
-            try {
-                final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
-                            ClientAlkisConf.getInstance().getGeoBuffer()
-                                    * 2));
+            if (geom != null) {
+                try {
+                    final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
+                                ClientAlkisConf.getInstance().getGeoBuffer()
+                                        * 2));
 
-                final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
-                mappingModel.addHome(new XBoundingBox(
-                        box.getX1(),
-                        box.getY1(),
-                        box.getX2(),
-                        box.getY2(),
-                        ClientAlkisConf.getInstance().getSrsService(),
-                        true));
-                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                            ClientAlkisConf.getInstance().getMapCallString()));
-                swms.setName("Verkehrszeichen");
+                    final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
+                    mappingModel.addHome(new XBoundingBox(
+                            box.getX1(),
+                            box.getY1(),
+                            box.getX2(),
+                            box.getY2(),
+                            ClientAlkisConf.getInstance().getSrsService(),
+                            true));
+                    final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                                ClientAlkisConf.getInstance().getMapCallString()));
+                    swms.setName("Verkehrszeichen");
 
-                // add the raster layer to the model
-                mappingModel.addLayer(swms);
-                // set the model
-                mappingComponent1.setMappingModel(mappingModel);
-                // interaction mode
-                mappingComponent1.gotoInitialBoundingBox();
-                mappingComponent1.setInteractionMode(MappingComponent.ZOOM);
-                // finally when all configurations are done ...
-                mappingComponent1.unlock();
-            } catch (final Exception ex) {
-                LOG.warn("could not init Map !", ex);
+                    // add the raster layer to the model
+                    mappingModel.addLayer(swms);
+                    // set the model
+                    mappingComponent1.setMappingModel(mappingModel);
+                    // interaction mode
+                    mappingComponent1.gotoInitialBoundingBox();
+                    mappingComponent1.setInteractionMode(MappingComponent.ZOOM);
+                    // finally when all configurations are done ...
+                    mappingComponent1.unlock();
+
+                    mapInitialized = true;
+                } catch (final Exception ex) {
+                    LOG.warn("could not init Map !", ex);
+                }
             }
         }
     }

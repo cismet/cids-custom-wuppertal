@@ -10,7 +10,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau;
+package de.cismet.cids.custom.objecteditors.wunda_blau.treppe;
+
+import Sirius.navigator.ui.ComponentRegistry;
+
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -20,6 +24,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXHyperlink;
 
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
@@ -59,11 +64,11 @@ import de.cismet.tools.gui.SemiRoundedPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
+public class TreppeStuetzmauerPanel extends javax.swing.JPanel implements CidsBeanStore, Disposable {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(TreppeHandlaufPanel.class);
+    private static final Logger LOG = Logger.getLogger(TreppeStuetzmauerPanel.class);
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -82,22 +87,26 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         final JPanel panBeschreibungContent5 = new JPanel();
         final JPanel jPanel36 = new JPanel();
         final JLabel jLabel62 = new JLabel();
-        jTextField22 = new JTextField();
-        final JLabel jLabel69 = new JLabel();
-        final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        final JScrollPane jScrollPane10 = new JScrollPane();
-        jTextArea9 = new JTextArea();
-        final JLabel jLabel67 = new JLabel();
-        final Box.Filler filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        final JScrollPane jScrollPane9 = new JScrollPane();
-        jTextArea8 = new JTextArea();
-        final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final JPanel jPanel1 = new JPanel();
-        treppeBauteilZustandKostenPanel4 = new TreppeBauteilZustandKostenPanel(editable);
-        final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final JLabel jLabel2 = new JLabel();
+        jXHyperlink1 = new JXHyperlink();
+        final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        jTextField1 = new JTextField();
+        final JLabel jLabel79 = new JLabel();
+        jTextField2 = new JTextField();
+        final JLabel jLabel78 = new JLabel();
+        jTextField3 = new JTextField();
+        final JScrollPane jScrollPane5 = new JScrollPane();
+        jTextArea4 = new JTextArea();
+        final JLabel jLabel66 = new JLabel();
+        final Box.Filler filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final JPanel jPanel3 = new JPanel();
+        treppeBauteilZustandKostenPanel4 = new TreppeBauteilZustandKostenPanel(false, true);
+        final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         btnRemoveArt1 = new JButton();
         final JSeparator jSeparator1 = new JSeparator();
-        final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
         final FormListener formListener = new FormListener();
 
@@ -120,8 +129,8 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         lblHeaderAllgemein6.setHorizontalAlignment(SwingConstants.CENTER);
         Mnemonics.setLocalizedText(
             lblHeaderAllgemein6,
-            NbBundle.getMessage(TreppeHandlaufPanel.class, "TreppeHandlaufPanel.lblHeaderAllgemein6.text")); // NOI18N
-        lblHeaderAllgemein6.setName("lblHeaderAllgemein6");                                                  // NOI18N
+            NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.lblHeaderAllgemein6.text")); // NOI18N
+        lblHeaderAllgemein6.setName("lblHeaderAllgemein6");                                                        // NOI18N
         panBeschreibungTitle5.add(lblHeaderAllgemein6);
 
         gridBagConstraints = new GridBagConstraints();
@@ -129,7 +138,6 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
         panAllgemein5.add(panBeschreibungTitle5, gridBagConstraints);
 
         panBeschreibungContent5.setName("panBeschreibungContent5"); // NOI18N
@@ -142,8 +150,8 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
 
         Mnemonics.setLocalizedText(
             jLabel62,
-            NbBundle.getMessage(TreppeHandlaufPanel.class, "TreppeHandlaufPanel.jLabel62.text")); // NOI18N
-        jLabel62.setName("jLabel62");                                                             // NOI18N
+            NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.jLabel62.text")); // NOI18N
+        jLabel62.setName("jLabel62");                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -151,104 +159,148 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
         jPanel36.add(jLabel62, gridBagConstraints);
 
-        jTextField22.setName("jTextField22"); // NOI18N
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new GridBagLayout());
+
+        Mnemonics.setLocalizedText(
+            jLabel2,
+            NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2");                                                                    // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 10, 1, 5);
+        jPanel1.add(jLabel2, gridBagConstraints);
+
+        jXHyperlink1.setName("jXHyperlink1"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                ELProperty.create("${cidsBean.nummer}"),
-                jTextField22,
+                ELProperty.create("${mauerBean.mauer_nummer}"),
+                jXHyperlink1,
                 BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
-        jPanel36.add(jTextField22, gridBagConstraints);
-
-        Mnemonics.setLocalizedText(
-            jLabel69,
-            NbBundle.getMessage(TreppeHandlaufPanel.class, "TreppeHandlaufPanel.jLabel69.text")); // NOI18N
-        jLabel69.setVerticalAlignment(SwingConstants.TOP);
-        jLabel69.setName("jLabel69");                                                             // NOI18N
+        jXHyperlink1.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
-        jPanel36.add(jLabel69, gridBagConstraints);
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel1.add(jXHyperlink1, gridBagConstraints);
 
-        filler4.setName("filler4"); // NOI18N
+        filler1.setName("filler1"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
-        jPanel36.add(filler4, gridBagConstraints);
+        gridBagConstraints.ipadx = 60;
+        jPanel1.add(filler1, gridBagConstraints);
 
-        jScrollPane10.setName("jScrollPane10"); // NOI18N
-
-        jTextArea9.setColumns(20);
-        jTextArea9.setLineWrap(true);
-        jTextArea9.setWrapStyleWord(true);
-        jTextArea9.setName("jTextArea9"); // NOI18N
+        jTextField1.setEditable(false);
+        jTextField1.setName("jTextField1"); // NOI18N
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                ELProperty.create("${cidsBean.beschreibung}"),
-                jTextArea9,
+                ELProperty.create("${mauerBean.lagebezeichnung}"),
+                jTextField1,
                 BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jScrollPane10.setViewportView(jTextArea9);
-
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
-        jPanel36.add(jScrollPane10, gridBagConstraints);
+        jPanel1.add(jTextField1, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel36.add(jPanel1, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
-            jLabel67,
-            NbBundle.getMessage(TreppeHandlaufPanel.class, "TreppeHandlaufPanel.jLabel67.text")); // NOI18N
-        jLabel67.setVerticalAlignment(SwingConstants.TOP);
-        jLabel67.setName("jLabel67");                                                             // NOI18N
+            jLabel79,
+            NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.jLabel79.text")); // NOI18N
+        jLabel79.setName("jLabel79");                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new Insets(1, 0, 1, 5);
-        jPanel36.add(jLabel67, gridBagConstraints);
+        jPanel36.add(jLabel79, gridBagConstraints);
 
-        filler5.setName("filler5"); // NOI18N
+        jTextField2.setEditable(false);
+        jTextField2.setName("jTextField2"); // NOI18N
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${mauerBean.stuetzmauertyp.name}"),
+                jTextField2,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel36.add(jTextField2, gridBagConstraints);
+
+        Mnemonics.setLocalizedText(
+            jLabel78,
+            NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.jLabel78.text")); // NOI18N
+        jLabel78.setName("jLabel78");                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
-        jPanel36.add(filler5, gridBagConstraints);
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        jPanel36.add(jLabel78, gridBagConstraints);
 
-        jScrollPane9.setName("jScrollPane9"); // NOI18N
+        jTextField3.setName("jTextField3"); // NOI18N
 
-        jTextArea8.setColumns(20);
-        jTextArea8.setLineWrap(true);
-        jTextArea8.setWrapStyleWord(true);
-        jTextArea8.setName("jTextArea8"); // NOI18N
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.wo}"),
+                jTextField3,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        jPanel36.add(jTextField3, gridBagConstraints);
+
+        jScrollPane5.setName("jScrollPane5"); // NOI18N
+
+        jTextArea4.setColumns(20);
+        jTextArea4.setLineWrap(true);
+        jTextArea4.setWrapStyleWord(true);
+        jTextArea4.setName("jTextArea4"); // NOI18N
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 ELProperty.create("${cidsBean.bemerkung}"),
-                jTextArea8,
+                jTextArea4,
                 BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jScrollPane9.setViewportView(jTextArea8);
+        jScrollPane5.setViewportView(jTextArea4);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -256,7 +308,27 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(1, 0, 1, 0);
-        jPanel36.add(jScrollPane9, gridBagConstraints);
+        jPanel36.add(jScrollPane5, gridBagConstraints);
+
+        Mnemonics.setLocalizedText(
+            jLabel66,
+            NbBundle.getMessage(TreppeStuetzmauerPanel.class, "TreppeStuetzmauerPanel.jLabel66.text")); // NOI18N
+        jLabel66.setVerticalAlignment(SwingConstants.TOP);
+        jLabel66.setName("jLabel66");                                                                   // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        jPanel36.add(jLabel66, gridBagConstraints);
+
+        filler6.setName("filler6"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(19, 0, 19, 0);
+        jPanel36.add(filler6, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -280,17 +352,16 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
         jPanel26.add(panAllgemein5, gridBagConstraints);
 
-        filler1.setName("filler1"); // NOI18N
+        filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel26.add(filler1, gridBagConstraints);
+        jPanel26.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -300,16 +371,16 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.insets = new Insets(0, 0, 0, 5);
         add(jPanel26, gridBagConstraints);
 
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new GridBagLayout());
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new GridBagLayout());
 
         treppeBauteilZustandKostenPanel4.setName("treppeBauteilZustandKostenPanel4"); // NOI18N
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                ELProperty.create("${cidsBean.zustand}"),
+                ELProperty.create("${zustandBean}"),
                 treppeBauteilZustandKostenPanel4,
                 BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
@@ -319,16 +390,16 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(treppeBauteilZustandKostenPanel4, gridBagConstraints);
+        jPanel3.add(treppeBauteilZustandKostenPanel4, gridBagConstraints);
 
-        filler3.setName("filler3"); // NOI18N
+        filler4.setName("filler4"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel1.add(filler3, gridBagConstraints);
+        jPanel3.add(filler4, gridBagConstraints);
 
         btnRemoveArt1.setIcon(new ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
@@ -342,12 +413,12 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.anchor = GridBagConstraints.SOUTHEAST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        jPanel1.add(btnRemoveArt1, gridBagConstraints);
+        jPanel3.add(btnRemoveArt1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        add(jPanel1, gridBagConstraints);
+        add(jPanel3, gridBagConstraints);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
@@ -358,14 +429,14 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         add(jSeparator1, gridBagConstraints);
 
-        filler2.setName("filler2"); // NOI18N
+        filler3.setName("filler3"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        add(filler2, gridBagConstraints);
+        add(filler3, gridBagConstraints);
 
         bindingGroup.bind();
     }
@@ -385,8 +456,10 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
 
         @Override
         public void actionPerformed(final ActionEvent evt) {
-            if (evt.getSource() == btnRemoveArt1) {
-                TreppeHandlaufPanel.this.btnRemoveArt1ActionPerformed(evt);
+            if (evt.getSource() == jXHyperlink1) {
+                TreppeStuetzmauerPanel.this.jXHyperlink1ActionPerformed(evt);
+            } else if (evt.getSource() == btnRemoveArt1) {
+                TreppeStuetzmauerPanel.this.btnRemoveArt1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -394,14 +467,18 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private TreppeHandlaeufePanel parent;
+    private CidsBean mauerBean;
+    private CidsBean zustandBean;
+    private TreppeStuetzmauernPanel parent;
     private final boolean editable;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnRemoveArt1;
-    JTextArea jTextArea8;
-    JTextArea jTextArea9;
-    JTextField jTextField22;
+    JTextArea jTextArea4;
+    JTextField jTextField1;
+    JTextField jTextField2;
+    JTextField jTextField3;
+    JXHyperlink jXHyperlink1;
     TreppeBauteilZustandKostenPanel treppeBauteilZustandKostenPanel4;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -409,26 +486,27 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new TreppeHandlaufPanel object.
+     * Creates a new TreppeStuetzmauerPanel object.
      */
-    public TreppeHandlaufPanel() {
+    public TreppeStuetzmauerPanel() {
         this(true);
     }
 
     /**
-     * Creates new form TreppeHandlaufPanel.
+     * Creates new form TreppeStuetzmauerPanel.
      *
      * @param  editable  DOCUMENT ME!
      */
-    public TreppeHandlaufPanel(final boolean editable) {
+    public TreppeStuetzmauerPanel(final boolean editable) {
         this.editable = editable;
         initComponents();
-        jTextArea8.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
-        jTextArea9.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
+
+        jTextArea4.addKeyListener(new RendererTools.NoTabTextAreaKeyAdapter());
         if (!editable) {
-            RendererTools.makeReadOnly(jTextField22);
-            RendererTools.makeReadOnly(jTextArea8);
-            RendererTools.makeReadOnly(jTextArea9);
+            RendererTools.makeReadOnly(jTextField1);
+            RendererTools.makeReadOnly(jTextField2);
+            RendererTools.makeReadOnly(jTextField3);
+            RendererTools.makeReadOnly(jTextArea4);
         }
         btnRemoveArt1.setVisible(editable);
     }
@@ -442,12 +520,39 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
      */
     private void btnRemoveArt1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveArt1ActionPerformed
         parent.getCidsBeans().remove(cidsBean);
-        parent.removeHandlaufPanel(this);
+        parent.removeMauerPanel(this);
     }                                                                  //GEN-LAST:event_btnRemoveArt1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(new MetaObjectNode(mauerBean), false);
+    }                                                                 //GEN-LAST:event_jXHyperlink1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mauerBean  DOCUMENT ME!
+     */
+    public void setMauerBean(final CidsBean mauerBean) {
+        this.mauerBean = mauerBean;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getMauerBean() {
+        return mauerBean;
     }
 
     @Override
@@ -462,15 +567,36 @@ public class TreppeHandlaufPanel extends javax.swing.JPanel implements CidsBeanS
      *
      * @param  parent  DOCUMENT ME!
      */
-    public void setParent(final TreppeHandlaeufePanel parent) {
+    public void setParent(final TreppeStuetzmauernPanel parent) {
         this.parent = parent;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  zustandBean  DOCUMENT ME!
+     */
+    void setZustandBean(final CidsBean zustandBean) {
+        this.zustandBean = zustandBean;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getZustandBean() {
+        return zustandBean;
     }
 
     @Override
     public void dispose() {
         bindingGroup.unbind();
-        treppeBauteilZustandKostenPanel4.dispose();
-        cidsBean = null;
+
         parent = null;
+        cidsBean = null;
+        mauerBean = null;
+        zustandBean = null;
+        treppeBauteilZustandKostenPanel4.dispose();
     }
 }

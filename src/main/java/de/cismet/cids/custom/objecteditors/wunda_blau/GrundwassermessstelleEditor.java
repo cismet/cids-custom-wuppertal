@@ -298,7 +298,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
     private GrundwassermessstellenReportBean createReportBean() {
         final CidsBean kategorieBean = grundwassermessstelleTablePanel1.getKategorieBean();
         final JFreeChart chart = grundwassermessstelleTablePanel1.getChart();
-        final List<CidsBean> messungBeans = grundwassermessstelleTablePanel1.getMessungBeans();
+        final List<CidsBean> messungBeans = grundwassermessstelleTablePanel1.getCurrentKategorieMessungBeans();
         final List<GrundwassermessstellenReportBean.LegendeBean> legendeLeft =
             grundwassermessstelleTablePanel1.getDiagrammPanel().getLegendLeftBeans();
         final List<GrundwassermessstellenReportBean.LegendeBean> legendeRight =
@@ -1847,7 +1847,7 @@ public class GrundwassermessstelleEditor extends javax.swing.JPanel implements C
         if (!grundwassermessstelleTablePanel.isMessungenEnabled()) {
             return true;
         }
-        for (final CidsBean messungBean : grundwassermessstelleTablePanel1.getMessungBeans()) {
+        for (final CidsBean messungBean : grundwassermessstelleTablePanel1.getAllMessungBeans()) {
             try {
                 messungBean.persist(getConnectionContext());
             } catch (final Exception ex) {
