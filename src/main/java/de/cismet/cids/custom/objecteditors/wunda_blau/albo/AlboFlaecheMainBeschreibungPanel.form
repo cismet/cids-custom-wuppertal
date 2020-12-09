@@ -390,7 +390,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBox1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Fl&#xe4;che kann gel&#xf6;scht werden"/>
+            <Property name="text" type="java.lang.String" value="Fl&#xe4;che unterdr&#xfc;cken"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="jCheckBox1" noResource="true"/>
           </Properties>
