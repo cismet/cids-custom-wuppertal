@@ -32,6 +32,7 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
 
@@ -65,6 +66,11 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        comboBoxFilterDialog1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(
+                null,
+                new AlboVorgangLightweightSearch(),
+                "Vorgang auswählen",
+                getConnectionContext());
         panLinks = new javax.swing.JPanel();
         panBeschreibung = new javax.swing.JPanel();
         alboFlaecheBeschreibungPanel1 =
@@ -86,6 +92,13 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                 new java.awt.Dimension(32767, 0));
         jLabel36 = new javax.swing.JLabel();
         cbFlaechentyp = new DefaultBindableScrollableComboBox();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jScrollPane4 = new javax.swing.JScrollPane();
         jXTable1 = new DroppedBeansTable();
         panRechts = new javax.swing.JPanel();
@@ -148,6 +161,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                 new java.awt.Dimension(32767, 32767));
 
         final FormListener formListener = new FormListener();
+
+        comboBoxFilterDialog1.setName("comboBoxFilterDialog1"); // NOI18N
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -346,6 +361,50 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panTop.add(cbFlaechentyp, gridBagConstraints);
         ((DefaultBindableScrollableComboBox)cbFlaechentyp).setNullable(true);
 
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jPanel10.setName("jPanel10"); // NOI18N
+        jPanel10.setOpaque(false);
+        jPanel10.setLayout(new java.awt.GridBagLayout());
+
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
+        jButton3.setName("jButton3");                                                                // NOI18N
+        jButton3.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        jPanel10.add(jButton3, gridBagConstraints);
+        jButton3.setVisible(isEditable());
+
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
+        jButton2.setName("jButton2");                                                                   // NOI18N
+        jButton2.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jButton2, gridBagConstraints);
+        jButton2.setVisible(isEditable());
+
+        filler7.setName("filler7"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel10.add(filler7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel2.add(jPanel10, gridBagConstraints);
+
         jScrollPane4.setMinimumSize(new java.awt.Dimension(26, 100));
         jScrollPane4.setName("jScrollPane4"); // NOI18N
         jScrollPane4.setPreferredSize(new java.awt.Dimension(2, 100));
@@ -358,13 +417,19 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        jPanel2.add(jScrollPane4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(10, 2, 2, 2);
-        panTop.add(jScrollPane4, gridBagConstraints);
+        panTop.add(jPanel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -712,12 +777,21 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      *
      * @version  $Revision$, $Date$
      */
-    private class FormListener implements java.awt.event.MouseListener {
+    private class FormListener implements java.awt.event.ActionListener, java.awt.event.MouseListener {
 
         /**
          * Creates a new FormListener object.
          */
         FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final java.awt.event.ActionEvent evt) {
+            if (evt.getSource() == jButton3) {
+                AlboFlaecheMainPanel.this.jButton3ActionPerformed(evt);
+            } else if (evt.getSource() == jButton2) {
+                AlboFlaecheMainPanel.this.jButton2ActionPerformed(evt);
+            }
         }
 
         @Override
@@ -785,6 +859,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortePanel
         alboFlaecheStandortePanel1;
     private javax.swing.JComboBox<String> cbFlaechentyp;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialog1;
     private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler28;
     private javax.swing.Box.Filler filler29;
@@ -794,6 +869,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.Box.Filler filler39;
     private javax.swing.Box.Filler filler58;
     private javax.swing.Box.Filler filler69;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel54;
@@ -802,9 +880,11 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<CidsBean> jList2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
@@ -898,6 +978,30 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     .gotoMetaObjectNode(new MetaObjectNode(bplanBean), false);
         }
     }                                                                      //GEN-LAST:event_jList2MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        final Object selectedItem = comboBoxFilterDialog1.showAndGetSelected();
+        if (selectedItem instanceof CidsBean) {
+            final CidsBean vorgangBean = (CidsBean)selectedItem;
+            ((FlaecheVorgangTableModel)jXTable1.getModel()).add(vorgangBean);
+        }
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        final CidsBean flaecheBean = ((FlaecheVorgangTableModel)jXTable1.getModel()).getCidsBean(
+                jXTable1.getSelectedRow());
+        ((FlaecheVorgangTableModel)jXTable1.getModel()).remove(flaecheBean);
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
