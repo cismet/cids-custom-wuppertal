@@ -393,7 +393,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(filler1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Fläche kann gelöscht werden");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Fläche unterdrücken");
         jCheckBox1.setContentAreaFilled(false);
         jCheckBox1.setName("jCheckBox1"); // NOI18N
 
