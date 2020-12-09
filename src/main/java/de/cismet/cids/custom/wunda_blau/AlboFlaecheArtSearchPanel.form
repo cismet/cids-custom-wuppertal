@@ -3,14 +3,15 @@
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JPanel" name="pnlStandort">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/search/Bundle.properties" key="AlboFlaecheArtWindowSearch.jLabel14.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Wirtschaftszweig:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -19,6 +20,9 @@
           </Constraints>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel6">
+          <Properties>
+            <Property name="opaque" type="boolean" value="false"/>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -27,20 +31,17 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JComboBox" name="jComboBox24">
+            <Component class="javax.swing.JComboBox" name="cbWirtschaftszweig">
               <Properties>
-                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[500, 32767]"/>
-                </Property>
-                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[100, 28]"/>
-                </Property>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[300, 28]"/>
+                <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
                 </Property>
               </Properties>
+              <BindingProperties>
+                <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkWirtschaftszweig}" target="cbWirtschaftszweig" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+              </BindingProperties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="((DefaultBindableReferenceCombo)jComboBox24).setNullable(true);"/>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="((DefaultBindableReferenceCombo)cbWirtschaftszweig).setNullable(true);"/>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox(mcWirtschaftszweig, true, false)"/>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;CidsBean&gt;"/>
               </AuxValues>
@@ -97,10 +98,21 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlAltablagerung">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Component class="javax.swing.JComboBox" name="cbStilllegung">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkStilllegung}" target="cbStilllegung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_stilllegung&quot;,&#xa;    getConnectionContext()), true, false)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
@@ -114,9 +126,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel19">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/search/Bundle.properties" key="AlboFlaecheArtWindowSearch.jLabel19.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Stilllegung:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -125,6 +135,14 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbVerfuellkategorie">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkVerfuellkategorie}" target="cbVerfuellkategorie" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_verfuellkategorie&quot;,&#xa;    getConnectionContext()), true, false)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
@@ -138,9 +156,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel20">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/search/Bundle.properties" key="AlboFlaecheArtWindowSearch.jLabel20.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Verf&#xfc;llkategorie:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -149,6 +165,14 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbErhebungsklasse">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkErhebungsklasse}" target="cbErhebungsklasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_erhebungsklasse&quot;,&#xa;    getConnectionContext()), true, false)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
@@ -162,9 +186,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/search/Bundle.properties" key="AlboFlaecheArtWindowSearch.jLabel21.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Erhebungsklasse:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -190,10 +212,21 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlSchadensfall">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Component class="javax.swing.JComboBox" name="cbSchadensfallart">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkSchadensfallArt}" target="cbSchadensfallart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_schadensfallart&quot;,&#xa;    getConnectionContext()), true, false)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
@@ -207,7 +240,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel17">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Schadensfallart:"/>
+            <Property name="text" type="java.lang.String" value="Art:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -233,10 +266,21 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlImmision">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Component class="javax.swing.JComboBox" name="cbImmissionsart">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkImmissionArt}" target="cbImmissionsart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_immissionsart&quot;,&#xa;    getConnectionContext()), true, false)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
@@ -250,9 +294,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel15">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/search/Bundle.properties" key="AlboFlaecheArtWindowSearch.jLabel15.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Art:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -278,10 +320,21 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlMaterialaufbringung">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Component class="javax.swing.JComboBox" name="cbMaterialaufbringungsart">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkMaterialaufbringungArt}" target="cbMaterialaufbringungsart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbMaterialaufbringungsartActionPerformed"/>
           </Events>
@@ -298,9 +351,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel16">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/search/Bundle.properties" key="AlboFlaecheArtWindowSearch.jLabel16.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Art:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -326,10 +377,21 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlBewirtschaftungsschaden">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
         <Component class="javax.swing.JComboBox" name="cbBewirtschaftungsschadensart">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkBewirtschaftungsschadenArt}" target="cbBewirtschaftungsschadensart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_bewirtschaftungsschadensart&quot;,&#xa;    getConnectionContext()), true, false)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
@@ -344,7 +406,7 @@
         <Component class="javax.swing.JLabel" name="jLabel18">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/search/Bundle.properties" key="AlboFlaecheArtWindowSearch.jLabel18.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/wunda_blau/Bundle.properties" key="AlboFlaecheArtSearchPanel.jLabel18.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -371,12 +433,18 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlOhneVerdacht">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
     </Container>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
     </Component>
   </NonVisualComponents>
+  <Properties>
+    <Property name="opaque" type="boolean" value="false"/>
+  </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -393,6 +461,9 @@
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel1">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="1.0" weightY="1.0"/>
@@ -412,6 +483,14 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbFlaechenart">
+          <Properties>
+            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="DOTDOTDOT_CELL_RENDERER" type="code"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkFlaechenArt}" target="cbFlaechenart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbFlaechenartActionPerformed"/>
           </Events>
@@ -427,6 +506,9 @@
           </Constraints>
         </Component>
         <Container class="javax.swing.JPanel" name="pnlArt">
+          <Properties>
+            <Property name="opaque" type="boolean" value="false"/>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="0" gridY="1" gridWidth="3" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="1.0" weightY="1.0"/>
@@ -444,6 +526,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jButton2.setVisible(editable);"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="19" weightX="0.0" weightY="0.0"/>
