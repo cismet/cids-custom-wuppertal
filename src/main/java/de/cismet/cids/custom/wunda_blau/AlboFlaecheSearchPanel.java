@@ -422,6 +422,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         jPanel1.add(jLabel4, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
         jRadioButton1.setText("und");
         jRadioButton1.setContentAreaFilled(false);
         jRadioButton1.setName("jRadioButton1"); // NOI18N
@@ -521,6 +522,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         jPanel6.add(filler8, gridBagConstraints);
 
         buttonGroup2.add(jRadioButton5);
+        jRadioButton5.setSelected(true);
         jRadioButton5.setText("und");
         jRadioButton5.setContentAreaFilled(false);
         jRadioButton5.setName("jRadioButton5"); // NOI18N
@@ -806,7 +808,6 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                             gridBagConstraints.weightx = 1.0;
                             gridBagConstraints.weighty = 1.0;
-                            gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
                             panel.add(artInfoPanel, gridBagConstraints);
                         }
 
@@ -814,7 +815,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                             final GridBagConstraints gridBagConstraints = new GridBagConstraints();
                             gridBagConstraints.gridx = 0;
                             gridBagConstraints.gridy = -1;
-                            gridBagConstraints.gridheight = 3;
+                            gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
                             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                             gridBagConstraints.weightx = 1.0;
                             gridBagConstraints.weighty = 1.0;
