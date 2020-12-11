@@ -273,11 +273,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         txtName = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        optEigIstMaennlich = new javax.swing.JRadioButton();
         optEigIstWeiblich = new javax.swing.JRadioButton();
+        optEigIstMaennlich = new javax.swing.JRadioButton();
         optEigIstFirma = new javax.swing.JRadioButton();
         optEigIstUnbekannt = new javax.swing.JRadioButton();
+        jPanel5 = new javax.swing.JPanel();
         txtGeburtsname = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -523,32 +523,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panEingabeEigentuemer.add(jLabel8, gridBagConstraints);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"),
+                javax.swing.BorderFactory.createTitledBorder("Eigentümer Anrede ist"),
                 javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
         jPanel4.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jPanel5, gridBagConstraints);
-
-        bgrOwner.add(optEigIstMaennlich);
-        optEigIstMaennlich.setText("männlich");
-        optEigIstMaennlich.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optEigIstMaennlichActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        jPanel4.add(optEigIstMaennlich, gridBagConstraints);
 
         bgrOwner.add(optEigIstWeiblich);
-        optEigIstWeiblich.setText("weiblich");
+        optEigIstWeiblich.setText("Frau");
         optEigIstWeiblich.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -557,8 +537,22 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel4.add(optEigIstWeiblich, gridBagConstraints);
+
+        bgrOwner.add(optEigIstMaennlich);
+        optEigIstMaennlich.setText("Herr");
+        optEigIstMaennlich.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optEigIstMaennlichActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel4.add(optEigIstMaennlich, gridBagConstraints);
 
         bgrOwner.add(optEigIstFirma);
         optEigIstFirma.setText("Firma");
@@ -583,7 +577,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                     optEigIstUnbekanntActionPerformed(evt);
                 }
             });
-        jPanel4.add(optEigIstUnbekannt, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel4.add(optEigIstUnbekannt, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(jPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
