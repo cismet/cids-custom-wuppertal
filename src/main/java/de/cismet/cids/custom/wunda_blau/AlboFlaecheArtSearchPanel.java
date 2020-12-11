@@ -30,6 +30,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -68,7 +69,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
     private final boolean editable;
 
-    private Bean bean = new Bean();
+    private Bean bean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbBewirtschaftungsschadensart;
@@ -88,6 +89,12 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.Box.Filler filler6;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JFormattedTextField jFormattedTextField17;
+    private javax.swing.JFormattedTextField jFormattedTextField18;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -97,8 +104,9 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlAltablagerung;
     private javax.swing.JPanel pnlArt;
@@ -128,6 +136,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     public AlboFlaecheArtSearchPanel(final AlboFlaecheSearchPanel parent, final boolean editable) {
         this.parent = parent;
         this.editable = editable;
+        this.bean = new Bean();
+
         try {
             mcWirtschaftszweig = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
@@ -138,6 +148,10 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         }
         initComponents();
 
+        RendererTools.makeReadOnly(jFormattedTextField17, !editable);
+        RendererTools.makeReadOnly(jFormattedTextField18, !editable);
+        RendererTools.makeReadOnly(jComboBox1, !editable);
+        RendererTools.makeReadOnly(jComboBox2, !editable);
         RendererTools.makeReadOnly(cbBewirtschaftungsschadensart, !editable);
         RendererTools.makeReadOnly(cbErhebungsklasse, !editable);
         RendererTools.makeReadOnly(cbFlaechenart, !editable);
@@ -181,398 +195,593 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
         pnlStandort = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
         cbWirtschaftszweig = new DefaultBindableScrollableComboBox(mcWirtschaftszweig, true, false);
         jButton1 = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        jLabel22 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jFormattedTextField17 = new javax.swing.JFormattedTextField();
+        jButton3 = new javax.swing.JButton();
+        jLabel23 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jFormattedTextField18 = new javax.swing.JFormattedTextField();
+        jButton4 = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         pnlAltablagerung = new javax.swing.JPanel();
         cbStilllegung = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-            CidsBeanSupport.DOMAIN_NAME,
-            "albo_stilllegung",
-            getConnectionContext()), true, false);
-    jLabel19 = new javax.swing.JLabel();
-    cbVerfuellkategorie = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-        CidsBeanSupport.DOMAIN_NAME,
-        "albo_verfuellkategorie",
-        getConnectionContext()), true, false);
-jLabel20 = new javax.swing.JLabel();
-cbErhebungsklasse = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-    CidsBeanSupport.DOMAIN_NAME,
-    "albo_erhebungsklasse",
-    getConnectionContext()), true, false);
-    jLabel21 = new javax.swing.JLabel();
-    filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-    pnlSchadensfall = new javax.swing.JPanel();
-    cbSchadensfallart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-        CidsBeanSupport.DOMAIN_NAME,
-        "albo_schadensfallart",
-        getConnectionContext()), true, false);
-jLabel17 = new javax.swing.JLabel();
-filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-pnlImmision = new javax.swing.JPanel();
-cbImmissionsart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-    CidsBeanSupport.DOMAIN_NAME,
-    "albo_immissionsart",
-    getConnectionContext()), true, false);
-    jLabel15 = new javax.swing.JLabel();
-    filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-    pnlMaterialaufbringung = new javax.swing.JPanel();
-    cbMaterialaufbringungsart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-        CidsBeanSupport.DOMAIN_NAME,
-        "albo_materialaufbringungsart",
-        getConnectionContext()), true, false);
-jLabel16 = new javax.swing.JLabel();
-filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-pnlBewirtschaftungsschaden = new javax.swing.JPanel();
-cbBewirtschaftungsschadensart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-    CidsBeanSupport.DOMAIN_NAME,
-    "albo_bewirtschaftungsschadensart",
-    getConnectionContext()), true, false);
-    jLabel18 = new javax.swing.JLabel();
-    filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-    pnlOhneVerdacht = new javax.swing.JPanel();
-    jSeparator1 = new javax.swing.JSeparator();
-    jPanel1 = new javax.swing.JPanel();
-    jLabel13 = new javax.swing.JLabel();
-    cbFlaechenart = new DefaultBindableScrollableComboBox(ClassCacheMultiple.getMetaClass(
-        CidsBeanSupport.DOMAIN_NAME,
-        "albo_flaechenart",
-        getConnectionContext()), false, false);
-pnlArt = new javax.swing.JPanel();
-jButton2 = new javax.swing.JButton();
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_stilllegung",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel19 = new javax.swing.JLabel();
+        cbVerfuellkategorie = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_verfuellkategorie",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel20 = new javax.swing.JLabel();
+        cbErhebungsklasse = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_erhebungsklasse",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel21 = new javax.swing.JLabel();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        pnlSchadensfall = new javax.swing.JPanel();
+        cbSchadensfallart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_schadensfallart",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel17 = new javax.swing.JLabel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        pnlImmision = new javax.swing.JPanel();
+        cbImmissionsart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_immissionsart",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel15 = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        pnlMaterialaufbringung = new javax.swing.JPanel();
+        cbMaterialaufbringungsart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_materialaufbringungsart",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel16 = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        pnlBewirtschaftungsschaden = new javax.swing.JPanel();
+        cbBewirtschaftungsschadensart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_bewirtschaftungsschadensart",
+                    getConnectionContext()),
+                true,
+                false);
+        jLabel18 = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        pnlOhneVerdacht = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        cbFlaechenart = new DefaultBindableScrollableComboBox(ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "albo_flaechenart",
+                    getConnectionContext()),
+                false,
+                false);
+        pnlArt = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
 
-pnlStandort.setOpaque(false);
-pnlStandort.setLayout(new java.awt.GridBagLayout());
+        pnlStandort.setOpaque(false);
+        pnlStandort.setLayout(new java.awt.GridBagLayout());
 
-org.openide.awt.Mnemonics.setLocalizedText(jLabel14, "Wirtschaftszweig:");
-gridBagConstraints = new java.awt.GridBagConstraints();
-gridBagConstraints.gridx = 0;
-gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-pnlStandort.add(jLabel14, gridBagConstraints);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel14, "Wirtschaftszweig:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jLabel14, gridBagConstraints);
 
-jPanel6.setOpaque(false);
-jPanel6.setLayout(new java.awt.GridBagLayout());
+        cbWirtschaftszweig.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
-cbWirtschaftszweig.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkWirtschaftszweig}"),
+                cbWirtschaftszweig,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkWirtschaftszweig}"), cbWirtschaftszweig, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-bindingGroup.addBinding(binding);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(cbWirtschaftszweig, gridBagConstraints);
+        ((DefaultBindableReferenceCombo)cbWirtschaftszweig).setNullable(true);
 
-gridBagConstraints = new java.awt.GridBagConstraints();
-gridBagConstraints.gridx = 0;
-gridBagConstraints.gridy = 0;
-gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-gridBagConstraints.weightx = 1.0;
-gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 0);
-jPanel6.add(cbWirtschaftszweig, gridBagConstraints);
-((DefaultBindableReferenceCombo)cbWirtschaftszweig).setNullable(true);
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png"))); // NOI18N
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setFocusPainted(false);
+        jButton1.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton1.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton1.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
 
-jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png"))); // NOI18N
-jButton1.setBorderPainted(false);
-jButton1.setContentAreaFilled(false);
-jButton1.setFocusPainted(false);
-jButton1.setMaximumSize(new java.awt.Dimension(24, 24));
-jButton1.setMinimumSize(new java.awt.Dimension(24, 24));
-jButton1.setPreferredSize(new java.awt.Dimension(24, 24));
-jButton1.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton1ActionPerformed(evt);
-    }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 2);
-    jPanel6.add(jButton1, gridBagConstraints);
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlStandort.add(jButton1, gridBagConstraints);
+        jButton1.setVisible(editable);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    pnlStandort.add(jPanel6, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weighty = 1.0;
-    pnlStandort.add(filler1, gridBagConstraints);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel22, "Jahr:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jLabel22, gridBagConstraints);
 
-    pnlAltablagerung.setOpaque(false);
-    pnlAltablagerung.setLayout(new java.awt.GridBagLayout());
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "exakt", "vor", "nach" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jComboBox1, gridBagConstraints);
 
-    cbStilllegung.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        jFormattedTextField17.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkStilllegung}"), cbStilllegung, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.standortJahr}"),
+                jFormattedTextField17,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlAltablagerung.add(cbStilllegung, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jFormattedTextField17, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel19, "Stilllegung:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlAltablagerung.add(jLabel19, gridBagConstraints);
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton3.setBorderPainted(false);
+        jButton3.setContentAreaFilled(false);
+        jButton3.setFocusPainted(false);
+        jButton3.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton3.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton3.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
 
-    cbVerfuellkategorie.setRenderer(DOTDOTDOT_CELL_RENDERER);
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlStandort.add(jButton3, gridBagConstraints);
+        jButton3.setVisible(editable);
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkVerfuellkategorie}"), cbVerfuellkategorie, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel23, "Dauer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jLabel23, gridBagConstraints);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlAltablagerung.add(cbVerfuellkategorie, gridBagConstraints);
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "exakt", "kürzer als", "länger als" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jComboBox2, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel20, "Verfüllkategorie:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlAltablagerung.add(jLabel20, gridBagConstraints);
+        jFormattedTextField18.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
 
-    cbErhebungsklasse.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.standortDauer}"),
+                jFormattedTextField18,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkErhebungsklasse}"), cbErhebungsklasse, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jFormattedTextField18, gridBagConstraints);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlAltablagerung.add(cbErhebungsklasse, gridBagConstraints);
+        jButton4.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton4.setBorderPainted(false);
+        jButton4.setContentAreaFilled(false);
+        jButton4.setFocusPainted(false);
+        jButton4.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton4.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton4.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel21, "Erhebungsklasse:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlAltablagerung.add(jLabel21, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weighty = 1.0;
-    pnlAltablagerung.add(filler6, gridBagConstraints);
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlStandort.add(jButton4, gridBagConstraints);
+        jButton4.setVisible(editable);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlStandort.add(filler1, gridBagConstraints);
 
-    pnlSchadensfall.setOpaque(false);
-    pnlSchadensfall.setLayout(new java.awt.GridBagLayout());
+        pnlAltablagerung.setOpaque(false);
+        pnlAltablagerung.setLayout(new java.awt.GridBagLayout());
 
-    cbSchadensfallart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        cbStilllegung.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkSchadensfallArt}"), cbSchadensfallart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkStilllegung}"),
+                cbStilllegung,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlSchadensfall.add(cbSchadensfallart, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlAltablagerung.add(cbStilllegung, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel17, "Art:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlSchadensfall.add(jLabel17, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weighty = 1.0;
-    pnlSchadensfall.add(filler4, gridBagConstraints);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel19, "Stilllegung:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlAltablagerung.add(jLabel19, gridBagConstraints);
 
-    pnlImmision.setOpaque(false);
-    pnlImmision.setLayout(new java.awt.GridBagLayout());
+        cbVerfuellkategorie.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
-    cbImmissionsart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkVerfuellkategorie}"),
+                cbVerfuellkategorie,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkImmissionArt}"), cbImmissionsart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlAltablagerung.add(cbVerfuellkategorie, gridBagConstraints);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlImmision.add(cbImmissionsart, gridBagConstraints);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel20, "Verfüllkategorie:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlAltablagerung.add(jLabel20, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel15, "Art:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlImmision.add(jLabel15, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weighty = 1.0;
-    pnlImmision.add(filler2, gridBagConstraints);
+        cbErhebungsklasse.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
-    pnlMaterialaufbringung.setOpaque(false);
-    pnlMaterialaufbringung.setLayout(new java.awt.GridBagLayout());
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkErhebungsklasse}"),
+                cbErhebungsklasse,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-    cbMaterialaufbringungsart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlAltablagerung.add(cbErhebungsklasse, gridBagConstraints);
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkMaterialaufbringungArt}"), cbMaterialaufbringungsart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel21, "Erhebungsklasse:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlAltablagerung.add(jLabel21, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlAltablagerung.add(filler6, gridBagConstraints);
 
-    cbMaterialaufbringungsart.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            cbMaterialaufbringungsartActionPerformed(evt);
-        }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlMaterialaufbringung.add(cbMaterialaufbringungsart, gridBagConstraints);
+        pnlSchadensfall.setOpaque(false);
+        pnlSchadensfall.setLayout(new java.awt.GridBagLayout());
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Art:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlMaterialaufbringung.add(jLabel16, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weighty = 1.0;
-    pnlMaterialaufbringung.add(filler3, gridBagConstraints);
+        cbSchadensfallart.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
-    pnlBewirtschaftungsschaden.setOpaque(false);
-    pnlBewirtschaftungsschaden.setLayout(new java.awt.GridBagLayout());
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkSchadensfallArt}"),
+                cbSchadensfallart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-    cbBewirtschaftungsschadensart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlSchadensfall.add(cbSchadensfallart, gridBagConstraints);
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkBewirtschaftungsschadenArt}"), cbBewirtschaftungsschadensart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, "Art:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlSchadensfall.add(jLabel17, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlSchadensfall.add(filler4, gridBagConstraints);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlBewirtschaftungsschaden.add(cbBewirtschaftungsschadensart, gridBagConstraints);
+        pnlImmision.setOpaque(false);
+        pnlImmision.setLayout(new java.awt.GridBagLayout());
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel18, "Art:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    pnlBewirtschaftungsschaden.add(jLabel18, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weighty = 1.0;
-    pnlBewirtschaftungsschaden.add(filler5, gridBagConstraints);
+        cbImmissionsart.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
-    pnlOhneVerdacht.setOpaque(false);
-    pnlOhneVerdacht.setLayout(new java.awt.GridBagLayout());
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkImmissionArt}"),
+                cbImmissionsart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-    setOpaque(false);
-    setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlImmision.add(cbImmissionsart, gridBagConstraints);
 
-    jPanel1.setOpaque(false);
-    jPanel1.setLayout(new java.awt.GridBagLayout());
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, "Art:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlImmision.add(jLabel15, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlImmision.add(filler2, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel13, "Flächenart:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(jLabel13, gridBagConstraints);
+        pnlMaterialaufbringung.setOpaque(false);
+        pnlMaterialaufbringung.setLayout(new java.awt.GridBagLayout());
 
-    cbFlaechenart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        cbMaterialaufbringungsart.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
-    binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${bean.fkFlaechenArt}"), cbFlaechenart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-    bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkMaterialaufbringungArt}"),
+                cbMaterialaufbringungsart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-    cbFlaechenart.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            cbFlaechenartActionPerformed(evt);
-        }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(cbFlaechenart, gridBagConstraints);
+        cbMaterialaufbringungsart.addActionListener(new java.awt.event.ActionListener() {
 
-    pnlArt.setOpaque(false);
-    pnlArt.setLayout(new java.awt.BorderLayout());
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridwidth = 3;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(pnlArt, gridBagConstraints);
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbMaterialaufbringungsartActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlMaterialaufbringung.add(cbMaterialaufbringungsart, gridBagConstraints);
 
-    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
-    jButton2.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton2ActionPerformed(evt);
-        }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(jButton2, gridBagConstraints);
-    jButton2.setVisible(editable);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Art:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlMaterialaufbringung.add(jLabel16, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlMaterialaufbringung.add(filler3, gridBagConstraints);
 
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-    add(jPanel1, gridBagConstraints);
+        pnlBewirtschaftungsschaden.setOpaque(false);
+        pnlBewirtschaftungsschaden.setLayout(new java.awt.GridBagLayout());
 
-    bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+        cbBewirtschaftungsschadensart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkBewirtschaftungsschadenArt}"),
+                cbBewirtschaftungsschadensart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlBewirtschaftungsschaden.add(cbBewirtschaftungsschadensart, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel18, "Art:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlBewirtschaftungsschaden.add(jLabel18, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlBewirtschaftungsschaden.add(filler5, gridBagConstraints);
+
+        pnlOhneVerdacht.setOpaque(false);
+        pnlOhneVerdacht.setLayout(new java.awt.GridBagLayout());
+
+        setOpaque(false);
+        setLayout(new java.awt.GridBagLayout());
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, "Flächenart:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jLabel13, gridBagConstraints);
+
+        cbFlaechenart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkFlaechenArt}"),
+                cbFlaechenart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cbFlaechenart.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbFlaechenartActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(cbFlaechenart, gridBagConstraints);
+
+        pnlArt.setOpaque(false);
+        pnlArt.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel1.add(pnlArt, gridBagConstraints);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jButton2, gridBagConstraints);
+        jButton2.setVisible(editable);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jPanel1, gridBagConstraints);
+
+        bindingGroup.bind();
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         ComboBoxFilterDialog.showForCombobox(cbWirtschaftszweig, getConnectionContext());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         parent.removeArtPanel(this);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -580,19 +789,37 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
      * @param  evt  DOCUMENT ME!
      */
 
-    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFlaechenartActionPerformed
+    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
         refreshArtPanel();
         parent.revalidate();
-    }//GEN-LAST:event_cbFlaechenartActionPerformed
+    }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMaterialaufbringungsartActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMaterialaufbringungsartActionPerformed
+    private void cbMaterialaufbringungsartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMaterialaufbringungsartActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbMaterialaufbringungsartActionPerformed
+    } //GEN-LAST:event_cbMaterialaufbringungsartActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        jFormattedTextField17.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+        jFormattedTextField18.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -652,224 +879,230 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
      * @param  artInfo  DOCUMENT ME!
      */
     public void initFromArtInfo(final AlboFlaecheSearch.ArtInfo artInfo) {
-        new SwingWorker<CidsBean, Void>() {
+        this.bean = new Bean();
 
-                @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getSchluesselBean(
-                            "albo_flaechenart",
-                            (artInfo != null) ? artInfo.getFlaechenartSchluessel() : null,
-                            getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        bean.setFkFlaechenArt(get());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    rebind();
-                }
-            }.execute();
-        if (artInfo instanceof AlboFlaecheSearch.AltablagerungInfo) {
+        if (artInfo != null) {
             new SwingWorker<CidsBean, Void>() {
 
                     @Override
                     protected CidsBean doInBackground() throws Exception {
                         return getSchluesselBean(
-                                "albo_stilllegung",
-                                ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getStilllegungSchluessel(),
+                                "albo_flaechenart",
+                                artInfo.getFlaechenartSchluessel(),
                                 getConnectionContext());
                     }
 
                     @Override
                     protected void done() {
                         try {
-                            bean.setFkStilllegung(get());
+                            bean.setFkFlaechenArt(get());
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
                         }
                         rebind();
                     }
                 }.execute();
-            new SwingWorker<CidsBean, Void>() {
+            if (artInfo instanceof AlboFlaecheSearch.AltablagerungInfo) {
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_verfuellkategorie",
-                                ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getVerfuellkategorieSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkVerfuellkategorie(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_stilllegung",
+                                    ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getStilllegungSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_erhebungsklasse",
-                                ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getErhebungsklasseSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkErhebungsklasse(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkStilllegung(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.AltstandortInfo) {
-            new SwingWorker<CidsBean, Void>() {
+                    }.execute();
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_wirtschaftszweig",
-                                ((AlboFlaecheSearch.AltstandortInfo)artInfo).getWzSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkWirtschaftszweig(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_verfuellkategorie",
+                                    ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getVerfuellkategorieSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.BetriebsstandortInfo) {
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_wirtschaftszweig",
-                                ((AlboFlaecheSearch.BetriebsstandortInfo)artInfo).getWzSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkWirtschaftszweig(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkVerfuellkategorie(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.BewirtschaftungsschadenInfo) {
-            new SwingWorker<CidsBean, Void>() {
+                    }.execute();
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_bewirtschaftungsschadensart",
-                                ((AlboFlaecheSearch.BewirtschaftungsschadenInfo)artInfo)
-                                            .getBewirtschaftungsschadensartSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkBewirtschaftungsschadenArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_erhebungsklasse",
+                                    ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getErhebungsklasseSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.MaterialaufbringungInfo) {
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_materialaufbringungsart",
-                                ((AlboFlaecheSearch.MaterialaufbringungInfo)artInfo)
-                                            .getMaterialaufbringungsartSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkMaterialaufbringungArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkErhebungsklasse(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.ImmissionInfo) {
-            new SwingWorker<CidsBean, Void>() {
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.AltstandortInfo) {
+                final Boolean jahrModus = ((AlboFlaecheSearch.AltstandortInfo)artInfo).getJahrModus();
+                final Boolean dauerModus = ((AlboFlaecheSearch.AltstandortInfo)artInfo).getDauerModus();
+                jComboBox1.setSelectedItem(Boolean.TRUE.equals(jahrModus)
+                        ? "nach" : (Boolean.FALSE.equals(jahrModus) ? "vor" : "exakt"));
+                jComboBox2.setSelectedItem(Boolean.TRUE.equals(dauerModus)
+                        ? "länger als" : (Boolean.FALSE.equals(dauerModus) ? "kürzer als" : "exakt"));
+                bean.setStandortDauer(((AlboFlaecheSearch.AltstandortInfo)artInfo).getDauer());
+                bean.setStandortJahr(((AlboFlaecheSearch.AltstandortInfo)artInfo).getJahr());
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_immissionsart",
-                                ((AlboFlaecheSearch.ImmissionInfo)artInfo).getImmissionsartSchluessel(),
-                                getConnectionContext());
-                    }
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkImmissionArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_wirtschaftszweig",
+                                    ((AlboFlaecheSearch.AltstandortInfo)artInfo).getWzSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.SchadensfallInfo) {
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_schadensfallart",
-                                ((AlboFlaecheSearch.SchadensfallInfo)artInfo).getSchadensfallartSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkSchadensfallArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkWirtschaftszweig(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.BetriebsstandortInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_wirtschaftszweig",
+                                    ((AlboFlaecheSearch.BetriebsstandortInfo)artInfo).getWzSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkWirtschaftszweig(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.BewirtschaftungsschadenInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_bewirtschaftungsschadensart",
+                                    ((AlboFlaecheSearch.BewirtschaftungsschadenInfo)artInfo)
+                                                .getBewirtschaftungsschadensartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkBewirtschaftungsschadenArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.MaterialaufbringungInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_materialaufbringungsart",
+                                    ((AlboFlaecheSearch.MaterialaufbringungInfo)artInfo)
+                                                .getMaterialaufbringungsartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkMaterialaufbringungArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.ImmissionInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_immissionsart",
+                                    ((AlboFlaecheSearch.ImmissionInfo)artInfo).getImmissionsartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkImmissionArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.SchadensfallInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_schadensfallart",
+                                    ((AlboFlaecheSearch.SchadensfallInfo)artInfo).getSchadensfallartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkSchadensfallArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            }
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  artInfo  DOCUMENT ME!
-     */
-    public void setArtInfo(final AlboFlaecheSearch.ArtInfo artInfo) {
+        rebind();
     }
 
     /**
@@ -894,6 +1127,17 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
                             ? (CidsBean)cbWirtschaftszweig.getSelectedItem() : null;
                         ((AlboFlaecheSearch.StandortInfo)artInfo).setWzSchluessel((wirtschaftszweig != null)
                                 ? (String)wirtschaftszweig.getProperty("schluessel") : null);
+
+                        final Integer jahr = (bean != null) ? bean.getStandortJahr() : null;
+                        final Integer dauer = (bean != null) ? bean.getStandortDauer() : null;
+                        final Boolean jahrModus = "nach".equals(jComboBox1.getSelectedItem())
+                            ? Boolean.TRUE : ("vor".equals(jComboBox1.getSelectedItem()) ? Boolean.FALSE : null);
+                        final Boolean dauerModus = "länger als".equals(jComboBox2.getSelectedItem())
+                            ? Boolean.TRUE : ("kürzer als".equals(jComboBox2.getSelectedItem()) ? Boolean.FALSE : null);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setJahr(jahr);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setJahrModus(jahrModus);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setDauer(dauer);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setDauerModus(dauerModus);
                     }
                     break;
                     case "altablagerung": {
@@ -995,6 +1239,8 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
         private CidsBean fkImmissionArt;
         private CidsBean fkMaterialaufbringungArt;
         private CidsBean fkBewirtschaftungsschadenArt;
+        private Integer standortJahr;
+        private Integer standortDauer;
     }
 
     /**
