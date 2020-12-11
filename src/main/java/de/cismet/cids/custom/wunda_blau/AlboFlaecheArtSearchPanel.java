@@ -30,6 +30,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -68,7 +69,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
     private final boolean editable;
 
-    private Bean bean = new Bean();
+    private Bean bean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbBewirtschaftungsschadensart;
@@ -88,6 +89,12 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.Box.Filler filler6;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JFormattedTextField jFormattedTextField17;
+    private javax.swing.JFormattedTextField jFormattedTextField18;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -97,8 +104,9 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlAltablagerung;
     private javax.swing.JPanel pnlArt;
@@ -128,6 +136,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     public AlboFlaecheArtSearchPanel(final AlboFlaecheSearchPanel parent, final boolean editable) {
         this.parent = parent;
         this.editable = editable;
+        this.bean = new Bean();
+
         try {
             mcWirtschaftszweig = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
@@ -138,6 +148,10 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         }
         initComponents();
 
+        RendererTools.makeReadOnly(jFormattedTextField17, !editable);
+        RendererTools.makeReadOnly(jFormattedTextField18, !editable);
+        RendererTools.makeReadOnly(jComboBox1, !editable);
+        RendererTools.makeReadOnly(jComboBox2, !editable);
         RendererTools.makeReadOnly(cbBewirtschaftungsschadensart, !editable);
         RendererTools.makeReadOnly(cbErhebungsklasse, !editable);
         RendererTools.makeReadOnly(cbFlaechenart, !editable);
@@ -181,9 +195,16 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
         pnlStandort = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
         cbWirtschaftszweig = new DefaultBindableScrollableComboBox(mcWirtschaftszweig, true, false);
         jButton1 = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jFormattedTextField17 = new javax.swing.JFormattedTextField();
+        jButton3 = new javax.swing.JButton();
+        jLabel23 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jFormattedTextField18 = new javax.swing.JFormattedTextField();
+        jButton4 = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -279,9 +300,6 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         pnlStandort.add(jLabel14, gridBagConstraints);
 
-        jPanel6.setOpaque(false);
-        jPanel6.setLayout(new java.awt.GridBagLayout());
-
         cbWirtschaftszweig.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -293,12 +311,12 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 0);
-        jPanel6.add(cbWirtschaftszweig, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(cbWirtschaftszweig, gridBagConstraints);
         ((DefaultBindableReferenceCombo)cbWirtschaftszweig).setNullable(true);
 
         jButton1.setIcon(new javax.swing.ImageIcon(
@@ -317,18 +335,126 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 2);
-        jPanel6.add(jButton1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        pnlStandort.add(jPanel6, gridBagConstraints);
+        pnlStandort.add(jButton1, gridBagConstraints);
+        jButton1.setVisible(editable);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel22, "Jahr:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jLabel22, gridBagConstraints);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "exakt", "vor", "nach" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jComboBox1, gridBagConstraints);
+
+        jFormattedTextField17.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.standortJahr}"),
+                jFormattedTextField17,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jFormattedTextField17, gridBagConstraints);
+
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton3.setBorderPainted(false);
+        jButton3.setContentAreaFilled(false);
+        jButton3.setFocusPainted(false);
+        jButton3.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton3.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton3.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlStandort.add(jButton3, gridBagConstraints);
+        jButton3.setVisible(editable);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel23, "Dauer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jLabel23, gridBagConstraints);
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "exakt", "kürzer als", "länger als" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jComboBox2, gridBagConstraints);
+
+        jFormattedTextField18.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.standortDauer}"),
+                jFormattedTextField18,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jFormattedTextField18, gridBagConstraints);
+
+        jButton4.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton4.setBorderPainted(false);
+        jButton4.setContentAreaFilled(false);
+        jButton4.setFocusPainted(false);
+        jButton4.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton4.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton4.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlStandort.add(jButton4, gridBagConstraints);
+        jButton4.setVisible(editable);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
@@ -609,7 +735,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel1.add(pnlArt, gridBagConstraints);
 
         jButton2.setIcon(new javax.swing.ImageIcon(
@@ -679,6 +805,24 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        jFormattedTextField17.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+        jFormattedTextField18.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void refreshArtPanel() {
         final Object selectedObject = cbFlaechenart.getSelectedItem();
@@ -735,224 +879,230 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
      * @param  artInfo  DOCUMENT ME!
      */
     public void initFromArtInfo(final AlboFlaecheSearch.ArtInfo artInfo) {
-        new SwingWorker<CidsBean, Void>() {
+        this.bean = new Bean();
 
-                @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getSchluesselBean(
-                            "albo_flaechenart",
-                            (artInfo != null) ? artInfo.getFlaechenartSchluessel() : null,
-                            getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        bean.setFkFlaechenArt(get());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    rebind();
-                }
-            }.execute();
-        if (artInfo instanceof AlboFlaecheSearch.AltablagerungInfo) {
+        if (artInfo != null) {
             new SwingWorker<CidsBean, Void>() {
 
                     @Override
                     protected CidsBean doInBackground() throws Exception {
                         return getSchluesselBean(
-                                "albo_stilllegung",
-                                ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getStilllegungSchluessel(),
+                                "albo_flaechenart",
+                                artInfo.getFlaechenartSchluessel(),
                                 getConnectionContext());
                     }
 
                     @Override
                     protected void done() {
                         try {
-                            bean.setFkStilllegung(get());
+                            bean.setFkFlaechenArt(get());
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
                         }
                         rebind();
                     }
                 }.execute();
-            new SwingWorker<CidsBean, Void>() {
+            if (artInfo instanceof AlboFlaecheSearch.AltablagerungInfo) {
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_verfuellkategorie",
-                                ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getVerfuellkategorieSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkVerfuellkategorie(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_stilllegung",
+                                    ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getStilllegungSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_erhebungsklasse",
-                                ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getErhebungsklasseSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkErhebungsklasse(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkStilllegung(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.AltstandortInfo) {
-            new SwingWorker<CidsBean, Void>() {
+                    }.execute();
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_wirtschaftszweig",
-                                ((AlboFlaecheSearch.AltstandortInfo)artInfo).getWzSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkWirtschaftszweig(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_verfuellkategorie",
+                                    ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getVerfuellkategorieSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.BetriebsstandortInfo) {
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_wirtschaftszweig",
-                                ((AlboFlaecheSearch.BetriebsstandortInfo)artInfo).getWzSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkWirtschaftszweig(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkVerfuellkategorie(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.BewirtschaftungsschadenInfo) {
-            new SwingWorker<CidsBean, Void>() {
+                    }.execute();
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_bewirtschaftungsschadensart",
-                                ((AlboFlaecheSearch.BewirtschaftungsschadenInfo)artInfo)
-                                            .getBewirtschaftungsschadensartSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkBewirtschaftungsschadenArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_erhebungsklasse",
+                                    ((AlboFlaecheSearch.AltablagerungInfo)artInfo).getErhebungsklasseSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.MaterialaufbringungInfo) {
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_materialaufbringungsart",
-                                ((AlboFlaecheSearch.MaterialaufbringungInfo)artInfo)
-                                            .getMaterialaufbringungsartSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkMaterialaufbringungArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkErhebungsklasse(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.ImmissionInfo) {
-            new SwingWorker<CidsBean, Void>() {
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.AltstandortInfo) {
+                final Boolean jahrModus = ((AlboFlaecheSearch.AltstandortInfo)artInfo).getJahrModus();
+                final Boolean dauerModus = ((AlboFlaecheSearch.AltstandortInfo)artInfo).getDauerModus();
+                jComboBox1.setSelectedItem(Boolean.TRUE.equals(jahrModus)
+                        ? "nach" : (Boolean.FALSE.equals(jahrModus) ? "vor" : "exakt"));
+                jComboBox2.setSelectedItem(Boolean.TRUE.equals(dauerModus)
+                        ? "länger als" : (Boolean.FALSE.equals(dauerModus) ? "kürzer als" : "exakt"));
+                bean.setStandortDauer(((AlboFlaecheSearch.AltstandortInfo)artInfo).getDauer());
+                bean.setStandortJahr(((AlboFlaecheSearch.AltstandortInfo)artInfo).getJahr());
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_immissionsart",
-                                ((AlboFlaecheSearch.ImmissionInfo)artInfo).getImmissionsartSchluessel(),
-                                getConnectionContext());
-                    }
+                new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkImmissionArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_wirtschaftszweig",
+                                    ((AlboFlaecheSearch.AltstandortInfo)artInfo).getWzSchluessel(),
+                                    getConnectionContext());
                         }
-                        rebind();
-                    }
-                }.execute();
-        } else if (artInfo instanceof AlboFlaecheSearch.SchadensfallInfo) {
-            new SwingWorker<CidsBean, Void>() {
 
-                    @Override
-                    protected CidsBean doInBackground() throws Exception {
-                        return getSchluesselBean(
-                                "albo_schadensfallart",
-                                ((AlboFlaecheSearch.SchadensfallInfo)artInfo).getSchadensfallartSchluessel(),
-                                getConnectionContext());
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            bean.setFkSchadensfallArt(get());
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkWirtschaftszweig(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
                         }
-                        rebind();
-                    }
-                }.execute();
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.BetriebsstandortInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_wirtschaftszweig",
+                                    ((AlboFlaecheSearch.BetriebsstandortInfo)artInfo).getWzSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkWirtschaftszweig(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.BewirtschaftungsschadenInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_bewirtschaftungsschadensart",
+                                    ((AlboFlaecheSearch.BewirtschaftungsschadenInfo)artInfo)
+                                                .getBewirtschaftungsschadensartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkBewirtschaftungsschadenArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.MaterialaufbringungInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_materialaufbringungsart",
+                                    ((AlboFlaecheSearch.MaterialaufbringungInfo)artInfo)
+                                                .getMaterialaufbringungsartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkMaterialaufbringungArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.ImmissionInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_immissionsart",
+                                    ((AlboFlaecheSearch.ImmissionInfo)artInfo).getImmissionsartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkImmissionArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            } else if (artInfo instanceof AlboFlaecheSearch.SchadensfallInfo) {
+                new SwingWorker<CidsBean, Void>() {
+
+                        @Override
+                        protected CidsBean doInBackground() throws Exception {
+                            return getSchluesselBean(
+                                    "albo_schadensfallart",
+                                    ((AlboFlaecheSearch.SchadensfallInfo)artInfo).getSchadensfallartSchluessel(),
+                                    getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                bean.setFkSchadensfallArt(get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                            rebind();
+                        }
+                    }.execute();
+            }
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  artInfo  DOCUMENT ME!
-     */
-    public void setArtInfo(final AlboFlaecheSearch.ArtInfo artInfo) {
+        rebind();
     }
 
     /**
@@ -977,6 +1127,17 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                             ? (CidsBean)cbWirtschaftszweig.getSelectedItem() : null;
                         ((AlboFlaecheSearch.StandortInfo)artInfo).setWzSchluessel((wirtschaftszweig != null)
                                 ? (String)wirtschaftszweig.getProperty("schluessel") : null);
+
+                        final Integer jahr = (bean != null) ? bean.getStandortJahr() : null;
+                        final Integer dauer = (bean != null) ? bean.getStandortDauer() : null;
+                        final Boolean jahrModus = "nach".equals(jComboBox1.getSelectedItem())
+                            ? Boolean.TRUE : ("vor".equals(jComboBox1.getSelectedItem()) ? Boolean.FALSE : null);
+                        final Boolean dauerModus = "länger als".equals(jComboBox2.getSelectedItem())
+                            ? Boolean.TRUE : ("kürzer als".equals(jComboBox2.getSelectedItem()) ? Boolean.FALSE : null);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setJahr(jahr);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setJahrModus(jahrModus);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setDauer(dauer);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setDauerModus(dauerModus);
                     }
                     break;
                     case "altablagerung": {
@@ -1078,6 +1239,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         private CidsBean fkImmissionArt;
         private CidsBean fkMaterialaufbringungArt;
         private CidsBean fkBewirtschaftungsschadenArt;
+        private Integer standortJahr;
+        private Integer standortDauer;
     }
 
     /**

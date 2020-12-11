@@ -16,6 +16,7 @@ import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 
@@ -35,10 +36,16 @@ import java.net.URL;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheSearch;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -85,9 +92,14 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel alboFlaecheSearchPanel1;
+    private javax.swing.JComboBox<String> cbAbfragen;
     private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlMain;
@@ -184,6 +196,11 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         java.awt.GridBagConstraints gridBagConstraints;
 
         pnlMain = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        cbAbfragen = new DefaultBindableReferenceCombo(true);
+        jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         alboFlaecheSearchPanel1 = new de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel(true);
@@ -197,6 +214,77 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
 
         pnlMain.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlMain.setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/reload.png"))); // NOI18N
+        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                AlboFlaecheWindowSearch.class,
+                "AlboFlaecheWindowSearch.jButton1.toolTipText"));                             // NOI18N
+        jButton1.setPreferredSize(new java.awt.Dimension(32, 32));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        jPanel2.add(jButton1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel15,
+            org.openide.util.NbBundle.getMessage(
+                AlboFlaecheWindowSearch.class,
+                "AlboFlaecheWindowSearch.jLabel15.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        jPanel2.add(jLabel15, gridBagConstraints);
+
+        ((DefaultBindableReferenceCombo)cbAbfragen).setMetaClass(ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                "cs_searchconf",
+                getConnectionContext()));
+        cbAbfragen.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbAbfragenActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        jPanel2.add(cbAbfragen, gridBagConstraints);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-save-floppy.png"))); // NOI18N
+        jButton2.setPreferredSize(new java.awt.Dimension(32, 32));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        jPanel2.add(jButton2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlMain.add(jPanel2, gridBagConstraints);
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -219,6 +307,7 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         jScrollPane1.setViewportView(jPanel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -228,7 +317,6 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         org.openide.awt.Mnemonics.setLocalizedText(cbMapSearch, "Nur im aktuellen Kartenausschnitt suchen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
@@ -237,7 +325,6 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlMain.add(pnlButtons, gridBagConstraints);
@@ -251,6 +338,126 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
         gridBagConstraints.weighty = 1.0;
         add(pnlMain, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        final Object selected = ((DefaultBindableReferenceCombo)cbAbfragen).getSelectedItem();
+        try {
+            final Boolean updateOrInsert;
+            if (selected instanceof CidsBean) {
+                final int option = JOptionPane.showConfirmDialog(
+                        this,
+                        "<html>Möchten Sie die aktuell ausgewählte Abfrage überschreiben?<br>"
+                                + "<br>"
+                                + "&bull; Ja: ausgewählte Abfrage wird überschrieben.<br>"
+                                + "&bull; Nein: eine neue Abfrage wird erzeugt.<br>",
+                        "Abfrage überschreiben?",
+                        JOptionPane.YES_NO_CANCEL_OPTION);
+                switch (option) {
+                    case JOptionPane.YES_OPTION: {
+                        updateOrInsert = Boolean.TRUE;
+                        break;
+                    }
+                    case JOptionPane.NO_OPTION: {
+                        updateOrInsert = Boolean.FALSE;
+                        break;
+                    }
+                    default: {
+                        updateOrInsert = null;
+                    }
+                }
+            } else {
+                updateOrInsert = Boolean.FALSE;
+            }
+            if (updateOrInsert != null) {
+                final CidsBean abfrageBean;
+                if (updateOrInsert) {
+                    abfrageBean = (CidsBean)selected;
+                } else {
+                    final String name = JOptionPane.showInputDialog(
+                            this,
+                            "Wählen Sie einen Namen für die neue Abfrage:",
+                            "Neue Abfrage",
+                            JOptionPane.PLAIN_MESSAGE);
+                    if (name == null) {
+                        return;
+                    }
+                    abfrageBean = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "cs_searchconf",
+                            getConnectionContext());
+                    abfrageBean.setProperty("name", name);
+                }
+                final AlboFlaecheSearch.FlaecheSearchInfo searchInfo = alboFlaecheSearchPanel1.createSearchInfo();
+                final String conf_json = AlboFlaecheSearch.OBJECT_MAPPER.writeValueAsString(searchInfo);
+                abfrageBean.setProperty("conf_json", conf_json);
+                final CidsBean persisted = abfrageBean.persist(getConnectionContext());
+
+                if (updateOrInsert) {
+                    ComponentRegistry.getRegistry()
+                            .getCatalogueTree()
+                            .requestRefreshNode(String.format("albo.abfragen.%d", persisted.getMetaObject().getId()));
+                } else {
+                    ComponentRegistry.getRegistry().getCatalogueTree().requestRefreshNode("albo.abfragen");
+                }
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Die Abfrage wurde erfolgreich abgespeichert.",
+                    "Abfrage gespeichert.",
+                    JOptionPane.INFORMATION_MESSAGE);
+                ((DefaultBindableReferenceCombo)cbAbfragen).reload(true);
+                ((DefaultBindableReferenceCombo)cbAbfragen).setSelectedItem(persisted);
+            }
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+            JOptionPane.showMessageDialog(
+                this,
+                "Das Abspeichern der Abfrage ist fehlgeschlagen.",
+                "Speichern fehlgeschlagen.",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    } //GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        ((DefaultBindableReferenceCombo)cbAbfragen).reload(true);
+        ((DefaultBindableReferenceCombo)cbAbfragen).setSelectedItem(null);
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbAbfragenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAbfragenActionPerformed
+        final Object selected = cbAbfragen.getSelectedItem();
+        if (selected instanceof CidsBean) {
+            final CidsBean abfrageBean = (CidsBean)selected;
+            final String conf_json = (String)abfrageBean.getProperty("conf_json");
+            if (conf_json != null) {
+                try {
+                    alboFlaecheSearchPanel1.initFromSeachInfo(AlboFlaecheSearch.OBJECT_MAPPER.readValue(
+                            conf_json,
+                            AlboFlaecheSearch.FlaecheSearchInfo.class));
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
+                }
+            } else {
+                alboFlaecheSearchPanel1.initFromSeachInfo(null);
+            }
+        } else {
+            alboFlaecheSearchPanel1.initFromSeachInfo(null);
+        }
+    }                                                                              //GEN-LAST:event_cbAbfragenActionPerformed
 
     @Override
     public MetaObjectNodeServerSearch getServerSearch() {

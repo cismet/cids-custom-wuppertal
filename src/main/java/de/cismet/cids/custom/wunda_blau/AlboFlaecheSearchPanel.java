@@ -70,7 +70,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
     private final Collection<AlboFlaecheArtSearchPanel> artInfoPanels = new ArrayList<>();
 
-    private final Bean bean = new Bean();
+    private Bean bean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -133,6 +133,8 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+        this.bean = new Bean();
+
         initComponents();
 
         RendererTools.makeReadOnly(jRadioButton1, !editable);
@@ -479,7 +481,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 20);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 20);
         jPanel5.add(jPanel2, gridBagConstraints);
 
         jButton3.setIcon(new javax.swing.ImageIcon(
@@ -664,71 +666,73 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      * @param  searchInfo  DOCUMENT ME!
      */
     public void initFromSeachInfo(final AlboFlaecheSearch.FlaecheSearchInfo searchInfo) {
-        new SwingWorker<CidsBean, Void>() {
-
-                @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getSchluesselBean(
-                            "albo_flaechenstatus",
-                            (searchInfo != null) ? searchInfo.getStatusSchluessel() : null,
-                            getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        bean.setFkStatus(get());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    rebind();
-                }
-            }.execute();
-
-        new SwingWorker<CidsBean, Void>() {
-
-                @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getSchluesselBean(
-                            "albo_flaechenzuordnung",
-                            (searchInfo != null) ? searchInfo.getZuordnungSchluessel() : null,
-                            getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        bean.setFkZuordnung(get());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    rebind();
-                }
-            }.execute();
-        new SwingWorker<CidsBean, Void>() {
-
-                @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getSchluesselBean(
-                            "albo_flaechentyp",
-                            (searchInfo != null) ? searchInfo.getTypSchluessel() : null,
-                            getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        bean.setFkTyp(get());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    rebind();
-                }
-            }.execute();
-
-        bean.setErhebungsnummer((searchInfo != null) ? searchInfo.getErhebungsNummer() : null);
-        bean.setVorgangsnummer((searchInfo != null) ? searchInfo.getVorgangSchluessel() : null);
+        this.bean = new Bean();
+        artInfoPanels.clear();
         if (searchInfo != null) {
+            new SwingWorker<CidsBean, Void>() {
+
+                    @Override
+                    protected CidsBean doInBackground() throws Exception {
+                        return getSchluesselBean(
+                                "albo_flaechenstatus",
+                                searchInfo.getStatusSchluessel(),
+                                getConnectionContext());
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            bean.setFkStatus(get());
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                        rebind();
+                    }
+                }.execute();
+
+            new SwingWorker<CidsBean, Void>() {
+
+                    @Override
+                    protected CidsBean doInBackground() throws Exception {
+                        return getSchluesselBean(
+                                "albo_flaechenzuordnung",
+                                searchInfo.getZuordnungSchluessel(),
+                                getConnectionContext());
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            bean.setFkZuordnung(get());
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                        rebind();
+                    }
+                }.execute();
+            new SwingWorker<CidsBean, Void>() {
+
+                    @Override
+                    protected CidsBean doInBackground() throws Exception {
+                        return getSchluesselBean(
+                                "albo_flaechentyp",
+                                searchInfo.getTypSchluessel(),
+                                getConnectionContext());
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            bean.setFkTyp(get());
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                        rebind();
+                    }
+                }.execute();
+
+            bean.setErhebungsnummer(searchInfo.getErhebungsNummer());
+            bean.setVorgangsnummer(searchInfo.getVorgangSchluessel());
             buttonGroup1.setSelected(jRadioButton1.getModel(),
                 AlboFlaecheSearch.SearchMode.AND.equals(searchInfo.getSearchModeMain()));
             buttonGroup1.setSelected(jRadioButton2.getModel(),
@@ -737,17 +741,17 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                 AlboFlaecheSearch.SearchMode.AND.equals(searchInfo.getSearchModeArt()));
             buttonGroup2.setSelected(jRadioButton6.getModel(),
                 AlboFlaecheSearch.SearchMode.OR.equals(searchInfo.getSearchModeArt()));
-        }
-        rebind();
 
-        artInfoPanels.clear();
-        if ((searchInfo != null) && (searchInfo.getArtInfos() != null)) {
-            for (final AlboFlaecheSearch.ArtInfo artInfo : searchInfo.getArtInfos()) {
-                final AlboFlaecheArtSearchPanel artInfoPanel = new AlboFlaecheArtSearchPanel(this, editable);
-                artInfoPanel.initFromArtInfo(artInfo);
-                artInfoPanels.add(artInfoPanel);
+            if (searchInfo.getArtInfos() != null) {
+                for (final AlboFlaecheSearch.ArtInfo artInfo : searchInfo.getArtInfos()) {
+                    final AlboFlaecheArtSearchPanel artInfoPanel = new AlboFlaecheArtSearchPanel(this, editable);
+                    artInfoPanel.initFromArtInfo(artInfo);
+                    artInfoPanels.add(artInfoPanel);
+                }
             }
         }
+
+        rebind();
         refreshArtInfoPanels();
     }
 
