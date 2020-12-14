@@ -865,7 +865,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      */
     private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         final CidsBean flaecheBean = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBean(
-                jXTable1.getSelectedRow());
+                jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
         ((VorgangFlaecheTableModel)jXTable1.getModel()).remove(flaecheBean);
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
@@ -877,7 +877,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jXTable1MouseClicked
         if (isEditable() && (evt.getClickCount() == 2)) {
             final CidsBean flaecheBean = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBean(
-                    jXTable1.getSelectedRow());
+                    jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
             ComponentRegistry.getRegistry()
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(flaecheBean), false);
