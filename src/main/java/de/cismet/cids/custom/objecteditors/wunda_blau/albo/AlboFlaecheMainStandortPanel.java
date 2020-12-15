@@ -110,8 +110,10 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         jPanel16 = new javax.swing.JPanel();
         jPanel48 = new javax.swing.JPanel();
         jFormattedTextField17 = new javax.swing.JFormattedTextField();
+        jButton5 = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
         jFormattedTextField18 = new javax.swing.JFormattedTextField();
+        jButton6 = new javax.swing.JButton();
         filler63 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -367,6 +369,22 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel48.add(jFormattedTextField17, gridBagConstraints);
 
+        jButton5.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton5.setBorderPainted(false);
+        jButton5.setContentAreaFilled(false);
+        jButton5.setFocusPainted(false);
+        jButton5.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton5.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton5.setName("jButton5");                                                                       // NOI18N
+        jButton5.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton5.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel48.add(jButton5, gridBagConstraints);
+        jButton5.setVisible(isEditable());
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel51, "bis:");
         jLabel51.setName("jLabel51"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -394,6 +412,22 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel48.add(jFormattedTextField18, gridBagConstraints);
+
+        jButton6.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton6.setBorderPainted(false);
+        jButton6.setContentAreaFilled(false);
+        jButton6.setFocusPainted(false);
+        jButton6.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton6.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton6.setName("jButton6");                                                                       // NOI18N
+        jButton6.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton6.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel48.add(jButton6, gridBagConstraints);
+        jButton6.setVisible(isEditable());
 
         filler63.setName("filler63"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -591,7 +625,9 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
 
         @Override
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == jButton1) {
+            if (evt.getSource() == jXHyperlink1) {
+                AlboFlaecheMainStandortPanel.this.jXHyperlink1ActionPerformed(evt);
+            } else if (evt.getSource() == jButton1) {
                 AlboFlaecheMainStandortPanel.this.jButton1ActionPerformed(evt);
             } else if (evt.getSource() == jButton2) {
                 AlboFlaecheMainStandortPanel.this.jButton2ActionPerformed(evt);
@@ -601,8 +637,10 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
                 AlboFlaecheMainStandortPanel.this.jButton3ActionPerformed(evt);
             } else if (evt.getSource() == jButton4) {
                 AlboFlaecheMainStandortPanel.this.jButton4ActionPerformed(evt);
-            } else if (evt.getSource() == jXHyperlink1) {
-                AlboFlaecheMainStandortPanel.this.jXHyperlink1ActionPerformed(evt);
+            } else if (evt.getSource() == jButton5) {
+                AlboFlaecheMainStandortPanel.this.jButton5ActionPerformed(evt);
+            } else if (evt.getSource() == jButton6) {
+                AlboFlaecheMainStandortPanel.this.jButton6ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -626,6 +664,8 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox27;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JFormattedTextField jFormattedTextField17;
@@ -724,7 +764,8 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      */
     private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).remove(
-            ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).getCidsBean(jXTable2.getSelectedRow()));
+            ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).getCidsBean(
+                jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow())));
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -767,6 +808,24 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
             LOG.error(ex, ex);
         }
     }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+        jFormattedTextField17.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
+        jFormattedTextField17.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
