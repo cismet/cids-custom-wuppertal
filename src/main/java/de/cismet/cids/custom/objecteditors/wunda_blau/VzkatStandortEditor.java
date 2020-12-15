@@ -273,6 +273,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXHyperlink jxhOVBW;
     private org.jdesktop.swingx.JXHyperlink jxhOVCenter;
@@ -559,6 +560,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jScrollPane2 = new javax.swing.JScrollPane();
         panFullIcon = new de.cismet.tools.gui.RoundedPanel();
         lblFullIconVorne = new javax.swing.JLabel();
         lblFullIconHinten = new javax.swing.JLabel();
@@ -1552,13 +1554,15 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panFullIcon.add(lblFullIconSonstige, "sonstige");
         lblPreviewIconSonstige.setVisible(false);
 
+        jScrollPane2.setViewportView(panFullIcon);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel13.add(panFullIcon, gridBagConstraints);
+        jPanel13.add(jScrollPane2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
