@@ -64,6 +64,8 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
+
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
@@ -126,18 +128,18 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     private static final String[] BEARBEITUNG_COLUMN_PROPERTIES = new String[] {
             "stand",
-            "login_name",
-            "geschaeft_id"
+            "fk_bearbeiter",
+            "fk_geschaeft"
         };
     private static final String[] BEARBEITUNG_COLUMN_NAMES = new String[] {
             "Stand",
-            "Benutzer",
-            "Geschäft-ID"
+            "Bearbeiter",
+            "Geschäft"
         };
     private static final Class[] BEARBEITUNG_COLUMN_CLASSES = new Class[] {
-            Timestamp.class,
-            String.class,
-            Integer.class
+            Date.class,
+            CidsBean.class,
+            CidsBean.class
         };
 
     //~ Instance fields --------------------------------------------------------
@@ -153,21 +155,24 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton btnReport;
+    private javax.swing.ButtonGroup buttonGroup1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialog1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox102;
     private javax.swing.JCheckBox jCheckBox103;
     private javax.swing.JComboBox<String> jComboBox28;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -177,6 +182,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -184,6 +190,8 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -240,22 +248,10 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 new AlboFlaecheLightweightSearch(),
                 "Erhebungsfläche auswählen",
                 getConnectionContext());
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
-        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
-                strassennameSearch,
-                strassennameSearch.getRepresentationPattern(),
-                strassennameSearch.getRepresentationFields());
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        jLabel17 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
@@ -263,6 +259,20 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jCheckBox102 = new javax.swing.JCheckBox();
         jCheckBox103 = new javax.swing.JCheckBox();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+                strassennameSearch,
+                strassennameSearch.getRepresentationPattern(),
+                strassennameSearch.getRepresentationFields());
+        jLabel17 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel7 = new javax.swing.JPanel();
         jLabel61 = new javax.swing.JLabel();
         jComboBox28 = new DefaultBindableScrollableComboBox();
@@ -294,6 +304,12 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jPanel10 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jXTable2 = new org.jdesktop.swingx.JXTable();
+        jPanel12 = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
         panTitle.setName("panTitle"); // NOI18N
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -365,109 +381,10 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel16.setText("Straße:");  // NOI18N
-        jLabel16.setName("jLabel16"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jLabel16, gridBagConstraints);
-
-        jComboBox4.setName("jComboBox4"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_strasse}"),
-                jComboBox4,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jComboBox4, gridBagConstraints);
-
-        jLabel5.setText("Bemerkung:"); // NOI18N
-        jLabel5.setName("jLabel5");    // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jLabel5, gridBagConstraints);
-
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setName("jTextArea1"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
-                jTextArea1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane1.setViewportView(jTextArea1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jScrollPane1, gridBagConstraints);
-
-        filler3.setName("filler3"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        jPanel2.add(filler3, gridBagConstraints);
-
-        jLabel17.setText("Haus-Nr:"); // NOI18N
-        jLabel17.setName("jLabel17"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
-        jPanel2.add(jLabel17, gridBagConstraints);
-
-        jTextField5.setName("jTextField5"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
-                jTextField5,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jTextField5, gridBagConstraints);
-
         jLabel1.setText("Schlüssel:"); // NOI18N
         jLabel1.setName("jLabel1");    // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel2.add(jLabel1, gridBagConstraints);
@@ -573,10 +490,139 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel2.add(jPanel3, gridBagConstraints);
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("Straße:");
+        jRadioButton1.setContentAreaFilled(false);
+        jRadioButton1.setName("jRadioButton1"); // NOI18N
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jRadioButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jRadioButton1, gridBagConstraints);
+
+        jComboBox4.setName("jComboBox4"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_strasse}"),
+                jComboBox4,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jComboBox4, gridBagConstraints);
+
+        jLabel17.setText("Haus-Nr:"); // NOI18N
+        jLabel17.setName("jLabel17"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
+        jPanel2.add(jLabel17, gridBagConstraints);
+
+        jTextField5.setName("jTextField5"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                jTextField5,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jTextField5, gridBagConstraints);
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("Lage aus BPlan ersichtlich");
+        jRadioButton2.setContentAreaFilled(false);
+        jRadioButton2.setName("jRadioButton2"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lage_aus_bplan}"),
+                jRadioButton2,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jRadioButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jRadioButton2, gridBagConstraints);
+
+        jLabel5.setText("Bemerkung:"); // NOI18N
+        jLabel5.setName("jLabel5");    // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jLabel5, gridBagConstraints);
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setName("jTextArea1"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(jTextArea1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
+
+        filler3.setName("filler3"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(filler3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -731,6 +777,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel11, gridBagConstraints);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Flächen:"));
@@ -840,6 +887,56 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel10.add(jScrollPane5, gridBagConstraints);
 
+        jPanel12.setName("jPanel12"); // NOI18N
+        jPanel12.setOpaque(false);
+        jPanel12.setLayout(new java.awt.GridBagLayout());
+
+        jButton4.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
+        jButton4.setName("jButton4");                                                                // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jButton4, gridBagConstraints);
+        jButton4.setVisible(isEditable());
+
+        jButton5.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
+        jButton5.setName("jButton5");                                                                   // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton5ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(jButton5, gridBagConstraints);
+        jButton5.setVisible(isEditable());
+
+        filler8.setName("filler8"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel12.add(filler8, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel10.add(jPanel12, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -920,6 +1017,52 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         }
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jRadioButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton1ActionPerformed
+        updateLageFields();
+    }                                                                                 //GEN-LAST:event_jRadioButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton2ActionPerformed
+        updateLageFields();
+    }                                                                                 //GEN-LAST:event_jRadioButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            final CidsBean bearbeitungBean = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "albo_vorgang_bearbeitung",
+                    getConnectionContext());
+            ((VorgangBearbeitungTableModel)jXTable2.getModel()).add(bearbeitungBean);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+        final CidsBean bearbeitungBean = ((VorgangBearbeitungTableModel)jXTable2.getModel()).getCidsBean(
+                jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow()));
+        ((VorgangBearbeitungTableModel)jXTable2.getModel()).remove(bearbeitungBean);
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -979,6 +1122,8 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             }
             RendererTools.makeReadOnly(jTextField1);
         }
+        updateLageFields();
+
         ((VorgangFlaecheTableModel)jXTable1.getModel()).setCidsBeans((cidsBean != null)
                 ? cidsBean.getBeanCollectionProperty("arr_flaechen") : null);
         ((VorgangBearbeitungTableModel)jXTable2.getModel()).setCidsBeans((cidsBean != null)
@@ -1049,11 +1194,23 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         return String.format("Altlastenkataster - Vorgang: %s", (String)cidsBean.getProperty("schluessel"));
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateLageFields() {
+        if (isEditable()) {
+            jComboBox4.setEnabled(jRadioButton1.isSelected());
+            jTextField5.setEnabled(jRadioButton1.isSelected());
+        }
+    }
+
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        RendererTools.makeReadOnly(jRadioButton1, !isEditable());
         if (isEditable()) {
+            jXTable2.setDefaultEditor(Date.class, new DateCellEditor());
             try {
                 new CidsBeanDropTarget(jXTable1);
             } catch (final Exception ex) {
@@ -1063,7 +1220,9 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         }
         RendererTools.makeReadOnly(jList1);
         RendererTools.makeReadOnly(jXTable1);
-        RendererTools.makeReadOnly(jXTable2);
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(jXTable2);
+        }
     }
 
     /**
@@ -1262,7 +1421,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
          * Creates a new VorgangBearbeitungTableModel object.
          */
         public VorgangBearbeitungTableModel() {
-            super(BEARBEITUNG_COLUMN_PROPERTIES, BEARBEITUNG_COLUMN_NAMES, BEARBEITUNG_COLUMN_CLASSES);
+            super(BEARBEITUNG_COLUMN_PROPERTIES, BEARBEITUNG_COLUMN_NAMES, BEARBEITUNG_COLUMN_CLASSES, true);
         }
     }
 }
