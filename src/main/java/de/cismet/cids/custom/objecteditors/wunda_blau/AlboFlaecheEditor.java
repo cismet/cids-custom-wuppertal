@@ -42,7 +42,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -60,6 +59,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkunge
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -79,6 +80,8 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -112,6 +115,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panTitle = new JPanel();
         lblTitle = new JLabel();
         jToggleButton1 = new JToggleButton();
+        btnReport1 = new JButton();
         btnReport = new JButton();
         panFooter = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
@@ -171,15 +175,26 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_open.png"))); // NOI18N
         jToggleButton1.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(jToggleButton1, gridBagConstraints);
         jToggleButton1.setVisible(isEditable());
 
+        btnReport1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/table_export.png")));    // NOI18N
+        btnReport1.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
+        btnReport1.setBorderPainted(false);
+        btnReport1.setContentAreaFilled(false);
+        btnReport1.setFocusPainted(false);
+        btnReport1.setName("btnReport1");                                                                              // NOI18N
+        btnReport1.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panTitle.add(btnReport1, gridBagConstraints);
+
         btnReport.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png")));         // NOI18N
-        btnReport.setText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.text"));               // NOI18N
         btnReport.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
         btnReport.setBorderPainted(false);
         btnReport.setContentAreaFilled(false);
@@ -188,7 +203,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         btnReport.setName("btnReport");                                                                               // NOI18N
         btnReport.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -351,6 +365,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == jToggleButton1) {
                 AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
+            } else if (evt.getSource() == btnReport1) {
+                AlboFlaecheEditor.this.btnReport1ActionPerformed(evt);
             } else if (evt.getSource() == btnReport) {
                 AlboFlaecheEditor.this.btnReportActionPerformed(evt);
             } else if (evt.getSource() == btnBack) {
@@ -400,6 +416,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private JButton btnBack;
     private JButton btnForward;
     JButton btnReport;
+    JButton btnReport1;
     private Box.Filler filler1;
     private Box.Filler filler2;
     private JLabel jLabel1;
@@ -483,47 +500,13 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
         if (cidsBean != null) {
             if (isEditable()) {
-                if (cidsBean.getProperty("fk_massnahme") == null) {
+                if (cidsBean.getProperty("fk_massnahmen") == null) {
                     try {
                         cidsBean.setProperty(
-                            "fk_massnahme",
-                            CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "ALBO_MASSNAHME", getConnectionContext())
-                                        .getEmptyInstance(getConnectionContext()).getBean());
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
-                    }
-                }
-                if (cidsBean.getProperty("fk_massnahme_dekontamination") == null) {
-                    try {
-                        cidsBean.setProperty(
-                            "fk_massnahme_dekontamination",
+                            "fk_massnahmen",
                             CidsBean.getMetaClassFromTableName(
                                 "WUNDA_BLAU",
-                                "ALBO_MASSNAHME_DEKONTAMINATION",
-                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
-                    }
-                }
-                if (cidsBean.getProperty("fk_massnahme_sicherung") == null) {
-                    try {
-                        cidsBean.setProperty(
-                            "fk_massnahme_sicherung",
-                            CidsBean.getMetaClassFromTableName(
-                                "WUNDA_BLAU",
-                                "ALBO_MASSNAHME_SICHERUNG",
-                                getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
-                    } catch (final Exception ex) {
-                        LOG.fatal(ex, ex);
-                    }
-                }
-                if (cidsBean.getProperty("fk_massnahme_schutzbeschraenkung") == null) {
-                    try {
-                        cidsBean.setProperty(
-                            "fk_massnahme_schutzbeschraenkung",
-                            CidsBean.getMetaClassFromTableName(
-                                "WUNDA_BLAU",
-                                "ALBO_MASSNAHME_SCHUTZBESCHRAENKUNG",
+                                "ALBO_MASSNAHMEN",
                                 getConnectionContext()).getEmptyInstance(getConnectionContext()).getBean());
                     } catch (final Exception ex) {
                         LOG.fatal(ex, ex);
@@ -627,6 +610,30 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReport1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReport1ActionPerformed
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        CismapBroker.getInstance().getMappingComponent())) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+            DownloadManager.instance()
+                    .add(
+                        new ByteArrayActionDownload(
+                            AlboExportServerAction.TASK_NAME,
+                            null,
+                            null,
+                            "Schnittstellen-Export",
+                            jobname,
+                            "export",
+                            ".csv",
+                            getConnectionContext()));
+        }
+    } //GEN-LAST:event_btnReport1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void updateFooterControls() {
         for (final Component card : panMainCard.getComponents()) {
@@ -638,57 +645,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 btnForward.setEnabled(!panCardMassnahmen.equals(card));
             }
         }
-
-        int countMassnahme = 0;
-        final CidsBean massnahme = (cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_massnahme") : null;
-        if (massnahme != null) {
-            for (final String property : massnahme.getPropertyNames()) {
-                final Object value = massnahme.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahme++;
-                }
-            }
-        }
-        int countMassnahmeSicherung = 0;
-        final CidsBean massnahmeSicherung = (cidsBean != null)
-            ? (CidsBean)cidsBean.getProperty("fk_massnahme_sicherung") : null;
-        if (massnahmeSicherung != null) {
-            for (final String property : massnahmeSicherung.getPropertyNames()) {
-                final Object value = massnahmeSicherung.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahmeSicherung++;
-                }
-            }
-        }
-        int countMassnahmeDekontamination = 0;
-        final CidsBean massnahmeDekontamination = (cidsBean != null)
-            ? (CidsBean)cidsBean.getProperty("fk_massnahme_dekontamination") : null;
-        if (massnahmeDekontamination != null) {
-            for (final String property : massnahmeDekontamination.getPropertyNames()) {
-                final Object value = massnahmeDekontamination.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahmeDekontamination++;
-                }
-            }
-        }
-        int countMassnahmeSchutzbeschraenkung = 0;
-        final CidsBean massnahmeSchutzbeschraenkung = (cidsBean != null)
-            ? (CidsBean)cidsBean.getProperty("fk_massnahme_schutzbeschraenkung") : null;
-        if (massnahmeSchutzbeschraenkung != null) {
-            for (final String property : massnahmeSchutzbeschraenkung.getPropertyNames()) {
-                final Object value = massnahmeSchutzbeschraenkung.getProperty(property);
-                if ((value instanceof Boolean) && Boolean.TRUE.equals(value)) {
-                    countMassnahmeSchutzbeschraenkung++;
-                }
-            }
-        }
-
-        jLabel3.setText(String.format(
-                "<html><body><center><b><h3>Maßnahmen</b> <i>(%d/%d/%d/%d)",
-                countMassnahme,
-                countMassnahmeSicherung,
-                countMassnahmeDekontamination,
-                countMassnahmeSchutzbeschraenkung));
     }
 
     /**

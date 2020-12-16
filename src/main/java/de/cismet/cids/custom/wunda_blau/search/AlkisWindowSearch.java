@@ -246,17 +246,16 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrNach = new javax.swing.ButtonGroup();
         bgrOwner = new javax.swing.ButtonGroup();
         panSearch = new javax.swing.JPanel();
-        panCommand = new javax.swing.JPanel();
         panSucheNach = new javax.swing.JPanel();
         optSucheNachFlurstuecke = new javax.swing.JRadioButton();
         optSucheNachGrundbuchblaetter = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
         panSucheUeber = new javax.swing.JPanel();
         optSucheUeberEigentuemer = new javax.swing.JRadioButton();
         optSucheUeberFlurstueck = new javax.swing.JRadioButton();
         optSucheUeberGrundbuchblatt = new javax.swing.JRadioButton();
         jPanel3 = new javax.swing.JPanel();
+        panCommand = new javax.swing.JPanel();
         panEingabe = new javax.swing.JPanel();
         panEingabeGrundbuchblatt = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
@@ -274,16 +273,17 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         txtName = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        optEigIstMaennlich = new javax.swing.JRadioButton();
         optEigIstWeiblich = new javax.swing.JRadioButton();
+        optEigIstMaennlich = new javax.swing.JRadioButton();
         optEigIstFirma = new javax.swing.JRadioButton();
         optEigIstUnbekannt = new javax.swing.JRadioButton();
+        jPanel5 = new javax.swing.JPanel();
         txtGeburtsname = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtGeburtsdatum = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
         chkGeomFilter = new javax.swing.JCheckBox();
 
         setMaximumSize(new java.awt.Dimension(325, 460));
@@ -295,14 +295,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panSearch.setMinimumSize(new java.awt.Dimension(400, 150));
         panSearch.setPreferredSize(new java.awt.Dimension(400, 150));
         panSearch.setLayout(new java.awt.GridBagLayout());
-
-        panCommand.setLayout(new javax.swing.BoxLayout(panCommand, javax.swing.BoxLayout.LINE_AXIS));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSearch.add(panCommand, gridBagConstraints);
 
         panSucheNach.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 javax.swing.BorderFactory.createTitledBorder("Suche nach"),
@@ -332,13 +324,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
         panSearch.add(panSucheNach, gridBagConstraints);
-
-        jPanel6.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.weighty = 1.0;
-        panSearch.add(jPanel6, gridBagConstraints);
 
         panSucheUeber.setBorder(javax.swing.BorderFactory.createCompoundBorder(
                 javax.swing.BorderFactory.createTitledBorder("Suche über"),
@@ -392,6 +377,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
         panSearch.add(panSucheUeber, gridBagConstraints);
+
+        panCommand.setLayout(new javax.swing.BoxLayout(panCommand, javax.swing.BoxLayout.LINE_AXIS));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panSearch.add(panCommand, gridBagConstraints);
 
         panEingabe.setLayout(new java.awt.CardLayout());
 
@@ -530,32 +523,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panEingabeEigentuemer.add(jLabel8, gridBagConstraints);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"),
+                javax.swing.BorderFactory.createTitledBorder("Eigentümer Anrede ist"),
                 javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
         jPanel4.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jPanel5, gridBagConstraints);
-
-        bgrOwner.add(optEigIstMaennlich);
-        optEigIstMaennlich.setText("männlich");
-        optEigIstMaennlich.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optEigIstMaennlichActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        jPanel4.add(optEigIstMaennlich, gridBagConstraints);
 
         bgrOwner.add(optEigIstWeiblich);
-        optEigIstWeiblich.setText("weiblich");
+        optEigIstWeiblich.setText("Frau");
         optEigIstWeiblich.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -564,8 +537,22 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel4.add(optEigIstWeiblich, gridBagConstraints);
+
+        bgrOwner.add(optEigIstMaennlich);
+        optEigIstMaennlich.setText("Herr");
+        optEigIstMaennlich.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optEigIstMaennlichActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel4.add(optEigIstMaennlich, gridBagConstraints);
 
         bgrOwner.add(optEigIstFirma);
         optEigIstFirma.setText("Firma");
@@ -590,7 +577,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                     optEigIstUnbekanntActionPerformed(evt);
                 }
             });
-        jPanel4.add(optEigIstUnbekannt, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel4.add(optEigIstUnbekannt, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(jPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -661,6 +655,13 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
         panSearch.add(panEingabe, gridBagConstraints);
+
+        jPanel6.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.weighty = 1.0;
+        panSearch.add(jPanel6, gridBagConstraints);
 
         chkGeomFilter.setText("nur im aktuellen Kartenausschnitt suchen");
         gridBagConstraints = new java.awt.GridBagConstraints();

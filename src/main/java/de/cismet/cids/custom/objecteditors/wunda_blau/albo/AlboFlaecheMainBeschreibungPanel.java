@@ -280,11 +280,11 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jTextField7, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Straße:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Lage:");
         jLabel16.setName("jLabel16"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jLabel16, gridBagConstraints);
 
@@ -337,6 +337,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         filler42.setName("filler42"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.weightx = 1.0;
@@ -345,6 +346,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         filler46.setName("filler46"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 40;
         gridBagConstraints.weightx = 1.0;
@@ -393,7 +395,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(filler1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Fläche kann gelöscht werden");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Fläche unterdrücken");
         jCheckBox1.setContentAreaFilled(false);
         jCheckBox1.setName("jCheckBox1"); // NOI18N
 
