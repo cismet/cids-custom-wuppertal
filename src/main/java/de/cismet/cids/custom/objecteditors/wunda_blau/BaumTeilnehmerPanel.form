@@ -79,7 +79,11 @@
                 <Property name="name" type="java.lang.String" value="taBemerkung" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="taBemerkung" targetPath="text" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="taBemerkung" targetPath="text" updateStrategy="0" immediately="false">
+                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                  <Property name="nullValue" type="java.lang.String" value="null"/>
+                  <Property name="incompletePathValue" type="java.lang.String" value="null"/>
+                </BindingProperty>
               </BindingProperties>
             </Component>
           </SubComponents>
@@ -105,7 +109,10 @@
             <Property name="name" type="java.lang.String" value="ftxtTelefon" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.telefon}" target="ftxtTelefon" targetPath="value" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.telefon}" target="ftxtTelefon" targetPath="value" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
+            </BindingProperty>
           </BindingProperties>
           <Events>
             <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="ftxtTelefonFocusLost"/>

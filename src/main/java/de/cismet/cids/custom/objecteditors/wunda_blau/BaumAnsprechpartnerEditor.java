@@ -643,7 +643,6 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             RendererTools.makeReadOnly(txtStrasse);
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtBemerkung);
-            RendererTools.makeReadOnly(txtName);
         }
     }
 

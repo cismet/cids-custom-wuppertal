@@ -153,6 +153,8 @@ public class BaumTeilnehmerPanel extends javax.swing.JPanel implements Disposabl
         taBemerkung.setName("taBemerkung"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -182,6 +184,8 @@ public class BaumTeilnehmerPanel extends javax.swing.JPanel implements Disposabl
         ftxtTelefon.setName("ftxtTelefon"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtTelefon, BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         ftxtTelefon.addFocusListener(formListener);

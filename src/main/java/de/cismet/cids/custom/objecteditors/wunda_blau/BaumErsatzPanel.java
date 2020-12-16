@@ -13,11 +13,9 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Point;
-import de.cismet.cids.custom.objecteditors.utils.EmobConfProperties;
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.TableUtils;
+import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import org.apache.log4j.Logger;
@@ -29,14 +27,12 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -48,6 +44,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -55,41 +52,26 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import javax.swing.Box;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -98,8 +80,6 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingbinding.SwingBindings;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.awt.Mnemonics;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
@@ -113,29 +93,6 @@ import org.openide.util.NbBundle;
 public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
-    private static final Comparator<Object> DATE_COMPARATOR = new Comparator<Object>() {
-
-            @Override
-           /* public int compare(final Object o1, final Object o2) {
-                return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
-            }*/
-            public int compare(final Object o1, final Object o2) {
-                    final String o1String = String.valueOf(((CidsBean)o1).getProperty("datum"));
-                    final String o2String = String.valueOf(((CidsBean)o2).getProperty("datum"));
-
-                    try {
-                        final Integer o1Int = Integer.parseInt(o1String);
-                        final Integer o2Int = Integer.parseInt(o2String);
-
-                        return o1Int.compareTo(o2Int);
-                    } catch (NumberFormatException e) {
-                        // do nothing
-                    }
-
-                    return String.valueOf(o1).compareTo(String.valueOf(o2));
-                }
-        };
-    
     private List<CidsBean> kontrolleBeans;
     private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
     
@@ -175,47 +132,47 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         btnMenOkKontrolle = new JButton();
         dcKontrolle = new DefaultBindableDateChooser();
         panErsatz = new JPanel();
-        JLabel lblBis = new JLabel();
+        lblBis = new JLabel();
         dcBis = new DefaultBindableDateChooser();
-        JLabel lblGeom = new JLabel();
+        lblGeom = new JLabel();
         if (isEditor){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
-        JLabel lblDatum = new JLabel();
-        JLabel lblArt = new JLabel();
+        lblDatum = new JLabel();
+        lblArt = new JLabel();
         cbArt = new DefaultBindableScrollableComboBox();
-        JLabel lblAnzahl = new JLabel();
+        lblAnzahl = new JLabel();
         spAnzahl = new JSpinner();
-        JLabel lblSelbst = new JLabel();
+        lblSelbst = new JLabel();
         chSelbst = new JCheckBox();
-        JLabel lblFirma = new JLabel();
+        lblFirma = new JLabel();
         txtFirma = new JTextField();
-        JPanel panGeometrie = new JPanel();
-        JPanel panLage = new JPanel();
-        RoundedPanel rpKarte = new RoundedPanel();
+        panGeometrie = new JPanel();
+        panLage = new JPanel();
+        rpKarte = new RoundedPanel();
         panPreviewMap = new DefaultPreviewMapPanel();
-        SemiRoundedPanel semiRoundedPanel7 = new SemiRoundedPanel();
-        JLabel lblKarte = new JLabel();
-        JLabel lblBemerkung = new JLabel();
-        JScrollPane scpBemerkung = new JScrollPane();
+        semiRoundedPanel7 = new SemiRoundedPanel();
+        lblKarte = new JLabel();
+        lblBemerkung = new JLabel();
+        scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         panKontrolle = new JPanel();
         rpKontrolleliste = new RoundedPanel();
         scpLaufendeKontrolle = new JScrollPane();
         lstKontrollen = new JList();
-        SemiRoundedPanel semiRoundedPanelKontrolle = new SemiRoundedPanel();
+        semiRoundedPanelKontrolle = new SemiRoundedPanel();
         lblKontrolle = new JLabel();
-        JPanel panControlsNewKontrolle = new JPanel();
+        panControlsNewKontrolle = new JPanel();
         btnAddNewKontrolle = new JButton();
         btnRemoveKontrolle = new JButton();
-        RoundedPanel rpKontrolleinfo = new RoundedPanel();
+        rpKontrolleinfo = new RoundedPanel();
         semiRoundedPanel5 = new SemiRoundedPanel();
         lblKontrolleanzeige = new JLabel();
         panKontrolleMain = new JPanel();
-        Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        BaumKontrollePanel baumKontrollePanel1 = new BaumKontrollePanel();
+        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        baumKontrollePanel1 = new BaumKontrollePanel();
         dcDatum = new DefaultBindableDateChooser();
-        Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
         FormListener formListener = new FormListener();
 
@@ -295,6 +252,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         dcBis.setName("dcBis"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__BIS + "}"), dcBis, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(dcBis.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -323,6 +282,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             cbGeom.setName("cbGeom"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__GEOM + "}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding.setSourceNullValue(null);
+            binding.setSourceUnreadableValue(null);
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
 
@@ -367,6 +328,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         cbArt.setPreferredSize(new Dimension(100, 24));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__ART + "}"), cbArt, BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -394,6 +357,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         spAnzahl.setName("spAnzahl"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__ANZAHL + "}"), spAnzahl, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -446,12 +411,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         txtFirma.setName("txtFirma"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__FIRMA + "}"), txtFirma, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -547,6 +513,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         taBemerkung.setName("taBemerkung"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__BEMERKUNG + "}"), taBemerkung, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -731,6 +699,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         dcDatum.setName("dcDatum"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__DATUM + "}"), dcDatum, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(dcDatum.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -798,7 +768,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
             if (kontrolleBeans != null) {
                 kontrolleBeans.remove((CidsBean)selectedObject);
-                if (kontrolleBeans != null) {
+                if (kontrolleBeans != null && kontrolleBeans.size() > 0) {
                     lstKontrollen.setSelectedIndex(0);
                 }else{
                     lstKontrollen.clearSelection();
@@ -834,10 +804,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             kontrolleBeans.add(beanKontrolle);
 
             //Refresh:
-
-            bindingGroup.unbind();
-            Collections.sort((List)kontrolleBeans, DATE_COMPARATOR);
-            bindingGroup.bind();
             lstKontrollen.setSelectedValue(beanKontrolle, true);
 
         } catch (Exception ex) {
@@ -855,6 +821,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    BaumKontrollePanel baumKontrollePanel1;
     JButton btnAddNewKontrolle;
     JButton btnMenAbortKontrolle;
     JButton btnMenOkKontrolle;
@@ -866,19 +833,38 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     DefaultBindableDateChooser dcDatum;
     DefaultBindableDateChooser dcKontrolle;
     JDialog dlgAddKontrolle;
+    Box.Filler filler3;
+    Box.Filler filler4;
+    JLabel lblAnzahl;
+    JLabel lblArt;
     JLabel lblAuswaehlenKontrolle;
+    JLabel lblBemerkung;
+    JLabel lblBis;
+    JLabel lblDatum;
+    JLabel lblFirma;
+    JLabel lblGeom;
+    JLabel lblKarte;
     JLabel lblKontrolle;
     JLabel lblKontrolleanzeige;
+    JLabel lblSelbst;
     JList lstKontrollen;
     JPanel panAddKontrolle;
+    JPanel panControlsNewKontrolle;
     JPanel panErsatz;
+    JPanel panGeometrie;
     JPanel panKontrolle;
     JPanel panKontrolleMain;
+    JPanel panLage;
     JPanel panMenButtonsKontrolle;
     DefaultPreviewMapPanel panPreviewMap;
+    RoundedPanel rpKarte;
+    RoundedPanel rpKontrolleinfo;
     RoundedPanel rpKontrolleliste;
+    JScrollPane scpBemerkung;
     JScrollPane scpLaufendeKontrolle;
     SemiRoundedPanel semiRoundedPanel5;
+    SemiRoundedPanel semiRoundedPanel7;
+    SemiRoundedPanel semiRoundedPanelKontrolle;
     JSpinner spAnzahl;
     JTextArea taBemerkung;
     JTextField txtFirma;
@@ -924,7 +910,20 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     }
 
     //~ Methods ----------------------------------------------------------------
-
+    public static void main(final String[] args) throws Exception {
+        Log4JQuickConfig.configure4LumbermillOnLocalhost();
+        final MappingComponent mc = new MappingComponent();
+        CismapBroker.getInstance().setMappingComponent(mc);
+        DevelopmentTools.createEditorFromRestfulConnection(
+            DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
+            "WUNDA_BLAU",
+            null,
+            true,
+            "baum_ersatz",
+            1,
+            800,
+            600);
+    }   
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
@@ -935,6 +934,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         bindingGroup.unbind();
         cidsBean = null;
         dlgAddKontrolle.dispose();
+        if (this.isEditor) {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        }
     }
 
     @Override
@@ -952,15 +954,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 bindingGroup,
                 this.cidsBean,
                 getConnectionContext());
+        } else{
+            setKontrolleBeans(null);
         }
-        
         
         setMapWindow();
         bindingGroup.bind();
         
-        if (kontrolleBeans != null) {
-            lstKontrollen.setSelectedIndex(0);
-        }
         lstKontrollen.setCellRenderer(new DefaultListCellRenderer() {
 
                 @Override
@@ -979,11 +979,18 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                             newValue = "unbenannt";
                         }
                     }
-                    final Component compoTeil = super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
-                    compoTeil.setForeground(Color.red);
-                    return compoTeil;
+                    final Component compoDatum = super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
+                    compoDatum.setForeground(Color.red);
+                    return compoDatum;
                 }
             });
+        if (kontrolleBeans != null && kontrolleBeans.size() > 0) {
+            lstKontrollen.setSelectedIndex(0);
+        }
+        
+
+        dlgAddKontrolle.pack();
+        dlgAddKontrolle.getRootPane().setDefaultButton(btnMenOkKontrolle);
     }
     /**
      * DOCUMENT ME!
@@ -992,6 +999,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
      */
     public void setKontrolleBeans(final List<CidsBean> cidsBeans) {
         this.kontrolleBeans = cidsBeans;
+        baumKontrollePanel1.setCidsBean(null);
     }
     /**
      * DOCUMENT ME!
@@ -1010,7 +1018,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             try {
                 Double bufferMeter = 0.0;
                 try{
-                    bufferMeter = EmobConfProperties.getInstance().getBufferMeter();
+                    bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
                 } catch (final Exception ex) {
                     Exceptions.printStackTrace(ex);
                     LOG.warn("Get no conf properties.", ex);

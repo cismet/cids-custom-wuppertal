@@ -128,35 +128,37 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         btnTeilMenOk = new JButton();
         txtTeil = new JTextField();
         panOrtstermin = new JPanel();
-        JLabel lblBemerkung = new JLabel();
-        JScrollPane scpBemerkung = new JScrollPane();
-        JTextArea taBemerkung = new JTextArea();
+        lblBemerkung = new JLabel();
+        scpBemerkung = new JScrollPane();
+        taBemerkung = new JTextArea();
         panTeil = new JPanel();
         rpTeilliste = new RoundedPanel();
         scpLaufendeTeil = new JScrollPane();
         lstTeil = new JList();
-        SemiRoundedPanel semiRoundedPanelTeil = new SemiRoundedPanel();
+        semiRoundedPanelTeil = new SemiRoundedPanel();
         lblTeiln = new JLabel();
-        JPanel panControlsNewTeil = new JPanel();
+        panControlsNewTeil = new JPanel();
         btnAddNewTeil = new JButton();
         btnRemoveTeil = new JButton();
-        RoundedPanel rpTeilinfo = new RoundedPanel();
+        rpTeilinfo = new RoundedPanel();
         semiRoundedPanel5 = new SemiRoundedPanel();
         lblTeil = new JLabel();
         panTeilMain = new JPanel();
-        BaumTeilnehmerPanel baumTeilnehmerPanel1 = new BaumTeilnehmerPanel();
-        Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        baumTeilnehmerPanel1 = new BaumTeilnehmerPanel();
+        filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
         FormListener formListener = new FormListener();
 
+        dlgAddTeil.setTitle(NbBundle.getMessage(BaumOrtsterminPanel.class, "BaumOrtsterminPanel.dlgAddTeil.title")); // NOI18N
         dlgAddTeil.setModal(true);
         dlgAddTeil.setName("dlgAddTeil"); // NOI18N
 
         panAddTeil.setMaximumSize(new Dimension(180, 120));
         panAddTeil.setMinimumSize(new Dimension(180, 120));
         panAddTeil.setName("panAddTeil"); // NOI18N
-        panAddTeil.setPreferredSize(new Dimension(180, 120));
+        panAddTeil.setPreferredSize(new Dimension(335, 120));
+        panAddTeil.setRequestFocusEnabled(false);
         panAddTeil.setLayout(new GridBagLayout());
 
         lblTeilAuswaehlen.setText(NbBundle.getMessage(BaumOrtsterminPanel.class, "BaumOrtsterminPanel.lblTeilAuswaehlen.text")); // NOI18N
@@ -235,6 +237,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         taBemerkung.setName("taBemerkung"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -476,7 +480,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 teilBeans.remove((CidsBean)selectedObject);
                 //((CustomJListModel)lstMeldungen.getModel()).refresh();
                 //lstMeldungen.getSelectionModel().clearSelection();
-                if (teilBeans != null) {
+                if (teilBeans != null && teilBeans.size() > 0) {
                     lstTeil.setSelectedIndex(0);
                 }else{
                     lstTeil.clearSelection();
@@ -497,6 +501,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 "WUNDA_BLAU",
                 "BAUM_Teilnehmer",
                 getConnectionContext());
+            beanTeil.setProperty(FIELD__NAME, txtTeil.getText());
 
             //Meldungen erweitern:
             teilBeans.add(beanTeil);
@@ -523,23 +528,32 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    BaumTeilnehmerPanel baumTeilnehmerPanel1;
     JButton btnAddNewTeil;
     JButton btnRemoveTeil;
     JButton btnTeilMenAbort;
     JButton btnTeilMenOk;
     JDialog dlgAddTeil;
+    Box.Filler filler3;
+    Box.Filler filler4;
+    JLabel lblBemerkung;
     JLabel lblTeil;
     JLabel lblTeilAuswaehlen;
     JLabel lblTeiln;
     JList lstTeil;
     JPanel panAddTeil;
+    JPanel panControlsNewTeil;
     JPanel panMenTeilButtons;
     JPanel panOrtstermin;
     JPanel panTeil;
     JPanel panTeilMain;
+    RoundedPanel rpTeilinfo;
     RoundedPanel rpTeilliste;
+    JScrollPane scpBemerkung;
     JScrollPane scpLaufendeTeil;
     SemiRoundedPanel semiRoundedPanel5;
+    SemiRoundedPanel semiRoundedPanelTeil;
+    JTextArea taBemerkung;
     JTextField txtTeil;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -580,8 +594,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         this.connectionContext = connectionContext;
         initComponents();
         this.parentPanel = parentPanel;
-        dlgAddTeil.pack();
-        dlgAddTeil.getRootPane().setDefaultButton(btnTeilMenOk);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -628,13 +640,15 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         this.cidsBean = cidsBean;
         if (this.cidsBean != null){
             setTeilnehmerBeans(cidsBean.getBeanCollectionProperty(FIELD__TEILNEHMER));   
+        } else {
+            setTeilnehmerBeans(null);
         }
         if (teilBeans != null) {
             Collections.sort((List)teilBeans, COMPARATOR);
         }
         bindingGroup.bind();
         
-        if (teilBeans != null) {
+        if (teilBeans != null && teilBeans.size() > 0) {
             lstTeil.setSelectedIndex(0);
         }
         lstTeil.setCellRenderer(new DefaultListCellRenderer() {
@@ -660,6 +674,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     return compoTeil;
                 }
             });
+        dlgAddTeil.pack();
+        dlgAddTeil.getRootPane().setDefaultButton(btnTeilMenOk);
     }
     /**
      * DOCUMENT ME!
@@ -668,6 +684,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      */
     public void setTeilnehmerBeans(final List<CidsBean> cidsBeans) {
         this.teilBeans = cidsBeans;
+        baumTeilnehmerPanel1.setCidsBean(null);
     }
     /**
      * DOCUMENT ME!

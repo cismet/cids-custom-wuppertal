@@ -62,7 +62,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -84,7 +83,7 @@ import org.openide.util.NbBundle;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
+public class BaumMeldungPanel_ALT extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
     
@@ -114,7 +113,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     
     private List<CidsBean> ortsterminBeans;
     private List<CidsBean> schadenBeans;
-    private static final Logger LOG = Logger.getLogger(BaumMeldungPanel.class);
+    private static final Logger LOG = Logger.getLogger(BaumMeldungPanel_ALT.class);
     
     
     public static final String FIELD__APARTNER = "arr_ansprechpartner";         // baum_meldung
@@ -156,10 +155,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         btnMenAbortOrtstermin = new JButton();
         btnMenOkOrtstermin = new JButton();
         dcOrtstermin = new DefaultBindableDateChooser();
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        pnlCard1 = new JPanel();
-        jTabbedPane = new JTabbedPane();
-        jPanelAllgemein = new JPanel();
+        panMeldung = new JPanel();
         lblApartner = new JLabel();
         panApartner = new JPanel();
         scpApartner = new JScrollPane();
@@ -171,9 +167,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
-        panFillerUnten5 = new JPanel();
-        jPanelOrtstermine = new JPanel();
-        panFillerUnten3 = new JPanel();
         panOrtstermin = new JPanel();
         rpOrtsterminliste = new RoundedPanel();
         scpLaufendeOrtstermine = new JScrollPane();
@@ -189,8 +182,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         lblOrtstermin = new JLabel();
         panOrtstermineMain = new JPanel();
         baumOrtsterminPanel1 = new BaumOrtsterminPanel();
-        jPanelSchaeden = new JPanel();
-        panFillerUnten4 = new JPanel();
         panSchaden = new JPanel();
         rpSchadenliste = new RoundedPanel();
         scpLaufendeSchaeden = new JScrollPane();
@@ -206,17 +197,18 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         lblSchaden = new JLabel();
         panSchaedenMain = new JPanel();
         baumSchadenPanel1 = new BaumSchadenPanel();
+        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
         FormListener formListener = new FormListener();
 
-        dlgAddApartner.setTitle(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.dlgAddApartner.title")); // NOI18N
+        dlgAddApartner.setTitle(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.dlgAddApartner.title")); // NOI18N
         dlgAddApartner.setModal(true);
         dlgAddApartner.setName("dlgAddApartner"); // NOI18N
 
         panAddApartner.setName("panAddApartner"); // NOI18N
         panAddApartner.setLayout(new GridBagLayout());
 
-        lblAuswaehlenApartner.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblAuswaehlenApartner.text")); // NOI18N
+        lblAuswaehlenApartner.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblAuswaehlenApartner.text")); // NOI18N
         lblAuswaehlenApartner.setName("lblAuswaehlenApartner"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
@@ -233,7 +225,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panMenButtonsApartner.setName("panMenButtonsApartner"); // NOI18N
         panMenButtonsApartner.setLayout(new GridBagLayout());
 
-        btnMenAbortApartner.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.btnMenAbortApartner.text")); // NOI18N
+        btnMenAbortApartner.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.btnMenAbortApartner.text")); // NOI18N
         btnMenAbortApartner.setName("btnMenAbortApartner"); // NOI18N
         btnMenAbortApartner.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -243,7 +235,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panMenButtonsApartner.add(btnMenAbortApartner, gridBagConstraints);
 
-        btnMenOkApartner.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.btnMenOkApartner.text")); // NOI18N
+        btnMenOkApartner.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.btnMenOkApartner.text")); // NOI18N
         btnMenOkApartner.setName("btnMenOkApartner"); // NOI18N
         btnMenOkApartner.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -261,14 +253,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
         dlgAddApartner.getContentPane().add(panAddApartner, BorderLayout.CENTER);
 
-        dlgAddOrtstermin.setTitle(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.dlgAddOrtstermin.title")); // NOI18N
+        dlgAddOrtstermin.setTitle(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.dlgAddOrtstermin.title")); // NOI18N
         dlgAddOrtstermin.setModal(true);
         dlgAddOrtstermin.setName("dlgAddOrtstermin"); // NOI18N
 
         panAddOrtstermin.setName("panAddOrtstermin"); // NOI18N
         panAddOrtstermin.setLayout(new GridBagLayout());
 
-        lblAuswaehlenOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblAuswaehlenOrtstermin.text")); // NOI18N
+        lblAuswaehlenOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblAuswaehlenOrtstermin.text")); // NOI18N
         lblAuswaehlenOrtstermin.setName("lblAuswaehlenOrtstermin"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
@@ -277,7 +269,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panMenButtonsOrtstermin.setName("panMenButtonsOrtstermin"); // NOI18N
         panMenButtonsOrtstermin.setLayout(new GridBagLayout());
 
-        btnMenAbortOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.btnMenAbortOrtstermin.text")); // NOI18N
+        btnMenAbortOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.btnMenAbortOrtstermin.text")); // NOI18N
         btnMenAbortOrtstermin.setName("btnMenAbortOrtstermin"); // NOI18N
         btnMenAbortOrtstermin.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -287,7 +279,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panMenButtonsOrtstermin.add(btnMenAbortOrtstermin, gridBagConstraints);
 
-        btnMenOkOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.btnMenOkOrtstermin.text")); // NOI18N
+        btnMenOkOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.btnMenOkOrtstermin.text")); // NOI18N
         btnMenOkOrtstermin.setName("btnMenOkOrtstermin"); // NOI18N
         btnMenOkOrtstermin.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -318,29 +310,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         setOpaque(false);
         setLayout(new GridBagLayout());
 
-        filler3.setName("filler3"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        add(filler3, gridBagConstraints);
-
-        pnlCard1.setName("pnlCard1"); // NOI18N
-        pnlCard1.setOpaque(false);
-        pnlCard1.setLayout(new GridBagLayout());
-
-        jTabbedPane.setName("jTabbedPane"); // NOI18N
-
-        jPanelAllgemein.setName("jPanelAllgemein"); // NOI18N
-        jPanelAllgemein.setOpaque(false);
-        jPanelAllgemein.setLayout(new GridBagLayout());
+        panMeldung.setName("panMeldung"); // NOI18N
+        panMeldung.setOpaque(false);
+        panMeldung.setLayout(new GridBagLayout());
 
         lblApartner.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblApartner, NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblApartner.text")); // NOI18N
+        Mnemonics.setLocalizedText(lblApartner, NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblApartner.text")); // NOI18N
         lblApartner.setName("lblApartner"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -349,7 +324,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        jPanelAllgemein.add(lblApartner, gridBagConstraints);
+        panMeldung.add(lblApartner, gridBagConstraints);
 
         panApartner.setName("panApartner"); // NOI18N
         panApartner.setOpaque(false);
@@ -425,19 +400,19 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        jPanelAllgemein.add(panApartner, gridBagConstraints);
+        panMeldung.add(panApartner, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblBemerkung, NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblBemerkung.text")); // NOI18N
+        Mnemonics.setLocalizedText(lblBemerkung, NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblBemerkung.text")); // NOI18N
         lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        jPanelAllgemein.add(lblBemerkung, gridBagConstraints);
+        panMeldung.add(lblBemerkung, gridBagConstraints);
 
         scpBemerkung.setName("scpBemerkung"); // NOI18N
         scpBemerkung.setOpaque(false);
@@ -453,63 +428,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         scpBemerkung.setViewportView(taBemerkung);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanelAllgemein.add(scpBemerkung, gridBagConstraints);
-
-        panFillerUnten5.setName("panFillerUnten5"); // NOI18N
-        panFillerUnten5.setOpaque(false);
-
-        GroupLayout panFillerUnten5Layout = new GroupLayout(panFillerUnten5);
-        panFillerUnten5.setLayout(panFillerUnten5Layout);
-        panFillerUnten5Layout.setHorizontalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten5Layout.setVerticalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelAllgemein.add(panFillerUnten5, gridBagConstraints);
-
-        jTabbedPane.addTab(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.jPanelAllgemein.TabConstraints.tabTitle"), jPanelAllgemein); // NOI18N
-
-        jPanelOrtstermine.setName("jPanelOrtstermine"); // NOI18N
-        jPanelOrtstermine.setOpaque(false);
-        jPanelOrtstermine.setLayout(new GridBagLayout());
-
-        panFillerUnten3.setName(""); // NOI18N
-        panFillerUnten3.setOpaque(false);
-
-        GroupLayout panFillerUnten3Layout = new GroupLayout(panFillerUnten3);
-        panFillerUnten3.setLayout(panFillerUnten3Layout);
-        panFillerUnten3Layout.setHorizontalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten3Layout.setVerticalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelOrtstermine.add(panFillerUnten3, gridBagConstraints);
+        panMeldung.add(scpBemerkung, gridBagConstraints);
 
         panOrtstermin.setMinimumSize(new Dimension(297, 230));
         panOrtstermin.setName("panOrtstermin"); // NOI18N
@@ -549,7 +475,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         semiRoundedPanelOrt.setLayout(new GridBagLayout());
 
         lblOrtstermine.setForeground(new Color(255, 255, 255));
-        lblOrtstermine.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblOrtstermine.text")); // NOI18N
+        lblOrtstermine.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblOrtstermine.text")); // NOI18N
         lblOrtstermine.setName("lblOrtstermine"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
@@ -631,7 +557,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         semiRoundedPanel5.setLayout(new GridBagLayout());
 
         lblOrtstermin.setForeground(new Color(255, 255, 255));
-        lblOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblOrtstermin.text")); // NOI18N
+        lblOrtstermin.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblOrtstermin.text")); // NOI18N
         lblOrtstermin.setName("lblOrtstermin"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -681,53 +607,28 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        jPanelOrtstermine.add(panOrtstermin, gridBagConstraints);
-
-        jTabbedPane.addTab(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.jPanelOrtstermine.TabConstraints.tabTitle"), jPanelOrtstermine); // NOI18N
-
-        jPanelSchaeden.setName("jPanelSchaeden"); // NOI18N
-        jPanelSchaeden.setOpaque(false);
-        jPanelSchaeden.setLayout(new GridBagLayout());
-
-        panFillerUnten4.setName("panFillerUnten4"); // NOI18N
-        panFillerUnten4.setOpaque(false);
-
-        GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
-        panFillerUnten4.setLayout(panFillerUnten4Layout);
-        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelSchaeden.add(panFillerUnten4, gridBagConstraints);
+        panMeldung.add(panOrtstermin, gridBagConstraints);
 
         panSchaden.setName("panSchaden"); // NOI18N
         panSchaden.setOpaque(false);
         panSchaden.setLayout(new GridBagLayout());
 
+        rpSchadenliste.setMinimumSize(new Dimension(80, 202));
         rpSchadenliste.setName("rpSchadenliste"); // NOI18N
+        rpSchadenliste.setPreferredSize(new Dimension(100, 202));
         rpSchadenliste.setLayout(new GridBagLayout());
 
         scpLaufendeSchaeden.setName("scpLaufendeSchaeden"); // NOI18N
 
         lstSchaeden.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstSchaeden.setFixedCellWidth(75);
         lstSchaeden.setName("lstSchaeden"); // NOI18N
-        lstSchaeden.setVisibleRowCount(2);
 
         eLProperty = ELProperty.create("${cidsBean." + FIELD__SCHAEDEN + "}");
         jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstSchaeden);
@@ -738,8 +639,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         rpSchadenliste.add(scpLaufendeSchaeden, gridBagConstraints);
 
@@ -749,7 +650,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         semiRoundedPanelSchaden.setLayout(new GridBagLayout());
 
         lblSchaeden.setForeground(new Color(255, 255, 255));
-        lblSchaeden.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblSchaeden.text")); // NOI18N
+        lblSchaeden.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblSchaeden.text")); // NOI18N
         lblSchaeden.setName("lblSchaeden"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
@@ -766,7 +667,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new GridBagConstraints();
@@ -775,8 +676,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         semiRoundedPanelSchaden.add(jPanel9, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         rpSchadenliste.add(semiRoundedPanelSchaden, gridBagConstraints);
@@ -804,15 +703,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         btnRemoveSchaden.setPreferredSize(new Dimension(39, 25));
         btnRemoveSchaden.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewSchaden.add(btnRemoveSchaden, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
         rpSchadenliste.add(panControlsNewSchaden, gridBagConstraints);
@@ -820,9 +718,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(0, 0, 0, 5);
         panSchaden.add(rpSchadenliste, gridBagConstraints);
@@ -835,7 +732,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         semiRoundedPanel6.setLayout(new GridBagLayout());
 
         lblSchaden.setForeground(new Color(255, 255, 255));
-        lblSchaden.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblSchaden.text")); // NOI18N
+        lblSchaden.setText(NbBundle.getMessage(BaumMeldungPanel_ALT.class, "BaumMeldungPanel_ALT.lblSchaden.text")); // NOI18N
         lblSchaden.setName("lblSchaden"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -858,11 +755,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         panSchaedenMain.add(baumSchadenPanel1, gridBagConstraints);
 
@@ -870,46 +764,40 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         rpSchadeninfo.add(panSchaedenMain, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 8.0;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         panSchaden.add(rpSchadeninfo, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanelSchaeden.add(panSchaden, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        panMeldung.add(panSchaden, gridBagConstraints);
 
-        jTabbedPane.addTab(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.jPanelSchaeden.TabConstraints.tabTitle"), jPanelSchaeden); // NOI18N
+        add(panMeldung, new GridBagConstraints());
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlCard1.add(jTabbedPane, gridBagConstraints);
-
+        filler3.setName("filler3"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(pnlCard1, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        add(filler3, gridBagConstraints);
 
         bindingGroup.bind();
     }
@@ -919,41 +807,41 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     private class FormListener implements ActionListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
-            if (evt.getSource() == btnAddNewSchaden) {
-                BaumMeldungPanel.this.btnAddNewSchadenActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnRemoveSchaden) {
-                BaumMeldungPanel.this.btnRemoveSchadenActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnAddApartner) {
-                BaumMeldungPanel.this.btnAddApartnerActionPerformed(evt);
+            if (evt.getSource() == btnAddApartner) {
+                BaumMeldungPanel_ALT.this.btnAddApartnerActionPerformed(evt);
             }
             else if (evt.getSource() == btnRemoveApartner) {
-                BaumMeldungPanel.this.btnRemoveApartnerActionPerformed(evt);
+                BaumMeldungPanel_ALT.this.btnRemoveApartnerActionPerformed(evt);
             }
             else if (evt.getSource() == btnAddNewOrtstermin) {
-                BaumMeldungPanel.this.btnAddNewOrtsterminActionPerformed(evt);
+                BaumMeldungPanel_ALT.this.btnAddNewOrtsterminActionPerformed(evt);
             }
             else if (evt.getSource() == btnRemoveOrtstermin) {
-                BaumMeldungPanel.this.btnRemoveOrtsterminActionPerformed(evt);
+                BaumMeldungPanel_ALT.this.btnRemoveOrtsterminActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnAddNewSchaden) {
+                BaumMeldungPanel_ALT.this.btnAddNewSchadenActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnRemoveSchaden) {
+                BaumMeldungPanel_ALT.this.btnRemoveSchadenActionPerformed(evt);
             }
             else if (evt.getSource() == btnMenAbortApartner) {
-                BaumMeldungPanel.this.btnMenAbortApartnerActionPerformed(evt);
+                BaumMeldungPanel_ALT.this.btnMenAbortApartnerActionPerformed(evt);
             }
             else if (evt.getSource() == btnMenOkApartner) {
-                BaumMeldungPanel.this.btnMenOkApartnerActionPerformed(evt);
+                BaumMeldungPanel_ALT.this.btnMenOkApartnerActionPerformed(evt);
             }
             else if (evt.getSource() == btnMenAbortOrtstermin) {
-                BaumMeldungPanel.this.btnMenAbortOrtsterminActionPerformed(evt);
+                BaumMeldungPanel_ALT.this.btnMenAbortOrtsterminActionPerformed(evt);
             }
             else if (evt.getSource() == btnMenOkOrtstermin) {
-                BaumMeldungPanel.this.btnMenOkOrtsterminActionPerformed(evt);
+                BaumMeldungPanel_ALT.this.btnMenOkOrtsterminActionPerformed(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddApartnerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddApartnerActionPerformed
-        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this), dlgAddApartner, true);
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel_ALT.this), dlgAddApartner, true);
     }//GEN-LAST:event_btnAddApartnerActionPerformed
 
     private void btnMenAbortApartnerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortApartnerActionPerformed
@@ -1004,7 +892,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
     private void btnAddNewOrtsterminActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewOrtsterminActionPerformed
         try {
-            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this), dlgAddOrtstermin, true);
+            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel_ALT.this), dlgAddOrtstermin, true);
         } catch (Exception e) {
             LOG.error("Cannot add new BaumOrtstermin object", e);
         }
@@ -1131,10 +1019,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     Box.Filler filler3;
     JPanel jPanel8;
     JPanel jPanel9;
-    JPanel jPanelAllgemein;
-    JPanel jPanelOrtstermine;
-    JPanel jPanelSchaeden;
-    JTabbedPane jTabbedPane;
     JLabel lblApartner;
     JLabel lblAuswaehlenApartner;
     JLabel lblAuswaehlenOrtstermin;
@@ -1152,16 +1036,13 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JPanel panButtonsApartner;
     JPanel panControlsNewOrtstermine;
     JPanel panControlsNewSchaden;
-    JPanel panFillerUnten3;
-    JPanel panFillerUnten4;
-    JPanel panFillerUnten5;
+    JPanel panMeldung;
     JPanel panMenButtonsApartner;
     JPanel panMenButtonsOrtstermin;
     JPanel panOrtstermin;
     JPanel panOrtstermineMain;
     JPanel panSchaden;
     JPanel panSchaedenMain;
-    JPanel pnlCard1;
     RoundedPanel rpOrtstermininfo;
     RoundedPanel rpOrtsterminliste;
     RoundedPanel rpSchadeninfo;
@@ -1183,7 +1064,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     /**
      * Creates a new BaumMeldungPanel object.
      */
-    public BaumMeldungPanel() {
+    public BaumMeldungPanel_ALT() {
         this(null,true);
     }
 
@@ -1194,7 +1075,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      * @param parentEditor
      * @param  editable  DOCUMENT ME!
      */
-    public BaumMeldungPanel(final BaumGebietEditor parentEditor, final boolean editable) {
+    public BaumMeldungPanel_ALT(final BaumGebietEditor parentEditor, final boolean editable) {
         this.isEditor = editable;
         initComponents();
         this.connectionContext = null;
@@ -1208,7 +1089,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      * @param  editable             DOCUMENT ME!
      * @param  connectionContext    DOCUMENT ME!
      */
-    public BaumMeldungPanel(final BaumGebietEditor parentEditor, final boolean editable,
+    public BaumMeldungPanel_ALT(final BaumGebietEditor parentEditor, final boolean editable,
             final ConnectionContext connectionContext) {
         this.isEditor = editable;
         this.connectionContext = connectionContext;
@@ -1228,6 +1109,18 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
    
     
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  panel  DOCUMENT ME!
+     */
+    public void removeMeldungPanel(final BaumMeldungPanel_ALT panel) {
+        if (panel != null) {
+            //cidsBeans.remove(panel.getCidsBean());
+            panMeldung.remove(panel);
+            panMeldung.repaint();
+        }
+    }
 
         
     @Override

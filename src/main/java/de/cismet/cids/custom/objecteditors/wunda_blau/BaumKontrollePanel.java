@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import org.apache.log4j.Logger;
@@ -36,9 +37,12 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.regex.Pattern;
@@ -114,6 +118,8 @@ public class BaumKontrollePanel extends javax.swing.JPanel implements Disposable
         taBemerkung.setName("taBemerkung"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__BEMERKUNG + "}"), taBemerkung, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -225,5 +231,18 @@ public class BaumKontrollePanel extends javax.swing.JPanel implements Disposable
         
         
     }
-    
+    public static void main(final String[] args) throws Exception {
+        Log4JQuickConfig.configure4LumbermillOnLocalhost();
+        final MappingComponent mc = new MappingComponent();
+        CismapBroker.getInstance().setMappingComponent(mc);
+        DevelopmentTools.createEditorFromRestfulConnection(
+            DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
+            "WUNDA_BLAU",
+            null,
+            true,
+            "baum_kontrolle",
+            1,
+            800,
+            600);
+    }
 }

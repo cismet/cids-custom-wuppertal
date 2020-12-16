@@ -57,7 +57,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
-import de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
@@ -97,7 +96,6 @@ import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.util.List;
@@ -108,11 +106,8 @@ import java.util.Comparator;
 import java.util.Date;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingbinding.SwingBindings;
-import org.jdesktop.swingx.JXHyperlink;
 import org.openide.util.WeakListeners;
 /**
  * DOCUMENT ME!
@@ -120,7 +115,7 @@ import org.openide.util.WeakListeners;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
+public class BaumGebietEditor_ALT extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
     BindingGroupStore,
     PropertyChangeListener {
@@ -151,7 +146,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String GEOMTYPE = "Point";
     public static final int FOTO_WIDTH = 150;
 
-    private static final Logger LOG = Logger.getLogger(BaumGebietEditor.class);
+    private static final Logger LOG = Logger.getLogger(BaumGebietEditor_ALT.class);
 
     public static final String FIELD__NAME = "name";                            // baum_gebiet
     public static final String FIELD__ID = "id";                                    // baum_gebiet
@@ -212,10 +207,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private DefaultBindableDateChooser dcMeldung;
     private JDialog dlgAddMeldung;
     private Box.Filler filler3;
+    private JPanel jPanel1;
     private JPanel jPanel8;
-    private JPanel jPanelAllgemein;
-    private JPanel jPanelMeldungen;
-    JTabbedPane jTabbedPane;
     private JLabel lblAktMeldung;
     private JLabel lblAktenzeichen;
     private JLabel lblAuswaehlenMeldung;
@@ -238,8 +231,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panDaten;
     private JPanel panFiller;
     private JPanel panFillerUnten;
-    private JPanel panFillerUnten2;
-    private JPanel panFillerUnten3;
+    private JPanel panFillerUnten1;
     private JPanel panGeometrie;
     private JPanel panLage;
     private JPanel panMeldung;
@@ -247,7 +239,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panMenButtonsMeldung;
     private DefaultPreviewMapPanel panPreviewMap;
     private JPanel panZusatz;
-    private JPanel pnlCard1;
     private RoundedPanel rpAktMeldungen;
     private RoundedPanel rpKarte;
     private RoundedPanel rpMeldunginfo;
@@ -274,7 +265,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     /**
      * Creates new form.
      */
-    public BaumGebietEditor() {
+    public BaumGebietEditor_ALT() {
     }
 
     /**
@@ -282,7 +273,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  boolEditor  DOCUMENT ME!
      */
-    public BaumGebietEditor(final boolean boolEditor) {
+    public BaumGebietEditor_ALT(final boolean boolEditor) {
         this.isEditor = boolEditor;
     }
 
@@ -374,15 +365,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
-        pnlCard1 = new JPanel();
-        jTabbedPane = new JTabbedPane();
-        jPanelAllgemein = new JPanel();
-        panGeometrie = new JPanel();
-        panLage = new JPanel();
-        rpKarte = new RoundedPanel();
-        panPreviewMap = new DefaultPreviewMapPanel();
-        semiRoundedPanel7 = new SemiRoundedPanel();
-        lblKarte = new JLabel();
+        jPanel1 = new JPanel();
+        panFillerUnten1 = new JPanel();
         panDaten = new JPanel();
         lblAktenzeichen = new JLabel();
         txtAktenzeichen = new JTextField();
@@ -406,9 +390,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         sepStatus = new JSeparator();
         lblStatus = new JLabel();
         cbStatus = new DefaultBindableReferenceCombo() ;
-        panFillerUnten2 = new JPanel();
-        jPanelMeldungen = new JPanel();
-        panFillerUnten3 = new JPanel();
+        panGeometrie = new JPanel();
+        panLage = new JPanel();
+        rpKarte = new RoundedPanel();
+        panPreviewMap = new DefaultPreviewMapPanel();
+        semiRoundedPanel7 = new SemiRoundedPanel();
+        lblKarte = new JLabel();
         panMeldung = new JPanel();
         rpMeldungliste = new RoundedPanel();
         scpLaufendeMeldungen = new JScrollPane();
@@ -495,7 +482,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanelAktMeldung.setLayout(new GridBagLayout());
 
         lblAktMeldung.setForeground(new Color(255, 255, 255));
-        lblAktMeldung.setText(NbBundle.getMessage(BaumGebietEditor.class, "BaumGebietEditor.jLabel13.text")); // NOI18N
+        lblAktMeldung.setText(NbBundle.getMessage(BaumGebietEditor_ALT.class, "BaumGebietEditor.jLabel13.text")); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         semiRoundedPanelAktMeldung.add(lblAktMeldung, gridBagConstraints);
@@ -571,71 +558,29 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
 
-        pnlCard1.setOpaque(false);
-        pnlCard1.setLayout(new GridBagLayout());
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new GridBagLayout());
 
-        jPanelAllgemein.setOpaque(false);
-        jPanelAllgemein.setLayout(new GridBagLayout());
+        panFillerUnten1.setName(""); // NOI18N
+        panFillerUnten1.setOpaque(false);
 
-        panGeometrie.setOpaque(false);
-        panGeometrie.setLayout(new GridBagLayout());
+        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        panFillerUnten1.setLayout(panFillerUnten1Layout);
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
-        panLage.setMinimumSize(new Dimension(300, 142));
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
-
-        rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        rpKarte.add(panPreviewMap, gridBagConstraints);
-
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setLayout(new GridBagLayout());
-
-        lblKarte.setForeground(new Color(255, 255, 255));
-        lblKarte.setText("Lage");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panLage.add(rpKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panGeometrie.add(panLage, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        jPanelAllgemein.add(panGeometrie, gridBagConstraints);
+        jPanel1.add(panFillerUnten1, gridBagConstraints);
 
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
@@ -896,54 +841,67 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 5, 5);
-        jPanelAllgemein.add(panDaten, gridBagConstraints);
+        jPanel1.add(panDaten, gridBagConstraints);
 
-        panFillerUnten2.setName(""); // NOI18N
-        panFillerUnten2.setOpaque(false);
+        panGeometrie.setOpaque(false);
+        panGeometrie.setLayout(new GridBagLayout());
 
-        GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
-        panFillerUnten2.setLayout(panFillerUnten2Layout);
-        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panLage.setMinimumSize(new Dimension(300, 142));
+        panLage.setOpaque(false);
+        panLage.setLayout(new GridBagLayout());
+
+        rpKarte.setName(""); // NOI18N
+        rpKarte.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        rpKarte.add(panPreviewMap, gridBagConstraints);
+
+        semiRoundedPanel7.setBackground(Color.darkGray);
+        semiRoundedPanel7.setLayout(new GridBagLayout());
+
+        lblKarte.setForeground(new Color(255, 255, 255));
+        lblKarte.setText("Lage");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
+        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelAllgemein.add(panFillerUnten2, gridBagConstraints);
-
-        jTabbedPane.addTab("Allgemeine Informationen", jPanelAllgemein);
-
-        jPanelMeldungen.setOpaque(false);
-        jPanelMeldungen.setLayout(new GridBagLayout());
-
-        panFillerUnten3.setName(""); // NOI18N
-        panFillerUnten3.setOpaque(false);
-
-        GroupLayout panFillerUnten3Layout = new GroupLayout(panFillerUnten3);
-        panFillerUnten3.setLayout(panFillerUnten3Layout);
-        panFillerUnten3Layout.setHorizontalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten3Layout.setVerticalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        gridBagConstraints.weightx = 1.0;
+        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanelMeldungen.add(panFillerUnten3, gridBagConstraints);
+        panLage.add(rpKarte, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panGeometrie.add(panLage, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
+        jPanel1.add(panGeometrie, gridBagConstraints);
 
         panMeldung.setOpaque(false);
         panMeldung.setLayout(new GridBagLayout());
@@ -974,7 +932,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanel4.setLayout(new GridBagLayout());
 
         lblMeldungen.setForeground(new Color(255, 255, 255));
-        lblMeldungen.setText(NbBundle.getMessage(BaumGebietEditor.class, "BaumGebietEditor.lblMeldungen.text")); // NOI18N
+        lblMeldungen.setText(NbBundle.getMessage(BaumGebietEditor_ALT.class, "BaumGebietEditor.lblMeldungen.text")); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -1057,7 +1015,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanel5.setLayout(new GridBagLayout());
 
         lblMeldung.setForeground(new Color(255, 255, 255));
-        lblMeldung.setText(NbBundle.getMessage(BaumGebietEditor.class, "BaumGebietEditor.lblMeldung.text")); // NOI18N
+        lblMeldung.setText(NbBundle.getMessage(BaumGebietEditor_ALT.class, "BaumGebietEditor.lblMeldung.text")); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1108,24 +1066,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        jPanelMeldungen.add(panMeldung, gridBagConstraints);
-
-        jTabbedPane.addTab("Meldungen", jPanelMeldungen);
+        jPanel1.add(panMeldung, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        pnlCard1.add(jTabbedPane, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panContent.add(pnlCard1, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panContent.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1223,7 +1171,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
     private void btnAddNewMeldungActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewMeldungActionPerformed
         try {
-            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumGebietEditor.this), dlgAddMeldung, true);
+            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumGebietEditor_ALT.this), dlgAddMeldung, true);
         } catch (Exception e) {
             LOG.error("Cannot add new BaumMeldung object", e);
         }
@@ -1308,11 +1256,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             if (txtAktenzeichen.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_NONAME));
             } else {
                 if (redundantName) {
                     LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATENAME));
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_DUPLICATENAME));
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -1323,7 +1271,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             if (txtStrasse.getText().trim().isEmpty()) {
                 LOG.warn("No street specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSTREET));
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_NOSTREET));
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Street not given.", ex);
@@ -1335,12 +1283,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_NOGEOM));
             } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_WRONGGEOM));
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -1350,10 +1298,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX)
+                NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
-                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE),
+                        + NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumGebietEditor_ALT.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
 
             return false;
