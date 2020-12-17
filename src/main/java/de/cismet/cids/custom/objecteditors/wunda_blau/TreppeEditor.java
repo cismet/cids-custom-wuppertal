@@ -71,6 +71,13 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeBeschreibungPanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeEntwaesserungPanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeHandlaeufePanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeLaeufePanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeLeitelementePanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppePodestePanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeStuetzmauernPanel;
 import de.cismet.cids.custom.reports.wunda_blau.TreppenReportGenerator;
 import de.cismet.cids.custom.utils.DmsUrlsPanel;
 

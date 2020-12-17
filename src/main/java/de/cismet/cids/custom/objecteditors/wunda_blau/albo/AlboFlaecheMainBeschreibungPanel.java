@@ -23,6 +23,7 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -50,6 +51,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel13 = new javax.swing.JLabel();
         cbFlaechenart = new DefaultBindableScrollableComboBox();
         jLabel14 = new javax.swing.JLabel();
@@ -69,6 +71,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jTextField7 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jRadioButton1 = new javax.swing.JRadioButton();
         jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
@@ -81,6 +84,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jRadioButton2 = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         txtAlteNummer = new javax.swing.JTextField();
@@ -292,6 +296,16 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
+        buttonGroup1.add(jRadioButton1);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, "Straße:");
+        jRadioButton1.setContentAreaFilled(false);
+        jRadioButton1.setName("jRadioButton1"); // NOI18N
+        jRadioButton1.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jRadioButton1, gridBagConstraints);
+
         jComboBox4.setName("jComboBox4"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -351,6 +365,30 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.ipadx = 40;
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(filler46, gridBagConstraints);
+
+        buttonGroup1.add(jRadioButton2);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, "in BPlan ersichtlich");
+        jRadioButton2.setContentAreaFilled(false);
+        jRadioButton2.setName("jRadioButton2"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lage_bplan}"),
+                jRadioButton2,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        jRadioButton2.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jRadioButton2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -443,6 +481,10 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == cbFlaechenart) {
                 AlboFlaecheMainBeschreibungPanel.this.cbFlaechenartActionPerformed(evt);
+            } else if (evt.getSource() == jRadioButton1) {
+                AlboFlaecheMainBeschreibungPanel.this.jRadioButton1ActionPerformed(evt);
+            } else if (evt.getSource() == jRadioButton2) {
+                AlboFlaecheMainBeschreibungPanel.this.jRadioButton2ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -470,6 +512,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private AlboFlaecheMainPanel mainPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbFlaechenart;
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
@@ -492,6 +535,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel54;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField txtAlteNummer;
@@ -547,8 +592,10 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     public void setCidsBean(final CidsBean cidsBean) {
         setUnlocked((cidsBean != null) && (MetaObject.NEW == cidsBean.getMetaObject().getStatus()));
         super.setCidsBean(cidsBean);
+        RendererTools.makeReadOnly(jRadioButton1, !isEditable());
 
         refreshStrCbo();
+        updateLageFields();
     }
 
     /**
@@ -727,6 +774,34 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         updateArtFk();
         updateDetailsPanel();
     }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jRadioButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton1ActionPerformed
+        updateLageFields();
+    }                                                                                 //GEN-LAST:event_jRadioButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton2ActionPerformed
+        updateLageFields();
+    }                                                                                 //GEN-LAST:event_jRadioButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateLageFields() {
+        if (isEditable()) {
+            jComboBox4.setEnabled(jRadioButton1.isSelected());
+            jTextField5.setEnabled(jRadioButton1.isSelected());
+        }
+    }
 
     /**
      * DOCUMENT ME!
