@@ -506,7 +506,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jFormattedTextField7, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel27, "Schutz und Begrenzungsmaßnahmen:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel27, "Schutz und Beschränkungsmaßnahme:");
         jLabel27.setName("jLabel27"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

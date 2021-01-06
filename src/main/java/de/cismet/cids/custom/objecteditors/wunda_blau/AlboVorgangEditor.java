@@ -68,6 +68,7 @@ import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * DOCUMENT ME!
@@ -192,6 +193,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JPanel jPanel9;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -267,6 +269,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jLabel17 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
         jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButton3 = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -558,17 +561,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jRadioButton2.setText("Lage aus BPlan ersichtlich");
         jRadioButton2.setContentAreaFilled(false);
         jRadioButton2.setName("jRadioButton2"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lage_aus_bplan}"),
-                jRadioButton2,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -578,10 +570,29 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel2.add(jRadioButton2, gridBagConstraints);
+
+        buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setText("Sonstige");
+        jRadioButton3.setContentAreaFilled(false);
+        jRadioButton3.setName("jRadioButton3"); // NOI18N
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jRadioButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel2.add(jRadioButton3, gridBagConstraints);
 
         jLabel5.setText("Bemerkung:"); // NOI18N
         jLabel5.setName("jLabel5");    // NOI18N
@@ -960,87 +971,87 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final CidsBean flaecheBean = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBean(
                 jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
         ((VorgangFlaecheTableModel)jXTable1.getModel()).remove(flaecheBean);
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jXTable1MouseClicked
-        if (isEditable() && (evt.getClickCount() == 2)) {
+    private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jXTable1MouseClicked
+        if (!isEditable() && (evt.getClickCount() == 2)) {
             final CidsBean flaecheBean = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBean(
                     jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
             ComponentRegistry.getRegistry()
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(flaecheBean), false);
         }
-    }                                                                        //GEN-LAST:event_jXTable1MouseClicked
+    }//GEN-LAST:event_jXTable1MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList1MouseClicked
+    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean bplanBean = jList1.getSelectedValue();
             ComponentRegistry.getRegistry()
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(bplanBean), false);
         }
-    }                                                                      //GEN-LAST:event_jList1MouseClicked
+    }//GEN-LAST:event_jList1MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         AlboReportGenerator.startVorgangReportDownload(getCidsBean(), this, getConnectionContext());
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final Object selectedItem = comboBoxFilterDialog1.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean flaecheBean = (CidsBean)selectedItem;
             ((VorgangFlaecheTableModel)jXTable1.getModel()).add(flaecheBean);
         }
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jRadioButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton1ActionPerformed
-        updateLageFields();
-    }                                                                                 //GEN-LAST:event_jRadioButton1ActionPerformed
+    private void jRadioButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        lageSelectionChanged();
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton2ActionPerformed
-        updateLageFields();
-    }                                                                                 //GEN-LAST:event_jRadioButton2ActionPerformed
+    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        lageSelectionChanged();
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
             final CidsBean bearbeitungBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
@@ -1050,18 +1061,27 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
-    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         final CidsBean bearbeitungBean = ((VorgangBearbeitungTableModel)jXTable2.getModel()).getCidsBean(
                 jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow()));
         ((VorgangBearbeitungTableModel)jXTable2.getModel()).remove(bearbeitungBean);
-    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jRadioButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        lageSelectionChanged();
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1081,10 +1101,10 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         if ((maxSchluessels != null) && !maxSchluessels.isEmpty()) {
             final Integer maxSchluessel = maxSchluessels.iterator().next();
             if (maxSchluessel != null) {
-                return String.valueOf(maxSchluessel + 1);
+                return StringUtils.leftPad(String.valueOf(maxSchluessel + 1), 5, '0');
             }
         }
-        return "1";
+        return "00001";
     }
 
     @Override
@@ -1096,6 +1116,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 cidsBean,
                 getConnectionContext());
             this.cidsBean = cidsBean;
+
+            RendererTools.makeReadOnly(jRadioButton1, !isEditable());
+            RendererTools.makeReadOnly(jRadioButton2, !isEditable());
+            RendererTools.makeReadOnly(jRadioButton3, !isEditable());
+
             bindingGroup.bind();
 
             if (MetaObject.NEW == cidsBean.getMetaObject().getStatus()) {
@@ -1198,9 +1223,29 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      * DOCUMENT ME!
      */
     private void updateLageFields() {
+        final Boolean lageAusBPlan = (Boolean)cidsBean.getProperty("lage_aus_bplan");
+        jRadioButton1.setSelected(lageAusBPlan == null);
+        jRadioButton2.setSelected(Boolean.TRUE.equals(lageAusBPlan));
+        jRadioButton3.setSelected(Boolean.FALSE.equals(lageAusBPlan));
         if (isEditable()) {
             jComboBox4.setEnabled(jRadioButton1.isSelected());
             jTextField5.setEnabled(jRadioButton1.isSelected());
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void lageSelectionChanged() {
+        if (isEditable()) {
+            try {
+                cidsBean.setProperty(
+                    "lage_aus_bplan",
+                    jRadioButton1.isSelected() ? null : (jRadioButton2.isSelected() ? Boolean.TRUE : Boolean.FALSE));
+                updateLageFields();
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
         }
     }
 
