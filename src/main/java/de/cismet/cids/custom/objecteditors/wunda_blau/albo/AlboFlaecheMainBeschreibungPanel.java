@@ -50,6 +50,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel13 = new javax.swing.JLabel();
         cbFlaechenart = new DefaultBindableScrollableComboBox();
         jLabel14 = new javax.swing.JLabel();
@@ -280,7 +281,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jTextField7, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Lage:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Straße:");
         jLabel16.setName("jLabel16"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -470,6 +471,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private AlboFlaecheMainPanel mainPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbFlaechenart;
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
@@ -727,6 +729,14 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         updateArtFk();
         updateDetailsPanel();
     }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton2ActionPerformed
+    }                                                                                 //GEN-LAST:event_jRadioButton2ActionPerformed
 
     /**
      * DOCUMENT ME!

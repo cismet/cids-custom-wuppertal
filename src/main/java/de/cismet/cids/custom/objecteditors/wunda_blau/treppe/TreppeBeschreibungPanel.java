@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau;
+package de.cismet.cids.custom.objecteditors.wunda_blau.treppe;
 
 import Sirius.navigator.connection.SessionManager;
 
@@ -59,6 +59,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
