@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau;
+package de.cismet.cids.custom.objecteditors.wunda_blau.treppe;
 
 import Sirius.navigator.connection.SessionManager;
 
@@ -43,6 +43,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -77,7 +78,7 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
     // Variables declaration - do not modify//GEN-BEGIN:variables
     Box.Filler filler1;
     JPanel jPanel1;
-    TreppeStuetzmauerPanel treppeStuetzmauerPanel1;
+    de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeStuetzmauerPanel treppeStuetzmauerPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -331,7 +332,8 @@ public class TreppeStuetzmauernPanel extends javax.swing.JPanel implements Dispo
         jPanel1 = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         if (netbeansDesignDummy) {
-            treppeStuetzmauerPanel1 = new TreppeStuetzmauerPanel();
+            treppeStuetzmauerPanel1 =
+                new de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeStuetzmauerPanel();
         }
         final JLabel jLabel1 = new DroppedLabel();
 

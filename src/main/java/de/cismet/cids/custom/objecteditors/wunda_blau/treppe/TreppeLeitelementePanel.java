@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objecteditors.wunda_blau;
+package de.cismet.cids.custom.objecteditors.wunda_blau.treppe;
 
 import org.apache.log4j.Logger;
 
@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -65,7 +66,8 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel implements Dispo
         jPanel1 = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         if (netbeansDesignDummy) {
-            treppeLeitelementPanel1 = new TreppeLeitelementPanel();
+            treppeLeitelementPanel1 =
+                new de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeLeitelementPanel();
         }
         btnAddArt1 = new JButton();
 
@@ -156,7 +158,7 @@ public class TreppeLeitelementePanel extends javax.swing.JPanel implements Dispo
     JButton btnAddArt1;
     Box.Filler filler1;
     JPanel jPanel1;
-    TreppeLeitelementPanel treppeLeitelementPanel1;
+    de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeLeitelementPanel treppeLeitelementPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
