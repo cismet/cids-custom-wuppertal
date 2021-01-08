@@ -16,11 +16,12 @@ import Sirius.server.middleware.types.MetaClass;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 import org.apache.log4j.Logger;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -31,7 +32,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingWorker;
 
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -45,32 +45,29 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Calendar;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
 import javax.swing.Box;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -78,8 +75,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingbinding.JListBinding;
-import org.jdesktop.swingbinding.SwingBindings;
+import org.jdesktop.swingx.JXTable;
 import org.openide.awt.Mnemonics;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
@@ -107,12 +103,24 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public static final String FIELD__ANZAHL = "anzahl";                        // baum_ersatz
     public static final String FIELD__FIRMA = "firma";                          // baum_ersatz
     public static final String FIELD__BEMERKUNG = "bemerkung";                  // baum_ersatz
+    public static final String FIELD__KONTROLLE_BEMERKUNG = "bemerkung";                  // baum_ersatz
+    public static final String FIELD__KONTROLLE_DATUM = "datum";                  // baum_ersatz
     
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_ersatz_geom
     
     public static final String TABLE_GEOM = "geom";
+    public static final String TABLE_NAME__KONTROLLE = "baum_kontrolle";
     
+    private static final String[] KONTROLLE_COL_NAMES = new String[] { "Datum", "Bemerkung"};
+    private static final String[] KONTROLLE_PROP_NAMES = new String[] {
+            FIELD__KONTROLLE_DATUM,
+            FIELD__KONTROLLE_BEMERKUNG
+        };
+    private static final Class[] KONTROLLE_PROP_TYPES = new Class[] {
+            Date.class,
+            String.class
+        };
     
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -124,21 +132,15 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        dlgAddKontrolle = new JDialog();
-        panAddKontrolle = new JPanel();
-        lblAuswaehlenKontrolle = new JLabel();
-        panMenButtonsKontrolle = new JPanel();
-        btnMenAbortKontrolle = new JButton();
-        btnMenOkKontrolle = new JButton();
-        dcKontrolle = new DefaultBindableDateChooser();
         panErsatz = new JPanel();
         lblBis = new JLabel();
         dcBis = new DefaultBindableDateChooser();
+        lblDatum = new JLabel();
+        dcDatum = new DefaultBindableDateChooser();
         lblGeom = new JLabel();
         if (isEditor){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
-        lblDatum = new JLabel();
         lblArt = new JLabel();
         cbArt = new DefaultBindableScrollableComboBox();
         lblAnzahl = new JLabel();
@@ -156,78 +158,20 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
-        panKontrolle = new JPanel();
-        rpKontrolleliste = new RoundedPanel();
-        scpLaufendeKontrolle = new JScrollPane();
-        lstKontrollen = new JList();
-        semiRoundedPanelKontrolle = new SemiRoundedPanel();
-        lblKontrolle = new JLabel();
-        panControlsNewKontrolle = new JPanel();
-        btnAddNewKontrolle = new JButton();
-        btnRemoveKontrolle = new JButton();
-        rpKontrolleinfo = new RoundedPanel();
-        semiRoundedPanel5 = new SemiRoundedPanel();
-        lblKontrolleanzeige = new JLabel();
-        panKontrolleMain = new JPanel();
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        baumKontrollePanel1 = new BaumKontrollePanel();
-        dcDatum = new DefaultBindableDateChooser();
+        panKont = new JPanel();
+        rpKont = new RoundedPanel();
+        semiRoundedPanel8 = new SemiRoundedPanel();
+        lblKont = new JLabel();
+        panKontAdd = new JPanel();
+        btnAddKont = new JButton();
+        btnRemKont = new JButton();
+        filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        panKontDaten = new JPanel();
+        jScrollPaneKont = new JScrollPane();
+        xtKont = new JXTable();
         filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
         FormListener formListener = new FormListener();
-
-        dlgAddKontrolle.setTitle(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.dlgAddErsatz.title")); // NOI18N
-        dlgAddKontrolle.setModal(true);
-        dlgAddKontrolle.setName("dlgAddKontrolle"); // NOI18N
-
-        panAddKontrolle.setName("panAddKontrolle"); // NOI18N
-        panAddKontrolle.setLayout(new GridBagLayout());
-
-        lblAuswaehlenKontrolle.setText(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblAuswaehlenErsatz.text")); // NOI18N
-        lblAuswaehlenKontrolle.setName("lblAuswaehlenKontrolle"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panAddKontrolle.add(lblAuswaehlenKontrolle, gridBagConstraints);
-
-        panMenButtonsKontrolle.setName("panMenButtonsKontrolle"); // NOI18N
-        panMenButtonsKontrolle.setLayout(new GridBagLayout());
-
-        btnMenAbortKontrolle.setText(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.btnMenAbortKontrolle.text")); // NOI18N
-        btnMenAbortKontrolle.setName("btnMenAbortKontrolle"); // NOI18N
-        btnMenAbortKontrolle.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMenButtonsKontrolle.add(btnMenAbortKontrolle, gridBagConstraints);
-
-        btnMenOkKontrolle.setText(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.btnMenOkErsatz.text")); // NOI18N
-        btnMenOkKontrolle.setName("btnMenOkKontrolle"); // NOI18N
-        btnMenOkKontrolle.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMenButtonsKontrolle.add(btnMenOkKontrolle, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panAddKontrolle.add(panMenButtonsKontrolle, gridBagConstraints);
-
-        dcKontrolle.setName("dcKontrolle"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 4, 2, 2);
-        panAddKontrolle.add(dcKontrolle, gridBagConstraints);
-
-        dlgAddKontrolle.getContentPane().add(panAddKontrolle, BorderLayout.CENTER);
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -265,6 +209,34 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panErsatz.add(dcBis, gridBagConstraints);
 
+        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblDatum, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblDatum.text")); // NOI18N
+        lblDatum.setName("lblDatum"); // NOI18N
+        lblDatum.setRequestFocusEnabled(false);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panErsatz.add(lblDatum, gridBagConstraints);
+
+        dcDatum.setName("dcDatum"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__DATUM + "}"), dcDatum, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(dcDatum.getConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panErsatz.add(dcDatum, gridBagConstraints);
+
         lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblGeom, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblGeom.text")); // NOI18N
         lblGeom.setName("lblGeom"); // NOI18N
@@ -298,18 +270,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             panErsatz.add(cbGeom, gridBagConstraints);
         }
-
-        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblDatum, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblDatum.text")); // NOI18N
-        lblDatum.setName("lblDatum"); // NOI18N
-        lblDatum.setRequestFocusEnabled(false);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panErsatz.add(lblDatum, gridBagConstraints);
 
         lblArt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblArt, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblArt.text")); // NOI18N
@@ -411,8 +371,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         txtFirma.setName("txtFirma"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__FIRMA + "}"), txtFirma, BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("null");
+        binding.setSourceUnreadableValue("null");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -513,8 +473,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         taBemerkung.setName("taBemerkung"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__BEMERKUNG + "}"), taBemerkung, BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("null");
+        binding.setSourceUnreadableValue("null");
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -531,192 +491,135 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panErsatz.add(scpBemerkung, gridBagConstraints);
 
-        panKontrolle.setName("panKontrolle"); // NOI18N
-        panKontrolle.setOpaque(false);
-        panKontrolle.setLayout(new GridBagLayout());
+        panKont.setName("panKont"); // NOI18N
+        panKont.setOpaque(false);
+        panKont.setLayout(new GridBagLayout());
 
-        rpKontrolleliste.setMinimumSize(new Dimension(80, 202));
-        rpKontrolleliste.setName("rpKontrolleliste"); // NOI18N
-        rpKontrolleliste.setPreferredSize(new Dimension(100, 202));
-        rpKontrolleliste.setLayout(new GridBagLayout());
+        rpKont.setName("rpKont"); // NOI18N
+        rpKont.setLayout(new GridBagLayout());
 
-        scpLaufendeKontrolle.setName("scpLaufendeKontrolle"); // NOI18N
+        semiRoundedPanel8.setBackground(Color.darkGray);
+        semiRoundedPanel8.setName("semiRoundedPanel8"); // NOI18N
+        semiRoundedPanel8.setLayout(new GridBagLayout());
 
-        lstKontrollen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lstKontrollen.setFixedCellWidth(75);
-        lstKontrollen.setName("lstKontrollen"); // NOI18N
-
-        ELProperty eLProperty = ELProperty.create("${cidsBean." + FIELD__KONTROLLE + "}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstKontrollen);
-        bindingGroup.addBinding(jListBinding);
-
-        scpLaufendeKontrolle.setViewportView(lstKontrollen);
-
+        lblKont.setForeground(new Color(255, 255, 255));
+        lblKont.setText(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblKont.text")); // NOI18N
+        lblKont.setName("lblKont"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        rpKontrolleliste.add(scpLaufendeKontrolle, gridBagConstraints);
-
-        semiRoundedPanelKontrolle.setBackground(Color.darkGray);
-        semiRoundedPanelKontrolle.setMinimumSize(new Dimension(60, 25));
-        semiRoundedPanelKontrolle.setName("semiRoundedPanelKontrolle"); // NOI18N
-        semiRoundedPanelKontrolle.setLayout(new GridBagLayout());
-
-        lblKontrolle.setForeground(new Color(255, 255, 255));
-        lblKontrolle.setText(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblErsatz.text")); // NOI18N
-        lblKontrolle.setName("lblKontrolle"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanelKontrolle.add(lblKontrolle, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        rpKontrolleliste.add(semiRoundedPanelKontrolle, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        semiRoundedPanel8.add(lblKont, gridBagConstraints);
 
-        panControlsNewKontrolle.setName("panControlsNewKontrolle"); // NOI18N
-        panControlsNewKontrolle.setOpaque(false);
-        panControlsNewKontrolle.setLayout(new GridBagLayout());
+        panKontAdd.setAlignmentX(0.0F);
+        panKontAdd.setAlignmentY(1.0F);
+        panKontAdd.setFocusable(false);
+        panKontAdd.setName("panKontAdd"); // NOI18N
+        panKontAdd.setOpaque(false);
+        panKontAdd.setLayout(new GridBagLayout());
 
-        btnAddNewKontrolle.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddNewKontrolle.setMaximumSize(new Dimension(39, 20));
-        btnAddNewKontrolle.setMinimumSize(new Dimension(39, 20));
-        btnAddNewKontrolle.setName("btnAddNewKontrolle"); // NOI18N
-        btnAddNewKontrolle.setPreferredSize(new Dimension(39, 25));
-        btnAddNewKontrolle.addActionListener(formListener);
+        btnAddKont.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddKont.setName("btnAddKont"); // NOI18N
+        btnAddKont.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsNewKontrolle.add(btnAddNewKontrolle, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        panKontAdd.add(btnAddKont, gridBagConstraints);
 
-        btnRemoveKontrolle.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveKontrolle.setMaximumSize(new Dimension(39, 20));
-        btnRemoveKontrolle.setMinimumSize(new Dimension(39, 20));
-        btnRemoveKontrolle.setName("btnRemoveKontrolle"); // NOI18N
-        btnRemoveKontrolle.setPreferredSize(new Dimension(39, 25));
-        btnRemoveKontrolle.addActionListener(formListener);
+        btnRemKont.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemKont.setName("btnRemKont"); // NOI18N
+        btnRemKont.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        panKontAdd.add(btnRemKont, gridBagConstraints);
+
+        filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsNewKontrolle.add(btnRemoveKontrolle, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 0, 0, 10);
+        panKontAdd.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        rpKontrolleliste.add(panControlsNewKontrolle, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        semiRoundedPanel8.add(panKontAdd, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 0, 0, 5);
-        panKontrolle.add(rpKontrolleliste, gridBagConstraints);
-
-        rpKontrolleinfo.setName("rpKontrolleinfo"); // NOI18N
-        rpKontrolleinfo.setLayout(new GridBagLayout());
-
-        semiRoundedPanel5.setBackground(Color.darkGray);
-        semiRoundedPanel5.setName("semiRoundedPanel5"); // NOI18N
-        semiRoundedPanel5.setLayout(new GridBagLayout());
-
-        lblKontrolleanzeige.setForeground(new Color(255, 255, 255));
-        lblKontrolleanzeige.setText(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblErsatzanzeige.text")); // NOI18N
-        lblKontrolleanzeige.setName("lblKontrolleanzeige"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanel5.add(lblKontrolleanzeige, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        rpKontrolleinfo.add(semiRoundedPanel5, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        rpKont.add(semiRoundedPanel8, gridBagConstraints);
 
-        panKontrolleMain.setName("panKontrolleMain"); // NOI18N
-        panKontrolleMain.setOpaque(false);
-        panKontrolleMain.setLayout(new GridBagLayout());
+        panKontDaten.setMinimumSize(new Dimension(26, 80));
+        panKontDaten.setName("panKontDaten"); // NOI18N
+        panKontDaten.setLayout(new GridBagLayout());
 
-        filler3.setName("filler3"); // NOI18N
+        jScrollPaneKont.setName("jScrollPaneKont"); // NOI18N
+
+        xtKont.setName("xtKont"); // NOI18N
+        xtKont.setVisibleRowCount(7);
+        jScrollPaneKont.setViewportView(xtKont);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panKontDaten.add(jScrollPaneKont, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panKontrolleMain.add(filler3, gridBagConstraints);
-
-        baumKontrollePanel1.setName("baumKontrollePanel1"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstKontrollen, ELProperty.create("${selectedElement}"), baumKontrollePanel1, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panKontrolleMain.add(baumKontrollePanel1, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        rpKontrolleinfo.add(panKontrolleMain, gridBagConstraints);
+        gridBagConstraints.weighty = 20.0;
+        rpKont.add(panKontDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 8.0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        panKontrolle.add(rpKontrolleinfo, gridBagConstraints);
+        panKont.add(rpKont, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        panErsatz.add(panKontrolle, gridBagConstraints);
-
-        dcDatum.setName("dcDatum"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean." + FIELD__DATUM + "}"), dcDatum, BeanProperty.create("date"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
-        binding.setConverter(dcDatum.getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panErsatz.add(dcDatum, gridBagConstraints);
+        panErsatz.add(panKont, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         add(panErsatz, gridBagConstraints);
 
         filler4.setName("filler4"); // NOI18N
@@ -738,80 +641,22 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     private class FormListener implements ActionListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
-            if (evt.getSource() == btnAddNewKontrolle) {
-                BaumErsatzPanel.this.btnAddNewKontrolleActionPerformed(evt);
+            if (evt.getSource() == btnAddKont) {
+                BaumErsatzPanel.this.btnAddKontActionPerformed(evt);
             }
-            else if (evt.getSource() == btnRemoveKontrolle) {
-                BaumErsatzPanel.this.btnRemoveKontrolleActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnMenAbortKontrolle) {
-                BaumErsatzPanel.this.btnMenAbortKontrolleActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnMenOkKontrolle) {
-                BaumErsatzPanel.this.btnMenOkKontrolleActionPerformed(evt);
+            else if (evt.getSource() == btnRemKont) {
+                BaumErsatzPanel.this.btnRemKontActionPerformed(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddNewKontrolleActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewKontrolleActionPerformed
-        try {
-            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumErsatzPanel.this), dlgAddKontrolle, true);
-        } catch (Exception e) {
-            LOG.error("Cannot add new BaumKontrolle object", e);
-        }
-    }//GEN-LAST:event_btnAddNewKontrolleActionPerformed
+    private void btnAddKontActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddKontActionPerformed
+        TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
+    }//GEN-LAST:event_btnAddKontActionPerformed
 
-    private void btnRemoveKontrolleActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveKontrolleActionPerformed
-        final Object selectedObject = lstKontrollen.getSelectedValue();
-
-        if (selectedObject instanceof CidsBean) {
-
-            if (kontrolleBeans != null) {
-                kontrolleBeans.remove((CidsBean)selectedObject);
-                if (kontrolleBeans != null && kontrolleBeans.size() > 0) {
-                    lstKontrollen.setSelectedIndex(0);
-                }else{
-                    lstKontrollen.clearSelection();
-                }
-            }
-        }
-    }//GEN-LAST:event_btnRemoveKontrolleActionPerformed
-
-    private void btnMenAbortKontrolleActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortKontrolleActionPerformed
-        dlgAddKontrolle.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortKontrolleActionPerformed
-
-    private void btnMenOkKontrolleActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkKontrolleActionPerformed
-        try {
-            //meldungsBean erzeugen und vorbelegen:
-            final CidsBean beanKontrolle = CidsBean.createNewCidsBeanFromTableName(
-                "WUNDA_BLAU",
-                "BAUM_KONTROLLE",
-                getConnectionContext());
-
-            final java.util.Date selDate = dcKontrolle.getDate();
-            java.util.Calendar cal = Calendar.getInstance();
-            cal.setTime(selDate);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            java.sql.Date beanDate = new java.sql.Date(cal.getTime().getTime());
-
-            beanKontrolle.setProperty("datum", beanDate);
-
-            //Kontrollen erweitern:
-            kontrolleBeans.add(beanKontrolle);
-
-            //Refresh:
-            lstKontrollen.setSelectedValue(beanKontrolle, true);
-
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        } finally {
-            dlgAddKontrolle.setVisible(false);
-        }
-    }//GEN-LAST:event_btnMenOkKontrolleActionPerformed
+    private void btnRemKontActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
+        TableUtils.removeObjectsFromTable(xtKont);
+    }//GEN-LAST:event_btnRemKontActionPerformed
 
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
@@ -821,53 +666,42 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    BaumKontrollePanel baumKontrollePanel1;
-    JButton btnAddNewKontrolle;
-    JButton btnMenAbortKontrolle;
-    JButton btnMenOkKontrolle;
-    JButton btnRemoveKontrolle;
+    JButton btnAddKont;
+    JButton btnRemKont;
     JComboBox<String> cbArt;
     JComboBox cbGeom;
     JCheckBox chSelbst;
     DefaultBindableDateChooser dcBis;
     DefaultBindableDateChooser dcDatum;
-    DefaultBindableDateChooser dcKontrolle;
-    JDialog dlgAddKontrolle;
-    Box.Filler filler3;
+    Box.Filler filler2;
     Box.Filler filler4;
+    JScrollPane jScrollPaneKont;
     JLabel lblAnzahl;
     JLabel lblArt;
-    JLabel lblAuswaehlenKontrolle;
     JLabel lblBemerkung;
     JLabel lblBis;
     JLabel lblDatum;
     JLabel lblFirma;
     JLabel lblGeom;
     JLabel lblKarte;
-    JLabel lblKontrolle;
-    JLabel lblKontrolleanzeige;
+    JLabel lblKont;
     JLabel lblSelbst;
-    JList lstKontrollen;
-    JPanel panAddKontrolle;
-    JPanel panControlsNewKontrolle;
     JPanel panErsatz;
     JPanel panGeometrie;
-    JPanel panKontrolle;
-    JPanel panKontrolleMain;
+    JPanel panKont;
+    JPanel panKontAdd;
+    JPanel panKontDaten;
     JPanel panLage;
-    JPanel panMenButtonsKontrolle;
     DefaultPreviewMapPanel panPreviewMap;
     RoundedPanel rpKarte;
-    RoundedPanel rpKontrolleinfo;
-    RoundedPanel rpKontrolleliste;
+    RoundedPanel rpKont;
     JScrollPane scpBemerkung;
-    JScrollPane scpLaufendeKontrolle;
-    SemiRoundedPanel semiRoundedPanel5;
     SemiRoundedPanel semiRoundedPanel7;
-    SemiRoundedPanel semiRoundedPanelKontrolle;
+    SemiRoundedPanel semiRoundedPanel8;
     JSpinner spAnzahl;
     JTextArea taBemerkung;
     JTextField txtFirma;
+    JXTable xtKont;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -933,7 +767,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public void dispose() {
         bindingGroup.unbind();
         cidsBean = null;
-        dlgAddKontrolle.dispose();
         if (this.isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         }
@@ -960,37 +793,34 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         
         setMapWindow();
         bindingGroup.bind();
-        
-        lstKontrollen.setCellRenderer(new DefaultListCellRenderer() {
-
-                @Override
-                public Component getListCellRendererComponent(final JList list,
-                        final Object value,
-                        final int index,
-                        final boolean isSelected,
-                        final boolean cellHasFocus) {
-                    Object newValue = value;
-
-                    if (value instanceof CidsBean) {
-                        final CidsBean bean = (CidsBean)value;
-                        newValue = bean.getProperty(FIELD__DATE);
-
-                        if (newValue == null) {
-                            newValue = "unbenannt";
+        final DivBeanTable kontrolleModel = new DivBeanTable(
+                    isEditor,
+                    cidsBean,
+                    FIELD__KONTROLLE,
+                    KONTROLLE_COL_NAMES,
+                    KONTROLLE_PROP_NAMES,                   
+                    KONTROLLE_PROP_TYPES);
+            xtKont.setModel(kontrolleModel);
+            xtKont.getColumn(0).setCellEditor(new DateCellEditor());
+            //xtKont.getColumnModel().getColumn(0).setCellRenderer(xtKont.getDefaultRenderer(String.class));
+            xtKont.getColumn(0).setPreferredWidth(20);
+            xtKont.packAll();
+            xtKont.addMouseMotionListener(new MouseAdapter(){
+		public void mouseMoved(MouseEvent e) {
+                    int row=xtKont.rowAtPoint(e.getPoint());
+                    int col=xtKont.columnAtPoint(e.getPoint());
+                    if(row>-1 && col>-1){
+                        Object value=xtKont.getValueAt(row, col);
+                        if(null!=value && !"".equals(value)){
+                            xtKont.setToolTipText(value.toString());
+                        }else{
+                            xtKont.setToolTipText(null);//keinTooltip anzeigen
                         }
                     }
-                    final Component compoDatum = super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
-                    compoDatum.setForeground(Color.red);
-                    return compoDatum;
                 }
             });
-        if (kontrolleBeans != null && kontrolleBeans.size() > 0) {
-            lstKontrollen.setSelectedIndex(0);
-        }
         
-
-        dlgAddKontrolle.pack();
-        dlgAddKontrolle.getRootPane().setDefaultButton(btnMenOkKontrolle);
+        
     }
     /**
      * DOCUMENT ME!
@@ -999,7 +829,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
      */
     public void setKontrolleBeans(final List<CidsBean> cidsBeans) {
         this.kontrolleBeans = cidsBeans;
-        baumKontrollePanel1.setCidsBean(null);
     }
     /**
      * DOCUMENT ME!

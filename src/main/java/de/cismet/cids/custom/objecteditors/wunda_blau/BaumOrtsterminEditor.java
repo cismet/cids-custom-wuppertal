@@ -12,9 +12,9 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
-import com.vividsolutions.jts.geom.Point;
+import Sirius.server.middleware.types.MetaObjectNode;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import org.apache.log4j.Logger;
@@ -24,7 +24,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -43,10 +42,9 @@ import java.util.concurrent.ExecutionException;
 
 
 import javax.swing.*;
-import javax.swing.text.DefaultFormatter;
 
-import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -59,11 +57,6 @@ import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -73,34 +66,28 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import static de.cismet.cids.custom.objecteditors.wunda_blau.EmobLadestationEditor.TABLE_NAME_STECKDOSENTYP;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.editors.DefaultBindableComboboxCellEditor;
+import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
-import javax.swing.AbstractListModel;
-import javax.swing.JList;
+import java.util.MissingResourceException;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingbinding.JListBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXTable;
 /**
  * DOCUMENT ME!
@@ -130,22 +117,35 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     private List<CidsBean> teilBeans;
     private static final Logger LOG = Logger.getLogger(BaumOrtsterminEditor.class);
-    private static final String[] MELDUNG_COL_NAMES = new String[] { "Meldungsdatum", "Gebiet-Aktenzeichen" };
+    private static final String[] MELDUNG_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Gebiet-Bemerkung", "Meldungsdatum", "Meldung-Bemerkung" };
     private static final String[] MELDUNG_PROP_NAMES = new String[] {
+            "fk_gebiet.aktenzeichen",
+            "fk_gebiet.bemerkung",
             "datum",
-            "fk_gebiet"
+            "bemerkung"
         };
     private static final Class[] MELDUNG_PROP_TYPES = new Class[] {
+            CidsBean.class,
+            CidsBean.class, 
             Date.class,
-            CidsBean.class
+            String.class
         };
-    
+    private static final String[] LOADING_COL_NAMES = new String[] { "Die Daten werden geladen......"};
+    private static final String[] MUSTSET_COL_NAMES = new String[] { "Die Daten bitte zuweisen......"};
     
     public static final String FIELD__TEILNEHMER = "n_teilnehmer";              // baum_ortstermin
     public static final String FIELD__DATUM = "datum";                          // baum_ortstermin
+    public static final String FIELD__ID = "id";                                // baum_ortstermin
     public static final String FIELD__MELDUNG = "fk_meldung";                   // baum_ortstermin
+    public static final String FIELD__MELDUNG_ID = "fk_meldung.id";             // baum_meldung
     public static final String FIELD__NAME = "name";                            // baum_teilnehmer
-    public static final String TABLE_NAME__MELDUNG = "baum_meldung"; 
+    public static final String FIELD__MELDUNGEN = "n_ortstermine";              // baum_meldung
+    public static final String FIELD__TEILNEHMER_OTSTERMIN = "fk_ortstermin";   // baum_teilnehmer
+    public static final String FIELD__TEILNEHMER_NAME = "name";                 // baum_teilnehmer
+    public static final String FIELD__TEILNEHMER_TELEFON = "telefon";           // baum_teilnehmer
+    public static final String FIELD__TEILNEHMER_BEMERKUNG = "bemerkung";       // baum_teilnehmer
+    public static final String TABLE_NAME__MELDUNG = "baum_meldung";
+    public static final String TABLE_NAME__TEILNEHMER = "baum_teilnehmer"; 
     
     public static final String BUNDLE_PANE_PREFIX =
         "BaumGebietEditor.prepareForSave().JOptionPane.message.prefix";
@@ -156,6 +156,19 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     public static final String BUNDLE_TEIL_TITLE = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().title";
     public static final String BUNDLE_TEIL_ERRORTITLE = "BaumOrtsterminEditor.btnRemoveTeilrActionPerformed().errortitle";
     public static final String BUNDLE_TEIL_ERRORTEXT = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
+    public static final String BUNDLE_NOMELDUNG = "BaumOrtsterminEditor.prepareForSave().noMeldung";
+    
+    private static final String[] TEILNEHMER_COL_NAMES = new String[] { "Name", "Telefon", "Bemerkung"};
+    private static final String[] TEILNEHMER_PROP_NAMES = new String[] {
+            FIELD__TEILNEHMER_NAME,
+            FIELD__TEILNEHMER_TELEFON,
+            FIELD__TEILNEHMER_BEMERKUNG
+        };
+    private static final Class[] TEILNEHMER_PROP_TYPES = new Class[] {
+            String.class,
+            String.class,
+            String.class
+        };
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -179,49 +192,37 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     //~ Instance fields --------------------------------------------------------
     
-    private SwingWorker worker_name;
-    private SwingWorker worker_versatz;
-
+    private MetaClass teilnehmerMetaClass;
 
     private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private BaumTeilnehmerPanel baumTeilnehmerPanel1;
-    JButton btnAddNewTeil;
-    JButton btnRemoveTeil;
-    JButton btnTeilMenAbort;
-    JButton btnTeilMenOk;
-    private JComboBox cbMeldung;
+    private JButton btnAddTeilnehmer;
+    private JButton btnChangeGebiet;
+    private JButton btnRemTeilnehmer;
+    private ComboBoxFilterDialog comboBoxFilterDialogGebiet;
     private DefaultBindableDateChooser dcDatum;
-    JDialog dlgAddTeil;
-    private Box.Filler filler4;
-    private JPanel jPanel1;
+    private Box.Filler filler2;
+    private Box.Filler filler7;
+    private JPanel jPanelButtons;
     private JScrollPane jScrollPaneMeldung;
+    private JScrollPane jScrollPaneTeil;
     private JLabel lblBemerkung;
     private JLabel lblDatum;
     private JLabel lblGebiet_Meldung;
-    JLabel lblTeil;
-    JLabel lblTeilAuswaehlen;
-    JLabel lblTeiln;
-    JList lstTeil;
-    JPanel panAddTeil;
-    private JPanel panControlsNewTeil;
+    JLabel lblTeil1;
     private JPanel panFillerUnten;
-    JPanel panMenTeilButtons;
     JPanel panOrtstermin;
     JPanel panTeil;
-    JPanel panTeilMain;
-    private RoundedPanel rpTeilinfo;
-    RoundedPanel rpTeilliste;
+    private JPanel panTeilDaten;
+    private JPanel panTeilnehmerAdd;
+    private RoundedPanel rpTeil;
     private JScrollPane scpBemerkung;
-    JScrollPane scpLaufendeTeil;
-    SemiRoundedPanel semiRoundedPanel6;
-    private SemiRoundedPanel semiRoundedPanelTeil;
+    SemiRoundedPanel semiRoundedPanel7;
     private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JTextArea taBemerkung;
-    JTextField txtFirma;
-    JTextField txtTeil;
     private JXTable xtMeldung;
+    private JXTable xtTeil;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -253,7 +254,10 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 TABLE_NAME__MELDUNG,
                 connectionContext);
         setReadOnly();
-
+        teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                TABLE_NAME__TEILNEHMER,
+                connectionContext);
     }
 
     /**
@@ -267,13 +271,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         bindingGroup = new BindingGroup();
 
         sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
-        dlgAddTeil = new JDialog();
-        panAddTeil = new JPanel();
-        lblTeilAuswaehlen = new JLabel();
-        panMenTeilButtons = new JPanel();
-        btnTeilMenAbort = new JButton();
-        btnTeilMenOk = new JButton();
-        txtTeil = new JTextField();
+        comboBoxFilterDialogGebiet = new ComboBoxFilterDialog(null, new BaumMeldungLightweightSearch(), "Gebiet-Meldung auswählen", getConnectionContext());
         panFillerUnten = new JPanel();
         panOrtstermin = new JPanel();
         lblDatum = new JLabel();
@@ -284,86 +282,20 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         lblGebiet_Meldung = new JLabel();
         jScrollPaneMeldung = new JScrollPane();
         xtMeldung = new JXTable();
+        jPanelButtons = new JPanel();
+        btnChangeGebiet = new JButton();
+        filler7 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         panTeil = new JPanel();
-        rpTeilliste = new RoundedPanel();
-        scpLaufendeTeil = new JScrollPane();
-        lstTeil = new JList();
-        semiRoundedPanelTeil = new SemiRoundedPanel();
-        lblTeiln = new JLabel();
-        panControlsNewTeil = new JPanel();
-        btnAddNewTeil = new JButton();
-        btnRemoveTeil = new JButton();
-        rpTeilinfo = new RoundedPanel();
-        semiRoundedPanel6 = new SemiRoundedPanel();
-        lblTeil = new JLabel();
-        panTeilMain = new JPanel();
-        baumTeilnehmerPanel1 = new BaumTeilnehmerPanel();
-        filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        final MetaObject[] meldung = ObjectRendererUtils.getLightweightMetaObjectsForTable("baum_meldung", new String[]{"datum"}, getConnectionContext());
-        if(meldung != null) {
-            Arrays.sort(meldung);
-            cbMeldung = new JComboBox(meldung);
-        }
-        jPanel1 = new JPanel();
-        txtFirma = new JTextField();
-
-        dlgAddTeil.setTitle(NbBundle.getMessage(BaumOrtsterminEditor.class, "BaumOrtsterminEditor.dlgAddTeil.title")); // NOI18N
-        dlgAddTeil.setModal(true);
-
-        panAddTeil.setMaximumSize(new Dimension(180, 120));
-        panAddTeil.setMinimumSize(new Dimension(180, 120));
-        panAddTeil.setPreferredSize(new Dimension(335, 120));
-        panAddTeil.setRequestFocusEnabled(false);
-        panAddTeil.setLayout(new GridBagLayout());
-
-        lblTeilAuswaehlen.setText(NbBundle.getMessage(BaumOrtsterminEditor.class, "BaumOrtsterminEditor.lblTeilAuswaehlen.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panAddTeil.add(lblTeilAuswaehlen, gridBagConstraints);
-
-        panMenTeilButtons.setLayout(new GridBagLayout());
-
-        btnTeilMenAbort.setText(NbBundle.getMessage(BaumOrtsterminEditor.class, "BaumOrtsterminEditor.btnTeilMenAbort.text")); // NOI18N
-        btnTeilMenAbort.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnTeilMenAbortActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMenTeilButtons.add(btnTeilMenAbort, gridBagConstraints);
-
-        btnTeilMenOk.setText(NbBundle.getMessage(BaumOrtsterminEditor.class, "BaumOrtsterminEditor.btnTeilMenOk.text")); // NOI18N
-        btnTeilMenOk.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnTeilMenOkActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMenTeilButtons.add(btnTeilMenOk, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = GridBagConstraints.LAST_LINE_END;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panAddTeil.add(panMenTeilButtons, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panAddTeil.add(txtTeil, gridBagConstraints);
-
-        dlgAddTeil.getContentPane().add(panAddTeil, BorderLayout.CENTER);
+        rpTeil = new RoundedPanel();
+        semiRoundedPanel7 = new SemiRoundedPanel();
+        lblTeil1 = new JLabel();
+        panTeilnehmerAdd = new JPanel();
+        btnAddTeilnehmer = new JButton();
+        btnRemTeilnehmer = new JButton();
+        filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        panTeilDaten = new JPanel();
+        jScrollPaneTeil = new JScrollPane();
+        xtTeil = new JXTable();
 
         setLayout(new GridBagLayout());
 
@@ -403,6 +335,9 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         panOrtstermin.add(lblDatum, gridBagConstraints);
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(dcDatum.getConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -455,7 +390,8 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panOrtstermin.add(lblGebiet_Meldung, gridBagConstraints);
 
-        xtMeldung.setVisibleRowCount(2);
+        xtMeldung.setModel(new OrtsterminMeldungTableModel());
+        xtMeldung.setVisibleRowCount(1);
         jScrollPaneMeldung.setViewportView(xtMeldung);
 
         gridBagConstraints = new GridBagConstraints();
@@ -467,188 +403,153 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panOrtstermin.add(jScrollPaneMeldung, gridBagConstraints);
 
-        panTeil.setMinimumSize(new Dimension(197, 150));
-        panTeil.setOpaque(false);
-        panTeil.setPreferredSize(new Dimension(217, 150));
-        panTeil.setLayout(new GridBagLayout());
+        jPanelButtons.setOpaque(false);
+        jPanelButtons.setLayout(new GridBagLayout());
 
-        rpTeilliste.setMinimumSize(new Dimension(90, 202));
-        rpTeilliste.setPreferredSize(new Dimension(90, 202));
-        rpTeilliste.setLayout(new GridBagLayout());
-
-        lstTeil.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lstTeil.setFixedCellWidth(75);
-
-        ELProperty eLProperty = ELProperty.create("${cidsBean." + FIELD__TEILNEHMER + "}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstTeil);
-        bindingGroup.addBinding(jListBinding);
-
-        scpLaufendeTeil.setViewportView(lstTeil);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        rpTeilliste.add(scpLaufendeTeil, gridBagConstraints);
-
-        semiRoundedPanelTeil.setBackground(Color.darkGray);
-        semiRoundedPanelTeil.setMinimumSize(new Dimension(90, 25));
-        semiRoundedPanelTeil.setPreferredSize(new Dimension(90, 25));
-        semiRoundedPanelTeil.setLayout(new GridBagLayout());
-
-        lblTeiln.setForeground(new Color(255, 255, 255));
-        lblTeiln.setText(NbBundle.getMessage(BaumOrtsterminEditor.class, "BaumOrtsterminEditor.lblTeiln.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanelTeil.add(lblTeiln, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpTeilliste.add(semiRoundedPanelTeil, gridBagConstraints);
-
-        panControlsNewTeil.setOpaque(false);
-        panControlsNewTeil.setLayout(new GridBagLayout());
-
-        btnAddNewTeil.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddNewTeil.setMaximumSize(new Dimension(39, 20));
-        btnAddNewTeil.setMinimumSize(new Dimension(39, 20));
-        btnAddNewTeil.setPreferredSize(new Dimension(39, 25));
-        btnAddNewTeil.addActionListener(new ActionListener() {
+        btnChangeGebiet.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
+        btnChangeGebiet.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                btnAddNewTeilActionPerformed(evt);
+                btnChangeGebietActionPerformed(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsNewTeil.add(btnAddNewTeil, gridBagConstraints);
-
-        btnRemoveTeil.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveTeil.setMaximumSize(new Dimension(39, 20));
-        btnRemoveTeil.setMinimumSize(new Dimension(39, 20));
-        btnRemoveTeil.setPreferredSize(new Dimension(39, 25));
-        btnRemoveTeil.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveTeilActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsNewTeil.add(btnRemoveTeil, gridBagConstraints);
-
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
+        jPanelButtons.add(btnChangeGebiet, gridBagConstraints);
+        btnChangeGebiet.setVisible(isEditor);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        rpTeilliste.add(panControlsNewTeil, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 0, 0, 5);
-        panTeil.add(rpTeilliste, gridBagConstraints);
+        jPanelButtons.add(filler7, gridBagConstraints);
 
-        rpTeilinfo.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        panOrtstermin.add(jPanelButtons, gridBagConstraints);
 
-        semiRoundedPanel6.setBackground(Color.darkGray);
-        semiRoundedPanel6.setLayout(new GridBagLayout());
+        panTeil.setOpaque(false);
+        panTeil.setPreferredSize(new Dimension(100, 100));
+        panTeil.setLayout(new GridBagLayout());
 
-        lblTeil.setForeground(new Color(255, 255, 255));
-        lblTeil.setText(NbBundle.getMessage(BaumOrtsterminEditor.class, "BaumOrtsterminEditor.lblTeil.text")); // NOI18N
+        rpTeil.setLayout(new GridBagLayout());
+
+        semiRoundedPanel7.setBackground(Color.darkGray);
+        semiRoundedPanel7.setLayout(new GridBagLayout());
+
+        lblTeil1.setForeground(new Color(255, 255, 255));
+        lblTeil1.setText(NbBundle.getMessage(BaumOrtsterminEditor.class, "BaumOrtsterminEditor.lblTeil.text")); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanel6.add(lblTeil, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        rpTeilinfo.add(semiRoundedPanel6, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        semiRoundedPanel7.add(lblTeil1, gridBagConstraints);
 
-        panTeilMain.setOpaque(false);
-        panTeilMain.setLayout(new GridBagLayout());
+        panTeilnehmerAdd.setAlignmentX(0.0F);
+        panTeilnehmerAdd.setAlignmentY(1.0F);
+        panTeilnehmerAdd.setFocusable(false);
+        panTeilnehmerAdd.setOpaque(false);
+        panTeilnehmerAdd.setLayout(new GridBagLayout());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstTeil, ELProperty.create("${selectedElement}"), baumTeilnehmerPanel1, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
+        btnAddTeilnehmer.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddTeilnehmer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnAddTeilnehmerActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        panTeilnehmerAdd.add(btnAddTeilnehmer, gridBagConstraints);
+
+        btnRemTeilnehmer.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemTeilnehmer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnRemTeilnehmerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        panTeilnehmerAdd.add(btnRemTeilnehmer, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        panTeilMain.add(baumTeilnehmerPanel1, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 0, 0, 10);
+        panTeilnehmerAdd.add(filler2, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        semiRoundedPanel7.add(panTeilnehmerAdd, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        rpTeil.add(semiRoundedPanel7, gridBagConstraints);
+
+        panTeilDaten.setMinimumSize(new Dimension(26, 80));
+        panTeilDaten.setLayout(new GridBagLayout());
+
+        xtTeil.setVisibleRowCount(7);
+        jScrollPaneTeil.setViewportView(xtTeil);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panTeilDaten.add(jScrollPaneTeil, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panTeilMain.add(filler4, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        rpTeilinfo.add(panTeilMain, gridBagConstraints);
+        rpTeil.add(panTeilDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 8.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        panTeil.add(rpTeilinfo, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        panOrtstermin.add(panTeil, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        panTeil.add(rpTeil, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panOrtstermin.add(cbMeldung, gridBagConstraints);
-
-        jPanel1.setLayout(new GridBagLayout());
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtFirma, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 1808;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        jPanel1.add(txtFirma, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panOrtstermin.add(jPanel1, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        panOrtstermin.add(panTeil, gridBagConstraints);
+        panTeil.getAccessibleContext().setAccessibleName("");
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -690,77 +591,47 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     }
    
     
-    private void btnAddNewTeilActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewTeilActionPerformed
-        try {
-            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumOrtsterminEditor.this), dlgAddTeil, true);
-        } catch (Exception e) {
-            LOG.error("Cannot add new BaumOrtstermin object", e);
-        }
-    }//GEN-LAST:event_btnAddNewTeilActionPerformed
-
-    private void btnRemoveTeilActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveTeilActionPerformed
-        final Object selectedObject = lstTeil.getSelectedValue();
-
-        if (selectedObject instanceof CidsBean) {
-            //final List<CidsBean> meldungBeans = cidsBean.getBeanCollectionProperty(FIELD__MELDUNGEN);
-
-            if (teilBeans != null) {
-                teilBeans.remove((CidsBean)selectedObject);
-                //((CustomJListModel)lstMeldungen.getModel()).refresh();
-                //lstMeldungen.getSelectionModel().clearSelection();
-                if (teilBeans != null && teilBeans.size() > 0) {
-                    lstTeil.setSelectedIndex(0);
-                }else{
-                    lstTeil.clearSelection();
-                }
+    private void btnChangeGebietActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
+        final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
+        if (selectedItem instanceof CidsBean) {
+            final CidsBean meldungBean = (CidsBean)selectedItem;
+            setMeldungTable(meldungBean);
+            
+            xtMeldung.getTableHeader().setForeground(Color.BLACK);
+            try {
+                cidsBean.setProperty(FIELD__MELDUNG, meldungBean);
+            } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
             }
         }
-    }//GEN-LAST:event_btnRemoveTeilActionPerformed
+    }//GEN-LAST:event_btnChangeGebietActionPerformed
 
-    private void btnTeilMenAbortActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnTeilMenAbortActionPerformed
-        dlgAddTeil.setVisible(false);
-        txtTeil.setText("");
-    }//GEN-LAST:event_btnTeilMenAbortActionPerformed
+    private void btnAddTeilnehmerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddTeilnehmerActionPerformed
+        TableUtils.addObjectToTable(xtTeil, TABLE_NAME__TEILNEHMER, getConnectionContext());
+    }//GEN-LAST:event_btnAddTeilnehmerActionPerformed
 
-    private void btnTeilMenOkActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnTeilMenOkActionPerformed
-        try{
-            //meldungsBean erzeugen und vorbelegen:
-            final CidsBean beanTeil = CidsBean.createNewCidsBeanFromTableName(
-                "WUNDA_BLAU",
-                "BAUM_Teilnehmer",
-                getConnectionContext());
-            beanTeil.setProperty(FIELD__NAME, txtTeil.getText());
-
-            //Meldungen erweitern:
-            teilBeans.add(beanTeil);
-
-           
-            lstTeil.setSelectedValue(beanTeil, true);
-
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        } finally {
-            dlgAddTeil.setVisible(false);
-        }
-    }//GEN-LAST:event_btnTeilMenOkActionPerformed
+    private void btnRemTeilnehmerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemTeilnehmerActionPerformed
+        TableUtils.removeObjectsFromTable(xtTeil);
+    }//GEN-LAST:event_btnRemTeilnehmerActionPerformed
 
 
-    /**
-     * DOCUMENT ME!
-     */
- /*   private void doWithFotoUrl() {
-        final String foto = EmobConfProperties.getInstance().getFotoUrlRaeder().concat(txtFoto.getText());
-        // Worker Aufruf, grün/rot
-        checkUrl(foto, lblUrlCheck);
-        // Worker Aufruf, Foto laden
-        loadPictureWithUrl(foto, lblFotoAnzeigen);
-    }*/
+   
 
 
     @Override
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
+
+         try {
+            if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
+                LOG.warn("No geom specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOMELDUNG));
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Geom not given.", ex);
+            save = false;
+        }
 
         
         if (errorMessage.length() > 0) {
@@ -787,11 +658,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         try {
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (this.cidsBean != null){
-                setTeilnehmerBeans(cidsBean.getBeanCollectionProperty(FIELD__TEILNEHMER));   
-            } else {
-                setTeilnehmerBeans(null);
-            }
             if (teilBeans != null) {
                 Collections.sort((List)teilBeans, COMPARATOR);
             }
@@ -802,52 +668,127 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            final DivBeanTable meldungModel = new DivBeanTable(
+            final DivBeanTable teilnehmerModel = new DivBeanTable(
                     isEditor,
                     cidsBean,
-                    FIELD__MELDUNG,
-                    MELDUNG_COL_NAMES,
-                    MELDUNG_PROP_NAMES,
-                    MELDUNG_PROP_TYPES);
-            xtMeldung.setModel(meldungModel);
-            xtMeldung.getColumn(2).setCellEditor(new DefaultBindableComboboxCellEditor(meldungMetaClass));
-            //xtMeldung.getColumn(4).setPreferredWidth(COLUMN_WIDTH);
-        
-            if (teilBeans != null && teilBeans.size() > 0) {
-                lstTeil.setSelectedIndex(0);
-            }
-            lstTeil.setCellRenderer(new DefaultListCellRenderer() {
-
-                    @Override
-                    public Component getListCellRendererComponent(final JList list,
-                            final Object value,
-                            final int index,
-                            final boolean isSelected,
-                            final boolean cellHasFocus) {
-                        Object newValue = value;
-
-                        if (value instanceof CidsBean) {
-                            final CidsBean bean = (CidsBean)value;
-                            newValue = bean.getProperty(FIELD__NAME);
-
-                            if (newValue == null) {
-                                newValue = "unbenannt";
-                            }
+                    FIELD__TEILNEHMER,
+                    TEILNEHMER_COL_NAMES,
+                    TEILNEHMER_PROP_NAMES,                   
+                    TEILNEHMER_PROP_TYPES);
+            xtTeil.setModel(teilnehmerModel);
+            xtTeil.addMouseMotionListener(new MouseAdapter(){
+                @Override
+		public void mouseMoved(MouseEvent e) {
+                    int row=xtTeil.rowAtPoint(e.getPoint());
+                    int col=xtTeil.columnAtPoint(e.getPoint());
+                    if(row>-1 && col>-1){
+                        Object value=xtTeil.getValueAt(row, col);
+                        if(null!=value && !"".equals(value)){
+                            xtTeil.setToolTipText(value.toString());
+                        }else{
+                            xtTeil.setToolTipText(null);//keinTooltip anzeigen
                         }
-                        final Component compoTeil = super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
-                        compoTeil.setForeground(Color.red);
-                        return compoTeil;
                     }
-                });
-            dlgAddTeil.pack();
-            dlgAddTeil.getRootPane().setDefaultButton(btnTeilMenOk);
-
+                }
+            });
+            //searchMeldungen();
+            
+            xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+            if(cidsBean.getProperty(FIELD__MELDUNG) == null){
+                xtMeldung.getTableHeader().setForeground(Color.red);
+            }else{
+                xtMeldung.getTableHeader().setForeground(Color.BLACK);
+                setMeldungTable((CidsBean)cidsBean.getProperty(FIELD__MELDUNG));
+            }
+            xtMeldung.addMouseMotionListener(new MouseAdapter(){
+                @Override
+		public void mouseMoved(MouseEvent e) {
+                    int row=xtMeldung.rowAtPoint(e.getPoint());
+                    int col=xtMeldung.columnAtPoint(e.getPoint());
+                    if(row>-1 && col>-1){
+                        Object value=xtMeldung.getValueAt(row, col);
+                        if(null!=value && !"".equals(value)){
+                            xtMeldung.setToolTipText(value.toString());
+                        }else{
+                            xtMeldung.setToolTipText(null);//keinTooltip anzeigen
+                        }
+                    }
+                }
+            });
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
                 LOG.error("Bean not set.", ex);
             }
     }
+    
+    
+    private void setMeldungTable(CidsBean meldungBean){
+        List<CidsBean> meldungBeans = new ArrayList<>();
+        meldungBeans.add(meldungBean);
+        //xtMeldung.setModel(new OrtsterminMeldungTableModel());
+        ((OrtsterminMeldungTableModel)xtMeldung.getModel()).setCidsBeans(meldungBeans);
+    }
+    
+    private void searchMeldungen() {
+        xtMeldung.setModel(new LoadingTableModel());
 
+        if (getCidsBean() != null) {
+            new SwingWorker<List<CidsBean>, Void>() {
+
+                    @Override
+                    protected List<CidsBean> doInBackground() throws Exception {
+                        final BaumMeldungSearch search = new BaumMeldungSearch();
+                        search.setOrtsterminId((Integer)getCidsBean().getProperty(FIELD__ID));
+                        search.setOrtsterminFKMeldung((Integer)getCidsBean().getProperty(FIELD__MELDUNG_ID));
+
+                        final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            search,
+                                            getConnectionContext());
+
+                        if (mons == null) {
+                            xtMeldung.setModel(new MustSetTableModel());
+                            return null;
+                        }
+
+                        final List<CidsBean> beans = new ArrayList<>();
+                        for (final MetaObjectNode mon : mons) {
+                            
+                            beans.add(SessionManager.getProxy().getMetaObject(
+                                    mon.getObjectId(),
+                                    mon.getClassId(),
+                                    "WUNDA_BLAU",
+                                    getConnectionContext()).getBean());
+                        }
+                        return beans;
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final List<CidsBean> beans = get();
+                            List<CidsBean> meldungBeans = new ArrayList<>();
+                            if (cidsBean.getProperty(FIELD__MELDUNG_ID) != null){
+                                for (final CidsBean cb : beans){
+                                    if(cb.getProperty(FIELD__ID).toString().equals(cidsBean.getProperty(FIELD__MELDUNG_ID).toString())){
+                                       meldungBeans.add(cb);
+                                       break;
+                                    }
+                                }
+                            }
+                            if(meldungBeans.isEmpty()){
+                                xtMeldung.setModel(new MustSetTableModel());
+                            }else{
+                                xtMeldung.setModel(new OrtsterminMeldungTableModel());
+                                ((OrtsterminMeldungTableModel)xtMeldung.getModel()).setCidsBeans(meldungBeans);
+                            }
+                        } catch (final InterruptedException | ExecutionException ex) {
+                            LOG.fatal(ex, ex);
+                        }
+                    }
+                }.execute();
+        }
+    }
     /**
      * DOCUMENT ME!
      */
@@ -855,105 +796,8 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         if (!(isEditor)) {
             RendererTools.makeReadOnly(taBemerkung);
         }
+        RendererTools.makeReadOnly(xtMeldung);
     }
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  cidsBeans  DOCUMENT ME!
-     */
-    public void setTeilnehmerBeans(final List<CidsBean> cidsBeans) {
-        this.teilBeans = cidsBeans;
-        baumTeilnehmerPanel1.setCidsBean(null);
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public List<CidsBean> getTeilnehmerBeans() {
-        return teilBeans;
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private class CustomJListModel extends AbstractListModel<CidsBean> {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private String listPropertyName;
-        private Comparator beanComparator = new Comparator<CidsBean>() {
-
-                @Override
-                public int compare(final CidsBean o1, final CidsBean o2) {
-                    final String o1String = String.valueOf(o1.getProperty("datum"));
-                    final String o2String = String.valueOf(o2.getProperty("datum"));
-
-                    try {
-                        final Integer o1Int = Integer.parseInt(o1String);
-                        final Integer o2Int = Integer.parseInt(o2String);
-
-                        return o1Int.compareTo(o2Int);
-                    } catch (NumberFormatException e) {
-                        // do nothing
-                    }
-
-                    return String.valueOf(o1).compareTo(String.valueOf(o2));
-                }
-            };
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new CustomJListModel object.
-         *
-         * @param  listPropertyName  DOCUMENT ME!
-         */
-        public CustomJListModel(final String listPropertyName) {
-            this.listPropertyName = listPropertyName;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        private List<CidsBean> getBeanList() {
-            if ((cidsBean != null) && (listPropertyName != null)) {
-                final Object colObj = cidsBean.getProperty(listPropertyName);
-                if (colObj instanceof Collection) {
-                    return (List<CidsBean>)colObj;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        public void refresh() {
-            fireContentsChanged(this, 0, getBeanList().size() - 1);
-        }
-
-        @Override
-        public int getSize() {
-            return getBeanList().size();
-        }
-
-        @Override
-        public CidsBean getElementAt(final int index) {
-            final List<CidsBean> l = new ArrayList<CidsBean>();
-            l.addAll(getBeanList());
-
-            Collections.sort(l, beanComparator);
-
-            return l.get(index);
-        }
-    }
-    
     
     public static void main(final String[] args) throws Exception {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
@@ -978,7 +822,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     @Override
     public void dispose() {
         super.dispose();
-        dlgAddTeil.dispose();
+     //   ((OrtsterminMeldungTableModel)xtMeldung.getModel()).clear();
     }
     
     @Override
@@ -994,7 +838,39 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         return bindingGroup;
     }
 
-          
+    class OrtsterminMeldungTableModel extends CidsBeansTableModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new OrtsterminMeldungTableModel object.
+         */
+        public OrtsterminMeldungTableModel() {
+            super(MELDUNG_PROP_NAMES, MELDUNG_COL_NAMES, MELDUNG_PROP_TYPES);
+        }
+    }  
+    class LoadingTableModel extends CidsBeansTableModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new LoadingTableModel object.
+         */
+        public LoadingTableModel() {
+            super( MELDUNG_PROP_NAMES,LOADING_COL_NAMES, MELDUNG_PROP_TYPES);
+        }
+    } 
+    class MustSetTableModel extends CidsBeansTableModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new LoadingTableModel object.
+         */
+        public MustSetTableModel() {
+            super( MELDUNG_PROP_NAMES,MUSTSET_COL_NAMES, MELDUNG_PROP_TYPES);
+        }
+    }
 }
     
 

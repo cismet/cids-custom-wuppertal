@@ -423,7 +423,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanel5 = new SemiRoundedPanel();
         lblMeldung = new JLabel();
         panMeldungenMain = new JPanel();
-        baumMeldungPanel = new BaumMeldungPanel();
+        baumMeldungPanel = baumMeldungPanel = new BaumMeldungPanel(this, true);
 
         dlgAddMeldung.setTitle("Meldungsdatum");
         dlgAddMeldung.setModal(true);
@@ -1303,6 +1303,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
+        
 
         // name vorhanden
         try {
@@ -1358,7 +1359,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
             return false;
         }
-        return save;
+        return baumMeldungPanel.prepareForSave();
+        //return save;
     }
 
     @Override
