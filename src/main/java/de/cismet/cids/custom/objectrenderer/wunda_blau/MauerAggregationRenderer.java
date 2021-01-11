@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -36,7 +38,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -155,6 +156,18 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                     changeMap();
                 }
             });
+
+        boolean rechteManagement = false;
+
+        try {
+            rechteManagement = SessionManager.getProxy()
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                                "mauerObjektRechteManagement",
+                                getConnectionContext());
+        } catch (final ConnectionException ex) {
+            LOG.error(ex, ex);
+        }
+        pnlHeaderProducts1.setVisible(rechteManagement);
     }
 
     /**

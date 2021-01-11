@@ -2515,6 +2515,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     "WUNDA_BLAU",
                     "mauer_massnahme",
                     getConnectionContext());
+            massnahmeBean.setProperty("wann", new Date(new java.util.Date().getTime()));
             ((MassnahmenTableModel)jXTable1.getModel()).add(massnahmeBean);
         } catch (final Exception ex) {
             LOG.error(ex, ex);
