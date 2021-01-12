@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
@@ -70,6 +71,8 @@ import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
+import de.cismet.tools.gui.TitleComponentProvider;
+
 /**
  * DOCUMENT ME!
  *
@@ -78,6 +81,7 @@ import de.cismet.connectioncontext.ConnectionContextStore;
  */
 public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     ConnectionContextStore,
+    TitleComponentProvider,
     EditorSaveListener,
     RequestsFullSizeComponent {
 
@@ -1247,6 +1251,16 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 LOG.error(ex, ex);
             }
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    public JComponent getTitleComponent() {
+        return panTitle;
     }
 
     @Override

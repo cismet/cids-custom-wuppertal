@@ -17,9 +17,13 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.newuser.User;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import java.awt.Component;
+
+import java.util.Arrays;
 
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
