@@ -319,6 +319,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 new java.awt.Dimension(0, 32767));
 
         panTitle.setName("panTitle"); // NOI18N
+        panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
@@ -367,6 +368,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         panTitle.add(btnReport, gridBagConstraints);
 
         panFooter.setName("panFooter"); // NOI18N
+        panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
 
         comboBoxFilterDialog1.setName("comboBoxFilterDialog1"); // NOI18N
