@@ -573,17 +573,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                             }
                         }
                         break;
-                        case "bewirtschaftungsschaden": {
-                            if (cidsBean.getProperty("fk_bewirtschaftungsschaden") == null) {
-                                cidsBean.setProperty(
-                                    "fk_bewirtschaftungsschaden",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_BEWIRTSCHAFTUNGSSCHADEN",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
                         case "immission": {
                             if (cidsBean.getProperty("fk_immission") == null) {
                                 cidsBean.setProperty(
@@ -633,9 +622,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         try {
             if (!"altablagerung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_altablagerung", null);
-            }
-            if (!"bewirtschaftungsschaden".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_bewirtschaftungsschaden", null);
             }
             if (!"immission".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_immission", null);
@@ -705,8 +691,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "materialaufbringung");
                     break;
                 }
-                case "bewirtschaftungsschaden": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "bewirtschaftungsschaden");
+                case "sonstige": {
+                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "sonstige");
                     break;
                 }
                 case "ohne_verdacht": {
