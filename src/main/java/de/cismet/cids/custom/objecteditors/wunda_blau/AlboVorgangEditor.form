@@ -5,6 +5,7 @@
     <Container class="javax.swing.JPanel" name="panTitle">
       <Properties>
         <Property name="name" type="java.lang.String" value="panTitle" noResource="true"/>
+        <Property name="opaque" type="boolean" value="false"/>
       </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
@@ -61,6 +62,7 @@
     <Container class="javax.swing.JPanel" name="panFooter">
       <Properties>
         <Property name="name" type="java.lang.String" value="panFooter" noResource="true"/>
+        <Property name="opaque" type="boolean" value="false"/>
       </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
