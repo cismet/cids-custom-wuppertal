@@ -14,7 +14,6 @@ import java.awt.Stroke;
 import javax.swing.JComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
-import de.cismet.cids.custom.utils.AlboProperties;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
@@ -49,8 +48,8 @@ public class AlboFlaecheFeatureRenderer extends CustomCidsFeatureRenderer {
             case "betriebsstandort": {
                 return Color.getColor(ClientAlboProperties.getInstance().getBetriebsstandort_color(), Color.GREEN);
             }
-            case "bewirtschaftungsschaden": {
-                return Color.getColor(ClientAlboProperties.getInstance().getBewirtschaftungsschaden_color(),
+            case "sonstige": {
+                return Color.getColor(ClientAlboProperties.getInstance().getSonstige_color(),
                         Color.MAGENTA);
             }
             case "immission": {

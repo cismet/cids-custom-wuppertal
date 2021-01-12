@@ -743,14 +743,14 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="panBewirtschaftungsschaden">
+        <Container class="javax.swing.JPanel" name="panSonstige">
           <Properties>
-            <Property name="name" type="java.lang.String" value="panBewirtschaftungsschaden" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="panSonstige" noResource="true"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="bewirtschaftungsschaden"/>
+              <CardConstraints cardName="sonstige"/>
             </Constraint>
           </Constraints>
 
@@ -760,7 +760,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;html&gt;&lt;b&gt;Bewirtschaftungsschaden"/>
+                    <TitledBorder title="&lt;html&gt;&lt;b&gt;sonstige stoffliche Bodenver&#xe4;nderung"/>
                   </Border>
                 </Property>
                 <Property name="name" type="java.lang.String" value="jPanel21" noResource="true"/>
@@ -774,16 +774,16 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
-                <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel" name="alboFlaecheBewirtschaftungsschadenPanel1">
+                <Component class="javax.swing.JLabel" name="jLabel55">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="alboFlaecheBewirtschaftungsschadenPanel1" noResource="true"/>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
+                    <Property name="text" type="java.lang.String" value="...."/>
+                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                    <Property name="name" type="java.lang.String" value="jLabel55" noResource="true"/>
                   </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel(isEditable())"/>
-                  </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="1.0" weightY="1.0"/>
+                      <GridBagConstraints gridX="0" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="1.0" weightY="1.0"/>
                     </Constraint>
                   </Constraints>
                 </Component>

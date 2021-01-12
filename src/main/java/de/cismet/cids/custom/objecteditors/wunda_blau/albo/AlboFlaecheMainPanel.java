@@ -137,11 +137,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
-        panBewirtschaftungsschaden = new javax.swing.JPanel();
+        panSonstige = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
-        alboFlaecheBewirtschaftungsschadenPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel(
-                isEditable());
+        jLabel55 = new javax.swing.JLabel();
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
@@ -648,29 +646,34 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         panSpezifisch.add(panImmision, "immissions");
 
-        panBewirtschaftungsschaden.setName("panBewirtschaftungsschaden"); // NOI18N
-        panBewirtschaftungsschaden.setOpaque(false);
-        panBewirtschaftungsschaden.setLayout(new java.awt.GridBagLayout());
+        panSonstige.setName("panSonstige"); // NOI18N
+        panSonstige.setOpaque(false);
+        panSonstige.setLayout(new java.awt.GridBagLayout());
 
-        jPanel21.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Bewirtschaftungsschaden"));
+        jPanel21.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                "<html><b>sonstige stoffliche Bodenveränderung"));
         jPanel21.setName("jPanel21"); // NOI18N
         jPanel21.setOpaque(false);
         jPanel21.setLayout(new java.awt.GridBagLayout());
 
-        alboFlaecheBewirtschaftungsschadenPanel1.setName("alboFlaecheBewirtschaftungsschadenPanel1"); // NOI18N
+        jLabel55.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel55, "....");
+        jLabel55.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel55.setName("jLabel55"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel21.add(alboFlaecheBewirtschaftungsschadenPanel1, gridBagConstraints);
+        jPanel21.add(jLabel55, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panBewirtschaftungsschaden.add(jPanel21, gridBagConstraints);
+        panSonstige.add(jPanel21, gridBagConstraints);
 
         filler35.setName("filler35"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -679,9 +682,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panBewirtschaftungsschaden.add(filler35, gridBagConstraints);
+        panSonstige.add(filler35, gridBagConstraints);
 
-        panSpezifisch.add(panBewirtschaftungsschaden, "bewirtschaftungsschaden");
+        panSpezifisch.add(panSonstige, "sonstige");
 
         panMaterialaufbringung.setName("panMaterialaufbringung"); // NOI18N
         panMaterialaufbringung.setOpaque(false);
@@ -848,8 +851,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheAltablagerungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBeschreibungPanel
         alboFlaecheBeschreibungPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBewirtschaftungsschadenPanel
-        alboFlaecheBewirtschaftungsschadenPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainImmissionPanel alboFlaecheImmisionPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel
         alboFlaecheMaterialaufbringungPanel1;
@@ -875,6 +876,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -898,7 +900,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private org.jdesktop.swingx.JXTable jXTable1;
     private javax.swing.JPanel panAltablagerung;
     private javax.swing.JPanel panBeschreibung;
-    private javax.swing.JPanel panBewirtschaftungsschaden;
     private javax.swing.JPanel panImmision;
     private javax.swing.JPanel panLinks;
     private javax.swing.JPanel panMaterialaufbringung;
@@ -906,6 +907,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel panOrt;
     private javax.swing.JPanel panRechts;
     private javax.swing.JPanel panSchadensfall;
+    private javax.swing.JPanel panSonstige;
     private javax.swing.JPanel panSpezifisch;
     private javax.swing.JPanel panStandort;
     private javax.swing.JPanel panTop;
@@ -1030,8 +1032,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                                                                  : null);
         alboFlaecheMaterialaufbringungPanel1.setCidsBean((cidsBean != null)
                 ? (CidsBean)cidsBean.getProperty("fk_materialaufbringung") : null);
-        alboFlaecheBewirtschaftungsschadenPanel1.setCidsBean((cidsBean != null)
-                ? (CidsBean)cidsBean.getProperty("fk_bewirtschaftungsschaden") : null);
         alboFlaecheAltablagerungPanel1.setCidsBean((cidsBean != null)
                 ? (CidsBean)cidsBean.getProperty("fk_altablagerung") : null);
     }
@@ -1069,7 +1069,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheSchadensfallPanel1.dispose();
         alboFlaecheImmisionPanel1.dispose();
         alboFlaecheMaterialaufbringungPanel1.dispose();
-        alboFlaecheBewirtschaftungsschadenPanel1.dispose();
         alboFlaecheAltablagerungPanel1.dispose();
 
         ((FlaecheVorgangTableModel)jXTable1.getModel()).clear();
@@ -1088,7 +1087,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheSchadensfallPanel1.editorClosed(event);
         alboFlaecheImmisionPanel1.editorClosed(event);
         alboFlaecheMaterialaufbringungPanel1.editorClosed(event);
-        alboFlaecheBewirtschaftungsschadenPanel1.editorClosed(event);
         alboFlaecheAltablagerungPanel1.editorClosed(event);
     }
 
@@ -1101,7 +1099,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     && alboFlaecheSchadensfallPanel1.prepareForSave()
                     && alboFlaecheImmisionPanel1.prepareForSave()
                     && alboFlaecheMaterialaufbringungPanel1.prepareForSave()
-                    && alboFlaecheBewirtschaftungsschadenPanel1.prepareForSave()
                     && alboFlaecheAltablagerungPanel1.prepareForSave();
     }
 
@@ -1114,7 +1111,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheSchadensfallPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheImmisionPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheMaterialaufbringungPanel1.initWithConnectionContext(connectionContext);
-        alboFlaecheBewirtschaftungsschadenPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheAltablagerungPanel1.initWithConnectionContext(connectionContext);
     }
 
