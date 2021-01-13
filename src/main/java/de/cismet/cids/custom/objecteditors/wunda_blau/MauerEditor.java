@@ -183,7 +183,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private de.cismet.cids.editors.DefaultBindableReferenceCombo dcSanierung;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler12;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
@@ -253,6 +252,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     org.jdesktop.swingx.JXHyperlink jXHyperlink6;
     private org.jdesktop.swingx.JXTable jXTable1;
     private javax.swing.JScrollPane jspAllgemeineInfos;
+    private javax.swing.JScrollPane jspAllgemeineInfos1;
     private javax.swing.JLabel lblBauwerksbuchfertigstellung;
     private javax.swing.JLabel lblBesonderheiten;
     private javax.swing.JLabel lblEigentuemer;
@@ -263,6 +263,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblGeom;
     private javax.swing.JLabel lblHeaderAllgemein;
     private javax.swing.JLabel lblHeaderAllgemein1;
+    private javax.swing.JLabel lblHeaderAllgemein2;
     private javax.swing.JLabel lblHoeheMin;
     private javax.swing.JLabel lblImages;
     private javax.swing.JLabel lblInfo;
@@ -286,12 +287,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblStuetzmauer;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUmgebung;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel mauerBauteilZustandKostenPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel mauerBauteilZustandKostenPanel2;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel mauerBauteilZustandKostenPanel3;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel mauerBauteilZustandKostenPanel4;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel mauerBauteilZustandKostenPanel5;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel mauerBauteilZustandKostenPanel7;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel
+        mauerBauteilZustandKostenPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel
+        mauerBauteilZustandKostenPanel2;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel
+        mauerBauteilZustandKostenPanel3;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel
+        mauerBauteilZustandKostenPanel4;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel
+        mauerBauteilZustandKostenPanel5;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel
+        mauerBauteilZustandKostenPanel7;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panLeft;
     private javax.swing.JPanel panRight;
@@ -300,10 +307,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JPanel panZusammenfassungContent;
     private de.cismet.tools.gui.SemiRoundedPanel panZusammenfassungTitle;
     private de.cismet.tools.gui.RoundedPanel pnlAllgemein;
+    private de.cismet.tools.gui.RoundedPanel pnlAllgemein1;
     private javax.swing.JPanel pnlCard1;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderAllgemein;
+    private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderAllgemein1;
     private javax.swing.JPanel pnlHoehe;
     private javax.swing.JPanel pnlLeft;
+    private javax.swing.JPanel pnlLeft1;
     private de.cismet.tools.gui.RoundedPanel pnlMassnahmen;
     private de.cismet.tools.gui.SemiRoundedPanel pnlMassnahmenHeader;
     de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel roundedPanel1;
@@ -508,11 +518,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         lblFiller10 = new javax.swing.JLabel();
         lblSanierung = new javax.swing.JLabel();
         dcSanierung = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        if(editable){
+        if (editable) {
             lblGeom = new javax.swing.JLabel();
         }
-        if (editable){
-
+        if (editable) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         lblFiller8 = new javax.swing.JLabel();
@@ -525,13 +534,17 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel8 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         panZusammenfassung = new de.cismet.tools.gui.RoundedPanel();
         panZusammenfassungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderAllgemein1 = new javax.swing.JLabel();
         panZusammenfassungContent = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         jXHyperlink2 = new org.jdesktop.swingx.JXHyperlink();
         jXHyperlink3 = new org.jdesktop.swingx.JXHyperlink();
@@ -563,52 +576,95 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel6 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         roundedPanel7 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         jPanel17 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel7 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gelände", isEditable());
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        mauerBauteilZustandKostenPanel7 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel(
+                "Gelände oben",
+                isEditable());
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel4 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Geländer", isEditable());
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        mauerBauteilZustandKostenPanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel(
+                "Absturzsicherung",
+                isEditable());
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel10 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel2 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Kopf", isEditable());
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        mauerBauteilZustandKostenPanel2 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel(
+                "Kopf",
+                isEditable());
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel12 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel3 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Ansicht", isEditable());
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        mauerBauteilZustandKostenPanel3 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel(
+                "Ansicht",
+                isEditable());
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel13 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel4 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gründung", isEditable());
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        mauerBauteilZustandKostenPanel4 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel(
+                "Gründung",
+                isEditable());
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel14 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel5 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gelände", isEditable());
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        mauerBauteilZustandKostenPanel5 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel(
+                "Gelände unten",
+                isEditable());
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel18 = new javax.swing.JPanel();
+        pnlAllgemein1 = new de.cismet.tools.gui.RoundedPanel();
+        pnlHeaderAllgemein1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblHeaderAllgemein2 = new javax.swing.JLabel();
+        jspAllgemeineInfos1 = new javax.swing.JScrollPane();
+        pnlLeft1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        webDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(editable, "url_mauern", "bilder", "mauer_bilder", "mauer_nummer", "georeferenz.geo_field", getConnectionContext());
+        webDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(
+                editable,
+                "url_mauern",
+                "bilder",
+                "mauer_bilder",
+                "mauer_nummer",
+                "georeferenz.geo_field",
+                getConnectionContext());
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
 
         panLeft.setOpaque(false);
 
-        lblInfo.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        lblInfo.setFont(new java.awt.Font("DejaVu Sans", 1, 14));                                             // NOI18N
         lblInfo.setForeground(new java.awt.Color(255, 255, 255));
         lblInfo.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblInfo.text")); // NOI18N
         lblInfo.setEnabled(false);
         panLeft.add(lblInfo);
 
-        btnInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-left.png"))); // NOI18N
+        btnInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-left.png")));            // NOI18N
         btnInfo.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnInfo.text")); // NOI18N
         btnInfo.setBorderPainted(false);
         btnInfo.setContentAreaFilled(false);
         btnInfo.setEnabled(false);
         btnInfo.setFocusPainted(false);
         btnInfo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInfoActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnInfoActionPerformed(evt);
+                }
+            });
         panLeft.add(btnInfo);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -618,19 +674,21 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         panRight.setOpaque(false);
 
-        btnImages.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-right.png"))); // NOI18N
+        btnImages.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-right.png")));             // NOI18N
         btnImages.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnImages.text")); // NOI18N
         btnImages.setBorderPainted(false);
         btnImages.setContentAreaFilled(false);
         btnImages.setFocusPainted(false);
         btnImages.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImagesActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnImagesActionPerformed(evt);
+                }
+            });
         panRight.add(btnImages);
 
-        lblImages.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        lblImages.setFont(new java.awt.Font("DejaVu Sans", 1, 14));                                               // NOI18N
         lblImages.setForeground(new java.awt.Color(255, 255, 255));
         lblImages.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblImages.text")); // NOI18N
         panRight.add(lblImages);
@@ -653,17 +711,22 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.weightx = 1.0;
         panTitle.add(lblTitle, gridBagConstraints);
 
-        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/printer.png")));                             // NOI18N
         btnReport.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnReport.text")); // NOI18N
-        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.btnReport.toolTipText")); // NOI18N
+        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.btnReport.toolTipText"));                                                            // NOI18N
         btnReport.setBorderPainted(false);
         btnReport.setContentAreaFilled(false);
         btnReport.setFocusPainted(false);
         btnReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -680,10 +743,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         pnlCard1.setLayout(new java.awt.GridBagLayout());
 
         jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jTabbedPane1StateChanged(evt);
-            }
-        });
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    jTabbedPane1StateChanged(evt);
+                }
+            });
 
         jPanel9.setOpaque(false);
         jPanel9.setLayout(new java.awt.GridBagLayout());
@@ -698,7 +763,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         pnlHeaderAllgemein.setLayout(new java.awt.FlowLayout());
 
         lblHeaderAllgemein.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderAllgemein.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblHeaderAllgemein.text")); // NOI18N
+        lblHeaderAllgemein.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblHeaderAllgemein.text")); // NOI18N
         pnlHeaderAllgemein.add(lblHeaderAllgemein);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -718,7 +785,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         pnlLeft.setPreferredSize(new java.awt.Dimension(500, 850));
         pnlLeft.setLayout(new java.awt.GridBagLayout());
 
-        lblMauerNummer.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblMauerNummer.text")); // NOI18N
+        lblMauerNummer.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblMauerNummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -728,7 +797,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfMauerNummer.setMinimumSize(new java.awt.Dimension(150, 20));
         tfMauerNummer.setPreferredSize(new java.awt.Dimension(150, 20));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mauer_nummer}"), tfMauerNummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mauer_nummer}"),
+                tfMauerNummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -737,7 +811,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(tfMauerNummer, gridBagConstraints);
 
-        lblLagebezeichnung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblLagebezeichnung.text")); // NOI18N
+        lblLagebezeichnung.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblLagebezeichnung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -747,7 +823,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfLagebezeichnung.setMinimumSize(new java.awt.Dimension(100, 20));
         tfLagebezeichnung.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebezeichnung}"), tfLagebezeichnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebezeichnung}"),
+                tfLagebezeichnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -757,7 +838,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(tfLagebezeichnung, gridBagConstraints);
 
-        lblLagebeschreibung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblLagebeschreibung.text")); // NOI18N
+        lblLagebeschreibung.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblLagebeschreibung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -772,7 +855,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         taLagebeschreibung.setMaximumSize(new java.awt.Dimension(500, 34));
         taLagebeschreibung.setMinimumSize(new java.awt.Dimension(500, 34));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebeschreibung}"), taLagebeschreibung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebeschreibung}"),
+                taLagebeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(taLagebeschreibung);
@@ -795,7 +883,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfUmgebung.setMinimumSize(new java.awt.Dimension(100, 20));
         tfUmgebung.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.umgebung}"), tfUmgebung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.umgebung}"),
+                tfUmgebung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -818,7 +911,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         taNeigung.setLineWrap(true);
         taNeigung.setMinimumSize(new java.awt.Dimension(500, 34));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.neigung}"), taNeigung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.neigung}"),
+                taNeigung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane2.setViewportView(taNeigung);
@@ -837,7 +935,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(lblMauertyp, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mauertyp}"), cbMauertyp, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mauertyp}"),
+                cbMauertyp,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -846,14 +949,21 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(cbMauertyp, gridBagConstraints);
 
-        lblStuetzmauer.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblStuetzmauer.text")); // NOI18N
+        lblStuetzmauer.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblStuetzmauer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(lblStuetzmauer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stuetzmauertyp}"), cbStuetzmauertyp, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stuetzmauertyp}"),
+                cbStuetzmauertyp,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -862,14 +972,21 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(cbStuetzmauertyp, gridBagConstraints);
 
-        lblMaterialTyp.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblMaterialTyp.text")); // NOI18N
+        lblMaterialTyp.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblMaterialTyp.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(lblMaterialTyp, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.materialtyp}"), cbMaterialtyp, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.materialtyp}"),
+                cbMaterialtyp,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -878,14 +995,21 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(cbMaterialtyp, gridBagConstraints);
 
-        lblEigentuemer.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblEigentuemer.text")); // NOI18N
+        lblEigentuemer.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblEigentuemer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(lblEigentuemer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer}"), cbEigentuemer, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer}"),
+                cbEigentuemer,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -914,7 +1038,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfHoeheMin.setMinimumSize(new java.awt.Dimension(50, 20));
         tfHoeheMin.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_min}"), tfHoeheMin, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_min}"),
+                tfHoeheMin,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new NumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -934,7 +1063,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfHoeheMax.setMinimumSize(new java.awt.Dimension(50, 20));
         tfHoeheMax.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_max}"), tfHoeheMax, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_max}"),
+                tfHoeheMax,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new NumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -961,7 +1095,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.gridy = 0;
         jPanel3.add(jLabel4, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_ONCE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe}"), jLabel2, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_ONCE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe}"),
+                jLabel2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1002,7 +1141,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblStaerkeUnten.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblStaerkeUnten.text")); // NOI18N
+        lblStaerkeUnten.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblStaerkeUnten.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1012,22 +1153,31 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfStaerke_unten.setMinimumSize(new java.awt.Dimension(50, 20));
         tfStaerke_unten.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.staerke_unten}"), tfStaerke_unten, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.staerke_unten}"),
+                tfStaerke_unten,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new NumberConverter());
         bindingGroup.addBinding(binding);
 
         tfStaerke_unten.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfStaerke_untenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tfStaerke_untenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
         jPanel1.add(tfStaerke_unten, gridBagConstraints);
 
-        lblStaerkeOben.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblStaerkeOben.text")); // NOI18N
+        lblStaerkeOben.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblStaerkeOben.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -1037,7 +1187,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfStaerkeOben.setMinimumSize(new java.awt.Dimension(50, 20));
         tfStaerkeOben.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.staerke_oben}"), tfStaerkeOben, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.staerke_oben}"),
+                tfStaerkeOben,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new NumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -1062,7 +1217,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfLaenge.setMinimumSize(new java.awt.Dimension(100, 20));
         tfLaenge.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laenge}"), tfLaenge, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laenge}"),
+                tfLaenge,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -1072,7 +1232,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(tfLaenge, gridBagConstraints);
 
-        lblBesonderheiten.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblBesonderheiten.text")); // NOI18N
+        lblBesonderheiten.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblBesonderheiten.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -1085,7 +1247,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         taBesonderheiten.setLineWrap(true);
         taBesonderheiten.setMinimumSize(new java.awt.Dimension(500, 34));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.besonderheiten}"), taBesonderheiten, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.besonderheiten}"),
+                taBesonderheiten,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane17.setViewportView(taBesonderheiten);
@@ -1097,7 +1264,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         pnlLeft.add(jScrollPane17, gridBagConstraints);
 
-        lblLastabstand.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblLastabstand.text")); // NOI18N
+        lblLastabstand.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblLastabstand.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1107,7 +1276,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfLastabstand.setMinimumSize(new java.awt.Dimension(100, 20));
         tfLastabstand.setPreferredSize(new java.awt.Dimension(100, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lastabstand}"), tfLastabstand, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lastabstand}"),
+                tfLastabstand,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new NumberConverter());
         bindingGroup.addBinding(binding);
 
@@ -1117,14 +1291,21 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(tfLastabstand, gridBagConstraints);
 
-        lblLastklasse.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblLastklasse.text")); // NOI18N
+        lblLastklasse.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblLastklasse.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(lblLastklasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lastklasse}"), cbLastklasse, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lastklasse}"),
+                cbLastklasse,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1154,7 +1335,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         dcErstePruefung.setMinimumSize(new java.awt.Dimension(124, 20));
         dcErstePruefung.setPreferredSize(new java.awt.Dimension(124, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_erste_pruefung}"), dcErstePruefung, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_erste_pruefung}"),
+                dcErstePruefung,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcErstePruefung.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1176,7 +1362,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         cbArtErstePruefung.setMinimumSize(new java.awt.Dimension(120, 20));
         cbArtErstePruefung.setPreferredSize(new java.awt.Dimension(120, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_erste_pruefung}"), cbArtErstePruefung, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_erste_pruefung}"),
+                cbArtErstePruefung,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1194,7 +1385,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(jPanel2, gridBagConstraints);
 
-        lblLetztePruefung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblLetztePruefung.text")); // NOI18N
+        lblLetztePruefung.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblLetztePruefung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1215,7 +1408,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         dcLetztePruefung.setMinimumSize(new java.awt.Dimension(124, 20));
         dcLetztePruefung.setPreferredSize(new java.awt.Dimension(124, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_letzte_pruefung}"), dcLetztePruefung, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_letzte_pruefung}"),
+                dcLetztePruefung,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcLetztePruefung.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1237,7 +1435,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         cbArtLetztePruefung.setMinimumSize(new java.awt.Dimension(120, 20));
         cbArtLetztePruefung.setPreferredSize(new java.awt.Dimension(120, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_letzte_pruefung}"), cbArtLetztePruefung, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_letzte_pruefung}"),
+                cbArtLetztePruefung,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1255,7 +1458,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(jPanel6, gridBagConstraints);
 
-        lblNaechstePruefung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblNaechstePruefung.text")); // NOI18N
+        lblNaechstePruefung.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblNaechstePruefung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1276,7 +1481,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         dcNaechstePruefung.setMinimumSize(new java.awt.Dimension(124, 20));
         dcNaechstePruefung.setPreferredSize(new java.awt.Dimension(124, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_naechste_pruefung}"), dcNaechstePruefung, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_naechste_pruefung}"),
+                dcNaechstePruefung,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcNaechstePruefung.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -1298,7 +1508,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         cbArtNaechstePruefung1.setMinimumSize(new java.awt.Dimension(120, 20));
         cbArtNaechstePruefung1.setPreferredSize(new java.awt.Dimension(120, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_naechste_pruefung}"), cbArtNaechstePruefung1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_naechste_pruefung}"),
+                cbArtNaechstePruefung1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1316,7 +1531,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(jPanel7, gridBagConstraints);
 
-        lblBauwerksbuchfertigstellung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblBauwerksbuchfertigstellung.text")); // NOI18N
+        lblBauwerksbuchfertigstellung.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblBauwerksbuchfertigstellung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1337,9 +1554,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         dcBauwerksbuchfertigstellung.setMinimumSize(new java.awt.Dimension(124, 20));
         dcBauwerksbuchfertigstellung.setPreferredSize(new java.awt.Dimension(124, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bauwerksbuchfertigstellung}"), dcBauwerksbuchfertigstellung, org.jdesktop.beansbinding.BeanProperty.create("date"));
-        binding.setConverter(dcBauwerksbuchfertigstellung.getConverter()
-        );
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bauwerksbuchfertigstellung}"),
+                dcBauwerksbuchfertigstellung,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(dcBauwerksbuchfertigstellung.getConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1370,7 +1591,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(lblSanierung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sanierung}"), dcSanierung, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sanierung}"),
+                dcSanierung,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1379,10 +1605,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(dcSanierung, gridBagConstraints);
 
-        if(editable){
+        if (editable) {
             lblGeom.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblGeom.text")); // NOI18N
         }
-        if(editable){
+        if (editable) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1390,16 +1616,20 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             pnlLeft.add(lblGeom, gridBagConstraints);
         }
 
-        if (editable){
+        if (editable) {
             cbGeom.setMinimumSize(new java.awt.Dimension(41, 25));
             cbGeom.setPreferredSize(new java.awt.Dimension(41, 25));
 
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"), cbGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (editable){
+        if (editable) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1440,7 +1670,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         pnlMassnahmenHeader.setLayout(new java.awt.FlowLayout());
 
         lblMassnahmenHeader.setForeground(new java.awt.Color(255, 255, 255));
-        lblMassnahmenHeader.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblMassnahmenHeader.text")); // NOI18N
+        lblMassnahmenHeader.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblMassnahmenHeader.text")); // NOI18N
         pnlMassnahmenHeader.add(lblMassnahmenHeader);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1470,12 +1702,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel8.setOpaque(false);
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1483,12 +1718,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel8.add(jButton2, gridBagConstraints);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1528,7 +1766,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         panZusammenfassungTitle.setLayout(new java.awt.FlowLayout());
 
         lblHeaderAllgemein1.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderAllgemein1.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblHeaderAllgemein1.text")); // NOI18N
+        lblHeaderAllgemein1.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblHeaderAllgemein1.text")); // NOI18N
         panZusammenfassungTitle.add(lblHeaderAllgemein1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1553,10 +1793,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jXHyperlink1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jXHyperlink1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlink1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -1570,10 +1812,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jXHyperlink2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jXHyperlink2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jXHyperlink2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlink2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -1588,10 +1832,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jXHyperlink3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jXHyperlink3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jXHyperlink3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlink3ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink3ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -1606,10 +1852,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jXHyperlink4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jXHyperlink4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jXHyperlink4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlink4ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink4ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
@@ -1623,10 +1871,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jXHyperlink5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jXHyperlink5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jXHyperlink5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlink5ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink5ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1641,10 +1891,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jXHyperlink6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jXHyperlink6.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jXHyperlink6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlink6ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jXHyperlink6ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
@@ -1752,7 +2004,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel29.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel29.text")); // NOI18N
-        jLabel29.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel29.toolTipText")); // NOI18N
+        jLabel29.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jLabel29.toolTipText"));                                                           // NOI18N
         jLabel29.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1763,7 +2017,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel30.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel30.text")); // NOI18N
-        jLabel30.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel30.toolTipText")); // NOI18N
+        jLabel30.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jLabel30.toolTipText"));                                                           // NOI18N
         jLabel30.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -1774,7 +2030,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel31.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel31.text")); // NOI18N
-        jLabel31.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel31.toolTipText")); // NOI18N
+        jLabel31.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jLabel31.toolTipText"));                                                           // NOI18N
         jLabel31.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -1785,7 +2043,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel32.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel32.text")); // NOI18N
-        jLabel32.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel32.toolTipText")); // NOI18N
+        jLabel32.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jLabel32.toolTipText"));                                                           // NOI18N
         jLabel32.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -1796,7 +2056,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel33.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel33.text")); // NOI18N
-        jLabel33.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel33.toolTipText")); // NOI18N
+        jLabel33.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jLabel33.toolTipText"));                                                           // NOI18N
         jLabel33.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1807,7 +2069,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel34.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel34.text")); // NOI18N
-        jLabel34.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel34.toolTipText")); // NOI18N
+        jLabel34.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jLabel34.toolTipText"));                                                           // NOI18N
         jLabel34.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -1818,7 +2082,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jLabel35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel35.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel35.text")); // NOI18N
-        jLabel35.setToolTipText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel35.toolTipText")); // NOI18N
+        jLabel35.setToolTipText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jLabel35.toolTipText"));                                                           // NOI18N
         jLabel35.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -1830,16 +2096,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel1.setMaximumSize(new java.awt.Dimension(32, 32));
         roundedPanel1.setMinimumSize(new java.awt.Dimension(32, 32));
 
-        javax.swing.GroupLayout roundedPanel1Layout = new javax.swing.GroupLayout(roundedPanel1);
+        final javax.swing.GroupLayout roundedPanel1Layout = new javax.swing.GroupLayout(roundedPanel1);
         roundedPanel1.setLayout(roundedPanel1Layout);
         roundedPanel1Layout.setHorizontalGroup(
-            roundedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
         roundedPanel1Layout.setVerticalGroup(
-            roundedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1853,16 +2121,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel2.setMaximumSize(new java.awt.Dimension(32, 32));
         roundedPanel2.setMinimumSize(new java.awt.Dimension(32, 32));
 
-        javax.swing.GroupLayout roundedPanel2Layout = new javax.swing.GroupLayout(roundedPanel2);
+        final javax.swing.GroupLayout roundedPanel2Layout = new javax.swing.GroupLayout(roundedPanel2);
         roundedPanel2.setLayout(roundedPanel2Layout);
         roundedPanel2Layout.setHorizontalGroup(
-            roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
         roundedPanel2Layout.setVerticalGroup(
-            roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -1876,16 +2146,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel3.setMaximumSize(new java.awt.Dimension(32, 32));
         roundedPanel3.setMinimumSize(new java.awt.Dimension(32, 32));
 
-        javax.swing.GroupLayout roundedPanel3Layout = new javax.swing.GroupLayout(roundedPanel3);
+        final javax.swing.GroupLayout roundedPanel3Layout = new javax.swing.GroupLayout(roundedPanel3);
         roundedPanel3.setLayout(roundedPanel3Layout);
         roundedPanel3Layout.setHorizontalGroup(
-            roundedPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
         roundedPanel3Layout.setVerticalGroup(
-            roundedPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -1899,16 +2171,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel4.setMaximumSize(new java.awt.Dimension(32, 32));
         roundedPanel4.setMinimumSize(new java.awt.Dimension(32, 32));
 
-        javax.swing.GroupLayout roundedPanel4Layout = new javax.swing.GroupLayout(roundedPanel4);
+        final javax.swing.GroupLayout roundedPanel4Layout = new javax.swing.GroupLayout(roundedPanel4);
         roundedPanel4.setLayout(roundedPanel4Layout);
         roundedPanel4Layout.setHorizontalGroup(
-            roundedPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
         roundedPanel4Layout.setVerticalGroup(
-            roundedPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -1922,16 +2196,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel5.setMaximumSize(new java.awt.Dimension(32, 32));
         roundedPanel5.setMinimumSize(new java.awt.Dimension(32, 32));
 
-        javax.swing.GroupLayout roundedPanel5Layout = new javax.swing.GroupLayout(roundedPanel5);
+        final javax.swing.GroupLayout roundedPanel5Layout = new javax.swing.GroupLayout(roundedPanel5);
         roundedPanel5.setLayout(roundedPanel5Layout);
         roundedPanel5Layout.setHorizontalGroup(
-            roundedPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
         roundedPanel5Layout.setVerticalGroup(
-            roundedPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1945,16 +2221,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel6.setMaximumSize(new java.awt.Dimension(32, 32));
         roundedPanel6.setMinimumSize(new java.awt.Dimension(32, 32));
 
-        javax.swing.GroupLayout roundedPanel6Layout = new javax.swing.GroupLayout(roundedPanel6);
+        final javax.swing.GroupLayout roundedPanel6Layout = new javax.swing.GroupLayout(roundedPanel6);
         roundedPanel6.setLayout(roundedPanel6Layout);
         roundedPanel6Layout.setHorizontalGroup(
-            roundedPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
         roundedPanel6Layout.setVerticalGroup(
-            roundedPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -1968,16 +2246,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel7.setMaximumSize(new java.awt.Dimension(32, 32));
         roundedPanel7.setMinimumSize(new java.awt.Dimension(32, 32));
 
-        javax.swing.GroupLayout roundedPanel7Layout = new javax.swing.GroupLayout(roundedPanel7);
+        final javax.swing.GroupLayout roundedPanel7Layout = new javax.swing.GroupLayout(roundedPanel7);
         roundedPanel7.setLayout(roundedPanel7Layout);
         roundedPanel7Layout.setHorizontalGroup(
-            roundedPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
         roundedPanel7Layout.setVerticalGroup(
-            roundedPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+            roundedPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                32,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -2015,7 +2295,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel17.setOpaque(false);
         jPanel17.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gelaende_oben}"), mauerBauteilZustandKostenPanel7, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gelaende_oben}"),
+                mauerBauteilZustandKostenPanel7,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2036,7 +2321,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gelaender}"), mauerBauteilZustandKostenPanel1, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gelaender}"),
+                mauerBauteilZustandKostenPanel1,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2052,12 +2342,20 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(filler6, gridBagConstraints);
 
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
+        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.jPanel4.TabConstraints.tabTitle"),
+            jPanel4); // NOI18N
 
         jPanel10.setOpaque(false);
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_kopf}"), mauerBauteilZustandKostenPanel2, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_kopf}"),
+                mauerBauteilZustandKostenPanel2,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2078,7 +2376,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel12.setOpaque(false);
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_ansicht}"), mauerBauteilZustandKostenPanel3, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_ansicht}"),
+                mauerBauteilZustandKostenPanel3,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2099,7 +2402,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel13.setOpaque(false);
         jPanel13.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gruendung}"), mauerBauteilZustandKostenPanel4, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gruendung}"),
+                mauerBauteilZustandKostenPanel4,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2120,7 +2428,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel14.setOpaque(false);
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gelaende}"), mauerBauteilZustandKostenPanel5, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zustand_gelaende}"),
+                mauerBauteilZustandKostenPanel5,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2141,16 +2454,50 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel18.setOpaque(false);
         jPanel18.setLayout(new java.awt.GridBagLayout());
 
+        pnlAllgemein1.setLayout(new java.awt.GridBagLayout());
+
+        pnlHeaderAllgemein1.setBackground(new java.awt.Color(51, 51, 51));
+        pnlHeaderAllgemein1.setMinimumSize(new java.awt.Dimension(109, 24));
+        pnlHeaderAllgemein1.setPreferredSize(new java.awt.Dimension(109, 24));
+        pnlHeaderAllgemein1.setLayout(new java.awt.FlowLayout());
+
+        lblHeaderAllgemein2.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeaderAllgemein2.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblHeaderAllgemein2.text")); // NOI18N
+        pnlHeaderAllgemein1.add(lblHeaderAllgemein2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        pnlAllgemein1.add(pnlHeaderAllgemein1, gridBagConstraints);
+
+        jspAllgemeineInfos1.setBorder(null);
+        jspAllgemeineInfos1.setMinimumSize(new java.awt.Dimension(500, 520));
+        jspAllgemeineInfos1.setOpaque(false);
+
+        pnlLeft1.setOpaque(false);
+        pnlLeft1.setLayout(new java.awt.GridBagLayout());
+
         jLabel7.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 5);
-        jPanel18.add(jLabel7, gridBagConstraints);
+        pnlLeft1.add(jLabel7, gridBagConstraints);
 
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
+        jTextArea1.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anlieger}"), jTextArea1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anlieger}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane3.setViewportView(jTextArea1);
@@ -2158,13 +2505,27 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 10);
-        jPanel18.add(jScrollPane3, gridBagConstraints);
+        pnlLeft1.add(jScrollPane3, gridBagConstraints);
+
+        jspAllgemeineInfos1.setViewportView(pnlLeft1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        pnlAllgemein1.add(jspAllgemeineInfos1, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel18.add(filler12, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel18.add(pnlAllgemein1, gridBagConstraints);
 
         jTabbedPane1.addTab("Anlieger", jPanel18);
 
@@ -2177,132 +2538,137 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         add(pnlCard1, "card1");
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"), webDavPicturePanel1, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
+                webDavPicturePanel1,
+                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         add(webDavPicturePanel1, "card2");
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }//GEN-LAST:event_btnImagesActionPerformed
+    }                                                                             //GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
         cardLayout.show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }//GEN-LAST:event_btnInfoActionPerformed
+    }                                                                           //GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         final Collection<CidsBean> c = new LinkedList<>();
         c.add(cidsBean);
         MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this, getConnectionContext());
-    }//GEN-LAST:event_btnReportActionPerformed
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTabbedPane1StateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+    private void jTabbedPane1StateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jTabbedPane1StateChanged
         overview.recalculateAll();
-    }//GEN-LAST:event_jTabbedPane1StateChanged
+    }                                                                                //GEN-LAST:event_jTabbedPane1StateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink6ActionPerformed
+    private void jXHyperlink6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink6ActionPerformed
         jTabbedPane1.setSelectedIndex(6);
-    }//GEN-LAST:event_jXHyperlink6ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink5ActionPerformed
-        jTabbedPane1.setSelectedIndex(5);
-    }//GEN-LAST:event_jXHyperlink5ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jXHyperlink4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink4ActionPerformed
-        jTabbedPane1.setSelectedIndex(4);
-    }//GEN-LAST:event_jXHyperlink4ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink3ActionPerformed
-        jTabbedPane1.setSelectedIndex(3);
-    }//GEN-LAST:event_jXHyperlink3ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
-        jTabbedPane1.setSelectedIndex(2);
-    }//GEN-LAST:event_jXHyperlink2ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jXHyperlink5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink5ActionPerformed
         jTabbedPane1.setSelectedIndex(1);
-    }//GEN-LAST:event_jXHyperlink1ActionPerformed
+    }                                                                                //GEN-LAST:event_jXHyperlink5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jXHyperlink4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink4ActionPerformed
+        jTabbedPane1.setSelectedIndex(5);
+    }                                                                                //GEN-LAST:event_jXHyperlink4ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink3ActionPerformed
+        jTabbedPane1.setSelectedIndex(4);
+    }                                                                                //GEN-LAST:event_jXHyperlink3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
+        jTabbedPane1.setSelectedIndex(3);
+    }                                                                                //GEN-LAST:event_jXHyperlink2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+        jTabbedPane1.setSelectedIndex(2);
+    }                                                                                //GEN-LAST:event_jXHyperlink1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final CidsBean massnahmeBean = ((MassnahmenTableModel)jXTable1.getModel()).getCidsBean(jXTable1.getRowSorter()
                         .convertRowIndexToModel(
                             jXTable1.getSelectedRow()));
         ((MassnahmenTableModel)jXTable1.getModel()).remove(massnahmeBean);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         try {
             final CidsBean massnahmeBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
@@ -2313,16 +2679,16 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStaerke_untenActionPerformed
+    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tfStaerke_untenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfStaerke_untenActionPerformed
+    } //GEN-LAST:event_tfStaerke_untenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -2795,8 +3161,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
          * DOCUMENT ME!
          */
         public void refreshView() {
-            refreshZustand((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt")
-                                                   : null,
+            refreshZustand((getCidsBean() != null)
+                    ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt") : null,
                 jLabel27,
                 roundedPanel5);
             refreshZustand((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.gesamt")
@@ -2820,8 +3186,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 roundedPanel6);
             refreshZustand(getZustandGesamt(), jLabel28, roundedPanel7);
 
-            refreshKosten((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.kosten")
-                                                  : null,
+            refreshKosten((getCidsBean() != null) ? (Double)getCidsBean().getProperty(
+                    "fk_zustand_gelaende_oben.kosten") : null,
                 jLabel33);
             refreshKosten((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.kosten")
                                                   : null,
@@ -2845,7 +3211,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
          */
         public void recalculateGesamt() {
             final Double[] kostenAll = new Double[] {
-                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.kosten") : null,
+                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.kosten")
+                                            : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.kosten") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_kopf.kosten") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_ansicht.kosten") : null,
@@ -2853,7 +3220,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende.kosten") : null
                 };
             final Double[] zustandAll = new Double[] {
-                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt") : null,
+                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt")
+                                            : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.gesamt") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_kopf.gesamt") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_ansicht.gesamt") : null,
