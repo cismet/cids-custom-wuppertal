@@ -133,7 +133,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panCardMassnahmen = new JPanel();
         panMassnahmen = new AlboFlaecheMassnahmenPanel(isEditable());
 
-        final FormListener formListener = new FormListener();
+        FormListener formListener = new FormListener();
 
         panTitle.setName("panTitle"); // NOI18N
         panTitle.setOpaque(false);
@@ -142,13 +142,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         lblTitle.setForeground(new Color(255, 255, 255));
         lblTitle.setName("lblTitle"); // NOI18N
 
-        final Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create(
-                    "<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: ${cidsBean.erhebungsnummer}"),
-                lblTitle,
-                BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: ${cidsBean.erhebungsnummer}"), lblTitle, BeanProperty.create("text"));
         binding.setSourceNullValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: -");
         binding.setSourceUnreadableValue("<html><body><h2><nobr>Altlastenkataster - Erhebungsnummer: <i>[Fehler]");
         bindingGroup.addBinding(binding);
@@ -156,40 +150,33 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
-        jToggleButton1.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock.png")));      // NOI18N
+        jToggleButton1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock.png"))); // NOI18N
         jToggleButton1.setBorderPainted(false);
         jToggleButton1.setContentAreaFilled(false);
         jToggleButton1.setFocusPainted(false);
-        jToggleButton1.setName("jToggleButton1");                                                          // NOI18N
-        jToggleButton1.setRolloverIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_edit.png"))); // NOI18N
-        jToggleButton1.setRolloverSelectedIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_go.png")));   // NOI18N
-        jToggleButton1.setSelectedIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_open.png"))); // NOI18N
+        jToggleButton1.setName("jToggleButton1"); // NOI18N
+        jToggleButton1.setRolloverIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_edit.png"))); // NOI18N
+        jToggleButton1.setRolloverSelectedIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_go.png"))); // NOI18N
+        jToggleButton1.setSelectedIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_open.png"))); // NOI18N
         jToggleButton1.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(jToggleButton1, gridBagConstraints);
         jToggleButton1.setVisible(isEditable());
 
-        btnReport1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/table_export.png")));    // NOI18N
+        btnReport1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/table_export.png"))); // NOI18N
         btnReport1.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
         btnReport1.setBorderPainted(false);
         btnReport1.setContentAreaFilled(false);
         btnReport1.setFocusPainted(false);
-        btnReport1.setName("btnReport1");                                                                              // NOI18N
+        btnReport1.setName("btnReport1"); // NOI18N
         btnReport1.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(btnReport1, gridBagConstraints);
 
         panFooter.setName("panFooter"); // NOI18N
@@ -210,12 +197,10 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         btnBack.setFocusPainted(false);
         btnBack.setMaximumSize(new Dimension(30, 30));
         btnBack.setMinimumSize(new Dimension(30, 30));
-        btnBack.setName("btnBack");                                                                                     // NOI18N
+        btnBack.setName("btnBack"); // NOI18N
         btnBack.setPreferredSize(new Dimension(30, 30));
-        btnBack.setPressedIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png")));               // NOI18N
-        btnBack.setRolloverIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));                   // NOI18N
+        btnBack.setPressedIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
         btnBack.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -254,15 +239,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panFooter.add(panButtons, gridBagConstraints);
 
-        btnForward.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
         btnForward.setBorder(null);
         btnForward.setBorderPainted(false);
         btnForward.setContentAreaFilled(false);
         btnForward.setFocusPainted(false);
         btnForward.setMaximumSize(new Dimension(30, 30));
         btnForward.setMinimumSize(new Dimension(30, 30));
-        btnForward.setName("btnForward");                                                          // NOI18N
+        btnForward.setName("btnForward"); // NOI18N
         btnForward.setPreferredSize(new Dimension(30, 30));
         btnForward.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -332,59 +316,49 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         bindingGroup.bind();
     }
 
-    /**
-     * Code for dispatching events from components to event handlers.
-     *
-     * @version  $Revision$, $Date$
-     */
+    // Code for dispatching events from components to event handlers.
+
     private class FormListener implements ActionListener, MouseListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
+        FormListener() {}
+        public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == jToggleButton1) {
                 AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
-            } else if (evt.getSource() == btnReport1) {
+            }
+            else if (evt.getSource() == btnReport1) {
                 AlboFlaecheEditor.this.btnReport1ActionPerformed(evt);
-            } else if (evt.getSource() == btnBack) {
+            }
+            else if (evt.getSource() == btnBack) {
                 AlboFlaecheEditor.this.btnBackActionPerformed(evt);
-            } else if (evt.getSource() == btnForward) {
+            }
+            else if (evt.getSource() == btnForward) {
                 AlboFlaecheEditor.this.btnForwardActionPerformed(evt);
             }
         }
 
-        @Override
-        public void mouseClicked(final MouseEvent evt) {
+        public void mouseClicked(MouseEvent evt) {
             if (evt.getSource() == jLabel1) {
                 AlboFlaecheEditor.this.jLabel1MouseClicked(evt);
-            } else if (evt.getSource() == jLabel2) {
+            }
+            else if (evt.getSource() == jLabel2) {
                 AlboFlaecheEditor.this.jLabel2MouseClicked(evt);
-            } else if (evt.getSource() == jLabel3) {
+            }
+            else if (evt.getSource() == jLabel3) {
                 AlboFlaecheEditor.this.jLabel3MouseClicked(evt);
             }
         }
 
-        @Override
-        public void mouseEntered(final MouseEvent evt) {
+        public void mouseEntered(MouseEvent evt) {
         }
 
-        @Override
-        public void mouseExited(final MouseEvent evt) {
+        public void mouseExited(MouseEvent evt) {
         }
 
-        @Override
-        public void mousePressed(final MouseEvent evt) {
+        public void mousePressed(MouseEvent evt) {
         }
 
-        @Override
-        public void mouseReleased(final MouseEvent evt) {
+        public void mouseReleased(MouseEvent evt) {
         }
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     //~ Instance fields --------------------------------------------------------
 
@@ -524,68 +498,68 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         cardLayout.previous(panMainCard);
         updateFooterControls();
-    }                                                            //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.next(panMainCard);
         updateFooterControls();
-    }                                                               //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jLabel1MouseClicked(final MouseEvent evt) { //GEN-FIRST:event_jLabel1MouseClicked
+    private void jLabel1MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         cardLayout.show(panMainCard, "flaeche");
         updateFooterControls();
-    }                                                        //GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_jLabel1MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jLabel2MouseClicked(final MouseEvent evt) { //GEN-FIRST:event_jLabel2MouseClicked
+    private void jLabel2MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         cardLayout.show(panMainCard, "arbeitsstand");
         updateFooterControls();
-    }                                                        //GEN-LAST:event_jLabel2MouseClicked
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jLabel3MouseClicked(final MouseEvent evt) { //GEN-FIRST:event_jLabel3MouseClicked
+    private void jLabel3MouseClicked(final MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         cardLayout.show(panMainCard, "massnahmen");
         updateFooterControls();
-    }                                                        //GEN-LAST:event_jLabel3MouseClicked
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         if (isEditable()) {
             panMain.setUnlocked(jToggleButton1.isSelected());
         }
-    }                                                                   //GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReport1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReport1ActionPerformed
+    private void btnReport1ActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnReport1ActionPerformed
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         CismapBroker.getInstance().getMappingComponent())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
@@ -602,7 +576,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                             ".csv",
                             getConnectionContext()));
         }
-    } //GEN-LAST:event_btnReport1ActionPerformed
+    }//GEN-LAST:event_btnReport1ActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -183,7 +183,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private de.cismet.cids.editors.DefaultBindableReferenceCombo dcSanierung;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler12;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
@@ -253,6 +252,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     org.jdesktop.swingx.JXHyperlink jXHyperlink6;
     private org.jdesktop.swingx.JXTable jXTable1;
     private javax.swing.JScrollPane jspAllgemeineInfos;
+    private javax.swing.JScrollPane jspAllgemeineInfos1;
     private javax.swing.JLabel lblBauwerksbuchfertigstellung;
     private javax.swing.JLabel lblBesonderheiten;
     private javax.swing.JLabel lblEigentuemer;
@@ -263,6 +263,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblGeom;
     private javax.swing.JLabel lblHeaderAllgemein;
     private javax.swing.JLabel lblHeaderAllgemein1;
+    private javax.swing.JLabel lblHeaderAllgemein2;
     private javax.swing.JLabel lblHoeheMin;
     private javax.swing.JLabel lblImages;
     private javax.swing.JLabel lblInfo;
@@ -300,10 +301,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JPanel panZusammenfassungContent;
     private de.cismet.tools.gui.SemiRoundedPanel panZusammenfassungTitle;
     private de.cismet.tools.gui.RoundedPanel pnlAllgemein;
+    private de.cismet.tools.gui.RoundedPanel pnlAllgemein1;
     private javax.swing.JPanel pnlCard1;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderAllgemein;
+    private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderAllgemein1;
     private javax.swing.JPanel pnlHoehe;
     private javax.swing.JPanel pnlLeft;
+    private javax.swing.JPanel pnlLeft1;
     private de.cismet.tools.gui.RoundedPanel pnlMassnahmen;
     private de.cismet.tools.gui.SemiRoundedPanel pnlMassnahmenHeader;
     de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel roundedPanel1;
@@ -563,10 +567,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel6 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         roundedPanel7 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         jPanel17 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel7 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gelände", isEditable());
+        mauerBauteilZustandKostenPanel7 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gelände oben", isEditable());
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jPanel4 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Geländer", isEditable());
+        mauerBauteilZustandKostenPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Absturzsicherung", isEditable());
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jPanel10 = new javax.swing.JPanel();
         mauerBauteilZustandKostenPanel2 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Kopf", isEditable());
@@ -578,13 +582,17 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         mauerBauteilZustandKostenPanel4 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gründung", isEditable());
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jPanel14 = new javax.swing.JPanel();
-        mauerBauteilZustandKostenPanel5 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gelände", isEditable());
+        mauerBauteilZustandKostenPanel5 = new de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel("Gelände unten", isEditable());
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jPanel18 = new javax.swing.JPanel();
+        pnlAllgemein1 = new de.cismet.tools.gui.RoundedPanel();
+        pnlHeaderAllgemein1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblHeaderAllgemein2 = new javax.swing.JLabel();
+        jspAllgemeineInfos1 = new javax.swing.JScrollPane();
+        pnlLeft1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         webDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(editable, "url_mauern", "bilder", "mauer_bilder", "mauer_nummer", "georeferenz.geo_field", getConnectionContext());
 
         panFooter.setOpaque(false);
@@ -2141,14 +2149,41 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jPanel18.setOpaque(false);
         jPanel18.setLayout(new java.awt.GridBagLayout());
 
+        pnlAllgemein1.setLayout(new java.awt.GridBagLayout());
+
+        pnlHeaderAllgemein1.setBackground(new java.awt.Color(51, 51, 51));
+        pnlHeaderAllgemein1.setMinimumSize(new java.awt.Dimension(109, 24));
+        pnlHeaderAllgemein1.setPreferredSize(new java.awt.Dimension(109, 24));
+        pnlHeaderAllgemein1.setLayout(new java.awt.FlowLayout());
+
+        lblHeaderAllgemein2.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeaderAllgemein2.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblHeaderAllgemein2.text")); // NOI18N
+        pnlHeaderAllgemein1.add(lblHeaderAllgemein2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        pnlAllgemein1.add(pnlHeaderAllgemein1, gridBagConstraints);
+
+        jspAllgemeineInfos1.setBorder(null);
+        jspAllgemeineInfos1.setMinimumSize(new java.awt.Dimension(500, 520));
+        jspAllgemeineInfos1.setOpaque(false);
+
+        pnlLeft1.setOpaque(false);
+        pnlLeft1.setLayout(new java.awt.GridBagLayout());
+
         jLabel7.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 5);
-        jPanel18.add(jLabel7, gridBagConstraints);
+        pnlLeft1.add(jLabel7, gridBagConstraints);
 
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
+        jTextArea1.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anlieger}"), jTextArea1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -2158,13 +2193,27 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 10);
-        jPanel18.add(jScrollPane3, gridBagConstraints);
+        pnlLeft1.add(jScrollPane3, gridBagConstraints);
+
+        jspAllgemeineInfos1.setViewportView(pnlLeft1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        pnlAllgemein1.add(jspAllgemeineInfos1, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel18.add(filler12, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel18.add(pnlAllgemein1, gridBagConstraints);
 
         jTabbedPane1.addTab("Anlieger", jPanel18);
 
@@ -2246,7 +2295,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink5ActionPerformed
-        jTabbedPane1.setSelectedIndex(5);
+        jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_jXHyperlink5ActionPerformed
 
     /**
@@ -2255,7 +2304,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink4ActionPerformed
-        jTabbedPane1.setSelectedIndex(4);
+        jTabbedPane1.setSelectedIndex(5);
     }//GEN-LAST:event_jXHyperlink4ActionPerformed
 
     /**
@@ -2264,7 +2313,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink3ActionPerformed
-        jTabbedPane1.setSelectedIndex(3);
+        jTabbedPane1.setSelectedIndex(4);
     }//GEN-LAST:event_jXHyperlink3ActionPerformed
 
     /**
@@ -2273,7 +2322,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink2ActionPerformed
-        jTabbedPane1.setSelectedIndex(2);
+        jTabbedPane1.setSelectedIndex(3);
     }//GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
@@ -2282,7 +2331,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
-        jTabbedPane1.setSelectedIndex(1);
+        jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
     /**
@@ -2795,8 +2844,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
          * DOCUMENT ME!
          */
         public void refreshView() {
-            refreshZustand((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt")
-                                                   : null,
+            refreshZustand((getCidsBean() != null)
+                    ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt") : null,
                 jLabel27,
                 roundedPanel5);
             refreshZustand((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.gesamt")
@@ -2820,8 +2869,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 roundedPanel6);
             refreshZustand(getZustandGesamt(), jLabel28, roundedPanel7);
 
-            refreshKosten((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.kosten")
-                                                  : null,
+            refreshKosten((getCidsBean() != null) ? (Double)getCidsBean().getProperty(
+                    "fk_zustand_gelaende_oben.kosten") : null,
                 jLabel33);
             refreshKosten((getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.kosten")
                                                   : null,
@@ -2845,7 +2894,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
          */
         public void recalculateGesamt() {
             final Double[] kostenAll = new Double[] {
-                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.kosten") : null,
+                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.kosten")
+                                            : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.kosten") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_kopf.kosten") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_ansicht.kosten") : null,
@@ -2853,7 +2903,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende.kosten") : null
                 };
             final Double[] zustandAll = new Double[] {
-                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt") : null,
+                    (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaende_oben.gesamt")
+                                            : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_gelaender.gesamt") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_kopf.gesamt") : null,
                     (getCidsBean() != null) ? (Double)getCidsBean().getProperty("fk_zustand_ansicht.gesamt") : null,
