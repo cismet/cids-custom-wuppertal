@@ -181,17 +181,23 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JList<CidsBean> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
@@ -265,15 +271,21 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jCheckBox102 = new javax.swing.JCheckBox();
         jCheckBox103 = new javax.swing.JCheckBox();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jPanel6 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
+        jLabel4 = new javax.swing.JLabel();
         jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
         jLabel17 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
+        jPanel13 = new javax.swing.JPanel();
         jRadioButton2 = new javax.swing.JRadioButton();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
         jRadioButton3 = new javax.swing.JRadioButton();
+        jLabel7 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -340,7 +352,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
         btnReport.setIcon(new javax.swing.ImageIcon(
@@ -364,7 +375,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panTitle.add(btnReport, gridBagConstraints);
 
         panFooter.setName("panFooter"); // NOI18N
@@ -503,8 +513,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel2.add(jPanel3, gridBagConstraints);
 
+        jPanel6.setName("jPanel6"); // NOI18N
+        jPanel6.setOpaque(false);
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
         buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("Straße:");
         jRadioButton1.setContentAreaFilled(false);
         jRadioButton1.setName("jRadioButton1"); // NOI18N
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -517,8 +530,20 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel6.add(jRadioButton1, gridBagConstraints);
+
+        jLabel4.setText("Straße:");
+        jLabel4.setName("jLabel4"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel6.add(jLabel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jRadioButton1, gridBagConstraints);
+        jPanel2.add(jPanel6, gridBagConstraints);
 
         jComboBox4.setName("jComboBox4"); // NOI18N
 
@@ -563,8 +588,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel2.add(jTextField5, gridBagConstraints);
 
+        jPanel13.setName("jPanel13"); // NOI18N
+        jPanel13.setOpaque(false);
+        jPanel13.setLayout(new java.awt.GridBagLayout());
+
         buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Lage aus BPlan ersichtlich");
         jRadioButton2.setContentAreaFilled(false);
         jRadioButton2.setName("jRadioButton2"); // NOI18N
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -576,13 +604,29 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel13.add(jRadioButton2, gridBagConstraints);
+
+        jLabel6.setText("Lage aus BPlan ersichtlich");
+        jLabel6.setName("jLabel6"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel13.add(jLabel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jRadioButton2, gridBagConstraints);
+        jPanel2.add(jPanel13, gridBagConstraints);
+
+        jPanel14.setName("jPanel14"); // NOI18N
+        jPanel14.setOpaque(false);
+        jPanel14.setLayout(new java.awt.GridBagLayout());
 
         buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setText("Sonstige");
         jRadioButton3.setContentAreaFilled(false);
         jRadioButton3.setName("jRadioButton3"); // NOI18N
         jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -593,12 +637,27 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel14.add(jRadioButton3, gridBagConstraints);
+
+        jLabel7.setText("Sonstige");
+        jLabel7.setName("jLabel7"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel14.add(jLabel7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel2.add(jRadioButton3, gridBagConstraints);
+        jPanel2.add(jPanel14, gridBagConstraints);
 
         jLabel5.setText("Bemerkung:"); // NOI18N
         jLabel5.setName("jLabel5");    // NOI18N
