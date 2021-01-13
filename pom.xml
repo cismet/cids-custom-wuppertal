@@ -461,19 +461,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.4</version>
-            <scope>compile</scope>
-            <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>9.1-903.jdbc4</version>
