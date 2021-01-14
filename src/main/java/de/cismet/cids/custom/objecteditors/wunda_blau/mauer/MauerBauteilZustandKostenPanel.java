@@ -30,6 +30,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -140,6 +142,8 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
             }
         };
 
+    private final MauerEditor mauerEditor;
+
     private final NumberFormatter nf = new NumberFormatter(new DecimalFormat("#0"));
 
     private final String bauteilName;
@@ -167,36 +171,45 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
      * Creates a new MauerBauteilZustandKostenPanel object.
      */
     public MauerBauteilZustandKostenPanel() {
-        this(null, false, false);
+        this(null, null, false, false);
     }
 
     /**
      * Creates a new MauerBauteilZustandKostenPanel object.
      *
+     * @param  mauerEditor  DOCUMENT ME!
      * @param  bauteilName  DOCUMENT ME!
      */
-    public MauerBauteilZustandKostenPanel(final String bauteilName) {
-        this(bauteilName, false, false);
+    public MauerBauteilZustandKostenPanel(final MauerEditor mauerEditor, final String bauteilName) {
+        this(mauerEditor, bauteilName, false, false);
     }
 
     /**
      * Creates a new MauerBauteilZustandKostenPanel object.
      *
+     * @param  mauerEditor  DOCUMENT ME!
      * @param  bauteilName  DOCUMENT ME!
      * @param  editable     DOCUMENT ME!
      */
-    public MauerBauteilZustandKostenPanel(final String bauteilName, final boolean editable) {
-        this(bauteilName, editable, false);
+    public MauerBauteilZustandKostenPanel(final MauerEditor mauerEditor,
+            final String bauteilName,
+            final boolean editable) {
+        this(mauerEditor, bauteilName, editable, false);
     }
 
     /**
      * Creates new form MauerBauteilZustandKostenPanel.
      *
+     * @param  mauerEditor  DOCUMENT ME!
      * @param  bauteilName  DOCUMENT ME!
      * @param  editable     DOCUMENT ME!
      * @param  manual       DOCUMENT ME!
      */
-    public MauerBauteilZustandKostenPanel(final String bauteilName, final boolean editable, final boolean manual) {
+    public MauerBauteilZustandKostenPanel(final MauerEditor mauerEditor,
+            final String bauteilName,
+            final boolean editable,
+            final boolean manual) {
+        this.mauerEditor = mauerEditor;
         this.bauteilName = bauteilName;
         this.editable = editable;
         this.manual = manual;
@@ -812,6 +825,7 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
                         } else {
                             cidsBean.setProperty("gesamt", null);
                         }
+                        mauerEditor.recalculateOverview();
                     } catch (final Exception ex) {
                         LOG.warn("Zustand konnte nicht berechnet werden.", ex);
                     }
