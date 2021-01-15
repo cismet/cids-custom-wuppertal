@@ -45,6 +45,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
@@ -56,6 +57,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSe
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultBindableComboboxCellEditor;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
@@ -157,6 +159,9 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             StrAdrStrasseLightweightSearch.Subject.NAME,
             STRASSENNAME_TOSTRING_TEMPLATE,
             STRASSENNAME_TOSTRING_FIELDS);
+
+    private TableCellEditor ceBearbeiter;
+    private TableCellEditor ceGeschaeft;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton btnReport;
@@ -322,7 +327,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 new java.awt.Dimension(0, 32767));
         jPanel10 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jXTable2 = new org.jdesktop.swingx.JXTable();
+        jXTable2 = new BearbeitungTable();
         jPanel12 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -537,6 +542,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         jPanel6.add(jLabel4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -613,6 +619,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         jPanel13.add(jLabel6, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -649,6 +656,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         jPanel14.add(jLabel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1120,7 +1128,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         try {
             final CidsBean bearbeitungBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
-                    "albo_vorgang_bearbeitung",
+                    "albo_bearbeitung",
                     getConnectionContext());
             ((VorgangBearbeitungTableModel)jXTable2.getModel()).add(bearbeitungBean);
         } catch (final Exception ex) {
@@ -1343,6 +1351,24 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         if (!isEditable()) {
             RendererTools.makeReadOnly(jXTable2);
         }
+
+        try {
+            ceBearbeiter = new DefaultBindableComboboxCellEditor(CidsBean.getMetaClassFromTableName(
+                        "WUNDA_BLAU",
+                        "ALBO_BEARBEITER",
+                        getConnectionContext()));
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+
+        try {
+            ceGeschaeft = new DefaultBindableComboboxCellEditor(CidsBean.getMetaClassFromTableName(
+                        "WUNDA_BLAU",
+                        "ALBO_BEARBEITUNG_GESCHAEFT",
+                        getConnectionContext()));
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
     }
 
     /**
@@ -1476,7 +1502,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         try {
             final CidsBean bearbeitungBean = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
-                    "ALBO_VORGANG_BEARBEITUNG",
+                    "ALBO_BEARBEITUNG",
                     getConnectionContext());
             bearbeitungBean.setProperty("stand", new Timestamp(new Date().getTime()));
             bearbeitungBean.setProperty("login_name", SessionManager.getSession().getUser().getName());
@@ -1542,6 +1568,31 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
          */
         public VorgangBearbeitungTableModel() {
             super(BEARBEITUNG_COLUMN_PROPERTIES, BEARBEITUNG_COLUMN_NAMES, BEARBEITUNG_COLUMN_CLASSES, true);
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class BearbeitungTable extends JXTable {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public TableCellEditor getCellEditor(final int row, final int column) {
+            switch (column) {
+                case 1: {
+                    return ceBearbeiter;
+                }
+                case 2: {
+                    return ceGeschaeft;
+                }
+                default: {
+                    return super.getCellEditor(row, column);    // To change body of generated methods, choose Tools |
+                                                                // Templates.
+                }
+            }
         }
     }
 }
