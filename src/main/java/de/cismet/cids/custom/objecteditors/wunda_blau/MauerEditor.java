@@ -158,7 +158,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private CidsBean cidsBean;
     private String title;
     private boolean editable;
-    private CardLayout cardLayout;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
     private final ZustandOverview overview = new ZustandOverview();
 
@@ -2571,7 +2570,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
-        cardLayout.show(this, "card2");
+        ((CardLayout)getLayout()).show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
@@ -2584,7 +2583,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @param  evt  DOCUMENT ME!
      */
     private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
-        cardLayout.show(this, "card1");
+        ((CardLayout)getLayout()).show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
