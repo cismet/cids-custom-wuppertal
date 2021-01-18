@@ -52,17 +52,11 @@ public class AlboFlaecheFeatureRenderer extends CustomCidsFeatureRenderer {
                 return Color.getColor(ClientAlboProperties.getInstance().getSonstige_color(),
                         Color.MAGENTA);
             }
-            case "immission": {
-                return Color.getColor(ClientAlboProperties.getInstance().getImmission_color(), Color.ORANGE);
-            }
             case "materialaufbringung": {
                 return Color.getColor(ClientAlboProperties.getInstance().getMaterialaufbringung_color(), Color.YELLOW);
             }
             case "ohne_verdacht": {
                 return Color.getColor(ClientAlboProperties.getInstance().getOhne_verdacht_color(), Color.PINK);
-            }
-            case "schadensfall": {
-                return Color.getColor(ClientAlboProperties.getInstance().getSchadensfall_color(), Color.RED);
             }
         }
         return Color.GRAY;
