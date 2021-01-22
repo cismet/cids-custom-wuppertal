@@ -82,7 +82,7 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
     
-    private static String titleNewStamm = "einen neuen Stammschaden anlegen..."; 
+    private static String TITLE_NEW_STAMM = "einen neuen Stammschaden anlegen..."; 
 
     public static final String BUNDLE_NONAME = "BaumStammEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumStammEditor.prepareForSave().duplicateName";
@@ -362,7 +362,7 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return titleNewStamm;
+            return TITLE_NEW_STAMM;
         } else {
             return cidsBean.toString();
         }

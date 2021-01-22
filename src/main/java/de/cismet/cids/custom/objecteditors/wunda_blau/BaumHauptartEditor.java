@@ -109,7 +109,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
 
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
-    private static String titleNewHauptart = "eine neue Hauptart anlegen..."; 
+    private static String TITLE_NEW_HAUPTART = "eine neue Hauptart anlegen..."; 
 
     private boolean isEditor = true;
 
@@ -421,7 +421,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     public String getTitle() {
        // return cidsBean.toString();
        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return titleNewHauptart;
+            return TITLE_NEW_HAUPTART;
         } else {
             return cidsBean.toString();
         }

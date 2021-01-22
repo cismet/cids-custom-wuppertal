@@ -82,7 +82,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
     
-    private static String titleNewKrone= "einen neuen Kronenschaden anlegen..."; 
+    private static String TITLE_NEW_KRONE = "einen neuen Kronenschaden anlegen..."; 
 
     public static final String BUNDLE_NONAME = "BaumKroneEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumKroneEditor.prepareForSave().duplicateName";
@@ -362,7 +362,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return titleNewKrone;
+            return TITLE_NEW_KRONE;
         } else {
             return cidsBean.toString();
         }

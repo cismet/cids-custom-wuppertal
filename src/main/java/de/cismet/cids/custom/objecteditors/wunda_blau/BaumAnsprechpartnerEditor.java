@@ -98,7 +98,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public static final String FIELD__TELEFON = "telefon";
     public static final String FIELD__ID = "id";
     
-    private static String titleNewAnsprechpartner = "einen neuen Ansprechpartner anlegen..."; 
+    private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen..."; 
 
     public static final String BUNDLE_NONAME = "BaumAnsprechpartnerEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumAnsprechpartnerEditor.prepareForSave().duplicateName";
@@ -658,7 +658,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return titleNewAnsprechpartner;
+            return TITLE_NEW_AP;
         } else {
             return cidsBean.toString();
         }

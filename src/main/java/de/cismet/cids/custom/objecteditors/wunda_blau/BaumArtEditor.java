@@ -114,7 +114,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
 
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
-    private static String titleNewArt = "eine neue Baumart anlegen..."; 
+    private static String TITLE_NEW_ART = "eine neue Baumart anlegen..."; 
 
     private boolean isEditor = true;
 
@@ -503,7 +503,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     public String getTitle() {
        // return cidsBean.toString();
        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return titleNewArt;
+            return TITLE_NEW_ART;
         } else {
             return cidsBean.toString();
         }

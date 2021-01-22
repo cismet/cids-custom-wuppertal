@@ -82,7 +82,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
     
-    private static String titleNewMassnahme = "einen neue Massnahme anlegen..."; 
+    private static String TITLE_NEW_MASSNAHME = "eine neue Massnahme anlegen..."; 
 
     public static final String BUNDLE_NONAME = "BaumMassnahmeEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumMassnahmeEditor.prepareForSave().duplicateName";
@@ -362,7 +362,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return titleNewMassnahme;
+            return TITLE_NEW_MASSNAHME;
         } else {
             return cidsBean.toString();
         }

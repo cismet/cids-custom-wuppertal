@@ -41,9 +41,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblBis.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Umsetzung bis:"/>
             <Property name="name" type="java.lang.String" value="lblBis" noResource="true"/>
             <Property name="requestFocusEnabled" type="boolean" value="false"/>
           </Properties>
@@ -58,9 +56,7 @@
             <Property name="name" type="java.lang.String" value="dcBis" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.&quot; + FIELD__BIS + &quot;}" target="dcBis" targetPath="date" updateStrategy="0" immediately="false">
-              <Property name="nullValue" type="java.util.Date" value="null"/>
-              <Property name="incompletePathValue" type="java.util.Date" value="null"/>
+            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.umsetzung_bis}" target="dcBis" targetPath="date" updateStrategy="0" immediately="false">
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="dcBis.getConverter()" type="code"/>
               </Property>
@@ -80,9 +76,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblDatum.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Pflanzdatum:"/>
             <Property name="name" type="java.lang.String" value="lblDatum" noResource="true"/>
             <Property name="requestFocusEnabled" type="boolean" value="false"/>
           </Properties>
@@ -97,9 +91,7 @@
             <Property name="name" type="java.lang.String" value="dcDatum" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.&quot; + FIELD__DATUM + &quot;}" target="dcDatum" targetPath="date" updateStrategy="0" immediately="false">
-              <Property name="nullValue" type="java.util.Date" value="null"/>
-              <Property name="incompletePathValue" type="java.util.Date" value="null"/>
+            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.pflanzdatum}" target="dcDatum" targetPath="date" updateStrategy="0" immediately="false">
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                 <Connection code="dcDatum.getConverter()" type="code"/>
               </Property>
@@ -119,9 +111,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblGeom.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Geometrie:"/>
             <Property name="name" type="java.lang.String" value="lblGeom" noResource="true"/>
           </Properties>
           <Constraints>
@@ -130,7 +120,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cbGeom">
+        <Component class="javax.swing.JComboBox" name="cbGeomErsatz">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="12" style="0"/>
@@ -138,14 +128,12 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="cbGeom" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="cbGeomErsatz" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.&quot; + FIELD__GEOM + &quot;}" target="cbGeom" targetPath="selectedItem" updateStrategy="0" immediately="false">
-              <Property name="nullValue" type="java.lang.Object" value="null"/>
-              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_geom}" target="cbGeomErsatz" targetPath="selectedItem" updateStrategy="0" immediately="false">
               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                <Connection code="((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter()" type="code"/>
+                <Connection code="((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).getConverter()" type="code"/>
               </Property>
             </BindingProperty>
           </BindingProperties>
@@ -170,9 +158,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblArt.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Art:"/>
             <Property name="name" type="java.lang.String" value="lblArt" noResource="true"/>
           </Properties>
           <Constraints>
@@ -195,10 +181,7 @@
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.&quot; + FIELD__ART + &quot;}" target="cbArt" targetPath="selectedItem" updateStrategy="0" immediately="false">
-              <Property name="nullValue" type="java.lang.Object" value="null"/>
-              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
-            </BindingProperty>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_art}" target="cbArt" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
@@ -216,9 +199,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblAlter.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Anzahl:"/>
             <Property name="name" type="java.lang.String" value="lblAnzahl" noResource="true"/>
           </Properties>
           <Constraints>
@@ -227,32 +208,19 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JSpinner" name="spAnzahl">
+        <Component class="javax.swing.JTextField" name="txtAnzahl">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Dialog" size="12" style="0"/>
-            </Property>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="0" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="spAnzahl" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="txtAnzahl" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="value" source="Form" sourcePath="${cidsBean.&quot; + FIELD__ANZAHL + &quot;}" target="spAnzahl" targetPath="value" updateStrategy="0" immediately="false">
-              <Property name="nullValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                <Connection code="0d" type="code"/>
-              </Property>
-              <Property name="incompletePathValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                <Connection code="0d" type="code"/>
-              </Property>
-            </BindingProperty>
+            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.anzahl}" target="txtAnzahl" targetPath="text" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="1" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -261,9 +229,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblPrivat.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="selbstst&#xe4;ndig:"/>
             <Property name="name" type="java.lang.String" value="lblSelbst" noResource="true"/>
           </Properties>
           <Constraints>
@@ -278,10 +244,7 @@
             <Property name="name" type="java.lang.String" value="chSelbst" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.&quot; + FIELD__SELBST + &quot;}" target="chSelbst" targetPath="selected" updateStrategy="0" immediately="false">
-              <Property name="nullValue" type="boolean" value="false"/>
-              <Property name="incompletePathValue" type="boolean" value="false"/>
-            </BindingProperty>
+            <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.selbststaendig}" target="chSelbst" targetPath="selected" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -298,9 +261,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblFirma.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Firma:"/>
             <Property name="name" type="java.lang.String" value="lblFirma" noResource="true"/>
           </Properties>
           <Constraints>
@@ -314,11 +275,7 @@
             <Property name="name" type="java.lang.String" value="txtFirma" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.&quot; + FIELD__FIRMA + &quot;}" target="txtFirma" targetPath="text" updateStrategy="0" immediately="false">
-              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="null"/>
-              <Property name="incompletePathValue" type="java.lang.String" value="null"/>
-            </BindingProperty>
+            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.firma}" target="txtFirma" targetPath="text" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -404,9 +361,7 @@
                             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="ff" green="ff" red="ff" type="rgb"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblKarte.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                            </Property>
+                            <Property name="text" type="java.lang.String" value="Lage"/>
                             <Property name="name" type="java.lang.String" value="lblKarte" noResource="true"/>
                           </Properties>
                           <Constraints>
@@ -428,9 +383,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblBemerkung.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Bemerkung:"/>
             <Property name="name" type="java.lang.String" value="lblBemerkung" noResource="true"/>
           </Properties>
           <Constraints>
@@ -463,11 +416,7 @@
                 <Property name="name" type="java.lang.String" value="taBemerkung" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.&quot; + FIELD__BEMERKUNG + &quot;}" target="taBemerkung" targetPath="text" updateStrategy="0" immediately="false">
-                  <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                  <Property name="nullValue" type="java.lang.String" value="null"/>
-                  <Property name="incompletePathValue" type="java.lang.String" value="null"/>
-                </BindingProperty>
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="taBemerkung" targetPath="text" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -526,9 +475,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumErsatzPanel.lblKont.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                        </Property>
+                        <Property name="text" type="java.lang.String" value="Kontrollen"/>
                         <Property name="name" type="java.lang.String" value="lblKont" noResource="true"/>
                       </Properties>
                       <AuxValues>

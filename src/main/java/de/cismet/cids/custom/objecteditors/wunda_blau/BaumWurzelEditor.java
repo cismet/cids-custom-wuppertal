@@ -82,7 +82,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
     
-    private static String titleNewWurzel = "einen neuen Wurzelschaden anlegen..."; 
+    private static String TITLE_NEW_WURZEL = "einen neuen Wurzelschaden anlegen..."; 
 
     public static final String BUNDLE_NONAME = "BaumWurzelEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumWurzelEditor.prepareForSave().duplicateName";
@@ -362,7 +362,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return titleNewWurzel;
+            return TITLE_NEW_WURZEL;
         } else {
             return cidsBean.toString();
         }
