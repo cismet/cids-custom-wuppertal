@@ -72,20 +72,14 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private Bean bean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cbBewirtschaftungsschadensart;
     private javax.swing.JComboBox<String> cbErhebungsklasse;
     private javax.swing.JComboBox<String> cbFlaechenart;
-    private javax.swing.JComboBox<String> cbImmissionsart;
     private javax.swing.JComboBox<String> cbMaterialaufbringungsart;
-    private javax.swing.JComboBox<String> cbSchadensfallart;
     private javax.swing.JComboBox<String> cbStilllegung;
     private javax.swing.JComboBox<String> cbVerfuellkategorie;
     private javax.swing.JComboBox<CidsBean> cbWirtschaftszweig;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -97,10 +91,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.JFormattedTextField jFormattedTextField18;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -110,11 +101,9 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlAltablagerung;
     private javax.swing.JPanel pnlArt;
-    private javax.swing.JPanel pnlBewirtschaftungsschaden;
-    private javax.swing.JPanel pnlImmision;
     private javax.swing.JPanel pnlMaterialaufbringung;
     private javax.swing.JPanel pnlOhneVerdacht;
-    private javax.swing.JPanel pnlSchadensfall;
+    private javax.swing.JPanel pnlSonstige;
     private javax.swing.JPanel pnlStandort;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -152,12 +141,9 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         RendererTools.makeReadOnly(jFormattedTextField18, !editable);
         RendererTools.makeReadOnly(jComboBox1, !editable);
         RendererTools.makeReadOnly(jComboBox2, !editable);
-        RendererTools.makeReadOnly(cbBewirtschaftungsschadensart, !editable);
         RendererTools.makeReadOnly(cbErhebungsklasse, !editable);
         RendererTools.makeReadOnly(cbFlaechenart, !editable);
-        RendererTools.makeReadOnly(cbImmissionsart, !editable);
         RendererTools.makeReadOnly(cbMaterialaufbringungsart, !editable);
-        RendererTools.makeReadOnly(cbSchadensfallart, !editable);
         RendererTools.makeReadOnly(cbStilllegung, !editable);
         RendererTools.makeReadOnly(cbVerfuellkategorie, !editable);
         RendererTools.makeReadOnly(cbWirtschaftszweig, !editable);
@@ -233,28 +219,6 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        pnlSchadensfall = new javax.swing.JPanel();
-        cbSchadensfallart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_schadensfallart",
-                    getConnectionContext()),
-                true,
-                false);
-        jLabel17 = new javax.swing.JLabel();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        pnlImmision = new javax.swing.JPanel();
-        cbImmissionsart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_immissionsart",
-                    getConnectionContext()),
-                true,
-                false);
-        jLabel15 = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
         pnlMaterialaufbringung = new javax.swing.JPanel();
         cbMaterialaufbringungsart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
                     CidsBeanSupport.DOMAIN_NAME,
@@ -266,17 +230,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        pnlBewirtschaftungsschaden = new javax.swing.JPanel();
-        cbBewirtschaftungsschadensart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_bewirtschaftungsschadensart",
-                    getConnectionContext()),
-                true,
-                false);
-        jLabel18 = new javax.swing.JLabel();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        pnlSonstige = new javax.swing.JPanel();
         pnlOhneVerdacht = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
@@ -541,74 +495,6 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         gridBagConstraints.weighty = 1.0;
         pnlAltablagerung.add(filler6, gridBagConstraints);
 
-        pnlSchadensfall.setOpaque(false);
-        pnlSchadensfall.setLayout(new java.awt.GridBagLayout());
-
-        cbSchadensfallart.setRenderer(DOTDOTDOT_CELL_RENDERER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${bean.fkSchadensfallArt}"),
-                cbSchadensfallart,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlSchadensfall.add(cbSchadensfallart, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel17, "Art:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlSchadensfall.add(jLabel17, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        pnlSchadensfall.add(filler4, gridBagConstraints);
-
-        pnlImmision.setOpaque(false);
-        pnlImmision.setLayout(new java.awt.GridBagLayout());
-
-        cbImmissionsart.setRenderer(DOTDOTDOT_CELL_RENDERER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${bean.fkImmissionArt}"),
-                cbImmissionsart,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlImmision.add(cbImmissionsart, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel15, "Art:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlImmision.add(jLabel15, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        pnlImmision.add(filler2, gridBagConstraints);
-
         pnlMaterialaufbringung.setOpaque(false);
         pnlMaterialaufbringung.setLayout(new java.awt.GridBagLayout());
 
@@ -650,39 +536,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         gridBagConstraints.weighty = 1.0;
         pnlMaterialaufbringung.add(filler3, gridBagConstraints);
 
-        pnlBewirtschaftungsschaden.setOpaque(false);
-        pnlBewirtschaftungsschaden.setLayout(new java.awt.GridBagLayout());
-
-        cbBewirtschaftungsschadensart.setRenderer(DOTDOTDOT_CELL_RENDERER);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${bean.fkBewirtschaftungsschadenArt}"),
-                cbBewirtschaftungsschadensart,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlBewirtschaftungsschaden.add(cbBewirtschaftungsschadensart, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel18, "Art:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlBewirtschaftungsschaden.add(jLabel18, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        pnlBewirtschaftungsschaden.add(filler5, gridBagConstraints);
+        pnlSonstige.setOpaque(false);
+        pnlSonstige.setLayout(new java.awt.GridBagLayout());
 
         pnlOhneVerdacht.setOpaque(false);
         pnlOhneVerdacht.setLayout(new java.awt.GridBagLayout());
@@ -840,20 +695,12 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         pnl = pnlAltablagerung;
                     }
                     break;
-                    case "schadensfall": {
-                        pnl = pnlSchadensfall;
-                    }
-                    break;
-                    case "immission": {
-                        pnl = pnlImmision;
-                    }
-                    break;
                     case "materialaufbringung": {
                         pnl = pnlMaterialaufbringung;
                     }
                     break;
-                    case "bewirtschaftungsschaden": {
-                        pnl = pnlBewirtschaftungsschaden;
+                    case "sonstige": {
+                        pnl = pnlSonstige;
                     }
                     break;
                     case "ohne_verdacht": {
@@ -1014,28 +861,6 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                             rebind();
                         }
                     }.execute();
-            } else if (artInfo instanceof AlboFlaecheSearch.BewirtschaftungsschadenInfo) {
-                new SwingWorker<CidsBean, Void>() {
-
-                        @Override
-                        protected CidsBean doInBackground() throws Exception {
-                            return getSchluesselBean(
-                                    "albo_bewirtschaftungsschadensart",
-                                    ((AlboFlaecheSearch.BewirtschaftungsschadenInfo)artInfo)
-                                                .getBewirtschaftungsschadensartSchluessel(),
-                                    getConnectionContext());
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                bean.setFkBewirtschaftungsschadenArt(get());
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                            }
-                            rebind();
-                        }
-                    }.execute();
             } else if (artInfo instanceof AlboFlaecheSearch.MaterialaufbringungInfo) {
                 new SwingWorker<CidsBean, Void>() {
 
@@ -1052,48 +877,6 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         protected void done() {
                             try {
                                 bean.setFkMaterialaufbringungArt(get());
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                            }
-                            rebind();
-                        }
-                    }.execute();
-            } else if (artInfo instanceof AlboFlaecheSearch.ImmissionInfo) {
-                new SwingWorker<CidsBean, Void>() {
-
-                        @Override
-                        protected CidsBean doInBackground() throws Exception {
-                            return getSchluesselBean(
-                                    "albo_immissionsart",
-                                    ((AlboFlaecheSearch.ImmissionInfo)artInfo).getImmissionsartSchluessel(),
-                                    getConnectionContext());
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                bean.setFkImmissionArt(get());
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                            }
-                            rebind();
-                        }
-                    }.execute();
-            } else if (artInfo instanceof AlboFlaecheSearch.SchadensfallInfo) {
-                new SwingWorker<CidsBean, Void>() {
-
-                        @Override
-                        protected CidsBean doInBackground() throws Exception {
-                            return getSchluesselBean(
-                                    "albo_schadensfallart",
-                                    ((AlboFlaecheSearch.SchadensfallInfo)artInfo).getSchadensfallartSchluessel(),
-                                    getConnectionContext());
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                bean.setFkSchadensfallArt(get());
                             } catch (final Exception ex) {
                                 LOG.error(ex, ex);
                             }
@@ -1157,20 +940,6 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                             (erhebungsklasse != null) ? (String)erhebungsklasse.getProperty("schluessel") : null);
                     }
                     break;
-                    case "schadensfall": {
-                        final CidsBean schadensfallart = (cbSchadensfallart.getSelectedItem() instanceof CidsBean)
-                            ? (CidsBean)cbSchadensfallart.getSelectedItem() : null;
-                        artInfo = new AlboFlaecheSearch.SchadensfallInfo((schadensfallart != null)
-                                    ? (String)schadensfallart.getProperty("schluessel") : null);
-                    }
-                    break;
-                    case "immission": {
-                        final CidsBean immissionsart = (cbImmissionsart.getSelectedItem() instanceof CidsBean)
-                            ? (CidsBean)cbImmissionsart.getSelectedItem() : null;
-                        artInfo = new AlboFlaecheSearch.ImmissionInfo((immissionsart != null)
-                                    ? (String)immissionsart.getProperty("schluessel") : null);
-                    }
-                    break;
                     case "materialaufbringung": {
                         final CidsBean materialaufbringungsart =
                             (cbMaterialaufbringungsart.getSelectedItem() instanceof CidsBean)
@@ -1179,13 +948,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                                     ? (String)materialaufbringungsart.getProperty("schluessel") : null);
                     }
                     break;
-                    case "bewirtschaftungsschaden": {
-                        final CidsBean bewirtschaftungsschadensart =
-                            (cbBewirtschaftungsschadensart.getSelectedItem() instanceof CidsBean)
-                            ? (CidsBean)cbBewirtschaftungsschadensart.getSelectedItem() : null;
-                        artInfo = new AlboFlaecheSearch.BewirtschaftungsschadenInfo(
-                                (bewirtschaftungsschadensart != null)
-                                    ? (String)bewirtschaftungsschadensart.getProperty("schluessel") : null);
+                    case "sonstige": {
+                        artInfo = new AlboFlaecheSearch.SonstigeInfo();
                     }
                     break;
                     case "ohne_verdacht": {
@@ -1235,10 +999,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         private CidsBean fkStilllegung;
         private CidsBean fkVerfuellkategorie;
         private CidsBean fkErhebungsklasse;
-        private CidsBean fkSchadensfallArt;
-        private CidsBean fkImmissionArt;
         private CidsBean fkMaterialaufbringungArt;
-        private CidsBean fkBewirtschaftungsschadenArt;
         private Integer standortJahr;
         private Integer standortDauer;
     }

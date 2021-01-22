@@ -58,7 +58,6 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheArbeitssta
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkungenPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
-import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
 
@@ -116,7 +115,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         lblTitle = new JLabel();
         jToggleButton1 = new JToggleButton();
         btnReport1 = new JButton();
-        btnReport = new JButton();
         panFooter = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         btnBack = new JButton();
@@ -158,7 +156,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
         jToggleButton1.setIcon(new ImageIcon(
@@ -177,7 +174,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(jToggleButton1, gridBagConstraints);
         jToggleButton1.setVisible(isEditable());
 
@@ -191,22 +187,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panTitle.add(btnReport1, gridBagConstraints);
-
-        btnReport.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png")));         // NOI18N
-        btnReport.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
-        btnReport.setBorderPainted(false);
-        btnReport.setContentAreaFilled(false);
-        btnReport.setEnabled(false);
-        btnReport.setFocusPainted(false);
-        btnReport.setName("btnReport");                                                                               // NOI18N
-        btnReport.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = GridBagConstraints.EAST;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panTitle.add(btnReport, gridBagConstraints);
 
         panFooter.setName("panFooter"); // NOI18N
         panFooter.setOpaque(false);
@@ -367,8 +348,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
             } else if (evt.getSource() == btnReport1) {
                 AlboFlaecheEditor.this.btnReport1ActionPerformed(evt);
-            } else if (evt.getSource() == btnReport) {
-                AlboFlaecheEditor.this.btnReportActionPerformed(evt);
             } else if (evt.getSource() == btnBack) {
                 AlboFlaecheEditor.this.btnBackActionPerformed(evt);
             } else if (evt.getSource() == btnForward) {
@@ -415,7 +394,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnBack;
     private JButton btnForward;
-    JButton btnReport;
     JButton btnReport1;
     private Box.Filler filler1;
     private Box.Filler filler2;
@@ -537,15 +515,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     public boolean isEditable() {
         return editable;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        AlboReportGenerator.startFlaecheReportDownload(getCidsBean(), this, getConnectionContext());
-    }                                                              //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!

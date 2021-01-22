@@ -119,11 +119,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     private MetaClass mcGewerk;
+    private MetaClass mcSanierung;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbGewerkDurchge;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbGewerkDurchzu;
     private javax.swing.JCheckBox cbMapSearch;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbSanierung;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcBauwerksbegehBis;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcBauwerksbegehVon;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcBauwerksbesichtigBis;
@@ -145,8 +148,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -209,6 +210,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private javax.swing.JTextField tfBausubstanzBis;
     private javax.swing.JTextField tfBausubstanzVon;
     private javax.swing.JTextField tfGelaendeBis;
+    private javax.swing.JTextField tfGelaendeObenBis;
+    private javax.swing.JTextField tfGelaendeObenVon;
     private javax.swing.JTextField tfGelaendeVon;
     private javax.swing.JTextField tfGelaenderBis;
     private javax.swing.JTextField tfGelaenderVon;
@@ -216,10 +219,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private javax.swing.JTextField tfGruendungVon;
     private javax.swing.JTextField tfHoeheBis;
     private javax.swing.JTextField tfHoeheVon;
-    private javax.swing.JTextField tfSanierungBis;
-    private javax.swing.JTextField tfSanierungVon;
-    private javax.swing.JTextField tfVerformungBis;
-    private javax.swing.JTextField tfVerformungVon;
     private javax.swing.JTextField tfWandkopfBis;
     private javax.swing.JTextField tfWandkopfVon;
     // End of variables declaration//GEN-END:variables
@@ -245,6 +244,15 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
+        try {
+            mcSanierung = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "MAUER_EINGRIFF",
+                    getConnectionContext());
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+
         try {
             initComponents();
             // todo just for debug
@@ -363,6 +371,11 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
         pnlNoten = new javax.swing.JPanel();
+        lblVerformung = new javax.swing.JLabel();
+        lblNotenFrom5 = new javax.swing.JLabel();
+        tfGelaendeObenVon = new javax.swing.JTextField();
+        lblNotenBis4 = new javax.swing.JLabel();
+        tfGelaendeObenBis = new javax.swing.JTextField();
         lblGelaender = new javax.swing.JLabel();
         lblNotenFrom1 = new javax.swing.JLabel();
         tfGelaenderVon = new javax.swing.JTextField();
@@ -383,11 +396,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         tfGruendungVon = new javax.swing.JTextField();
         lblNotenBis3 = new javax.swing.JLabel();
         tfGruendungBis = new javax.swing.JTextField();
-        lblVerformung = new javax.swing.JLabel();
-        lblNotenFrom5 = new javax.swing.JLabel();
-        tfVerformungVon = new javax.swing.JTextField();
-        lblNotenBis4 = new javax.swing.JLabel();
-        tfVerformungBis = new javax.swing.JTextField();
         lblGelaende = new javax.swing.JLabel();
         lblNotenFrom6 = new javax.swing.JLabel();
         tfGelaendeVon = new javax.swing.JTextField();
@@ -400,11 +408,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         jLabel5 = new javax.swing.JLabel();
         tfBausubstanzBis = new javax.swing.JTextField();
         lblSanierung = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        tfSanierungVon = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        tfSanierungBis = new javax.swing.JTextField();
         lblFiller2 = new javax.swing.JLabel();
+        cbSanierung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(mcSanierung, true, false);
         pnlLastklasse = new javax.swing.JPanel();
         scpListLastklasse = new javax.swing.JScrollPane();
         lstLastklasse = new javax.swing.JList();
@@ -435,16 +440,16 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         dcDurchgeSanVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
         lblPruefTil2 = new javax.swing.JLabel();
         dcDurchgeSanBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        jLabel10 = new javax.swing.JLabel();
-        lblPruefVon3 = new javax.swing.JLabel();
-        dcBauwerksbesichtigVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        lblPruefTil3 = new javax.swing.JLabel();
-        dcBauwerksbesichtigBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
         jLabel11 = new javax.swing.JLabel();
         lblPruefVon4 = new javax.swing.JLabel();
         dcBauwerksbegehVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
         lblPruefTil4 = new javax.swing.JLabel();
         dcBauwerksbegehBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        jLabel10 = new javax.swing.JLabel();
+        lblPruefVon3 = new javax.swing.JLabel();
+        dcBauwerksbesichtigVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        lblPruefTil3 = new javax.swing.JLabel();
+        dcBauwerksbesichtigBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
         cbGewerkDurchge = new de.cismet.cids.editors.DefaultBindableReferenceCombo(mcGewerk, true, false);
         cbGewerkDurchzu = new de.cismet.cids.editors.DefaultBindableReferenceCombo(mcGewerk, true, false);
         jLabel12 = new javax.swing.JLabel();
@@ -478,9 +483,50 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                     "MauernWindowSearch.pnlNoten.border.title"))); // NOI18N
         pnlNoten.setLayout(new java.awt.GridBagLayout());
 
-        lblGelaender.setText(org.openide.util.NbBundle.getMessage(
+        lblVerformung.setText("Gelände oben:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        pnlNoten.add(lblVerformung, gridBagConstraints);
+
+        lblNotenFrom5.setText(org.openide.util.NbBundle.getMessage(
                 MauernWindowSearch.class,
-                "MauernWindowSearch.lblGelaender.text")); // NOI18N
+                "MauernWindowSearch.lblNotenFrom5.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        pnlNoten.add(lblNotenFrom5, gridBagConstraints);
+
+        tfGelaendeObenVon.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.tfGelaendeObenVon.text")); // NOI18N
+        tfGelaendeObenVon.setMinimumSize(new java.awt.Dimension(70, 27));
+        tfGelaendeObenVon.setPreferredSize(new java.awt.Dimension(70, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlNoten.add(tfGelaendeObenVon, gridBagConstraints);
+
+        lblNotenBis4.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblNotenBis2.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        pnlNoten.add(lblNotenBis4, gridBagConstraints);
+
+        tfGelaendeObenBis.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.tfGelaendeObenBis.text")); // NOI18N
+        tfGelaendeObenBis.setMinimumSize(new java.awt.Dimension(70, 27));
+        tfGelaendeObenBis.setPreferredSize(new java.awt.Dimension(70, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        pnlNoten.add(tfGelaendeObenBis, gridBagConstraints);
+
+        lblGelaender.setText("Absturzsicherung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -523,9 +569,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(tfGelaenderBis, gridBagConstraints);
 
-        lblWandKopf.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblWandKopf.text")); // NOI18N
+        lblWandKopf.setText("Wandkopf:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -568,9 +612,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(tfWandkopfBis, gridBagConstraints);
 
-        lblAnsicht.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblAnsicht.text")); // NOI18N
+        lblAnsicht.setText("Ansicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -613,9 +655,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(tfAnsichtBis, gridBagConstraints);
 
-        lblGruendung.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblGruendung.text")); // NOI18N
+        lblGruendung.setText("Gründung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -658,54 +698,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(tfGruendungBis, gridBagConstraints);
 
-        lblVerformung.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblVerformung.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlNoten.add(lblVerformung, gridBagConstraints);
-
-        lblNotenFrom5.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblNotenFrom5.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlNoten.add(lblNotenFrom5, gridBagConstraints);
-
-        tfVerformungVon.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.tfVerformungVon.text")); // NOI18N
-        tfVerformungVon.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfVerformungVon.setPreferredSize(new java.awt.Dimension(70, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlNoten.add(tfVerformungVon, gridBagConstraints);
-
-        lblNotenBis4.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblNotenBis2.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        pnlNoten.add(lblNotenBis4, gridBagConstraints);
-
-        tfVerformungBis.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.tfVerformungBis.text")); // NOI18N
-        tfVerformungBis.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfVerformungBis.setPreferredSize(new java.awt.Dimension(70, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        pnlNoten.add(tfVerformungBis, gridBagConstraints);
-
-        lblGelaende.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblGelaende.text")); // NOI18N
+        lblGelaende.setText("Gelände unten:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -754,9 +747,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         pnlNoten.add(jSeparator1, gridBagConstraints);
 
-        lblBausubstanz.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblBausubstanz.text")); // NOI18N
+        lblBausubstanz.setText("Zustand gesamte Bausubstanz:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -799,50 +790,12 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlNoten.add(tfBausubstanzBis, gridBagConstraints);
 
-        lblSanierung.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblSanierung.text")); // NOI18N
+        lblSanierung.setText("Notwendigkeit einer Sanierung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlNoten.add(lblSanierung, gridBagConstraints);
-
-        jLabel7.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel7.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlNoten.add(jLabel7, gridBagConstraints);
-
-        tfSanierungVon.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.tfSanierungVon.text")); // NOI18N
-        tfSanierungVon.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfSanierungVon.setPreferredSize(new java.awt.Dimension(70, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlNoten.add(tfSanierungVon, gridBagConstraints);
-
-        jLabel8.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel8.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        pnlNoten.add(jLabel8, gridBagConstraints);
-
-        tfSanierungBis.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jTextField3.text")); // NOI18N
-        tfSanierungBis.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfSanierungBis.setPreferredSize(new java.awt.Dimension(70, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        pnlNoten.add(tfSanierungBis, gridBagConstraints);
 
         lblFiller2.setText(org.openide.util.NbBundle.getMessage(
                 MauernWindowSearch.class,
@@ -854,6 +807,13 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         pnlNoten.add(lblFiller2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        pnlNoten.add(cbSanierung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1129,48 +1089,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlPruefung.add(dcDurchgeSanBis, gridBagConstraints);
 
-        jLabel10.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel10.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlPruefung.add(jLabel10, gridBagConstraints);
-
-        lblPruefVon3.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblPruefVon3.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlPruefung.add(lblPruefVon3, gridBagConstraints);
-
-        dcBauwerksbesichtigVon.setPreferredSize(new java.awt.Dimension(124, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlPruefung.add(dcBauwerksbesichtigVon, gridBagConstraints);
-
-        lblPruefTil3.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblPruefTil3.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        pnlPruefung.add(lblPruefTil3, gridBagConstraints);
-
-        dcBauwerksbesichtigBis.setPreferredSize(new java.awt.Dimension(124, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlPruefung.add(dcBauwerksbesichtigBis, gridBagConstraints);
-
         jLabel11.setText(org.openide.util.NbBundle.getMessage(
                 MauernWindowSearch.class,
                 "MauernWindowSearch.jLabel11.text")); // NOI18N
@@ -1212,6 +1130,48 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlPruefung.add(dcBauwerksbegehBis, gridBagConstraints);
+
+        jLabel10.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.jLabel10.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        pnlPruefung.add(jLabel10, gridBagConstraints);
+
+        lblPruefVon3.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblPruefVon3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        pnlPruefung.add(lblPruefVon3, gridBagConstraints);
+
+        dcBauwerksbesichtigVon.setPreferredSize(new java.awt.Dimension(124, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlPruefung.add(dcBauwerksbesichtigVon, gridBagConstraints);
+
+        lblPruefTil3.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblPruefTil3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        pnlPruefung.add(lblPruefTil3, gridBagConstraints);
+
+        dcBauwerksbesichtigBis.setPreferredSize(new java.awt.Dimension(124, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlPruefung.add(dcBauwerksbesichtigBis, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -1258,10 +1218,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlPruefung, gridBagConstraints);
-        pnlPruefung.getAccessibleContext()
-                .setAccessibleName(org.openide.util.NbBundle.getMessage(
-                        MauernWindowSearch.class,
-                        "MauernWindowSearch.pnlPruefung.AccessibleContext.accessibleName")); // NOI18N
 
         pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1478,14 +1434,17 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         appendZustandFilterProp(tfAnsichtBis, PropertyKeys.ZUSTAND_ANSICHT_BIS, filterProps);
         appendZustandFilterProp(tfGruendungVon, PropertyKeys.ZUSTAND_GRUENDUNG_VON, filterProps);
         appendZustandFilterProp(tfGruendungBis, PropertyKeys.ZUSTAND_GRUENDUNG_BIS, filterProps);
-        appendZustandFilterProp(tfVerformungVon, PropertyKeys.ZUSTAND_VERFORMUNG_VON, filterProps);
-        appendZustandFilterProp(tfVerformungBis, PropertyKeys.ZUSTAND_VERFORMUNG_BIS, filterProps);
+        appendZustandFilterProp(tfGelaendeObenVon, PropertyKeys.ZUSTAND_GELAENDE_OBEN_VON, filterProps);
+        appendZustandFilterProp(tfGelaendeObenBis, PropertyKeys.ZUSTAND_GELAENDE_OBEN_BIS, filterProps);
         appendZustandFilterProp(tfGelaendeVon, PropertyKeys.ZUSTAND_GELAENDE_VON, filterProps);
         appendZustandFilterProp(tfGelaendeBis, PropertyKeys.ZUSTAND_GELAENDE_BIS, filterProps);
         appendZustandFilterProp(tfBausubstanzVon, PropertyKeys.ZUSTAND_BAUSUBSTANZ_VON, filterProps);
         appendZustandFilterProp(tfBausubstanzBis, PropertyKeys.ZUSTAND_BAUSUBSTANZ_BIS, filterProps);
-        appendZustandFilterProp(tfSanierungVon, PropertyKeys.ZUSTAND_SANIERUNG_VON, filterProps);
-        appendZustandFilterProp(tfSanierungBis, PropertyKeys.ZUSTAND_SANIERUNG_BIS, filterProps);
+
+        filterProps.put(
+            PropertyKeys.SANIERUNG,
+            (cbSanierung.getSelectedItem() != null) ? ((CidsBean)cbSanierung.getSelectedItem()).getMetaObject()
+                        .getId() : null);
 
         appendMassnahmeFilterProp(dcPruefVon, PropertyKeys.MASSNAHME_PRUEFUNG_VON, filterProps);
         appendMassnahmeFilterProp(dcPruefBis, PropertyKeys.MASSNAHME_PRUEFUNG_BIS, filterProps);

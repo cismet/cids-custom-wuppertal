@@ -573,28 +573,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                             }
                         }
                         break;
-                        case "bewirtschaftungsschaden": {
-                            if (cidsBean.getProperty("fk_bewirtschaftungsschaden") == null) {
-                                cidsBean.setProperty(
-                                    "fk_bewirtschaftungsschaden",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_BEWIRTSCHAFTUNGSSCHADEN",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
-                        case "immission": {
-                            if (cidsBean.getProperty("fk_immission") == null) {
-                                cidsBean.setProperty(
-                                    "fk_immission",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_IMMISSION",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
                         case "materialaufbringung": {
                             if (cidsBean.getProperty("fk_materialaufbringung") == null) {
                                 cidsBean.setProperty(
@@ -602,17 +580,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                                     CidsBean.createNewCidsBeanFromTableName(
                                         "WUNDA_BLAU",
                                         "ALBO_MATERIALAUFBRINGUNG",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
-                        case "schadensfall": {
-                            if (cidsBean.getProperty("fk_schadensfall") == null) {
-                                cidsBean.setProperty(
-                                    "fk_schadensfall",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_SCHADENSFALL",
                                         getConnectionContext()));
                             }
                         }
@@ -634,17 +601,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
             if (!"altablagerung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_altablagerung", null);
             }
-            if (!"bewirtschaftungsschaden".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_bewirtschaftungsschaden", null);
-            }
-            if (!"immission".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_immission", null);
-            }
             if (!"materialaufbringung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_materialaufbringung", null);
-            }
-            if (!"schadensfall".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_schadensfall", null);
             }
             return true;
         } catch (final Exception ex) {
@@ -693,20 +651,12 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "standort");
                     break;
                 }
-                case "schadensfall": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "schadensfall");
-                    break;
-                }
-                case "immission": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "immissions");
-                    break;
-                }
                 case "materialaufbringung": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "materialaufbringung");
                     break;
                 }
-                case "bewirtschaftungsschaden": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "bewirtschaftungsschaden");
+                case "sonstige": {
+                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "sonstige");
                     break;
                 }
                 case "ohne_verdacht": {
