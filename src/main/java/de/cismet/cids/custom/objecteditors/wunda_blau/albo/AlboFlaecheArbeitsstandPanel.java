@@ -193,6 +193,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel19, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox6).setNullable(true);
         jComboBox6.setName("jComboBox6"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -239,6 +240,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel45, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox32).setNullable(true);
         jComboBox32.setName("jComboBox32"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -286,6 +288,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel22, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox7).setNullable(true);
         jComboBox7.setName("jComboBox7"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -332,6 +335,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel23, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox8).setNullable(true);
         jComboBox8.setName("jComboBox8"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -376,6 +380,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel24, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox9).setNullable(true);
         jComboBox9.setName("jComboBox9"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -422,6 +427,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel25, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox10).setNullable(true);
         jComboBox10.setName("jComboBox10"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -468,6 +474,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel26, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox11).setNullable(true);
         jComboBox11.setName("jComboBox11"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -514,6 +521,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel27, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox12).setNullable(true);
         jComboBox12.setName("jComboBox12"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -560,6 +568,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel30, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox15).setNullable(true);
         jComboBox15.setName("jComboBox15"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -606,6 +615,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jLabel34, gridBagConstraints);
 
+        ((DefaultBindableScrollableComboBox)jComboBox19).setNullable(true);
         jComboBox19.setName("jComboBox19"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
