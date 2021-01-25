@@ -87,6 +87,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox6).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -137,6 +138,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox32).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -187,6 +189,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox7).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -237,6 +240,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox8).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -285,6 +289,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox9).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -335,6 +340,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox10).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -385,6 +391,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox11).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -435,6 +442,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox12).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -485,6 +493,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox15).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
@@ -535,6 +544,7 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox()"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableScrollableComboBox)jComboBox19).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>

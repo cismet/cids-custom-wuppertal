@@ -16,6 +16,10 @@ import Sirius.server.middleware.types.MetaClass;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import java.awt.event.MouseEvent;
+
+import java.util.EventObject;
+
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -322,7 +326,18 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
             LOG.error(ex, ex);
         }
 
-        jXTable1.setDefaultEditor(CidsBean.class, new DefaultBindableComboboxCellEditor(mcAbfallherkunft));
+        final DefaultBindableComboboxCellEditor abfallherkunftCellEditor = new DefaultBindableComboboxCellEditor(
+                mcAbfallherkunft) {
+
+                @Override
+                public boolean isCellEditable(final EventObject anEvent) {
+                    if (anEvent instanceof MouseEvent) {
+                        return ((MouseEvent)anEvent).getClickCount() >= 1;
+                    }
+                    return true;
+                }
+            };
+        jXTable1.setDefaultEditor(CidsBean.class, abfallherkunftCellEditor);
 
         if (!isEditable()) {
             RendererTools.makeReadOnly(getBindingGroup(), "cidsBean");
