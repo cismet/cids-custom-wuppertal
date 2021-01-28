@@ -25,10 +25,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import java.awt.Component;
+import java.awt.event.MouseEvent;
 
 import java.sql.Timestamp;
 
@@ -37,8 +39,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.List;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -67,8 +71,6 @@ import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-
-import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -1356,7 +1358,16 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             ceBearbeiter = new DefaultBindableComboboxCellEditor(CidsBean.getMetaClassFromTableName(
                         "WUNDA_BLAU",
                         "ALBO_BEARBEITER",
-                        getConnectionContext()));
+                        getConnectionContext())) {
+
+                    @Override
+                    public boolean isCellEditable(final EventObject anEvent) {
+                        if (anEvent instanceof MouseEvent) {
+                            return ((MouseEvent)anEvent).getClickCount() >= 1;
+                        }
+                        return true;
+                    }
+                };
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -1365,7 +1376,16 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             ceGeschaeft = new DefaultBindableComboboxCellEditor(CidsBean.getMetaClassFromTableName(
                         "WUNDA_BLAU",
                         "ALBO_BEARBEITUNG_GESCHAEFT",
-                        getConnectionContext()));
+                        getConnectionContext())) {
+
+                    @Override
+                    public boolean isCellEditable(final EventObject anEvent) {
+                        if (anEvent instanceof MouseEvent) {
+                            return ((MouseEvent)anEvent).getClickCount() >= 1;
+                        }
+                        return true;
+                    }
+                };
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -1589,10 +1609,62 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                     return ceGeschaeft;
                 }
                 default: {
-                    return super.getCellEditor(row, column);    // To change body of generated methods, choose Tools |
-                                                                // Templates.
+                    return super.getCellEditor(row, column); // To change body of generated methods, choose Tools |
+                                                             // Templates.
                 }
             }
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class DateCellEditor extends AbstractCellEditor implements TableCellEditor {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final JXDatePicker datePicker;
+        private boolean useSqlDate = true;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DateCellEditor object.
+         */
+        public DateCellEditor() {
+            datePicker = new JXDatePicker();
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Object getCellEditorValue() {
+            if (useSqlDate) {
+                return (datePicker.getDate() != null) ? new java.sql.Date(datePicker.getDate().getTime()) : null;
+            } else {
+                return datePicker.getDate();
+            }
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final int row,
+                final int column) {
+            if (value instanceof Date) {
+                useSqlDate = false;
+                datePicker.setDate((Date)value);
+            }
+
+            if (value instanceof java.sql.Date) {
+                useSqlDate = true;
+                final java.sql.Date date = (java.sql.Date)value;
+                datePicker.setDate(new Date(date.getTime()));
+            }
+
+            return datePicker;
         }
     }
 }
