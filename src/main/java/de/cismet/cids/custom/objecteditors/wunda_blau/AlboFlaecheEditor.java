@@ -502,7 +502,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panMain.setCidsBean(cidsBean);
         panArbeitsstand.setCidsBean(cidsBean);
         panBemerkungen.setCidsBean(cidsBean);
-        panMassnahmen.setCidsBean(cidsBean);
+        panMassnahmen.setCidsBean((CidsBean)cidsBean.getProperty("fk_massnahmen"));
 
         updateFooterControls();
     }
