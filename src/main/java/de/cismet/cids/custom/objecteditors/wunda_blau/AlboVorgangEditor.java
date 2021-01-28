@@ -1144,9 +1144,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      * @param  evt  DOCUMENT ME!
      */
     private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
-        final CidsBean bearbeitungBean = ((VorgangBearbeitungTableModel)jXTable2.getModel()).getCidsBean(
-                jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow()));
-        ((VorgangBearbeitungTableModel)jXTable2.getModel()).remove(bearbeitungBean);
+        if (jXTable2.getSelectedRow() >= 0) {
+            final CidsBean bearbeitungBean = ((VorgangBearbeitungTableModel)jXTable2.getModel()).getCidsBean(
+                    jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow()));
+            ((VorgangBearbeitungTableModel)jXTable2.getModel()).remove(bearbeitungBean);
+        }
     }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
@@ -1512,23 +1514,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 LOG.error(ex, ex);
                 return false;
             }
-        }
-        final List<CidsBean> bearbeitungen = new ArrayList<>(cidsBean.getBeanCollectionProperty("n_bearbeitungen"));
-        for (final CidsBean bearbeitungBean : bearbeitungen) {
-            if ((bearbeitungBean != null) && (MetaObject.NEW == bearbeitungBean.getMetaObject().getStatus())) {
-                cidsBean.getBeanCollectionProperty("n_bearbeitungen").remove(bearbeitungBean);
-            }
-        }
-        try {
-            final CidsBean bearbeitungBean = CidsBean.createNewCidsBeanFromTableName(
-                    "WUNDA_BLAU",
-                    "ALBO_BEARBEITUNG",
-                    getConnectionContext());
-            bearbeitungBean.setProperty("stand", new Timestamp(new Date().getTime()));
-            bearbeitungBean.setProperty("login_name", SessionManager.getSession().getUser().getName());
-            cidsBean.getBeanCollectionProperty("n_bearbeitungen").add(bearbeitungBean);
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
         }
         if (cidsBean.getProperty("loeschen") == null) {
             try {

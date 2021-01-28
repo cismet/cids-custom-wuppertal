@@ -197,6 +197,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_b_bodenmat_gesamt}"),
                 jCheckBox38,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -241,6 +243,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_sonst_mat_ges}"),
                 jCheckBox40,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -262,6 +266,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_sonst_m_m_ant}"),
                 jCheckBox41,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -281,6 +287,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_sickerwasser}"),
                 jCheckBox42,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -300,6 +308,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_grundwasser}"),
                 jCheckBox43,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -319,6 +329,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_oberfl_wasser}"),
                 jCheckBox46,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -338,6 +350,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_bodenluft}"),
                 jCheckBox44,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -357,6 +371,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_luft}"),
                 jCheckBox45,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -376,6 +392,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_pflanzen}"),
                 jCheckBox47,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -395,6 +413,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_humanproben}"),
                 jCheckBox48,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -414,6 +434,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ba_tierproben}"),
                 jCheckBox49,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -445,6 +467,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ga_boden_mensch}"),
                 jCheckBox50,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -464,6 +488,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ga_boden_pflanze}"),
                 jCheckBox51,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -483,6 +509,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ga_boden_wasser}"),
                 jCheckBox52,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -502,6 +530,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ga_sonstiges}"),
                 jCheckBox53,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -548,9 +578,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_sicherungsbauwerk_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_sicherungsbauwerk}"),
                 jCheckBox18,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -572,6 +604,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ea_versiegelung}"),
                 jCheckBox16,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -591,6 +625,8 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ea_oberfl_abdicht}"),
                 jCheckBox14,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -607,9 +643,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_oberflaechenabdeckung_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_oberflaechenabdeckung}"),
                 jCheckBox15,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -626,9 +664,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_vertikale_abdichtung_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_vertikale_abdichtung}"),
                 jCheckBox17,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -645,9 +685,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_immobilisierung_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_immobilisierung}"),
                 jCheckBox22,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -664,9 +706,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_pneumatisch_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_pneumatisch}"),
                 jCheckBox23,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -683,9 +727,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_pump_treat_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_pump_treat}"),
                 jCheckBox102,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -702,9 +748,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_in_situ_behandlung_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_in_situ_behandlung}"),
                 jCheckBox104,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -721,9 +769,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_sonstige_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.sm_sonstige}"),
                 jCheckBox24,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -763,9 +813,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_aushub_deponierung_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_aushub_deponierung}"),
                 jCheckBox81,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -782,9 +834,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_aushub_bodenbehandlung_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_aushub_bodenbehandlung}"),
                 jCheckBox80,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -801,9 +855,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_bodenbehandlung_ohne_aushub_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_bodenbeh_ohne_aushub}"),
                 jCheckBox114,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -820,9 +876,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_pneumatisch_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_pneumatisch}"),
                 jCheckBox90,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -839,9 +897,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_pump_treat_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_pump_treat}"),
                 jCheckBox99,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -858,9 +918,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_in_situ_behandlung_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dm_in_situ_behandlung}"),
                 jCheckBox103,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -905,9 +967,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ueberwachungs_massnahmen_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ueberwachungs_massnahmen}"),
                 jCheckBox101,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -924,9 +988,11 @@ public class AlboFlaecheMassnahmenPanel extends AbstractAlboFlaechePanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schutz_beschr_massnahmen_tog}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schutz_beschr_massnahmen}"),
                 jCheckBox100,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

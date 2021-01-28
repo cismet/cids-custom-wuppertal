@@ -252,7 +252,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("<html>Erhebnungsnummer: <i>*");
+        jLabel1.setText("<html>Erhebungsnummer: <i>*");
         jLabel1.setName("jLabel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
