@@ -44,6 +44,7 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 
 /**
@@ -66,11 +67,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        comboBoxFilterDialog1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(
-                null,
-                new AlboVorgangLightweightSearch(),
-                "Vorgang auswählen",
-                getConnectionContext());
+        comboBoxFilterDialog1 = AlboFlaecheVorgangFilterDialog.getInstance();
         panLinks = new javax.swing.JPanel();
         panBeschreibung = new javax.swing.JPanel();
         alboFlaecheBeschreibungPanel1 =
@@ -916,6 +913,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     public void setCidsBean(final CidsBean cidsBean) {
         setUnlocked((cidsBean != null) && (MetaObject.NEW == cidsBean.getMetaObject().getStatus()));
         super.setCidsBean(cidsBean);
+        if (cidsBean != null) {
+            comboBoxFilterDialog1.refresh();
+        }
 
         alboFlaecheBeschreibungPanel1.setCidsBean(cidsBean);
         alboFlaecheOrtPanel1.setCidsBean(cidsBean);
@@ -1158,6 +1158,44 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
          */
         public FlaecheVorgangTableModel() {
             super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static final class AlboFlaecheVorgangFilterDialog extends ComboBoxFilterDialog {
+
+        //~ Static fields/initializers -----------------------------------------
+
+        private static final AlboFlaecheVorgangFilterDialog INSTANCE = new AlboFlaecheVorgangFilterDialog();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AlboFlaecheVorgangFilterDialog object.
+         */
+        private AlboFlaecheVorgangFilterDialog() {
+            super(
+                null,
+                new AlboVorgangLightweightSearch(),
+                "Vorgang auswählen",
+                ConnectionContext.create(
+                    AbstractConnectionContext.Category.STATIC,
+                    AlboFlaecheVorgangFilterDialog.class.getSimpleName()));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public static AlboFlaecheVorgangFilterDialog getInstance() {
+            return INSTANCE;
         }
     }
 }
