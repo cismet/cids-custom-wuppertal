@@ -69,7 +69,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox38" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_b_bodenmat_gesamt}" target="jCheckBox38" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_b_bodenmat_gesamt}" target="jCheckBox38" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -102,7 +105,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox40" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_sonst_mat_ges}" target="jCheckBox40" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_sonst_mat_ges}" target="jCheckBox40" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -117,7 +123,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox41" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_sonst_m_m_ant}" target="jCheckBox41" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_sonst_m_m_ant}" target="jCheckBox41" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -132,7 +141,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox42" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_sickerwasser}" target="jCheckBox42" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_sickerwasser}" target="jCheckBox42" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -147,7 +159,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox43" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_grundwasser}" target="jCheckBox43" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_grundwasser}" target="jCheckBox43" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -162,7 +177,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox46" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_oberfl_wasser}" target="jCheckBox46" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_oberfl_wasser}" target="jCheckBox46" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -177,7 +195,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox44" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_bodenluft}" target="jCheckBox44" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_bodenluft}" target="jCheckBox44" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -192,7 +213,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox45" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_luft}" target="jCheckBox45" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_luft}" target="jCheckBox45" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -207,7 +231,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox47" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_pflanzen}" target="jCheckBox47" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_pflanzen}" target="jCheckBox47" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -222,7 +249,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox48" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_humanproben}" target="jCheckBox48" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_humanproben}" target="jCheckBox48" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -237,7 +267,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox49" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_tierproben}" target="jCheckBox49" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ba_tierproben}" target="jCheckBox49" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -272,7 +305,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox50" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_boden_mensch}" target="jCheckBox50" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_boden_mensch}" target="jCheckBox50" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -287,7 +323,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox51" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_boden_pflanze}" target="jCheckBox51" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_boden_pflanze}" target="jCheckBox51" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -302,7 +341,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox52" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_boden_wasser}" target="jCheckBox52" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_boden_wasser}" target="jCheckBox52" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -317,7 +359,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox53" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_sonstiges}" target="jCheckBox53" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ga_sonstiges}" target="jCheckBox53" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -383,7 +428,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox18" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_sicherungsbauwerk_tog}" target="jCheckBox18" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_sicherungsbauwerk}" target="jCheckBox18" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -398,7 +446,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox16" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ea_versiegelung}" target="jCheckBox16" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ea_versiegelung}" target="jCheckBox16" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -413,7 +464,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox14" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ea_oberfl_abdicht}" target="jCheckBox14" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ea_oberfl_abdicht}" target="jCheckBox14" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -428,7 +482,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox15" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_oberflaechenabdeckung_tog}" target="jCheckBox15" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_oberflaechenabdeckung}" target="jCheckBox15" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -443,7 +500,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox17" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_vertikale_abdichtung_tog}" target="jCheckBox17" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_vertikale_abdichtung}" target="jCheckBox17" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -458,7 +518,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox22" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_immobilisierung_tog}" target="jCheckBox22" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_immobilisierung}" target="jCheckBox22" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -473,7 +536,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox23" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_pneumatisch_tog}" target="jCheckBox23" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_pneumatisch}" target="jCheckBox23" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -488,7 +554,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox102" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_pump_treat_tog}" target="jCheckBox102" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_pump_treat}" target="jCheckBox102" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -503,7 +572,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox104" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_in_situ_behandlung_tog}" target="jCheckBox104" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_in_situ_behandlung}" target="jCheckBox104" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -518,7 +590,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox24" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_sonstige_tog}" target="jCheckBox24" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sm_sonstige}" target="jCheckBox24" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -582,7 +657,10 @@
                     <Property name="name" type="java.lang.String" value="jCheckBox81" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_aushub_deponierung_tog}" target="jCheckBox81" targetPath="selected" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_aushub_deponierung}" target="jCheckBox81" targetPath="selected" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="boolean" value="false"/>
+                      <Property name="incompletePathValue" type="boolean" value="false"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -597,7 +675,10 @@
                     <Property name="name" type="java.lang.String" value="jCheckBox80" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_aushub_bodenbehandlung_tog}" target="jCheckBox80" targetPath="selected" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_aushub_bodenbehandlung}" target="jCheckBox80" targetPath="selected" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="boolean" value="false"/>
+                      <Property name="incompletePathValue" type="boolean" value="false"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -612,7 +693,10 @@
                     <Property name="name" type="java.lang.String" value="jCheckBox114" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_bodenbehandlung_ohne_aushub_tog}" target="jCheckBox114" targetPath="selected" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_bodenbeh_ohne_aushub}" target="jCheckBox114" targetPath="selected" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="boolean" value="false"/>
+                      <Property name="incompletePathValue" type="boolean" value="false"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -627,7 +711,10 @@
                     <Property name="name" type="java.lang.String" value="jCheckBox90" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_pneumatisch_tog}" target="jCheckBox90" targetPath="selected" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_pneumatisch}" target="jCheckBox90" targetPath="selected" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="boolean" value="false"/>
+                      <Property name="incompletePathValue" type="boolean" value="false"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -642,7 +729,10 @@
                     <Property name="name" type="java.lang.String" value="jCheckBox99" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_pump_treat_tog}" target="jCheckBox99" targetPath="selected" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_pump_treat}" target="jCheckBox99" targetPath="selected" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="boolean" value="false"/>
+                      <Property name="incompletePathValue" type="boolean" value="false"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -657,7 +747,10 @@
                     <Property name="name" type="java.lang.String" value="jCheckBox103" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_in_situ_behandlung_tog}" target="jCheckBox103" targetPath="selected" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dm_in_situ_behandlung}" target="jCheckBox103" targetPath="selected" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="boolean" value="false"/>
+                      <Property name="incompletePathValue" type="boolean" value="false"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -710,7 +803,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox101" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ueberwachungs_massnahmen_tog}" target="jCheckBox101" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ueberwachungs_massnahmen}" target="jCheckBox101" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -725,7 +821,10 @@
                 <Property name="name" type="java.lang.String" value="jCheckBox100" noResource="true"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.schutz_beschr_massnahmen_tog}" target="jCheckBox100" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.schutz_beschr_massnahmen}" target="jCheckBox100" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

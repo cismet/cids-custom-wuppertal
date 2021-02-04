@@ -72,7 +72,7 @@
         <Property name="name" type="java.lang.String" value="comboBoxFilterDialog1" noResource="true"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(null, new AlboFlaecheLightweightSearch(), &quot;Erhebungsfl&#xe4;che ausw&#xe4;hlen&quot;, getConnectionContext())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="AlboVorgangFlaecheFilterDialog.getInstance()"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
