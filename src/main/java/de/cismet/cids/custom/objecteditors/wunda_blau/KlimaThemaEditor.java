@@ -228,10 +228,12 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         panContent.add(panFillerUnten1, gridBagConstraints);
 
         panName.setOpaque(false);
@@ -311,7 +313,7 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(25, 5, 0, 5);
         panContent.add(panName, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();

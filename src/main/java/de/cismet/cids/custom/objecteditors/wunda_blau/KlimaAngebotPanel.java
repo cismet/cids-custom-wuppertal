@@ -603,6 +603,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new Insets(5, 10, 5, 10);
         add(panAngebot, gridBagConstraints);
 
         filler3.setName("filler3"); // NOI18N
