@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
@@ -33,6 +34,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
@@ -56,7 +58,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -70,11 +71,12 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final String TITLE_NEW_THEMA = "eine neues Thema anlegen...";
     private static final Logger LOG = Logger.getLogger(KlimaThemaEditor.class);
 
-    public static final String FIELD__NAME = "name";             // KlimaThema
-    public static final String FIELD__ID = "id";                 // KlimaThema
+    public static final String FIELD__NAME = "name"; // KlimaThema
+    public static final String FIELD__ID = "id";     // KlimaThema
     public static final String TABLE_NAME = "klima_thema";
 
     public static final String BUNDLE_NONAME = "KlimaThemaEditor.prepareForSave().noName";
@@ -82,14 +84,9 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_NOCOLOR = "KlimaThemaEditor.prepareForSave().noFarbe";
     public static final String BUNDLE_WRONGCOLOR = "KlimaThemaEditor.prepareForSave().wrongFarbe";
     public static final String BUNDLE_DUPLICATENAME = "KlimaThemaEditor.prepareForSave().duplicateName";
-    public static final String BUNDLE_PANE_PREFIX =
-        "KlimaThemaEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX =
-        "KlimaThemaEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX = "KlimaThemaEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "KlimaThemaEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "KlimaThemaEditor.prepareForSave().JOptionPane.title";
-
-    //~ Enums ------------------------------------------------------------------
-
 
     //~ Instance fields --------------------------------------------------------
 
@@ -188,14 +185,12 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -217,14 +212,12 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -251,7 +244,12 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -274,7 +272,12 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
 
         txtIcon.setToolTipText("");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.icon}"), txtIcon, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.icon}"),
+                txtIcon,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -297,7 +300,12 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
 
         txtFarbe.setToolTipText("");
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.farbe}"), txtFarbe, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.farbe}"),
+                txtFarbe,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -327,7 +335,7 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public boolean prepareForSave() {
@@ -343,7 +351,7 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
                 if (redundantName) {
                     LOG.warn("Duplicate name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(KlimaThemaEditor.class, BUNDLE_DUPLICATENAME));
-                } 
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
@@ -354,7 +362,7 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
             if (txtIcon.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(KlimaThemaEditor.class, BUNDLE_NOICON));
-            } 
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
             save = false;
@@ -364,8 +372,9 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
             if (txtFarbe.getText().trim().isEmpty()) {
                 LOG.warn("No color specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(KlimaThemaEditor.class, BUNDLE_NOCOLOR));
-            } else { 
-                if (!(txtFarbe.getText().trim().length() == 7 && txtFarbe.getText().trim().matches("#[a-fA-F0-9]{0,6}$"))){
+            } else {
+                if (!((txtFarbe.getText().trim().length() == 7)
+                                && txtFarbe.getText().trim().matches("#[a-fA-F0-9]{0,6}$"))) {
                     LOG.warn("Wrong color specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(KlimaThemaEditor.class, BUNDLE_WRONGCOLOR));
                 }
@@ -423,7 +432,6 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
      * DOCUMENT ME!
      *
      * @param  field  DOCUMENT ME!
-     * @param  fall   DOCUMENT ME!
      */
     private void checkName(final String field) {
         // Worker Aufruf, ob das Objekt schon existiert
@@ -439,8 +447,6 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
                     + cidsBean.getProperty(FIELD__ID));
     }
 
-    
-
     @Override
     public void dispose() {
         super.dispose();
@@ -448,7 +454,7 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_THEMA;
         } else {
             return cidsBean.toString();
@@ -500,6 +506,5 @@ public class KlimaThemaEditor extends DefaultCustomObjectEditor implements CidsB
         }
         worker_name = worker;
         worker_name.execute();
-        
     }
 }
