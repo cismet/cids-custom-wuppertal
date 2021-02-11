@@ -17,7 +17,6 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Point;
-import de.cismet.cids.client.tools.DevelopmentTools;
 
 import org.apache.log4j.Logger;
 
@@ -27,20 +26,28 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingbinding.JListBinding;
+import org.jdesktop.swingbinding.SwingBindings;
 
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 
@@ -49,10 +56,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatter;
 
+import de.cismet.cids.client.tools.DevelopmentTools;
+
 import de.cismet.cids.custom.objecteditors.utils.KlimaConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -69,25 +79,17 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.List;
-import org.jdesktop.swingbinding.JListBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 /**
  * DOCUMENT ME!
  *
@@ -123,25 +125,18 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
     public static final String BUNDLE_NOSTREET = "KlimaStandortEditor.prepareForSave().noStrasse";
     public static final String BUNDLE_NOGEOM = "KlimaStandortEditor.prepareForSave().noGeom";
     public static final String BUNDLE_NODESCRIPTION = "KlimaStandortEditor.prepareForSave().noAngebotsbeschreibung";
-    public static final String BUNDLE_PANE_PREFIX =
-        "KlimaStandortEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX =
-        "KlimaStandortEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX = "KlimaStandortEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "KlimaStandortEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "KlimaStandortEditor.prepareForSave().JOptionPane.title";
 
-
-    //~ Enums ------------------------------------------------------------------
-
-    
-
     //~ Instance fields --------------------------------------------------------
+
     private List<CidsBean> angebotBeans;
     private SwingWorker worker_name;
 
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnAddNewAngebot;
@@ -274,7 +269,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
                             newValue = "unbenannt";
                         }
                     }
-                    final Component compoDatum = super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
+                    final Component compoDatum = super.getListCellRendererComponent(
+                            list,
+                            newValue,
+                            index,
+                            isSelected,
+                            cellHasFocus);
                     compoDatum.setForeground(Color.BLACK);
                     return compoDatum;
                 }
@@ -297,8 +297,11 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         panMenButtonsAngebot = new JPanel();
         btnMenAbortAngebot = new JButton();
         btnMenOkAngebot = new JButton();
-        final MetaObject[] thema = ObjectRendererUtils.getLightweightMetaObjectsForTable("klima_thema", new String[]{"name"}, getConnectionContext());
-        if(thema != null) {
+        final MetaObject[] thema = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                "klima_thema",
+                new String[] { "name" },
+                getConnectionContext());
+        if (thema != null) {
             Arrays.sort(thema);
             cbAngebot = new JComboBox(thema);
         }
@@ -334,7 +337,7 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         panFiller = new JPanel();
         panGeometrie = new JPanel();
         lblGeom = new JLabel();
-        if (isEditor){
+        if (isEditor) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         panLage = new JPanel();
@@ -372,10 +375,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
 
         btnMenAbortAngebot.setText("Abbrechen");
         btnMenAbortAngebot.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenAbortAngebotActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenAbortAngebotActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -385,10 +390,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
 
         btnMenOkAngebot.setText("Ok");
         btnMenOkAngebot.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenOkAngebotActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenOkAngebotActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -415,14 +422,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -443,14 +448,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -477,7 +480,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -501,7 +509,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -533,7 +546,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
 
         txtHnr.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hausnummer}"),
+                txtHnr,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -556,7 +574,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblOrt, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.stadt}"), txtOrt, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.stadt}"),
+                txtOrt,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -581,7 +604,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
 
         txtPlz.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), txtPlz, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plz}"),
+                txtPlz,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -612,7 +640,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         taBeschreibungS.setRows(2);
         taBeschreibungS.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibungS, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibungS,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibungS.setViewportView(taBeschreibungS);
@@ -659,7 +692,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -705,7 +743,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         taErreichbarkeit.setRows(2);
         taErreichbarkeit.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.erreichbarkeit}"), taErreichbarkeit, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.erreichbarkeit}"),
+                taErreichbarkeit,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpErreichbarkeit.setViewportView(taErreichbarkeit);
@@ -742,14 +785,16 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -778,17 +823,21 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 10, 2, 5);
         panGeometrie.add(lblGeom, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -864,8 +913,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
 
         lstAngebote.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        ELProperty eLProperty = ELProperty.create("${cidsBean." + FIELD__ANGEBOTE + "}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstAngebote);
+        final ELProperty eLProperty = ELProperty.create("${cidsBean." + FIELD__ANGEBOTE + "}");
+        final JListBinding jListBinding = SwingBindings.createJListBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstAngebote);
         bindingGroup.addBinding(jListBinding);
 
         scpLaufendeAngebote.setViewportView(lstAngebote);
@@ -893,14 +946,16 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         jPanel8.setOpaque(false);
         jPanel8.setPreferredSize(new Dimension(1, 1));
 
-        GroupLayout jPanel8Layout = new GroupLayout(jPanel8);
+        final GroupLayout jPanel8Layout = new GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel8Layout.setHorizontalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
+        jPanel8Layout.setVerticalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -915,30 +970,36 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         panControlsNewAngebote.setOpaque(false);
         panControlsNewAngebote.setLayout(new GridBagLayout());
 
-        btnAddNewAngebot.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewAngebot.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewAngebot.setMaximumSize(new Dimension(39, 20));
         btnAddNewAngebot.setMinimumSize(new Dimension(39, 20));
         btnAddNewAngebot.setPreferredSize(new Dimension(39, 25));
         btnAddNewAngebot.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddNewAngebotActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddNewAngebotActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewAngebote.add(btnAddNewAngebot, gridBagConstraints);
 
-        btnRemoveAngebot.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveAngebot.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveAngebot.setMaximumSize(new Dimension(39, 20));
         btnRemoveAngebot.setMinimumSize(new Dimension(39, 20));
         btnRemoveAngebot.setPreferredSize(new Dimension(39, 25));
         btnRemoveAngebot.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveAngebotActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveAngebotActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -957,7 +1018,6 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(0, 0, 0, 5);
         panAngebot.add(rpAngebotliste, gridBagConstraints);
@@ -983,7 +1043,12 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         panAngeboteMain.setOpaque(false);
         panAngeboteMain.setLayout(new GridBagLayout());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstAngebote, ELProperty.create("${selectedElement}"), klimaAngebotPanel, BeanProperty.create("cidsBean"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                lstAngebote,
+                ELProperty.create("${selectedElement}"),
+                klimaAngebotPanel,
+                BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1038,74 +1103,86 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnAddNewAngebotActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewAngebotActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddNewAngebotActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewAngebotActionPerformed
         try {
             StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(KlimaStandortEditor.this), dlgAddAngebot, true);
         } catch (Exception e) {
             LOG.error("Cannot add new Angebot object", e);
         }
-    }//GEN-LAST:event_btnAddNewAngebotActionPerformed
+    }                                                                     //GEN-LAST:event_btnAddNewAngebotActionPerformed
 
-    private void btnRemoveAngebotActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveAngebotActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveAngebotActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveAngebotActionPerformed
         final Object selectedObject = lstAngebote.getSelectedValue();
 
         if (selectedObject instanceof CidsBean) {
-
             if (angebotBeans != null) {
                 angebotBeans.remove((CidsBean)selectedObject);
                 if (angebotBeans != null) {
                     lstAngebote.setSelectedIndex(0);
-                }else{
+                } else {
                     lstAngebote.clearSelection();
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveAngebotActionPerformed
+    } //GEN-LAST:event_btnRemoveAngebotActionPerformed
 
-    private void btnMenAbortAngebotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortAngebotActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortAngebotActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortAngebotActionPerformed
         dlgAddAngebot.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortAngebotActionPerformed
+    }                                                                                      //GEN-LAST:event_btnMenAbortAngebotActionPerformed
 
-    private void btnMenOkAngebotActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkAngebotActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkAngebotActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkAngebotActionPerformed
         try {
-            //angebotBean erzeugen und vorbelegen:
+            // angebotBean erzeugen und vorbelegen:
             final CidsBean beanAngebot = CidsBean.createNewCidsBeanFromTableName(
-                "WUNDA_BLAU",
-                TABLE_NAME_ANGEBOT,
-                getConnectionContext());
+                    "WUNDA_BLAU",
+                    TABLE_NAME_ANGEBOT,
+                    getConnectionContext());
             final int standortId = cidsBean.getPrimaryKeyValue();
             beanAngebot.setProperty(FIELD__STANDORT, standortId);
             beanAngebot.setProperty(FIELD__ANGEBOT_ONLINE, false);
-            
+
             final Object selection = cbAngebot.getSelectedItem();
             if (selection instanceof LightweightMetaObject) {
                 final CidsBean selectedBean = ((LightweightMetaObject)selection).getBean();
                 beanAngebot.setProperty(FIELD__THEMA, selectedBean);
             }
 
-            //Meldungen erweitern:
+            // Meldungen erweitern:
             angebotBeans.add(beanAngebot);
 
-            //Refresh:
+            // Refresh:
 
             bindingGroup.unbind();
             bindingGroup.bind();
             lstAngebote.setSelectedValue(beanAngebot, true);
-
         } catch (Exception ex) {
             LOG.error(ex, ex);
         } finally {
             dlgAddAngebot.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkAngebotActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  propName  DOCUMENT ME!
-     */
+    } //GEN-LAST:event_btnMenOkAngebotActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1160,19 +1237,21 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(KlimaStandortEditor.class, BUNDLE_NOGEOM));
-            } 
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;
         }
-        
-        //Angebotsbeschreibung muss bei einem online gestelltem Angebot gefllt sein
+
+        // Angebotsbeschreibung muss bei einem online gestelltem Angebot gefllt sein
         try {
             for (final CidsBean angebot : cidsBean.getBeanCollectionProperty(FIELD__ANGEBOTE)) {
-                if (angebot == null || (angebot.getProperty(FIELD__ANGEBOT_DESC) == null && "true".equalsIgnoreCase(angebot.getProperty(FIELD__ANGEBOT_ONLINE).toString()))) {
+                if ((angebot == null)
+                            || ((angebot.getProperty(FIELD__ANGEBOT_DESC) == null)
+                                && "true".equalsIgnoreCase(angebot.getProperty(FIELD__ANGEBOT_ONLINE).toString()))) {
                     LOG.warn("No Angebotsbeschreibung specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(KlimaStandortEditor.class, BUNDLE_NODESCRIPTION));
-                } 
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Angebotsbeschreibung not given.", ex);
@@ -1207,8 +1286,8 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
             }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (this.cidsBean != null){
-                setAngebotBeans(cidsBean.getBeanCollectionProperty(FIELD__ANGEBOTE));   
+            if (this.cidsBean != null) {
+                setAngebotBeans(cidsBean.getBeanCollectionProperty(FIELD__ANGEBOTE));
             }
             if (isEditor && (this.cidsBean != null)) {
                 LOG.info("add propchange klima_standort: " + this.cidsBean);
@@ -1226,7 +1305,6 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
             if (angebotBeans != null) {
                 lstAngebote.setSelectedIndex(0);
             }
-            
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -1268,7 +1346,7 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
         return angebotBeans;
     }
 
-     /**
+    /**
      * DOCUMENT ME!
      *
      * @param   args  DOCUMENT ME!
@@ -1321,7 +1399,7 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_STANDORT;
         } else {
             return cidsBean.toString();
@@ -1361,9 +1439,8 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
     /**
      * DOCUMENT ME!
      *
-     * @param  tableName     DOCUMENT ME!
-     * @param  whereClause   DOCUMENT ME!
-     * @param  propertyName  DOCUMENT ME!
+     * @param  tableName    DOCUMENT ME!
+     * @param  whereClause  DOCUMENT ME!
      */
     private void valueFromOtherTable(final String tableName,
             final String whereClause) {
@@ -1387,11 +1464,11 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
                     }
                 }
             };
-            if (worker_name != null) {
-                worker_name.cancel(true);
-            }
-            worker_name = worker;
-            worker_name.execute();
+        if (worker_name != null) {
+            worker_name.cancel(true);
+        }
+        worker_name = worker;
+        worker_name.execute();
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1441,5 +1518,4 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
             return lastValid;
         }
     }
-   
 }

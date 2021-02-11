@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
@@ -33,6 +34,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
@@ -56,7 +58,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -70,23 +71,19 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final String TITLE_NEW_KATEGORIE = "eine neue Kategorie anlegen...";
     private static final Logger LOG = Logger.getLogger(KlimaKategorieEditor.class);
 
-    public static final String FIELD__NAME = "name";             // KlimaKategorie
-    public static final String FIELD__ID = "id";                 // KlimaKategorie
+    public static final String FIELD__NAME = "name"; // KlimaKategorie
+    public static final String FIELD__ID = "id";     // KlimaKategorie
     public static final String TABLE_NAME = "klima_kategorie";
 
     public static final String BUNDLE_NONAME = "KlimaKategorieEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "KlimaKategorieEditor.prepareForSave().duplicateName";
-    public static final String BUNDLE_PANE_PREFIX =
-        "KlimaKategorieEditor.prepareForSave().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX =
-        "KlimaKategorieEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX = "KlimaKategorieEditor.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "KlimaKategorieEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "KlimaKategorieEditor.prepareForSave().JOptionPane.title";
-
-    //~ Enums ------------------------------------------------------------------
-
 
     //~ Instance fields --------------------------------------------------------
 
@@ -177,14 +174,12 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -206,14 +201,12 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -239,7 +232,12 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
 
         txtName.setToolTipText("");
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        final Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -269,7 +267,7 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public boolean prepareForSave() {
@@ -285,7 +283,7 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
                 if (redundantName) {
                     LOG.warn("Duplicate name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(KlimaKategorieEditor.class, BUNDLE_DUPLICATENAME));
-                } 
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
@@ -338,7 +336,6 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
      * DOCUMENT ME!
      *
      * @param  field  DOCUMENT ME!
-     * @param  fall   DOCUMENT ME!
      */
     private void checkName(final String field) {
         // Worker Aufruf, ob das Objekt schon existiert
@@ -354,8 +351,6 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
                     + cidsBean.getProperty(FIELD__ID));
     }
 
-    
-
     @Override
     public void dispose() {
         super.dispose();
@@ -363,7 +358,7 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_KATEGORIE;
         } else {
             return cidsBean.toString();
@@ -415,6 +410,5 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
         }
         worker_name = worker;
         worker_name.execute();
-        
     }
 }
