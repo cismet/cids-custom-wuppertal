@@ -275,7 +275,7 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
                         }
                     }
                     final Component compoDatum = super.getListCellRendererComponent(list, newValue, index, isSelected, cellHasFocus);
-                    compoDatum.setForeground(Color.blue);
+                    compoDatum.setForeground(Color.BLACK);
                     return compoDatum;
                 }
             });
@@ -1248,6 +1248,7 @@ public class KlimaStandortEditor extends DefaultCustomObjectEditor implements Ci
             RendererTools.makeReadOnly(taErreichbarkeit);
             lblGeom.setVisible(isEditor);
             RendererTools.makeReadOnly(lstAngebote);
+            panControlsNewAngebote.setVisible(isEditor);
         }
     }
     /**
