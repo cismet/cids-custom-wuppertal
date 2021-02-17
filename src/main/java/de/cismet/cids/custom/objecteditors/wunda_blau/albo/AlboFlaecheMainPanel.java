@@ -851,6 +851,12 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
             } catch (final Exception ex) {
                 LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
             }
+        } else {
+            RendererTools.makeReadOnly(jTextField6);
+            RendererTools.makeReadOnly(jTextField9);
+            RendererTools.makeReadOnly(jTextField11);
+            RendererTools.makeReadOnly(jTextField12);
+            RendererTools.makeReadOnly(cbFlaechentyp);
         }
         RendererTools.makeReadOnly(jXTable1);
         RendererTools.makeReadOnly(jList2);
@@ -955,11 +961,11 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      */
     private void updateLockedFields() {
         if (isEditable()) {
-            RendererTools.makeReadOnly(jTextField6, !unlocked);
-            RendererTools.makeReadOnly(jTextField9, !unlocked);
-            RendererTools.makeReadOnly(jTextField11, !unlocked);
-            RendererTools.makeReadOnly(jTextField12, !unlocked);
-            RendererTools.makeReadOnly(cbFlaechentyp, !unlocked);
+            RendererTools.makeUneditable(jTextField6, !unlocked);
+            RendererTools.makeUneditable(jTextField9, !unlocked);
+            RendererTools.makeUneditable(jTextField11, !unlocked);
+            RendererTools.makeUneditable(jTextField12, !unlocked);
+            RendererTools.makeUneditable(cbFlaechentyp, !unlocked);
         }
     }
 

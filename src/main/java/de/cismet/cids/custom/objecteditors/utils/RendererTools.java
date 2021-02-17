@@ -119,8 +119,8 @@ public class RendererTools {
      * @param  bindingGroup  DOCUMENT ME!
      * @param  baseProp      DOCUMENT ME!
      */
-    public static void makeAsRenderer(final BindingGroup bindingGroup, final String baseProp) {
-        makeAsRenderer(bindingGroup, baseProp, true);
+    public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
+        RendererTools.makeReadOnly(bindingGroup, baseProp, true);
     }
 
     /**
@@ -130,22 +130,12 @@ public class RendererTools {
      * @param  baseProp      DOCUMENT ME!
      * @param  asRenderer    DOCUMENT ME!
      */
-    public static void makeAsRenderer(final BindingGroup bindingGroup,
+    public static void makeReadOnly(final BindingGroup bindingGroup,
             final String baseProp,
             final boolean asRenderer) {
         for (final JComponent component : getAllBindedComponents(bindingGroup, baseProp)) {
-            makeAsRenderer(component, asRenderer);
+            makeReadOnly(component, asRenderer);
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  bindingGroup  DOCUMENT ME!
-     * @param  baseProp      DOCUMENT ME!
-     */
-    public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
-        makeReadOnly(bindingGroup, baseProp, true);
     }
 
     /**
@@ -155,9 +145,9 @@ public class RendererTools {
      * @param  baseProp      DOCUMENT ME!
      * @param  readOnly      DOCUMENT ME!
      */
-    public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp, final boolean readOnly) {
+    public static void makeUneditable(final BindingGroup bindingGroup, final String baseProp, final boolean readOnly) {
         for (final JComponent component : getAllBindedComponents(bindingGroup, baseProp)) {
-            makeReadOnly(component, readOnly);
+            RendererTools.makeUneditable(component, readOnly);
         }
         if (bindingGroup != null) {
             final List<Binding> bindings = bindingGroup.getBindings();
@@ -196,24 +186,15 @@ public class RendererTools {
     /**
      * DOCUMENT ME!
      *
-     * @param  comp  DOCUMENT ME!
-     */
-    public static void makeAsRenderer(final JComponent comp) {
-        makeAsRenderer(comp, true);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  comp        DOCUMENT ME!
      * @param  asRenderer  DOCUMENT ME!
      */
-    public static void makeAsRenderer(final JComponent comp, final boolean asRenderer) {
+    public static void makeReadOnly(final JComponent comp, final boolean asRenderer) {
         if (comp instanceof EditorAndRendererComponent) {
             final EditorAndRendererComponent er = (EditorAndRendererComponent)comp;
             er.setActingAsRenderer(asRenderer);
         } else {
-            makeReadOnly(comp, asRenderer);
+            RendererTools.makeUneditable(comp, asRenderer);
         }
     }
 
@@ -225,7 +206,7 @@ public class RendererTools {
      *
      * @throws  RuntimeException  DOCUMENT ME!
      */
-    public static void makeReadOnly(final JComponent comp, final boolean readOnly) {
+    public static void makeUneditable(final JComponent comp, final boolean readOnly) {
         if (comp instanceof JTextComponent) {
             final JTextComponent tComp = (JTextComponent)comp;
             tComp.setEditable(!readOnly);
