@@ -30,6 +30,8 @@ import java.lang.reflect.Field;
 
 import java.text.DecimalFormat;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -56,8 +58,6 @@ import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.EditorAndRendererComponent;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * DOCUMENT ME!
@@ -75,7 +75,16 @@ public class RendererTools {
 
     //~ Methods ----------------------------------------------------------------
 
-    private static Collection<JComponent> getAllBindedComponents(final BindingGroup bindingGroup, final String baseProp) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bindingGroup  DOCUMENT ME!
+     * @param   baseProp      DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static Collection<JComponent> getAllBindedComponents(final BindingGroup bindingGroup,
+            final String baseProp) {
         final Collection<JComponent> allBindedComponents = new ArrayList<>();
         if (bindingGroup != null) {
             final List<Binding> bindings = bindingGroup.getBindings();
@@ -100,20 +109,41 @@ public class RendererTools {
                     }
                 }
             }
-        }                
+        }
         return allBindedComponents;
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bindingGroup  DOCUMENT ME!
+     * @param  baseProp      DOCUMENT ME!
+     */
     public static void makeAsRenderer(final BindingGroup bindingGroup, final String baseProp) {
         makeAsRenderer(bindingGroup, baseProp, true);
     }
-    
-    public static void makeAsRenderer(final BindingGroup bindingGroup, final String baseProp, final boolean asRenderer) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bindingGroup  DOCUMENT ME!
+     * @param  baseProp      DOCUMENT ME!
+     * @param  asRenderer    DOCUMENT ME!
+     */
+    public static void makeAsRenderer(final BindingGroup bindingGroup,
+            final String baseProp,
+            final boolean asRenderer) {
         for (final JComponent component : getAllBindedComponents(bindingGroup, baseProp)) {
-            makeAsRenderer(component, asRenderer);            
+            makeAsRenderer(component, asRenderer);
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bindingGroup  DOCUMENT ME!
+     * @param  baseProp      DOCUMENT ME!
+     */
     public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
         makeReadOnly(bindingGroup, baseProp, true);
     }
@@ -123,6 +153,7 @@ public class RendererTools {
      *
      * @param  bindingGroup  DOCUMENT ME!
      * @param  baseProp      DOCUMENT ME!
+     * @param  readOnly      DOCUMENT ME!
      */
     public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp, final boolean readOnly) {
         for (final JComponent component : getAllBindedComponents(bindingGroup, baseProp)) {
@@ -162,10 +193,21 @@ public class RendererTools {
         makeReadOnly(comp, true);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  comp  DOCUMENT ME!
+     */
     public static void makeAsRenderer(final JComponent comp) {
         makeAsRenderer(comp, true);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  comp        DOCUMENT ME!
+     * @param  asRenderer  DOCUMENT ME!
+     */
     public static void makeAsRenderer(final JComponent comp, final boolean asRenderer) {
         if (comp instanceof EditorAndRendererComponent) {
             final EditorAndRendererComponent er = (EditorAndRendererComponent)comp;
@@ -174,7 +216,7 @@ public class RendererTools {
             makeReadOnly(comp, asRenderer);
         }
     }
-    
+
     /**
      * DOCUMENT ME!
      *
