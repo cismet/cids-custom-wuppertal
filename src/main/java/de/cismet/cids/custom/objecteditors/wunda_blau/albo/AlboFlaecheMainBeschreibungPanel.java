@@ -70,7 +70,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jTextField7 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+        jComboBox4 = new de.cismet.cids.editors.FastBindableScrollableComboBox(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
@@ -82,6 +82,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jRadioButton2 = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         txtAlteNummer = new javax.swing.JTextField();
@@ -353,6 +354,30 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(filler46, gridBagConstraints);
 
+        buttonGroup1.add(jRadioButton2);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, "in BPlan ersichtlich");
+        jRadioButton2.setContentAreaFilled(false);
+        jRadioButton2.setName("jRadioButton2"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lage_bplan}"),
+                jRadioButton2,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        jRadioButton2.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jRadioButton2, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -444,6 +469,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == cbFlaechenart) {
                 AlboFlaecheMainBeschreibungPanel.this.cbFlaechenartActionPerformed(evt);
+            } else if (evt.getSource() == jRadioButton2) {
+                AlboFlaecheMainBeschreibungPanel.this.jRadioButton2ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -494,6 +521,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel54;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField txtAlteNummer;
