@@ -55,6 +55,9 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.EditorAndRendererComponent;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * DOCUMENT ME!
@@ -72,13 +75,59 @@ public class RendererTools {
 
     //~ Methods ----------------------------------------------------------------
 
+    private static Collection<JComponent> getAllBindedComponents(final BindingGroup bindingGroup, final String baseProp) {
+        final Collection<JComponent> allBindedComponents = new ArrayList<>();
+        if (bindingGroup != null) {
+            final List<Binding> bindings = bindingGroup.getBindings();
+            for (final Binding binding : bindings) {
+                if ((binding != null) && (binding.getTargetObject() instanceof JComponent)) {
+                    final JComponent bindedComponent = (JComponent)binding.getTargetObject();
+                    final ELProperty p = (ELProperty)binding.getSourceProperty();
+
+                    try {
+                        final Field expressionField = p.getClass().getDeclaredField("expression"); // NOI18N
+                        expressionField.setAccessible(true);
+
+                        final ValueExpressionImpl valueExpression = (ValueExpressionImpl)expressionField.get(p);
+
+                        final String expr = valueExpression.getExpressionString();
+                        if (expr.substring(2, expr.length() - 1).startsWith(baseProp + ".")) {
+                            allBindedComponents.add(bindedComponent);
+                        }
+                    } catch (final IllegalAccessException | IllegalArgumentException | NoSuchFieldException
+                                | SecurityException ex) {
+                        LOG.warn("", ex);
+                    }
+                }
+            }
+        }                
+        return allBindedComponents;
+    }
+    
+    public static void makeAsRenderer(final BindingGroup bindingGroup, final String baseProp) {
+        makeAsRenderer(bindingGroup, baseProp, true);
+    }
+    
+    public static void makeAsRenderer(final BindingGroup bindingGroup, final String baseProp, final boolean asRenderer) {
+        for (final JComponent component : getAllBindedComponents(bindingGroup, baseProp)) {
+            makeAsRenderer(component, asRenderer);            
+        }
+    }
+
+    public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
+        makeReadOnly(bindingGroup, baseProp, true);
+    }
+
     /**
      * DOCUMENT ME!
      *
      * @param  bindingGroup  DOCUMENT ME!
      * @param  baseProp      DOCUMENT ME!
      */
-    public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
+    public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp, final boolean readOnly) {
+        for (final JComponent component : getAllBindedComponents(bindingGroup, baseProp)) {
+            makeReadOnly(component, readOnly);
+        }
         if (bindingGroup != null) {
             final List<Binding> bindings = bindingGroup.getBindings();
             for (final Binding binding : bindings) {
@@ -94,7 +143,6 @@ public class RendererTools {
 
                         final String expr = valueExpression.getExpressionString();
                         if (expr.substring(2, expr.length() - 1).startsWith(baseProp + ".")) {
-                            makeReadOnly(target);
                         }
                     } catch (final IllegalAccessException | IllegalArgumentException | NoSuchFieldException
                                 | SecurityException ex) {
@@ -114,6 +162,19 @@ public class RendererTools {
         makeReadOnly(comp, true);
     }
 
+    public static void makeAsRenderer(final JComponent comp) {
+        makeAsRenderer(comp, true);
+    }
+
+    public static void makeAsRenderer(final JComponent comp, final boolean asRenderer) {
+        if (comp instanceof EditorAndRendererComponent) {
+            final EditorAndRendererComponent er = (EditorAndRendererComponent)comp;
+            er.setActingAsRenderer(asRenderer);
+        } else {
+            makeReadOnly(comp, asRenderer);
+        }
+    }
+    
     /**
      * DOCUMENT ME!
      *
