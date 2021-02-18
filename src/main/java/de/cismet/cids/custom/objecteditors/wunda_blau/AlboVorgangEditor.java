@@ -32,8 +32,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import java.sql.Timestamp;
-
 import java.text.DecimalFormat;
 
 import java.util.ArrayList;
@@ -52,6 +50,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
@@ -72,6 +71,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
@@ -262,11 +262,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         lblTitle = new javax.swing.JLabel();
         btnReport = new javax.swing.JButton();
         panFooter = new javax.swing.JPanel();
-        comboBoxFilterDialog1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(
-                null,
-                new AlboFlaecheLightweightSearch(),
-                "Erhebungsfläche auswählen",
-                getConnectionContext());
+        comboBoxFilterDialog1 = AlboVorgangFlaecheFilterDialog.getInstance();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
@@ -281,7 +277,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jPanel6 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+        jComboBox4 = new de.cismet.cids.editors.FastBindableScrollableComboBox(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
@@ -1187,6 +1183,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
+        comboBoxFilterDialog1.refresh();
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
@@ -1650,6 +1647,44 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             }
 
             return datePicker;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static final class AlboVorgangFlaecheFilterDialog extends ComboBoxFilterDialog {
+
+        //~ Static fields/initializers -----------------------------------------
+
+        private static final AlboVorgangFlaecheFilterDialog INSTANCE = new AlboVorgangFlaecheFilterDialog();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AlboVorgangFlaecheFilterDialog object.
+         */
+        private AlboVorgangFlaecheFilterDialog() {
+            super(
+                null,
+                new AlboFlaecheLightweightSearch(),
+                "Erhebungsfläche auswählen",
+                ConnectionContext.create(
+                    AbstractConnectionContext.Category.STATIC,
+                    AlboVorgangFlaecheFilterDialog.class.getSimpleName()));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public static AlboVorgangFlaecheFilterDialog getInstance() {
+            return INSTANCE;
         }
     }
 }

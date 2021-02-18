@@ -82,6 +82,8 @@ import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
+import de.cismet.layout.WrapLayout;
+
 /**
  * DOCUMENT ME!
  *
