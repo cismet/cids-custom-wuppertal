@@ -277,7 +277,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jPanel6 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+        jComboBox4 = new de.cismet.cids.editors.FastBindableScrollableComboBox(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
