@@ -17,6 +17,8 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+import Sirius.server.middleware.types.LightweightMetaObject;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -59,6 +61,7 @@ import de.cismet.cids.custom.utils.HexcolorFormatter;
 import de.cismet.cids.custom.wunda_blau.search.server.PoiKategorienLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.editors.CategorisedFastBindableReferenceCombo;
 
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -78,6 +81,7 @@ import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.util.List;
 
 /**
  * DOCUMENT ME!
@@ -102,18 +106,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             Poi_locationinstanceEditor.class);
 
     private static final int MAX_INFO_LENGTH = 255;
-    public static final String POI_KAT_NAME_TOSTRING_TEMPLATE = "%s";
-    public static final String[] POI_KAT_NAME_TOSTRING_FIELDS = {
-            PoiKategorienLightweightSearch.Subject.NAME.toString()
-        };
 
     //~ Instance fields --------------------------------------------------------
 
     private String title = "";
-    private final PoiKategorienLightweightSearch kategorieSearch = new PoiKategorienLightweightSearch(
-            PoiKategorienLightweightSearch.Subject.NAME,
-            POI_KAT_NAME_TOSTRING_TEMPLATE,
-            POI_KAT_NAME_TOSTRING_FIELDS);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddThema;
@@ -231,6 +227,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        fillCategoryList();
         ((AbstractDocument)txtaInfo.getDocument()).setDocumentFilter(new DocumentFilter() {
 
                 @Override
@@ -553,11 +550,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 lblRvrPrio = new javax.swing.JLabel();
                 cbRvrPrio = new DefaultBindableReferenceCombo(true);
                 lblRvrKat = new javax.swing.JLabel();
-                cbRvrKat = new de.cismet.cids.editors.FastBindableReferenceCombo(
-                    kategorieSearch,
-                    kategorieSearch.getRepresentationPattern(),
-                    kategorieSearch.getRepresentationFields()
-                );
+                cbRvrKat = new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo();
+                ;
                 lblHeader3 = new javax.swing.JLabel();
                 lblImageUrl = new javax.swing.JLabel();
                 jScrollPane1 = new javax.swing.JScrollPane();
@@ -1051,7 +1045,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(cbInfoArt, gridBagConstraints);
 
         btnCreateAreaFromPoint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
@@ -1429,7 +1423,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblImageUrl.setText("Bild-URL:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblImageUrl, gridBagConstraints);
@@ -1447,7 +1441,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1461,7 +1455,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         panContent2.add(lblUrlCheckImage, gridBagConstraints);
@@ -1470,7 +1464,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblWebsite.setText("Webseite des Bildes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblWebsite, gridBagConstraints);
@@ -1488,7 +1482,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1502,7 +1496,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         panContent2.add(lblUrlCheckWebsite, gridBagConstraints);
@@ -1511,7 +1505,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblAuthor.setText("Urheber:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblAuthor, gridBagConstraints);
@@ -1521,7 +1515,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(txtAuthor, gridBagConstraints);
@@ -1529,7 +1523,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panSpacing2.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
@@ -1966,6 +1960,56 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         }
     }
 
+    public void fillCategoryList(){
+         try {
+             final MetaObject[] mo = SessionManager.getProxy()
+                         .getAllLightweightMetaObjectsForClass(
+                             508,
+                             SessionManager.getSession().getUser(),
+                             new String[] { "name" },
+                             "",
+                             ConnectionContext.createDummy());
+
+             final Collection<LightweightMetaObject> results =
+                            SessionManager.getProxy()
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                    new PoiKategorienLightweightSearch(),
+                                    getConnectionContext());
+             final List<List> elements = new ArrayList<>();
+             int maxElements = 0;
+
+             //determine the max number of sub categories
+             for (final LightweightMetaObject tmp : results) {
+                 if (tmp.toString().split(" - ").length > maxElements) {
+                     maxElements = tmp.toString().split(" - ").length;
+                 }
+             }
+
+             //add the elements to the list
+             for (final LightweightMetaObject tmp : results) {
+                 final String[] splittedRepresentation = tmp.toString().split(" - ");
+                 int i;
+                 final List l = new ArrayList(maxElements);
+
+                 for (i = 0; i < (splittedRepresentation.length - 1); ++i) {
+                     l.add(splittedRepresentation[i]);
+                 }
+
+                 while (i < (maxElements - 1)) {
+                     l.add("");
+                     ++i;
+                 }
+
+                 l.add(tmp);
+                 elements.add(l);
+             }
+
+            ((CategorisedFastBindableReferenceCombo)cbRvrKat).init(elements);
+         } catch (ConnectionException e) {
+             LOG.error("error while filling the cat list", e);
+         }
+
+    }
     /**
      * DOCUMENT ME!
      *
