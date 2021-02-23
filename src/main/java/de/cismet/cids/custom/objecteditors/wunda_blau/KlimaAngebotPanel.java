@@ -36,6 +36,7 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.security.WebAccessManager;
+import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -45,6 +46,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Arrays;
@@ -75,6 +78,7 @@ import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
@@ -156,7 +160,9 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         lblUrlCheck = new JLabel();
         lblFotoAnzeigen = new JLabel();
         lblHomepage = new JLabel();
-        txtHomepage = new JTextField();
+        JPanel panHomepage = new JPanel();
+        JScrollPane scpHomepage = new JScrollPane();
+        taHomepage = new JTextArea();
         JPanel panUrlHp = new JPanel();
         lblUrlHpCheck = new JLabel();
         Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
@@ -470,7 +476,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         lblOnline.setName("lblOnline"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -485,7 +491,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 19;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -564,20 +570,45 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panAngebot.add(lblHomepage, gridBagConstraints);
 
-        txtHomepage.setName(""); // NOI18N
+        panHomepage.setName("panHomepage"); // NOI18N
+        panHomepage.setOpaque(false);
+        panHomepage.setLayout(new GridBagLayout());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.website}"), txtHomepage, BeanProperty.create("text"));
+        scpHomepage.setName("scpHomepage"); // NOI18N
+
+        taHomepage.setColumns(20);
+        taHomepage.setLineWrap(true);
+        taHomepage.setRows(2);
+        taHomepage.setWrapStyleWord(true);
+        taHomepage.setName("taHomepage"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.website}"), taHomepage, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        taHomepage.addMouseListener(formListener);
+        scpHomepage.setViewportView(taHomepage);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panHomepage.add(scpHomepage, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panAngebot.add(txtHomepage, gridBagConstraints);
+        panAngebot.add(panHomepage, gridBagConstraints);
 
         panUrlHp.setName("panUrlHp"); // NOI18N
         panUrlHp.setOpaque(false);
@@ -603,6 +634,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new Insets(5, 10, 5, 10);
         add(panAngebot, gridBagConstraints);
 
         filler3.setName("filler3"); // NOI18N
@@ -621,7 +653,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
     // Code for dispatching events from components to event handlers.
 
-    private class FormListener implements ActionListener {
+    private class FormListener implements ActionListener, MouseListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == btnAddKategorie) {
@@ -636,6 +668,24 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
             else if (evt.getSource() == btnMenOkKategorie) {
                 KlimaAngebotPanel.this.btnMenOkKategorieActionPerformed(evt);
             }
+        }
+
+        public void mouseClicked(MouseEvent evt) {
+            if (evt.getSource() == taHomepage) {
+                KlimaAngebotPanel.this.taHomepageMouseClicked(evt);
+            }
+        }
+
+        public void mouseEntered(MouseEvent evt) {
+        }
+
+        public void mouseExited(MouseEvent evt) {
+        }
+
+        public void mousePressed(MouseEvent evt) {
+        }
+
+        public void mouseReleased(MouseEvent evt) {
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -689,6 +739,25 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         }
     }//GEN-LAST:event_btnRemoveKategorieActionPerformed
 
+    private void taHomepageMouseClicked(MouseEvent evt) {//GEN-FIRST:event_taHomepageMouseClicked
+        if (!isEditor){
+            try {
+                BrowserLauncher.openURL(taHomepage.getText());
+            } catch (final Exception e) {
+                LOG.fatal("Problem during opening url", e);
+                final ErrorInfo ei = new ErrorInfo(
+                    "Fehler beim Aufrufen der Url",
+                    "Beim Aufrufen der Url ist ein Fehler aufgetreten",
+                    null,
+                    null,
+                    e,
+                    Level.SEVERE,
+                    null);
+                JXErrorPane.showDialog(this, ei);
+            }
+        }
+    }//GEN-LAST:event_taHomepageMouseClicked
+
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
     private final KlimaStandortEditor parentEditor;
@@ -729,9 +798,9 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
     JPanel panUrl;
     JTextArea taBemerkung;
     JTextArea taBeschreibungA;
+    JTextArea taHomepage;
     JTextArea taKommentar;
     JTextField txtFoto;
-    JTextField txtHomepage;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -820,8 +889,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
                     doWithFotoUrl();
                 }
             });
-
-        txtHomepage.getDocument().addDocumentListener(new DocumentListener() {
+        taHomepage.getDocument().addDocumentListener(new DocumentListener() {
 
                 // Immer, wenn die Homepage geändert wird, wird diese überprüft.
                 @Override
@@ -851,7 +919,9 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(txtFoto);
-            RendererTools.makeReadOnly(txtHomepage);
+            RendererTools.makeReadOnly(taHomepage);
+            taHomepage.setForeground(Color.BLUE);
+            taHomepage.setToolTipText("zur Homepage");
             RendererTools.makeReadOnly(taBeschreibungA);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(taKommentar);
@@ -893,7 +963,9 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
     private void doWithFotoUrl() {
         
         if(txtFoto.getText().trim().isEmpty()){
+            lblFotoAnzeigen.setIcon(null);
             lblFotoAnzeigen.setText(NbBundle.getMessage(KlimaAngebotPanel.class, BUNDLE_NOFOTO));
+            lblFotoAnzeigen.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         } else{
             final String foto = KlimaConfProperties.getInstance().getFotoUrl().concat(txtFoto.getText());
             // Worker Aufruf, grün/rot
@@ -907,7 +979,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
      * DOCUMENT ME!
      */
     private void doWithHpUrl() {
-        final String url = txtHomepage.getText();
+        final String url = taHomepage.getText();
         // Worker Aufruf, grün/rot
         checkUrl(url, lblUrlHpCheck);
     }
@@ -935,7 +1007,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
                             check = get();
                             if (check) {
                                 showLabel.setIcon(statusOk);
-                                showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                                showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));         
                             } else {
                                 showLabel.setIcon(statusFalsch);
                                 showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));

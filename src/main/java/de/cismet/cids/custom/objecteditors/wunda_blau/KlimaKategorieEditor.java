@@ -221,6 +221,7 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
         panContent.add(panFillerUnten1, gridBagConstraints);
 
         panName.setOpaque(false);
@@ -254,7 +255,7 @@ public class KlimaKategorieEditor extends DefaultCustomObjectEditor implements C
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(25, 5, 0, 5);
         panContent.add(panName, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
