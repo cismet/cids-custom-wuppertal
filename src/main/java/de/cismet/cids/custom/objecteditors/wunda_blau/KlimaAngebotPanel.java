@@ -85,6 +85,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.security.WebAccessManager;
+
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -129,8 +130,11 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         dlgAddKategorie = new JDialog();
         panAddKategorie = new JPanel();
         lblAuswaehlenKategorie = new JLabel();
-        final MetaObject[] kategorie = ObjectRendererUtils.getLightweightMetaObjectsForTable("klima_kategorie", new String[]{"name"}, getConnectionContext());
-        if(kategorie != null) {
+        final MetaObject[] kategorie = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                "klima_kategorie",
+                new String[] { "name" },
+                getConnectionContext());
+        if (kategorie != null) {
             Arrays.sort(kategorie);
             cbKategorie = new JComboBox(kategorie);
         }
@@ -139,24 +143,24 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         btnMenOkKategorie = new JButton();
         panAngebot = new JPanel();
         lblKategorie = new JLabel();
-        JPanel panKategorie = new JPanel();
-        JScrollPane scpKategorie = new JScrollPane();
+        final JPanel panKategorie = new JPanel();
+        final JScrollPane scpKategorie = new JScrollPane();
         lstKategorie = new JList();
         panButtonsKategorie = new JPanel();
         btnAddKategorie = new JButton();
         btnRemoveKategorie = new JButton();
-        Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         lblBeschreibungA = new JLabel();
-        JPanel panBeschreibungA = new JPanel();
-        JScrollPane scpBeschreibungA = new JScrollPane();
+        final JPanel panBeschreibungA = new JPanel();
+        final JScrollPane scpBeschreibungA = new JScrollPane();
         taBeschreibungA = new JTextArea();
         lblBemerkung = new JLabel();
-        JPanel panBemerkung = new JPanel();
-        JScrollPane scpBemerkung = new JScrollPane();
+        final JPanel panBemerkung = new JPanel();
+        final JScrollPane scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         lblKommentar = new JLabel();
-        JPanel panKommentar = new JPanel();
-        JScrollPane scpKommentar = new JScrollPane();
+        final JPanel panKommentar = new JPanel();
+        final JScrollPane scpKommentar = new JScrollPane();
         taKommentar = new JTextArea();
         lblOnline = new JLabel();
         chOnline = new JCheckBox();
@@ -166,14 +170,14 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         lblUrlCheck = new JLabel();
         lblFotoAnzeigen = new JLabel();
         lblHomepage = new JLabel();
-        JPanel panHomepage = new JPanel();
+        final JPanel panHomepage = new JPanel();
         hlHomepage = new JXHyperlink();
         tfHomepage = new JTextField();
-        JPanel panUrlHp = new JPanel();
+        final JPanel panUrlHp = new JPanel();
         lblUrlHpCheck = new JLabel();
-        Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
-        FormListener formListener = new FormListener();
+        final FormListener formListener = new FormListener();
 
         dlgAddKategorie.setTitle("Kategorie auswählen");
         dlgAddKategorie.setModal(true);
@@ -237,7 +241,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblKategorie.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblKategorie, "Kategorie:");
-        lblKategorie.setName("lblKategorie"); // NOI18N
+        lblKategorie.setName("lblKategorie");            // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -256,11 +260,15 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lstKategorie.setFont(new Font("Dialog", 0, 12)); // NOI18N
         lstKategorie.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lstKategorie.setName("lstKategorie"); // NOI18N
+        lstKategorie.setName("lstKategorie");            // NOI18N
         lstKategorie.setVisibleRowCount(3);
 
-        ELProperty eLProperty = ELProperty.create("${cidsBean.arr_kategorie}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstKategorie);
+        final ELProperty eLProperty = ELProperty.create("${cidsBean.arr_kategorie}");
+        final JListBinding jListBinding = SwingBindings.createJListBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstKategorie);
         bindingGroup.addBinding(jListBinding);
 
         scpKategorie.setViewportView(lstKategorie);
@@ -281,15 +289,17 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         panButtonsKategorie.setOpaque(false);
         panButtonsKategorie.setLayout(new GridBagLayout());
 
-        btnAddKategorie.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddKategorie.setName("btnAddKategorie"); // NOI18N
+        btnAddKategorie.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddKategorie.setName("btnAddKategorie");                                                            // NOI18N
         btnAddKategorie.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsKategorie.add(btnAddKategorie, gridBagConstraints);
 
-        btnRemoveKategorie.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveKategorie.setName("btnRemoveKategorie"); // NOI18N
+        btnRemoveKategorie.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveKategorie.setName("btnRemoveKategorie");                                                         // NOI18N
         btnRemoveKategorie.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -325,7 +335,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblBeschreibungA.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBeschreibungA, "Beschreibung:");
-        lblBeschreibungA.setName("lblBeschreibungA"); // NOI18N
+        lblBeschreibungA.setName("lblBeschreibungA");        // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -347,7 +357,12 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         taBeschreibungA.setWrapStyleWord(true);
         taBeschreibungA.setName("taBeschreibungA"); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibungA, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibungA,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibungA.setViewportView(taBeschreibungA);
@@ -377,7 +392,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
-        lblBemerkung.setName("lblBemerkung"); // NOI18N
+        lblBemerkung.setName("lblBemerkung");            // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -399,7 +414,12 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         taBemerkung.setWrapStyleWord(true);
         taBemerkung.setName("taBemerkung"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -428,7 +448,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblKommentar.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblKommentar, "Kommentar:");
-        lblKommentar.setName("lblKommentar"); // NOI18N
+        lblKommentar.setName("lblKommentar");            // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -450,7 +470,12 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         taKommentar.setWrapStyleWord(true);
         taKommentar.setName("taKommentar"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.kommentar}"), taKommentar, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.kommentar}"),
+                taKommentar,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpKommentar.setViewportView(taKommentar);
@@ -479,7 +504,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblOnline.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblOnline, "Online:");
-        lblOnline.setName("lblOnline"); // NOI18N
+        lblOnline.setName("lblOnline");               // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 19;
@@ -492,7 +517,12 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         chOnline.setContentAreaFilled(false);
         chOnline.setName("chOnline"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.online}"), chOnline, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.online}"),
+                chOnline,
+                BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -506,7 +536,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblFoto.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblFoto, "Foto:");
-        lblFoto.setName("lblFoto"); // NOI18N
+        lblFoto.setName("lblFoto");                 // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -518,7 +548,12 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         txtFoto.setName("txtFoto"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bild}"), txtFoto, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bild}"),
+                txtFoto,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -535,8 +570,9 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
-        lblUrlCheck.setName("lblUrlCheck"); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setName("lblUrlCheck");                                                                  // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -553,7 +589,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblFotoAnzeigen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblFotoAnzeigen, "Foto anzeigen");
-        lblFotoAnzeigen.setName("lblFotoAnzeigen"); // NOI18N
+        lblFotoAnzeigen.setName("lblFotoAnzeigen");         // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
@@ -567,7 +603,7 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         lblHomepage.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblHomepage, "Homepage:");
-        lblHomepage.setName("lblHomepage"); // NOI18N
+        lblHomepage.setName("lblHomepage");             // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 15;
@@ -585,9 +621,19 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         hlHomepage.setName("hlHomepage"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.website}"), hlHomepage, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.website}"),
+                hlHomepage,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.website}"), hlHomepage, BeanProperty.create("toolTipText"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.website}"),
+                hlHomepage,
+                BeanProperty.create("toolTipText"));
         bindingGroup.addBinding(binding);
 
         hlHomepage.addActionListener(formListener);
@@ -600,7 +646,12 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
 
         tfHomepage.setName("tfHomepage"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.website}"), tfHomepage, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.website}"),
+                tfHomepage,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -624,8 +675,9 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         panUrlHp.setOpaque(false);
         panUrlHp.setLayout(new GridBagLayout());
 
-        lblUrlHpCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
-        lblUrlHpCheck.setName("lblUrlHpCheck"); // NOI18N
+        lblUrlHpCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlHpCheck.setName("lblUrlHpCheck");                                                              // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -661,28 +713,34 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         bindingGroup.bind();
     }
 
-    // Code for dispatching events from components to event handlers.
-
+    /**
+     * Code for dispatching events from components to event handlers.
+     *
+     * @version  $Revision$, $Date$
+     */
     private class FormListener implements ActionListener {
-        FormListener() {}
-        public void actionPerformed(ActionEvent evt) {
+
+        /**
+         * Creates a new FormListener object.
+         */
+        FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddKategorie) {
                 KlimaAngebotPanel.this.btnAddKategorieActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnRemoveKategorie) {
+            } else if (evt.getSource() == btnRemoveKategorie) {
                 KlimaAngebotPanel.this.btnRemoveKategorieActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnMenAbortKategorie) {
+            } else if (evt.getSource() == btnMenAbortKategorie) {
                 KlimaAngebotPanel.this.btnMenAbortKategorieActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnMenOkKategorie) {
+            } else if (evt.getSource() == btnMenOkKategorie) {
                 KlimaAngebotPanel.this.btnMenOkKategorieActionPerformed(evt);
-            }
-            else if (evt.getSource() == hlHomepage) {
+            } else if (evt.getSource() == hlHomepage) {
                 KlimaAngebotPanel.this.hlHomepageActionPerformed(evt);
             }
         }
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     //~ Instance fields --------------------------------------------------------
 
@@ -779,25 +837,25 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddKategorieActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddKategorieActionPerformed
+    private void btnAddKategorieActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddKategorieActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(KlimaAngebotPanel.this), dlgAddKategorie, true);
-    }//GEN-LAST:event_btnAddKategorieActionPerformed
+    }                                                                    //GEN-LAST:event_btnAddKategorieActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortKategorieActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortKategorieActionPerformed
+    private void btnMenAbortKategorieActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortKategorieActionPerformed
         dlgAddKategorie.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortKategorieActionPerformed
+    }                                                                         //GEN-LAST:event_btnMenAbortKategorieActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkKategorieActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkKategorieActionPerformed
+    private void btnMenOkKategorieActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkKategorieActionPerformed
         try {
             final Object selItem = cbKategorie.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -812,14 +870,14 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
         } finally {
             dlgAddKategorie.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkKategorieActionPerformed
+    }                                                                      //GEN-LAST:event_btnMenOkKategorieActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveKategorieActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveKategorieActionPerformed
+    private void btnRemoveKategorieActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveKategorieActionPerformed
         final Object selection = lstKategorie.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -842,26 +900,31 @@ public class KlimaAngebotPanel extends javax.swing.JPanel implements Disposable,
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveKategorieActionPerformed
+    }                                                                       //GEN-LAST:event_btnRemoveKategorieActionPerformed
 
-    private void hlHomepageActionPerformed(ActionEvent evt) {//GEN-FIRST:event_hlHomepageActionPerformed
-        if (!isEditor){
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlHomepageActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_hlHomepageActionPerformed
+        if (!isEditor) {
             try {
                 BrowserLauncher.openURL(hlHomepage.getText());
             } catch (final Exception e) {
                 LOG.fatal("Problem during opening url", e);
                 final ErrorInfo ei = new ErrorInfo(
-                    "Fehler beim Aufrufen der Url",
-                    "Beim Aufrufen der Url ist ein Fehler aufgetreten",
-                    null,
-                    null,
-                    e,
-                    Level.SEVERE,
-                    null);
+                        "Fehler beim Aufrufen der Url",
+                        "Beim Aufrufen der Url ist ein Fehler aufgetreten",
+                        null,
+                        null,
+                        e,
+                        Level.SEVERE,
+                        null);
                 JXErrorPane.showDialog(this, ei);
             }
         }
-    }//GEN-LAST:event_hlHomepageActionPerformed
+    }                                                               //GEN-LAST:event_hlHomepageActionPerformed
 
     @Override
     public ConnectionContext getConnectionContext() {
