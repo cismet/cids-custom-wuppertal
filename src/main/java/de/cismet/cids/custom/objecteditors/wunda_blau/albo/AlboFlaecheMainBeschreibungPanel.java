@@ -147,6 +147,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenstatus, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)cbFlaechenstatus).setNullable(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, "Flächenzuordnung zu:");
         jLabel15.setName("jLabel15"); // NOI18N
@@ -172,6 +173,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenzuordnung, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)cbFlaechenzuordnung).setNullable(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, "Jahr");
         jLabel12.setName("jLabel12"); // NOI18N
