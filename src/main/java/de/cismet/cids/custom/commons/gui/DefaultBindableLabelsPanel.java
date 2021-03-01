@@ -44,7 +44,6 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -54,8 +53,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.layout.WrapLayout;
-
-import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -90,8 +87,10 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
     private javax.swing.JButton btnEdit;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panLabels;
     private javax.swing.JPanel panToggles;
@@ -284,6 +283,7 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
         panToggles.removeAll();
         panLabels.removeAll();
         panLabels.add(new JLabel("<html><i>Liste wird geladen..."));
+        btnEdit.setEnabled(false);
 
         new SwingWorker<MetaObject[], Void>() {
 
@@ -425,6 +425,7 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
     @Override
     public void setEnabled(final boolean enabled) {
         super.setEnabled(enabled);
+        btnEdit.setEnabled(enabled);
         for (final Component component : panToggles.getComponents()) {
             if (component instanceof Toggle) {
                 final Toggle toggle = (Toggle)component;
@@ -449,6 +450,7 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
         java.awt.GridBagConstraints gridBagConstraints;
 
         jDialog1 = new javax.swing.JDialog();
+        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         panToggles = new javax.swing.JPanel();
@@ -459,11 +461,15 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         panLabels = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         btnEdit = new javax.swing.JButton();
 
         jDialog1.setTitle(getTitle());
         jDialog1.setMinimumSize(new java.awt.Dimension(400, 300));
+        jDialog1.setModal(true);
         jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -496,7 +502,7 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jDialog1.getContentPane().add(jPanel1, gridBagConstraints);
+        jPanel3.add(jPanel1, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -546,47 +552,65 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        jDialog1.getContentPane().add(jPanel2, gridBagConstraints);
+        jPanel3.add(jPanel2, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jDialog1.getContentPane().add(jPanel3, gridBagConstraints);
+
+        jDialog1.getRootPane().setDefaultButton(btnApply);
+
+        setBorder(isEditable() ? javax.swing.BorderFactory.createEtchedBorder() : null);
         setOpaque(isOpaque());
+        addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    formMouseClicked(evt);
+                }
+            });
         setLayout(new java.awt.GridBagLayout());
 
         panLabels.setOpaque(false);
+        panLabels.addMouseListener(new java.awt.event.MouseAdapter() {
 
-        final javax.swing.GroupLayout panLabelsLayout = new javax.swing.GroupLayout(panLabels);
-        panLabels.setLayout(panLabelsLayout);
-        panLabelsLayout.setHorizontalGroup(
-            panLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                371,
-                Short.MAX_VALUE));
-        panLabelsLayout.setVerticalGroup(
-            panLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                300,
-                Short.MAX_VALUE));
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    panLabelsMouseClicked(evt);
+                }
+            });
+        panLabels.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                DefaultBindableLabelsPanel.class,
+                "DefaultBindableLabelsPanel.jLabel1.text")); // NOI18N
+        panLabels.add(jLabel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         add(panLabels, gridBagConstraints);
         panLabels.setLayout(new WrapLayout(WrapLayout.LEFT, 0, 5));
 
         btnEdit.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cismap/commons/gui/attributetable/res/icon-edit.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnEdit,
             org.openide.util.NbBundle.getMessage(
                 DefaultBindableLabelsPanel.class,
                 "DefaultBindableLabelsPanel.btnEdit.text",
-                new Object[] {}));                                                                          // NOI18N
+                new Object[] {}));                                                            // NOI18N
         btnEdit.setToolTipText(org.openide.util.NbBundle.getMessage(
                 DefaultBindableLabelsPanel.class,
-                "DefaultBindableLabelsPanel.btnEdit.toolTipText"));                                         // NOI18N
+                "DefaultBindableLabelsPanel.btnEdit.toolTipText"));                           // NOI18N
         btnEdit.setBorderPainted(false);
         btnEdit.setContentAreaFilled(false);
         btnEdit.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -602,8 +626,9 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 0, 0);
         add(btnEdit, gridBagConstraints);
         btnEdit.setVisible(isEditable());
     } // </editor-fold>//GEN-END:initComponents
@@ -614,8 +639,14 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
      * @param  evt  DOCUMENT ME!
      */
     private void btnEditActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnEditActionPerformed
+//        StaticSwingTools.showDialog(jDialog1);
 
-        StaticSwingTools.showDialog(jDialog1);
+        jDialog1.setSize(getSize().width, jDialog1.getSize().height);
+        final int x = btnEdit.getLocationOnScreen().x - jDialog1.getBounds().width + btnEdit.getBounds().width;
+        final int y = btnEdit.getLocationOnScreen().y;
+
+        jDialog1.setLocation(x + 2, y - 4);
+        jDialog1.setVisible(true);
     } //GEN-LAST:event_btnEditActionPerformed
 
     /**
@@ -651,6 +682,24 @@ public class DefaultBindableLabelsPanel extends JPanel implements Bindable, Meta
 //        propertyChangeSupport.firePropertyChange("selectedElement", null, cidsBean);
         jDialog1.setVisible(false);
     } //GEN-LAST:event_btnApplyActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void panLabelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_panLabelsMouseClicked
+        btnEditActionPerformed(null);
+    }                                                                         //GEN-LAST:event_panLabelsMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
+        btnEditActionPerformed(null);
+    }                                                                    //GEN-LAST:event_formMouseClicked
 
     //~ Inner Classes ----------------------------------------------------------
 
