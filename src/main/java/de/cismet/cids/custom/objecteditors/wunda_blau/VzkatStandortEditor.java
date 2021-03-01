@@ -200,6 +200,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             VzkatProperties.getInstance().getWebdavUploadPassword(),
             false);
 
+    boolean refreshingSchildPanels = false;
+
     private final StrAdrStrasseLightweightSearch strassennameSearch = new StrAdrStrasseLightweightSearch(
             StrAdrStrasseLightweightSearch.Subject.NAME,
             STRASSENNAME_TOSTRING_TEMPLATE,
@@ -2566,36 +2568,41 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * DOCUMENT ME!
      */
     public void refreshSchildPanels() {
-        for (final Component component : jPanel5.getComponents()) {
-            if (component instanceof VzkatStandortSchildPanel) {
-                ((VzkatStandortSchildPanel)component).dispose();
+        try {
+            refreshingSchildPanels = true;
+            for (final Component component : jPanel5.getComponents()) {
+                if (component instanceof VzkatStandortSchildPanel) {
+                    ((VzkatStandortSchildPanel)component).dispose();
+                }
             }
-        }
-        jPanel5.removeAll();
+            jPanel5.removeAll();
 
-        jButton3.setVisible(schildBeans.isEmpty());
+            jButton3.setVisible(schildBeans.isEmpty());
 
-        VzkatStandortSchildPanel selectedSchildPanel = null;
-        for (final CidsBean schildBean : schildBeans) {
-            final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(
-                    VzkatStandortEditor.this,
-                    isEditable());
-            schildPanel.initWithConnectionContext(getConnectionContext());
-            schildPanel.setCidsBean(schildBean);
-            schildPanel.setOpaque(false);
-            if (schildBean.equals(selectedSchildBean)) {
-                selectedSchildPanel = schildPanel;
+            VzkatStandortSchildPanel selectedSchildPanel = null;
+            for (final CidsBean schildBean : schildBeans) {
+                final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(
+                        VzkatStandortEditor.this,
+                        isEditable());
+                schildPanel.initWithConnectionContext(getConnectionContext());
+                schildPanel.setCidsBean(schildBean);
+                schildPanel.setOpaque(false);
+                if (schildBean.equals(selectedSchildBean)) {
+                    selectedSchildPanel = schildPanel;
+                }
+                jPanel5.add(schildPanel);
             }
-            jPanel5.add(schildPanel);
-        }
-        if (selectedSchildPanel != null) {
-            final VzkatStandortSchildPanel component = selectedSchildPanel;
-            component.setSelected(true);
+            if (selectedSchildPanel != null) {
+                final VzkatStandortSchildPanel component = selectedSchildPanel;
+                component.setSelected(true);
 
-            jScrollPane1.scrollRectToVisible(component.getBounds());
-        }
+                jScrollPane1.scrollRectToVisible(component.getBounds());
+            }
 
-        refreshImageButtons();
+            refreshImageButtons();
+        } finally {
+            refreshingSchildPanels = false;
+        }
     }
 
     /**
@@ -2715,20 +2722,22 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * DOCUMENT ME!
      */
     public void richtungUpdate() {
-        new SwingWorker<Void, Void>() {
+        if (!refreshingSchildPanels) {
+            new SwingWorker<Void, Void>() {
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    redoSchilder(redoReihenfolge(createRichtungsLists(schildBeans)));
-                    cidsBean.setArtificialChangeFlag(true);
-                    return null;
-                }
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        redoSchilder(redoReihenfolge(createRichtungsLists(schildBeans)));
+                        cidsBean.setArtificialChangeFlag(true);
+                        return null;
+                    }
 
-                @Override
-                protected void done() {
-                    refreshSchildPanels();
-                }
-            }.execute();
+                    @Override
+                    protected void done() {
+                        refreshSchildPanels();
+                    }
+                }.execute();
+        }
     }
 
     /**
