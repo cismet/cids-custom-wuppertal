@@ -82,9 +82,9 @@ public class AlboReportGenerator {
                     if (flaecheGeom != null) {
                         features.add(new CidsFeature(flaecheBean.getMetaObject()));
                         if (geom == null) {
-                            geom = (Geometry)flaecheGeom.clone();
+                            geom = (Geometry)flaecheGeom.buffer(0).clone();
                         } else {
-                            geom = geom.union((Geometry)flaecheGeom.clone());
+                            geom = geom.union((Geometry)flaecheGeom.buffer(0).clone());
                         }
                     }
                 }
