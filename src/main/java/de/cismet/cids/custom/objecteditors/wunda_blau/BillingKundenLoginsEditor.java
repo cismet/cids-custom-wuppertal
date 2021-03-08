@@ -11,15 +11,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.MetaClass;
-
 import org.apache.log4j.Logger;
-
-import java.util.concurrent.ExecutionException;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
@@ -35,10 +27,6 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
-
-import de.cismet.tools.CismetThreadPool;
-
-import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMetaClass;
 
 /**
  * DOCUMENT ME!
@@ -124,7 +112,8 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         jLabel3 = new javax.swing.JLabel();
         txtTelNummer = new DefaultBindableJTextField();
         lblKunde = new javax.swing.JLabel();
-        cboCustomer = new AlwaysReloadBindableReferenceCombo();
+        cboCustomer = new DefaultBindableReferenceCombo(
+                new DefaultBindableReferenceCombo.AlwaysReloadOption());
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -305,64 +294,5 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private class AlwaysReloadBindableReferenceCombo extends DefaultBindableReferenceCombo {
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        protected void init(final MetaClass mc, final boolean forceReload) {
-            if (!isFakeModel() && (mc != null)) {
-                DefaultComboBoxModel tmpModel = null;
-                if (!SwingUtilities.isEventDispatchThread()) {
-                    tmpModel = getModelByMetaClass(
-                            mc,
-                            isNullable(),
-                            isOnlyUsed(),
-                            getComparator(),
-                            true,
-                            getConnectionContext());
-                }
-                final DefaultComboBoxModel model = tmpModel;
-
-                CismetThreadPool.execute(new SwingWorker<DefaultComboBoxModel, Void>() {
-
-                        @Override
-                        protected DefaultComboBoxModel doInBackground() throws Exception {
-                            if (model != null) {
-                                return model;
-                            } else {
-                                return getModelByMetaClass(
-                                        mc,
-                                        isNullable(),
-                                        isOnlyUsed(),
-                                        getComparator(),
-                                        forceReload,
-                                        getConnectionContext());
-                            }
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                final DefaultComboBoxModel tmp = get();
-                                tmp.setSelectedItem(cidsBean);
-                                setModel(tmp);
-                            } catch (InterruptedException interruptedException) {
-                            } catch (ExecutionException executionException) {
-                                LOG.error("Error while initializing the model of a referenceCombo", executionException); // NOI18N
-                            }
-                        }
-                    });
-            }
-        }
     }
 }
