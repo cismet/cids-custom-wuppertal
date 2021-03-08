@@ -410,7 +410,7 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
                     "Die Abfrage wurde erfolgreich abgespeichert.",
                     "Abfrage gespeichert.",
                     JOptionPane.INFORMATION_MESSAGE);
-                ((DefaultBindableReferenceCombo)cbAbfragen).reload(true);
+                ((DefaultBindableReferenceCombo)cbAbfragen).reload();
                 ((DefaultBindableReferenceCombo)cbAbfragen).setSelectedItem(persisted);
             }
         } catch (final Exception ex) {
@@ -429,7 +429,7 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
      * @param  evt  DOCUMENT ME!
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        ((DefaultBindableReferenceCombo)cbAbfragen).reload(true);
+        ((DefaultBindableReferenceCombo)cbAbfragen).reload();
         ((DefaultBindableReferenceCombo)cbAbfragen).setSelectedItem(null);
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 

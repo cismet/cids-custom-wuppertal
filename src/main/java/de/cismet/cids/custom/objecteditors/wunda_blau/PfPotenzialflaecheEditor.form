@@ -494,12 +494,12 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel" name="searchLabelsFieldPanel2">
+                        <Container class="de.cismet.cids.editors.SearchLabelsFieldPanel" name="searchLabelsFieldPanel2">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(bezirkSearch)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(bezirkSearch)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -524,12 +524,12 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel" name="searchLabelsFieldPanel1">
+                        <Container class="de.cismet.cids.editors.SearchLabelsFieldPanel" name="searchLabelsFieldPanel1">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(quartierSearch)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(quartierSearch)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -554,7 +554,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField3">
+                        <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField3">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
@@ -562,7 +562,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_eigentuemer}" target="defaultBindableCheckboxField3" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Eigent&#xfc;mer:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Eigent&#xfc;mer:&quot;)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -685,6 +685,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_lagebewertung_verkehr}" target="cbLagetyp" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -709,7 +710,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField11">
+                        <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField11">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
@@ -717,7 +718,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_naehen_zu}" target="defaultBindableCheckboxField11" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;N&#xe4;he zu:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;N&#xe4;he zu:&quot;)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -747,6 +748,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_siedlungsraeumliche_lage}" target="cbLagetyp2" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -776,6 +778,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_oepnv}" target="cbOepnv" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -817,6 +820,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.topografie}" target="cbTopografie" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -846,6 +850,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_ausrichtung}" target="cbTopografie1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -958,7 +963,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField9">
+                        <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField9">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
@@ -966,7 +971,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.regionalplan}" target="defaultBindableCheckboxField9" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Regionalplan:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Regionalplan:&quot;)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -991,12 +996,12 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel" name="searchLabelsFieldPanel6">
+                        <Container class="de.cismet.cids.editors.SearchLabelsFieldPanel" name="searchLabelsFieldPanel6">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(fnpHauptnutzungenSearch)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(fnpHauptnutzungenSearch)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1021,12 +1026,12 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel" name="searchLabelsFieldPanel4">
+                        <Container class="de.cismet.cids.editors.SearchLabelsFieldPanel" name="searchLabelsFieldPanel4">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(bplanSearch, true)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(bplanSearch, true)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1137,7 +1142,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField6">
+                        <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField6">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
@@ -1145,7 +1150,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.umgebungsnutzung}" target="defaultBindableCheckboxField6" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Umgebungsnutzung:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Umgebungsnutzung:&quot;)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1182,7 +1187,7 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
                           <SubComponents>
-                            <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField1">
+                            <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField1">
                               <Properties>
                                 <Property name="opaque" type="boolean" value="false"/>
                               </Properties>
@@ -1190,7 +1195,7 @@
                                 <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_brachflaechen}" target="defaultBindableCheckboxField1" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Brachfl&#xe4;chenkategorie:&quot;)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Brachfl&#xe4;chenkategorie:&quot;)"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1260,7 +1265,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField5">
+                        <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField5">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
@@ -1268,7 +1273,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.bisherige_nutzung}" target="defaultBindableCheckboxField5" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Bisherige Nutzung:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Bisherige Nutzung:&quot;)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1298,6 +1303,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.vorhandene_bebauung}" target="cbVorhandeneBebauung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -1327,6 +1333,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_aeussere_erschliessung}" target="cbAeussereErschluessung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -1351,12 +1358,12 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel" name="searchLabelsFieldPanel5">
+                        <Container class="de.cismet.cids.editors.SearchLabelsFieldPanel" name="searchLabelsFieldPanel5">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(stadtraumtypSearch, false)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(stadtraumtypSearch, false)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1381,12 +1388,12 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Container class="de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel" name="searchLabelsFieldPanel3">
+                        <Container class="de.cismet.cids.editors.SearchLabelsFieldPanel" name="searchLabelsFieldPanel3">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(wohnlagenSearch, false)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(wohnlagenSearch, false)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1929,6 +1936,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_potenzialart}" target="cbEntwicklungsaussichten1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -1958,6 +1966,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_entwicklungsstand}" target="cbEntwicklungsaussichten2" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -1982,7 +1991,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField4">
+                    <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField4">
                       <Properties>
                         <Property name="opaque" type="boolean" value="false"/>
                       </Properties>
@@ -1990,7 +1999,7 @@
                         <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_restriktionen}" target="defaultBindableCheckboxField4" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Restriktionen/Hemmnisse:&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Restriktionen/Hemmnisse:&quot;)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -2015,7 +2024,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField10">
+                    <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField10">
                       <Properties>
                         <Property name="opaque" type="boolean" value="false"/>
                       </Properties>
@@ -2023,7 +2032,7 @@
                         <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_empfohlene_nutzungen_wohnen}" target="defaultBindableCheckboxField10" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Art der Wohnnutzung:&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Art der Wohnnutzung:&quot;)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -2053,6 +2062,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_wohneinheiten}" target="cbAktivierbarkeit1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -2101,6 +2111,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_entwicklungsaussichten}" target="cbEntwicklungsaussichten" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -2216,6 +2227,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.verfuegbarkeit}" target="cbVerfuegbarkeit1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -2245,6 +2257,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.aktivierbarkeit}" target="cbAktivierbarkeit" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -2277,6 +2290,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_handlungsprioritaet}" target="cbHandlungsdruck1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -2301,7 +2315,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Container class="de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField8">
+                    <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="defaultBindableCheckboxField8">
                       <Properties>
                         <Property name="opaque" type="boolean" value="false"/>
                       </Properties>
@@ -2309,7 +2323,7 @@
                         <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_empfohlene_nutzungen}" target="defaultBindableCheckboxField8" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Nutzung:&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Nutzung:&quot;)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -2339,6 +2353,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_revitalisierung}" target="cbRevitalisierung1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -2371,6 +2386,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.handlungsdruck}" target="cbHandlungsdruck" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>

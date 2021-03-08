@@ -120,7 +120,7 @@ public class RendererTools {
      * @param  baseProp      DOCUMENT ME!
      */
     public static void makeReadOnly(final BindingGroup bindingGroup, final String baseProp) {
-        RendererTools.makeReadOnly(bindingGroup, baseProp, true);
+        makeReadOnly(bindingGroup, baseProp, true);
     }
 
     /**
@@ -147,7 +147,7 @@ public class RendererTools {
      */
     public static void makeUneditable(final BindingGroup bindingGroup, final String baseProp, final boolean readOnly) {
         for (final JComponent component : getAllBindedComponents(bindingGroup, baseProp)) {
-            RendererTools.makeUneditable(component, readOnly);
+            makeUneditable(component, readOnly);
         }
         if (bindingGroup != null) {
             final List<Binding> bindings = bindingGroup.getBindings();
@@ -194,7 +194,7 @@ public class RendererTools {
             final EditorAndRendererComponent er = (EditorAndRendererComponent)comp;
             er.setActingAsRenderer(asRenderer);
         } else {
-            RendererTools.makeUneditable(comp, asRenderer);
+            makeUneditable(comp, asRenderer);
         }
     }
 
