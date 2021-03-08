@@ -202,6 +202,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             VzkatProperties.getInstance().getWebdavUploadPassword(),
             false);
 
+    boolean refreshingSchildPanels = false;
+
     private final StrAdrStrasseLightweightSearch strassennameSearch = new StrAdrStrasseLightweightSearch(
             StrAdrStrasseLightweightSearch.Subject.NAME,
             STRASSENNAME_TOSTRING_TEMPLATE,
@@ -226,6 +228,8 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private CidsBean standortBean;
     private Richtung richtung;
     private File uploadFile = null;
+
+    private boolean mapInitialized = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFullMinimize;
@@ -273,6 +277,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXHyperlink jxhOVBW;
     private org.jdesktop.swingx.JXHyperlink jxhOVCenter;
@@ -559,6 +564,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jScrollPane2 = new javax.swing.JScrollPane();
         panFullIcon = new de.cismet.tools.gui.RoundedPanel();
         lblFullIconVorne = new javax.swing.JLabel();
         lblFullIconHinten = new javax.swing.JLabel();
@@ -1552,13 +1558,15 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panFullIcon.add(lblFullIconSonstige, "sonstige");
         lblPreviewIconSonstige.setVisible(false);
 
+        jScrollPane2.setViewportView(panFullIcon);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel13.add(panFullIcon, gridBagConstraints);
+        jPanel13.add(jScrollPane2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1653,7 +1661,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                                 return null;
                             }
                         }.execute();
-                        mappingComponent1.zoomToFeatureCollection();
                     }
                 });
         }
@@ -2563,36 +2570,41 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * DOCUMENT ME!
      */
     public void refreshSchildPanels() {
-        for (final Component component : jPanel5.getComponents()) {
-            if (component instanceof VzkatStandortSchildPanel) {
-                ((VzkatStandortSchildPanel)component).dispose();
+        try {
+            refreshingSchildPanels = true;
+            for (final Component component : jPanel5.getComponents()) {
+                if (component instanceof VzkatStandortSchildPanel) {
+                    ((VzkatStandortSchildPanel)component).dispose();
+                }
             }
-        }
-        jPanel5.removeAll();
+            jPanel5.removeAll();
 
-        jButton3.setVisible(schildBeans.isEmpty());
+            jButton3.setVisible(schildBeans.isEmpty());
 
-        VzkatStandortSchildPanel selectedSchildPanel = null;
-        for (final CidsBean schildBean : schildBeans) {
-            final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(
-                    VzkatStandortEditor.this,
-                    isEditable());
-            schildPanel.initWithConnectionContext(getConnectionContext());
-            schildPanel.setCidsBean(schildBean);
-            schildPanel.setOpaque(false);
-            if (schildBean.equals(selectedSchildBean)) {
-                selectedSchildPanel = schildPanel;
+            VzkatStandortSchildPanel selectedSchildPanel = null;
+            for (final CidsBean schildBean : schildBeans) {
+                final VzkatStandortSchildPanel schildPanel = new VzkatStandortSchildPanel(
+                        VzkatStandortEditor.this,
+                        isEditable());
+                schildPanel.initWithConnectionContext(getConnectionContext());
+                schildPanel.setCidsBean(schildBean);
+                schildPanel.setOpaque(false);
+                if (schildBean.equals(selectedSchildBean)) {
+                    selectedSchildPanel = schildPanel;
+                }
+                jPanel5.add(schildPanel);
             }
-            jPanel5.add(schildPanel);
-        }
-        if (selectedSchildPanel != null) {
-            final VzkatStandortSchildPanel component = selectedSchildPanel;
-            component.setSelected(true);
+            if (selectedSchildPanel != null) {
+                final VzkatStandortSchildPanel component = selectedSchildPanel;
+                component.setSelected(true);
 
-            jScrollPane1.scrollRectToVisible(component.getBounds());
-        }
+                jScrollPane1.scrollRectToVisible(component.getBounds());
+            }
 
-        refreshImageButtons();
+            refreshImageButtons();
+        } finally {
+            refreshingSchildPanels = false;
+        }
     }
 
     /**
@@ -2712,20 +2724,22 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
      * DOCUMENT ME!
      */
     public void richtungUpdate() {
-        new SwingWorker<Void, Void>() {
+        if (!refreshingSchildPanels) {
+            new SwingWorker<Void, Void>() {
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    redoSchilder(redoReihenfolge(createRichtungsLists(schildBeans)));
-                    cidsBean.setArtificialChangeFlag(true);
-                    return null;
-                }
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        redoSchilder(redoReihenfolge(createRichtungsLists(schildBeans)));
+                        cidsBean.setArtificialChangeFlag(true);
+                        return null;
+                    }
 
-                @Override
-                protected void done() {
-                    refreshSchildPanels();
-                }
-            }.execute();
+                    @Override
+                    protected void done() {
+                        refreshSchildPanels();
+                    }
+                }.execute();
+        }
     }
 
     /**
@@ -2904,7 +2918,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
             bindingGroup.bind();
 
-            initMap();
             refreshStrassenComboboxes();
             refreshGeomFeatures();
 
@@ -3055,9 +3068,22 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         if (standortBean != null) {
             final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
             if (geom != null) {
+                if (!mapInitialized) {
+                    initMap();
+                }
                 final StyledFeature dsf = new DefaultStyledFeature();
                 dsf.setGeometry(geom);
                 mappingComponent1.getFeatureCollection().addFeature(dsf);
+                final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
+                            ClientAlkisConf.getInstance().getGeoBuffer()
+                                    * 2));
+                SwingUtilities.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            mappingComponent1.gotoBoundingBoxWithoutHistory(box);
+                        }
+                    });
             }
         }
     }
@@ -3065,38 +3091,42 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
     /**
      * DOCUMENT ME!
      */
-    private void initMap() {
-        if (standortBean != null) {
+    private synchronized void initMap() {
+        if ((standortBean != null) && !mapInitialized) {
             final Geometry geom = (Geometry)standortBean.getProperty("fk_geom.geo_field");
-            try {
-                final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
-                            ClientAlkisConf.getInstance().getGeoBuffer()
-                                    * 2));
+            if (geom != null) {
+                try {
+                    final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
+                                ClientAlkisConf.getInstance().getGeoBuffer()
+                                        * 2));
 
-                final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
-                mappingModel.addHome(new XBoundingBox(
-                        box.getX1(),
-                        box.getY1(),
-                        box.getX2(),
-                        box.getY2(),
-                        ClientAlkisConf.getInstance().getSrsService(),
-                        true));
-                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                            ClientAlkisConf.getInstance().getMapCallString()));
-                swms.setName("Verkehrszeichen");
+                    final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
+                    mappingModel.addHome(new XBoundingBox(
+                            box.getX1(),
+                            box.getY1(),
+                            box.getX2(),
+                            box.getY2(),
+                            ClientAlkisConf.getInstance().getSrsService(),
+                            true));
+                    final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                                ClientAlkisConf.getInstance().getMapCallString()));
+                    swms.setName("Verkehrszeichen");
 
-                // add the raster layer to the model
-                mappingModel.addLayer(swms);
-                // set the model
-                mappingComponent1.setMappingModel(mappingModel);
-                // interaction mode
-                mappingComponent1.gotoInitialBoundingBox();
-                mappingComponent1.setInteractionMode(MappingComponent.ZOOM);
-                // finally when all configurations are done ...
-                mappingComponent1.unlock();
-            } catch (final Exception ex) {
-                LOG.warn("could not init Map !", ex);
+                    // add the raster layer to the model
+                    mappingModel.addLayer(swms);
+                    // set the model
+                    mappingComponent1.setMappingModel(mappingModel);
+                    // interaction mode
+                    mappingComponent1.gotoInitialBoundingBox();
+                    mappingComponent1.setInteractionMode(MappingComponent.ZOOM);
+                    // finally when all configurations are done ...
+                    mappingComponent1.unlock();
+
+                    mapInitialized = true;
+                } catch (final Exception ex) {
+                    LOG.warn("could not init Map !", ex);
+                }
             }
         }
     }

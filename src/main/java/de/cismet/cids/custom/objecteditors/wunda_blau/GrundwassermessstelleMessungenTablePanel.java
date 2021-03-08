@@ -82,6 +82,8 @@ import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
+import de.cismet.layout.WrapLayout;
+
 /**
  * DOCUMENT ME!
  *
@@ -736,7 +738,7 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      */
     private void setKategorie(final CidsBean kategorieBean) {
         getModel().setKategorieBean(kategorieBean);
-        grundwassermessstelleMesswerteDiagrammPanel1.setMessungBeans(getMessungBeans());
+        grundwassermessstelleMesswerteDiagrammPanel1.setMessungBeans(getCurrentKategorieMessungBeans());
         grundwassermessstelleMesswerteDiagrammPanel1.setStoffBeans(getKategorieBean().getBeanCollectionProperty(
                 "stoffe"));
         grundwassermessstelleMesswerteDiagrammPanel1.refreshChart();
@@ -759,17 +761,22 @@ public class GrundwassermessstelleMessungenTablePanel extends JPanel implements 
      *
      * @return  DOCUMENT ME!
      */
-    public List<CidsBean> getMessungBeans() {
-        final List<CidsBean> selectedMessungBeans = new ArrayList<>();
-//        for (final int rowIndex : jXTable1.getSelectedRows()) {
-//            final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
-//            selectedMessungBeans.add(messungBean);
-//        }
+    public List<CidsBean> getAllMessungBeans() {
+        return new ArrayList<>(((MesswerteTableModel)jXTable1.getModel()).getMessungBeans());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<CidsBean> getCurrentKategorieMessungBeans() {
+        final List<CidsBean> kategorieMessungBeans = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < jXTable1.getRowCount(); rowIndex++) {
             final CidsBean messungBean = getModel().getMessungBean(jXTable1.convertRowIndexToModel(rowIndex));
-            selectedMessungBeans.add(messungBean);
+            kategorieMessungBeans.add(messungBean);
         }
-        return selectedMessungBeans;
+        return kategorieMessungBeans;
     }
 
     /**

@@ -220,7 +220,7 @@ public class VzkatWindowSearch extends javax.swing.JPanel implements CidsWindowS
                         try {
                             get();
                             cbStvo.setMetaClass(mcVzkatStvo);
-                            cbStvo.reload(true);
+                            cbStvo.reload();
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
                         }

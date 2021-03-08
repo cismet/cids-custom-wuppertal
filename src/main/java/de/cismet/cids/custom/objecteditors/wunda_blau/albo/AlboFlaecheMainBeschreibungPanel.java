@@ -23,6 +23,7 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -50,6 +51,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel13 = new javax.swing.JLabel();
         cbFlaechenart = new DefaultBindableScrollableComboBox();
         jLabel14 = new javax.swing.JLabel();
@@ -69,7 +71,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jTextField7 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+        jComboBox4 = new de.cismet.cids.editors.FastBindableScrollableComboBox(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
@@ -145,6 +147,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenstatus, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)cbFlaechenstatus).setNullable(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, "Flächenzuordnung zu:");
         jLabel15.setName("jLabel15"); // NOI18N
@@ -170,6 +173,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenzuordnung, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)cbFlaechenzuordnung).setNullable(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, "Jahr");
         jLabel12.setName("jLabel12"); // NOI18N
@@ -284,7 +288,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jLabel16.setName("jLabel16"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jLabel16, gridBagConstraints);
 
@@ -337,6 +341,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         filler42.setName("filler42"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.weightx = 1.0;
@@ -345,6 +350,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         filler46.setName("filler46"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 40;
         gridBagConstraints.weightx = 1.0;
@@ -393,7 +399,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(filler1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Fläche kann gelöscht werden");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Fläche unterdrücken");
         jCheckBox1.setContentAreaFilled(false);
         jCheckBox1.setName("jCheckBox1"); // NOI18N
 
@@ -468,6 +474,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private AlboFlaecheMainPanel mainPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbFlaechenart;
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
@@ -569,28 +576,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                             }
                         }
                         break;
-                        case "bewirtschaftungsschaden": {
-                            if (cidsBean.getProperty("fk_bewirtschaftungsschaden") == null) {
-                                cidsBean.setProperty(
-                                    "fk_bewirtschaftungsschaden",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_BEWIRTSCHAFTUNGSSCHADEN",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
-                        case "immission": {
-                            if (cidsBean.getProperty("fk_immission") == null) {
-                                cidsBean.setProperty(
-                                    "fk_immission",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_IMMISSION",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
                         case "materialaufbringung": {
                             if (cidsBean.getProperty("fk_materialaufbringung") == null) {
                                 cidsBean.setProperty(
@@ -598,17 +583,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                                     CidsBean.createNewCidsBeanFromTableName(
                                         "WUNDA_BLAU",
                                         "ALBO_MATERIALAUFBRINGUNG",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
-                        case "schadensfall": {
-                            if (cidsBean.getProperty("fk_schadensfall") == null) {
-                                cidsBean.setProperty(
-                                    "fk_schadensfall",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_SCHADENSFALL",
                                         getConnectionContext()));
                             }
                         }
@@ -630,17 +604,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
             if (!"altablagerung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_altablagerung", null);
             }
-            if (!"bewirtschaftungsschaden".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_bewirtschaftungsschaden", null);
-            }
-            if (!"immission".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_immission", null);
-            }
             if (!"materialaufbringung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_materialaufbringung", null);
-            }
-            if (!"schadensfall".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_schadensfall", null);
             }
             return true;
         } catch (final Exception ex) {
@@ -664,8 +629,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
      */
     private void updateLockedFields() {
         if (isEditable()) {
-            cbFlaechenart.setEnabled(unlocked);
-            // RendererTools.makeReadOnly(cbFlaechenart, !unlocked);
+            RendererTools.makeUneditable(cbFlaechenart, !unlocked);
         }
     }
 
@@ -689,20 +653,12 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "standort");
                     break;
                 }
-                case "schadensfall": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "schadensfall");
-                    break;
-                }
-                case "immission": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "immissions");
-                    break;
-                }
                 case "materialaufbringung": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "materialaufbringung");
                     break;
                 }
-                case "bewirtschaftungsschaden": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "bewirtschaftungsschaden");
+                case "sonstige": {
+                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "sonstige");
                     break;
                 }
                 case "ohne_verdacht": {
