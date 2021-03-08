@@ -900,7 +900,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                     try {
                         get();
                         cbStvo.setMetaClass(mcVzkatStvo);
-                        cbStvo.reload(true);
+                        cbStvo.reload();
                     } catch (final Exception ex) {
                         LOG.error(ex, ex);
                     }
