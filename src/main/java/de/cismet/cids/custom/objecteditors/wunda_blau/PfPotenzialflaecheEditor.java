@@ -139,15 +139,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVerfuegbarkeit1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVorhandeneBebauung;
     private de.cismet.cids.editors.DefaultBindableDateChooser dateStand;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField1;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField10;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField11;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField3;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField4;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField5;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField6;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField8;
-    private de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel defaultBindableCheckboxField9;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField1;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField10;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField11;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField3;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField4;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField5;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField6;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField8;
+    private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField9;
     private javax.swing.JDialog dlgFlaeche;
     private javax.swing.JDialog dlgMassnahme;
     private javax.swing.Box.Filler filler1;
@@ -259,12 +259,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.tools.gui.SemiRoundedPanel panMessstellenausbauTitle;
     private de.cismet.tools.gui.RoundedPanel panPlanungsrecht;
     private de.cismet.tools.gui.RoundedPanel panStandortdaten;
-    private de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel searchLabelsFieldPanel1;
-    private de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel searchLabelsFieldPanel2;
-    private de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel searchLabelsFieldPanel3;
-    private de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel searchLabelsFieldPanel4;
-    private de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel searchLabelsFieldPanel5;
-    private de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel searchLabelsFieldPanel6;
+    private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel1;
+    private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel2;
+    private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel3;
+    private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel4;
+    private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel5;
+    private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel6;
     private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private javax.swing.JTextArea taFlaeche;
     private javax.swing.JTextArea taFlaecheDialog;
@@ -432,11 +432,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblFlaechengroesse = new javax.swing.JLabel();
         lblFlaechengroesseWert = new javax.swing.JLabel();
         lblStadtbezirk = new javax.swing.JLabel();
-        searchLabelsFieldPanel2 = new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(bezirkSearch);
+        searchLabelsFieldPanel2 = new de.cismet.cids.editors.SearchLabelsFieldPanel(bezirkSearch);
         lblQuartiere = new javax.swing.JLabel();
-        searchLabelsFieldPanel1 = new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(quartierSearch);
+        searchLabelsFieldPanel1 = new de.cismet.cids.editors.SearchLabelsFieldPanel(quartierSearch);
         lblStadtbezirk5 = new javax.swing.JLabel();
-        defaultBindableCheckboxField3 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField3 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Eigentümer:");
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(150, 0),
@@ -450,7 +450,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblLagetyp = new javax.swing.JLabel();
         cbLagetyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         lblLagetyp1 = new javax.swing.JLabel();
-        defaultBindableCheckboxField11 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField11 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Nähe zu:");
         lblLagetyp2 = new javax.swing.JLabel();
@@ -473,13 +473,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblMessstellenausbauTitle = new javax.swing.JLabel();
         panMessstellenausbauBody = new javax.swing.JPanel();
         lblFlaechennutzung1 = new javax.swing.JLabel();
-        defaultBindableCheckboxField9 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField9 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Regionalplan:");
         lblFlaechennutzung = new javax.swing.JLabel();
-        searchLabelsFieldPanel6 = new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(fnpHauptnutzungenSearch);
+        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(fnpHauptnutzungenSearch);
         lblFlaechennutzung2 = new javax.swing.JLabel();
-        searchLabelsFieldPanel4 = new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(bplanSearch, true);
+        searchLabelsFieldPanel4 = new de.cismet.cids.editors.SearchLabelsFieldPanel(bplanSearch, true);
         filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -491,12 +491,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblLageTitle3 = new javax.swing.JLabel();
         panLageBody3 = new javax.swing.JPanel();
         lblStadtbezirk4 = new javax.swing.JLabel();
-        defaultBindableCheckboxField6 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField6 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Umgebungsnutzung:");
         lblStadtbezirk6 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
-        defaultBindableCheckboxField1 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField1 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Brachflächenkategorie:");
         lblNutzungsaufgabe = new javax.swing.JLabel();
@@ -505,7 +505,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 new java.awt.Dimension(75, 0),
                 new java.awt.Dimension(75, 0));
         lblStadtbezirk3 = new javax.swing.JLabel();
-        defaultBindableCheckboxField5 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField5 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Bisherige Nutzung:");
         lblVorhandeneBebauung = new javax.swing.JLabel();
@@ -513,11 +513,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblAessereErschl = new javax.swing.JLabel();
         cbAeussereErschluessung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         lblStadtbezirk1 = new javax.swing.JLabel();
-        searchLabelsFieldPanel5 = new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(
+        searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
                 stadtraumtypSearch,
                 false);
         lblStadtbezirk2 = new javax.swing.JLabel();
-        searchLabelsFieldPanel3 = new de.cismet.cids.custom.commons.gui.SearchLabelsFieldPanel(wohnlagenSearch, false);
+        searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(wohnlagenSearch, false);
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -562,11 +562,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblEntwicklungsausssichten2 = new javax.swing.JLabel();
         cbEntwicklungsaussichten2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         lblEntwicklungsausssichten3 = new javax.swing.JLabel();
-        defaultBindableCheckboxField4 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField4 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Restriktionen/Hemmnisse:");
         lblEntwicklungsausssichten5 = new javax.swing.JLabel();
-        defaultBindableCheckboxField10 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField10 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Empfohlene Art der Wohnnutzung:");
         lblAktivierbarkeit1 = new javax.swing.JLabel();
@@ -591,7 +591,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblHandlungsdruck1 = new javax.swing.JLabel();
         cbHandlungsdruck1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         lblEntwicklungsausssichten4 = new javax.swing.JLabel();
-        defaultBindableCheckboxField8 = new de.cismet.cids.custom.commons.gui.DefaultBindableLabelsPanel(
+        defaultBindableCheckboxField8 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Empfohlene Nutzung:");
         lblRevitalisierung1 = new javax.swing.JLabel();
@@ -2604,93 +2604,93 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort4ActionPerformed
+    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort4ActionPerformed
         dlgFlaeche.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort4ActionPerformed
+    }//GEN-LAST:event_btnMenAbort4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk4ActionPerformed
+    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk4ActionPerformed
         try {
             cidsBean.setProperty("beschreibung_flaeche", taFlaecheDialog.getText());
         } catch (Exception e) {
             LOG.error("Cannot save text for beschreibung_flaeche", e);
         }
         dlgFlaeche.setVisible(false);
-    }                                                                             //GEN-LAST:event_btnMenOk4ActionPerformed
+    }//GEN-LAST:event_btnMenOk4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort5ActionPerformed
+    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort5ActionPerformed
         dlgMassnahme.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort5ActionPerformed
+    }//GEN-LAST:event_btnMenAbort5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk5ActionPerformed
+    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk5ActionPerformed
         try {
             cidsBean.setProperty("notwendige_massnahmen", taMassnahmeDialog.getText());
         } catch (Exception e) {
             LOG.error("Cannot save text for notwendige_massnahmen", e);
         }
         dlgMassnahme.setVisible(false);
-    }                                                                             //GEN-LAST:event_btnMenOk5ActionPerformed
+    }//GEN-LAST:event_btnMenOk5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmenActionPerformed
+    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMassnahmenActionPerformed
         taMassnahmeDialog.setText((String)cidsBean.getProperty("notwendige_massnahmen"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgMassnahme, true);
-    }                                                                                 //GEN-LAST:event_btnMassnahmenActionPerformed
+    }//GEN-LAST:event_btnMassnahmenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlaecheActionPerformed
+    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlaecheActionPerformed
         taFlaecheDialog.setText((String)cidsBean.getProperty("beschreibung_flaeche"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgFlaeche, true);
-    }                                                                              //GEN-LAST:event_btnFlaecheActionPerformed
+    }//GEN-LAST:event_btnFlaecheActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_cbGeomFocusLost
+    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbGeomFocusLost
         setGeometryArea();
-    }                                                                   //GEN-LAST:event_cbGeomFocusLost
+    }//GEN-LAST:event_cbGeomFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBezeichnungFocusLost
+    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBezeichnungFocusLost
         panTitle.refreshTitle();
-    }                                                                           //GEN-LAST:event_txtBezeichnungFocusLost
+    }//GEN-LAST:event_txtBezeichnungFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAeussereErschluessungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAeussereErschluessungActionPerformed
+    private void cbAeussereErschluessungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAeussereErschluessungActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbAeussereErschluessungActionPerformed
+    }//GEN-LAST:event_cbAeussereErschluessungActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
