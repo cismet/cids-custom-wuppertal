@@ -408,11 +408,8 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         dlgAddKmQuadrat = new JDialog();
         panAddKmQuadrat = new JPanel();
         lblAuswaehlenKmQuadrat = new JLabel();
-        final MetaObject[] kmquadrat = ObjectRendererUtils.getLightweightMetaObjectsForTable(
-                "str_adr_strasse_kmquadrat",
-                new String[] { "name" },
-                getConnectionContext());
-        if (kmquadrat != null) {
+        final MetaObject[] kmquadrat = ObjectRendererUtils.getLightweightMetaObjectsForTable("str_adr_strasse_kmquadrat", new String[]{"name"}, getConnectionContext());
+        if(kmquadrat != null) {
             Arrays.sort(kmquadrat);
             cbKmQuadrat = new JComboBox(kmquadrat);
         }
@@ -422,12 +419,9 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         dlgAddPlz = new JDialog();
         panAddPlz = new JPanel();
         lblAuswaehlenPlz = new JLabel();
-        final MetaObject[] plz = ObjectRendererUtils.getLightweightMetaObjectsForTable(
-                "str_adr_strasse_plz",
-                new String[] { "name" },
-                getConnectionContext());
-        if (plz != null) {
-            Arrays.sort(plz); // ||
+        final MetaObject[] plz = ObjectRendererUtils.getLightweightMetaObjectsForTable("str_adr_strasse_plz", new String[]{"name"}, getConnectionContext());
+        if(plz != null) {
+            Arrays.sort(plz);//||
             cbPlz = new JComboBox(plz);
         }
         panMenButtonsPlz = new JPanel();
@@ -436,11 +430,8 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         dlgAddStadtbezirk = new JDialog();
         panAddStadtbezirk = new JPanel();
         lblAuswaehlenStadtbezirk = new JLabel();
-        final MetaObject[] stadtbezirk = ObjectRendererUtils.getLightweightMetaObjectsForTable(
-                "kst_stadtbezirk",
-                new String[] { "name" },
-                getConnectionContext());
-        if (stadtbezirk != null) {
+        final MetaObject[] stadtbezirk = ObjectRendererUtils.getLightweightMetaObjectsForTable("kst_stadtbezirk", new String[]{"name"}, getConnectionContext());
+        if(stadtbezirk != null) {
             Arrays.sort(stadtbezirk);
             cbStadtbezirk = new JComboBox(stadtbezirk);
             panMenButtonsStadtbezirk = new JPanel();
@@ -455,19 +446,21 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             txtName = new JTextField();
             lblSchluessel = new JLabel();
             lblStrasse = new JLabel();
-            cbSchluessel = new FastBindableReferenceCombo(
-                    "select ss.id, s.schluessel, s.name, ss.name, coalesce(s.name, '--') || ' (' || ss.name || ')' as anzeige "
-                            + "from str_adr_strasse_schluessel ss left join str_adr_strasse s"
-                            + " on ss.id = s.schluessel"
-                            + " order by ss.name ",
-                    "%1$2s",
-                    new String[] { "anzeige", "id" });
+            cbSchluessel =
+            new FastBindableReferenceCombo(
+                "select ss.id, s.schluessel, s.name, ss.name, coalesce(s.name, '--') || ' (' || ss.name || ')' as anzeige "
+                + "from str_adr_strasse_schluessel ss left join str_adr_strasse s"
+                + " on ss.id = s.schluessel"
+                + " order by ss.name ",
+                "%1$2s",
+                new String [] {"anzeige","id"})
+            ;
             lblGeom = new JLabel();
-            if (isEditor) {
+            if (isEditor){
                 cbGeom = new DefaultCismapGeometryComboBoxEditor();
             }
             lblGeomBBox = new JLabel();
-            if (isEditor) {
+            if (isEditor){
                 cbGeomBBox = new DefaultCismapGeometryComboBoxEditor();
             }
             lblBenenndat = new JLabel();
@@ -482,7 +475,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             panMotiv = new JPanel();
             scpMotiv = new JScrollPane();
             taMotiv = new JTextArea();
-            if (isEditor) {
+            if(isEditor){
                 cbMotiv = new DefaultBindableScrollableComboBox();
             }
             lblBemerkung = new JLabel();
@@ -542,12 +535,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
             btnMenAbortKmQuadrat.setText("Abbrechen");
             btnMenAbortKmQuadrat.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent evt) {
-                        btnMenAbortKmQuadratActionPerformed(evt);
-                    }
-                });
+                public void actionPerformed(ActionEvent evt) {
+                    btnMenAbortKmQuadratActionPerformed(evt);
+                }
+            });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -557,12 +548,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
             btnMenOkKmQuadrat.setText("Ok");
             btnMenOkKmQuadrat.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent evt) {
-                        btnMenOkKmQuadratActionPerformed(evt);
-                    }
-                });
+                public void actionPerformed(ActionEvent evt) {
+                    btnMenOkKmQuadratActionPerformed(evt);
+                }
+            });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -598,12 +587,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
             btnMenAbortPlz.setText("Abbrechen");
             btnMenAbortPlz.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent evt) {
-                        btnMenAbortPlzActionPerformed(evt);
-                    }
-                });
+                public void actionPerformed(ActionEvent evt) {
+                    btnMenAbortPlzActionPerformed(evt);
+                }
+            });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -613,12 +600,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
             btnMenOkPlz.setText("Ok");
             btnMenOkPlz.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent evt) {
-                        btnMenOkPlzActionPerformed(evt);
-                    }
-                });
+                public void actionPerformed(ActionEvent evt) {
+                    btnMenOkPlzActionPerformed(evt);
+                }
+            });
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -643,6 +628,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.insets = new Insets(10, 10, 10, 10);
             panAddStadtbezirk.add(lblAuswaehlenStadtbezirk, gridBagConstraints);
+
         }
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -655,12 +641,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         btnMenAbortStadtbezirk.setText("Abbrechen");
         btnMenAbortStadtbezirk.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnMenAbortStadtbezirkActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnMenAbortStadtbezirkActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -670,12 +654,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         btnMenOkStadtbezirk.setText("Ok");
         btnMenOkStadtbezirk.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnMenOkStadtbezirkActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnMenOkStadtbezirkActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -696,12 +678,14 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGap(0, 0, Short.MAX_VALUE));
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -719,12 +703,14 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -749,12 +735,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.name}"),
-                txtName,
-                BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -780,12 +761,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         lblStrasse.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.schluessel.name}"),
-                lblStrasse,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.schluessel.name}"), lblStrasse, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -799,15 +775,11 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         ((FastBindableReferenceCombo)cbSchluessel).setSorted(false);
 
-        // ((FastBindableReferenceCombo)cbSchluessel).setLocale(Locale.GERMAN);
+        //((FastBindableReferenceCombo)cbSchluessel).setLocale(Locale.GERMAN);
         cbSchluessel.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbSchluessel.setMaximumRowCount(20);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.schluessel}"),
-                cbSchluessel,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.schluessel}"), cbSchluessel, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -831,21 +803,17 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor) {
-            if (isEditor) {
+        if (isEditor){
+            if (isEditor){
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.georeferenz}"),
-                    cbGeom,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.georeferenz}"), cbGeom, BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor) {
+        if (isEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 2;
@@ -868,19 +836,15 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeomBBox, gridBagConstraints);
 
-        if (isEditor) {
+        if (isEditor){
             cbGeomBBox.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.georeferenz_bbox}"),
-                    cbGeomBBox,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.georeferenz_bbox}"), cbGeomBBox, BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomBBox).getConverter());
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor) {
+        if (isEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 3;
@@ -903,12 +867,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBenenndat, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.benenndat}"),
-                dcBenenndat,
-                BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.benenndat}"), dcBenenndat, BeanProperty.create("date"));
         binding.setConverter(dcBenenndat.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -935,12 +894,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         cbBeschlussB.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbBeschlussB.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.beschluss_b}"),
-                cbBeschlussB,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschluss_b}"), cbBeschlussB, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -963,12 +917,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblEntnenndat, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.entnenndat}"),
-                dcEntnenndat,
-                BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.entnenndat}"), dcEntnenndat, BeanProperty.create("date"));
         binding.setConverter(dcEntnenndat.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -995,12 +944,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         cbBeschlussE.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbBeschlussE.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.beschluss_e}"),
-                cbBeschlussE,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschluss_e}"), cbBeschlussE, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1054,21 +998,17 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panMotiv, gridBagConstraints);
 
-        if (isEditor) {
+        if(isEditor){
             cbMotiv.setFont(new Font("Dialog", 0, 12)); // NOI18N
-            if (isEditor) {
+            if(isEditor){
                 cbMotiv.setPreferredSize(new Dimension(100, 24));
             }
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.motiv}"),
-                    cbMotiv,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.motiv}"), cbMotiv, BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor) {
+        if(isEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 13;
@@ -1098,12 +1038,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.bemerkung}"),
-                taBemerkung,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -1151,11 +1086,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lstPlz.setVisibleRowCount(2);
 
         ELProperty eLProperty = ELProperty.create("${cidsBean.plz}");
-        JListBinding jListBinding = SwingBindings.createJListBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                eLProperty,
-                lstPlz);
+        JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstPlz);
         bindingGroup.addBinding(jListBinding);
 
         scpLstPlz.setViewportView(lstPlz);
@@ -1175,28 +1106,22 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         panButtonsPlz.setOpaque(false);
         panButtonsPlz.setLayout(new GridBagLayout());
 
-        btnAddPlz.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddPlz.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddPlz.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnAddPlzActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnAddPlzActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsPlz.add(btnAddPlz, gridBagConstraints);
 
-        btnRemovePlz.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemovePlz.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemovePlz.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnRemovePlzActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnRemovePlzActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1247,11 +1172,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lstKmQuadrat.setVisibleRowCount(3);
 
         eLProperty = ELProperty.create("${cidsBean.kmquadrat}");
-        jListBinding = SwingBindings.createJListBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                eLProperty,
-                lstKmQuadrat);
+        jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstKmQuadrat);
         bindingGroup.addBinding(jListBinding);
 
         scpLstKmQuadrat.setViewportView(lstKmQuadrat);
@@ -1272,28 +1193,22 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         panButtonsKmQuadrat.setOpaque(false);
         panButtonsKmQuadrat.setLayout(new GridBagLayout());
 
-        btnAddKmQuadrat.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddKmQuadrat.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddKmQuadrat.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnAddKmQuadratActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnAddKmQuadratActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsKmQuadrat.add(btnAddKmQuadrat, gridBagConstraints);
 
-        btnRemoveKmQuadrat.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveKmQuadrat.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveKmQuadrat.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnRemoveKmQuadratActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnRemoveKmQuadratActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1345,11 +1260,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lstStadtbezirk.setVisibleRowCount(3);
 
         eLProperty = ELProperty.create("${cidsBean.stadtbezirk}");
-        jListBinding = SwingBindings.createJListBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                eLProperty,
-                lstStadtbezirk);
+        jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstStadtbezirk);
         bindingGroup.addBinding(jListBinding);
 
         scpLstStadtbezirk.setViewportView(lstStadtbezirk);
@@ -1369,28 +1280,22 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         panButtonsStadtbezirk.setOpaque(false);
         panButtonsStadtbezirk.setLayout(new GridBagLayout());
 
-        btnAddStadtbezirk.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddStadtbezirk.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddStadtbezirk.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnAddStadtbezirkActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnAddStadtbezirkActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panButtonsStadtbezirk.add(btnAddStadtbezirk, gridBagConstraints);
 
-        btnRemoveStadtbezirk.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveStadtbezirk.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveStadtbezirk.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent evt) {
-                    btnRemoveStadtbezirkActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(ActionEvent evt) {
+                btnRemoveStadtbezirkActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1435,12 +1340,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         txtDatum.setToolTipText("");
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.datum}"),
-                txtDatum,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), txtDatum, BeanProperty.create("text"));
         binding.setConverter(sqlDateToStringConverter);
         bindingGroup.addBinding(binding);
 
@@ -1536,23 +1436,23 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddKmQuadratActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddKmQuadratActionPerformed
+    private void btnAddKmQuadratActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddKmQuadratActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(StrAdrStrasseEditor.this), dlgAddKmQuadrat, true);
-    }                                                                    //GEN-LAST:event_btnAddKmQuadratActionPerformed
+    }//GEN-LAST:event_btnAddKmQuadratActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveKmQuadratActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveKmQuadratActionPerformed
+    private void btnRemoveKmQuadratActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveKmQuadratActionPerformed
         final Object selection = lstKmQuadrat.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1576,23 +1476,23 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
                 }
             }
         }
-    }                                                                       //GEN-LAST:event_btnRemoveKmQuadratActionPerformed
+    }//GEN-LAST:event_btnRemoveKmQuadratActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortKmQuadratActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortKmQuadratActionPerformed
+    private void btnMenAbortKmQuadratActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortKmQuadratActionPerformed
         dlgAddKmQuadrat.setVisible(false);
-    }                                                                         //GEN-LAST:event_btnMenAbortKmQuadratActionPerformed
+    }//GEN-LAST:event_btnMenAbortKmQuadratActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkKmQuadratActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkKmQuadratActionPerformed
+    private void btnMenOkKmQuadratActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkKmQuadratActionPerformed
         try {
             final Object selItem = cbKmQuadrat.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1608,14 +1508,14 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddKmQuadrat.setVisible(false);
         }
-    }                                                                      //GEN-LAST:event_btnMenOkKmQuadratActionPerformed
+    }//GEN-LAST:event_btnMenOkKmQuadratActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemovePlzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemovePlzActionPerformed
+    private void btnRemovePlzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemovePlzActionPerformed
         final Object selection = lstPlz.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1638,23 +1538,23 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
                 }
             }
         }
-    }                                                                 //GEN-LAST:event_btnRemovePlzActionPerformed
+    }//GEN-LAST:event_btnRemovePlzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddPlzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddPlzActionPerformed
+    private void btnAddPlzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddPlzActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(StrAdrStrasseEditor.this), dlgAddPlz, true);
-    }                                                              //GEN-LAST:event_btnAddPlzActionPerformed
+    }//GEN-LAST:event_btnAddPlzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveStadtbezirkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveStadtbezirkActionPerformed
+    private void btnRemoveStadtbezirkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveStadtbezirkActionPerformed
         final Object selection = lstStadtbezirk.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1678,23 +1578,23 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
                 }
             }
         }
-    }                                                                         //GEN-LAST:event_btnRemoveStadtbezirkActionPerformed
+    }//GEN-LAST:event_btnRemoveStadtbezirkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddStadtbezirkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddStadtbezirkActionPerformed
+    private void btnAddStadtbezirkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddStadtbezirkActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(StrAdrStrasseEditor.this), dlgAddStadtbezirk, true);
-    }                                                                      //GEN-LAST:event_btnAddStadtbezirkActionPerformed
+    }//GEN-LAST:event_btnAddStadtbezirkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkStadtbezirkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkStadtbezirkActionPerformed
+    private void btnMenOkStadtbezirkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkStadtbezirkActionPerformed
         try {
             final Object selItem = cbStadtbezirk.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1710,23 +1610,23 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddStadtbezirk.setVisible(false);
         }
-    }                                                                        //GEN-LAST:event_btnMenOkStadtbezirkActionPerformed
+    }//GEN-LAST:event_btnMenOkStadtbezirkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortStadtbezirkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortStadtbezirkActionPerformed
+    private void btnMenAbortStadtbezirkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortStadtbezirkActionPerformed
         dlgAddStadtbezirk.setVisible(false);
-    }                                                                           //GEN-LAST:event_btnMenAbortStadtbezirkActionPerformed
+    }//GEN-LAST:event_btnMenAbortStadtbezirkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkPlzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkPlzActionPerformed
+    private void btnMenOkPlzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkPlzActionPerformed
         try {
             final Object selItem = cbPlz.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -1741,16 +1641,16 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         } finally {
             dlgAddPlz.setVisible(false);
         }
-    }                                                                //GEN-LAST:event_btnMenOkPlzActionPerformed
+    }//GEN-LAST:event_btnMenOkPlzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortPlzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortPlzActionPerformed
+    private void btnMenAbortPlzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortPlzActionPerformed
         dlgAddPlz.setVisible(false);
-    }                                                                   //GEN-LAST:event_btnMenAbortPlzActionPerformed
+    }//GEN-LAST:event_btnMenAbortPlzActionPerformed
 
     /**
      * DOCUMENT ME!
