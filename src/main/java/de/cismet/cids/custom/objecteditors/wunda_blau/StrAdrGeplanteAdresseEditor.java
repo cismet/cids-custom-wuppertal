@@ -172,9 +172,9 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         jLabel1 = new javax.swing.JLabel();
         txtAdr_zusatz = new javax.swing.JTextField();
         cbStrassenname = new FastBindableReferenceCombo(
-                "select s.id, s.name, s.strasse, s.name || ' (' || s.strasse || ')' as anzeige from str_adr_strasse s where s.strasse::int < 4000 order by s.name",
+                "select s.id, s.name AS strname, k.name AS schluessel, s.name || ' (' || k.name || ')' as anzeige from str_adr_strasse s left join str_adr_strasse_schluessel k on s.schluessel = k.id where k.name::int < 4000 order by s.name",
                 "%1$2s",
-                new String[] { "anzeige", "strasse" });
+                new String[] { "anzeige", "schluessel" });
         ftxHausnr = new javax.swing.JFormattedTextField();
         lblSchluessel = new javax.swing.JLabel();
         if (isEditor) {
@@ -967,7 +967,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         if (cbStrassenname.getSelectedItem() != null) {
             lblSchluessel.setText(String.valueOf(
                     getOtherTableValue("str_adr_strasse", getMyWhere(cbStrassenname.getSelectedItem().toString()))
-                                .getProperty("strasse")));
+                                .getProperty("schluessel.name")));
         }
     }                                                                                  //GEN-LAST:event_cbStrassennameActionPerformed
 
@@ -989,7 +989,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         if (cbStrassenname.getSelectedItem() != null) {
             lblSchluessel.setText(String.valueOf(
                     getOtherTableValue("str_adr_strasse", getMyWhere(cbStrassenname.getSelectedItem().toString()))
-                                .getProperty("strasse")));
+                                .getProperty("schluessel.name")));
         }
     }                                                                                     //GEN-LAST:event_cbStrassennamePropertyChange
 
@@ -1330,7 +1330,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         errorMessage.append(noSelectedItem(cbAntragsteller.getSelectedItem(), "antrag", "noAntrag"));
 
         // Strasse
-        errorMessage.append(noSelectedItem(cbStrassenname.getSelectedItem(), "strasse", "noStrasse"));
+        errorMessage.append(noSelectedItem(cbStrassenname.getSelectedItem(), "schluessel", "noStrasse"));
 
         // geom
         if ((cbGeom.getSelectedItem() == null) || cbGeom.getSelectedItem().toString().trim().isEmpty()) {
