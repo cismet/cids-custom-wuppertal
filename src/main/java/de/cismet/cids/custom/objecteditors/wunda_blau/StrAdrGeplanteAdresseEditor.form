@@ -164,7 +164,7 @@
                 <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="cbStrassennamePropertyChange"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&#xa;    &quot;select s.id, s.name, s.strasse, s.name || &apos; (&apos; || s.strasse || &apos;)&apos; as anzeige from str_adr_strasse s where s.strasse::int &lt; 4000 order by s.name&quot;,&#xa;    &quot;%1$2s&quot;,&#xa;    new String [] {&quot;anzeige&quot;,&quot;strasse&quot;}) "/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&#xa;    &quot;select s.id, s.name AS strname, k.name AS schluessel, s.name || &apos; (&apos; || k.name || &apos;)&apos; as anzeige from str_adr_strasse s left join str_adr_strasse_schluessel k on s.schluessel = k.id where k.name::int &lt; 4000 order by s.name&quot;,&#xa;    &quot;%1$2s&quot;,&#xa;    new String [] {&quot;anzeige&quot;,&quot;schluessel&quot;}) "/>
                 <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="//((FastBindableReferenceCombo)cbStrassenname).setLocale(Locale.GERMAN);&#xa;((FastBindableReferenceCombo)cbStrassenname).setSorted(false);"/>
               </AuxValues>
               <Constraints>
