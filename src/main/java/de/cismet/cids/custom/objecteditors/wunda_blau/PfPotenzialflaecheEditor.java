@@ -9,9 +9,10 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
-import Sirius.navigator.ui.RequestsFullSizeComponent;
+import Sirius.navigator.ui.DescriptionPaneFS;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -24,13 +25,17 @@ import java.awt.event.ComponentEvent;
 import java.lang.reflect.Field;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -39,20 +44,27 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
-import de.cismet.cids.custom.wunda_blau.search.server.BplanSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.FnpHauptnutzungenSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.KstSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.StadtraumtypSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.WohnlagenKategorisierungSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.AlkisLandparcelGeometryMonSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.FnpHauptnutzungenMonSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.GeometrySearch;
+import de.cismet.cids.custom.wunda_blau.search.server.KstGeometryMonSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.StadtraumtypMonSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.WohnlagenKategorisierungMonSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultBindableLabelsPanel;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.SearchLabelsFieldPanel;
+
+import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+import de.cismet.cids.tools.metaobjectrenderer.CidsObjectRendererFactory;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -83,7 +95,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     EditorSaveListener,
     FooterComponentProvider,
     TitleComponentProvider,
-    RequestsFullSizeComponent,
     ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -105,12 +116,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private CidsBean cidsBean;
     private ConnectionContext connectionContext;
     private Object currentTreeNode = null;
-    private final KstSearch bezirkSearch = new KstSearch(KstSearch.SearchFor.BEZIRK);
-    private final KstSearch quartierSearch = new KstSearch(KstSearch.SearchFor.QUARTIER);
-    private final WohnlagenKategorisierungSearch wohnlagenSearch = new WohnlagenKategorisierungSearch();
-    private final BplanSearch bplanSearch = new BplanSearch();
-    private final StadtraumtypSearch stadtraumtypSearch = new StadtraumtypSearch();
-    private final FnpHauptnutzungenSearch fnpHauptnutzungenSearch = new FnpHauptnutzungenSearch();
+
+    private final Collection<SearchLabelsFieldPanel> searchLabelFieldPanels = new ArrayList<>();
+    private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
 
     private final Map<String, JComponent> componentMap = new HashMap<>();
 
@@ -122,6 +130,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JButton btnMenOk4;
     private javax.swing.JButton btnMenOk5;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAeussereErschluessung;
+    de.cismet.cids.editors.DefaultBindableReferenceCombo cbAeussereErschluessung1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAktivierbarkeit;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAktivierbarkeit1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbEntwicklungsaussichten;
@@ -138,7 +147,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbTopografie1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVerfuegbarkeit1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVorhandeneBebauung;
+    de.cismet.cids.editors.DefaultBindableReferenceCombo cbVorhandeneBebauung1;
+    de.cismet.cids.editors.DefaultBindableReferenceCombo cbVorhandeneBebauung2;
+    de.cismet.cids.editors.DefaultBindableReferenceCombo cbVorhandeneBebauung3;
     private de.cismet.cids.editors.DefaultBindableDateChooser dateStand;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dateStand1;
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField1;
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField10;
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField11;
@@ -155,7 +168,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler15;
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler22;
     private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler3;
@@ -169,20 +181,25 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblAessereErschl;
+    private javax.swing.JLabel lblAessereErschl1;
     private javax.swing.JLabel lblAktivierbarkeit;
     private javax.swing.JLabel lblAktivierbarkeit1;
     private javax.swing.JLabel lblBeschreibungTitle;
@@ -200,6 +217,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JLabel lblFlaechennutzung;
     private javax.swing.JLabel lblFlaechennutzung1;
     private javax.swing.JLabel lblFlaechennutzung2;
+    private javax.swing.JLabel lblFlaechennutzung3;
     private javax.swing.JLabel lblGeometrie5;
     private javax.swing.JLabel lblHandlungsdruck;
     private javax.swing.JLabel lblHandlungsdruck1;
@@ -215,6 +233,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JLabel lblNutzungsaufgabe;
     private javax.swing.JLabel lblOepnv;
     private javax.swing.JLabel lblQuartiere;
+    private javax.swing.JLabel lblQuartiere1;
     private javax.swing.JLabel lblQuelle;
     private javax.swing.JLabel lblRevitalisierung1;
     private javax.swing.JLabel lblStadtbezirk;
@@ -229,7 +248,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JLabel lblTopografie1;
     private javax.swing.JLabel lblVerfuegbarkeit1;
     private javax.swing.JLabel lblVorhandeneBebauung;
+    private javax.swing.JLabel lblVorhandeneBebauung1;
+    private javax.swing.JLabel lblVorhandeneBebauung2;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
+    private de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<MetaObjectNode> monSearchResultsList1;
     private de.cismet.tools.gui.RoundedPanel panAllgemein;
     private de.cismet.tools.gui.RoundedPanel panAllgemein3;
     private de.cismet.tools.gui.RoundedPanel panAllgemein6;
@@ -340,25 +362,42 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
 
+        searchLabelFieldPanels.clear();
+        labelsPanels.clear();
+
         initComponents();
         initComponentMap();
 
-        defaultBindableCheckboxField4.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField8.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField9.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField5.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField6.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField3.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField1.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField10.initWithConnectionContext(connectionContext);
-        defaultBindableCheckboxField11.initWithConnectionContext(connectionContext);
+        RendererTools.makeUneditable(monSearchResultsList1, true);
 
-        searchLabelsFieldPanel1.initWithConnectionContext(connectionContext);
-        searchLabelsFieldPanel2.initWithConnectionContext(connectionContext);
-        searchLabelsFieldPanel3.initWithConnectionContext(connectionContext);
-        searchLabelsFieldPanel4.initWithConnectionContext(connectionContext);
-        searchLabelsFieldPanel5.initWithConnectionContext(connectionContext);
-        searchLabelsFieldPanel6.initWithConnectionContext(connectionContext);
+        searchLabelFieldPanels.addAll(Arrays.asList(
+                searchLabelsFieldPanel1,
+                searchLabelsFieldPanel2,
+                searchLabelsFieldPanel3,
+                searchLabelsFieldPanel4,
+                searchLabelsFieldPanel5,
+                searchLabelsFieldPanel6));
+
+        labelsPanels.addAll(Arrays.asList(
+                defaultBindableCheckboxField1,
+                defaultBindableCheckboxField3,
+                defaultBindableCheckboxField4,
+                defaultBindableCheckboxField5,
+                defaultBindableCheckboxField6,
+                defaultBindableCheckboxField8,
+                defaultBindableCheckboxField9,
+                defaultBindableCheckboxField10,
+                defaultBindableCheckboxField11));
+
+        for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
+            searchLabelFieldPanel.initWithConnectionContext(connectionContext);
+        }
+
+        for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
+            labelsPanel.initWithConnectionContext(connectionContext);
+        }
+
+        monSearchResultsList1.initWithConnectionContext(connectionContext);
 
         panTitle.init();
         panFooter.init();
@@ -420,28 +459,31 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panAllgemein = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBeschreibungTitle = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         lblBezeichnung = new javax.swing.JLabel();
         txtBezeichnung = new javax.swing.JTextField();
         lblNummer = new javax.swing.JLabel();
         txtNummer = new javax.swing.JTextField();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
+        jPanel7 = new javax.swing.JPanel();
         lblGeometrie5 = new javax.swing.JLabel();
         cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
         lblFlaechengroesse = new javax.swing.JLabel();
         lblFlaechengroesseWert = new javax.swing.JLabel();
         lblStadtbezirk = new javax.swing.JLabel();
-        searchLabelsFieldPanel2 = new de.cismet.cids.editors.SearchLabelsFieldPanel(bezirkSearch);
+        searchLabelsFieldPanel2 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(
+                    KstGeometryMonSearch.SearchFor.BEZIRK));
         lblQuartiere = new javax.swing.JLabel();
-        searchLabelsFieldPanel1 = new de.cismet.cids.editors.SearchLabelsFieldPanel(quartierSearch);
+        searchLabelsFieldPanel1 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(
+                    KstGeometryMonSearch.SearchFor.QUARTIER));
+        lblQuartiere1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        monSearchResultsList1 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
+                new AlkisLandparcelGeometryMonSearch());
         lblStadtbezirk5 = new javax.swing.JLabel();
         defaultBindableCheckboxField3 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Eigentümer:");
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(150, 0),
-                new java.awt.Dimension(150, 0),
-                new java.awt.Dimension(150, 0));
         jPanel10 = new javax.swing.JPanel();
         panStandortdaten = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle2 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -477,9 +519,17 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 isEditable(),
                 "Regionalplan:");
         lblFlaechennutzung = new javax.swing.JLabel();
-        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(fnpHauptnutzungenSearch);
+        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new FnpHauptnutzungenMonSearch());
         lblFlaechennutzung2 = new javax.swing.JLabel();
-        searchLabelsFieldPanel4 = new de.cismet.cids.editors.SearchLabelsFieldPanel(bplanSearch, true);
+        searchLabelsFieldPanel4 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new BplaeneMonSearch(), true);
+        lblFlaechennutzung3 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jTextField2 = new javax.swing.JTextField();
+        dateStand1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        lblVorhandeneBebauung1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        cbVorhandeneBebauung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbVorhandeneBebauung2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -510,23 +560,26 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 "Bisherige Nutzung:");
         lblVorhandeneBebauung = new javax.swing.JLabel();
         cbVorhandeneBebauung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        lblVorhandeneBebauung2 = new javax.swing.JLabel();
+        cbVorhandeneBebauung3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         lblAessereErschl = new javax.swing.JLabel();
         cbAeussereErschluessung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         lblStadtbezirk1 = new javax.swing.JLabel();
-        searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
-                stadtraumtypSearch,
-                false);
+        searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new StadtraumtypMonSearch());
         lblStadtbezirk2 = new javax.swing.JLabel();
-        searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(wohnlagenSearch, false);
+        searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                new WohnlagenKategorisierungMonSearch());
+        lblAessereErschl1 = new javax.swing.JLabel();
+        cbAeussereErschluessung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0));
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(400, 0),
-                new java.awt.Dimension(400, 0),
-                new java.awt.Dimension(400, 0));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(450, 0),
+                new java.awt.Dimension(450, 0),
+                new java.awt.Dimension(450, 0));
         filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -803,9 +856,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         panAllgemein.add(panBeschreibungTitle, gridBagConstraints);
 
-        jPanel7.setOpaque(false);
-        jPanel7.setLayout(new java.awt.GridBagLayout());
-
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
@@ -875,18 +925,22 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel3.add(txtNummer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        jPanel7.add(jPanel3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
+        panAllgemein.add(jPanel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel7.add(mappingComponent1, gridBagConstraints);
+        panAllgemein.add(mappingComponent1, gridBagConstraints);
+
+        jPanel7.setOpaque(false);
+        jPanel7.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblGeometrie5,
@@ -917,6 +971,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                     @Override
                     public void focusLost(final java.awt.event.FocusEvent evt) {
                         cbGeomFocusLost(evt);
+                    }
+                });
+            cbGeom.addActionListener(new java.awt.event.ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        cbGeomActionPerformed(evt);
                     }
                 });
         }
@@ -1002,6 +1063,38 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel7.add(searchLabelsFieldPanel1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
+            lblQuartiere1,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.lblQuartiere1.text")); // NOI18N
+        lblQuartiere1.setName(PotenzialflaecheReportServerAction.Property.FLURSTUECKE.toString());
+        lblQuartiere1.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblQuartiere1MouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        jPanel7.add(lblQuartiere1, gridBagConstraints);
+
+        monSearchResultsList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        monSearchResultsList1.setVisibleRowCount(4);
+        jScrollPane1.setViewportView(monSearchResultsList1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel7.add(jScrollPane1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
             lblStadtbezirk5,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
@@ -1032,18 +1125,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel7.add(defaultBindableCheckboxField3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel7.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
         panAllgemein.add(jPanel7, gridBagConstraints);
 
@@ -1410,6 +1498,101 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panMessstellenausbauBody.add(searchLabelsFieldPanel4, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFlaechennutzung3,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.lblFlaechennutzung3.text")); // NOI18N
+        lblFlaechennutzung3.setName(PotenzialflaecheReportServerAction.Property.FESTSETZUNGEN_BPLAN.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panMessstellenausbauBody.add(lblFlaechennutzung3, gridBagConstraints);
+
+        jPanel12.setOpaque(false);
+        jPanel12.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel12.add(jTextField2, gridBagConstraints);
+
+        dateStand1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.dateStand1.toolTipText")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        jPanel12.add(dateStand1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panMessstellenausbauBody.add(jPanel12, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblVorhandeneBebauung1,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.lblVorhandeneBebauung1.text")); // NOI18N
+        lblVorhandeneBebauung1.setName(PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_GENEHMIGUNG
+                    .toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panMessstellenausbauBody.add(lblVorhandeneBebauung1, gridBagConstraints);
+
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnung_genehmigung}"),
+                cbVorhandeneBebauung1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel5.add(cbVorhandeneBebauung1, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnung_baulast}"),
+                cbVorhandeneBebauung2,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel5.add(cbVorhandeneBebauung2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panMessstellenausbauBody.add(jPanel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1634,6 +1817,35 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody3.add(cbVorhandeneBebauung, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
+            lblVorhandeneBebauung2,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.lblVorhandeneBebauung2.text")); // NOI18N
+        lblVorhandeneBebauung2.setName(PotenzialflaecheReportServerAction.Property.VERSIEGELUNG.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panLageBody3.add(lblVorhandeneBebauung2, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_versiegelung}"),
+                cbVorhandeneBebauung3,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panLageBody3.add(cbVorhandeneBebauung3, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
             lblAessereErschl,
             org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
@@ -1707,6 +1919,26 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panLageBody3.add(searchLabelsFieldPanel3, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAessereErschl1,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.lblAessereErschl1.text")); // NOI18N
+        lblAessereErschl1.setName(PotenzialflaecheReportServerAction.Property.KLIMAINFORMATIONEN.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 6);
+        panLageBody3.add(lblAessereErschl1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panLageBody3.add(cbAeussereErschluessung1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2692,6 +2924,41 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         // TODO add your handling code here:
     } //GEN-LAST:event_cbAeussereErschluessungActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
+        refreshMap();
+        refreshGeomFields();
+    }                                                                          //GEN-LAST:event_cbGeomActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblQuartiere1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblQuartiere1MouseClicked
+//        if (evt.getClickCount() > 1) {
+//            final DescriptionPaneFS pane = new DescriptionPaneFS();
+//            final JDialog dialog = new JDialog();
+//            dialog.setContentPane(pane);
+//            final Collection<MetaObjectNode> mons = new ArrayList<>();
+//            final DefaultListModel<MetaObjectNode> model = (DefaultListModel<MetaObjectNode>)
+//                monSearchResultsList1.getModel();
+//            for (int i = 0; i < model.getSize(); i++) {
+//                final MetaObjectNode mon = model.get(i);
+//                mons.add(mon);
+//            }
+//
+//
+//            pane.gotoMetaObjectNodes(mons.toArray(new MetaObjectNode[0]));
+//
+//            StaticSwingTools.showDialog(this, dialog, true);
+//        }
+    } //GEN-LAST:event_lblQuartiere1MouseClicked
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -2713,32 +2980,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         bindingGroup.unbind();
         if (cidsBean != null) {
-            initMap();
-            refreshGeomFeatures();
-            final Geometry geom = (Geometry)cidsBean.getProperty("geometrie.geo_field");
-
-            if (geom != null) {
-                bezirkSearch.setGeom(geom);
-                quartierSearch.setGeom(geom);
-                wohnlagenSearch.setGeom(geom);
-                bplanSearch.setGeom(geom);
-                stadtraumtypSearch.setGeom(geom);
-                fnpHauptnutzungenSearch.setGeom(geom);
-
-                searchLabelsFieldPanel1.refresh();
-                searchLabelsFieldPanel2.refresh();
-                searchLabelsFieldPanel3.refresh();
-                searchLabelsFieldPanel4.refresh();
-                searchLabelsFieldPanel5.refresh();
-                searchLabelsFieldPanel6.refresh();
-            } else {
-                searchLabelsFieldPanel1.clear();
-                searchLabelsFieldPanel2.clear();
-                searchLabelsFieldPanel3.clear();
-                searchLabelsFieldPanel4.clear();
-                searchLabelsFieldPanel5.clear();
-                searchLabelsFieldPanel6.clear();
-            }
+            refreshMap();
+            refreshGeomFields();
 
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
@@ -2912,38 +3155,47 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     /**
      * DOCUMENT ME!
      */
-    private void initMap() {
+    private void refreshMap() {
+        mappingComponent1.getFeatureCollection().removeAllFeatures();
+
         if (getCidsBean() != null) {
             final Geometry geom = (Geometry)getCidsBean().getProperty("geometrie.geo_field");
-            try {
-                final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
-                            ClientAlkisConf.getInstance().getGeoBuffer()
-                                    * 2));
+            if (geom != null) {
+                try {
+                    final XBoundingBox box = new XBoundingBox(geom.getEnvelope().buffer(
+                                ClientAlkisConf.getInstance().getGeoBuffer()
+                                        * 2));
 
-                final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
-                mappingModel.addHome(new XBoundingBox(
-                        box.getX1(),
-                        box.getY1(),
-                        box.getX2(),
-                        box.getY2(),
-                        ClientAlkisConf.getInstance().getSrsService(),
-                        true));
-                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                            ClientAlkisConf.getInstance().getMapCallString()));
-                swms.setName("Potenzialflächen");
+                    final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                    mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
+                    mappingModel.addHome(new XBoundingBox(
+                            box.getX1(),
+                            box.getY1(),
+                            box.getX2(),
+                            box.getY2(),
+                            ClientAlkisConf.getInstance().getSrsService(),
+                            true));
+                    final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                                ClientAlkisConf.getInstance().getMapCallString()));
+                    swms.setName("Potenzialflächen");
 
-                // add the raster layer to the model
-                mappingModel.addLayer(swms);
-                // set the model
-                mappingComponent1.setMappingModel(mappingModel);
-                // interaction mode
-                mappingComponent1.gotoInitialBoundingBox();
-                mappingComponent1.setInteractionMode(MappingComponent.ZOOM);
-                // finally when all configurations are done ...
-                mappingComponent1.unlock();
-            } catch (final Exception ex) {
-                LOG.warn("could not init Map !", ex);
+                    // add the raster layer to the model
+                    mappingModel.addLayer(swms);
+                    // set the model
+                    mappingComponent1.setMappingModel(mappingModel);
+                    // interaction mode
+                    mappingComponent1.gotoInitialBoundingBox();
+                    mappingComponent1.setInteractionMode(MappingComponent.ZOOM);
+                    // finally when all configurations are done ...
+                    mappingComponent1.unlock();
+                } catch (final Exception ex) {
+                    LOG.warn("could not init Map !", ex);
+                }
+
+                final StyledFeature dsf = new DefaultStyledFeature();
+                dsf.setGeometry(geom);
+                dsf.setFillingPaint(Color.RED);
+                mappingComponent1.getFeatureCollection().addFeature(dsf);
             }
         }
     }
@@ -2951,16 +3203,26 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     /**
      * DOCUMENT ME!
      */
-    private void refreshGeomFeatures() {
-        mappingComponent1.getFeatureCollection().removeAllFeatures();
-        if (getCidsBean() != null) {
-            final Geometry geom = (Geometry)getCidsBean().getProperty("geometrie.geo_field");
-            if (geom != null) {
-                final StyledFeature dsf = new DefaultStyledFeature();
-                dsf.setGeometry(geom);
-                dsf.setFillingPaint(Color.RED);
-                mappingComponent1.getFeatureCollection().addFeature(dsf);
+    private void refreshGeomFields() {
+        final Geometry geometry = (getCidsBean() != null) ? (Geometry)getCidsBean().getProperty("geometrie.geo_field")
+                                                          : null;
+
+        if (geometry != null) {
+            for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
+                final CidsServerSearch search = searchLabelFieldPanel.getSearch();
+                if (search instanceof GeometrySearch) {
+                    final GeometrySearch geometrySearch = (GeometrySearch)search;
+                    geometrySearch.setGeometry(geometry);
+                    searchLabelFieldPanel.refresh();
+                }
             }
+            ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(geometry);
+            monSearchResultsList1.refresh();
+        } else {
+            for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
+                searchLabelFieldPanel.clear();
+            }
+            monSearchResultsList1.removeAll();
         }
     }
 

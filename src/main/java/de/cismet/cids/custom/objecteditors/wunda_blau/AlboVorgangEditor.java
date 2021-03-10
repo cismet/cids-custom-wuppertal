@@ -55,7 +55,7 @@ import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangNextSchluesselServerSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1439,7 +1439,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
                 @Override
                 protected List<CidsBean> doInBackground() throws Exception {
-                    final BplaeneSearch search = new BplaeneSearch();
+                    final BplaeneMonSearch search = new BplaeneMonSearch();
 
                     Geometry geom = null;
                     for (final CidsBean flaecheBean : getCidsBean().getBeanCollectionProperty("arr_flaechen")) {
@@ -1451,7 +1451,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                             }
                         }
                     }
-                    search.setGeom(geom);
+                    search.setGeometry(geom);
 
                     final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
