@@ -34,7 +34,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -1076,10 +1076,10 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
                     @Override
                     protected List<CidsBean> doInBackground() throws Exception {
-                        final BplaeneSearch search = new BplaeneSearch();
+                        final BplaeneMonSearch search = new BplaeneMonSearch();
 
                         final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
-                        search.setGeom(geom);
+                        search.setGeometry(geom);
 
                         final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(),

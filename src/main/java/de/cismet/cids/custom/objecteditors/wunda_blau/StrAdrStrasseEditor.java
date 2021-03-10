@@ -317,7 +317,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
     private JPanel panFillerUnten1;
     private JPanel panGeometrie;
     private JPanel panKmQuadrat;
-    private JPanel panLage;
     private JPanel panMenButtonsKmQuadrat;
     private JPanel panMenButtonsPlz;
     private JPanel panMenButtonsStadtbezirk;
@@ -509,7 +508,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             lblDatum = new JLabel();
             txtDatum = new JTextField();
             panGeometrie = new JPanel();
-            panLage = new JPanel();
             rpKarte = new RoundedPanel();
             panPreviewMap = new DefaultPreviewMapPanel();
             semiRoundedPanel7 = new SemiRoundedPanel();
@@ -714,7 +712,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -741,7 +739,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -767,7 +764,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -785,7 +781,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -817,7 +812,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 2;
-            gridBagConstraints.gridwidth = 2;
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.weightx = 1.0;
@@ -848,7 +842,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 3;
-            gridBagConstraints.gridwidth = 2;
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.weightx = 1.0;
@@ -900,7 +893,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -950,7 +942,6 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -960,10 +951,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lblMotiv.setText("Motivgruppe:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblMotiv, gridBagConstraints);
 
@@ -989,9 +980,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1011,8 +1000,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         if(isEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 13;
-            gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.gridy = 8;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1023,10 +1011,10 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBemerkung, gridBagConstraints);
 
@@ -1056,10 +1044,8 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1070,13 +1056,14 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lblPlz.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblPlz, gridBagConstraints);
 
+        panPlz.setOpaque(false);
         panPlz.setLayout(new GridBagLayout());
 
         scpLstPlz.setMinimumSize(new Dimension(258, 66));
@@ -1145,8 +1132,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 17;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1156,13 +1142,14 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lblKmQuadrat.setText("KM-Quadrat(e):");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblKmQuadrat, gridBagConstraints);
 
+        panKmQuadrat.setOpaque(false);
         panKmQuadrat.setLayout(new GridBagLayout());
 
         scpLstKmQuadrat.setMinimumSize(new Dimension(258, 66));
@@ -1233,8 +1220,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1244,13 +1230,14 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lblStadtbezirk.setText("Stadtbezirk(e):");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblStadtbezirk, gridBagConstraints);
 
+        panStadtbezirk.setOpaque(false);
         panStadtbezirk.setLayout(new GridBagLayout());
 
         scpLstStadtbezirk.setMinimumSize(new Dimension(258, 66));
@@ -1319,8 +1306,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 19;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1331,7 +1317,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         lblDatum.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1346,8 +1332,7 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1359,15 +1344,11 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 5);
         panContent.add(panDaten, gridBagConstraints);
 
         panGeometrie.setOpaque(false);
         panGeometrie.setLayout(new GridBagLayout());
-
-        panLage.setMinimumSize(new Dimension(300, 142));
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
 
         rpKarte.setName(""); // NOI18N
         rpKarte.setLayout(new GridBagLayout());
@@ -1397,32 +1378,20 @@ public class StrAdrStrasseEditor extends DefaultCustomObjectEditor implements Ci
         rpKarte.add(semiRoundedPanel7, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 0, 10, 0);
-        panLage.add(rpKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panGeometrie.add(panLage, gridBagConstraints);
+        panGeometrie.add(rpKarte, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 0, 5);
+        gridBagConstraints.insets = new Insets(10, 5, 10, 10);
         panContent.add(panGeometrie, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
