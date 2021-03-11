@@ -32,10 +32,12 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 /**
  * DOCUMENT ME!
  *
+ * @param    <O>
+ *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class CidsSearchResultsList<O extends Object> extends JList<O> implements ConnectionContextStore {
+public class CidsSearchResultsList<O> extends JList<O> implements ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -43,7 +45,7 @@ public class CidsSearchResultsList<O extends Object> extends JList<O> implements
     private static final ListModel MODEL_LOAD = new DefaultListModel() {
 
             {
-                add(0, "<hml><i>Ergebnisse werden geladen...");
+                add(0, "Ergebnisse werden geladen...");
             }
         };
 

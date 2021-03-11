@@ -9,7 +9,6 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
-import Sirius.navigator.ui.DescriptionPaneFS;
 
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
@@ -32,10 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -64,7 +61,6 @@ import de.cismet.cids.editors.SearchLabelsFieldPanel;
 import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import de.cismet.cids.tools.metaobjectrenderer.CidsObjectRendererFactory;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -102,10 +98,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             PfPotenzialflaecheEditor.class);
 
-    private static DefaultBindableReferenceCombo.Option[] DFBC_OPTIONS = new DefaultBindableReferenceCombo.Option[] {
-            new DefaultBindableReferenceCombo.NullableOption("<html><i>[keine Auswahl]", "-"),
-            new DefaultBindableReferenceCombo.ManageableOption("name", "<html><i>[neue Auswahl erzeugen]")
-        };
+    private static DefaultBindableReferenceCombo.Option NULLABLE_OPTION =
+        new DefaultBindableReferenceCombo.NullableOption(null, "-");
+    private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION =
+        new DefaultBindableReferenceCombo.ManageableOption("name", "<html><i>[neue Auswahl erzeugen]");
+
     private static CidsBean lastKampagne = null;
 
     //~ Instance fields --------------------------------------------------------
@@ -168,6 +165,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler15;
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler22;
     private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler3;
@@ -178,6 +176,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -194,10 +193,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblAessereErschl;
     private javax.swing.JLabel lblAessereErschl1;
     private javax.swing.JLabel lblAktivierbarkeit;
@@ -490,20 +490,20 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblLageTitle2 = new javax.swing.JLabel();
         panLageBody2 = new javax.swing.JPanel();
         lblLagetyp = new javax.swing.JLabel();
-        cbLagetyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbLagetyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
         lblLagetyp1 = new javax.swing.JLabel();
         defaultBindableCheckboxField11 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Nähe zu:");
         lblLagetyp2 = new javax.swing.JLabel();
-        cbLagetyp2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbLagetyp2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
         lblOepnv = new javax.swing.JLabel();
-        cbOepnv = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbOepnv = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
         lblTopografie = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        cbTopografie = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbTopografie = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
         lblTopografie1 = new javax.swing.JLabel();
-        cbTopografie1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbTopografie1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION);
         filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -524,12 +524,21 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         searchLabelsFieldPanel4 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new BplaeneMonSearch(), true);
         lblFlaechennutzung3 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
-        jTextField2 = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        jLabel1 = new javax.swing.JLabel();
         dateStand1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         lblVorhandeneBebauung1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        cbVorhandeneBebauung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
-        cbVorhandeneBebauung2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbVorhandeneBebauung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
+        cbVorhandeneBebauung2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -559,18 +568,26 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 isEditable(),
                 "Bisherige Nutzung:");
         lblVorhandeneBebauung = new javax.swing.JLabel();
-        cbVorhandeneBebauung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbVorhandeneBebauung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblVorhandeneBebauung2 = new javax.swing.JLabel();
-        cbVorhandeneBebauung3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbVorhandeneBebauung3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblAessereErschl = new javax.swing.JLabel();
-        cbAeussereErschluessung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbAeussereErschluessung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblStadtbezirk1 = new javax.swing.JLabel();
         searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new StadtraumtypMonSearch());
         lblStadtbezirk2 = new javax.swing.JLabel();
         searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
                 new WohnlagenKategorisierungMonSearch());
         lblAessereErschl1 = new javax.swing.JLabel();
-        cbAeussereErschluessung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbAeussereErschluessung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -611,9 +628,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblLageTitle6 = new javax.swing.JLabel();
         panLageBody5 = new javax.swing.JPanel();
         lblEntwicklungsausssichten1 = new javax.swing.JLabel();
-        cbEntwicklungsaussichten1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbEntwicklungsaussichten1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblEntwicklungsausssichten2 = new javax.swing.JLabel();
-        cbEntwicklungsaussichten2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbEntwicklungsaussichten2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblEntwicklungsausssichten3 = new javax.swing.JLabel();
         defaultBindableCheckboxField4 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
@@ -623,10 +644,14 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 isEditable(),
                 "Empfohlene Art der Wohnnutzung:");
         lblAktivierbarkeit1 = new javax.swing.JLabel();
-        cbAktivierbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbAktivierbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         lblEntwicklungsausssichten = new javax.swing.JLabel();
-        cbEntwicklungsaussichten = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbEntwicklungsaussichten = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -638,19 +663,27 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblLageTitle7 = new javax.swing.JLabel();
         panLageBody6 = new javax.swing.JPanel();
         lblVerfuegbarkeit1 = new javax.swing.JLabel();
-        cbVerfuegbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbVerfuegbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblAktivierbarkeit = new javax.swing.JLabel();
-        cbAktivierbarkeit = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbAktivierbarkeit = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblHandlungsdruck1 = new javax.swing.JLabel();
-        cbHandlungsdruck1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbHandlungsdruck1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblEntwicklungsausssichten4 = new javax.swing.JLabel();
         defaultBindableCheckboxField8 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
                 "Empfohlene Nutzung:");
         lblRevitalisierung1 = new javax.swing.JLabel();
-        cbRevitalisierung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbRevitalisierung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION);
         lblHandlungsdruck = new javax.swing.JLabel();
-        cbHandlungsdruck = new de.cismet.cids.editors.DefaultBindableReferenceCombo(DFBC_OPTIONS);
+        cbHandlungsdruck = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
         filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -868,7 +901,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel3.add(lblBezeichnung, gridBagConstraints);
@@ -904,7 +937,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 25, 5, 5);
         jPanel3.add(lblNummer, gridBagConstraints);
@@ -950,7 +983,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblGeometrie5, gridBagConstraints);
@@ -998,7 +1031,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblFlaechengroesse, gridBagConstraints);
@@ -1025,7 +1058,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblStadtbezirk, gridBagConstraints);
@@ -1048,7 +1081,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblQuartiere, gridBagConstraints);
@@ -1078,7 +1111,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblQuartiere1, gridBagConstraints);
@@ -1103,7 +1136,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblStadtbezirk5, gridBagConstraints);
@@ -1190,7 +1223,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody2.add(lblLagetyp, gridBagConstraints);
@@ -1219,7 +1252,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody2.add(lblLagetyp1, gridBagConstraints);
@@ -1251,7 +1284,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody2.add(lblLagetyp2, gridBagConstraints);
@@ -1280,7 +1313,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody2.add(lblOepnv, gridBagConstraints);
@@ -1309,7 +1342,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody2.add(lblTopografie, gridBagConstraints);
@@ -1341,7 +1374,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
         jPanel4.add(lblTopografie1, gridBagConstraints);
@@ -1430,7 +1463,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panMessstellenausbauBody.add(lblFlaechennutzung1, gridBagConstraints);
@@ -1462,7 +1495,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panMessstellenausbauBody.add(lblFlaechennutzung, gridBagConstraints);
@@ -1485,7 +1518,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panMessstellenausbauBody.add(lblFlaechennutzung2, gridBagConstraints);
@@ -1508,27 +1541,73 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panMessstellenausbauBody.add(lblFlaechennutzung3, gridBagConstraints);
 
         jPanel12.setOpaque(false);
         jPanel12.setLayout(new java.awt.GridBagLayout());
+
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(3);
+        jTextArea1.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.festsetzungen_bplan}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane3.setViewportView(jTextArea1);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel12.add(jTextField2, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        jPanel12.add(jScrollPane3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel12.add(filler2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheEditor.jLabel1.text")); // NOI18N
+        jLabel1.setName(PotenzialflaecheReportServerAction.Property.FESTSETZUNGEN_BPLAN_STAND.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel12.add(jLabel1, gridBagConstraints);
 
         dateStand1.setToolTipText(org.openide.util.NbBundle.getMessage(
                 PfPotenzialflaecheEditor.class,
                 "PfPotenzialflaecheEditor.dateStand1.toolTipText")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_festsetzungen_bplan}"),
+                dateStand1,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel12.add(dateStand1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1548,7 +1627,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panMessstellenausbauBody.add(lblVorhandeneBebauung1, gridBagConstraints);
@@ -1559,7 +1638,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnung_genehmigung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnungsrecht_genehmigung}"),
                 cbVorhandeneBebauung1,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -1575,7 +1654,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnung_baulast}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnungsrecht_baulast}"),
                 cbVorhandeneBebauung2,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -1659,7 +1738,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblStadtbezirk4, gridBagConstraints);
@@ -1691,7 +1770,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblStadtbezirk6, gridBagConstraints);
@@ -1725,7 +1804,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblNutzungsaufgabe.setName(PotenzialflaecheReportServerAction.Property.JAHR_NUTZUNGSAUFGABE.toString());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         jPanel9.add(lblNutzungsaufgabe, gridBagConstraints);
@@ -1764,7 +1843,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblStadtbezirk3, gridBagConstraints);
@@ -1796,7 +1875,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblVorhandeneBebauung, gridBagConstraints);
@@ -1825,7 +1904,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblVorhandeneBebauung2, gridBagConstraints);
@@ -1854,7 +1933,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 6);
         panLageBody3.add(lblAessereErschl, gridBagConstraints);
@@ -1883,7 +1962,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblStadtbezirk1, gridBagConstraints);
@@ -1906,7 +1985,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblStadtbezirk2, gridBagConstraints);
@@ -1929,10 +2008,19 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 6);
         panLageBody3.add(lblAessereErschl1, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_klimainformationen}"),
+                cbAeussereErschluessung1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2101,7 +2189,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel6.add(lblQuelle, gridBagConstraints);
@@ -2130,7 +2218,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
         jPanel6.add(lblStand, gridBagConstraints);
@@ -2336,7 +2424,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten1, gridBagConstraints);
@@ -2366,7 +2454,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten2, gridBagConstraints);
@@ -2396,7 +2484,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten3, gridBagConstraints);
@@ -2431,7 +2519,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten5, gridBagConstraints);
@@ -2465,7 +2553,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblAktivierbarkeit1, gridBagConstraints);
@@ -2515,7 +2603,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten, gridBagConstraints);
@@ -2600,7 +2688,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody6.add(lblVerfuegbarkeit1, gridBagConstraints);
@@ -2630,7 +2718,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody6.add(lblAktivierbarkeit, gridBagConstraints);
@@ -2664,7 +2752,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody6.add(lblHandlungsdruck1, gridBagConstraints);
@@ -2695,7 +2783,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody6.add(lblEntwicklungsausssichten4, gridBagConstraints);
@@ -2729,7 +2817,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody6.add(lblRevitalisierung1, gridBagConstraints);
@@ -2763,7 +2851,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 12;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody6.add(lblHandlungsdruck, gridBagConstraints);
