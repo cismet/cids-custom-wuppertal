@@ -407,11 +407,6 @@
             <scope>compile</scope>
         </dependency>        
         <dependency>
-            <groupId>de.cismet.todo</groupId>
-            <artifactId>quicktime</artifactId>
-            <version>unknown</version>
-        </dependency>
-        <dependency>
             <groupId>org.swinglabs</groupId>
             <artifactId>jxlayer</artifactId>
             <version>3.0.3</version>
