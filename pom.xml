@@ -8,12 +8,12 @@
     <parent>
         <groupId>de.cismet.cids</groupId>
         <artifactId>cids-parent</artifactId>
-        <version>6.0</version>
+        <version>7.0</version>
     </parent>
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>6.27.2</version>
+    <version>7.0</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
@@ -23,7 +23,7 @@
         <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
-        <tag>v6.27.2</tag>
+        <tag>v7.0</tag>
     </scm>
 
     <properties>
@@ -51,7 +51,7 @@
             <dependency>
                 <groupId>de.cismet</groupId>
                 <artifactId>cismet-ext-bom</artifactId>
-                <version>6.0</version>
+                <version>7.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -60,13 +60,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>6.5.7</version>
+                <version>7.0</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>6.5.7</version>
+                <version>7.0</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -74,13 +74,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>6.2.7</version>
+                <version>7.0</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>6.2.7</version>
+                <version>7.0</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -88,13 +88,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>6.6.9</version>
+                <version>7.0</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>6.6.9</version>
+                <version>7.0</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -102,13 +102,13 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>6.5</version>
+                <version>7.0</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>6.5</version>
+                <version>7.0</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -116,21 +116,21 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>6.27.2</version>
+                <version>7.0</version>
                 <type>jar</type>
             </dependency>
             
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>6.6.5</version>
+                <version>7.0</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>6.6.5</version>
+                <version>7.0</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -138,47 +138,34 @@
             <dependency>
                 <groupId>de.cismet.cismap</groupId>
                 <artifactId>cismap-plugin</artifactId>
-                <version>6.1.9</version>
+                <version>7.0</version>
                 <type>jar</type>
             </dependency>
             
             <dependency>
                 <groupId>de.cismet.cids.navigator.plugin</groupId>
                 <artifactId>wf-akuk</artifactId>
-                <version>6.0</version>
+                <version>7.0</version>
                 <type>jar</type>   
             </dependency>
             
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-scale-generator</artifactId>
-                <version>6.0</version>
+                <version>7.0</version>
                 <type>jar</type>
             </dependency>
 
             <dependency>
                 <groupId>de.cismet.custom</groupId>
                 <artifactId>beansbinding</artifactId>
-                <version>6.0</version>
+                <version>7.0</version>
             </dependency>
             
             <dependency>
                 <groupId>de.cismet</groupId>
                 <artifactId>jgrid</artifactId>
-                <version>6.0</version>
-            </dependency>
-              <dependency>
-                <groupId>io.socket</groupId>
-                <artifactId>socket.io-client</artifactId>
-                <version>1.0.0</version>
-                <scope>compile</scope>                
-            </dependency>
-        
-            <dependency>
-                <groupId>io.socket</groupId>
-                <artifactId>engine.io-client</artifactId>
-                 <version>1.0.0</version>
-                <scope>compile</scope>        
+                <version>7.0</version>
             </dependency>
             <!-- END: managed cids-dependencies -->  
         </dependencies>
@@ -393,7 +380,18 @@
         
         <!-- BEGIN: unmanaged dependencies -->
         
-        
+        <dependency>
+            <groupId>io.socket</groupId>
+            <artifactId>socket.io-client</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>                
+        </dependency>    
+        <dependency>
+            <groupId>io.socket</groupId>
+            <artifactId>engine.io-client</artifactId>
+                <version>1.0.0</version>
+            <scope>compile</scope>        
+        </dependency>
         <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>
             <artifactId>imageio-jpeg</artifactId>
@@ -406,11 +404,6 @@
             <version>3.0</version> <!-- Alternatively, build your own 3.1-something version -->
             <scope>compile</scope>
         </dependency>        
-        <dependency>
-            <groupId>de.cismet.todo</groupId>
-            <artifactId>quicktime</artifactId>
-            <version>unknown</version>
-        </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
             <artifactId>jxlayer</artifactId>
@@ -437,7 +430,7 @@
         <dependency>
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-soap-connector</artifactId>
-            <version>6.4.7.1-1</version>
+            <version>6.4.7.1-2</version>
         </dependency>        
         <dependency>
             <groupId>jfree</groupId>
