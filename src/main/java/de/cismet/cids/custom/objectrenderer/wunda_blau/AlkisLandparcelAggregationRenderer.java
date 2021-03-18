@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.DescriptionPane;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -26,6 +27,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -34,6 +36,8 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -55,6 +59,7 @@ import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
+import de.cismet.cids.tools.metaobjectrenderer.SelfDisposingPanel;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -104,7 +109,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
+    private final boolean eigentuemerPermission = AlkisProductDownloadHelper.validateUserHasEigentuemerAccess(
+            getConnectionContext());
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisEigentuemerPanel eigentuemerPanel;
+    private javax.swing.JLabel jLabel1;
     private org.jdesktop.swingx.JXHyperlink jxlBaulastBescheinigung;
     private org.jdesktop.swingx.JXHyperlink jxlFlurstuecksnachweis;
     private org.jdesktop.swingx.JXHyperlink jxlKarte;
@@ -113,10 +123,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private org.jdesktop.swingx.JXHyperlink jxlNachweisNRW;
     private javax.swing.JLabel lblHeaderButtons;
     private javax.swing.JLabel lblHeaderLandparcels;
+    private javax.swing.JPanel panBuchungEigentum;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlLandparcels;
     private javax.swing.JPanel pnlMap;
     private javax.swing.JScrollPane scpLandparcels;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
     private de.cismet.tools.gui.SemiRoundedPanel srpHeaderButtons;
     private de.cismet.tools.gui.SemiRoundedPanel srpHeaderLandparcels;
     private javax.swing.JTable tblLandparcels;
@@ -137,6 +149,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        eigentuemerPanel.initWithConnectionContext(connectionContext);
 
         map = new MappingComponent();
         pnlMap.add(map, BorderLayout.CENTER);
@@ -153,8 +166,53 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                         selectedCidsBeanWrapper = tableModel.get(lsm.getLeadSelectionIndex());
                     }
                     changeMap();
+
+                    if (showEigentuemer()) {
+                        eigentuemerPanel.setFlurstuecke(
+                            (selectedCidsBeanWrapper != null) ? Arrays.asList(selectedCidsBeanWrapper.getCidsBean())
+                                                              : null);
+                    }
                 }
             });
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private DescriptionPane waitForDescriptionPane() {
+        Component component = this;
+        while (component.getParent() == null) {
+            try {
+                Thread.sleep(100);
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
+        }
+        while ((component = component.getParent()) != null) {
+            if (component instanceof SelfDisposingPanel) {
+                while (component.getParent() == null) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            } else if (component instanceof DescriptionPane) {
+                return (DescriptionPane)component;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean showEigentuemer() {
+        return eigentuemerPermission;
     }
 
     @Override
@@ -186,6 +244,10 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         lblHeaderLandparcels = new javax.swing.JLabel();
         scpLandparcels = new javax.swing.JScrollPane();
         tblLandparcels = new javax.swing.JTable();
+        panBuchungEigentum = new RoundedPanel();
+        semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel1 = new javax.swing.JLabel();
+        eigentuemerPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisEigentuemerPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -399,6 +461,44 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
         add(pnlLandparcels, gridBagConstraints);
+
+        panBuchungEigentum.setLayout(new java.awt.GridBagLayout());
+
+        semiRoundedPanel1.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(
+                AlkisLandparcelAggregationRenderer.class,
+                "AlkisLandparcelAggregationRenderer.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel1.add(jLabel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panBuchungEigentum.add(semiRoundedPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panBuchungEigentum.add(eigentuemerPanel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(panBuchungEigentum, gridBagConstraints);
+        panBuchungEigentum.setVisible(false);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -528,10 +628,42 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
             changeButtonAvailability(cidsBeanWrappers.size() > 0);
         }
+
+        if (showEigentuemer()) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        new SwingWorker<DescriptionPane, Void>() {
+
+                            @Override
+                            protected DescriptionPane doInBackground() throws Exception {
+                                return waitForDescriptionPane();
+                            }
+
+                            @Override
+                            protected void done() {
+                                try {
+                                    final DescriptionPane descriptionPane = get();
+                                    if ((descriptionPane != null)
+                                                && (descriptionPane.getParent()
+                                                    instanceof AlkisEigentuemerDescriptionPaneParent)) {
+                                        panBuchungEigentum.setVisible(true);
+                                        eigentuemerPanel.setFlurstuecke(cidsBeans);
+                                    }
+                                } catch (final Exception ex) {
+                                    LOG.error(ex, ex);
+                                }
+                            }
+                        }.execute();
+                    }
+                });
+        }
     }
 
     @Override
     public void dispose() {
+        eigentuemerPanel.cancelWorker();
         map.dispose();
     }
 
@@ -702,6 +834,16 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         final BerechtigungspruefungAlkisKarteDownloadInfo downloadInfo = DownloadInfoFactory
                     .createBerechtigungspruefungAlkisKarteDownloadInfo(parcelCodes);
         AlkisProductDownloadHelper.downloadKarteProduct(downloadInfo, getConnectionContext());
+    }
+
+    //~ Inner Interfaces -------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public interface AlkisEigentuemerDescriptionPaneParent {
     }
 
     //~ Inner Classes ----------------------------------------------------------
