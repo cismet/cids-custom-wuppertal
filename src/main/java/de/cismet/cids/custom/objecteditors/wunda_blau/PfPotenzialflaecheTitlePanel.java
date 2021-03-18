@@ -25,6 +25,7 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
     private final PfPotenzialflaecheEditor editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXBusyLabel blWait;
     private javax.swing.JButton btnReport;
     private javax.swing.JLabel txtTitle;
     private javax.swing.JLabel txtTitle1;
@@ -42,6 +43,16 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  waiting  DOCUMENT ME!
+     */
+    public void setWaiting(final boolean waiting) {
+        blWait.setVisible(waiting);
+        blWait.setBusy(waiting);
+    }
 
     /**
      * DOCUMENT ME!
@@ -82,6 +93,7 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
         txtTitle = new javax.swing.JLabel();
         txtTitle1 = new javax.swing.JLabel();
         btnReport = new javax.swing.JButton();
+        blWait = new org.jdesktop.swingx.JXBusyLabel();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -89,7 +101,6 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
         txtTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         txtTitle.setForeground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -131,6 +142,11 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(btnReport, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 5);
+        add(blWait, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
