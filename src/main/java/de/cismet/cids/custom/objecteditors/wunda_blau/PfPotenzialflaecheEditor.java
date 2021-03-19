@@ -115,6 +115,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     private static DefaultBindableReferenceCombo.Option NULLABLE_OPTION =
         new DefaultBindableReferenceCombo.NullableOption(null, "-");
+    private static DefaultBindableReferenceCombo.Option SORTING_OPTION =
+        new DefaultBindableReferenceCombo.SortingColumnOption("order_by");
     private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION =
         new DefaultBindableReferenceCombo.ManageableOption("name", "<html><i>[neue Auswahl erzeugen]");
 
@@ -538,64 +540,66 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panBeschreibungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBeschreibungTitle = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        filler74 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler74 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblNummer = new javax.swing.JLabel();
         txtNummer = new javax.swing.JTextField();
-        filler48 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler48 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblBezeichnung = new javax.swing.JLabel();
         txtBezeichnung = new javax.swing.JTextField();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
         jPanel7 = new javax.swing.JPanel();
-        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblGeometrie5 = new javax.swing.JLabel();
         cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
-        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechengroesse = new javax.swing.JLabel();
         lblFlaechengroesseWert = new javax.swing.JLabel();
-        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk = new javax.swing.JLabel();
         filler58 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel2 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(
                     KstGeometryMonSearch.SearchFor.BEZIRK));
-        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblQuartiere = new javax.swing.JLabel();
         filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel1 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(
                     KstGeometryMonSearch.SearchFor.QUARTIER));
-        filler53 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler53 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblQuartiere1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         monSearchResultsList1 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
                 new AlkisLandparcelGeometryMonSearch());
-        filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk5 = new javax.swing.JLabel();
         filler59 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField3 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Eigentümer:");
+                "Eigentümer:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
         filler55 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -604,40 +608,54 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageTitle2 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle2 = new javax.swing.JLabel();
         panLageBody2 = new javax.swing.JPanel();
-        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblLagetyp = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
-        cbLagetyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
-        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        cbLagetyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(32767, 30));
         lblOepnv = new javax.swing.JLabel();
-        cbOepnv = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
-        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        cbOepnv = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblLagetyp1 = new javax.swing.JLabel();
         filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField11 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Nähe zu:");
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Nähe zu:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblLagetyp2 = new javax.swing.JLabel();
-        cbLagetyp2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
-        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        cbLagetyp2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblTopografie = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        cbTopografie = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
+        cbTopografie = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         lblTopografie1 = new javax.swing.JLabel();
-        cbTopografie1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION);
+        cbTopografie1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0));
@@ -645,35 +663,37 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panMessstellenausbauTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblMessstellenausbauTitle = new javax.swing.JLabel();
         panMessstellenausbauBody = new javax.swing.JPanel();
-        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung1 = new javax.swing.JLabel();
         filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField9 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Regionalplan:");
-        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Regionalplan:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung = new javax.swing.JLabel();
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new FnpHauptnutzungenMonSearch());
-        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung2 = new javax.swing.JLabel();
         filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel4 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new BplaeneMonSearch(), true);
-        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung3 = new javax.swing.JLabel();
         filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -681,25 +701,27 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel12 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         jLabel1 = new javax.swing.JLabel();
         dateStand1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVorhandeneBebauung1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         cbVorhandeneBebauung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         cbVorhandeneBebauung2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0));
@@ -707,19 +729,21 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageTitle3 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle3 = new javax.swing.JLabel();
         panLageBody3 = new javax.swing.JPanel();
-        filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk4 = new javax.swing.JLabel();
         filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField6 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Umgebungsnutzung:");
-        filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Umgebungsnutzung:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk6 = new javax.swing.JLabel();
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -727,81 +751,89 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel9 = new javax.swing.JPanel();
         defaultBindableCheckboxField1 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Brachflächenkategorie:");
-        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Brachflächenkategorie:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblNutzungsaufgabe = new javax.swing.JLabel();
         txtJahrNutzungsaufgabe = new javax.swing.JTextField();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(150, 0),
                 new java.awt.Dimension(150, 0),
                 new java.awt.Dimension(150, 0));
-        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk3 = new javax.swing.JLabel();
         filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField5 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Bisherige Nutzung:");
-        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Bisherige Nutzung:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVorhandeneBebauung = new javax.swing.JLabel();
         cbVorhandeneBebauung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         jPanel16 = new javax.swing.JPanel();
-        filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVorhandeneBebauung2 = new javax.swing.JLabel();
         cbVorhandeneBebauung3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler44 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler44 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAessereErschl = new javax.swing.JLabel();
         cbAeussereErschluessung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         jPanel17 = new javax.swing.JPanel();
-        filler75 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler75 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(32767, 30));
         lblVorhandeneBebauung3 = new javax.swing.JLabel();
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         jScrollPane4 = new javax.swing.JScrollPane();
         monSearchResultsList2 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>();
-        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk2 = new javax.swing.JLabel();
         filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
                 new WohnlagenKategorisierungMonSearch());
-        filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk1 = new javax.swing.JLabel();
         filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new StadtraumtypMonSearch());
-        filler47 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler47 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAessereErschl1 = new javax.swing.JLabel();
         cbAeussereErschluessung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0));
@@ -822,9 +854,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panArtControls3 = new javax.swing.JPanel();
         btnFlaeche = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        filler73 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler73 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblQuelle = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         lblStand = new javax.swing.JLabel();
@@ -841,99 +873,116 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageTitle5 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle6 = new javax.swing.JLabel();
         panLageBody5 = new javax.swing.JPanel();
-        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten1 = new javax.swing.JLabel();
         cbEntwicklungsaussichten1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler60 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler60 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten2 = new javax.swing.JLabel();
         cbEntwicklungsaussichten2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten3 = new javax.swing.JLabel();
         filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField4 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Restriktionen/Hemmnisse:");
-        filler62 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Restriktionen/Hemmnisse:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler62 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten5 = new javax.swing.JLabel();
         filler71 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField10 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Empfohlene Art der Wohnnutzung:");
-        filler63 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Empfohlene Art der Wohnnutzung:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler63 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAktivierbarkeit1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         cbAktivierbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten = new javax.swing.JLabel();
         cbEntwicklungsaussichten = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler65 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler65 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVerfuegbarkeit1 = new javax.swing.JLabel();
         cbVerfuegbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAktivierbarkeit = new javax.swing.JLabel();
         cbAktivierbarkeit = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblHandlungsdruck1 = new javax.swing.JLabel();
         cbHandlungsdruck1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten4 = new javax.swing.JLabel();
         filler72 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         defaultBindableCheckboxField8 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
                 isEditable(),
-                "Empfohlene Nutzung:");
-        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                "Empfohlene Nutzung:",
+                SORTING_OPTION,
+                MANAGEABLE_OPTION);
+        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblRevitalisierung1 = new javax.swing.JLabel();
         cbRevitalisierung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 NULLABLE_OPTION,
-                MANAGEABLE_OPTION);
-        filler70 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(0, 24),
-                new java.awt.Dimension(32767, 24));
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
+        filler70 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblHandlungsdruck = new javax.swing.JLabel();
-        cbHandlungsdruck = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION);
+        cbHandlungsdruck = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                MANAGEABLE_OPTION,
+                SORTING_OPTION);
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0));
@@ -1393,7 +1442,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField3.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
@@ -1551,7 +1599,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField11.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
@@ -1728,7 +1775,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField9.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
@@ -2021,7 +2067,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField6.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridwidth = 2;
@@ -2064,7 +2109,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField1.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -2146,7 +2190,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField5.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridwidth = 2;
@@ -2814,7 +2857,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField4.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
@@ -2852,7 +2894,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField10.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
@@ -3060,7 +3101,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
-        defaultBindableCheckboxField8.setLayout(new java.awt.FlowLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
@@ -3103,7 +3143,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(lblHandlungsdruck, "Handlungsdruck:");
         lblHandlungsdruck.setToolTipText("Handlungsdruck / Handlungspriorität");
-        lblHandlungsdruck.setName(PotenzialflaecheReportServerAction.Property.HANDLUNGSDRUCK.toString());
+        lblHandlungsdruck.setName(PotenzialflaecheReportServerAction.Property.HANDLUNGSPRIORITAET.toString());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

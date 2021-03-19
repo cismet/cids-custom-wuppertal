@@ -72,13 +72,35 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
 
                 @Override
                 public int compare(final CidsBean o1, final CidsBean o2) {
-                    return ObjectUtils.compare(
-                            (o1 != null) ? (Integer)o1.getProperty("order_by") : null,
-                            (o2 != null) ? (Integer)o2.getProperty("order_by") : null);
+                    if ((o1 == null) && (o2 == null)) {
+                        return 0;
+                    } else if (o1 == null) {
+                        return -1;
+                    } else if (o2 == null) {
+                        return 1;
+                    }
+
+                    int compare = 0;
+                    final Integer i1 = (Integer)o1.getProperty("order_by");
+                    final Integer i2 = (Integer)o2.getProperty("order_by");
+                    final String n1 = (String)o1.getProperty("name");
+                    final String n2 = (String)o2.getProperty("name");
+                    if ((i1 != null) && (i2 != null)) {
+                        compare = ObjectUtils.compare(i1, i2);
+                    } else if (i1 != null) {
+                        compare = ObjectUtils.compare(i1, -1);
+                    } else if (i2 != null) {
+                        compare = ObjectUtils.compare(-1, i2);
+                    } else if ((n1 != null) && (n2 != null)) {
+                        compare = ObjectUtils.compare(n1, n2);
+                    } else if (n1 != null) {
+                        compare = ObjectUtils.compare(n1, "");
+                    } else if (n2 != null) {
+                        compare = ObjectUtils.compare("", n2);
+                    }
+                    return (compare != 0) ? compare : ObjectUtils.compare(o1.hashCode(), o2.hashCode());
                 }
             });
-
-    private boolean singleUseCidsBean = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler;
@@ -87,13 +109,20 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
     private javax.swing.Box.Filler filler3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JList<Object> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JLabel lblDefinition;
     private javax.swing.JLabel lblName;
+    private de.cismet.tools.gui.RoundedPanel panDetail;
+    private de.cismet.tools.gui.RoundedPanel panDetail1;
     private javax.swing.JScrollPane scpDefinition;
     private javax.swing.JTextArea txtDefinition;
     private javax.swing.JTextField txtName;
@@ -137,7 +166,10 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
 
         RendererTools.makeReadOnly(txtName, !isEditable());
         RendererTools.makeReadOnly(txtDefinition, !isEditable());
-        RendererTools.makeReadOnly(jList1);
+        if (!isEditable()) {
+            RendererTools.makeReadOnly(jList1);
+        }
+        jList1.setCellRenderer(new STCellRenderer());
     }
 
     /**
@@ -150,18 +182,23 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(300, 0),
+                new java.awt.Dimension(300, 0),
+                new java.awt.Dimension(600, 32767));
         jPanel2 = new javax.swing.JPanel();
+        panDetail1 = new de.cismet.tools.gui.RoundedPanel();
+        jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new FixedSelectionList();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(300, 0),
-                new java.awt.Dimension(300, 0),
-                new java.awt.Dimension(0, 0));
+        jPanel4 = new javax.swing.JPanel();
+        panDetail = new de.cismet.tools.gui.RoundedPanel();
         jPanel1 = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -171,26 +208,54 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                 new java.awt.Dimension(0, 32767));
         scpDefinition = new javax.swing.JScrollPane();
         txtDefinition = new javax.swing.JTextArea();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jButton4 = new javax.swing.JButton();
         filler = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        add(filler3, gridBagConstraints);
 
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        panDetail1.setLayout(new java.awt.GridBagLayout());
+
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jList1.setCellRenderer(new STCellRenderer());
         jList1.setVisibleRowCount(20);
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+
+                @Override
+                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
+                    jList1ValueChanged(evt);
+                }
+            });
         jScrollPane1.setViewportView(jList1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel2.add(jScrollPane1, gridBagConstraints);
+        jPanel5.add(jScrollPane1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
+        panDetail1.add(jPanel5, gridBagConstraints);
 
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -209,7 +274,9 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                     jButton1ActionPerformed(evt);
                 }
             });
-        jPanel3.add(jButton1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        jPanel3.add(jButton1, gridBagConstraints);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/down.png"))); // NOI18N
         jButton2.setBorderPainted(false);
@@ -227,29 +294,48 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         jPanel3.add(jButton2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel3.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        jPanel2.add(jPanel3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        panDetail1.add(jPanel3, gridBagConstraints);
         jPanel3.setVisible(isEditable());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton3, "neuen Eintrag erzeugen");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
+        panDetail1.add(jButton3, gridBagConstraints);
+        jButton3.setVisible(isEditable());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
+        panDetail1.add(filler2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        jPanel2.add(filler3, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        jPanel2.add(panDetail1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -259,6 +345,12 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel2, gridBagConstraints);
+
+        jPanel4.setBorder(null);
+        jPanel4.setOpaque(false);
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        panDetail.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -280,6 +372,13 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        txtName.addFocusListener(new java.awt.event.FocusAdapter() {
+
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtNameFocusLost(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -303,7 +402,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
 
         txtDefinition.setColumns(20);
         txtDefinition.setLineWrap(true);
-        txtDefinition.setRows(5);
+        txtDefinition.setRows(10);
         txtDefinition.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -324,15 +423,72 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         jPanel1.add(scpDefinition, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panDetail.add(jPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(panDetail, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jToggleButton1, "zum Löschen markieren");
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                jList1,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.metaObject.status == 3}"),
+                jToggleButton1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jToggleButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(jToggleButton1, gridBagConstraints);
+        jToggleButton1.setVisible(isEditable());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton4, "entfernen");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(jButton4, gridBagConstraints);
+        jButton4.setVisible(isEditable());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(jPanel1, gridBagConstraints);
+        add(jPanel4, gridBagConstraints);
+        jPanel4.setVisible(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -364,8 +520,8 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                 if (selectedObject.equals(indexBean)) {
                     if (beforeBean != null) {
                         try {
-                            final int beforeOrderBy = (Integer)beforeBean.getProperty("order_by");
-                            final int indexOrderBy = (Integer)indexBean.getProperty("order_by");
+                            final Integer beforeOrderBy = (Integer)beforeBean.getProperty("order_by");
+                            final Integer indexOrderBy = (Integer)indexBean.getProperty("order_by");
                             indexBean.setProperty("order_by", beforeOrderBy);
                             beforeBean.setProperty("order_by", indexOrderBy);
                         } catch (final Exception ex) {
@@ -375,7 +531,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                         cidsBeans.remove(indexBean);
                         cidsBeans.add(indexBean);
                         cidsBeans.add(beforeBean);
-//                        ((SortedListModel)jList1.getModel()).refresh();
+                        ((SortedListModel)jList1.getModel()).refresh();
                         jList1.setSelectedValue(selectedObject, true);
                         break;
                     }
@@ -398,8 +554,8 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
             for (final CidsBean indexBean : allBeans) {
                 if (beforeBean != null) {
                     try {
-                        final int beforeOrderBy = (Integer)beforeBean.getProperty("order_by");
-                        final int indexOrderBy = (Integer)indexBean.getProperty("order_by");
+                        final Integer beforeOrderBy = (Integer)beforeBean.getProperty("order_by");
+                        final Integer indexOrderBy = (Integer)indexBean.getProperty("order_by");
                         indexBean.setProperty("order_by", beforeOrderBy);
                         beforeBean.setProperty("order_by", indexOrderBy);
                     } catch (final Exception ex) {
@@ -409,7 +565,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                     cidsBeans.remove(indexBean);
                     cidsBeans.add(indexBean);
                     cidsBeans.add(beforeBean);
-//                    ((SortedListModel)jList1.getModel()).refresh();
+                    ((SortedListModel)jList1.getModel()).refresh();
                     jList1.setSelectedValue(selectedObject, true);
                     break;
                 }
@@ -420,19 +576,96 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         }
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
-    @Override
-    public CidsBean getCidsBean() {
-        return cidsBean;
-    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+        if (jList1.getSelectedValue() instanceof CidsBean) {
+            final CidsBean cidsBean = (CidsBean)jList1.getSelectedValue();
+            if (cidsBean.getMetaObject().getId() >= 0) {
+                final boolean toDelete = jToggleButton1.isSelected();
+                cidsBean.getMetaObject().setStatus(toDelete ? MetaObject.TO_DELETE : MetaObject.MODIFIED);
+            } else {
+                getCidsBeans().remove(cidsBean);
+            }
+            ((SortedListModel)jList1.getModel()).refresh();
+        }
+    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private String createQuery() {
-        final MetaClass metaClass = getCidsBean().getMetaObject().getMetaClass();
-        return createQuery(metaClass);
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        new SwingWorker<CidsBean, Void>() {
+
+                @Override
+                protected CidsBean doInBackground() throws Exception {
+                    return getEffectiveMetaClass().getEmptyInstance(getConnectionContext()).getBean();
+                }
+
+                @Override
+                protected void done() {
+                    CidsBean cidsBean = null;
+                    try {
+                        cidsBean = (get());
+                        cidsBean.setProperty("order_by", jList1.getModel().getSize() + 1);
+                        getCidsBeans().add(cidsBean);
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                    ((SortedListModel)jList1.getModel()).refresh();
+                    jList1.setSelectedValue(cidsBean, true);
+                }
+            }.execute();
+    } //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
+        if (jList1.getSelectedValue() instanceof CidsBean) {
+            final CidsBean cidsBean = (CidsBean)jList1.getSelectedValue();
+            jPanel4.setVisible(true);
+            jToggleButton1.setVisible(isParentBean() && isEditable()
+                        && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW));
+            jButton4.setVisible(isEditable() && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW));
+        } else {
+            final CidsBean cidsBean = (CidsBean)jList1.getSelectedValue();
+        }
+    }                                                                                 //GEN-LAST:event_jList1ValueChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+        if (jList1.getSelectedValue() instanceof CidsBean) {
+            final CidsBean cidsBean = (CidsBean)jList1.getSelectedValue();
+            getCidsBeans().remove(cidsBean);
+            ((SortedListModel)jList1.getModel()).refresh();
+        }
+        jList1.setSelectedIndex(-1);
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void txtNameFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtNameFocusLost
+        jList1.repaint();
+    }                                                                    //GEN-LAST:event_txtNameFocusLost
+
+    @Override
+    public CidsBean getCidsBean() {
+        return cidsBean;
     }
 
     /**
@@ -476,11 +709,38 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private MetaClass getEffectiveMetaClass() {
+        if (cidsBean != null) {
+            try {
+                final MetaClass metaClass = isParentBean()
+                    ? CidsBean.getMetaClassFromTableName(
+                        "WUNDA_BLAU",
+                        (String)cidsBean.getProperty("table_name"),
+                        getConnectionContext()) : getCidsBean().getMetaObject().getMetaClass();
+                return metaClass;
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
+        }
+        return null;
+    }
+
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         this.cidsBean = cidsBean;
         jList1.setModel(new DefaultListModel<>());
 
+        if (isParentBean()) {
+            cidsBean.setArtificialChangeFlag(true);
+        } else {
+            jToggleButton1.setVisible(false);
+            jButton3.setVisible(false);
+        }
         bindingGroup.unbind();
         if (cidsBean != null) {
             jList1.setModel(new JList<>(new Object[] { "wird geladen..." }).getModel());
@@ -490,14 +750,14 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
 
                     @Override
                     protected List<CidsBean> doInBackground() throws Exception {
-                        final String query = createQuery();
-
+                        final MetaClass metaClass = getEffectiveMetaClass();
+                        final String query = createQuery(metaClass);
                         final List<CidsBean> beans = new ArrayList<>();
                         final MetaObject[] mos = MetaObjectCache.getInstance()
                                     .getMetaObjectsByQuery(
                                         query,
-                                        getCidsBean().getMetaObject().getMetaClass(),
-                                        false,
+                                        metaClass,
+                                        true,
                                         getConnectionContext());
                         if (mos != null) {
                             for (final MetaObject mo : mos) {
@@ -514,11 +774,20 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                         try {
                             final List<CidsBean> beans = get();
                             getCidsBeans().addAll(beans);
-                            if (cidsBean != null) {
-                                // replace bean from db-selection with actual cidsbean
-                                // otherwise persisting does not work as expected
-                                getCidsBeans().remove(cidsBean);
-                                getCidsBeans().add(cidsBean);
+                            if ((cidsBean != null)) {
+                                if (isParentBean()) {
+                                    for (int index = 0; index < beans.size(); index++) {
+                                        final CidsBean subBean = beans.get(index);
+                                        if ((subBean != null) && (subBean.getProperty("order_by") == null)) {
+                                            subBean.setProperty("order_by", index + 1);
+                                        }
+                                    }
+                                } else {
+                                    // replace bean from db-selection with actual cidsbean
+                                    // otherwise persisting does not work as expected
+                                    getCidsBeans().remove(cidsBean);
+                                    getCidsBeans().add(cidsBean);
+                                }
                             }
                             jList1.setModel(new SortedListModel(getCidsBeans()));
 
@@ -559,7 +828,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
     @Override
     public boolean prepareForSave() {
         boolean goForSave = true;
-        if (!isSingleUseCidsBean()) {
+        if (isParentBean()) {
             for (int index = 0; index < jList1.getModel().getSize(); index++) {
                 final Object object = jList1.getModel().getElementAt(index);
                 if ((object instanceof CidsBean) && !object.equals(getCidsBean())) {
@@ -573,8 +842,9 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                 }
             }
         }
-        if (cidsBean != null) {
-            MetaObjectCache.getInstance().clearCache(cidsBean.getMetaObject().getMetaClass());
+        final MetaClass metaClass = getEffectiveMetaClass();
+        if (metaClass != null) {
+            MetaObjectCache.getInstance().clearCache(metaClass);
         }
         return goForSave;
     }
@@ -589,17 +859,8 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
      *
      * @return  DOCUMENT ME!
      */
-    public boolean isSingleUseCidsBean() {
-        return singleUseCidsBean;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  singleUseCidsBean  DOCUMENT ME!
-     */
-    public void setSingleUseCidsBean(final boolean singleUseCidsBean) {
-        this.singleUseCidsBean = singleUseCidsBean;
+    public boolean isParentBean() {
+        return "PF_SCHLUESSELTABELLE".equalsIgnoreCase(cidsBean.getMetaObject().getMetaClass().getTableName());
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -624,26 +885,33 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
                     value,
                     index,
                     isSelected,
-                    cellHasFocus);
-            if ((component instanceof JLabel) && (value instanceof CidsBean) && isEditable()
-                        && !isSingleUseCidsBean()) {
+                    cellHasFocus
+                            && isParentBean());
+            if ((component instanceof JLabel) && (value instanceof CidsBean)) {
                 final CidsBean cidsBean = (CidsBean)value;
                 final JLabel label = (JLabel)component;
-                switch (cidsBean.getMetaObject().getStatus()) {
-                    case MetaObject.MODIFIED: {
-                        label.setForeground(Color.BLUE);
-                    }
-                    break;
-                    case MetaObject.TO_DELETE: {
-                        label.setForeground(Color.RED);
-                    }
-                    break;
-                    case MetaObject.NEW: {
-                        label.setForeground(Color.GREEN);
-                    }
-                    break;
-                    default: {
-                        label.setForeground(Color.BLACK);
+                label.setEnabled(isParentBean() || cidsBean.equals(getCidsBean()));
+                label.setOpaque(isSelected);
+                if (cidsBean.getProperty("name") == null) {
+                    label.setText("<html><i>[neuer Eintrag]");
+                }
+                if (isEditable() && isParentBean()) {
+                    switch (cidsBean.getMetaObject().getStatus()) {
+                        case MetaObject.MODIFIED: {
+                            label.setForeground(Color.BLUE);
+                        }
+                        break;
+                        case MetaObject.TO_DELETE: {
+                            label.setForeground(Color.RED);
+                        }
+                        break;
+                        case MetaObject.NEW: {
+                            label.setForeground(Color.GREEN.darker());
+                        }
+                        break;
+                        default: {
+                            label.setForeground(Color.BLACK);
+                        }
                     }
                 }
             }
@@ -795,7 +1063,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
 
         @Override
         public void setSelectionInterval(final int anchor, final int lead) {
-            if (!isSingleUseCidsBean()) {
+            if (isParentBean()) {
                 super.setSelectionInterval(anchor, lead);
             }
         }
