@@ -326,13 +326,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler74">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -372,13 +372,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler48">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -440,13 +440,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler49">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -500,13 +500,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler50">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -541,13 +541,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler51">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -605,13 +605,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler52">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -669,13 +669,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler53">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -745,13 +745,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler54">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -799,7 +799,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_eigentuemer}" target="defaultBindableCheckboxField3" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Eigent&#xfc;mer:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Eigent&#xfc;mer:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -900,13 +900,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler19">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -948,7 +948,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_lagebewertung_verkehr}" target="cbLagetyp" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -997,7 +997,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_oepnv}" target="cbOepnv" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -1012,13 +1012,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler20">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1066,7 +1066,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_naehen_zu}" target="defaultBindableCheckboxField11" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;N&#xe4;he zu:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;N&#xe4;he zu:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1079,13 +1079,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler21">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1115,7 +1115,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_siedlungsraeumliche_lage}" target="cbLagetyp2" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -1128,13 +1128,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler24">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 32]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 32]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1176,7 +1176,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.topografie}" target="cbTopografie" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -1204,7 +1204,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_ausrichtung}" target="cbTopografie1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -1296,13 +1296,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler27">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1350,7 +1350,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.regionalplan}" target="defaultBindableCheckboxField9" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Regionalplan:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Regionalplan:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1363,13 +1363,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler28">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1427,13 +1427,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler29">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1491,13 +1491,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler30">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1578,13 +1578,13 @@
                             <Component class="javax.swing.Box$Filler" name="filler32">
                               <Properties>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[32767, 30]"/>
+                                  <Dimension value="[32767, 28]"/>
                                 </Property>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[0, 30]"/>
+                                  <Dimension value="[0, 28]"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[0, 30]"/>
+                                  <Dimension value="[0, 28]"/>
                                 </Property>
                               </Properties>
                               <AuxValues>
@@ -1645,13 +1645,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler31">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1693,7 +1693,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_bauordnungsrecht_genehmigung}" target="cbVorhandeneBebauung1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -1708,7 +1708,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_bauordnungsrecht_baulast}" target="cbVorhandeneBebauung2" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -1800,13 +1800,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler39">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1854,7 +1854,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.umgebungsnutzung}" target="defaultBindableCheckboxField6" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Umgebungsnutzung:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Umgebungsnutzung:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1867,13 +1867,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler40">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1933,7 +1933,7 @@
                                 <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_brachflaechen}" target="defaultBindableCheckboxField1" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Brachfl&#xe4;chenkategorie:&quot;)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Brachfl&#xe4;chenkategorie:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1946,13 +1946,13 @@
                             <Component class="javax.swing.Box$Filler" name="filler38">
                               <Properties>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[32767, 30]"/>
+                                  <Dimension value="[32767, 28]"/>
                                 </Property>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[0, 30]"/>
+                                  <Dimension value="[0, 28]"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[0, 30]"/>
+                                  <Dimension value="[0, 28]"/>
                                 </Property>
                               </Properties>
                               <AuxValues>
@@ -2010,13 +2010,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler41">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -2064,7 +2064,7 @@
                             <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.bisherige_nutzung}" target="defaultBindableCheckboxField5" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Bisherige Nutzung:&quot;)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Bisherige Nutzung:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -2077,13 +2077,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler42">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -2113,7 +2113,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.vorhandene_bebauung}" target="cbVorhandeneBebauung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -2138,13 +2138,13 @@
                             <Component class="javax.swing.Box$Filler" name="filler43">
                               <Properties>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[32767, 30]"/>
+                                  <Dimension value="[32767, 28]"/>
                                 </Property>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[0, 30]"/>
+                                  <Dimension value="[0, 28]"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[0, 30]"/>
+                                  <Dimension value="[0, 28]"/>
                                 </Property>
                               </Properties>
                               <AuxValues>
@@ -2174,7 +2174,7 @@
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_versiegelung}" target="cbVorhandeneBebauung3" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                               </AuxValues>
@@ -2189,13 +2189,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler44">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -2225,7 +2225,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_aeussere_erschliessung}" target="cbAeussereErschluessung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -2325,13 +2325,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler46">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -2389,13 +2389,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler45">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -2453,13 +2453,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler47">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -2489,7 +2489,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_klimainformationen}" target="cbAeussereErschluessung1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -2733,13 +2733,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler73">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 30]"/>
+                              <Dimension value="[32767, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[0, 30]"/>
+                              <Dimension value="[0, 28]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -3011,13 +3011,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler57">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3047,7 +3047,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_potenzialart}" target="cbEntwicklungsaussichten1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -3060,13 +3060,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler60">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3096,7 +3096,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_entwicklungsstand}" target="cbEntwicklungsaussichten2" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -3109,13 +3109,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler61">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3163,7 +3163,7 @@
                         <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_restriktionen}" target="defaultBindableCheckboxField4" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Restriktionen/Hemmnisse:&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Restriktionen/Hemmnisse:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -3176,13 +3176,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler62">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3230,7 +3230,7 @@
                         <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_empfohlene_nutzungen_wohnen}" target="defaultBindableCheckboxField10" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Art der Wohnnutzung:&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Art der Wohnnutzung:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -3243,13 +3243,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler63">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3291,7 +3291,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_wohneinheiten}" target="cbAktivierbarkeit1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
@@ -3322,13 +3322,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler64">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3358,7 +3358,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_entwicklungsaussichten}" target="cbEntwicklungsaussichten" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -3371,13 +3371,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler65">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3407,7 +3407,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.verfuegbarkeit}" target="cbVerfuegbarkeit1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -3420,13 +3420,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler66">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3456,7 +3456,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.aktivierbarkeit}" target="cbAktivierbarkeit" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -3469,13 +3469,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler67">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3506,7 +3506,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_handlungsprioritaet}" target="cbHandlungsdruck1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -3519,13 +3519,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler68">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3573,7 +3573,7 @@
                         <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_empfohlene_nutzungen}" target="defaultBindableCheckboxField8" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Nutzung:&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), &quot;Empfohlene Nutzung:&quot;, SORTING_OPTION, MANAGEABLE_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -3586,13 +3586,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler69">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3622,7 +3622,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_revitalisierung}" target="cbRevitalisierung1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
@@ -3635,13 +3635,13 @@
                     <Component class="javax.swing.Box$Filler" name="filler70">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[32767, 30]"/>
+                          <Dimension value="[32767, 28]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[0, 30]"/>
+                          <Dimension value="[0, 28]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -3658,7 +3658,7 @@
                         <Property name="text" type="java.lang.String" value="Handlungsdruck:"/>
                         <Property name="toolTipText" type="java.lang.String" value="Handlungsdruck / Handlungspriorit&#xe4;t"/>
                         <Property name="name" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="PotenzialflaecheReportServerAction.Property.HANDLUNGSDRUCK.toString()" type="code"/>
+                          <Connection code="PotenzialflaecheReportServerAction.Property.HANDLUNGSPRIORITAET.toString()" type="code"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -3672,7 +3672,7 @@
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.handlungsdruck}" target="cbHandlungsdruck" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION)"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                       </AuxValues>
