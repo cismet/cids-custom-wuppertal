@@ -25,20 +25,22 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import java.awt.Component;
-
-import java.sql.Timestamp;
+import java.awt.event.MouseEvent;
 
 import java.text.DecimalFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.List;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -48,11 +50,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangNextSchluesselServerSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -68,8 +71,7 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
-
+import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
@@ -260,11 +262,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         lblTitle = new javax.swing.JLabel();
         btnReport = new javax.swing.JButton();
         panFooter = new javax.swing.JPanel();
-        comboBoxFilterDialog1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(
-                null,
-                new AlboFlaecheLightweightSearch(),
-                "Erhebungsfläche auswählen",
-                getConnectionContext());
+        comboBoxFilterDialog1 = AlboVorgangFlaecheFilterDialog.getInstance();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
@@ -279,7 +277,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jPanel6 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+        jComboBox4 = new de.cismet.cids.editors.FastBindableScrollableComboBox(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
@@ -1142,9 +1140,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      * @param  evt  DOCUMENT ME!
      */
     private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
-        final CidsBean bearbeitungBean = ((VorgangBearbeitungTableModel)jXTable2.getModel()).getCidsBean(
-                jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow()));
-        ((VorgangBearbeitungTableModel)jXTable2.getModel()).remove(bearbeitungBean);
+        if (jXTable2.getSelectedRow() >= 0) {
+            final CidsBean bearbeitungBean = ((VorgangBearbeitungTableModel)jXTable2.getModel()).getCidsBean(
+                    jXTable2.getRowSorter().convertRowIndexToModel(jXTable2.getSelectedRow()));
+            ((VorgangBearbeitungTableModel)jXTable2.getModel()).remove(bearbeitungBean);
+        }
     }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
@@ -1183,6 +1183,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
+        comboBoxFilterDialog1.refresh();
         if (cidsBean != null) {
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
@@ -1356,7 +1357,16 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             ceBearbeiter = new DefaultBindableComboboxCellEditor(CidsBean.getMetaClassFromTableName(
                         "WUNDA_BLAU",
                         "ALBO_BEARBEITER",
-                        getConnectionContext()));
+                        getConnectionContext())) {
+
+                    @Override
+                    public boolean isCellEditable(final EventObject anEvent) {
+                        if (anEvent instanceof MouseEvent) {
+                            return ((MouseEvent)anEvent).getClickCount() >= 1;
+                        }
+                        return true;
+                    }
+                };
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -1365,7 +1375,16 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             ceGeschaeft = new DefaultBindableComboboxCellEditor(CidsBean.getMetaClassFromTableName(
                         "WUNDA_BLAU",
                         "ALBO_BEARBEITUNG_GESCHAEFT",
-                        getConnectionContext()));
+                        getConnectionContext())) {
+
+                    @Override
+                    public boolean isCellEditable(final EventObject anEvent) {
+                        if (anEvent instanceof MouseEvent) {
+                            return ((MouseEvent)anEvent).getClickCount() >= 1;
+                        }
+                        return true;
+                    }
+                };
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -1420,7 +1439,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
                 @Override
                 protected List<CidsBean> doInBackground() throws Exception {
-                    final BplaeneSearch search = new BplaeneSearch();
+                    final BplaeneMonSearch search = new BplaeneMonSearch();
 
                     Geometry geom = null;
                     for (final CidsBean flaecheBean : getCidsBean().getBeanCollectionProperty("arr_flaechen")) {
@@ -1432,7 +1451,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                             }
                         }
                     }
-                    search.setGeom(geom);
+                    search.setGeometry(geom);
 
                     final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),
@@ -1492,23 +1511,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 LOG.error(ex, ex);
                 return false;
             }
-        }
-        final List<CidsBean> bearbeitungen = new ArrayList<>(cidsBean.getBeanCollectionProperty("n_bearbeitungen"));
-        for (final CidsBean bearbeitungBean : bearbeitungen) {
-            if ((bearbeitungBean != null) && (MetaObject.NEW == bearbeitungBean.getMetaObject().getStatus())) {
-                cidsBean.getBeanCollectionProperty("n_bearbeitungen").remove(bearbeitungBean);
-            }
-        }
-        try {
-            final CidsBean bearbeitungBean = CidsBean.createNewCidsBeanFromTableName(
-                    "WUNDA_BLAU",
-                    "ALBO_BEARBEITUNG",
-                    getConnectionContext());
-            bearbeitungBean.setProperty("stand", new Timestamp(new Date().getTime()));
-            bearbeitungBean.setProperty("login_name", SessionManager.getSession().getUser().getName());
-            cidsBean.getBeanCollectionProperty("n_bearbeitungen").add(bearbeitungBean);
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
         }
         if (cidsBean.getProperty("loeschen") == null) {
             try {
@@ -1589,10 +1591,100 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                     return ceGeschaeft;
                 }
                 default: {
-                    return super.getCellEditor(row, column);    // To change body of generated methods, choose Tools |
-                                                                // Templates.
+                    return super.getCellEditor(row, column); // To change body of generated methods, choose Tools |
+                                                             // Templates.
                 }
             }
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class DateCellEditor extends AbstractCellEditor implements TableCellEditor {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final JXDatePicker datePicker;
+        private boolean useSqlDate = true;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DateCellEditor object.
+         */
+        public DateCellEditor() {
+            datePicker = new JXDatePicker();
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Object getCellEditorValue() {
+            if (useSqlDate) {
+                return (datePicker.getDate() != null) ? new java.sql.Date(datePicker.getDate().getTime()) : null;
+            } else {
+                return datePicker.getDate();
+            }
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final int row,
+                final int column) {
+            if (value instanceof Date) {
+                useSqlDate = false;
+                datePicker.setDate((Date)value);
+            }
+
+            if (value instanceof java.sql.Date) {
+                useSqlDate = true;
+                final java.sql.Date date = (java.sql.Date)value;
+                datePicker.setDate(new Date(date.getTime()));
+            }
+
+            return datePicker;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static final class AlboVorgangFlaecheFilterDialog extends ComboBoxFilterDialog {
+
+        //~ Static fields/initializers -----------------------------------------
+
+        private static final AlboVorgangFlaecheFilterDialog INSTANCE = new AlboVorgangFlaecheFilterDialog();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AlboVorgangFlaecheFilterDialog object.
+         */
+        private AlboVorgangFlaecheFilterDialog() {
+            super(
+                null,
+                new AlboFlaecheLightweightSearch(),
+                "Erhebungsfläche auswählen",
+                ConnectionContext.create(
+                    AbstractConnectionContext.Category.STATIC,
+                    AlboVorgangFlaecheFilterDialog.class.getSimpleName()));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public static AlboVorgangFlaecheFilterDialog getInstance() {
+            return INSTANCE;
         }
     }
 }

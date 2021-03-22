@@ -17,7 +17,9 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 
+import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
@@ -37,6 +39,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.DefaultListCellRenderer;
@@ -56,9 +59,11 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 import de.cismet.cids.custom.utils.HexcolorFormatter;
+import de.cismet.cids.custom.wunda_blau.search.server.PoiKategorienLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.CategorisedFastBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
@@ -124,6 +129,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JComboBox cbGeomPoint;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbInfoArt;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbMainLocationType;
+    private javax.swing.JComboBox<String> cbRvrKat;
     private javax.swing.JComboBox cbRvrPrio;
     private javax.swing.JComboBox cbSignatur;
     private javax.swing.JComboBox cbTypes;
@@ -156,6 +162,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JLabel lblMainLocationType;
     private javax.swing.JLabel lblNamesAuswaehlen;
     private javax.swing.JLabel lblPLZ;
+    private javax.swing.JLabel lblRvrKat;
     private javax.swing.JLabel lblRvrPrio;
     private javax.swing.JLabel lblSignatur;
     private javax.swing.JLabel lblStadt;
@@ -220,6 +227,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        fillCategoryList();
         ((AbstractDocument)txtaInfo.getDocument()).setDocumentFilter(new DocumentFilter() {
 
                 @Override
@@ -541,6 +549,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 chkVeroeffentlicht = new javax.swing.JCheckBox();
                 lblRvrPrio = new javax.swing.JLabel();
                 cbRvrPrio = new DefaultBindableReferenceCombo(true);
+                lblRvrKat = new javax.swing.JLabel();
+                cbRvrKat = new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo();
+                ;
                 lblHeader3 = new javax.swing.JLabel();
                 lblImageUrl = new javax.swing.JLabel();
                 jScrollPane1 = new javax.swing.JScrollPane();
@@ -1034,7 +1045,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 2);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(cbInfoArt, gridBagConstraints);
 
         btnCreateAreaFromPoint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
@@ -1378,11 +1389,36 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(cbRvrPrio, gridBagConstraints);
 
+        lblRvrKat.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblRvrKat.setText("RVR-Kategorie:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblRvrKat, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kategorie}"),
+                cbRvrKat,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(cbRvrKat, gridBagConstraints);
+
         lblHeader3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblHeader3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblHeader3.setText("Bilder");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1392,6 +1428,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblImageUrl.setText("Bild-URL:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblImageUrl, gridBagConstraints);
@@ -1409,6 +1446,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1422,6 +1460,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         panContent2.add(lblUrlCheckImage, gridBagConstraints);
@@ -1430,6 +1469,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblWebsite.setText("Webseite des Bildes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblWebsite, gridBagConstraints);
@@ -1447,6 +1487,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1460,6 +1501,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         panContent2.add(lblUrlCheckWebsite, gridBagConstraints);
@@ -1468,6 +1510,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblAuthor.setText("Urheber:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblAuthor, gridBagConstraints);
@@ -1477,6 +1520,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(txtAuthor, gridBagConstraints);
@@ -1484,6 +1528,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panSpacing2.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
@@ -1920,6 +1965,57 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    public void fillCategoryList() {
+        try {
+            final MetaObject[] mo = SessionManager.getProxy()
+                        .getAllLightweightMetaObjectsForClass(
+                            508,
+                            SessionManager.getSession().getUser(),
+                            new String[] { "name" },
+                            "",
+                            ConnectionContext.createDummy());
+
+            final Collection<LightweightMetaObject> results = SessionManager.getProxy()
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                            new PoiKategorienLightweightSearch(),
+                            getConnectionContext());
+            final List<List> elements = new ArrayList<>();
+            int maxElements = 0;
+
+            // determine the max number of sub categories
+            for (final LightweightMetaObject tmp : results) {
+                if (tmp.toString().split(" - ").length > maxElements) {
+                    maxElements = tmp.toString().split(" - ").length;
+                }
+            }
+
+            // add the elements to the list
+            for (final LightweightMetaObject tmp : results) {
+                final String[] splittedRepresentation = tmp.toString().split(" - ");
+                int i;
+                final List l = new ArrayList(maxElements);
+
+                for (i = 0; i < (splittedRepresentation.length - 1); ++i) {
+                    l.add(splittedRepresentation[i]);
+                }
+
+                while (i < (maxElements - 1)) {
+                    l.add("");
+                    ++i;
+                }
+
+                l.add(tmp);
+                elements.add(l);
+            }
+
+            ((CategorisedFastBindableReferenceCombo)cbRvrKat).init(elements);
+        } catch (ConnectionException e) {
+            LOG.error("error while filling the cat list", e);
+        }
+    }
     /**
      * DOCUMENT ME!
      *

@@ -54,6 +54,8 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
 
     private final ConnectionContext connectionContext;
 
+    private SwingWorker<Void, Void> refreshWorker;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnCancel;
@@ -179,8 +181,10 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
      */
     public void refresh() {
         if (search != null) {
-            cbSearch.setModel(new DefaultComboBoxModel<String>(new String[] { "Objekte werden geladen..." }));
-            new SwingWorker<Void, Void>() {
+            if (refreshWorker != null) {
+                refreshWorker.cancel(true);
+            }
+            refreshWorker = new SwingWorker<Void, Void>() {
 
                     @Override
                     protected Void doInBackground() throws Exception {
@@ -195,7 +199,10 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
                         getSelectionTableModel().fireTableDataChanged();
                         txtFilter.requestFocus();
                     }
-                }.execute();
+                };
+            txtFilter.setText("");
+            cbSearch.setModel(new DefaultComboBoxModel<>(new String[] { "Objekte werden geladen..." }));
+            refreshWorker.execute();
         } else {
             getSelectionTableModel().fireTableDataChanged();
         }

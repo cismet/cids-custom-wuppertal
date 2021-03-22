@@ -34,7 +34,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BplaeneSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -44,6 +44,7 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 
 /**
@@ -66,11 +67,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        comboBoxFilterDialog1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(
-                null,
-                new AlboVorgangLightweightSearch(),
-                "Vorgang auswählen",
-                getConnectionContext());
+        comboBoxFilterDialog1 = AlboFlaecheVorgangFilterDialog.getInstance();
         panLinks = new javax.swing.JPanel();
         panBeschreibung = new javax.swing.JPanel();
         alboFlaecheBeschreibungPanel1 =
@@ -854,6 +851,12 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
             } catch (final Exception ex) {
                 LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
             }
+        } else {
+            RendererTools.makeReadOnly(jTextField6);
+            RendererTools.makeReadOnly(jTextField9);
+            RendererTools.makeReadOnly(jTextField11);
+            RendererTools.makeReadOnly(jTextField12);
+            RendererTools.makeReadOnly(cbFlaechentyp);
         }
         RendererTools.makeReadOnly(jXTable1);
         RendererTools.makeReadOnly(jList2);
@@ -916,6 +919,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     public void setCidsBean(final CidsBean cidsBean) {
         setUnlocked((cidsBean != null) && (MetaObject.NEW == cidsBean.getMetaObject().getStatus()));
         super.setCidsBean(cidsBean);
+        if (cidsBean != null) {
+            comboBoxFilterDialog1.refresh();
+        }
 
         alboFlaecheBeschreibungPanel1.setCidsBean(cidsBean);
         alboFlaecheOrtPanel1.setCidsBean(cidsBean);
@@ -955,11 +961,11 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      */
     private void updateLockedFields() {
         if (isEditable()) {
-            RendererTools.makeReadOnly(jTextField6, !unlocked);
-            RendererTools.makeReadOnly(jTextField9, !unlocked);
-            RendererTools.makeReadOnly(jTextField11, !unlocked);
-            RendererTools.makeReadOnly(jTextField12, !unlocked);
-            RendererTools.makeReadOnly(cbFlaechentyp, !unlocked);
+            RendererTools.makeUneditable(jTextField6, !unlocked);
+            RendererTools.makeUneditable(jTextField9, !unlocked);
+            RendererTools.makeUneditable(jTextField11, !unlocked);
+            RendererTools.makeUneditable(jTextField12, !unlocked);
+            RendererTools.makeUneditable(cbFlaechentyp, !unlocked);
         }
     }
 
@@ -1070,10 +1076,10 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
                     @Override
                     protected List<CidsBean> doInBackground() throws Exception {
-                        final BplaeneSearch search = new BplaeneSearch();
+                        final BplaeneMonSearch search = new BplaeneMonSearch();
 
                         final Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
-                        search.setGeom(geom);
+                        search.setGeometry(geom);
 
                         final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
                                     .customServerSearch(SessionManager.getSession().getUser(),
@@ -1158,6 +1164,44 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
          */
         public FlaecheVorgangTableModel() {
             super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static final class AlboFlaecheVorgangFilterDialog extends ComboBoxFilterDialog {
+
+        //~ Static fields/initializers -----------------------------------------
+
+        private static final AlboFlaecheVorgangFilterDialog INSTANCE = new AlboFlaecheVorgangFilterDialog();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AlboFlaecheVorgangFilterDialog object.
+         */
+        private AlboFlaecheVorgangFilterDialog() {
+            super(
+                null,
+                new AlboVorgangLightweightSearch(),
+                "Vorgang auswählen",
+                ConnectionContext.create(
+                    AbstractConnectionContext.Category.STATIC,
+                    AlboFlaecheVorgangFilterDialog.class.getSimpleName()));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public static AlboFlaecheVorgangFilterDialog getInstance() {
+            return INSTANCE;
         }
     }
 }

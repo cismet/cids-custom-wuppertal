@@ -23,6 +23,7 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -70,7 +71,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jTextField7 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox4 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+        jComboBox4 = new de.cismet.cids.editors.FastBindableScrollableComboBox(
                 strassennameSearch,
                 strassennameSearch.getRepresentationPattern(),
                 strassennameSearch.getRepresentationFields());
@@ -146,6 +147,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenstatus, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)cbFlaechenstatus).setNullable(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel15, "Flächenzuordnung zu:");
         jLabel15.setName("jLabel15"); // NOI18N
@@ -171,6 +173,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenzuordnung, gridBagConstraints);
+        ((DefaultBindableScrollableComboBox)cbFlaechenzuordnung).setNullable(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, "Jahr");
         jLabel12.setName("jLabel12"); // NOI18N
@@ -626,8 +629,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
      */
     private void updateLockedFields() {
         if (isEditable()) {
-            cbFlaechenart.setEnabled(unlocked);
-            // RendererTools.makeReadOnly(cbFlaechenart, !unlocked);
+            RendererTools.makeUneditable(cbFlaechenart, !unlocked);
         }
     }
 
@@ -679,14 +681,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         updateArtFk();
         updateDetailsPanel();
     }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton2ActionPerformed
-    }                                                                                 //GEN-LAST:event_jRadioButton2ActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -58,8 +58,10 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheArbeitssta
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkungenPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -73,6 +75,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
@@ -502,7 +505,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panMain.setCidsBean(cidsBean);
         panArbeitsstand.setCidsBean(cidsBean);
         panBemerkungen.setCidsBean(cidsBean);
-        panMassnahmen.setCidsBean(cidsBean);
+        panMassnahmen.setCidsBean((CidsBean)cidsBean.getProperty("fk_massnahmen"));
 
         updateFooterControls();
     }
