@@ -57,6 +57,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -75,6 +76,21 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import de.cismet.cids.custom.objecteditors.wunda_blau.BaumAnsprechpartnerEditor.TelefonCellEditor;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import java.awt.Component;
+import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.EventObject;
+import java.util.Locale;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import org.jdesktop.swingx.JXTable;
 
 /**
  * DOCUMENT ME!
@@ -96,7 +112,9 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public static final String FIELD__NAME = "name";
     public static final String FIELD__SCHLUESSEL = "schluessel";
     public static final String FIELD__TELEFON = "telefon";
+    public static final String FIELD__TELEFONE = "n_telefone";
     public static final String FIELD__ID = "id";
+    public static final String TABLE_NAME_TELEFON = "baum_telefon";
     
     private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen..."; 
 
@@ -114,6 +132,13 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
     public static final Pattern TEL_FILLING_PATTERN = Pattern.compile("(|\\+(-|[0-9])*)");
     public static final Pattern TEL_MATCHING_PATTERN = Pattern.compile("\\+[0-9]{1,3}(-[0-9]+){1,}");
+    
+    private static final String[] TELEFON_COL_NAMES = new String[] { "Telefon", "Bemerkung" };
+    private static final String[] TELEFON_PROP_NAMES = new String[] {"nummer", "bemerkung"};
+    private static final Class[] TELEFON_PROP_TYPES = new Class[] {
+            String.class,
+            String.class
+        };
 
     //~ Enums ------------------------------------------------------------------
 
@@ -137,6 +162,8 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
+    
+    private DivBeanTable telefonModel;
 
     private boolean isEditor = true;
 
@@ -150,9 +177,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             TEL_MATCHING_PATTERN);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JButton btnAddTelefon;
+    private JButton btnRemTelefon;
+    private Box.Filler filler2;
     private Box.Filler filler3;
     private JFormattedTextField ftxtPlz;
-    private JFormattedTextField ftxtTelefon;
+    private JScrollPane jScrollPaneTelefon;
     private JLabel lblBemerkung;
     private JLabel lblHnr;
     private JLabel lblMail;
@@ -160,17 +190,20 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     private JLabel lblOrt;
     private JLabel lblPlz;
     private JLabel lblStrasse;
-    private JLabel lblTelefon;
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerUnten;
     private JPanel panFillerUnten1;
+    private JPanel panTel;
+    private JPanel panTelefon;
+    private JPanel panTelefonAdd;
     private JTextField txtBemerkung;
     private JTextField txtHnr;
     private JTextField txtMail;
     private JTextField txtName;
     private JTextField txtOrt;
     private JTextField txtStrasse;
+    private JXTable xtTelefon;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -241,8 +274,14 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         ftxtPlz = new JFormattedTextField();
         lblOrt = new JLabel();
         txtOrt = new JTextField();
-        lblTelefon = new JLabel();
-        ftxtTelefon = new JFormattedTextField(telPatternFormatter);
+        panTelefon = new JPanel();
+        panTel = new JPanel();
+        jScrollPaneTelefon = new JScrollPane();
+        xtTelefon = new JXTable();
+        panTelefonAdd = new JPanel();
+        btnAddTelefon = new JButton();
+        btnRemTelefon = new JButton();
+        filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         lblMail = new JLabel();
         txtMail = new JTextField();
         lblBemerkung = new JLabel();
@@ -344,7 +383,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         lblPlz.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblPlz.setText("PLZ:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -357,8 +396,9 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.3;
@@ -368,7 +408,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         lblOrt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblOrt.setText("Ort:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
@@ -380,52 +420,103 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.7;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtOrt, gridBagConstraints);
 
-        lblTelefon.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblTelefon.setText("Telefon:");
+        panTelefon.setLayout(new GridBagLayout());
+
+        panTel.setMinimumSize(new Dimension(26, 80));
+        panTel.setLayout(new GridBagLayout());
+
+        xtTelefon.setVisibleRowCount(4);
+        jScrollPaneTelefon.setViewportView(xtTelefon);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipady = 10;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panTel.add(jScrollPaneTelefon, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblTelefon, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panTelefon.add(panTel, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtTelefon, BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
+        panTelefonAdd.setAlignmentX(0.0F);
+        panTelefonAdd.setAlignmentY(1.0F);
+        panTelefonAdd.setFocusable(false);
+        panTelefonAdd.setLayout(new GridBagLayout());
 
-        ftxtTelefon.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent evt) {
-                ftxtTelefonFocusLost(evt);
-            }
-        });
-        ftxtTelefon.addActionListener(new ActionListener() {
+        btnAddTelefon.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddTelefon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                ftxtTelefonActionPerformed(evt);
+                btnAddTelefonActionPerformed(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        panTelefonAdd.add(btnAddTelefon, gridBagConstraints);
+
+        btnRemTelefon.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemTelefon.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnRemTelefonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        panTelefonAdd.add(btnRemTelefon, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panTelefonAdd.add(filler2, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(10, 2, 2, 2);
+        panTelefon.add(panTelefonAdd, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.3;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(ftxtTelefon, gridBagConstraints);
+        panDaten.add(panTelefon, gridBagConstraints);
 
         lblMail.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblMail.setText("Email:");
         lblMail.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
@@ -437,9 +528,9 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.7;
@@ -450,7 +541,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
@@ -461,7 +552,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -532,23 +623,13 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void ftxtTelefonFocusLost(final FocusEvent evt) {//GEN-FIRST:event_ftxtTelefonFocusLost
-        refreshValidTel();
-    }//GEN-LAST:event_ftxtTelefonFocusLost
+    private void btnAddTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddTelefonActionPerformed
+        TableUtils.addObjectToTable(xtTelefon, TABLE_NAME_TELEFON, getConnectionContext());
+    }//GEN-LAST:event_btnAddTelefonActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void ftxtTelefonActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_ftxtTelefonActionPerformed
-        refreshValidTel();
-    }//GEN-LAST:event_ftxtTelefonActionPerformed
+    private void btnRemTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemTelefonActionPerformed
+        TableUtils.removeObjectsFromTable(xtTelefon);
+    }//GEN-LAST:event_btnRemTelefonActionPerformed
 
 
     @Override
@@ -623,7 +704,17 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            saveValidTel(String.valueOf(cidsBean.getProperty(FIELD__TELEFON)));
+            //saveValidTel(String.valueOf(cidsBean.getProperty(FIELD__TELEFON)));
+            telefonModel = new DivBeanTable(
+                    isEditor,
+                    cidsBean,
+                    FIELD__TELEFONE,
+                    TELEFON_COL_NAMES,
+                    TELEFON_PROP_NAMES,
+                    TELEFON_PROP_TYPES);
+            xtTelefon.setModel(telefonModel);
+        
+            xtTelefon.getColumn(0).setCellEditor(new TelefonCellEditor());
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -636,13 +727,13 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(ftxtPlz);
-            RendererTools.makeReadOnly(ftxtTelefon);
             RendererTools.makeReadOnly(txtMail);
             RendererTools.makeReadOnly(txtOrt);
             RendererTools.makeReadOnly(txtHnr);
             RendererTools.makeReadOnly(txtStrasse);
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtBemerkung);
+            RendererTools.makeReadOnly(xtTelefon);
         }
     }
 
@@ -681,22 +772,6 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public void propertyChange(final PropertyChangeEvent evt) {
         // throw new UnsupportedOperationException("Not supported yet."); To change body of generated methods, choose
         // Tools | Templates.
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void refreshValidTel() {
-        ftxtTelefon.setValue(telPatternFormatter.getLastValid());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  okValue  DOCUMENT ME!
-     */
-    private void saveValidTel(final Object okValue) {
-        telPatternFormatter.setLastValid(okValue);
     }
 
     /**
@@ -836,7 +911,6 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     }
 
     //~ Inner Classes ----------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -908,4 +982,56 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             }
         }
     }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public class TelefonCellEditor extends DefaultCellEditor {
+        public TelefonCellEditor(){
+            super(new JFormattedTextField());
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            final JFormattedTextField editor = (JFormattedTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+
+            if (value != null){
+                JFormattedTextField.AbstractFormatter RegexPatternFormatter;
+
+                editor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                                telPatternFormatter));
+                editor.setValue(value);
+            }
+            editor.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        editor.setValue(telPatternFormatter.getLastValid());
+                    }
+                });
+            editor.addFocusListener(new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent evt) {
+                        editor.setValue(telPatternFormatter.getLastValid());
+                    }
+                });
+            return editor;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            try {
+                // try to get the value
+                this.getCellEditorValue();
+                return super.stopCellEditing();
+            } catch (Exception ex) {
+                return false;
+            }
+
+        }
+
+    }
+    
+    
 }

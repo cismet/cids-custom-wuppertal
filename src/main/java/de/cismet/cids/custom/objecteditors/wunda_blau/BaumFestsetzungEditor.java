@@ -118,38 +118,17 @@ import org.jdesktop.swingx.JXTable;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
+public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
     BindingGroupStore,
     PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
-    private List<CidsBean> ersatzBeans = new ArrayList<>();
+    private List<CidsBean> festBeans = new ArrayList<>();
     private MetaClass schadenMetaClass;
-    private final List<CidsBean> deletedErsatzBeans = new ArrayList<>();
-    private static final Logger LOG = Logger.getLogger(BaumErsatzEditor.class);
-    private static final Comparator<Object> DATE_COMPARATOR = new Comparator<Object>() {
-
-            @Override
-           /* public int compare(final Object o1, final Object o2) {
-                return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
-            }*/
-            public int compare(final Object o1, final Object o2) {
-                    final String o1String = String.valueOf(((CidsBean)o1).getProperty("datum"));
-                    final String o2String = String.valueOf(((CidsBean)o2).getProperty("datum"));
-
-                    try {
-                        final Integer o1Int = Integer.parseInt(o1String);
-                        final Integer o2Int = Integer.parseInt(o2String);
-
-                        return o1Int.compareTo(o2Int);
-                    } catch (NumberFormatException e) {
-                        // do nothing
-                    }
-
-                    return String.valueOf(o1).compareTo(String.valueOf(o2));
-                }
-        };   
+    private final List<CidsBean> deletedFestBeans = new ArrayList<>();
+    private static final Logger LOG = Logger.getLogger(BaumFestsetzungEditor.class);
+ 
     private static final String[] SCHADEN_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Meldungsdatum", "Id", "gef. Art" };
     private static final String[] SCHADEN_PROP_NAMES = new String[] {
             "fk_meldung.fk_gebiet.aktenzeichen",
@@ -166,13 +145,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     private static final String[] LOADING_COL_NAMES = new String[] { "Die Daten werden geladen......"};
     private static final String[] MUSTSET_COL_NAMES = new String[] { "Die Daten bitte zuweisen......"};
 
-    private static final String TITLE_NEW_ERSATZ = "eine neue Ersatzpflanzung anlegen ....";
+    private static final String TITLE_NEW_FEST = "eine neue Festsetzung anlegen ....";
 
         
-    public static final String FIELD__ID = "id";                                // baum_ersatz
-    public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_ersatz
-    public static final String FIELD__ART = "fk_art.name";                  // baum_ersatz
-    public static final String FIELD__FK_SCHADEN = "fk_schaden";                // baum_ersatz
+    public static final String FIELD__ID = "id";                                // baum_festsetzung
+    public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_festsetzung
+    public static final String FIELD__ART = "fk_art.name";                      // baum_festsetzung
+    public static final String FIELD__FK_SCHADEN = "fk_schaden";                // baum_festsetzung
     public static final String FIELD__SCHADEN_ID = "fk_schaden.id";             // baum_schaden
     public static final String FIELD__SCHADEN_ART = "fk_schaden.fk_art.name";   // baum_schaden
     public static final String FIELD__MELDUNG_DATUM = "fk_schaden.fk_meldung.datum";       // baum_meldung
@@ -180,16 +159,16 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     
     
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
-    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_ersatz_geom
+    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_festsetzung_geom
     
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_NAME__SCHADEN = "baum_schaden";
     
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumErsatzEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumErsatzEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumErsatzEditor.prepareForSave().JOptionPane.title";
+        "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "BaumFestsetzungEditor.prepareForSave().JOptionPane.title";
     
     
 
@@ -205,21 +184,20 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Instance fields --------------------------------------------------------
     
-    private SwingWorker worker_ersatz;
+    private SwingWorker worker_fest;
 
     private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private BaumErsatzPanel baumErsatzPanel;
+    private BaumFestsetzungPanel baumFestsetzungPanel;
     private JButton btnChangeSchaden;
     private ComboBoxFilterDialog comboBoxFilterDialogSchaden;
     private Box.Filler filler3;
     private JScrollPane jScrollPaneMeldung;
     private JLabel lblGebiet_Meldung;
     private JPanel panContent;
-    JPanel panErsatzMain;
+    JPanel panFestMain;
     private JPanel panFillerUnten;
-    private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JXTable xtSchaden;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -229,15 +207,15 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     /**
      * Creates new form.
      */
-    public BaumErsatzEditor() {
+    public BaumFestsetzungEditor() {
     }
 
     /**
-     * Creates a new BaumErsatzEditor object.
+     * Creates a new BaumFestsetzungEditor object.
      *
      * @param  boolEditor  DOCUMENT ME!
      */
-    public BaumErsatzEditor(final boolean boolEditor) {
+    public BaumFestsetzungEditor(final boolean boolEditor) {
         this.isEditor = boolEditor;
     }
 
@@ -253,7 +231,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 connectionContext);
         setReadOnly();
         if (isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)baumErsatzPanel.cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
+            ((DefaultCismapGeometryComboBoxEditor)baumFestsetzungPanel.cbGeomFest).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         }
     }
 
@@ -267,7 +245,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
         comboBoxFilterDialogSchaden = new ComboBoxFilterDialog(null, new BaumSchadenLightweightSearch(), "Gebiet-Meldung-Schaden auswählen", getConnectionContext());
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
@@ -275,9 +252,9 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         jScrollPaneMeldung = new JScrollPane();
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
-        panErsatzMain = new JPanel();
-        baumErsatzPanel = new BaumErsatzPanel();
+        panFestMain = new JPanel();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        baumFestsetzungPanel = new BaumFestsetzungPanel();
 
         setLayout(new GridBagLayout());
 
@@ -316,7 +293,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panContent.add(lblGebiet_Meldung, gridBagConstraints);
 
-        xtSchaden.setModel(new ErsatzSchadenTableModel());
+        xtSchaden.setModel(new FestSchadenTableModel());
         xtSchaden.setVisibleRowCount(1);
         jScrollPaneMeldung.setViewportView(xtSchaden);
 
@@ -344,18 +321,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         panContent.add(btnChangeSchaden, gridBagConstraints);
         btnChangeSchaden.setVisible(isEditor);
 
-        panErsatzMain.setOpaque(false);
-        panErsatzMain.setLayout(new GridBagLayout());
-
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean}"), baumErsatzPanel, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panErsatzMain.add(baumErsatzPanel, gridBagConstraints);
+        panFestMain.setOpaque(false);
+        panFestMain.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -364,7 +331,15 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panErsatzMain.add(filler3, gridBagConstraints);
+        panFestMain.add(filler3, gridBagConstraints);
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean}"), baumFestsetzungPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        panFestMain.add(baumFestsetzungPanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -373,7 +348,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panContent.add(panErsatzMain, gridBagConstraints);
+        panContent.add(panFestMain, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -437,9 +412,9 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         final StringBuilder errorMessage = new StringBuilder();
         
         boolean errorOccured = false;
-        for (final CidsBean ersatzBean : ersatzBeans) {
+        for (final CidsBean festBean : festBeans) {
             try {
-                ersatzBean.persist(getConnectionContext());
+                festBean.persist(getConnectionContext());
             } catch (final Exception ex) {
                 errorOccured = true;
                 LOG.error(ex, ex);
@@ -448,10 +423,10 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         if (errorOccured) {
             return false;
         }
-        for (final CidsBean ersatzBean : deletedErsatzBeans) {
+        for (final CidsBean festBean : deletedFestBeans) {
             try {
-                ersatzBean.delete();
-                ersatzBean.persist(getConnectionContext());
+                festBean.delete();
+                festBean.persist(getConnectionContext());
             } catch (final Exception ex) {
                 errorOccured = true;
                 LOG.error(ex, ex);
@@ -463,10 +438,10 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_PREFIX)
+                NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
-                        + NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_TITLE),
+                        + NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
 
             return false;
@@ -539,7 +514,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     private void setSchadenTable(CidsBean schadenBean){
         List<CidsBean> schadenBeans = new ArrayList<>();
         schadenBeans.add(schadenBean);
-        ((ErsatzSchadenTableModel)xtSchaden.getModel()).setCidsBeans(schadenBeans);
+        ((FestSchadenTableModel)xtSchaden.getModel()).setCidsBeans(schadenBeans);
     }
 
     public void setMapWindow() {
@@ -547,7 +522,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             final Double bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
             if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                baumErsatzPanel.panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
+                baumFestsetzungPanel.panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
                 final BoundingBox initialBoundingBox;
@@ -561,7 +536,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                         getConnectionContext());
                 final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
                 newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                baumErsatzPanel.panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
+                baumFestsetzungPanel.panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
             }
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
@@ -574,8 +549,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void setReadOnly() {
         if (!(isEditor)) {
-            RendererTools.makeReadOnly(baumErsatzPanel.taBemerkungE);
-            baumErsatzPanel.lblGeom.setVisible(isEditor);
+            RendererTools.makeReadOnly(baumFestsetzungPanel.taBemerkungF);
+            baumFestsetzungPanel.lblGeom.setVisible(isEditor);
         }
     }
     public static void main(final String[] args) throws Exception {
@@ -587,7 +562,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
             "WUNDA_BLAU",
             null,
             true,
-            "baum_schaden",
+            "baum_festsetzung",
             1,
             800,
             600);
@@ -596,7 +571,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            return TITLE_NEW_ERSATZ;
+            return TITLE_NEW_FEST;
         } else {
             return String.format("G: %s - M: %s - S: %s, %s - E:%s, %s", cidsBean.getProperty(FIELD__GEBIET_AZ), cidsBean.getProperty(FIELD__MELDUNG_DATUM), cidsBean.getProperty(FIELD__SCHADEN_ID), cidsBean.getProperty(FIELD__SCHADEN_ART), cidsBean.getProperty(FIELD__ID), cidsBean.getProperty(FIELD__ART));
         }
@@ -606,7 +581,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public void dispose() {
         super.dispose();
         if (this.isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)baumErsatzPanel.cbGeomErsatz).dispose();
+            ((DefaultCismapGeometryComboBoxEditor)baumFestsetzungPanel.cbGeomFest).dispose();
         }
     }
     
@@ -640,14 +615,14 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     
     
         
-    class ErsatzSchadenTableModel extends CidsBeansTableModel {
+    class FestSchadenTableModel extends CidsBeansTableModel {
 
         //~ Constructors -------------------------------------------------------
 
         /**
-         * Creates a new ErsatzSchadenTableModel object.
+         * Creates a new FestSchadenTableModel object.
          */
-        public ErsatzSchadenTableModel() {
+        public FestSchadenTableModel() {
             super(SCHADEN_PROP_NAMES, SCHADEN_COL_NAMES, SCHADEN_PROP_TYPES);
         }
     }  

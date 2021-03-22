@@ -1319,6 +1319,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         dlgAddOrtstermin.dispose();
         deletedOrtsterminBeans.clear();
         deletedSchadenBeans.clear();
+        schadenBeans.clear();
+        ortsterminBeans.clear();
+        changedSchadenBeans.clear();
+        changedOrtsterminBeans.clear();
     }
 
     @Override

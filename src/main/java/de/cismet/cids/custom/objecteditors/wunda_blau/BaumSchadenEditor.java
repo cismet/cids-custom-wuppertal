@@ -115,6 +115,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__GEBIET_AZ = "fk_meldung.fk_gebiet.aktenzeichen";       // baum_gebiet
     
     public static final String TABLE__ERSATZ = "baum_ersatz";
+    public static final String TABLE__FEST = "baum_festsetzung";
     public static final String TABLE_NAME__MELDUNG = "baum_meldung";
     
     public static final String BUNDLE_PANE_PREFIX =

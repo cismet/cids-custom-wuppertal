@@ -40,6 +40,7 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
@@ -58,11 +59,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -146,7 +152,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             cbGeomErsatz = new DefaultCismapGeometryComboBoxEditor();
         }
         lblArt = new JLabel();
-        cbArt = new DefaultBindableScrollableComboBox();
+        cbArtE = new DefaultBindableScrollableComboBox();
+        lblSorte = new JLabel();
+        cbSorte = new FastBindableReferenceCombo(
+            "select s.id, a.name || ' (' || a.fk_hauptart || ')' as anzeige from baum_art a where order by a.name",
+            "%1$2s",
+            new String [] {"anzeige","fk_art"}) ;
         lblAnzahl = new JLabel();
         txtAnzahl = new JTextField();
         lblSelbst = new JLabel();
@@ -161,7 +172,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblKarte = new JLabel();
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
-        taBemerkung = new JTextArea();
+        taBemerkungE = new JTextArea();
         panKont = new JPanel();
         rpKont = new RoundedPanel();
         semiRoundedPanel8 = new SemiRoundedPanel();
@@ -281,11 +292,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panErsatz.add(lblArt, gridBagConstraints);
 
-        cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        cbArt.setName("cbArt"); // NOI18N
-        cbArt.setPreferredSize(new Dimension(100, 24));
+        cbArtE.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbArtE.setName("cbArtE"); // NOI18N
+        cbArtE.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArt, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArtE, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -294,14 +305,46 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panErsatz.add(cbArt, gridBagConstraints);
+        panErsatz.add(cbArtE, gridBagConstraints);
+
+        lblSorte.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblSorte, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblSorte.text")); // NOI18N
+        lblSorte.setName("lblSorte"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panErsatz.add(lblSorte, gridBagConstraints);
+
+        //((FastBindableReferenceCombo)cbSorte).setLocale(Locale.GERMAN);
+        ((FastBindableReferenceCombo)cbSorte).setSorted(false);
+        cbSorte.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbSorte.setName("cbSorte"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_sorte}"), cbSorte, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cbSorte.addMouseListener(formListener);
+        cbSorte.addActionListener(formListener);
+        cbSorte.addPropertyChangeListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panErsatz.add(cbSorte, gridBagConstraints);
 
         lblAnzahl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblAnzahl, "Anzahl:");
         lblAnzahl.setName("lblAnzahl"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -315,7 +358,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -327,7 +370,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblSelbst.setName("lblSelbst"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -342,7 +385,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -353,7 +396,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblFirma.setName("lblFirma"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -367,7 +410,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -436,7 +479,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.gridheight = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 5, 5);
@@ -447,7 +490,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -457,19 +500,19 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         scpBemerkung.setName("scpBemerkung"); // NOI18N
         scpBemerkung.setOpaque(false);
 
-        taBemerkung.setLineWrap(true);
-        taBemerkung.setRows(2);
-        taBemerkung.setWrapStyleWord(true);
-        taBemerkung.setName("taBemerkung"); // NOI18N
+        taBemerkungE.setLineWrap(true);
+        taBemerkungE.setRows(2);
+        taBemerkungE.setWrapStyleWord(true);
+        taBemerkungE.setName("taBemerkungE"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungE, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        scpBemerkung.setViewportView(taBemerkung);
+        scpBemerkung.setViewportView(taBemerkungE);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -594,7 +637,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -626,14 +669,41 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
     // Code for dispatching events from components to event handlers.
 
-    private class FormListener implements ActionListener {
+    private class FormListener implements ActionListener, MouseListener, PropertyChangeListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
-            if (evt.getSource() == btnAddKont) {
+            if (evt.getSource() == cbSorte) {
+                BaumErsatzPanel.this.cbSorteActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnAddKont) {
                 BaumErsatzPanel.this.btnAddKontActionPerformed(evt);
             }
             else if (evt.getSource() == btnRemKont) {
                 BaumErsatzPanel.this.btnRemKontActionPerformed(evt);
+            }
+        }
+
+        public void mouseClicked(MouseEvent evt) {
+            if (evt.getSource() == cbSorte) {
+                BaumErsatzPanel.this.cbSorteMouseClicked(evt);
+            }
+        }
+
+        public void mouseEntered(MouseEvent evt) {
+        }
+
+        public void mouseExited(MouseEvent evt) {
+        }
+
+        public void mousePressed(MouseEvent evt) {
+        }
+
+        public void mouseReleased(MouseEvent evt) {
+        }
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (evt.getSource() == cbSorte) {
+                BaumErsatzPanel.this.cbSortePropertyChange(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
@@ -645,6 +715,22 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     private void btnRemKontActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
         TableUtils.removeObjectsFromTable(xtKont);
     }//GEN-LAST:event_btnRemKontActionPerformed
+
+    private void cbSorteMouseClicked(MouseEvent evt) {//GEN-FIRST:event_cbSorteMouseClicked
+        final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty("fk_strasse_id");
+        final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
+        umlautCollator.setStrength(Collator.SECONDARY);
+        Collections.sort(cblStrassen, umlautCollator);
+        cbSorte.setModel(new DefaultComboBoxModel(cblStrassen.toArray()));
+    }//GEN-LAST:event_cbSorteMouseClicked
+
+    private void cbSorteActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbSorteActionPerformed
+        
+    }//GEN-LAST:event_cbSorteActionPerformed
+
+    private void cbSortePropertyChange(PropertyChangeEvent evt) {//GEN-FIRST:event_cbSortePropertyChange
+        
+    }//GEN-LAST:event_cbSortePropertyChange
 
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
@@ -677,8 +763,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddKont;
     JButton btnRemKont;
-    JComboBox<String> cbArt;
+    JComboBox<String> cbArtE;
     JComboBox cbGeomErsatz;
+    JComboBox cbSorte;
     JCheckBox chSelbst;
     DefaultBindableDateChooser dcBis;
     DefaultBindableDateChooser dcDatum;
@@ -695,6 +782,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     JLabel lblKarte;
     JLabel lblKont;
     JLabel lblSelbst;
+    JLabel lblSorte;
     JPanel panErsatz;
     JPanel panGeometrie;
     JPanel panKont;
@@ -707,7 +795,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     JScrollPane scpBemerkung;
     SemiRoundedPanel semiRoundedPanel7;
     SemiRoundedPanel semiRoundedPanel8;
-    JTextArea taBemerkung;
+    JTextArea taBemerkungE;
     JTextField txtAnzahl;
     JTextField txtFirma;
     JXTable xtKont;
@@ -717,7 +805,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new BaumMeldungPanel object.
+     * Creates a new BaumErsatzPanel object.
      */
     public BaumErsatzPanel() {
         this(null,true);
@@ -725,7 +813,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
     
     /**
-     * Creates new form BaumMeldungPanel.
+     * Creates new form BaumErsatzPanel.
      *
      * @param parentPanel
      * @param  editable  DOCUMENT ME!
@@ -741,7 +829,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     }
  
     /**
-     * Creates new form BaumMeldungPanel.
+     * Creates new form BaumErsatzPanel.
      *
      * @param parentPanel
      * @param  editable             DOCUMENT ME!
@@ -811,9 +899,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         
         setMapWindow();
         bindingGroup.bind();
-        if (isEditor && (this.cidsBean != null)) {
-                cidsBean.addPropertyChangeListener(changeListener);
-        }
         final DivBeanTable kontrolleModel = new DivBeanTable(
                     isEditor,
                     cidsBean,
@@ -827,6 +912,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             xtKont.getColumn(0).setPreferredWidth(20);
             xtKont.packAll();
             xtKont.addMouseMotionListener(new MouseAdapter(){
+                @Override
 		public void mouseMoved(MouseEvent e) {
                     int row=xtKont.rowAtPoint(e.getPoint());
                     int col=xtKont.columnAtPoint(e.getPoint());
@@ -841,6 +927,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 }
             });
         cbGeomErsatz.updateUI();
+        if (isEditor && (this.cidsBean != null)) {
+                cidsBean.addPropertyChangeListener(changeListener);
+        }
         
     }
     
