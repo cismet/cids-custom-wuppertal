@@ -448,7 +448,7 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
         final String kampagne = txtKampagne.getText().trim().isEmpty() ? null : txtKampagne.getText()
                     .trim();
 
-        return new PotenzialflaecheSearch(searchMode, nummer, kampagne, bezeichnung, searchGeometrie);
+        return new PotenzialflaecheSearch(searchMode, nummer, null, bezeichnung, searchGeometrie);
     }
 
     /**

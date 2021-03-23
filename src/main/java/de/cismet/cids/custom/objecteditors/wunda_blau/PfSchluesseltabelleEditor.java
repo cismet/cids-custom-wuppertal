@@ -438,15 +438,6 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         jPanel4.add(panDetail, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jToggleButton1, "zum Löschen markieren");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                jList1,
-                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.metaObject.status == 3}"),
-                jToggleButton1,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -634,6 +625,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
             jPanel4.setVisible(true);
             jToggleButton1.setVisible(isParentBean() && isEditable()
                         && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW));
+            jToggleButton1.setSelected(cidsBean.getMetaObject().getStatus() == 3);
             jButton4.setVisible(isEditable() && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW));
         } else {
             final CidsBean cidsBean = (CidsBean)jList1.getSelectedValue();

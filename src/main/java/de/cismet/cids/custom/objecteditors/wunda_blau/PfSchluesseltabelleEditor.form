@@ -336,9 +336,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="zum L&#xf6;schen markieren"/>
           </Properties>
-          <BindingProperties>
-            <BindingProperty name="selected" source="jList1" sourcePath="${selectedElement.metaObject.status == 3}" target="jToggleButton1" targetPath="selected" updateStrategy="1" immediately="false"/>
-          </BindingProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton1ActionPerformed"/>
           </Events>

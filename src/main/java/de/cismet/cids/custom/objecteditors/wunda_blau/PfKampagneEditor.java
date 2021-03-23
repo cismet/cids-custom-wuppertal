@@ -13,12 +13,12 @@ import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.newuser.permission.Policy;
 
 import java.awt.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,9 +31,11 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.server.PotenzialflaecheSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -41,7 +43,8 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -138,6 +141,15 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   args  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
@@ -162,6 +174,14 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         this.connectionContext = connectionContext;
 
         initComponents();
+        RendererTools.makeUneditable(lstFlaechen, true);
+
+        ((CidsSearchResultsList)this.lstFlaechen).initWithConnectionContext(connectionContext);
+        try {
+            new CidsBeanDropTarget(lstFlaechen);
+        } catch (final Exception ex) {
+            LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
+        }
 
         lstFlaechen.setCellRenderer(new DefaultListCellRenderer() {
 
@@ -238,7 +258,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         cbSteckbrief = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         lblGeometrie6 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        lstFlaechen = new javax.swing.JList<>();
+        lstFlaechen = new DroppedPfList();
         panArtControls2 = new javax.swing.JPanel();
         btnAddArt2 = new javax.swing.JButton();
         btnRemoveArt2 = new javax.swing.JButton();
@@ -627,22 +647,22 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddArt2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddArt2ActionPerformed
-        PfPotenzialflaecheEditor.setLastKampagne(cidsBean);
+        createAndGotoPotenzialflaeche(null);
+    }                                                                              //GEN-LAST:event_btnAddArt2ActionPerformed
 
-        final MetaClass MC = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                "pf_potenzialflaeche",
-                getConnectionContext());
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  origPfBean  DOCUMENT ME!
+     */
+    private void createAndGotoPotenzialflaeche(final CidsBean origPfBean) {
         try {
-            final CidsBean cb = CidsBean.createNewCidsBeanFromTableName(MC.getDomain(),
-                    MC.getTableName(),
-                    getConnectionContext());
-
+            final CidsBean copyBean = PfPotenzialflaecheEditor.createCopyOf(origPfBean, getConnectionContext());
+            copyBean.setProperty("kampagne", getCidsBean());
             final MetaObjectNode metaObjectNode = new MetaObjectNode(
                     -1,
                     SessionManager.getSession().getUser().getDomain(),
-                    cb.getMetaObject(),
+                    copyBean.getMetaObject(),
                     null,
                     null,
                     true,
@@ -656,8 +676,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         } catch (Exception e) {
             LOG.error("Error while creating a new object", e);
         }
-    } //GEN-LAST:event_btnAddArt2ActionPerformed
-
+    }
     /**
      * DOCUMENT ME!
      *
@@ -698,6 +717,10 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
+            final PotenzialflaecheSearch search = new PotenzialflaecheSearch();
+            search.setKampagneId(cidsBean.getMetaObject().getId());
+            ((CidsSearchResultsList)lstFlaechen).setSearch(search);
+            ((CidsSearchResultsList)this.lstFlaechen).refresh();
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 cidsBean,
@@ -744,5 +767,37 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DroppedPfList extends CidsSearchResultsList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DroppedPfList object.
+         */
+        private DroppedPfList() {
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> origBeans) {
+            if (isEditable() && (origBeans != null) && (origBeans.size() == 1)) {
+                for (final CidsBean origPfBean : origBeans) {
+                    if (origPfBean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                                    "pf_potenzialflaeche")) {
+                        createAndGotoPotenzialflaeche(origPfBean);
+                    }
+                }
+            }
+        }
     }
 }
