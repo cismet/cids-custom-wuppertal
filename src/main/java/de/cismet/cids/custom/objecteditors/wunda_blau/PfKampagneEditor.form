@@ -359,6 +359,7 @@
                             <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.zugeordnete_flaechen}" target="lstFlaechen" targetPath="elements" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DroppedPfList()"/>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
                           </AuxValues>
                         </Component>
