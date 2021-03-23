@@ -12,8 +12,6 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import java.awt.CardLayout;
-
 /**
  * DOCUMENT ME!
  *
