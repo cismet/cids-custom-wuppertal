@@ -10,8 +10,9 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.tools.CacheException;
 import Sirius.navigator.tools.MetaObjectCache;
-import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.DescriptionPaneFS;
+import Sirius.navigator.ui.RequestsFullAvailableSpaceComponent;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.localserver.attribute.MemberAttributeInfo;
 import Sirius.server.middleware.types.MetaClass;
@@ -25,10 +26,22 @@ import org.apache.commons.lang.StringUtils;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 
 import java.lang.reflect.Field;
 
@@ -46,10 +59,14 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.commons.gui.ScrollablePanel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
@@ -96,6 +113,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
+import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -110,6 +128,9 @@ import static de.cismet.cids.editors.CidsObjectEditorFactory.getMetaClass;
  * @version  $Revision$, $Date$
  */
 public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+    RequestsFullSizeComponent,
+    RequestsFullAvailableSpaceComponent,
+    BorderProvider,
     EditorSaveListener,
     FooterComponentProvider,
     TitleComponentProvider,
@@ -127,21 +148,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION =
         new DefaultBindableReferenceCombo.ManageableOption("name", "<html><i>[neue Auswahl erzeugen]");
 
-    private static CidsBean lastKampagne = null;
-
     //~ Instance fields --------------------------------------------------------
+
+    int pX;
+    int pY;
 
     private final PfPotenzialflaecheTitlePanel panTitle = new PfPotenzialflaecheTitlePanel(this);
     private final PfPotenzialflaecheFooterPanel panFooter = new PfPotenzialflaecheFooterPanel(this);
     private final boolean editable;
     private CidsBean cidsBean;
     private ConnectionContext connectionContext;
-    private Object currentTreeNode = null;
 
     private final Collection<SearchLabelsFieldPanel> searchLabelFieldPanels = new ArrayList<>();
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
 
     private final Map<String, JComponent> componentMap = new HashMap<>();
+
+    private JComponent popupComponent;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlaeche;
@@ -258,9 +281,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler9;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
@@ -277,6 +302,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -289,8 +316,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
@@ -358,7 +387,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle3;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle6;
     private de.cismet.tools.gui.RoundedPanel panBewertung1;
+    private javax.swing.JPanel panDefinition;
     private javax.swing.JPanel panDetail;
+    private javax.swing.JDialog panDialog;
     private de.cismet.tools.gui.RoundedPanel panErweitert;
     private javax.swing.JPanel panFlaeche;
     private javax.swing.JPanel panFlaeche1;
@@ -388,6 +419,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JTextArea taMassnahmeDialog;
     private javax.swing.JTextArea taNotwendigeMassnahme;
     private javax.swing.JTextField txtBezeichnung;
+    private javax.swing.JEditorPane txtDefinition;
     private javax.swing.JTextField txtJahrNutzungsaufgabe;
     private javax.swing.JTextField txtNummer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -453,6 +485,20 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         initComponents();
         initComponentMap();
+
+        final ActionListener escListener = new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    panDialog.setVisible(false);
+                }
+            };
+
+        panDialog.getRootPane()
+                .registerKeyboardAction(
+                    escListener,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         try {
             new CidsBeanDropTarget(jPanel20);
@@ -549,6 +595,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jScrollPane2 = new javax.swing.JScrollPane();
         taMassnahmeDialog = new javax.swing.JTextArea();
         sqlDateToUtilDateConverter = new de.cismet.cids.editors.converters.SqlDateToUtilDateConverter();
+        panDialog = new javax.swing.JDialog();
+        panDefinition = new javax.swing.JPanel();
+        jPanel23 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        txtDefinition = new javax.swing.JEditorPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jPanel22 = new ScrollablePanel();
         panNew = new javax.swing.JPanel();
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0),
                 new java.awt.Dimension(100, 0),
@@ -1156,9 +1211,80 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         dlgMassnahme.getContentPane().add(panFlaeche1, java.awt.BorderLayout.CENTER);
 
+        panDialog.setAlwaysOnTop(true);
+        panDialog.setUndecorated(true);
+
+        panDefinition.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        panDefinition.setMinimumSize(new java.awt.Dimension(400, 400));
+        panDefinition.setPreferredSize(new java.awt.Dimension(600, 800));
+        panDefinition.setLayout(new java.awt.BorderLayout());
+
+        jPanel23.setBackground(java.awt.Color.darkGray);
+        jPanel23.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+
+                @Override
+                public void mouseDragged(final java.awt.event.MouseEvent evt) {
+                    jPanel23MouseDragged(evt);
+                }
+            });
+        jPanel23.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mousePressed(final java.awt.event.MouseEvent evt) {
+                    jPanel23MousePressed(evt);
+                }
+            });
+        jPanel23.setLayout(new java.awt.GridBagLayout());
+
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "<html><b>Definitionen - Potenzialflächenkataster");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanel23.add(jLabel3, gridBagConstraints);
+
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(jButton3, "<html><b>X");
+        jButton3.setToolTipText("");
+        jButton3.setBorderPainted(false);
+        jButton3.setContentAreaFilled(false);
+        jButton3.setFocusPainted(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        jPanel23.add(jButton3, gridBagConstraints);
+
+        panDefinition.add(jPanel23, java.awt.BorderLayout.NORTH);
+
+        jScrollPane9.setBorder(null);
+        jScrollPane9.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane9.setEnabled(false);
+
+        txtDefinition.setBackground(java.awt.Color.lightGray.brighter());
+        txtDefinition.setContentType("text/html"); // NOI18N
+        jScrollPane9.setViewportView(txtDefinition);
+
+        panDefinition.add(jScrollPane9, java.awt.BorderLayout.CENTER);
+
+        panDialog.getContentPane().add(panDefinition, java.awt.BorderLayout.CENTER);
+
         setOpaque(false);
-        setPreferredSize(new java.awt.Dimension(1028, 800));
-        setLayout(new java.awt.CardLayout());
+        setLayout(new java.awt.BorderLayout());
+
+        jScrollPane5.setBorder(null);
+        jScrollPane5.setOpaque(false);
+
+        jPanel22.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel22.setMaximumSize(new java.awt.Dimension(1200, 2147483647));
+        jPanel22.setOpaque(false);
+        jPanel22.setLayout(new java.awt.CardLayout());
 
         panNew.setOpaque(false);
         panNew.setLayout(new java.awt.GridBagLayout());
@@ -1269,7 +1395,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
         panNew.add(jLabel5, gridBagConstraints);
 
-        add(panNew, "neu");
+        jPanel22.add(panNew, "neu");
 
         panMain.setOpaque(false);
         panMain.setLayout(new java.awt.GridBagLayout());
@@ -2045,8 +2171,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel12.add(jLabel1, gridBagConstraints);
 
-        dateStand1.setToolTipText("Pflichtfeld");
-
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -2613,7 +2737,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         panMain.add(filler15, gridBagConstraints);
 
-        add(panMain, "grunddaten");
+        jPanel22.add(panMain, "grunddaten");
 
         panDetail.setOpaque(false);
         panDetail.setLayout(new java.awt.GridBagLayout());
@@ -2743,8 +2867,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
         jPanel6.add(lblStand, gridBagConstraints);
-
-        dateStand.setToolTipText("Pflichtfeld");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -2924,6 +3046,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten1, "Potenzialart:");
         lblEntwicklungsausssichten1.setName(PotenzialflaecheReportServerAction.Property.POTENZIALART.toString());
+        lblEntwicklungsausssichten1.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblEntwicklungsausssichten1MouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2952,6 +3081,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten2, "Entwicklungsstand:");
         lblEntwicklungsausssichten2.setName(PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSSTAND.toString());
+        lblEntwicklungsausssichten2.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblEntwicklungsausssichten2MouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2980,6 +3116,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten3, "Restriktionen/Hemmnisse:");
         lblEntwicklungsausssichten3.setName(PotenzialflaecheReportServerAction.Property.RESTRIKTIONEN.toString());
+        lblEntwicklungsausssichten3.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblEntwicklungsausssichten3MouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3015,8 +3158,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler62, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten5, "Empfohlene Art der Wohnnutzung:");
-        lblEntwicklungsausssichten5.setName(PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN
+        lblEntwicklungsausssichten5.setName(PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN_WOHNEN
                     .toString());
+        lblEntwicklungsausssichten5.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblEntwicklungsausssichten5MouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3176,7 +3326,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aktivierbarkeit}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_verwertbarkeit}"),
                 cbAktivierbarkeit,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -3193,7 +3343,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler67, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblHandlungsdruck1, "Handlungspriorität (Verwaltung):");
-        lblHandlungsdruck1.setToolTipText("Handlungsdruck / Handlungspriorität");
         lblHandlungsdruck1.setName(PotenzialflaecheReportServerAction.Property.HANDLUNGSDRUCK.toString());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -3287,7 +3436,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler70, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblHandlungsdruck, "Handlungsdruck:");
-        lblHandlungsdruck.setToolTipText("Handlungsdruck / Handlungspriorität");
         lblHandlungsdruck.setName(PotenzialflaecheReportServerAction.Property.HANDLUNGSPRIORITAET.toString());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -3347,7 +3495,14 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         panDetail.add(jPanel15, gridBagConstraints);
 
-        add(panDetail, "details");
+        jPanel22.add(panDetail, "details");
+
+        jScrollPane5.setViewportView(jPanel22);
+        ((ScrollablePanel)jPanel22).setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
+        ((ScrollablePanel)jPanel22).setScrollableHeight(ScrollablePanel.ScrollableSizeHint.STRETCH);
+
+        add(jScrollPane5, java.awt.BorderLayout.CENTER);
+        jScrollPane5.getViewport().setOpaque(false);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -3513,6 +3668,192 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         copyFrom(null);
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   component      DOCUMENT ME!
+     * @param   preferredSize  DOCUMENT ME!
+     * @param   position       DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    static Point fitToScreen(final Component component, final Dimension preferredSize, final Point position) {
+        final Toolkit toolkit = Toolkit.getDefaultToolkit();
+        final Rectangle screenBounds;
+        final Insets screenInsets;
+
+        final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        final GraphicsDevice[] gd = ge.getScreenDevices();
+
+        GraphicsConfiguration gc = null;
+        for (final GraphicsDevice gd1 : gd) {
+            if (gd1.getType() == GraphicsDevice.TYPE_RASTER_SCREEN) {
+                final GraphicsConfiguration dgc = gd1.getDefaultConfiguration();
+                if (dgc.getBounds().contains(position)) {
+                    gc = dgc;
+                    break;
+                }
+            }
+        }
+
+        if ((gc == null) && (component != null)) {
+            gc = component.getGraphicsConfiguration();
+        }
+
+        if (gc != null) {
+            screenInsets = toolkit.getScreenInsets(gc);
+            screenBounds = gc.getBounds();
+        } else {
+            screenInsets = new Insets(0, 0, 0, 0);
+            screenBounds = new Rectangle(toolkit.getScreenSize());
+        }
+
+        final int scrWidth = screenBounds.width - Math.abs(screenInsets.left + screenInsets.right);
+        final int scrHeight = screenBounds.height - Math.abs(screenInsets.top + screenInsets.bottom);
+
+        final long positionX = (long)position.x + (long)preferredSize.width;
+        final long positionY = (long)position.y + (long)preferredSize.height;
+
+        if (positionX > (screenBounds.x + scrWidth)) {
+            position.x = screenBounds.x + scrWidth - preferredSize.width;
+        }
+        if (position.x < screenBounds.x) {
+            position.x = screenBounds.x;
+        }
+        if (positionY > (screenBounds.y + scrHeight)) {
+            position.y = screenBounds.y + scrHeight - preferredSize.height;
+        }
+        if (position.y < screenBounds.y) {
+            position.y = screenBounds.y;
+        }
+
+        return position;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JComponent getPopupComponent() {
+        return popupComponent;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  source  DOCUMENT ME!
+     */
+    private void showOrHidePopup(final JComponent source) {
+        final boolean showOrHide = !panDialog.isVisible();
+        if (showOrHide) {
+            popupComponent = source;
+
+            final Point location = source.getLocationOnScreen();
+            final Point position = fitToScreen(
+                    source,
+                    panDialog.getPreferredSize(),
+                    new Point(location.x, location.y + source.getHeight()));
+
+            panDialog.setBounds(
+                position.x,
+                position.y,
+                panDialog.getPreferredSize().width,
+                panDialog.getPreferredSize().height);
+            panDialog.setVisible(true);
+
+            txtDefinition.setText("<html><i>Definitionen werden geladen...");
+
+            new SwingWorker<String, Void>() {
+
+                    @Override
+                    protected String doInBackground() throws Exception {
+                        return createDefinitionHtml(source.getName());
+                    }
+
+                    @Override
+                    protected void done() {
+                        if (source.equals(getPopupComponent())) {
+                            try {
+                                final String definition = get();
+                                txtDefinition.setText(definition);
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                                txtDefinition.setText(
+                                    "<html><i>Beim Laden der Definitionen ist ein Fehler aufgetreten !");
+                            }
+                        }
+                    }
+                }.execute();
+        } else {
+            panDialog.setVisible(false);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblEntwicklungsausssichten1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblEntwicklungsausssichten1MouseClicked
+        showOrHidePopup((JComponent)evt.getSource());
+    }                                                                                           //GEN-LAST:event_lblEntwicklungsausssichten1MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblEntwicklungsausssichten2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblEntwicklungsausssichten2MouseClicked
+        showOrHidePopup((JComponent)evt.getSource());
+    }                                                                                           //GEN-LAST:event_lblEntwicklungsausssichten2MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblEntwicklungsausssichten3MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblEntwicklungsausssichten3MouseClicked
+        showOrHidePopup((JComponent)evt.getSource());
+    }                                                                                           //GEN-LAST:event_lblEntwicklungsausssichten3MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblEntwicklungsausssichten5MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblEntwicklungsausssichten5MouseClicked
+        showOrHidePopup((JComponent)evt.getSource());
+    }                                                                                           //GEN-LAST:event_lblEntwicklungsausssichten5MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        panDialog.setVisible(false);
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jPanel23MousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jPanel23MousePressed
+        pX = evt.getX();
+        pY = evt.getY();
+    }                                                                        //GEN-LAST:event_jPanel23MousePressed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jPanel23MouseDragged(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jPanel23MouseDragged
+        panDialog.setLocation(panDialog.getLocation().x + evt.getX() - pX, panDialog.getLocation().y + evt.getY() - pY);
+    }                                                                        //GEN-LAST:event_jPanel23MouseDragged
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -3634,8 +3975,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        javax.swing.ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
-
         this.cidsBean = cidsBean;
         panTitle.refreshTitle();
 
@@ -3663,44 +4002,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             if (kampagne != null) {
                 markUsedFields((CidsBean)kampagne.getProperty("steckbrieftemplate"));
             }
-            new SwingWorker<Map<String, String>, Void>() {
-
-                    @Override
-                    protected Map<String, String> doInBackground() throws Exception {
-                        return createDefinitionTooltips();
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            final Map<String, String> tooltips = get();
-                            if (tooltips != null) {
-                                for (final String name : tooltips.keySet()) {
-                                    final JComponent component = componentMap.get(name);
-                                    if (component != null) {
-                                        final String tooltip;
-                                        if (component.getName().contains(";")) {
-                                            final StringBuffer sb = new StringBuffer();
-                                            for (final String subName : component.getName().split(";")) {
-                                                sb.append(tooltips.get(subName));
-                                            }
-                                            tooltip = sb.toString();
-                                        } else {
-                                            tooltip = tooltips.get(name);
-                                        }
-
-                                        component.setToolTipText((tooltip != null)
-                                                ? String.format(
-                                                    "<html><body>%s</body></html>",
-                                                    tooltip) : null);
-                                    }
-                                }
-                            }
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
-                        }
-                    }
-                }.execute();
         }
     }
 
@@ -3761,24 +4062,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         }
 
         return beans;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Map<String, String> createDefinitionTooltips() {
-        final Map<String, String> tooltips = new HashMap<>();
-        for (final String name : componentMap.keySet()) {
-            if (name != null) {
-                final JComponent component = componentMap.get(name);
-                if (component != null) {
-                    tooltips.put(name, createDefinitionHtml(name));
-                }
-            }
-        }
-        return tooltips;
     }
 
     /**
@@ -3986,7 +4269,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     @Override
     public boolean prepareForSave() {
-        currentTreeNode = ComponentRegistry.getRegistry().getAttributeEditor().getTreeNode();
         return true;
     }
 
@@ -4090,14 +4372,29 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     public void showDetails() {
-        ((CardLayout)getLayout()).show(this, "details");
+        ((CardLayout)jPanel22.getLayout()).show(jPanel22, "details");
     }
 
     /**
      * DOCUMENT ME!
      */
     public void showGrunddaten() {
-        ((CardLayout)getLayout()).show(this, "grunddaten");
+        ((CardLayout)jPanel22.getLayout()).show(jPanel22, "grunddaten");
+    }
+
+    @Override
+    public Border getTitleBorder() {
+        return new EmptyBorder(15, 20, 10, 20);
+    }
+
+    @Override
+    public Border getFooterBorder() {
+        return new EmptyBorder(10, 20, 15, 20);
+    }
+
+    @Override
+    public Border getCenterrBorder() {
+        return new EmptyBorder(1, 5, 0, 6);
     }
 
     //~ Inner Classes ----------------------------------------------------------
