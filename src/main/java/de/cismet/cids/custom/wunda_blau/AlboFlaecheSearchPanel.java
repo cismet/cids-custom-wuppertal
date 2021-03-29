@@ -603,22 +603,22 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      *
      * @return  DOCUMENT ME!
      */
-    public AlboFlaecheSearch.FlaecheSearchInfo createSearchInfo() {
-        final AlboFlaecheSearch.FlaecheSearchInfo searchInfo = new AlboFlaecheSearch.FlaecheSearchInfo();
-        searchInfo.setSearchModeMain(jRadioButton1.isSelected() ? AlboFlaecheSearch.SearchMode.AND
-                                                                : AlboFlaecheSearch.SearchMode.OR);
-        searchInfo.setSearchModeArt(jRadioButton5.isSelected() ? AlboFlaecheSearch.SearchMode.AND
-                                                               : AlboFlaecheSearch.SearchMode.OR);
-        searchInfo.setErhebungsNummer(jTextField1.getText());
-        searchInfo.setVorgangSchluessel(jTextField2.getText());
-        searchInfo.setStatusSchluessel((cbFlaechenstatus.getSelectedItem() instanceof CidsBean)
+    public AlboFlaecheSearch.Configuration createConfiguration() {
+        final AlboFlaecheSearch.Configuration configuration = new AlboFlaecheSearch.Configuration();
+        configuration.setSearchModeMain(jRadioButton1.isSelected() ? AlboFlaecheSearch.SearchMode.AND
+                                                                   : AlboFlaecheSearch.SearchMode.OR);
+        configuration.setSearchModeArt(jRadioButton5.isSelected() ? AlboFlaecheSearch.SearchMode.AND
+                                                                  : AlboFlaecheSearch.SearchMode.OR);
+        configuration.setErhebungsNummer(jTextField1.getText());
+        configuration.setVorgangSchluessel(jTextField2.getText());
+        configuration.setStatusSchluessel((cbFlaechenstatus.getSelectedItem() instanceof CidsBean)
                 ? (String)((CidsBean)cbFlaechenstatus.getSelectedItem()).getProperty("schluessel") : null);
-        searchInfo.setTypSchluessel((cbFlaechentyp.getSelectedItem() instanceof CidsBean)
+        configuration.setTypSchluessel((cbFlaechentyp.getSelectedItem() instanceof CidsBean)
                 ? (String)((CidsBean)cbFlaechentyp.getSelectedItem()).getProperty("schluessel") : null);
-        searchInfo.setZuordnungSchluessel((cbFlaechenzuordnung.getSelectedItem() instanceof CidsBean)
+        configuration.setZuordnungSchluessel((cbFlaechenzuordnung.getSelectedItem() instanceof CidsBean)
                 ? (String)((CidsBean)cbFlaechenzuordnung.getSelectedItem()).getProperty("schluessel") : null);
-        searchInfo.setArtInfos(createArtInfos());
-        return searchInfo;
+        configuration.setArtInfos(createArtInfos());
+        return configuration;
     }
 
     /**
@@ -637,7 +637,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
             transformedBoundingBox = null;
         }
 
-        final AlboFlaecheSearch search = new AlboFlaecheSearch(createSearchInfo());
+        final AlboFlaecheSearch search = new AlboFlaecheSearch(createConfiguration());
         search.setGeometry(geometry);
         return search;
     }
@@ -663,19 +663,19 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
     /**
      * DOCUMENT ME!
      *
-     * @param  searchInfo  DOCUMENT ME!
+     * @param  configuration  DOCUMENT ME!
      */
-    public void initFromSeachInfo(final AlboFlaecheSearch.FlaecheSearchInfo searchInfo) {
+    public void initFromConfiguration(final AlboFlaecheSearch.Configuration configuration) {
         this.bean = new Bean();
         artInfoPanels.clear();
-        if (searchInfo != null) {
+        if (configuration != null) {
             new SwingWorker<CidsBean, Void>() {
 
                     @Override
                     protected CidsBean doInBackground() throws Exception {
                         return getSchluesselBean(
                                 "albo_flaechenstatus",
-                                searchInfo.getStatusSchluessel(),
+                                configuration.getStatusSchluessel(),
                                 getConnectionContext());
                     }
 
@@ -696,7 +696,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                     protected CidsBean doInBackground() throws Exception {
                         return getSchluesselBean(
                                 "albo_flaechenzuordnung",
-                                searchInfo.getZuordnungSchluessel(),
+                                configuration.getZuordnungSchluessel(),
                                 getConnectionContext());
                     }
 
@@ -716,7 +716,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                     protected CidsBean doInBackground() throws Exception {
                         return getSchluesselBean(
                                 "albo_flaechentyp",
-                                searchInfo.getTypSchluessel(),
+                                configuration.getTypSchluessel(),
                                 getConnectionContext());
                     }
 
@@ -731,19 +731,19 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                     }
                 }.execute();
 
-            bean.setErhebungsnummer(searchInfo.getErhebungsNummer());
-            bean.setVorgangsnummer(searchInfo.getVorgangSchluessel());
+            bean.setErhebungsnummer(configuration.getErhebungsNummer());
+            bean.setVorgangsnummer(configuration.getVorgangSchluessel());
             buttonGroup1.setSelected(jRadioButton1.getModel(),
-                AlboFlaecheSearch.SearchMode.AND.equals(searchInfo.getSearchModeMain()));
+                AlboFlaecheSearch.SearchMode.AND.equals(configuration.getSearchModeMain()));
             buttonGroup1.setSelected(jRadioButton2.getModel(),
-                AlboFlaecheSearch.SearchMode.OR.equals(searchInfo.getSearchModeMain()));
+                AlboFlaecheSearch.SearchMode.OR.equals(configuration.getSearchModeMain()));
             buttonGroup2.setSelected(jRadioButton5.getModel(),
-                AlboFlaecheSearch.SearchMode.AND.equals(searchInfo.getSearchModeArt()));
+                AlboFlaecheSearch.SearchMode.AND.equals(configuration.getSearchModeArt()));
             buttonGroup2.setSelected(jRadioButton6.getModel(),
-                AlboFlaecheSearch.SearchMode.OR.equals(searchInfo.getSearchModeArt()));
+                AlboFlaecheSearch.SearchMode.OR.equals(configuration.getSearchModeArt()));
 
-            if (searchInfo.getArtInfos() != null) {
-                for (final AlboFlaecheSearch.ArtInfo artInfo : searchInfo.getArtInfos()) {
+            if (configuration.getArtInfos() != null) {
+                for (final AlboFlaecheSearch.ArtInfo artInfo : configuration.getArtInfos()) {
                     final AlboFlaecheArtSearchPanel artInfoPanel = new AlboFlaecheArtSearchPanel(this, editable);
                     artInfoPanel.initFromArtInfo(artInfo);
                     artInfoPanels.add(artInfoPanel);

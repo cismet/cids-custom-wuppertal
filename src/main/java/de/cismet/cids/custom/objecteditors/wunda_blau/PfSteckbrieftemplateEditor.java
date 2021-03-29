@@ -29,6 +29,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JToggleButton;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -36,6 +39,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportSer
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
@@ -69,8 +73,11 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private de.cismet.cids.editors.FastBindableReferenceCombo fastBindableReferenceCombo1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -78,6 +85,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -114,8 +122,14 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         jPanel1 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        fastBindableReferenceCombo1 = new de.cismet.cids.editors.FastBindableReferenceCombo(
+                "%1$2s",
+                new String[] { "bezeichnung" });
         jLabel9 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jTextField7 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -156,6 +170,32 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jTextField4, gridBagConstraints);
 
+        jLabel11.setText("Kampagne:");
+        jLabel11.setName("jLabel11"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel11, gridBagConstraints);
+
+        fastBindableReferenceCombo1.setName("fastBindableReferenceCombo1"); // NOI18N
+        fastBindableReferenceCombo1.setRenderer(new KampagneListCellRenderer());
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kampagne}"),
+                fastBindableReferenceCombo1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(fastBindableReferenceCombo1, gridBagConstraints);
+
         jLabel9.setText("Report-Pfad:");
         jLabel9.setName("jLabel9"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -181,6 +221,31 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jTextField6, gridBagConstraints);
 
+        jLabel12.setText("Aktionsrecht:");
+        jLabel12.setName("jLabel12"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel12, gridBagConstraints);
+
+        jTextField7.setName("jTextField7"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.conf_attr}"),
+                jTextField7,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jTextField7, gridBagConstraints);
+
         jLabel10.setText("Verwendete Attribute:");
         jLabel10.setName("jLabel10"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -205,7 +270,6 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -236,8 +300,14 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
 
-            final List<String> selectedProperties = new ArrayList<>(Arrays.asList(
-                        ((String)cidsBean.getProperty("verwendete_flaechenattribute")).split(",")));
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                cidsBean,
+                getConnectionContext());
+
+            final String verwendeteAttribute = (String)cidsBean.getProperty("verwendete_flaechenattribute");
+            final List<String> selectedProperties = (verwendeteAttribute != null)
+                ? new ArrayList<>(Arrays.asList(verwendeteAttribute.split(","))) : new ArrayList<String>();
             Collections.sort(selectedProperties);
 
             for (final Component component : jPanel2.getComponents()) {
@@ -353,5 +423,41 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
             return false;
         }
         return true;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class KampagneListCellRenderer extends DefaultListCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList<?> list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final Component component = super.getListCellRendererComponent(
+                    list,
+                    value,
+                    index,
+                    isSelected,
+                    cellHasFocus);
+            if ((component instanceof JLabel)) {
+                final JLabel label = (JLabel)component;
+                if (value instanceof CidsBean) {
+                    final CidsBean cidsBean = (CidsBean)value;
+                    label.setText((String)cidsBean.getProperty("bezeichnung"));
+                } else if (value == null) {
+                    label.setText(" ");
+                }
+            }
+            return component;
+        }
     }
 }
