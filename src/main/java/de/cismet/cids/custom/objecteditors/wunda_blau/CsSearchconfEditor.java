@@ -164,16 +164,16 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
         bindingGroup.bind();
         if (alboFlaecheSearchPanel1 != null) {
             final String seachInfoJson = (cidsBean != null) ? (String)cidsBean.getProperty("conf_json") : null;
-            AlboFlaecheSearch.FlaecheSearchInfo searchInfo;
+            AlboFlaecheSearch.Configuration searchInfo;
             try {
                 searchInfo = (seachInfoJson != null)
                     ? AlboFlaecheSearch.OBJECT_MAPPER.readValue(
                         seachInfoJson,
-                        AlboFlaecheSearch.FlaecheSearchInfo.class) : null;
+                        AlboFlaecheSearch.Configuration.class) : null;
             } catch (final Exception ex) {
                 searchInfo = null;
             }
-            alboFlaecheSearchPanel1.initFromSeachInfo(searchInfo);
+            alboFlaecheSearchPanel1.initFromConfiguration(searchInfo);
         }
     }
 
@@ -232,7 +232,7 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
         try {
             cidsBean.setProperty(
                 "conf_json",
-                AlboFlaecheSearch.OBJECT_MAPPER.writeValueAsString(alboFlaecheSearchPanel1.createSearchInfo()));
+                AlboFlaecheSearch.OBJECT_MAPPER.writeValueAsString(alboFlaecheSearchPanel1.createConfiguration()));
             return true;
         } catch (final Exception ex) {
             LOG.error(ex, ex);

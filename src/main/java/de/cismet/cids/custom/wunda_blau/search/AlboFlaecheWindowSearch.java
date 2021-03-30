@@ -392,7 +392,7 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
                             getConnectionContext());
                     abfrageBean.setProperty("name", name);
                 }
-                final AlboFlaecheSearch.FlaecheSearchInfo searchInfo = alboFlaecheSearchPanel1.createSearchInfo();
+                final AlboFlaecheSearch.Configuration searchInfo = alboFlaecheSearchPanel1.createConfiguration();
                 final String conf_json = AlboFlaecheSearch.OBJECT_MAPPER.writeValueAsString(searchInfo);
                 abfrageBean.setProperty("conf_json", conf_json);
                 final CidsBean persisted = abfrageBean.persist(getConnectionContext());
@@ -445,17 +445,17 @@ public class AlboFlaecheWindowSearch extends javax.swing.JPanel implements CidsW
             final String conf_json = (String)abfrageBean.getProperty("conf_json");
             if (conf_json != null) {
                 try {
-                    alboFlaecheSearchPanel1.initFromSeachInfo(AlboFlaecheSearch.OBJECT_MAPPER.readValue(
+                    alboFlaecheSearchPanel1.initFromConfiguration(AlboFlaecheSearch.OBJECT_MAPPER.readValue(
                             conf_json,
-                            AlboFlaecheSearch.FlaecheSearchInfo.class));
+                            AlboFlaecheSearch.Configuration.class));
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
             } else {
-                alboFlaecheSearchPanel1.initFromSeachInfo(null);
+                alboFlaecheSearchPanel1.initFromConfiguration(null);
             }
         } else {
-            alboFlaecheSearchPanel1.initFromSeachInfo(null);
+            alboFlaecheSearchPanel1.initFromConfiguration(null);
         }
     }                                                                              //GEN-LAST:event_cbAbfragenActionPerformed
 

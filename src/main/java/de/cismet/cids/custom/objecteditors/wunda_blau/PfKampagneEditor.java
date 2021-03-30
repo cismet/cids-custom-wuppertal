@@ -13,16 +13,17 @@ import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.newuser.permission.Policy;
 
 import java.awt.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -31,9 +32,11 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.server.PotenzialflaecheSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -41,7 +44,8 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -86,12 +90,14 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private javax.swing.JButton btnRemoveArt2;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbGeom;
-    de.cismet.cids.editors.DefaultBindableReferenceCombo cbSteckbrief;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVeroeffentlicht;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JList<CidsBean> jList1;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblBeschreibung;
@@ -138,6 +144,15 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   args  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
@@ -162,6 +177,14 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         this.connectionContext = connectionContext;
 
         initComponents();
+        RendererTools.makeUneditable(lstFlaechen, true);
+
+        ((CidsSearchResultsList)this.lstFlaechen).initWithConnectionContext(connectionContext);
+        try {
+            new CidsBeanDropTarget(lstFlaechen);
+        } catch (final Exception ex) {
+            LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
+        }
 
         lstFlaechen.setCellRenderer(new DefaultListCellRenderer() {
 
@@ -196,7 +219,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         if (!editable) {
             RendererTools.makeReadOnly(txtBezeichnung);
-            RendererTools.makeReadOnly(cbSteckbrief);
+            RendererTools.makeReadOnly(jList1);
             RendererTools.makeReadOnly(cbVeroeffentlicht);
             RendererTools.makeReadOnly(taBeschreibung);
             panArtControls2.setVisible(false);
@@ -235,15 +258,17 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblGeometrie5 = new javax.swing.JLabel();
         cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
         cbVeroeffentlicht = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        cbSteckbrief = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         lblGeometrie6 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        lstFlaechen = new javax.swing.JList<>();
+        lstFlaechen = new DroppedPfList();
         panArtControls2 = new javax.swing.JPanel();
         btnAddArt2 = new javax.swing.JButton();
         btnRemoveArt2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         taBeschreibung = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jButton1 = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -401,7 +426,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblGeometrie5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -420,7 +445,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -442,22 +467,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel7.add(cbVeroeffentlicht, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.steckbrieftemplate}"),
-                cbSteckbrief,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel7.add(cbSteckbrief, gridBagConstraints);
-
         lblGeometrie6.setFont(lblGeometrie6.getFont().deriveFont(
                 lblGeometrie6.getFont().getStyle()
                         | java.awt.Font.BOLD));
@@ -466,7 +475,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblGeometrie6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -491,7 +500,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -503,9 +512,12 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         btnAddArt2.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddArt2.setMaximumSize(new java.awt.Dimension(43, 25));
-        btnAddArt2.setMinimumSize(new java.awt.Dimension(43, 25));
-        btnAddArt2.setPreferredSize(new java.awt.Dimension(43, 25));
+        btnAddArt2.setBorderPainted(false);
+        btnAddArt2.setContentAreaFilled(false);
+        btnAddArt2.setFocusPainted(false);
+        btnAddArt2.setMaximumSize(new java.awt.Dimension(32, 32));
+        btnAddArt2.setMinimumSize(new java.awt.Dimension(32, 32));
+        btnAddArt2.setPreferredSize(new java.awt.Dimension(32, 32));
         btnAddArt2.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -522,9 +534,12 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         btnRemoveArt2.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveArt2.setMaximumSize(new java.awt.Dimension(43, 25));
-        btnRemoveArt2.setMinimumSize(new java.awt.Dimension(43, 25));
-        btnRemoveArt2.setPreferredSize(new java.awt.Dimension(43, 25));
+        btnRemoveArt2.setBorderPainted(false);
+        btnRemoveArt2.setContentAreaFilled(false);
+        btnRemoveArt2.setFocusPainted(false);
+        btnRemoveArt2.setMaximumSize(new java.awt.Dimension(32, 32));
+        btnRemoveArt2.setMinimumSize(new java.awt.Dimension(32, 32));
+        btnRemoveArt2.setPreferredSize(new java.awt.Dimension(32, 32));
         btnRemoveArt2.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -541,7 +556,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -572,6 +587,59 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel7.add(jScrollPane1, gridBagConstraints);
+
+        jList1.setVisibleRowCount(3);
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    jList1MouseClicked(evt);
+                }
+            });
+        jScrollPane3.setViewportView(jList1);
+        jList1.setCellRenderer(new SteckbriefListCellRenderer());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        jPanel7.add(jScrollPane3, gridBagConstraints);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/treeicons/wunda_demo/star.png")));            // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.jButton1.text")); // NOI18N
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setFocusPainted(false);
+        jButton1.setMaximumSize(new java.awt.Dimension(32, 32));
+        jButton1.setMinimumSize(new java.awt.Dimension(32, 32));
+        jButton1.setPreferredSize(new java.awt.Dimension(32, 32));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                jList1,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"),
+                jButton1,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(6, 5, 0, 0);
+        jPanel7.add(jButton1, gridBagConstraints);
+        jButton1.setVisible(isEditable());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -627,22 +695,22 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddArt2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddArt2ActionPerformed
-        PfPotenzialflaecheEditor.setLastKampagne(cidsBean);
+        createAndGotoPotenzialflaeche(null);
+    }                                                                              //GEN-LAST:event_btnAddArt2ActionPerformed
 
-        final MetaClass MC = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                "pf_potenzialflaeche",
-                getConnectionContext());
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  origPfBean  DOCUMENT ME!
+     */
+    private void createAndGotoPotenzialflaeche(final CidsBean origPfBean) {
         try {
-            final CidsBean cb = CidsBean.createNewCidsBeanFromTableName(MC.getDomain(),
-                    MC.getTableName(),
-                    getConnectionContext());
-
+            final CidsBean copyBean = PfPotenzialflaecheEditor.createCopyOf(origPfBean, getConnectionContext());
+            copyBean.setProperty("kampagne", getCidsBean());
             final MetaObjectNode metaObjectNode = new MetaObjectNode(
                     -1,
                     SessionManager.getSession().getUser().getDomain(),
-                    cb.getMetaObject(),
+                    copyBean.getMetaObject(),
                     null,
                     null,
                     true,
@@ -656,8 +724,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         } catch (Exception e) {
             LOG.error("Error while creating a new object", e);
         }
-    } //GEN-LAST:event_btnAddArt2ActionPerformed
-
+    }
     /**
      * DOCUMENT ME!
      *
@@ -688,6 +755,41 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         }
     }                                                                                 //GEN-LAST:event_btnRemoveArt2ActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jList1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList1MouseClicked
+        if (isEditable() && (evt.getClickCount() > 1)) {
+            selectMainSteckbrief();
+        }
+    }                                                                      //GEN-LAST:event_jList1MouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        selectMainSteckbrief();
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void selectMainSteckbrief() {
+        final CidsBean steckbrieftemplateBean = jList1.getSelectedValue();
+        if (steckbrieftemplateBean != null) {
+            try {
+                cidsBean.setProperty("haupt_steckbrieftemplate_id", steckbrieftemplateBean.getMetaObject().getId());
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
+            jList1.repaint();
+        }
+    }
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -698,6 +800,47 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
+            final DefaultListModel<CidsBean> model = new DefaultListModel<>();
+            for (final CidsBean steckbriefBean : cidsBean.getBeanCollectionProperty("n_steckbrieftemplates")) {
+                model.addElement(steckbriefBean);
+            }
+            jList1.setModel(model);
+            final Integer mainSteckbriefId = (Integer)cidsBean.getProperty("haupt_steckbrieftemplate_id");
+            CidsBean matchingSteckbriefBean = null;
+            if (mainSteckbriefId != null) {
+                for (final CidsBean steckbriefBean : cidsBean.getBeanCollectionProperty("n_steckbrieftemplates")) {
+                    if ((steckbriefBean != null) && (steckbriefBean.getMetaObject().getId() == mainSteckbriefId)) {
+                        matchingSteckbriefBean = steckbriefBean;
+                        break;
+                    }
+                }
+            }
+            try {
+                if (isEditable()) {
+                    if (cidsBean.getBeanCollectionProperty("n_steckbrieftemplates").isEmpty()
+                                || (matchingSteckbriefBean == null)) {
+                        cidsBean.setProperty("haupt_steckbrieftemplate_id", null);
+                    }
+                    if (cidsBean.getBeanCollectionProperty("n_steckbrieftemplates").size() == 1) {
+                        final CidsBean onlyOneSteckbriefBean = cidsBean.getBeanCollectionProperty(
+                                "n_steckbrieftemplates")
+                                    .iterator()
+                                    .next();
+                        cidsBean.setProperty(
+                            "haupt_steckbrieftemplate_id",
+                            onlyOneSteckbriefBean.getMetaObject().getId());
+                    }
+                }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            }
+
+            final PotenzialflaecheSearch search = new PotenzialflaecheSearch();
+            final PotenzialflaecheSearch.Configuration configuration = new PotenzialflaecheSearch.Configuration();
+            configuration.setKampagneId(cidsBean.getMetaObject().getId());
+            search.setConfiguration(configuration);
+            ((CidsSearchResultsList)lstFlaechen).setSearch(search);
+            ((CidsSearchResultsList)this.lstFlaechen).refresh();
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 cidsBean,
@@ -744,5 +887,76 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DroppedPfList extends CidsSearchResultsList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DroppedPfList object.
+         */
+        private DroppedPfList() {
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> origBeans) {
+            if (isEditable() && (origBeans != null) && (origBeans.size() == 1)) {
+                for (final CidsBean origPfBean : origBeans) {
+                    if (origPfBean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                                    "pf_potenzialflaeche")) {
+                        createAndGotoPotenzialflaeche(origPfBean);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class SteckbriefListCellRenderer extends DefaultListCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList<?> list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final Component component = super.getListCellRendererComponent(
+                    list,
+                    value,
+                    index,
+                    isSelected,
+                    cellHasFocus);
+            if ((component instanceof JLabel)) {
+                final JLabel label = (JLabel)component;
+                if (value instanceof CidsBean) {
+                    final CidsBean steackbriefBean = (CidsBean)value;
+                    final Integer mainSteckbriefId = (Integer)getCidsBean().getProperty("haupt_steckbrieftemplate_id");
+                    if ((mainSteckbriefId != null) && (steackbriefBean.getMetaObject().getId() == mainSteckbriefId)) {
+                        label.setText("<html><b>" + (String)steackbriefBean.getProperty("bezeichnung") + "</b></html>");
+                    } else {
+                        label.setText((String)steackbriefBean.getProperty("bezeichnung"));
+                    }
+                } else if (value == null) {
+                    label.setText(" ");
+                }
+            }
+            return component;
+        }
     }
 }

@@ -33,10 +33,6 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -448,7 +444,10 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
         final String kampagne = txtKampagne.getText().trim().isEmpty() ? null : txtKampagne.getText()
                     .trim();
 
-        return new PotenzialflaecheSearch(searchMode, nummer, kampagne, bezeichnung, searchGeometrie);
+        final PotenzialflaecheSearch.Configuration searchConfiguration = new PotenzialflaecheSearch.Configuration();
+        searchConfiguration.setBezeichnung(bezeichnung);
+        searchConfiguration.setNummer(nummer);
+        return new PotenzialflaecheSearch(searchMode, searchConfiguration, searchGeometrie);
     }
 
     /**
