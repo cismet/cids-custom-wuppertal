@@ -604,7 +604,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="11" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="H&#xf6;he:"/>
+                        <Property name="text" type="java.lang.String" value="H&#xf6;he [m]:"/>
                         <Property name="name" type="java.lang.String" value="lblHoehe" noResource="true"/>
                       </Properties>
                       <Constraints>
@@ -634,7 +634,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="11" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Umfang:"/>
+                        <Property name="text" type="java.lang.String" value="Umfang [cm]:"/>
                         <Property name="name" type="java.lang.String" value="lblUmfang" noResource="true"/>
                       </Properties>
                       <Constraints>
@@ -2221,9 +2221,7 @@
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Festsetzung">
-                    <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumSchadenPanel.jPanelFestsetzung.TabConstraints.tabTitle" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </Property>
+                    <Property name="tabTitle" type="java.lang.String" value="Festsetzung"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
@@ -2349,9 +2347,7 @@
                                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumSchadenPanel.lblFest.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                                </Property>
+                                <Property name="text" type="java.lang.String" value="Fest"/>
                                 <Property name="name" type="java.lang.String" value="lblFest" noResource="true"/>
                               </Properties>
                               <AuxValues>

@@ -129,7 +129,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         panFest.setLayout(new GridBagLayout());
 
         lblHoehe.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblHoehe, NbBundle.getMessage(BaumFestsetzungPanel.class, "BaumFestsetzungPanel.lblHoehe.text")); // NOI18N
+        Mnemonics.setLocalizedText(lblHoehe, "Höhe [m]:");
         lblHoehe.setName("lblHoehe"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -155,7 +155,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         panFest.add(txtHoeheF, gridBagConstraints);
 
         lblUmfang.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblUmfang, NbBundle.getMessage(BaumFestsetzungPanel.class, "BaumFestsetzungPanel.lblUmfang.text")); // NOI18N
+        Mnemonics.setLocalizedText(lblUmfang, "Umfang [cm]:");
         lblUmfang.setName("lblUmfang"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

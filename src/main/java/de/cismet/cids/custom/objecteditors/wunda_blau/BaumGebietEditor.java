@@ -12,9 +12,10 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.LightweightMetaObject;
+import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -45,8 +46,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
@@ -58,13 +57,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
-import de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -92,32 +88,26 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValues;
-import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
+import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Component;
-import java.awt.FlowLayout;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import java.text.Collator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.Locale;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.ComboPopup;
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingbinding.SwingBindings;
-import org.jdesktop.swingx.JXHyperlink;
-import org.openide.util.WeakListeners;
 /**
  * DOCUMENT ME!
  *
@@ -153,29 +143,29 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 }
         };   
     public static final String GEOMTYPE = "Point";
-    public static final int FOTO_WIDTH = 150;
-    public static final String STRASSENNAME_TOSTRING_TEMPLATE = "%s";
-    public static final String[] STRASSENNAME_TOSTRING_FIELDS = {
-            StrAdrStrasseLightweightSearch.Subject.NAME.toString()
-        };
-    public static final String STRASSENSCHLUESSEL_TOSTRING_TEMPLATE = "%s";
-    public static final String[] STRASSENSCHLUESSEL_TOSTRING_FIELDS = {
-            StrAdrStrasseLightweightSearch.Subject.SCHLUESSEL.toString()
+    public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
+    public static final String[] ADRESSE_TOSTRING_FIELDS = {
+            AdresseLightweightSearch.Subject.HNR.toString()
         };
 
     private static final Logger LOG = Logger.getLogger(BaumGebietEditor.class);
 
     public static final String FIELD__NAME = "name";                            // baum_gebiet
-    public static final String FIELD__STRASSE = "strasse";                      // baum_gebiet
+    public static final String FIELD__AZ = "aktenzeichen";                      // baum_gebiet
+    public static final String FIELD__STRASSE = "fk_strasse.strassenschluessel";// baum_gebiet
+    public static final String FIELD__HNR = "fk_adresse";                       // baum_gebiet
+    public static final String FIELD__HAUSNUMMER = "hausnummer";                // baum_adresse
     public static final String FIELD__ID = "id";                                // baum_gebiet
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_gebiet
     public static final String FIELD__MELDUNGEN = "n_meldungen";                // baum_gebiet
-    public static final String FIELD__DATUM= "datum";                           // baum_meldung
+    public static final String FIELD__DATUM = "datum";                          // baum_meldung
+    public static final String FIELD__STRASSE_NAME = "name";                    // strasse
+    public static final String FIELD__STRASSE_KEY = "strassenschluessel";       // strasse
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_gebiet_geombaum_gebiet
     public static final String TABLE_NAME = "baum_gebiet";
     public static final String TABLE_GEOM = "geom";
-    public static final String TABLE_STRASSE = "str_adr_strasse";
+    public static final String TABLE_ADRESSE = "adresse";
 
     public static final String BUNDLE_NOLOAD = "BaumGebietEditor.loadPictureWithUrl().noLoad";
     public static final String BUNDLE_NONAME = "BaumGebietEditor.prepareForSave().noName";
@@ -183,12 +173,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_NOSTREET = "BaumGebietEditor.prepareForSave().noStrasse";
     public static final String BUNDLE_NOGEOM = "BaumGebietEditor.prepareForSave().noGeom";
     public static final String BUNDLE_WRONGGEOM = "BaumGebietEditor.prepareForSave().wrongGeom";
+    public static final String BUNDLE_NOAZCREATE = "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().noCreateAz";
+    public static final String BUNDLE_AZQUESTION = "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().CreateAzQuest";
+    public static final String BUNDLE_AZWRITE = "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().CreateAzWrite";
     public static final String BUNDLE_PANE_PREFIX =
         "BaumGebietEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumGebietEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumGebietEditor.prepareForSave().JOptionPane.title";
-
+    
     private static final String TITLE_NEW_GEBIET = "ein neues Gebiet (mit Meldung) anlegen...";
     //~ Enums ------------------------------------------------------------------
 
@@ -208,32 +201,40 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private List<CidsBean> meldungBeans;
     private SwingWorker worker_name;
     private SwingWorker worker_versatz;
-    private final StrAdrStrasseLightweightSearch strassennameSearch = new StrAdrStrasseLightweightSearch(
-            StrAdrStrasseLightweightSearch.Subject.NAME,
-            STRASSENNAME_TOSTRING_TEMPLATE,
-            STRASSENNAME_TOSTRING_FIELDS);
-    private final StrAdrStrasseLightweightSearch strassenschluesselSearch = new StrAdrStrasseLightweightSearch(
-            StrAdrStrasseLightweightSearch.Subject.SCHLUESSEL,
-            STRASSENSCHLUESSEL_TOSTRING_TEMPLATE,
-            STRASSENSCHLUESSEL_TOSTRING_FIELDS);
+    
+    private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
+            AdresseLightweightSearch.Subject.HNR,
+            ADRESSE_TOSTRING_TEMPLATE,
+            ADRESSE_TOSTRING_FIELDS);
     
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
-    private boolean cbStrassenschluesselEnabled = true;
-    private boolean cbStrassennameEnabled = true;
-    private boolean comboboxesInited = false;
+    
+    private static final ComboBoxModel MUST_SET_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten bitte zuweisen......"});
+    private static final ComboBoxModel LOAD_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten werden geladen......"});
+    
+    private static final String[] STRASSE_COL_NAMES = new String[] { "Name", "Strassenschluessel"};
+    private static final String[] STRASSE_PROP_NAMES = new String[] {
+            FIELD__STRASSE_NAME,
+            FIELD__STRASSE_KEY
+        };
+    private static final Class[] STRASSE_PROP_TYPES = new Class[] {
+            String.class,
+            Integer.class
+        };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumMeldungPanel baumMeldungPanel;
     private JButton btnAddNewMeldung;
+    private JButton btnCreateAktenzeichen;
     private JButton btnMenAbortMeldung;
     private JButton btnMenOkMeldung;
     private JButton btnRemoveMeldung;
     private JComboBox cbGeom;
+    private FastBindableReferenceCombo cbHNr;
     private DefaultBindableReferenceCombo cbStatus;
-    private FastBindableReferenceCombo cbStrassenname;
-    private FastBindableReferenceCombo cbStrassenschluessel;
+    FastBindableReferenceCombo cbStrasse;
     private DefaultBindableDateChooser dcMeldung;
     private JDialog dlgAddMeldung;
     private Box.Filler filler3;
@@ -282,7 +283,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JTextArea taBemerkung;
     private JTextField txtAktenzeichen;
-    private JTextField txtHnr;
     private JTextField txtName;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -354,25 +354,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             });
         
         if(isEditor){
-            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbStrassenschluessel);
+            
+            
+            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
             {
-                final JList pop = ((ComboPopup)cbStrassenschluessel.getUI().getAccessibleChild(cbStrassenschluessel, 0))
+                final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0))
                             .getList();
-                final JTextField txt = (JTextField)cbStrassenschluessel.getEditor().getEditorComponent();
-                cbStrassenschluessel.addActionListener(new ActionListener() {
-
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                            final Object selectedValue = pop.getSelectedValue();
-                            txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
-                        }
-                    });
-            }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbStrassenname);
-            {
-                final JList pop = ((ComboPopup)cbStrassenname.getUI().getAccessibleChild(cbStrassenname, 0)).getList();
-                final JTextField txt = (JTextField)cbStrassenname.getEditor().getEditorComponent();
-                cbStrassenname.addActionListener(new ActionListener() {
+                final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
+                cbHNr.addActionListener(new ActionListener() {
 
                         @Override
                         public void actionPerformed(final ActionEvent e) {
@@ -390,7 +379,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         }
         setReadOnly();
-        initComboboxesStr();
+        initComboboxHnr();
     }
 
     /**
@@ -425,10 +414,18 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten = new JPanel();
         lblAktenzeichen = new JLabel();
         txtAktenzeichen = new JTextField();
+        lblGeom = new JLabel();
+        if (isEditor){
+            cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        }
         lblStrasse = new JLabel();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblHnr = new JLabel();
-        txtHnr = new JTextField();
+        cbHNr = new FastBindableReferenceCombo(
+            hnrSearch,
+            hnrSearch.getRepresentationPattern(),
+            hnrSearch.getRepresentationFields()
+        );
         lblName = new JLabel();
         txtName = new JTextField();
         panZusatz = new JPanel();
@@ -437,23 +434,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         panFiller = new JPanel();
-        lblGeom = new JLabel();
-        if (isEditor){
-            cbGeom = new DefaultCismapGeometryComboBoxEditor();
-        }
         sepStatus = new JSeparator();
         lblStatus = new JLabel();
         cbStatus = new DefaultBindableReferenceCombo() ;
-        cbStrassenname = new FastBindableReferenceCombo(
-            strassennameSearch,
-            strassennameSearch.getRepresentationPattern(),
-            strassennameSearch.getRepresentationFields()
-        );
-        cbStrassenschluessel = new FastBindableReferenceCombo(
-            strassenschluesselSearch,
-            strassenschluesselSearch.getRepresentationPattern(),
-            strassenschluesselSearch.getRepresentationFields()
-        );
+        cbStrasse = new FastBindableReferenceCombo();
+        btnCreateAktenzeichen = new JButton();
         panFillerUnten2 = new JPanel();
         jPanelMeldungen = new JPanel();
         panFillerUnten3 = new JPanel();
@@ -612,10 +597,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panGeometrie.add(panLage, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 5, 5);
         jPanelAllgemein.add(panGeometrie, gridBagConstraints);
 
@@ -639,12 +624,45 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtAktenzeichen, gridBagConstraints);
+
+        lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblGeom.setText("Geometrie:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblGeom, gridBagConstraints);
+
+        if (isEditor){
+            if (isEditor){
+                cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
+            }
+
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
+            bindingGroup.addBinding(binding);
+
+        }
+        if (isEditor){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 5;
+            gridBagConstraints.gridwidth = 4;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            panDaten.add(cbGeom, gridBagConstraints);
+        }
 
         lblStrasse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblStrasse.setText("Straße:");
@@ -659,7 +677,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDaten.add(filler3, gridBagConstraints);
@@ -675,25 +692,23 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHnr, gridBagConstraints);
 
-        txtHnr.setName(""); // NOI18N
+        cbHNr.setEnabled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(txtHnr, gridBagConstraints);
+        panDaten.add(cbHNr, gridBagConstraints);
 
         lblName.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblName.setText("Name:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -705,7 +720,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -717,7 +732,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panZusatz.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -731,7 +746,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -764,7 +779,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -788,49 +803,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         panDaten.add(panFiller, gridBagConstraints);
-
-        lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblGeom, gridBagConstraints);
-
-        if (isEditor){
-            if (isEditor){
-                cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
-            }
-
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
-            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
-            bindingGroup.addBinding(binding);
-
-        }
-        cbGeom.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbGeomActionPerformed(evt);
-            }
-        });
-        if (isEditor){
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 6;
-            gridBagConstraints.gridwidth = 4;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = GridBagConstraints.WEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-            panDaten.add(cbGeom, gridBagConstraints);
-        }
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -841,7 +818,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         lblStatus.setText("Status:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
@@ -856,7 +833,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -864,31 +841,42 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(cbStatus, gridBagConstraints);
 
-        cbStrassenname.addActionListener(new ActionListener() {
+        cbStrasse.setModel(new LoadModelCb());
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cbStrasse.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                cbStrassennameActionPerformed(evt);
+                cbStrasseActionPerformed(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(0, 0, 5, 5);
-        panDaten.add(cbStrassenname, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(cbStrasse, gridBagConstraints);
 
-        cbStrassenschluessel.addActionListener(new ActionListener() {
+        btnCreateAktenzeichen.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
+        btnCreateAktenzeichen.setToolTipText("Aktenzeichen automatisch generieren");
+        btnCreateAktenzeichen.setMaximumSize(new Dimension(66, 50));
+        btnCreateAktenzeichen.setMinimumSize(new Dimension(20, 19));
+        btnCreateAktenzeichen.setPreferredSize(new Dimension(33, 24));
+        btnCreateAktenzeichen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                cbStrassenschluesselActionPerformed(evt);
+                btnCreateAktenzeichenActionPerformed(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(0, 0, 5, 5);
-        panDaten.add(cbStrassenschluessel, gridBagConstraints);
-        cbStrassenschluessel.setVisible(isEditor);
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(btnCreateAktenzeichen, gridBagConstraints);
+        btnCreateAktenzeichen.setVisible(isEditor);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1249,57 +1237,55 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }//GEN-LAST:event_btnRemoveMeldungActionPerformed
 
-    private void cbStrassennameActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbStrassennameActionPerformed
-        if (comboboxesInited && cbStrassennameEnabled) {
-            synchronized (this) {
-                try {
-                    cbStrassennameEnabled = false;
-                    cbStrassenschluessel.setSelectedItem(cbStrassenname.getSelectedItem());
-                    cbStrassenschluesselActionPerformed(null);
-                    repaint();
-                } finally {
-                    cbStrassennameEnabled = true;
-                }
+    private void cbStrasseActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+        if (cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
+            cbHNr.setSelectedItem(null);
+            cbHNr.setEnabled(true);
+            refreshHnr();
+        }
+    }//GEN-LAST:event_cbStrasseActionPerformed
+
+    private void btnCreateAktenzeichenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAktenzeichenActionPerformed
+        if (this.cidsBean != null){
+            String aktenzeichen = "";
+            String hnr = "x";
+            if (this.cidsBean.getProperty(FIELD__HNR) != null) {
+                hnr = this.cidsBean.getProperty(FIELD__HNR).toString();
+            }
+            if (this.cidsBean.getProperty(FIELD__STRASSE) != null && !this.cidsBean.getProperty(FIELD__NAME).toString().isEmpty()){
+                aktenzeichen = this.cidsBean.getProperty(FIELD__STRASSE).toString()
+                        + "_" + hnr
+                        + "_" + this.cidsBean.getProperty(FIELD__NAME).toString();
+                if (this.cidsBean.getProperty(FIELD__AZ) != null) {
+                    final Object[] options = { "Ja, AZ überschreiben", "Abbrechen" };
+                    final int result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_AZQUESTION),
+                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_AZWRITE),
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+                if ((result == JOptionPane.CLOSED_OPTION) || (result == 1)) {
+                 return;
+                }          
+            }
+            try {
+                this.cidsBean.setProperty(FIELD__AZ, aktenzeichen);
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
+            } 
+                   
+            } else {
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOAZCREATE)
+                                + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE),
+                        JOptionPane.WARNING_MESSAGE);
             }
         }
-    }//GEN-LAST:event_cbStrassennameActionPerformed
-
-    private void cbStrassenschluesselActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbStrassenschluesselActionPerformed
-        if (comboboxesInited && cbStrassenschluesselEnabled) {
-            synchronized (this) {
-                try {
-                    cbStrassenschluesselEnabled = false;
-                    cbStrassenname.setSelectedItem(cbStrassenschluessel.getSelectedItem());
-                    cbStrassennameActionPerformed(null);
-                    repaint();
-                } finally {
-                    cbStrassenschluesselEnabled = true;
-                }
-            }
-        }
-        updateSelectedStrassenschluessel();
-    }//GEN-LAST:event_cbStrassenschluesselActionPerformed
-
-    private void cbGeomActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbGeomActionPerformed
-        if (isEditor) {
-            SwingUtilities.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        final Geometry geom = (Geometry)cidsBean.getProperty(FIELD__GEOREFERENZ__GEO_FIELD);
-                        new SwingWorker<Void, Void>() {
-
-                            @Override
-                            protected Void doInBackground() throws Exception {
-                                strassennameSearch.setGeom(geom);
-                                cbStrassenname.refreshModel();
-                                return null;
-                            }
-                        }.execute();
-                    }
-                });
-        }
-    }//GEN-LAST:event_cbGeomActionPerformed
+        
+    }//GEN-LAST:event_btnCreateAktenzeichenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1315,16 +1301,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         bindingGroup.bind();
     }
 
-    /**
-     * DOCUMENT ME!
-     */
- /*   private void doWithFotoUrl() {
-        final String foto = EmobConfProperties.getInstance().getFotoUrlRaeder().concat(txtFoto.getText());
-        // Worker Aufruf, grün/rot
-        checkUrl(foto, lblUrlCheck);
-        // Worker Aufruf, Foto laden
-        loadPictureWithUrl(foto, lblFotoAnzeigen);
-    }*/
+    
 
     /**
      * DOCUMENT ME!
@@ -1333,7 +1310,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         // Worker Aufruf, ob das Objekt schon existiert
         valueFromOtherTable(TABLE_NAME,
             " where "
-                    + FIELD__NAME
+                    + FIELD__AZ
                     + " ilike '"
                     + txtAktenzeichen.getText().trim()
                     + "' and "
@@ -1344,6 +1321,30 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             OtherTableCases.REDUNDANT_ATT_NAME);
     }
 
+    private void refreshHnr() { 
+        if (cidsBean != null){
+            String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
+            if (schluessel != null){
+
+                //hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));
+                
+                hnrSearch.setKeyId(Integer.parseInt(schluessel));
+
+                new SwingWorker<Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            cbHNr.refreshModel();
+
+                            return null;
+                        }
+                    }.execute();
+            }
+        }
+    }
+        
+    
+    
     @Override
     public boolean prepareForSave() {
         boolean save = true;
@@ -1450,79 +1451,23 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             if (meldungBeans != null && meldungBeans.size() > 0) {
                 lstMeldungen.setSelectedIndex(0);
             }
-            refreshStrassenComboboxes();
+            if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
+                cbHNr.setEnabled(true);
+                searchStreets();
+            }
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
         }
     }
     
-     private void refreshStrassenComboboxes() {
-        if (comboboxesInited && cidsBean != null) {
-            synchronized (this) {
-                cbStrassennameEnabled = false;
-                new SwingWorker<CidsBean, Void>() {
-
-                        @Override
-                        protected CidsBean doInBackground() throws Exception {
-                            final String strassenschluessel = (String)cidsBean.getProperty(FIELD__STRASSE);
-                            if (strassenschluessel == null) {
-                                return null;
-                            }
-
-                            final Geometry geom = (Geometry)cidsBean.getProperty(FIELD__GEOREFERENZ__GEO_FIELD);
-                            if (cidsBean != null) {
-                                strassennameSearch.setSortDistanceLimit(10);
-                                strassennameSearch.setGeom(geom);
-                            }
-                            cbStrassenname.refreshModel();
-                            for (int index = 0; index < cbStrassenname.getModel().getSize(); index++) {
-                                final Object element = cbStrassenname.getModel().getElementAt(index);
-                                if (element != null) {
-                                    if (strassenschluessel.equals(((LightweightMetaObject)element).toString())) {
-                                        return ((MetaObject)element).getBean();
-                                    }
-                                }
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                final CidsBean strasseBean = get();
-                                cbStrassenname.setSelectedItem(strasseBean);
-                                repaint();
-                            } catch (final InterruptedException | ExecutionException ex) {
-                                LOG.error(ex, ex);
-                            } finally {
-                                cbStrassennameEnabled = true;
-                            }
-                        }
-                    }.execute();
-            }
-        }
-    }
-     
-     private void updateSelectedStrassenschluessel() {
-        if (comboboxesInited && isEditor) {
-            final CidsBean selectedStrAdrAddresse = (CidsBean)cbStrassenschluessel.getSelectedItem();
-            try {
-                cidsBean.setProperty(
-                    FIELD__STRASSE,
-                    (selectedStrAdrAddresse != null) ? (String)selectedStrAdrAddresse.getProperty("strasse") : null);
-            } catch (final Exception ex) {
-                LOG.fatal(ex, ex);
-            }
-        }
-    }
+    
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(txtAktenzeichen);
-            RendererTools.makeReadOnly(txtHnr);
             RendererTools.makeReadOnly(taBemerkung);
             lblGeom.setVisible(isEditor);
         }
@@ -1552,8 +1497,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         //~ Instance fields ----------------------------------------------------
 
-        private String listPropertyName;
-        private Comparator beanComparator = new Comparator<CidsBean>() {
+        private final String listPropertyName;
+        private final Comparator beanComparator = new Comparator<CidsBean>() {
 
                 @Override
                 public int compare(final CidsBean o1, final CidsBean o2) {
@@ -1684,8 +1629,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         if (this.isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         }
-        cbStrassenschluesselEnabled = false;
-        cbStrassennameEnabled = false;
     }
     
     @Override
@@ -1781,7 +1724,44 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             worker_versatz.execute();
         }
     }
+    
+    private void searchStreets() {
+        if (getCidsBean() != null) {
+            new SwingWorker<Collection, Void>() {
 
+                    @Override
+                    protected Collection doInBackground() throws Exception {
+ /*
+                        if (cidsBean == null || cidsBean.getProperty(FIELD__STRASSE) == null) {
+                            cbStrasse.setModel(new MustSetModelCb());
+                            return null;
+                        }*/
+
+                        return setStrasseCb();
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final Collection colStreets = get();
+                            cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
+                            List<CidsBean> streetBeans = new ArrayList<>();
+                            /*if (cidsBean.getProperty(FIELD__STRASSE) != null){
+                                for (final CidsBean cb : colStreets.toArray().){
+                                    if(cb.getProperty(FIELD__STRASSE_KEY).toString().equals(cidsBean.getProperty(FIELD__STRASSE).toString())){
+                                       streetBeans.add(cb);
+                                       break;
+                                    }
+                                }
+                            }*/
+                            
+                        } catch (final InterruptedException | ExecutionException ex) {
+                            LOG.fatal(ex, ex);
+                        }
+                    }
+                }.execute();
+        }
+    }
         
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1831,19 +1811,21 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             return lastValid;
         }
     }
-    private void initComboboxesStr() {
+    private Collection setStrasseCb(){
+        final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty(FIELD__STRASSE);
+        final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
+        umlautCollator.setStrength(Collator.SECONDARY);
+        Collections.sort(cblStrassen, umlautCollator);
+        return cblStrassen;
+    }
+    
+    
+    private void initComboboxHnr() {
         new SwingWorker<Void, Void>() {
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    final MetaClass mcStrAdrStrasse = ClassCacheMultiple.getMetaClass(
-                            "WUNDA_BLAU",
-                            TABLE_STRASSE,
-                            getConnectionContext());
-                    cbStrassenschluessel.setMetaClass(mcStrAdrStrasse);
-                    cbStrassenschluessel.refreshModel();
-                    cbStrassenname.setMetaClass(mcStrAdrStrasse);
-                    cbStrassenname.refreshModel();
+                    cbHNr.refreshModel();
                     return null;
                 }
 
@@ -1851,13 +1833,37 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 protected void done() {
                     try {
                         get();
-                    } catch (final Exception ex) {
+                    } catch (final InterruptedException | ExecutionException ex) {
                         LOG.error(ex, ex);
                     }  finally {
-                        comboboxesInited = true;
-                        refreshStrassenComboboxes();
+                        refreshHnr();
                     }
                 }
             }.execute();
     }
+    
+   
+    class LoadModelCb extends DefaultComboBoxModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new LoadModelCb object.
+         */
+        public LoadModelCb() {
+            super(new String[] { "Die Daten werden geladen......"});
+        }
+    } 
+    
+    class MustSetModelCb extends DefaultComboBoxModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new MustSetModelCb object.
+         */
+        public MustSetModelCb() {
+            super(new String[] { "Die Daten bitte zuweisen......"});
+        }
     }
+}

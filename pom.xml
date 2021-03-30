@@ -116,11 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-<<<<<<< HEAD
-                <version>6.25-SNAPSHOT</version>
-=======
-                <version>7.0.2</version>
->>>>>>> origin/dev
+                <version>7.1-SNAPSHOT</version>
                 <type>jar</type>
             </dependency>
             

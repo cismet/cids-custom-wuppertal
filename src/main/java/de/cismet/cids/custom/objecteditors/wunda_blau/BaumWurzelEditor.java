@@ -112,6 +112,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panDaten;
     private JPanel panFillerUnten;
     private JPanel panFillerUnten1;
+    private JPanel panFillerUnten2;
     private JTextField txtName;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -176,6 +177,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
         lblName = new JLabel();
         txtName = new JTextField();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        panFillerUnten2 = new JPanel();
         panFillerUnten = new JPanel();
 
         panFillerUnten1.setName(""); // NOI18N
@@ -242,6 +244,27 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 0, 10);
         panContent.add(panDaten, gridBagConstraints);
+
+        panFillerUnten2.setName(""); // NOI18N
+        panFillerUnten2.setOpaque(false);
+
+        GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
+        panFillerUnten2.setLayout(panFillerUnten2Layout);
+        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        panContent.add(panFillerUnten2, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

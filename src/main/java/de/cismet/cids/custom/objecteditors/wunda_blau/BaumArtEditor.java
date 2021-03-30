@@ -198,7 +198,6 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
 
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
-        panFillerUnten1 = new JPanel();
         panName = new JPanel();
         lblName = new JLabel();
         lblNameBotanisch = new JLabel();
@@ -206,6 +205,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
         lblHauptart = new JLabel();
         cbHauptart = new DefaultBindableReferenceCombo() ;
         txtName = new JTextField();
+        panFillerUnten1 = new JPanel();
 
         setAutoscrolls(true);
         setMinimumSize(new Dimension(600, 646));
@@ -240,26 +240,6 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
         panContent.setOpaque(false);
         panContent.setPreferredSize(new Dimension(450, 961));
         panContent.setLayout(new GridBagLayout());
-
-        panFillerUnten1.setName(""); // NOI18N
-        panFillerUnten1.setOpaque(false);
-
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
-        panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        panContent.add(panFillerUnten1, gridBagConstraints);
 
         panName.setOpaque(false);
         panName.setLayout(new GridBagLayout());
@@ -340,6 +320,27 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(5, 5, 0, 5);
         panContent.add(panName, gridBagConstraints);
+
+        panFillerUnten1.setName(""); // NOI18N
+        panFillerUnten1.setOpaque(false);
+
+        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        panFillerUnten1.setLayout(panFillerUnten1Layout);
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        panContent.add(panFillerUnten1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

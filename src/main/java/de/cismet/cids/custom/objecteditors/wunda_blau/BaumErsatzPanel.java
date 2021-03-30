@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
@@ -20,6 +21,7 @@ import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumArtLightweightSearch;
 import org.apache.log4j.Logger;
 
 import java.awt.GridBagConstraints;
@@ -38,6 +40,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -78,6 +81,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingWorker;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -100,7 +104,17 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     //~ Static fields/initializers ---------------------------------------------
     private List<CidsBean> kontrolleBeans = new ArrayList<>();;
     private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
-    
+    private static final DefaultComboBoxModel NO_SELECTION_MODEL = new DefaultComboBoxModel(new Object[] {});
+    private static final MetaClass MC__ART;
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                BaumErsatzPanel.class.getSimpleName());
+        MC__ART = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "BAUM_ART",
+                connectionContext);
+    }
     
     public static final String FIELD__KONTROLLE = "n_kontrolle";                // baum_ersatz
     public static final String FIELD__DATE = "datum";                           // baum_kontrolle
@@ -120,6 +134,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_ersatz_geom
     
     public static final String TABLE_GEOM = "geom";
+    public static final String TABLE_SORTE = "baum_sorte";
     public static final String TABLE_NAME__KONTROLLE = "baum_kontrolle";
     
     private static final String[] KONTROLLE_COL_NAMES = new String[] { "Datum", "Bemerkung"};
@@ -152,12 +167,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             cbGeomErsatz = new DefaultCismapGeometryComboBoxEditor();
         }
         lblArt = new JLabel();
-        cbArtE = new DefaultBindableScrollableComboBox();
+        cbArtE = new DefaultBindableReferenceCombo(MC__ART, false, false);
         lblSorte = new JLabel();
         cbSorte = new FastBindableReferenceCombo(
-            "select s.id, a.name || ' (' || a.fk_hauptart || ')' as anzeige from baum_art a where order by a.name",
-            "%1$2s",
-            new String [] {"anzeige","fk_art"}) ;
+            sorteArtSearch,
+            sorteArtSearch.getRepresentationPattern(),
+            sorteArtSearch.getRepresentationFields()
+        );
         lblAnzahl = new JLabel();
         txtAnzahl = new JTextField();
         lblSelbst = new JLabel();
@@ -299,6 +315,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArtE, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cbArtE.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -308,7 +325,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         panErsatz.add(cbArtE, gridBagConstraints);
 
         lblSorte.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblSorte, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblSorte.text")); // NOI18N
+        Mnemonics.setLocalizedText(lblSorte, "Sorte:");
         lblSorte.setName("lblSorte"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -319,22 +336,17 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panErsatz.add(lblSorte, gridBagConstraints);
 
-        //((FastBindableReferenceCombo)cbSorte).setLocale(Locale.GERMAN);
-        ((FastBindableReferenceCombo)cbSorte).setSorted(false);
-        cbSorte.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbSorte.setEnabled(false);
         cbSorte.setName("cbSorte"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_sorte}"), cbSorte, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbSorte.addMouseListener(formListener);
-        cbSorte.addActionListener(formListener);
-        cbSorte.addPropertyChangeListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panErsatz.add(cbSorte, gridBagConstraints);
@@ -669,41 +681,17 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
     // Code for dispatching events from components to event handlers.
 
-    private class FormListener implements ActionListener, MouseListener, PropertyChangeListener {
+    private class FormListener implements ActionListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
-            if (evt.getSource() == cbSorte) {
-                BaumErsatzPanel.this.cbSorteActionPerformed(evt);
+            if (evt.getSource() == cbArtE) {
+                BaumErsatzPanel.this.cbArtEActionPerformed(evt);
             }
             else if (evt.getSource() == btnAddKont) {
                 BaumErsatzPanel.this.btnAddKontActionPerformed(evt);
             }
             else if (evt.getSource() == btnRemKont) {
                 BaumErsatzPanel.this.btnRemKontActionPerformed(evt);
-            }
-        }
-
-        public void mouseClicked(MouseEvent evt) {
-            if (evt.getSource() == cbSorte) {
-                BaumErsatzPanel.this.cbSorteMouseClicked(evt);
-            }
-        }
-
-        public void mouseEntered(MouseEvent evt) {
-        }
-
-        public void mouseExited(MouseEvent evt) {
-        }
-
-        public void mousePressed(MouseEvent evt) {
-        }
-
-        public void mouseReleased(MouseEvent evt) {
-        }
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getSource() == cbSorte) {
-                BaumErsatzPanel.this.cbSortePropertyChange(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
@@ -716,21 +704,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         TableUtils.removeObjectsFromTable(xtKont);
     }//GEN-LAST:event_btnRemKontActionPerformed
 
-    private void cbSorteMouseClicked(MouseEvent evt) {//GEN-FIRST:event_cbSorteMouseClicked
-        final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty("fk_strasse_id");
-        final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
-        umlautCollator.setStrength(Collator.SECONDARY);
-        Collections.sort(cblStrassen, umlautCollator);
-        cbSorte.setModel(new DefaultComboBoxModel(cblStrassen.toArray()));
-    }//GEN-LAST:event_cbSorteMouseClicked
-
-    private void cbSorteActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbSorteActionPerformed
-        
-    }//GEN-LAST:event_cbSorteActionPerformed
-
-    private void cbSortePropertyChange(PropertyChangeEvent evt) {//GEN-FIRST:event_cbSortePropertyChange
-        
-    }//GEN-LAST:event_cbSortePropertyChange
+    private void cbArtEActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbArtEActionPerformed
+        if (cidsBean != null && this.cidsBean.getProperty(FIELD__ART) != null){
+            cbSorte.setSelectedItem(null);
+            cbSorte.setEnabled(true);
+            refreshSorte();
+        }
+    }//GEN-LAST:event_cbArtEActionPerformed
 
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
@@ -758,14 +738,14 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 }
             }
         };
-    
+    private final BaumArtLightweightSearch sorteArtSearch;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JButton btnAddKont;
     JButton btnRemKont;
     JComboBox<String> cbArtE;
     JComboBox cbGeomErsatz;
-    JComboBox cbSorte;
+    FastBindableReferenceCombo cbSorte;
     JCheckBox chSelbst;
     DefaultBindableDateChooser dcBis;
     DefaultBindableDateChooser dcDatum;
@@ -820,6 +800,10 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
      */
     public BaumErsatzPanel(final BaumSchadenPanel parentPanel, final boolean editable) {
         this.isEditor = editable;
+        this.sorteArtSearch = new BaumArtLightweightSearch(
+                "%1$2s",
+                new String[] { "NAME" });
+        //cbSorte.setMetaClassFromTableName("WUNDA_BLAU", TABLE_SORTE);
         initComponents();
         if (isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
@@ -839,6 +823,10 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             final ConnectionContext connectionContext) {
         this.isEditor = editable;
         this.connectionContext = connectionContext;
+        this.sorteArtSearch = new BaumArtLightweightSearch(
+                "%1$2s",
+                new String[] { "NAME" });
+        cbSorte.setMetaClassFromTableName("WUNDA_BLAU", TABLE_SORTE);
         initComponents();
         if (isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
@@ -861,6 +849,22 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             800,
             600);
     }   
+    
+    private void refreshSorte() {
+        if (cidsBean != null){
+            sorteArtSearch.setArtId((Integer)cidsBean.getProperty("fk_art.id"));
+
+            new SwingWorker<Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        cbSorte.refreshModel();
+                        return null;
+                    }
+            }.execute();
+        }
+    }
+    
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
@@ -928,9 +932,19 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             });
         cbGeomErsatz.updateUI();
         if (isEditor && (this.cidsBean != null)) {
-                cidsBean.addPropertyChangeListener(changeListener);
+            cidsBean.addPropertyChangeListener(changeListener);
+            if(this.cidsBean.getProperty(FIELD__ART) != null){
+                cbSorte.setEnabled(true);
+            }
         }
         
+     /*   if (cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
+            if (cidsBean.getProperty(FIELD__ART) != null){
+                cbSorte.setEnabled(true);
+            }
+        } else {
+            cbSorte.setEnabled(false);
+        }*/
     }
     
     
