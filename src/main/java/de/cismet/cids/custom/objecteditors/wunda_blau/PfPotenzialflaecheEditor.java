@@ -3843,11 +3843,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                                 : PotenzialflaecheReportServerAction.Property.values()) {
                         if ((property != null)
                                     && (property.getValue()
-                                        instanceof PotenzialflaecheReportServerAction.SingleFieldReportProperty)) {
+                                        instanceof PotenzialflaecheReportServerAction.PathReportProperty)) {
                             final String propertyName = property.toString();
                             final String path =
-                                ((PotenzialflaecheReportServerAction.SingleFieldReportProperty)property.getValue())
-                                        .getPath();
+                                ((PotenzialflaecheReportServerAction.PathReportProperty)property.getValue()).getPath();
                             final MetaClass metaClass = getForeignMetaClass(path);
                             if (metaClass != null) {
                                 map.put(propertyName, metaClass);
