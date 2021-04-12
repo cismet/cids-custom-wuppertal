@@ -36,6 +36,7 @@ import de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.PotenzialflaecheSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -837,7 +838,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
             final PotenzialflaecheSearch search = new PotenzialflaecheSearch();
             final PotenzialflaecheSearch.Configuration configuration = new PotenzialflaecheSearch.Configuration();
-            configuration.setKampagneId(cidsBean.getMetaObject().getId());
+            configuration.addFilter(PotenzialflaecheReportServerAction.Property.KAMPAGNE, new MetaObjectNode(cidsBean));
             search.setConfiguration(configuration);
             ((CidsSearchResultsList)lstFlaechen).setSearch(search);
             ((CidsSearchResultsList)this.lstFlaechen).refresh();
