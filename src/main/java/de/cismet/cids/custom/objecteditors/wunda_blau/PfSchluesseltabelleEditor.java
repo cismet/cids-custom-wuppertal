@@ -194,6 +194,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         }
         jToggleButton2.setVisible(isEditable());
         jList1.setCellRenderer(new STCellRenderer());
+        jButton3.setVisible(isEditable());
     }
 
     /**
@@ -254,7 +255,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         add(filler3, gridBagConstraints);
 
@@ -979,7 +980,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         jToggleButton1.setVisible(isParentBean());
         jToggleButton2.setSelected(false);
         txtName2.setEnabled(false);
-        jButton3.setVisible(isParentBean());
+        jButton3.setVisible(isEditable() && isParentBean());
         jPanel6.setVisible(isParentBean());
 
         bindingGroup.unbind();
