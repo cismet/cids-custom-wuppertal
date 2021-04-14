@@ -23,6 +23,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.jdesktop.beansbinding.Converter;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -3052,7 +3054,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane7.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane7.setPreferredSize(new java.awt.Dimension(200, 80));
+        jScrollPane7.setPreferredSize(new java.awt.Dimension(200, 100));
 
         taNotwendigeMassnahme.setLineWrap(true);
         taNotwendigeMassnahme.setRows(3);
@@ -3387,6 +3389,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_wohneinheiten}"),
                 jFormattedTextField1,
                 org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setConverter(new IntegerToLongConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3677,8 +3680,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel24.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane10.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane10.setMinimumSize(new java.awt.Dimension(200, 60));
-        jScrollPane10.setPreferredSize(new java.awt.Dimension(200, 60));
+        jScrollPane10.setPreferredSize(new java.awt.Dimension(200, 80));
 
         taNotwendigeMassnahme1.setLineWrap(true);
         taNotwendigeMassnahme1.setRows(3);
@@ -4781,15 +4783,17 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                                                           : null;
 
         if (geometry != null) {
+            final Geometry bufferedGeom = geometry.buffer(-1);
+            bufferedGeom.setSRID(geometry.getSRID());
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
                 final CidsServerSearch search = searchLabelFieldPanel.getSearch();
                 if (search instanceof GeometrySearch) {
                     final GeometrySearch geometrySearch = (GeometrySearch)search;
-                    geometrySearch.setGeometry(geometry);
+                    geometrySearch.setGeometry(bufferedGeom);
                     searchLabelFieldPanel.refresh();
                 }
             }
-            ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(geometry);
+            ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(bufferedGeom);
             monSearchResultsList1.refresh();
         } else {
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
@@ -4882,6 +4886,32 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class IntegerToLongConverter extends Converter<Integer, Long> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Long convertForward(final Integer i) {
+            if (i == null) {
+                return null;
+            }
+            return i.longValue();
+        }
+
+        @Override
+        public Integer convertReverse(final Long l) {
+            if (l == null) {
+                return null;
+            }
+            return l.intValue();
         }
     }
 }
