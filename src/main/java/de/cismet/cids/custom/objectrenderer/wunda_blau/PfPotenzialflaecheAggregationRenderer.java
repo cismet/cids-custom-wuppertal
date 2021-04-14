@@ -14,15 +14,28 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.localserver.attribute.MemberAttributeInfo;
+import Sirius.server.middleware.types.MetaObjectNode;
+
 import com.google.common.collect.Lists;
 
 import java.awt.Color;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.CidsBeansTableModel;
+
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.search.QuerySearchResultsAction;
+
+import de.cismet.cids.server.actions.CsvExportServerAction;
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
@@ -30,6 +43,8 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -52,6 +67,78 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
 
     //~ Instance fields --------------------------------------------------------
 
+    private QuerySearchResultsAction csvAction = new QuerySearchResultsAction() {
+
+            @Override
+            public String getName() {
+                return "nach CSV exportieren";
+            }
+
+            @Override
+            public void doAction() {
+                final String title = cidsBeansTableActionPanel1.getMetaClass().getName();
+
+                if (DownloadManagerDialog.showAskingForUserTitle(
+                                StaticSwingTools.getParentFrame(PfPotenzialflaecheAggregationRenderer.this))) {
+                    final List<String> columnNames = new ArrayList<>(
+                            cidsBeansTableActionPanel1.getAttributeNames().size());
+                    final List<String> fields = new ArrayList<>(
+                            cidsBeansTableActionPanel1.getAttributeNames().size());
+                    for (final String attrKey
+                                : cidsBeansTableActionPanel1.getAttributesToDisplay().get(
+                                    cidsBeansTableActionPanel1.getMetaClass())) {
+                        final MemberAttributeInfo mai = (MemberAttributeInfo)cidsBeansTableActionPanel1
+                                    .getMetaClass().getMemberAttributeInfos().get(attrKey);
+                        columnNames.add(cidsBeansTableActionPanel1.getAttributeNames().get(attrKey));
+                        fields.add(mai.getFieldName());
+                    }
+
+                    final List<MetaObjectNode> mons = new ArrayList<>();
+                    for (final CidsBean cidsBean : cidsBeansTableActionPanel1.getCidsBeans()) {
+                        mons.add(new MetaObjectNode(cidsBean));
+                    }
+
+                    final ServerActionParameter[] params = new ServerActionParameter[] {
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.COLUMN_NAMES.toString(),
+                                columnNames),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.FIELDS.toString(),
+                                fields),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.MONS.toString(),
+                                mons),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.DATE_FORMAT.toString(),
+                                "dd.MM.yy"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.BOOLEAN_YES.toString(),
+                                "ja"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.BOOLEAN_NO.toString(),
+                                "nein"),
+                        };
+                    DownloadManager.instance()
+                            .add(
+                                new ByteArrayActionDownload(
+                                    "WUNDA_BLAU",
+                                    CsvExportServerAction.TASKNAME,
+                                    cidsBeansTableActionPanel1.getMetaClass().getTableName(),
+                                    params,
+                                    title,
+                                    DownloadManagerDialog.getInstance().getJobName(),
+                                    title,
+                                    ".csv",
+                                    ConnectionContext.createDeprecated()));
+                    final DownloadManagerDialog downloadManagerDialog = DownloadManagerDialog.getInstance();
+                    StaticSwingTools.showDialog(
+                        StaticSwingTools.getParentFrame(PfPotenzialflaecheAggregationRenderer.this),
+                        downloadManagerDialog,
+                        true);
+                }
+            }
+        };
+
     private Collection<CidsBean> cidsBeans = null;
 
     private ConnectionContext connectionContext;
@@ -61,6 +148,8 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private org.jdesktop.swingx.JXTable jXTable1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -80,16 +169,17 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        final java.awt.GridBagConstraints gridBagConstraints;
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jDialog1 = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
-        cidsBeansTableActionPanel1 = new de.cismet.cids.search.CidsBeansTableActionPanel(null, true);
+        cidsBeansTableActionPanel1 = new de.cismet.cids.search.CidsBeansTableActionPanel(Arrays.asList(csvAction),
+                true);
         jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jXTable1 = new org.jdesktop.swingx.JXTable();
 
-        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(
-                PfPotenzialflaecheAggregationRenderer.class,
-                "PfPotenzialflaecheAggregationRenderer.jDialog1.title")); // NOI18N
+        jDialog1.setTitle("Tabellen-Export");
         jDialog1.setModal(true);
 
         jPanel1.setOpaque(false);
@@ -100,6 +190,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(cidsBeansTableActionPanel1, gridBagConstraints);
 
         jDialog1.getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -119,7 +210,28 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                     jButton1ActionPerformed(evt);
                 }
             });
-        add(jButton1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(jButton1, gridBagConstraints);
+
+        jXTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null }
+                },
+                new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+        jScrollPane1.setViewportView(jXTable1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jScrollPane1, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -144,6 +256,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
             cidsBeansTableActionPanel1.setCidsBeans(Lists.newArrayList(cidsBeans));
 //            bindingGroup.bind();
         }
+        ((CidsBeansTableModel)jXTable1.getModel()).setCidsBeans(new ArrayList<>(cidsBeans));
     }
 
     @Override
@@ -164,6 +277,11 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         this.connectionContext = connectionContext;
 
         initComponents();
+        jXTable1.setModel(new CidsBeansTableModel(
+                new String[] { "nummer", "bezeichnung" },
+                new String[] { "Nummer", "Bezeichnung" },
+                new Class[] { String.class, String.class },
+                false));
 
         try {
             cidsBeansTableActionPanel1.setMetaClass(CidsBean.getMetaClassFromTableName(
@@ -173,6 +291,8 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
         }
+
+        jDialog1.pack();
     }
 
     @Override

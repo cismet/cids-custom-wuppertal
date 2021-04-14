@@ -176,6 +176,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlaeche;
     private javax.swing.JButton btnMassnahmen;
+    private javax.swing.JButton btnMassnahmen1;
     private javax.swing.JButton btnMenAbort4;
     private javax.swing.JButton btnMenAbort5;
     private javax.swing.JButton btnMenOk4;
@@ -187,6 +188,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbEntwicklungsaussichten;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbEntwicklungsaussichten1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbEntwicklungsaussichten2;
+    de.cismet.cids.editors.DefaultBindableReferenceCombo cbEntwicklungsaussichten3;
     private javax.swing.JComboBox<String> cbGeom;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbHandlungsdruck;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbHandlungsdruck1;
@@ -283,6 +285,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler73;
     private javax.swing.Box.Filler filler74;
     private javax.swing.Box.Filler filler75;
+    private javax.swing.Box.Filler filler76;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JButton jButton1;
@@ -310,6 +313,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
+    private javax.swing.JPanel jPanel24;
+    private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -318,6 +324,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -337,6 +344,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JLabel lblBeschreibungTitle;
     private javax.swing.JLabel lblBeschreibungTitle3;
     private javax.swing.JLabel lblBeschreibungTitle6;
+    private javax.swing.JLabel lblBeschreibungTitle7;
     private javax.swing.JLabel lblBezeichnung;
     private javax.swing.JLabel lblEntwicklungsausssichten;
     private javax.swing.JLabel lblEntwicklungsausssichten1;
@@ -344,6 +352,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JLabel lblEntwicklungsausssichten3;
     private javax.swing.JLabel lblEntwicklungsausssichten4;
     private javax.swing.JLabel lblEntwicklungsausssichten5;
+    private javax.swing.JLabel lblEntwicklungsausssichten6;
     private javax.swing.JLabel lblFlaechengroesse;
     private javax.swing.JLabel lblFlaechengroesseWert;
     private javax.swing.JLabel lblFlaechennutzung;
@@ -388,11 +397,14 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.tools.gui.RoundedPanel panAllgemein;
     private de.cismet.tools.gui.RoundedPanel panAllgemein3;
     private de.cismet.tools.gui.RoundedPanel panAllgemein6;
+    private de.cismet.tools.gui.RoundedPanel panAllgemein7;
     private javax.swing.JPanel panArtControls3;
     private javax.swing.JPanel panArtControls4;
+    private javax.swing.JPanel panArtControls5;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle3;
     private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle6;
+    private de.cismet.tools.gui.SemiRoundedPanel panBeschreibungTitle7;
     private de.cismet.tools.gui.RoundedPanel panBewertung1;
     private javax.swing.JPanel panDefinition;
     private javax.swing.JPanel panDetail;
@@ -425,6 +437,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JTextArea taFlaecheDialog;
     private javax.swing.JTextArea taMassnahmeDialog;
     private javax.swing.JTextArea taNotwendigeMassnahme;
+    private javax.swing.JTextArea taNotwendigeMassnahme1;
     private javax.swing.JTextField txtBezeichnung;
     private javax.swing.JEditorPane txtDefinition;
     private javax.swing.JTextField txtJahrNutzungsaufgabe;
@@ -960,6 +973,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 new java.awt.Dimension(0, 32767));
         panDetail = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
+        jPanel25 = new javax.swing.JPanel();
         panAllgemein3 = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle3 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBeschreibungTitle3 = new javax.swing.JLabel();
@@ -984,10 +998,18 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taNotwendigeMassnahme = new javax.swing.JTextArea();
         panArtControls4 = new javax.swing.JPanel();
         btnMassnahmen = new javax.swing.JButton();
+        jPanel26 = new javax.swing.JPanel();
         panBewertung1 = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle5 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle6 = new javax.swing.JLabel();
         panLageBody5 = new javax.swing.JPanel();
+        filler76 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
+        lblEntwicklungsausssichten6 = new javax.swing.JLabel();
+        cbEntwicklungsaussichten3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
         filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -1077,6 +1099,14 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0),
                 new java.awt.Dimension(200, 0));
+        panAllgemein7 = new de.cismet.tools.gui.RoundedPanel();
+        panBeschreibungTitle7 = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblBeschreibungTitle7 = new javax.swing.JLabel();
+        jPanel24 = new javax.swing.JPanel();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        taNotwendigeMassnahme1 = new javax.swing.JTextArea();
+        panArtControls5 = new javax.swing.JPanel();
+        btnMassnahmen1 = new javax.swing.JButton();
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
@@ -2821,6 +2851,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel15.setOpaque(false);
         jPanel15.setLayout(new java.awt.GridBagLayout());
 
+        jPanel25.setOpaque(false);
+        jPanel25.setLayout(new java.awt.GridBagLayout());
+
         panAllgemein3.setLayout(new java.awt.GridBagLayout());
 
         panBeschreibungTitle3.setBackground(java.awt.Color.darkGray);
@@ -2850,7 +2883,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jScrollPane15.setPreferredSize(new java.awt.Dimension(200, 80));
 
         taFlaeche.setLineWrap(true);
-        taFlaeche.setRows(10);
+        taFlaeche.setRows(15);
         taFlaeche.setWrapStyleWord(true);
         taFlaeche.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BESCHREIBUNG_FLAECHE.toString());
 
@@ -2987,13 +3020,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel15.add(panAllgemein3, gridBagConstraints);
+        jPanel25.add(panAllgemein3, gridBagConstraints);
 
         panAllgemein6.setLayout(new java.awt.GridBagLayout());
 
@@ -3020,7 +3052,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane7.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane7.setMinimumSize(new java.awt.Dimension(200, 80));
         jScrollPane7.setPreferredSize(new java.awt.Dimension(200, 80));
 
         taNotwendigeMassnahme.setLineWrap(true);
@@ -3095,13 +3126,20 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panAllgemein6.add(jPanel14, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel15.add(panAllgemein6, gridBagConstraints);
+        jPanel25.add(panAllgemein6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel15.add(jPanel25, gridBagConstraints);
+
+        jPanel26.setOpaque(false);
+        jPanel26.setLayout(new java.awt.GridBagLayout());
 
         panBewertung1.setLayout(new java.awt.GridBagLayout());
 
@@ -3127,6 +3165,38 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         panLageBody5.setOpaque(false);
         panLageBody5.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panLageBody5.add(filler76, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten6, "Kategorie:");
+        lblEntwicklungsausssichten6.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.KATEGORIE.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panLageBody5.add(lblEntwicklungsausssichten6, gridBagConstraints);
+
+        cbEntwicklungsaussichten3.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.POTENZIALART.toString());
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kategorie}"),
+                cbEntwicklungsaussichten3,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panLageBody5.add(cbEntwicklungsaussichten3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3574,15 +3644,128 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panBewertung1.add(panLageBody5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel15.add(panBewertung1, gridBagConstraints);
+        jPanel26.add(panBewertung1, gridBagConstraints);
+
+        panAllgemein7.setLayout(new java.awt.GridBagLayout());
+
+        panBeschreibungTitle7.setBackground(java.awt.Color.darkGray);
+        panBeschreibungTitle7.setLayout(new java.awt.GridBagLayout());
+
+        lblBeschreibungTitle7.setFont(lblBeschreibungTitle7.getFont());
+        lblBeschreibungTitle7.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibungTitle7, "Interne Hinweise");
+        lblBeschreibungTitle7.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.INTERNE_HINWEISE.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panBeschreibungTitle7.add(lblBeschreibungTitle7, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panAllgemein7.add(panBeschreibungTitle7, gridBagConstraints);
+
+        jPanel24.setOpaque(false);
+        jPanel24.setLayout(new java.awt.GridBagLayout());
+
+        jScrollPane10.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane10.setMinimumSize(new java.awt.Dimension(200, 60));
+        jScrollPane10.setPreferredSize(new java.awt.Dimension(200, 60));
+
+        taNotwendigeMassnahme1.setLineWrap(true);
+        taNotwendigeMassnahme1.setRows(3);
+        taNotwendigeMassnahme1.setWrapStyleWord(true);
+        taNotwendigeMassnahme1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.toString());
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interne_hinweise}"),
+                taNotwendigeMassnahme1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane10.setViewportView(taNotwendigeMassnahme1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel24.add(jScrollPane10, gridBagConstraints);
+
+        panArtControls5.setOpaque(false);
+        panArtControls5.setLayout(new java.awt.GridBagLayout());
+
+        btnMassnahmen1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
+        btnMassnahmen1.setBorderPainted(false);
+        btnMassnahmen1.setContentAreaFilled(false);
+        btnMassnahmen1.setMaximumSize(new java.awt.Dimension(32, 32));
+        btnMassnahmen1.setMinimumSize(new java.awt.Dimension(32, 32));
+        btnMassnahmen1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.toString());
+        btnMassnahmen1.setPreferredSize(new java.awt.Dimension(32, 32));
+        btnMassnahmen1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMassnahmen1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panArtControls5.add(btnMassnahmen1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel24.add(panArtControls5, gridBagConstraints);
+        panArtControls4.setVisible(isEditable());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
+        panAllgemein7.add(jPanel24, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel26.add(panAllgemein7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel15.add(jPanel26, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
@@ -3928,6 +4111,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                     + evt.getY()
                     - tooltipDialogPosition.getLocation().y);
     }                                                                        //GEN-LAST:event_jPanel23MouseDragged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMassnahmen1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmen1ActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_btnMassnahmen1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -4611,7 +4803,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     public void showNeu() {
-        ((CardLayout)getLayout()).show(this, "neu");
+        ((CardLayout)jPanel22.getLayout()).show(jPanel22, "neu");
     }
 
     /**
