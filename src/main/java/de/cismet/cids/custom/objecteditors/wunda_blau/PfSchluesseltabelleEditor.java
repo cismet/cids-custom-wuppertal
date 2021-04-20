@@ -118,6 +118,8 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JList<Object> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -133,6 +135,8 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblName1;
     private javax.swing.JLabel lblName2;
+    private javax.swing.JLabel lblName3;
+    private javax.swing.JLabel lblName4;
     private de.cismet.tools.gui.RoundedPanel panDetail;
     private de.cismet.tools.gui.RoundedPanel panDetail1;
     private de.cismet.tools.gui.RoundedPanel panDetail2;
@@ -183,11 +187,14 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         RendererTools.makeReadOnly(txtName1, !isEditable());
         RendererTools.makeReadOnly(txtName2, !isEditable());
         RendererTools.makeReadOnly(txtDefinition, !isEditable());
+        jCheckBox1.setEnabled(isEditable());
+        jCheckBox2.setEnabled(isEditable());
         if (!isEditable()) {
             RendererTools.makeReadOnly(jList1);
         }
         jToggleButton2.setVisible(isEditable());
         jList1.setCellRenderer(new STCellRenderer());
+        jButton3.setVisible(isEditable());
     }
 
     /**
@@ -211,6 +218,10 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         lblName2 = new javax.swing.JLabel();
         txtName2 = new javax.swing.JTextField();
         jToggleButton2 = new javax.swing.JToggleButton();
+        lblName3 = new javax.swing.JLabel();
+        lblName4 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         panDetail1 = new de.cismet.tools.gui.RoundedPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -244,7 +255,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         add(filler3, gridBagConstraints);
 
@@ -296,7 +307,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblName2, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -318,7 +329,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(txtName2, gridBagConstraints);
 
         jToggleButton2.setIcon(new javax.swing.ImageIcon(
@@ -346,15 +357,74 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel7.add(jToggleButton2, gridBagConstraints);
         jToggleButton1.setVisible(isEditable());
+
+        org.openide.awt.Mnemonics.setLocalizedText(lblName3, "Definitionen anzeigen:");
+        lblName3.setName(PotenzialflaecheReportServerAction.Property.BEZEICHNUNG.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        jPanel7.add(lblName3, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(lblName4, "Einträge im Editor erweiterbar:");
+        lblName4.setName(PotenzialflaecheReportServerAction.Property.BEZEICHNUNG.toString());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        jPanel7.add(lblName4, gridBagConstraints);
+
+        jCheckBox1.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.definition}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel7.add(jCheckBox1, gridBagConstraints);
+
+        jCheckBox2.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.erweiterbar}"),
+                jCheckBox2,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel7.add(jCheckBox2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
         panDetail2.add(jPanel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -910,7 +980,7 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         jToggleButton1.setVisible(isParentBean());
         jToggleButton2.setSelected(false);
         txtName2.setEnabled(false);
-        jButton3.setVisible(isParentBean());
+        jButton3.setVisible(isEditable() && isParentBean());
         jPanel6.setVisible(isParentBean());
 
         bindingGroup.unbind();
@@ -1000,23 +1070,25 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
     @Override
     public boolean prepareForSave() {
         final Set<String> errorMessages = new HashSet<>();
-        final Map<String, CidsBean> namesMap = new HashMap<>();
+        final Map<String, CidsBean> uniqueName = new HashMap<>();
         for (int index = 0; index < jList1.getModel().getSize(); index++) {
             final Object object = jList1.getModel().getElementAt(index);
             if ((object instanceof CidsBean)) {
-                final CidsBean cidsBean = (CidsBean)object;
-                final String name = (String)cidsBean.getProperty("name");
-                if ((name == null) || name.isEmpty()) {
-                    errorMessages.add("<li>Der Name der nicht leer sein.</li>");
-                } else if (namesMap.containsKey(name)) {
-                    errorMessages.add(String.format("<li>Der Name '%s' ist nicht eindeutig.</li>", name));
+                if (((CidsBean)object).getMetaObject().getStatus() != MetaObject.TO_DELETE) {
+                    final CidsBean cidsBean = (CidsBean)object;
+                    final String name = (String)cidsBean.getProperty("name");
+                    if ((name == null) || name.isEmpty()) {
+                        errorMessages.add("<li>Der Name der nicht leer sein.</li>");
+                    } else if (uniqueName.containsKey(name)) {
+                        errorMessages.add(String.format("<li>Der Name '%s' ist nicht eindeutig.</li>", name));
+                    }
+                    uniqueName.put(name, cidsBean);
                 }
-                namesMap.put(name, cidsBean);
             }
         }
         if (isParentBean() && errorMessages.isEmpty()) {
-            for (final String name : namesMap.keySet()) {
-                final CidsBean cidsBean = namesMap.get(name);
+            for (final String name : uniqueName.keySet()) {
+                final CidsBean cidsBean = uniqueName.get(name);
                 if (!cidsBean.equals(getCidsBean())) {
                     try {
                         cidsBean.persist(getConnectionContext());

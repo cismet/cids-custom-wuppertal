@@ -29,6 +29,8 @@ import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
+import java.util.Arrays;
+
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -36,6 +38,7 @@ import javax.swing.JPanel;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.PotenzialflaecheSearch;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -74,7 +77,8 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
 
     //~ Instance fields --------------------------------------------------------
 
-    private MetaClass metaClass;
+    private MetaClass metaClassFlaeche;
+    private MetaClass metaClassKampagne;
     private ImageIcon icon;
     private JPanel pnlSearchCancel;
     private GeoSearchButton btnGeoSearch;
@@ -88,21 +92,16 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
     private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblBezeichnung;
-    private javax.swing.JLabel lblFiller;
     private javax.swing.JLabel lblFiller5;
     private javax.swing.JLabel lblFiller6;
-    private javax.swing.JLabel lblKampagne;
-    private javax.swing.JLabel lblNummer;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlMessung;
     private javax.swing.JPanel pnlScrollPane;
     private javax.swing.JPanel pnlSearchMode;
+    private de.cismet.cids.custom.wunda_blau.search.PotenzialflaechenWindowSearchPanel
+        potenzialflaechenWindowSearchPanel1;
     private javax.swing.JRadioButton rbAll;
     private javax.swing.JRadioButton rbOne;
-    private javax.swing.JTextField txtBezeichnung;
-    private javax.swing.JTextField txtKampagne;
-    private javax.swing.JTextField txtNummer;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -119,7 +118,23 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         try {
+            metaClassFlaeche = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "pf_potenzialflaeche",
+                    getConnectionContext());
+            metaClassKampagne = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "pf_kampagne",
+                    getConnectionContext());
+
             initComponents();
+
+            potenzialflaechenWindowSearchPanel1.initWithConnectionContext(connectionContext);
+
+            potenzialflaechenWindowSearchPanel1.setFilters(Arrays.asList(
+                    new PotenzialflaecheSearch.FilterInfo(
+                        PotenzialflaecheReportServerAction.Property.BEZEICHNUNG,
+                        "")));
 
             pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
             final Dimension max = pnlSearchCancel.getMaximumSize();
@@ -136,28 +151,20 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
                     new Double(pre.getHeight() + 5).intValue()));
             pnlButtons.add(pnlSearchCancel);
 
-            metaClass = ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "pf_potenzialflaeche",
-                    getConnectionContext());
-
-            byte[] iconDataFromMetaclass = new byte[] {};
-
-            if (metaClass != null) {
-                iconDataFromMetaclass = metaClass.getIconData();
-            }
-
-            if (iconDataFromMetaclass.length > 0) {
-                LOG.info("Using icon from metaclass.");
-                icon = new ImageIcon(metaClass.getIconData());
-            } else {
-                LOG.warn("Metaclass icon is not set. Trying to load default icon.");
-                final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
-
-                if (urlToIcon != null) {
-                    icon = new ImageIcon(urlToIcon);
+            if (metaClassFlaeche != null) {
+                final byte[] iconDataFromMetaclass = metaClassFlaeche.getIconData();
+                if (iconDataFromMetaclass.length > 0) {
+                    LOG.info("Using icon from metaclass.");
+                    icon = new ImageIcon(metaClassFlaeche.getIconData());
                 } else {
-                    icon = new ImageIcon(new byte[] {});
+                    LOG.warn("Metaclass icon is not set. Trying to load default icon.");
+                    final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
+
+                    if (urlToIcon != null) {
+                        icon = new ImageIcon(urlToIcon);
+                    } else {
+                        icon = new ImageIcon(new byte[] {});
+                    }
                 }
             }
 
@@ -208,13 +215,8 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
         rbOne = new javax.swing.JRadioButton();
         lblFiller5 = new javax.swing.JLabel();
         pnlMessung = new javax.swing.JPanel();
-        lblBezeichnung = new javax.swing.JLabel();
-        txtBezeichnung = new javax.swing.JTextField();
-        lblNummer = new javax.swing.JLabel();
-        txtNummer = new javax.swing.JTextField();
-        lblKampagne = new javax.swing.JLabel();
-        txtKampagne = new javax.swing.JTextField();
-        lblFiller = new javax.swing.JLabel();
+        potenzialflaechenWindowSearchPanel1 =
+            new de.cismet.cids.custom.wunda_blau.search.PotenzialflaechenWindowSearchPanel();
         pnlButtons = new javax.swing.JPanel();
         cbMapSearch = new javax.swing.JCheckBox();
         lblFiller6 = new javax.swing.JLabel();
@@ -225,7 +227,10 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        pnlScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        pnlScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    PotenzialflaechenWindowSearch.class,
+                    "PotenzialflaechenWindowSearch.pnlScrollPane.border.title"))); // NOI18N
         pnlScrollPane.setLayout(new java.awt.GridBagLayout());
 
         pnlSearchMode.setLayout(new java.awt.GridBagLayout());
@@ -280,85 +285,16 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
         pnlScrollPane.add(pnlSearchMode, gridBagConstraints);
 
-        pnlMessung.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    PotenzialflaechenWindowSearch.class,
-                    "PotenzialflaechenWindowSearch.pnlMessung.border.title"))); // NOI18N
+        pnlMessung.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnlMessung.setLayout(new java.awt.GridBagLayout());
-
-        lblBezeichnung.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.lblBezeichnung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlMessung.add(lblBezeichnung, gridBagConstraints);
-
-        txtBezeichnung.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.txtBezeichnung.text")); // NOI18N
-        txtBezeichnung.setMinimumSize(new java.awt.Dimension(200, 29));
-        txtBezeichnung.setPreferredSize(new java.awt.Dimension(200, 29));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 20);
-        pnlMessung.add(txtBezeichnung, gridBagConstraints);
-
-        lblNummer.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.lblNummer.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlMessung.add(lblNummer, gridBagConstraints);
-
-        txtNummer.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.txtNummer.text")); // NOI18N
-        txtNummer.setMinimumSize(new java.awt.Dimension(200, 29));
-        txtNummer.setPreferredSize(new java.awt.Dimension(200, 29));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlMessung.add(txtNummer, gridBagConstraints);
-
-        lblKampagne.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.lblKampagne.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlMessung.add(lblKampagne, gridBagConstraints);
-
-        txtKampagne.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.txtKampagne.text")); // NOI18N
-        txtKampagne.setMinimumSize(new java.awt.Dimension(200, 29));
-        txtKampagne.setPreferredSize(new java.awt.Dimension(200, 29));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlMessung.add(txtKampagne, gridBagConstraints);
-
-        lblFiller.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.lblFiller.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        pnlMessung.add(lblFiller, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pnlMessung.add(potenzialflaechenWindowSearchPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -438,16 +374,10 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
         final PotenzialflaecheSearch.SearchMode searchMode = rbAll.isSelected() ? PotenzialflaecheSearch.SearchMode.AND
                                                                                 : PotenzialflaecheSearch.SearchMode.OR;
 
-        final String nummer = txtNummer.getText().trim().isEmpty() ? null : txtNummer.getText()
-                    .trim();
-        final String bezeichnung = txtBezeichnung.getText().trim().isEmpty() ? null : txtBezeichnung.getText().trim();
-        final String kampagne = txtKampagne.getText().trim().isEmpty() ? null : txtKampagne.getText()
-                    .trim();
-
         final PotenzialflaecheSearch.Configuration searchConfiguration = new PotenzialflaecheSearch.Configuration();
-        searchConfiguration.setBezeichnung(bezeichnung);
-        searchConfiguration.setNummer(nummer);
-        return new PotenzialflaecheSearch(searchMode, searchConfiguration, searchGeometrie);
+        searchConfiguration.getFilters().addAll(potenzialflaechenWindowSearchPanel1.getFilters());
+
+        return new PotenzialflaecheSearch(searchMode, searchConfiguration, transformedBoundingBox);
     }
 
     /**
