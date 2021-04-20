@@ -14,6 +14,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import com.vividsolutions.jts.geom.Geometry;
 
 import com.vividsolutions.jts.geom.Point;
 
@@ -102,6 +103,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String TITLE_NEW_STANDORT = "einen neuen Messpunkt anlegen...";
+    public static final String GEOMTYPE = "Point";
     private static final Logger LOG = Logger.getLogger(No2StandortEditor.class);
     public static final int FOTO_WIDTH = 150;
 
@@ -121,6 +123,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
     public static final String BUNDLE_WRONGVALUEMP = "No2StandortEditor.prepareForSave().wrongValueMp";
     public static final String BUNDLE_NOSTREET = "No2StandortEditor.prepareForSave().noStrasse";
     public static final String BUNDLE_NOGEOM = "No2StandortEditor.prepareForSave().noGeom";
+    public static final String BUNDLE_WRONGGEOM = "No2StandortEditor.prepareForSave().wrongGeom";
     public static final String BUNDLE_WRONGVALUE = "No2StandortEditor.prepareForSave().wrongValueH";
     public static final String BUNDLE_NOVON = "No2StandortEditor.prepareForSave().noVon";
     public static final String BUNDLE_VONBIS = "No2StandortEditor.prepareForSave().vonBis";
@@ -795,6 +798,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(No2StandortEditor.class, BUNDLE_NOGEOM));
+            }else {
+                final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
+                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                    LOG.warn("Wrong geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(No2StandortEditor.class, BUNDLE_WRONGGEOM));
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);

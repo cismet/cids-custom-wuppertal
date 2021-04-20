@@ -141,6 +141,8 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             "No2MessungEditor.prepareForSave().twiceLocation";
     public static final String BUNDLE_NOVALUE = 
             "No2MessungEditor.prepareForSave().noValue";
+    public static final String BUNDLE_WRONGVALUE = 
+            "No2MessungEditor.prepareForSave().wrongValue";
     public static final String BUNDLE_VONBIS = 
             "No2MessungEditor.prepareForSave().VonBis";
     public static final String BUNDLE_VONBISLOST = 
@@ -968,6 +970,11 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                     errorMessage.append(NbBundle.getMessage(No2MessungEditor.class, BUNDLE_NOLOCATION));
                     break;
                 }
+                case 4: {
+                    LOG.warn("Wrong value specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(No2MessungEditor.class, BUNDLE_WRONGVALUE));
+                    break;
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Error in Tabele.", ex);
@@ -1059,6 +1066,9 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                     if ((null == measureBean.getProperty(FIELD__WERT))
                                 || "".equals(measureBean.getProperty(FIELD__WERT).toString())) {
                         return 2;
+                    }
+                    if ((int)measureBean.getProperty(FIELD__WERT)< 0 && (int)measureBean.getProperty(FIELD__WERT) != -9999){
+                        return 4;
                     }
                     if ((null == measureBean.getProperty(FIELD__STANDORT))
                                 || "".equals(measureBean.getProperty(FIELD__STANDORT).toString())) {
