@@ -15,7 +15,9 @@ package de.cismet.cids.custom.utils;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -38,7 +40,8 @@ public class CidsBeansTableModel extends AbstractTableModel {
     private final Class[] columnClasses;
     private final String[] columnNames;
     private final String[] columnProperties;
-    private final Boolean[] columnEditable;
+    private final Boolean[] columnEditables;
+    private final Set<Integer> selectedRowIndices;
 
     private final Boolean allColumnsEditable;
     private final Boolean allRowsEditable;
@@ -58,7 +61,22 @@ public class CidsBeansTableModel extends AbstractTableModel {
     public CidsBeansTableModel(final String[] columnProperties,
             final String[] columnNames,
             final Class[] columnClasses) {
-        this(columnProperties, columnNames, columnClasses, false);
+        this(columnProperties, columnNames, columnClasses, false, false);
+    }
+
+    /**
+     * Creates a new CidsBeansTableModel object.
+     *
+     * @param  columnProperties  DOCUMENT ME!
+     * @param  columnNames       DOCUMENT ME!
+     * @param  columnClasses     DOCUMENT ME!
+     * @param  rowsSelectable    DOCUMENT ME!
+     */
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses,
+            final boolean rowsSelectable) {
+        this(columnProperties, columnNames, columnClasses, false, rowsSelectable);
     }
 
     /**
@@ -73,22 +91,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
             final String[] columnNames,
             final Class[] columnClasses,
             final Boolean[] columnEditable) {
-        this(columnProperties, columnNames, columnClasses, columnEditable, true);
-    }
-
-    /**
-     * Creates a new CidsBeansTableModel object.
-     *
-     * @param  columnProperties    DOCUMENT ME!
-     * @param  columnNames         DOCUMENT ME!
-     * @param  columnClasses       DOCUMENT ME!
-     * @param  allColumnsEditable  DOCUMENT ME!
-     */
-    public CidsBeansTableModel(final String[] columnProperties,
-            final String[] columnNames,
-            final Class[] columnClasses,
-            final boolean allColumnsEditable) {
-        this(columnProperties, columnNames, columnClasses, allColumnsEditable, true);
+        this(columnProperties, columnNames, columnClasses, columnEditable, true, false);
     }
 
     /**
@@ -98,20 +101,58 @@ public class CidsBeansTableModel extends AbstractTableModel {
      * @param  columnNames       DOCUMENT ME!
      * @param  columnClasses     DOCUMENT ME!
      * @param  columnEditable    DOCUMENT ME!
-     * @param  allRowsEditable   DOCUMENT ME!
+     * @param  rowsSelectable    DOCUMENT ME!
      */
     public CidsBeansTableModel(final String[] columnProperties,
             final String[] columnNames,
             final Class[] columnClasses,
             final Boolean[] columnEditable,
-            final boolean allRowsEditable) {
+            final boolean rowsSelectable) {
+        this(columnProperties, columnNames, columnClasses, columnEditable, true, rowsSelectable);
+    }
+
+    /**
+     * Creates a new CidsBeansTableModel object.
+     *
+     * @param  columnProperties    DOCUMENT ME!
+     * @param  columnNames         DOCUMENT ME!
+     * @param  columnClasses       DOCUMENT ME!
+     * @param  allColumnsEditable  DOCUMENT ME!
+     * @param  rowsSelectable      DOCUMENT ME!
+     */
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses,
+            final boolean allColumnsEditable,
+            final boolean rowsSelectable) {
+        this(columnProperties, columnNames, columnClasses, allColumnsEditable, true, rowsSelectable);
+    }
+
+    /**
+     * Creates a new CidsBeansTableModel object.
+     *
+     * @param  columnProperties  DOCUMENT ME!
+     * @param  columnNames       DOCUMENT ME!
+     * @param  columnClasses     DOCUMENT ME!
+     * @param  columnEditables   DOCUMENT ME!
+     * @param  allRowsEditable   DOCUMENT ME!
+     * @param  rowsSelectable    DOCUMENT ME!
+     */
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses,
+            final Boolean[] columnEditables,
+            final boolean allRowsEditable,
+            final boolean rowsSelectable) {
         this.columnProperties = columnProperties;
         this.columnNames = columnNames;
         this.columnClasses = columnClasses;
-        this.columnEditable = columnEditable;
+        this.columnEditables = columnEditables;
         this.allColumnsEditable = null;
         this.allRowsEditable = allRowsEditable;
+        selectedRowIndices = rowsSelectable ? new HashSet<Integer>() : null;
     }
+
     /**
      * Creates a new CidsBeansTableModel object.
      *
@@ -120,18 +161,21 @@ public class CidsBeansTableModel extends AbstractTableModel {
      * @param  columnClasses       DOCUMENT ME!
      * @param  allColumnsEditable  DOCUMENT ME!
      * @param  allRowsEditable     DOCUMENT ME!
+     * @param  rowsSelectable      DOCUMENT ME!
      */
     public CidsBeansTableModel(final String[] columnProperties,
             final String[] columnNames,
             final Class[] columnClasses,
             final boolean allColumnsEditable,
-            final boolean allRowsEditable) {
+            final boolean allRowsEditable,
+            final boolean rowsSelectable) {
         this.columnProperties = columnProperties;
         this.columnNames = columnNames;
         this.columnClasses = columnClasses;
-        this.columnEditable = null;
+        this.columnEditables = null;
         this.allColumnsEditable = allColumnsEditable;
         this.allRowsEditable = allRowsEditable;
+        selectedRowIndices = rowsSelectable ? new HashSet<Integer>() : null;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -146,16 +190,37 @@ public class CidsBeansTableModel extends AbstractTableModel {
     /**
      * DOCUMENT ME!
      *
-     * @param   row  DOCUMENT ME!
+     * @param   columnIndex  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    final String getColumnProperty(final int row) {
-        if ((row < 0) || (columnProperties == null) || (row >= columnProperties.length)) {
+    public boolean isColumnWithinBounds(final int columnIndex) {
+        return (columnProperties != null) && (columnIndex >= 0) && (columnIndex < getColumnCount());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   rowIndex  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isRowWithinBounds(final int rowIndex) {
+        return (rowIndex >= 0) && (rowIndex < getRowCount());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   columnIndex  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getColumnProperty(final int columnIndex) {
+        if ((columnIndex == 0) && isRowsSelectable()) {
             return null;
-        } else {
-            return columnProperties[row];
         }
+        return isColumnWithinBounds(columnIndex) ? columnProperties[columnIndex - (isRowsSelectable() ? 1 : 0)] : null;
     }
 
     /**
@@ -209,6 +274,15 @@ public class CidsBeansTableModel extends AbstractTableModel {
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isRowsSelectable() {
+        return selectedRowIndices != null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  cidsBean  DOCUMENT ME!
      */
     public void add(final CidsBean cidsBean) {
@@ -237,17 +311,15 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(final int columnIndex) {
-        if ((columnIndex < 0) || (columnIndex >= columnNames.length)) {
-            return null;
+        if ((columnIndex == 0) && isRowsSelectable()) {
+            return " ";
         }
-        return columnNames[columnIndex];
+        return isColumnWithinBounds(columnIndex) ? columnNames[columnIndex - (isRowsSelectable() ? 1 : 0)] : null;
     }
 
     @Override
     public boolean isCellEditable(final int rowIndex, final int columnIndex) {
-        if ((columnIndex < 0) || (columnProperties == null) || (columnIndex >= columnProperties.length)
-                    || (rowIndex < 0)
-                    || (rowIndex >= cidsBeans.size())) {
+        if (!isColumnWithinBounds(columnIndex) || !isRowWithinBounds(rowIndex)) {
             return false; // out of range
         } else if (Boolean.TRUE.equals(allColumnsEditable) && Boolean.TRUE.equals(allRowsEditable)) {
             return true;
@@ -255,8 +327,11 @@ public class CidsBeansTableModel extends AbstractTableModel {
             return false;
         }
 
+        if ((columnIndex == 0) && isRowsSelectable()) {
+            return true;
+        }
         final boolean columnCondition = Boolean.TRUE.equals(allColumnsEditable)
-                    || ((columnEditable != null) && Boolean.TRUE.equals(columnEditable[columnIndex]));
+                    || ((columnEditables != null) && Boolean.TRUE.equals(columnEditables[columnIndex]));
         final boolean rowCondition = Boolean.TRUE.equals(allRowsEditable) || editableRowIndices.contains(rowIndex);
 
         if (columnCondition && rowCondition) {
@@ -277,7 +352,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
         if (columnProperties == null) {
             return -1;
         }
-        return columnProperties.length;
+        return columnProperties.length + (isRowsSelectable() ? 1 : 0);
     }
 
     /**
@@ -288,21 +363,31 @@ public class CidsBeansTableModel extends AbstractTableModel {
      * @return  DOCUMENT ME!
      */
     public CidsBean getCidsBean(final int rowIndex) {
-        return cidsBeans.get(rowIndex);
+        return isRowWithinBounds(rowIndex) ? cidsBeans.get(rowIndex) : null;
     }
 
     @Override
     public Object getValueAt(final int rowIndex, final int columnIndex) {
-        if ((columnIndex < 0) || (columnProperties == null) || (columnIndex >= columnProperties.length)) {
+        if (!isRowWithinBounds(rowIndex) || !isColumnWithinBounds(columnIndex)) {
             return null;
         }
-        final CidsBean cidsBean = getCidsBean(rowIndex);
+        if ((columnIndex == 0) && isRowsSelectable()) {
+            return selectedRowIndices.contains(rowIndex);
+        }
 
-        if (cidsBean != null) {
-            return cidsBean.getProperty(columnProperties[columnIndex]);
-        } else {
-            return null;
-        }
+        final CidsBean cidsBean = getCidsBean(rowIndex);
+        final String columnProperty = getColumnProperty(columnIndex);
+
+        return ((cidsBean != null) && (columnProperty != null)) ? cidsBean.getProperty(columnProperty) : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Set<Integer> getSelectedRowIndices() {
+        return selectedRowIndices;
     }
 
     @Override
@@ -311,18 +396,30 @@ public class CidsBeansTableModel extends AbstractTableModel {
         if (cidsBean == null) {
             return;
         }
-        if ((columnIndex < 0) || (columnProperties == null) || (columnIndex >= columnProperties.length)) {
-            return;
-        }
         try {
-            final Object convertedValue;
-            if ((value instanceof java.util.Date) && (columnClasses != null)
-                        && java.sql.Date.class.equals(columnClasses[columnIndex])) {
-                convertedValue = new java.sql.Date(((java.util.Date)value).getTime());
-            } else {
-                convertedValue = value;
+            if (isColumnWithinBounds(columnIndex)) {
+                if ((columnIndex == 0) && isRowsSelectable()) {
+                    final Boolean selected = (Boolean)value;
+                    if (selected) {
+                        selectedRowIndices.add(rowIndex);
+                    } else if (selectedRowIndices.contains(rowIndex)) {
+                        selectedRowIndices.remove(rowIndex);
+                    }
+                } else {
+                    final Object convertedValue;
+                    final String columnProperty = getColumnProperty(columnIndex);
+                    if (columnProperty != null) {
+                        final Class columnClass = getColumnClass(columnIndex);
+                        if ((value instanceof java.util.Date) && (columnClass != null)
+                                    && java.sql.Date.class.equals(columnClass)) {
+                            convertedValue = new java.sql.Date(((java.util.Date)value).getTime());
+                        } else {
+                            convertedValue = value;
+                        }
+                        cidsBean.setProperty(columnProperty, convertedValue);
+                    }
+                }
             }
-            cidsBean.setProperty(columnProperties[columnIndex], convertedValue);
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -337,9 +434,9 @@ public class CidsBeansTableModel extends AbstractTableModel {
      */
     @Override
     public Class<?> getColumnClass(final int columnIndex) {
-        if ((columnIndex < 0) || (columnIndex >= columnClasses.length)) {
-            return null;
+        if ((columnIndex == 0) && isRowsSelectable()) {
+            return Boolean.class;
         }
-        return columnClasses[columnIndex];
+        return isColumnWithinBounds(columnIndex) ? columnClasses[columnIndex - (isRowsSelectable() ? 1 : 0)] : null;
     }
 }
