@@ -23,6 +23,7 @@ import java.awt.CardLayout;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -147,13 +148,23 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
 
         defaultBindableLabelsPanel1.initWithConnectionContext(connectionContext);
 
+        final List<PotenzialflaecheReportServerAction.Property> props = new ArrayList<>();
         for (final PotenzialflaecheReportServerAction.Property prop
                     : PotenzialflaecheReportServerAction.Property.values()) {
             if (prop.getValue() instanceof PotenzialflaecheReportServerAction.PathReportProperty) {
-                final PotenzialflaecheReportServerAction.PathReportProperty value =
-                    (PotenzialflaecheReportServerAction.PathReportProperty)prop.getValue();
-                ((DefaultComboBoxModel)jComboBox1.getModel()).addElement(prop);
+                props.add(prop);
             }
+        }
+        props.sort(new Comparator<PotenzialflaecheReportServerAction.Property>() {
+
+                @Override
+                public int compare(final PotenzialflaecheReportServerAction.Property o1,
+                        final PotenzialflaecheReportServerAction.Property o2) {
+                    return o1.toString().compareTo(o2.toString());
+                }
+            });
+        for (final PotenzialflaecheReportServerAction.Property prop : props) {
+            ((DefaultComboBoxModel)jComboBox1.getModel()).addElement(prop);
         }
     }
 
