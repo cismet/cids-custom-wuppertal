@@ -12,20 +12,37 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.localserver.attribute.MemberAttributeInfo;
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.google.common.collect.Lists;
 
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.SwingWorker;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
@@ -147,7 +164,9 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     private de.cismet.cids.search.CidsBeansTableActionPanel cidsBeansTableActionPanel1;
     private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXTable jXTable1;
     // End of variables declaration//GEN-END:variables
@@ -175,14 +194,16 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         jPanel1 = new javax.swing.JPanel();
         cidsBeansTableActionPanel1 = new de.cismet.cids.search.CidsBeansTableActionPanel(Arrays.asList(csvAction),
                 true);
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jXTable1 = new org.jdesktop.swingx.JXTable();
 
         jDialog1.setTitle("Tabellen-Export");
         jDialog1.setModal(true);
+        jDialog1.getContentPane().setLayout(new java.awt.CardLayout());
 
-        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         cidsBeansTableActionPanel1.setOpaque(false);
@@ -193,7 +214,18 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(cidsBeansTableActionPanel1, gridBagConstraints);
 
-        jDialog1.getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jDialog1.getContentPane().add(jPanel1, "exporter");
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheAggregationRenderer.class,
+                "PfPotenzialflaecheAggregationRenderer.jLabel1.text")); // NOI18N
+        jPanel2.add(jLabel1, new java.awt.GridBagConstraints());
+
+        jDialog1.getContentPane().add(jPanel2, "loader");
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -217,15 +249,10 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         add(jButton1, gridBagConstraints);
 
-        jXTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                    { null, null, null, null },
-                    { null, null, null, null },
-                    { null, null, null, null },
-                    { null, null, null, null }
-                },
-                new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+        jXTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        jXTable1.setSortable(false);
         jScrollPane1.setViewportView(jXTable1);
+        jXTable1.getTableHeader().setEnabled(false);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -240,8 +267,46 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
      * @param  evt  DOCUMENT ME!
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        StaticSwingTools.showDialog(jDialog1);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+        if (cidsBeans != null) {
+            ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(), "loader");
+            new SwingWorker<List<CidsBean>, Void>() {
+
+                    @Override
+                    protected List<CidsBean> doInBackground() throws Exception {
+                        final List<CidsBean> viewBeans = new ArrayList<>();
+                        for (final Integer rowIndex
+                                    : ((CidsBeansTableModel)jXTable1.getModel()).getSelectedRowIndices()) {
+                            final CidsBean cidsBean = ((CidsBeansTableModel)jXTable1.getModel()).getCidsBean(rowIndex);
+                            if (cidsBean != null) {
+                                final MetaObject mo = cidsBean.getMetaObject();
+                                final MetaObject viewMo = SessionManager.getConnection()
+                                            .getMetaObject(SessionManager.getSession().getUser(),
+                                                mo.getId(),
+                                                cidsBeansTableActionPanel1.getMetaClass().getId(),
+                                                cidsBeansTableActionPanel1.getMetaClass().getDomain(),
+                                                getConnectionContext());
+                                if (viewMo != null) {
+                                    viewBeans.add(viewMo.getBean());
+                                }
+                            }
+                        }
+                        return viewBeans;
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            cidsBeansTableActionPanel1.setCidsBeans(get());
+                            ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(),
+                                "exporter");
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                    }
+                }.execute();
+            StaticSwingTools.showDialog(this, jDialog1, true);
+        }
+    } //GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
@@ -253,7 +318,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
 //        bindingGroup.unbind();
         this.cidsBeans = cidsBeans;
         if (cidsBeans != null) {
-            cidsBeansTableActionPanel1.setCidsBeans(Lists.newArrayList(cidsBeans));
+            ((CidsBeansTableModel)jXTable1.getModel()).setCidsBeans(Lists.newArrayList(cidsBeans));
 //            bindingGroup.bind();
         }
         ((CidsBeansTableModel)jXTable1.getModel()).setCidsBeans(new ArrayList<>(cidsBeans));
@@ -281,22 +346,127 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                 new String[] { "nummer", "bezeichnung" },
                 new String[] { "Nummer", "Bezeichnung" },
                 new Class[] { String.class, String.class },
-                false));
+                false,
+                true));
+        jXTable1.getColumnModel().getColumn(0).setMinWidth(25);
+        jXTable1.getColumnModel().getColumn(0).setPreferredWidth(25);
+        jXTable1.getColumnModel().getColumn(0).setMaxWidth(25);
+
+        final CheckBoxHeader cbh = new CheckBoxHeader();
+        cbh.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    for (int i = 0; i < jXTable1.getRowCount(); i++) {
+                        jXTable1.setValueAt(cbh.isSelected(), i, 0);
+                    }
+                    jXTable1.repaint();
+                }
+            });
+
+        jXTable1.getColumnModel().getColumn(0).setHeaderRenderer(cbh);
+
+        jDialog1.pack();
 
         try {
             cidsBeansTableActionPanel1.setMetaClass(CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
-                    "PF_POTENZIALFLAECHE",
+                    "VIEW_POTENZIALFLAECHE_CSV",
                     getConnectionContext()));
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
         }
-
-        jDialog1.pack();
     }
 
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class CheckBoxHeader extends JCheckBox implements TableCellRenderer, MouseListener {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private int column;
+        private boolean mousePressed = false;
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getTableCellRendererComponent(
+                final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final boolean hasFocus,
+                final int row,
+                final int column) {
+            if (table != null) {
+                final JTableHeader header = table.getTableHeader();
+                if (header != null) {
+                    header.addMouseListener(this);
+                }
+            }
+            setColumn(column);
+            setHorizontalAlignment(JLabel.CENTER);
+            setBorder(BorderFactory.createEtchedBorder());
+            return this;
+        }
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  column  DOCUMENT ME!
+         */
+        protected void setColumn(final int column) {
+            this.column = column;
+        }
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public int getColumn() {
+            return column;
+        }
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
+        @Override
+        public void mouseClicked(final MouseEvent e) {
+            if (mousePressed) {
+                mousePressed = false;
+                final JTableHeader header = (JTableHeader)(e.getSource());
+                final JTable tableView = header.getTable();
+                final TableColumnModel columnModel = tableView.getColumnModel();
+                final int viewColumn = columnModel.getColumnIndexAtX(e.getX());
+                final int column = tableView.convertColumnIndexToModel(viewColumn);
+
+                if ((viewColumn == this.column) && (e.getClickCount() == 1)) {
+                    doClick();
+                }
+                repaint();
+            }
+        }
+        @Override
+        public void mousePressed(final MouseEvent e) {
+            mousePressed = true;
+        }
+        @Override
+        public void mouseReleased(final MouseEvent e) {
+        }
+        @Override
+        public void mouseEntered(final MouseEvent e) {
+        }
+        @Override
+        public void mouseExited(final MouseEvent e) {
+        }
     }
 }
