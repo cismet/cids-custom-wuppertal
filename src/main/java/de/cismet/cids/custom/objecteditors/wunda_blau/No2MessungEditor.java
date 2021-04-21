@@ -106,6 +106,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
     private static final Logger LOG = Logger.getLogger(No2MessungEditor.class);
     
     public static final int COLUMN_WIDTH = 250;
+    public static final int COLUMN_WIDTH_VALUE = 50;
 
     public static final String FIELD__ID = "id";                                // no2_messung
     public static final String FIELD__ZEIT = "fk_zeit";                         // no2_messung
@@ -215,7 +216,6 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panMesswerte;
     private JPanel panMesswerteAdd;
     private JPanel panWerte;
-    private JSeparator sepWerte;
     private JTextField txtJahr;
     private JXTable xtMesswerte;
     private BindingGroup bindingGroup;
@@ -304,7 +304,6 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         dcVon = new DefaultBindableDateChooser();
         lblBis = new JLabel();
         dcBis = new DefaultBindableDateChooser();
-        sepWerte = new JSeparator();
         lblWerte = new JLabel();
         panWerte = new JPanel();
         panMesswerte = new JPanel();
@@ -468,14 +467,6 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(dcBis, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 0, 5, 0);
-        panDaten.add(sepWerte, gridBagConstraints);
 
         lblWerte.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblWerte.setText("Messwerte:");
@@ -486,14 +477,19 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(12, 0, 2, 5);
         panDaten.add(lblWerte, gridBagConstraints);
 
+        panWerte.setOpaque(false);
         panWerte.setLayout(new GridBagLayout());
 
         panMesswerte.setMinimumSize(new Dimension(26, 80));
+        panMesswerte.setOpaque(false);
         panMesswerte.setLayout(new GridBagLayout());
 
+        jScrollPaneMesswerte.setOpaque(false);
+
+        xtMesswerte.setOpaque(false);
         jScrollPaneMesswerte.setViewportView(xtMesswerte);
 
         gridBagConstraints = new GridBagConstraints();
@@ -521,9 +517,16 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         panMesswerteAdd.setAlignmentX(0.0F);
         panMesswerteAdd.setAlignmentY(1.0F);
         panMesswerteAdd.setFocusable(false);
+        panMesswerteAdd.setOpaque(false);
         panMesswerteAdd.setLayout(new GridBagLayout());
 
         btnAddMesswert.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddMesswert.setBorderPainted(false);
+        btnAddMesswert.setContentAreaFilled(false);
+        btnAddMesswert.setFocusPainted(false);
+        btnAddMesswert.setMaximumSize(new Dimension(45, 22));
+        btnAddMesswert.setMinimumSize(new Dimension(45, 22));
+        btnAddMesswert.setPreferredSize(new Dimension(45, 22));
         btnAddMesswert.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 btnAddMesswertActionPerformed(evt);
@@ -532,10 +535,16 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panMesswerteAdd.add(btnAddMesswert, gridBagConstraints);
 
         btnRemMesswert.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemMesswert.setBorderPainted(false);
+        btnRemMesswert.setContentAreaFilled(false);
+        btnRemMesswert.setFocusPainted(false);
+        btnRemMesswert.setMaximumSize(new Dimension(45, 22));
+        btnRemMesswert.setMinimumSize(new Dimension(45, 22));
+        btnRemMesswert.setPreferredSize(new Dimension(45, 22));
         btnRemMesswert.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 btnRemMesswertActionPerformed(evt);
@@ -544,7 +553,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(0, 0, 2, 0);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panMesswerteAdd.add(btnRemMesswert, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -555,10 +564,9 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
 
         btnCreateMeasureLocations.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
         btnCreateMeasureLocations.setToolTipText("Standorte anlegen");
-        btnCreateMeasureLocations.setFocusPainted(false);
-        btnCreateMeasureLocations.setMaximumSize(new Dimension(45, 21));
-        btnCreateMeasureLocations.setMinimumSize(new Dimension(45, 21));
-        btnCreateMeasureLocations.setPreferredSize(new Dimension(45, 21));
+        btnCreateMeasureLocations.setMaximumSize(new Dimension(45, 28));
+        btnCreateMeasureLocations.setMinimumSize(new Dimension(45, 28));
+        btnCreateMeasureLocations.setPreferredSize(new Dimension(45, 28));
         btnCreateMeasureLocations.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 btnCreateMeasureLocationsActionPerformed(evt);
@@ -567,15 +575,14 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(15, 2, 2, 2);
         panMesswerteAdd.add(btnCreateMeasureLocations, gridBagConstraints);
 
         btnDeleteMeasureLocations.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
         btnDeleteMeasureLocations.setToolTipText("Standorte entfernen");
-        btnDeleteMeasureLocations.setFocusPainted(false);
         btnDeleteMeasureLocations.setMaximumSize(new Dimension(45, 21));
         btnDeleteMeasureLocations.setMinimumSize(new Dimension(45, 21));
-        btnDeleteMeasureLocations.setPreferredSize(new Dimension(45, 21));
+        btnDeleteMeasureLocations.setPreferredSize(new Dimension(45, 28));
         btnDeleteMeasureLocations.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 btnDeleteMeasureLocationsActionPerformed(evt);
@@ -584,7 +591,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(5, 2, 2, 2);
         panMesswerteAdd.add(btnDeleteMeasureLocations, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -593,7 +600,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(0, 2, 2, 2);
         panWerte.add(panMesswerteAdd, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -603,6 +610,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(10, 0, 0, 0);
         panDaten.add(panWerte, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -612,7 +620,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
+        gridBagConstraints.insets = new Insets(12, 12, 15, 15);
         panContent.add(panDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1044,6 +1052,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             xtMesswerte.setModel(wertModel);
             xtMesswerte.getColumn(1).setCellEditor(new DefaultBindableComboboxCellEditor(standortMetaClass));
             xtMesswerte.getColumn(1).setPreferredWidth(COLUMN_WIDTH);
+            xtMesswerte.getColumn(0).setMaxWidth(COLUMN_WIDTH_VALUE);
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
