@@ -371,7 +371,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
 
         for (final PotenzialflaecheReportServerAction.Property property
                     : PotenzialflaecheReportServerAction.Property.values()) {
-            final JToggleButton toggle = new JToggleButton(property.toString());
+            final JToggleButton toggle = new JToggleButton(property.name());
             toggle.setEnabled(isEditable());
             jPanel2.add(toggle);
         }
