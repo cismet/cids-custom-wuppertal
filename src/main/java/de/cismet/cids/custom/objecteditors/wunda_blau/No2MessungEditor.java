@@ -14,6 +14,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
@@ -25,6 +26,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXTable;
 
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
@@ -33,11 +35,20 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 
@@ -49,12 +60,20 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
+import de.cismet.cids.editors.DefaultBindableComboboxCellEditor;
+import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -68,21 +87,6 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
-import de.cismet.cids.editors.DefaultBindableComboboxCellEditor;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
-import org.jdesktop.swingx.JXTable;
 /**
  * DOCUMENT ME!
  *
@@ -95,76 +99,67 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
     PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static DefaultBindableReferenceCombo.Option NULLABLE_OPTION =
         new DefaultBindableReferenceCombo.NullableOption(null, "-");
     private static DefaultBindableReferenceCombo.Option SORTING_OPTION =
         new DefaultBindableReferenceCombo.SortingColumnOption("schluessel");
     private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION = null;
-       // new DefaultBindableReferenceCombo.ManageableOption("name");
-    
+    // new DefaultBindableReferenceCombo.ManageableOption("name");
+
     private static final String TITLE_NEW_MESSUNG = "eine neue Messung anlegen...";
     private static final Logger LOG = Logger.getLogger(No2MessungEditor.class);
-    
+
     public static final int COLUMN_WIDTH = 250;
     public static final int COLUMN_WIDTH_VALUE = 50;
 
-    public static final String FIELD__ID = "id";                                // no2_messung
-    public static final String FIELD__ZEIT = "fk_zeit";                         // no2_messung
-    public static final String FIELD__VON = "von";                              // no2_standort
-    public static final String FIELD__BIS = "bis";                              // no2_standort
-    public static final String FIELD__MP = "mp";                                // no2_standort
-    public static final String FIELD__ZEIT_NAME = "fk_zeit.name";               // no2_zeit
-    public static final String FIELD__NAME = "name";                            // no2_zeit
-    public static final String FIELD__ZEIT_SCHLUESSEL = "fk_zeit.schluessel";   // no2_zeit
-    public static final String FIELD__SCHLUESSEL = "schluessel";                // no2_zeit
-    public static final String FIELD__JAHR = "jahr";                            // no2_messung
-    public static final String FIELD__WERTE = "n_werte";                        // no2_messung
-    public static final String FIELD__WERT= "wert";                             // no2_wert
-    public static final String FIELD__STANDORT = "fk_standort";                 // no2_wert
-    public static final String FIELD__MESSUNG = "fk_messung";                   // no2_wert
-    
+    public static final String FIELD__ID = "id";                              // no2_messung
+    public static final String FIELD__ZEIT = "fk_zeit";                       // no2_messung
+    public static final String FIELD__VON = "von";                            // no2_standort
+    public static final String FIELD__BIS = "bis";                            // no2_standort
+    public static final String FIELD__MP = "mp";                              // no2_standort
+    public static final String FIELD__ZEIT_NAME = "fk_zeit.name";             // no2_zeit
+    public static final String FIELD__NAME = "name";                          // no2_zeit
+    public static final String FIELD__ZEIT_SCHLUESSEL = "fk_zeit.schluessel"; // no2_zeit
+    public static final String FIELD__SCHLUESSEL = "schluessel";              // no2_zeit
+    public static final String FIELD__JAHR = "jahr";                          // no2_messung
+    public static final String FIELD__WERTE = "n_werte";                      // no2_messung
+    public static final String FIELD__WERT = "wert";                          // no2_wert
+    public static final String FIELD__STANDORT = "fk_standort";               // no2_wert
+    public static final String FIELD__MESSUNG = "fk_messung";                 // no2_wert
+
     public static final String TABLE_NAME = "no2_messung";
     public static final String TABLE_NAME_ZEIT = "no2_zeit";
     public static final String TABLE_NAME_WERT = "no2_wert";
     public static final String TABLE_NAME_STANDORT = "no2_standort";
 
-    public static final String BUNDLE_NOYEAR = 
-            "No2MessungEditor.prepareForSave().noYear";
-    public static final String BUNDLE_DUPLICATE = 
-            "No2MessungEditor.prepareForSave().duplicate";
-    public static final String BUNDLE_WRONGYEAR = 
-            "No2MessungEditor.prepareForSave().wrongYear";
-    public static final String BUNDLE_NOTIME = 
-            "No2MessungEditor.prepareForSave().noTime";
-    public static final String BUNDLE_NOLOCATION = 
-            "No2MessungEditor.prepareForSave().noLocation";
-    public static final String BUNDLE_TWICELOCATION = 
-            "No2MessungEditor.prepareForSave().twiceLocation";
-    public static final String BUNDLE_NOVALUE = 
-            "No2MessungEditor.prepareForSave().noValue";
-    public static final String BUNDLE_WRONGVALUE = 
-            "No2MessungEditor.prepareForSave().wrongValue";
-    public static final String BUNDLE_VONBIS = 
-            "No2MessungEditor.prepareForSave().VonBis";
-    public static final String BUNDLE_VONBISLOST = 
-            "No2MessungEditor.prepareForSave().VonBisLost";
+    public static final String BUNDLE_NOYEAR = "No2MessungEditor.prepareForSave().noYear";
+    public static final String BUNDLE_DUPLICATE = "No2MessungEditor.prepareForSave().duplicate";
+    public static final String BUNDLE_WRONGYEAR = "No2MessungEditor.prepareForSave().wrongYear";
+    public static final String BUNDLE_NOTIME = "No2MessungEditor.prepareForSave().noTime";
+    public static final String BUNDLE_NOLOCATION = "No2MessungEditor.prepareForSave().noLocation";
+    public static final String BUNDLE_TWICELOCATION = "No2MessungEditor.prepareForSave().twiceLocation";
+    public static final String BUNDLE_NOVALUE = "No2MessungEditor.prepareForSave().noValue";
+    public static final String BUNDLE_WRONGVALUE = "No2MessungEditor.prepareForSave().wrongValue";
+    public static final String BUNDLE_VONBIS = "No2MessungEditor.prepareForSave().VonBis";
+    public static final String BUNDLE_VONBISLOST = "No2MessungEditor.prepareForSave().VonBisLost";
     public static final String BUNDLE_PANE_PREFIX = "No2MessungEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "No2MessungEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "No2MessungEditor.prepareForSave().JOptionPane.title";
-    public static final String BUNDLE_PANE_PREFIX_LOC = 
-            "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_TITLE_LOC = 
-            "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.title.add";
-    public static final String BUNDLE_PANE_LOCATION_MEASURE = 
-            "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.message.add";
-    public static final String BUNDLE_PANE_MESSAGE_DEL = 
-            "No2MessungEditor.btnDeleteMeasureLocationsActionPerformed().JOptionPane.message";
-    public static final String BUNDLE_PANE_TITLE_DEL = 
-            "No2MessungEditor.btnDeleteMeasureLocationsActionPerformed().JOptionPane.title";
-    public static final String BUNDLE_PANE_MESSAGE_ADD = 
-            "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.message";
-    public static final String BUNDLE_PANE_TITLE_ADD = 
-            "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.title";
+    public static final String BUNDLE_PANE_PREFIX_LOC =
+        "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_TITLE_LOC =
+        "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.title.add";
+    public static final String BUNDLE_PANE_LOCATION_MEASURE =
+        "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.message.add";
+    public static final String BUNDLE_PANE_MESSAGE_DEL =
+        "No2MessungEditor.btnDeleteMeasureLocationsActionPerformed().JOptionPane.message";
+    public static final String BUNDLE_PANE_TITLE_DEL =
+        "No2MessungEditor.btnDeleteMeasureLocationsActionPerformed().JOptionPane.title";
+    public static final String BUNDLE_PANE_MESSAGE_ADD =
+        "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.message";
+    public static final String BUNDLE_PANE_TITLE_ADD =
+        "No2MessungEditor.btnCreateMeasureLocationsActionPerformed().JOptionPane.title";
 
     private static final String[] WERTE_COL_NAMES = new String[] { "Werte", "Standorte" };
     private static final String[] WERTE_PROP_NAMES = new String[] {
@@ -175,14 +170,21 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             Integer.class,
             CidsBean.class
         };
-    
+
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     private static enum otherTableCases {
 
         //~ Enum constants -----------------------------------------------------
 
         redundantAttName, setTime
     }
-    
+
     //~ Instance fields --------------------------------------------------------
 
     private SwingWorker worker_name;
@@ -244,13 +246,13 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        
+
         standortMetaClass = ClassCacheMultiple.getMetaClass(
                 CidsBeanSupport.DOMAIN_NAME,
                 TABLE_NAME_STANDORT,
                 connectionContext);
         cbZeit.setNullable(false);
-        
+
         txtJahr.getDocument().addDocumentListener(new DocumentListener() {
 
                 // Immer, wenn das Jahr oder der Monat geändert wird, wird die Kombination überprüft.
@@ -272,10 +274,10 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         cbZeit.addItemListener(new ItemListener() {
 
                 // Immer, wenn das Jahr oder der Monat geändert wird, wird die Kombination überprüft.
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                checkName();
-            }
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    checkName();
+                }
             });
 
         setReadOnly();
@@ -321,14 +323,12 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -361,7 +361,12 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
 
         cbZeit.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_zeit}"), cbZeit, BeanProperty.create("selectedItem"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_zeit}"),
+                cbZeit,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -393,7 +398,12 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
 
         txtJahr.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.jahr}"), txtJahr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.jahr}"),
+                txtJahr,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -408,14 +418,16 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -433,7 +445,12 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblVon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.von}"), dcVon, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.von}"),
+                dcVon,
+                BeanProperty.create("date"));
         binding.setConverter(dcVon.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -456,7 +473,12 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBis, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bis}"), dcBis, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bis}"),
+                dcBis,
+                BeanProperty.create("date"));
         binding.setConverter(dcBis.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -520,7 +542,8 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         panMesswerteAdd.setOpaque(false);
         panMesswerteAdd.setLayout(new GridBagLayout());
 
-        btnAddMesswert.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddMesswert.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddMesswert.setBorderPainted(false);
         btnAddMesswert.setContentAreaFilled(false);
         btnAddMesswert.setFocusPainted(false);
@@ -528,17 +551,20 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         btnAddMesswert.setMinimumSize(new Dimension(45, 22));
         btnAddMesswert.setPreferredSize(new Dimension(45, 22));
         btnAddMesswert.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddMesswertActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddMesswertActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panMesswerteAdd.add(btnAddMesswert, gridBagConstraints);
 
-        btnRemMesswert.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemMesswert.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemMesswert.setBorderPainted(false);
         btnRemMesswert.setContentAreaFilled(false);
         btnRemMesswert.setFocusPainted(false);
@@ -546,10 +572,12 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         btnRemMesswert.setMinimumSize(new Dimension(45, 22));
         btnRemMesswert.setPreferredSize(new Dimension(45, 22));
         btnRemMesswert.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemMesswertActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemMesswertActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -562,32 +590,38 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         panMesswerteAdd.add(filler2, gridBagConstraints);
 
-        btnCreateMeasureLocations.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
+        btnCreateMeasureLocations.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
         btnCreateMeasureLocations.setToolTipText("Standorte anlegen");
         btnCreateMeasureLocations.setMaximumSize(new Dimension(45, 28));
         btnCreateMeasureLocations.setMinimumSize(new Dimension(45, 28));
         btnCreateMeasureLocations.setPreferredSize(new Dimension(45, 28));
         btnCreateMeasureLocations.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnCreateMeasureLocationsActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnCreateMeasureLocationsActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new Insets(15, 2, 2, 2);
         panMesswerteAdd.add(btnCreateMeasureLocations, gridBagConstraints);
 
-        btnDeleteMeasureLocations.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
+        btnDeleteMeasureLocations.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
         btnDeleteMeasureLocations.setToolTipText("Standorte entfernen");
         btnDeleteMeasureLocations.setMaximumSize(new Dimension(45, 21));
         btnDeleteMeasureLocations.setMinimumSize(new Dimension(45, 21));
         btnDeleteMeasureLocations.setPreferredSize(new Dimension(45, 28));
         btnDeleteMeasureLocations.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnDeleteMeasureLocationsActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnDeleteMeasureLocationsActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -634,34 +668,49 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnAddMesswertActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddMesswertActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddMesswertActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddMesswertActionPerformed
         TableUtils.addObjectToTable(xtMesswerte, TABLE_NAME_WERT, getConnectionContext());
-    }//GEN-LAST:event_btnAddMesswertActionPerformed
+    }                                                                   //GEN-LAST:event_btnAddMesswertActionPerformed
 
-    private void btnRemMesswertActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemMesswertActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemMesswertActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemMesswertActionPerformed
         TableUtils.removeObjectsFromTable(xtMesswerte);
-    }//GEN-LAST:event_btnRemMesswertActionPerformed
+    }                                                                   //GEN-LAST:event_btnRemMesswertActionPerformed
 
-    private void btnCreateMeasureLocationsActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnCreateMeasureLocationsActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnCreateMeasureLocationsActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnCreateMeasureLocationsActionPerformed
         try {
-            if (txtJahr.getText().trim().isEmpty() || cbZeit.getSelectedItem() == null){
-                //Meldung nicht moeglich
+            if (txtJahr.getText().trim().isEmpty() || (cbZeit.getSelectedItem() == null)) {
+                // Meldung nicht moeglich
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_PREFIX_LOC)
-                        + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_LOCATION_MEASURE)
-                        + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_LOC),
-                JOptionPane.WARNING_MESSAGE);
+                    NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_PREFIX_LOC)
+                            + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_LOCATION_MEASURE)
+                            + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_LOC),
+                    JOptionPane.WARNING_MESSAGE);
             } else {
-                //Meldung: wirklich mit loeschen?
+                // Meldung: wirklich mit loeschen?
                 final int answer = JOptionPane.showConfirmDialog(
-                                StaticSwingTools.getParentFrame(this),
-                                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_MESSAGE_ADD),
-                                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_ADD),
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.WARNING_MESSAGE);
+                        StaticSwingTools.getParentFrame(this),
+                        NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_MESSAGE_ADD),
+                        NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_ADD),
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
                     deleteMeasure();
                     createMeasure();
@@ -670,29 +719,36 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         } catch (HeadlessException | MissingResourceException e) {
             LOG.error("Cannot add new " + TABLE_NAME_WERT + " objects", e);
         }
-                        
+    } //GEN-LAST:event_btnCreateMeasureLocationsActionPerformed
 
-    
-    }//GEN-LAST:event_btnCreateMeasureLocationsActionPerformed
-
-    private void btnDeleteMeasureLocationsActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnDeleteMeasureLocationsActionPerformed
-        //Meldung: wirklich loeschen?
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnDeleteMeasureLocationsActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnDeleteMeasureLocationsActionPerformed
+        // Meldung: wirklich loeschen?
         final int answer = JOptionPane.showConfirmDialog(
-                                StaticSwingTools.getParentFrame(this),
-                                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_MESSAGE_DEL),
-                                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_DEL),
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.WARNING_MESSAGE);
+                StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_MESSAGE_DEL),
+                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_DEL),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
         if (answer == JOptionPane.YES_OPTION) {
             deleteMeasure();
         }
-    }//GEN-LAST:event_btnDeleteMeasureLocationsActionPerformed
-
-    //Fuegt eine neue Zeile hinzu und setz die Bean fuer den Standort
+    } //GEN-LAST:event_btnDeleteMeasureLocationsActionPerformed
+    /**
+     * Fuegt eine neue Zeile hinzu und setz die Bean fuer den Standort.
+     *
+     * @param  table              DOCUMENT ME!
+     * @param  standortMo         DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
     public static void addLocationsToTable(final JXTable table,
             final MetaObject standortMo,
             final ConnectionContext connectionContext) {
-        CidsBean bean;
+        final CidsBean bean;
         try {
             bean = CidsBeanSupport.createNewCidsBeanFromTableName(TABLE_NAME_WERT, connectionContext);
             bean.setProperty(FIELD__STANDORT, standortMo.getBean());
@@ -701,30 +757,28 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             Exceptions.printStackTrace(ex);
         }
     }
-    
+
     /**
-     * Entfernt alle Zeilen aus der Tabelle
+     * Entfernt alle Zeilen aus der Tabelle.
      */
-    public void deleteMeasure(){
+    public void deleteMeasure() {
         xtMesswerte.selectAll();
         TableUtils.removeObjectsFromTable(xtMesswerte);
     }
-    
+
     /**
-     * Erzeugt alle notwendigen Zeilen mit Vorbelegung des Standorts
+     * Erzeugt alle notwendigen Zeilen mit Vorbelegung des Standorts.
      */
-    public void createMeasure(){
+    public void createMeasure() {
         final MetaClass myClass;
         myClass = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
                 TABLE_NAME_STANDORT,
                 getConnectionContext());
         StringBuffer myQuery = new StringBuffer("");
-        if ((int)cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL) == 13){
-            //Jahresdurchschnitt Jeder Standort, der in dem Jahr auftaucht
-            myQuery = new StringBuffer("select ").append(myClass.getId())
-                        .append(", ")
-                        .append(myClass.getName())
+        if ((int)cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL) == 13) {
+            // Jahresdurchschnitt Jeder Standort, der in dem Jahr auftaucht
+            myQuery = new StringBuffer("select ").append(myClass.getId()).append(", ").append(myClass.getName())
                         .append(".")
                         .append(myClass.getPrimaryKey())
                         .append(" from ")
@@ -756,33 +810,33 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                         .append(") order by ")
                         .append(FIELD__MP);
         } else {
-            //Standort muss in diesem Monat aktiv sein
+            // Standort muss in diesem Monat aktiv sein
             String datum;
-            if ((int)cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL) > 9){
-                datum =  "15." + cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL).toString() + "." + cidsBean.getProperty(FIELD__JAHR).toString();
+            if ((int)cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL) > 9) {
+                datum = "15." + cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL).toString() + "."
+                            + cidsBean.getProperty(FIELD__JAHR).toString();
             } else {
-                datum =  "15.0" + cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL).toString() + "." + cidsBean.getProperty(FIELD__JAHR).toString();
+                datum = "15.0" + cidsBean.getProperty(FIELD__ZEIT_SCHLUESSEL).toString() + "."
+                            + cidsBean.getProperty(FIELD__JAHR).toString();
             }
             if (myClass != null) {
-                myQuery = new StringBuffer("select ").append(myClass.getId())
-                        .append(", ")
-                        .append(myClass.getName())
-                        .append(".")
-                        .append(myClass.getPrimaryKey())
-                        .append(" from ")
-                        .append(myClass.getTableName())
-                        .append(" where ")
-                        .append(FIELD__VON)
-                        .append(" < '")
-                        .append(datum)
-                        .append("' and ( ")
-                        .append(FIELD__BIS)
-                        .append(" is null or ")
-                        .append(FIELD__BIS)
-                        .append(" > '")
-                        .append(datum)
-                        .append("') order by ")
-                        .append(FIELD__MP);
+                myQuery = new StringBuffer("select ").append(myClass.getId()).append(", ").append(myClass.getName())
+                            .append(".")
+                            .append(myClass.getPrimaryKey())
+                            .append(" from ")
+                            .append(myClass.getTableName())
+                            .append(" where ")
+                            .append(FIELD__VON)
+                            .append(" < '")
+                            .append(datum)
+                            .append("' and ( ")
+                            .append(FIELD__BIS)
+                            .append(" is null or ")
+                            .append(FIELD__BIS)
+                            .append(" > '")
+                            .append(datum)
+                            .append("') order by ")
+                            .append(FIELD__MP);
             }
         }
         if (LOG.isDebugEnabled()) {
@@ -792,31 +846,31 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             myMetaObjects = SessionManager.getProxy()
                         .getMetaObjectByQuery(myQuery.toString(), 0, getConnectionContext());
-            if (myMetaObjects != null && myMetaObjects.length > 0){
-                for (final MetaObject mo : myMetaObjects){
+            if ((myMetaObjects != null) && (myMetaObjects.length > 0)) {
+                for (final MetaObject mo : myMetaObjects) {
                     addLocationsToTable(xtMesswerte, mo, getConnectionContext());
                 }
             } else {
-                //keine Standorte vorhanden
+                // keine Standorte vorhanden
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_PREFIX_LOC)
-                        + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_LOCATION_MEASURE)
-                        + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_LOC),
-                JOptionPane.WARNING_MESSAGE);
+                    NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_PREFIX_LOC)
+                            + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_LOCATION_MEASURE)
+                            + NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(No2MessungEditor.class, BUNDLE_PANE_TITLE_LOC),
+                    JOptionPane.WARNING_MESSAGE);
             }
         } catch (ConnectionException ex) {
             LOG.error(ex, ex);
         }
     }
     /**
-     * redundante Messung
+     * redundante Messung.
      */
     private void checkName() {
         // Worker Aufruf, ob die Kombination aus Monat und Jahr schon existiert
         valueFromOtherTable(
             TABLE_NAME,
-                " left join "
+            " left join "
                     + TABLE_NAME_ZEIT
                     + " on "
                     + TABLE_NAME_ZEIT
@@ -846,9 +900,9 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                     + cidsBean.getProperty(FIELD__ID),
             otherTableCases.redundantAttName);
     }
-    
+
     /**
-     * Ermittelt die aktuelle Messung
+     * Ermittelt die aktuelle Messung.
      */
     private void setMeasureValues() {
         try {
@@ -858,7 +912,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                     TABLE_NAME,
                     getConnectionContext());
             if (myClass != null) {
-                //Alle Messung aus dem zuletzt eingegebenen Jahr
+                // Alle Messung aus dem zuletzt eingegebenen Jahr
                 final StringBuffer myQuery = new StringBuffer("select ").append(myClass.getId())
                             .append(", ")
                             .append(myClass.getName())
@@ -880,21 +934,20 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                 try {
                     myMetaObject = SessionManager.getProxy()
                                 .getMetaObjectByQuery(myQuery.toString(), 0, getConnectionContext());
-                    if (myMetaObject != null){
+                    if (myMetaObject != null) {
                         int month = 0;
                         MetaObject moLast = null;
-                        //Letzte eingegeben Messung
-                        for (final MetaObject mo : myMetaObject){
-                            if ((int)mo.getBean().getProperty(FIELD__ZEIT_SCHLUESSEL) > month){
+                        // Letzte eingegeben Messung
+                        for (final MetaObject mo : myMetaObject) {
+                            if ((int)mo.getBean().getProperty(FIELD__ZEIT_SCHLUESSEL) > month) {
                                 month = (int)mo.getBean().getProperty(FIELD__ZEIT_SCHLUESSEL);
                                 moLast = mo;
                             }
                         }
-                        if (moLast != null){
+                        if (moLast != null) {
                             setNewMeasure(moLast.getBean());
                         }
                     }
-                    
                 } catch (ConnectionException ex) {
                     LOG.error(ex, ex);
                 }
@@ -903,7 +956,6 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.error(" kann nicht geladen werden ", ex);
         }
     }
-    
     @Override
     public boolean prepareForSave() {
         boolean save = true;
@@ -916,15 +968,15 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                 errorMessage.append(NbBundle.getMessage(No2MessungEditor.class, BUNDLE_NOYEAR));
             } else {
                 //
-                if (cbZeit.getSelectedItem() == null){
+                if (cbZeit.getSelectedItem() == null) {
                     LOG.warn("No time specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(No2MessungEditor.class, BUNDLE_NOTIME));
-                }else {
+                } else {
                     if (redundantName) {
                         LOG.warn("Duplicate name specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(No2MessungEditor.class, BUNDLE_DUPLICATE));
                     } else {
-                        if (txtJahr.getText().trim().length() == 4){
+                        if (txtJahr.getText().trim().length() == 4) {
                             try {
                                 Integer.parseInt(txtJahr.getText());
                             } catch (NumberFormatException e) {
@@ -941,14 +993,15 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Name not given.", ex);
             save = false;
         }
-        
-        //von muss angegeben werden
+
+        // von muss angegeben werden
         try {
-            if ((dcVon.getDate() == null  && dcBis.getDate() != null) || (dcBis.getDate() == null  && dcVon.getDate() != null)) {
+            if (((dcVon.getDate() == null) && (dcBis.getDate() != null))
+                        || ((dcBis.getDate() == null) && (dcVon.getDate() != null))) {
                 LOG.warn("No von specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(No2MessungEditor.class, BUNDLE_VONBISLOST));
             } else {
-                if(dcVon.getDate() != null && dcBis.getDate() != null){
+                if ((dcVon.getDate() != null) && (dcBis.getDate() != null)) {
                     final LocalDate ldBis = dcBis.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     final LocalDate ldVon = dcVon.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     if (ldBis.isBefore(ldVon)) {
@@ -960,7 +1013,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("VonBis not given.", ex);
             save = false;
         }
-        //Liste ueberpruefen
+        // Liste ueberpruefen
         try {
             switch (checkValuesForMeasure()) {
                 case 1: {
@@ -988,7 +1041,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Error in Tabele.", ex);
             save = false;
         }
-           
+
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(
@@ -1035,7 +1088,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+            if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                 setMeasureValues();
             } else {
                 RendererTools.makeReadOnly(txtJahr);
@@ -1060,7 +1113,9 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     /**
-     * Ueberprueft die Eingaben der Tabelle, sobald Fehler Abbruch
+     * Ueberprueft die Eingaben der Tabelle, sobald Fehler Abbruch.
+     *
+     * @return  DOCUMENT ME!
      */
     private int checkValuesForMeasure() {
         try {
@@ -1068,7 +1123,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                     cidsBean,
                     FIELD__WERTE);
 
-            if ((listMeasureBeans!= null) && (listMeasureBeans.size() > 0)) {
+            if ((listMeasureBeans != null) && (listMeasureBeans.size() > 0)) {
                 for (int i = 0; i < listMeasureBeans.size(); i++) {
                     final CidsBean measureBean = listMeasureBeans.get(i);
                     // .......Überprüfen ob alle Einträge gefüllt.......
@@ -1076,21 +1131,21 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                                 || "".equals(measureBean.getProperty(FIELD__WERT).toString())) {
                         return 2;
                     }
-                    if ((int)measureBean.getProperty(FIELD__WERT)< 0 && (int)measureBean.getProperty(FIELD__WERT) != -9999){
+                    if (((int)measureBean.getProperty(FIELD__WERT) < 0)
+                                && ((int)measureBean.getProperty(FIELD__WERT) != -9999)) {
                         return 4;
                     }
                     if ((null == measureBean.getProperty(FIELD__STANDORT))
                                 || "".equals(measureBean.getProperty(FIELD__STANDORT).toString())) {
                         return 3;
                     }
-                    //alle Eintraege vorhanden?
-                    
+                    // alle Eintraege vorhanden?
+
                     // Redundante Einträge
                     if (listMeasureBeans.size() > (i + 1)) {
                         for (int j = i + 1; j < listMeasureBeans.size(); j++) {
-                            if (
-                                measureBean.getProperty(FIELD__STANDORT).equals(
-                                        listMeasureBeans.get(j).getProperty(FIELD__STANDORT))) {
+                            if (measureBean.getProperty(FIELD__STANDORT).equals(
+                                            listMeasureBeans.get(j).getProperty(FIELD__STANDORT))) {
                                 return 1;
                             }
                         }
@@ -1103,16 +1158,16 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         return 0;
     }
     /**
-     * Mit Hilfe der zuletzt eingegeben Messung(Bean), wird die naechste Messung ermittelt
+     * Mit Hilfe der zuletzt eingegeben Messung(Bean), wird die naechste Messung ermittelt.
      *
-     * @param  latestBean        DOCUMENT ME!
+     * @param  latestBean  DOCUMENT ME!
      */
-    public void setNewMeasure(final CidsBean latestBean){
+    public void setNewMeasure(final CidsBean latestBean) {
         final int latestYear = Integer.parseInt(latestBean.getProperty(FIELD__JAHR).toString());
         final int latestTime = Integer.parseInt(latestBean.getProperty(FIELD__ZEIT_SCHLUESSEL).toString());
         int nextYear;
         int nextTime;
-        if (latestTime == 13){
+        if (latestTime == 13) {
             nextYear = latestYear + 1;
             nextTime = 1;
         } else {
@@ -1124,7 +1179,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
-        //CidsBean fuer die Zeit ermitteln und setzen
+        // CidsBean fuer die Zeit ermitteln und setzen
         valueFromOtherTable(
             TABLE_NAME_ZEIT,
             " where "
@@ -1134,7 +1189,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             otherTableCases.setTime);
     }
     /**
-     * Fuer Renderer
+     * Fuer Renderer.
      */
     private void setReadOnly() {
         if (!(isEditor)) {
@@ -1146,7 +1201,6 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             panMesswerteAdd.setVisible(isEditor);
         }
     }
-    
     /**
      * DOCUMENT ME!
      *
@@ -1168,14 +1222,14 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             800,
             600);
     }
-    
-    
+
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_MESSUNG;
         } else {
-            return cidsBean.getProperty(FIELD__ZEIT_NAME).toString() + "- " + cidsBean.getProperty(FIELD__JAHR).toString();
+            return cidsBean.getProperty(FIELD__ZEIT_NAME).toString() + "- "
+                        + cidsBean.getProperty(FIELD__JAHR).toString();
         }
     }
 
@@ -1199,17 +1253,16 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // To change body of generated methods, choose Tools | Templates.
-        
+        // throw new UnsupportedOperationException("Not supported yet."); To change body of generated methods, choose
+        // Tools | Templates.
     }
     /**
-     * Ermittelt, ob Werte fuer ein Select geliefert werden.
-     * redundante Messung bei not null
-     * set Value: Vorbelegung des Zeitpunktes
+     * Ermittelt, ob Werte fuer ein Select geliefert werden. redundante Messung bei not null set Value: Vorbelegung des
+     * Zeitpunktes
      *
      * @param  tableName    DOCUMENT ME!
      * @param  whereClause  DOCUMENT ME!
+     * @param  fall         DOCUMENT ME!
      */
     private void valueFromOtherTable(final String tableName,
             final String whereClause,
@@ -1228,7 +1281,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                         if (!isCancelled()) {
                             check = get();
                             switch (fall) {
-                                case setTime: {  //set next time
+                                case setTime: {          // set next time
                                     try {
                                         cidsBean.setProperty(
                                             FIELD__ZEIT,
@@ -1242,15 +1295,14 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                                     break;
                                 }
                             }
-                            
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         LOG.warn("problem in Worker: chech name.", e);
                     }
                 }
             };
-        switch (fall){
-            case redundantAttName:{
+        switch (fall) {
+            case redundantAttName: {
                 if (worker_name != null) {
                     worker_name.cancel(true);
                 }
@@ -1258,7 +1310,7 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                 worker_name.execute();
                 break;
             }
-            case setTime:{
+            case setTime: {
                 if (worker_time != null) {
                     worker_time.cancel(true);
                 }
@@ -1267,9 +1319,5 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
                 break;
             }
         }
-        
     }
-
-    //~ Inner Classes ----------------------------------------------------------
-    
 }

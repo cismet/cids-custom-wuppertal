@@ -42,8 +42,7 @@ public class PotenzialflaechenProperties {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final String orthoUrl;
-    private final String dgkUrl;
+    private final Properties properties;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -53,8 +52,7 @@ public class PotenzialflaechenProperties {
      * @param  properties  DOCUMENT ME!
      */
     private PotenzialflaechenProperties(final Properties properties) {
-        orthoUrl = properties.getProperty("ORTHO_URL");
-        dgkUrl = properties.getProperty("DGK_URL");
+        this.properties = properties;
     }
 
     //~ Methods ----------------------------------------------------------------

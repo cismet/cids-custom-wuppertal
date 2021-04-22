@@ -343,9 +343,9 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
 
         initComponents();
         jXTable1.setModel(new CidsBeansTableModel(
-                new String[] { "nummer", "bezeichnung" },
-                new String[] { "Nummer", "Bezeichnung" },
-                new Class[] { String.class, String.class },
+                new String[] { "nummer", "bezeichnung", "kampagne.bezeichnung" },
+                new String[] { "Nummer", "Bezeichnung", "Kampagne" },
+                new Class[] { String.class, String.class, String.class },
                 false,
                 true));
         jXTable1.getColumnModel().getColumn(0).setMinWidth(25);

@@ -14,8 +14,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import com.vividsolutions.jts.geom.Geometry;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
 import org.apache.log4j.Logger;
@@ -31,25 +31,35 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.net.URL;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
-import de.cismet.cids.custom.objecteditors.utils.No2ConfProperties;
 
+import de.cismet.cids.custom.objecteditors.utils.No2ConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
@@ -57,6 +67,7 @@ import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
+import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -73,6 +84,8 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -139,7 +152,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
-     private final ImageIcon statusFalsch = new ImageIcon(
+    private final ImageIcon statusFalsch = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
     private final ImageIcon statusOk = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
@@ -286,7 +299,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         lblBis = new JLabel();
         dcBis = new DefaultBindableDateChooser();
         lblGeom = new JLabel();
-        if (isEditor){
+        if (isEditor) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         lblFoto = new JLabel();
@@ -305,14 +318,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -346,7 +357,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblMp, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.mp}"), txtMp, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.mp}"),
+                txtMp,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -371,7 +387,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
 
         txtHoehe.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), txtHoehe, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hoehe}"),
+                txtHoehe,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -393,7 +414,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -425,7 +451,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
 
         txtHnr.setName(""); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hnr}"), txtHnr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hnr}"),
+                txtHnr,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -455,7 +486,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         taZusatzinfo.setRows(2);
         taZusatzinfo.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.zusatzinfo}"), taZusatzinfo, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.zusatzinfo}"),
+                taZusatzinfo,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpZusatzinfo.setViewportView(taZusatzinfo);
@@ -491,14 +527,16 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -530,7 +568,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblVon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.von}"), dcVon, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.von}"),
+                dcVon,
+                BeanProperty.create("date"));
         binding.setConverter(dcVon.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -553,7 +596,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBis, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bis}"), dcBis, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bis}"),
+                dcBis,
+                BeanProperty.create("date"));
         binding.setConverter(dcBis.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -576,17 +624,21 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 7;
@@ -608,7 +660,12 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblFoto, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bild}"), txtFoto, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bild}"),
+                txtFoto,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -623,7 +680,8 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -725,7 +783,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -743,8 +801,8 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
                     + " <> "
                     + cidsBean.getProperty(FIELD__ID));
     }
-    
-     /**
+
+    /**
      * DOCUMENT ME!
      */
     private void doWithFotoUrl() {
@@ -798,7 +856,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
             if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(No2StandortEditor.class, BUNDLE_NOGEOM));
-            }else {
+            } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
@@ -810,8 +868,8 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
             save = false;
         }
 
-        //hoehe als Ganzzahl
-        if (!txtHoehe.getText().isEmpty()){
+        // hoehe als Ganzzahl
+        if (!txtHoehe.getText().isEmpty()) {
             try {
                 Integer.parseInt(txtHoehe.getText());
             } catch (NumberFormatException e) {
@@ -819,14 +877,14 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
                 errorMessage.append(NbBundle.getMessage(No2StandortEditor.class, BUNDLE_WRONGVALUE));
             }
         }
-        
-        //von muss angegeben werden
+
+        // von muss angegeben werden
         try {
             if (dcVon.getDate() == null) {
                 LOG.warn("No von specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(No2StandortEditor.class, BUNDLE_NOVON));
             } else {
-                if(dcBis.getDate() != null){
+                if (dcBis.getDate() != null) {
                     final LocalDate ldBis = dcBis.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     final LocalDate ldVon = dcVon.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     if (ldBis.isBefore(ldVon)) {
@@ -838,7 +896,6 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
             LOG.warn("Von not given.", ex);
             save = false;
         }
-        
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -903,7 +960,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
             lblGeom.setVisible(isEditor);
         }
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -925,8 +982,7 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
             800,
             600);
     }
-    
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -1048,8 +1104,6 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
         worker_name.execute();
     }
 
-    //~ Inner Classes ----------------------------------------------------------
-    
     /**
      * DOCUMENT ME!
      *
@@ -1126,6 +1180,4 @@ public class No2StandortEditor extends DefaultCustomObjectEditor implements Cids
             };
         worker.execute();
     }
-    
-   
 }
