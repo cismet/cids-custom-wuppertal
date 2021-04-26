@@ -27,6 +27,7 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private javax.swing.JButton btnReport;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JLabel txtTitle;
     private javax.swing.JLabel txtTitle1;
     // End of variables declaration//GEN-END:variables
@@ -97,6 +98,7 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
 
         txtTitle = new javax.swing.JLabel();
         txtTitle1 = new javax.swing.JLabel();
+        jToggleButton1 = new javax.swing.JToggleButton();
         btnReport = new javax.swing.JButton();
         blWait = new org.jdesktop.swingx.JXBusyLabel();
 
@@ -121,6 +123,27 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         add(txtTitle1, gridBagConstraints);
+
+        jToggleButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock.png")));      // NOI18N
+        jToggleButton1.setBorderPainted(false);
+        jToggleButton1.setContentAreaFilled(false);
+        jToggleButton1.setFocusPainted(false);
+        jToggleButton1.setRolloverIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_edit.png"))); // NOI18N
+        jToggleButton1.setRolloverSelectedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_go.png")));   // NOI18N
+        jToggleButton1.setSelectedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/lock_open.png"))); // NOI18N
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jToggleButton1ActionPerformed(evt);
+                }
+            });
+        add(jToggleButton1, new java.awt.GridBagConstraints());
+        jToggleButton1.setVisible(editor.isEditable());
 
         btnReport.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/einzelReport.png"))); // NOI18N
@@ -162,4 +185,15 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         editor.startDownload();
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
+        if (editor.isEditable()) {
+            editor.toggleUsedInputs(jToggleButton1.isSelected());
+        }
+    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
 }

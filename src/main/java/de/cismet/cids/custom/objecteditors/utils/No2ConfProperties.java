@@ -10,15 +10,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.utils;
+package de.cismet.cids.custom.objecteditors.utils;
 
 import Sirius.navigator.connection.SessionManager;
+
+import Sirius.server.newuser.User;
 
 import lombok.Getter;
 
 import java.io.StringReader;
 
 import java.util.Properties;
+
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
@@ -29,30 +33,32 @@ import de.cismet.connectioncontext.ConnectionContext;
 /**
  * DOCUMENT ME!
  *
- * @author   jruiz
+ * @author   sandra
  * @version  $Revision$, $Date$
  */
 @Getter
-public class PotenzialflaechenProperties {
+public class No2ConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            PotenzialflaechenProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            No2ConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Properties properties;
+    private final String fotoUrl;
+    private final Double bufferMeter;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new FormSolutionsProperties object.
+     * Creates a new No2ConfProperties object.
      *
      * @param  properties  DOCUMENT ME!
      */
-    private PotenzialflaechenProperties(final Properties properties) {
-        this.properties = properties;
+    private No2ConfProperties(final Properties properties) {
+        fotoUrl = readProperty(properties, "PICTURE_PATH", null);
+        bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -60,10 +66,32 @@ public class PotenzialflaechenProperties {
     /**
      * DOCUMENT ME!
      *
+     * @param   properties    DOCUMENT ME!
+     * @param   property      DOCUMENT ME!
+     * @param   defaultValue  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    public static PotenzialflaechenProperties getInstance() {
-        return LazyInitialiser.INSTANCE;
+    private String readProperty(final Properties properties, final String property, final String defaultValue) {
+        String value = defaultValue;
+        try {
+            value = properties.getProperty(property, defaultValue);
+        } catch (final Exception ex) {
+            final String message = "could not read " + property + " from "
+                        + WundaBlauServerResources.NO2_CONF_PROPERTIES.getValue()
+                        + ". setting to default value: " + defaultValue;
+            LOG.warn(message, ex);
+        }
+        return value;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static No2ConfProperties getInstance() {
+        return No2ConfProperties.LazyInitialiser.INSTANCE;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -77,30 +105,31 @@ public class PotenzialflaechenProperties {
 
         //~ Static fields/initializers -----------------------------------------
 
-        private static final PotenzialflaechenProperties INSTANCE;
+        private static final No2ConfProperties INSTANCE;
 
         static {
-            PotenzialflaechenProperties instance = null;
+            No2ConfProperties instance = null;
+
             try {
+                final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(SessionManager.getSession().getUser(),
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                WundaBlauServerResources.POTENZIALFLAECHEN_PROPERTIES.getValue(),
-                                ConnectionContext.create(
-                                    Category.STATIC,
-                                    PotenzialflaechenProperties.class.getSimpleName()));
+                                WundaBlauServerResources.NO2_CONF_PROPERTIES.getValue(),
+                                ConnectionContext.create(Category.STATIC, No2ConfProperties.class.getSimpleName()));
                 if (ret instanceof Exception) {
                     throw (Exception)ret;
                 }
                 final Properties properties = new Properties();
                 properties.load(new StringReader((String)ret));
-
-                instance = new PotenzialflaechenProperties(properties);
+                instance = new No2ConfProperties(properties);
             } catch (final Exception ex) {
                 LOG.error(ex, ex);
             }
+
             INSTANCE = instance;
         }
 

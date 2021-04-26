@@ -23,6 +23,8 @@ import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -46,8 +48,8 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
@@ -201,99 +203,202 @@ public class RendererTools {
     /**
      * DOCUMENT ME!
      *
-     * @param   comp      DOCUMENT ME!
-     * @param   readOnly  DOCUMENT ME!
-     *
-     * @throws  RuntimeException  DOCUMENT ME!
+     * @param  comp      DOCUMENT ME!
+     * @param  readOnly  DOCUMENT ME!
      */
     public static void makeUneditable(final JComponent comp, final boolean readOnly) {
-        if (comp instanceof JTextComponent) {
-            final JTextComponent tComp = (JTextComponent)comp;
-            tComp.setEditable(!readOnly);
-            tComp.setOpaque(!readOnly);
-            if (readOnly) {
-                tComp.setBorder(new ReadOnlyEmtpyBorder(tComp.getBorder()));
-            } else if (tComp.getBorder() instanceof ReadOnlyEmtpyBorder) {
-                tComp.setBorder((ReadOnlyEmtpyBorder)tComp.getBorder());
-            }
-        } else if (comp instanceof JScrollPane) {
-            final JScrollPane jsp = (JScrollPane)comp;
-            jsp.setOpaque(!readOnly);
-            jsp.getViewport().setOpaque(!false);
-        } else if (comp instanceof JComboBox) {
-            final JComboBox cb = (JComboBox)comp;
-            cb.setEnabled(!readOnly);
-            if (readOnly) {
-                cb.setRenderer(new CustomListCellRenderer((ListCellRenderer)cb.getRenderer()));
-            } else if (cb.getRenderer() instanceof CustomListCellRenderer) {
-                cb.setRenderer(((CustomListCellRenderer)cb.getRenderer()).getOrigRenderer());
-            }
-        } else if (comp instanceof JSpinner) {
-            final JSpinner sp = (JSpinner)comp;
-            if (readOnly) {
-                sp.setOpaque(false);
-                sp.setBorder(null);
-                sp.getEditor().setOpaque(false);
-                ((JSpinner.DefaultEditor)sp.getEditor()).getTextField().setOpaque(false);
-            } else {
-                throw new RuntimeException("JSpinner not supported yet");
-            }
-        } else if (comp instanceof DefaultBindableDateChooser) {
-            final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
-            if (readOnly) {
-                dc.setEditable(false);
-                ((Component)dc.getComponents()[1]).setVisible(false);
-                ((JFormattedTextField)dc.getComponents()[0]).setOpaque(false);
-                ((JFormattedTextField)dc.getComponents()[0]).setBorder(null);
-            } else {
-                throw new RuntimeException("DefaultBindableDateChooser not supported yet");
-            }
-        } else if (comp instanceof JCheckBox) {
-            if (readOnly) {
-                ((JCheckBox)comp).setUI(new BasicCheckBoxUI() {
+        if (comp != null) {
+            final UneditableMarkerComp newUneditableMarker;
+            UneditableMarkerComp oldUneditableMarker = null;
 
-                        @Override
-                        protected BasicButtonListener createButtonListener(final AbstractButton b) {
-                            return null;
-                        }
-                    });
-            } else {
-                throw new RuntimeException("JCheckBox not supported yet");
-            }
-        } else if (comp instanceof JXTable) {
             if (readOnly) {
+                newUneditableMarker = new UneditableMarkerComp();
+                comp.addComponentListener(newUneditableMarker);
+            } else {
+                for (final ComponentListener subComp : comp.getComponentListeners()) {
+                    if (subComp instanceof UneditableMarkerComp) {
+                        oldUneditableMarker = (UneditableMarkerComp)subComp;
+                        break;
+                    }
+                }
+                if (oldUneditableMarker != null) {
+                    comp.removeComponentListener(oldUneditableMarker);
+                }
+                newUneditableMarker = null;
+            }
+
+            if (comp instanceof JTextArea) {
+                final JTextArea tComp = (JTextArea)comp;
+                if (readOnly) {
+                    if (newUneditableMarker != null) {
+                        final JTextArea dummy = new JTextArea();
+                        newUneditableMarker.setDummy(dummy);
+                        dummy.setBorder(tComp.getBorder());
+                    }
+                    tComp.setBorder(new EmptyBorder(0, 0, 0, 0));
+                } else {
+                    if (oldUneditableMarker != null) {
+                        final JTextArea dummy = (JTextArea)oldUneditableMarker.getDummy();
+                        tComp.setBorder(dummy.getBorder());
+                    }
+                }
+                tComp.setEditable(!readOnly);
+                tComp.setOpaque(!readOnly);
+            } else if (comp instanceof JTextField) {
+                final JTextField tComp = (JTextField)comp;
+                tComp.setEditable(!readOnly);
+                tComp.setOpaque(!readOnly);
+                if (readOnly) {
+                    if (newUneditableMarker != null) {
+                        final JTextField dummy = new JTextField();
+                        dummy.setBorder(tComp.getBorder());
+                        newUneditableMarker.setDummy(dummy);
+                    }
+                    tComp.setBorder(new EmptyBorder(0, 0, 0, 0));
+                } else {
+                    if (oldUneditableMarker != null) {
+                        final JTextField dummy = (JTextField)oldUneditableMarker.getDummy();
+                        tComp.setBorder(dummy.getBorder());
+                    }
+                }
+            } else if (comp instanceof JScrollPane) {
+                final JScrollPane jsp = (JScrollPane)comp;
+                jsp.setOpaque(!readOnly);
+                jsp.getViewport().setOpaque(!false);
+            } else if (comp instanceof JComboBox) {
+                final JComboBox cb = (JComboBox)comp;
+                cb.setEnabled(!readOnly);
+                if (readOnly) {
+                    cb.setRenderer(new CustomListCellRenderer((ListCellRenderer)cb.getRenderer()));
+                } else if (cb.getRenderer() instanceof CustomListCellRenderer) {
+                    cb.setRenderer(((CustomListCellRenderer)cb.getRenderer()).getOrigRenderer());
+                }
+            } else if (comp instanceof JSpinner) {
+                final JSpinner sp = (JSpinner)comp;
+                if (readOnly) {
+                    if (newUneditableMarker != null) {
+                        final JSpinner dummy = new JSpinner();
+                        newUneditableMarker.setDummy(dummy);
+                        dummy.setOpaque(sp.isOpaque());
+                        dummy.setBorder(sp.getBorder());
+                        dummy.getEditor().setOpaque(sp.getEditor().isOpaque());
+                        ((JSpinner.DefaultEditor)dummy.getEditor()).getTextField()
+                                .setOpaque(((JSpinner.DefaultEditor)sp.getEditor()).getTextField().isOpaque());
+                    }
+                    sp.setOpaque(false);
+                    sp.setBorder(null);
+                    sp.getEditor().setOpaque(false);
+                    ((JSpinner.DefaultEditor)sp.getEditor()).getTextField().setOpaque(false);
+                } else {
+                    if (oldUneditableMarker != null) {
+                        final JSpinner dummy = (JSpinner)oldUneditableMarker.getDummy();
+                        sp.setOpaque(dummy.isOpaque());
+                        sp.setBorder(dummy.getBorder());
+                        sp.getEditor().setOpaque(dummy.getEditor().isOpaque());
+                        ((JSpinner.DefaultEditor)sp.getEditor()).getTextField()
+                                .setOpaque(((JSpinner.DefaultEditor)dummy.getEditor()).getTextField().isOpaque());
+                    }
+                }
+            } else if (comp instanceof DefaultBindableDateChooser) {
+                final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
+                final Component arrow = (Component)dc.getComponents()[1];
+                final JFormattedTextField textField = (JFormattedTextField)dc.getComponents()[0];
+                if (readOnly) {
+                    if (newUneditableMarker != null) {
+                        final DefaultBindableDateChooser dummy = new DefaultBindableDateChooser();
+                        newUneditableMarker.setDummy(dummy);
+                        dummy.setOpaque(textField.isOpaque());
+                        dummy.setBorder(textField.getBorder());
+                    }
+
+                    textField.setOpaque(false);
+                    textField.setBorder(null);
+                } else {
+                    if (oldUneditableMarker != null) {
+                        final DefaultBindableDateChooser dummy = (DefaultBindableDateChooser)
+                            oldUneditableMarker.getDummy();
+                        textField.setOpaque(dummy.isOpaque());
+                        textField.setBorder(dummy.getBorder());
+                    }
+                }
+                dc.setEditable(!readOnly);
+                arrow.setVisible(!readOnly);
+            } else if (comp instanceof JCheckBox) {
+                final JCheckBox cb = (JCheckBox)comp;
+                if (readOnly) {
+                    if (newUneditableMarker != null) {
+                        final JCheckBox dummy = new JCheckBox();
+                        newUneditableMarker.setDummy(dummy);
+                        dummy.setUI(cb.getUI());
+                    }
+                    cb.setUI(new BasicCheckBoxUI() {
+
+                            @Override
+                            protected BasicButtonListener createButtonListener(final AbstractButton b) {
+                                return null;
+                            }
+                        });
+                } else {
+                    if (oldUneditableMarker != null) {
+                        final JCheckBox dummy = (JCheckBox)oldUneditableMarker.getDummy();
+                        cb.setUI(dummy.getUI());
+                    }
+                }
+            } else if (comp instanceof JXTable) {
                 final JXTable jxt = (JXTable)comp;
-                jxt.setEditable(false);
-                ((DefaultTableRenderer)jxt.getDefaultRenderer(Object.class)).setBackground(new Color(0, 0, 0, 0));
-                jxt.setOpaque(false);
-                jxt.setGridColor(Color.GRAY);
-                jxt.setBackground(new Color(0, 0, 0, 0));
-            } else {
-                throw new RuntimeException("JXTable not supported yet");
-            }
-        } else if (comp instanceof JList) {
-            if (readOnly) {
+                if (readOnly) {
+                    if (newUneditableMarker != null) {
+                        final JXTable dummy = new JXTable();
+                        newUneditableMarker.setDummy(dummy);
+                        dummy.setGridColor(jxt.getGridColor());
+                        dummy.setBackground(jxt.getBackground());
+                    }
+                    ((DefaultTableRenderer)jxt.getDefaultRenderer(Object.class)).setBackground(new Color(0, 0, 0, 0));
+                    jxt.setGridColor(Color.GRAY);
+                    jxt.setBackground(new Color(0, 0, 0, 0));
+                } else {
+                    if (oldUneditableMarker != null) {
+                        final JXTable dummy = (JXTable)oldUneditableMarker.getDummy();
+                        jxt.setGridColor(dummy.getGridColor());
+                        jxt.setBackground(dummy.getBackground());
+                    }
+                }
+                jxt.setEditable(!readOnly);
+                jxt.setOpaque(!readOnly);
+            } else if (comp instanceof JList) {
                 final JList jl = (JList)comp;
-                jl.setOpaque(false);
-                jl.setCellRenderer(new DefaultListCellRenderer() {
+                if (readOnly) {
+                    if (newUneditableMarker != null) {
+                        final JList dummy = new JList();
+                        newUneditableMarker.setDummy(dummy);
+                        dummy.setOpaque(jl.isOpaque());
+                        dummy.setCellRenderer(jl.getCellRenderer());
+                    }
+                    jl.setOpaque(false);
+                    jl.setCellRenderer(new DefaultListCellRenderer() {
 
-                        @Override
-                        public Component getListCellRendererComponent(final JList<?> list,
-                                final Object value,
-                                final int index,
-                                final boolean isSelected,
-                                final boolean cellHasFocus) {
-                            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                            // setForeground(Color.WHITE);
-                            setOpaque(isSelected);
-                            return this;
-                        }
-                    });
+                            @Override
+                            public Component getListCellRendererComponent(final JList<?> list,
+                                    final Object value,
+                                    final int index,
+                                    final boolean isSelected,
+                                    final boolean cellHasFocus) {
+                                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                                // setForeground(Color.WHITE);
+                                setOpaque(isSelected);
+                                return this;
+                            }
+                        });
+                } else {
+                    if (oldUneditableMarker != null) {
+                        final JList dummy = (JList)oldUneditableMarker.getDummy();
+                        jl.setOpaque(dummy.isOpaque());
+                        jl.setCellRenderer(dummy.getCellRenderer());
+                    }
+                }
             } else {
-                throw new RuntimeException("JList not supported yet");
+                comp.setEnabled(!readOnly);
             }
-        } else if (comp != null) {
-            comp.setEnabled(!readOnly);
         }
     }
 
@@ -453,6 +558,38 @@ public class RendererTools {
      *
      * @version  $Revision$, $Date$
      */
+    private static class UneditableMarkerComp extends ComponentAdapter {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private Component dummy;
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  compDummy  DOCUMENT ME!
+         */
+        public void setDummy(final Component compDummy) {
+            this.dummy = compDummy;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Component getDummy() {
+            return dummy;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     private static class RemoveColorFromComboBoxListRenderer extends BasicComboBoxRenderer {
 
         //~ Methods ------------------------------------------------------------
@@ -537,41 +674,6 @@ public class RendererTools {
                 }
                 evt.consume();
             }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static class ReadOnlyEmtpyBorder extends EmptyBorder {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private final Border origBorder;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ReadOnlyEmtpyBorder object.
-         *
-         * @param  origBorder  DOCUMENT ME!
-         */
-        public ReadOnlyEmtpyBorder(final Border origBorder) {
-            super(0, 0, 0, 0);
-            this.origBorder = origBorder;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Border getOrigBorder() {
-            return origBorder;
         }
     }
 }
