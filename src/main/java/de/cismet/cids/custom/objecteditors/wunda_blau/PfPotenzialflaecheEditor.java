@@ -116,6 +116,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
@@ -4780,7 +4782,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 dsf.setGeometry(geom);
                 dsf.setFillingPaint(Color.RED);
                 dsf.setTransparency(0.8f);
-                mappingComponent1.getFeatureCollection().addFeature(dsf);
+                mappingComponent1.getFeatureCollection().addFeature(new CidsFeature(getCidsBean().getMetaObject()));
             }
         }
     }

@@ -16,6 +16,9 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.newuser.permission.Policy;
 
+import org.jdesktop.beansbinding.Converter;
+
+import java.awt.Color;
 import java.awt.Component;
 
 import java.util.ArrayList;
@@ -80,6 +83,26 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 //    private static String REPORT_POTENZIALFLAECHE_URL =
 //        "/de/cismet/cids/custom/reports/wunda_blau/potenzialflaechen_full.jasper";
 
+    private static Converter<String, Color> COLORCODE_CONVERTER = new Converter<String, Color>() {
+
+            @Override
+            public String convertReverse(final Color color) {
+                if (color == null) {
+                    return null;
+                }
+                final String hex = Integer.toHexString(color.getRGB());
+                return String.format("#%s", hex.substring(hex.length() - 6));
+            }
+
+            @Override
+            public Color convertForward(final String string) {
+                if (string == null) {
+                    return null;
+                }
+                return Color.decode(string);
+            }
+        };
+
     //~ Instance fields --------------------------------------------------------
 
     private final boolean editable;
@@ -94,6 +117,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVeroeffentlicht;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JList<CidsBean> jList1;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
@@ -104,6 +128,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private javax.swing.JLabel lblBeschreibung;
     private javax.swing.JLabel lblBeschreibungTitle;
     private javax.swing.JLabel lblBezeichnung;
+    private javax.swing.JLabel lblBezeichnung1;
     private javax.swing.JLabel lblGeometrie5;
     private javax.swing.JLabel lblGeometrie6;
     private javax.swing.JLabel lblSteckbrief;
@@ -117,6 +142,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private javax.swing.JPanel panTitle;
     private javax.swing.JTextArea taBeschreibung;
     private javax.swing.JTextField txtBezeichnung;
+    private javax.swing.JTextField txtBezeichnung1;
     private javax.swing.JLabel txtTitle;
     private javax.swing.JLabel txtTitle1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -223,6 +249,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             RendererTools.makeReadOnly(jList1);
             RendererTools.makeReadOnly(cbVeroeffentlicht);
             RendererTools.makeReadOnly(taBeschreibung);
+            RendererTools.makeReadOnly(txtBezeichnung1);
             panArtControls2.setVisible(false);
             cbGeom.setVisible(false);
             lblGeometrie5.setVisible(false);
@@ -254,8 +281,14 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblBezeichnung = new javax.swing.JLabel();
         txtBezeichnung = new javax.swing.JTextField();
         lblBeschreibung = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        taBeschreibung = new javax.swing.JTextArea();
+        lblBezeichnung1 = new javax.swing.JLabel();
+        txtBezeichnung1 = new javax.swing.JTextField();
         lblVeroeffentlich = new javax.swing.JLabel();
         lblSteckbrief = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         lblGeometrie5 = new javax.swing.JLabel();
         cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
         cbVeroeffentlicht = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
@@ -265,11 +298,8 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         panArtControls2 = new javax.swing.JPanel();
         btnAddArt2 = new javax.swing.JButton();
         btnRemoveArt2 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        taBeschreibung = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -389,6 +419,69 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblBeschreibung, gridBagConstraints);
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        taBeschreibung.setColumns(20);
+        taBeschreibung.setLineWrap(true);
+        taBeschreibung.setRows(5);
+        taBeschreibung.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(taBeschreibung);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel7.add(jScrollPane1, gridBagConstraints);
+
+        lblBezeichnung1.setFont(lblBezeichnung1.getFont().deriveFont(
+                lblBezeichnung1.getFont().getStyle()
+                        | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBezeichnung1,
+            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblBezeichnung1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        jPanel7.add(lblBezeichnung1, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.colorcode}"),
+                txtBezeichnung1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        txtBezeichnung1.addFocusListener(new java.awt.event.FocusAdapter() {
+
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtBezeichnung1FocusLost(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel7.add(txtBezeichnung1, gridBagConstraints);
+
         lblVeroeffentlich.setFont(lblVeroeffentlich.getFont().deriveFont(
                 lblVeroeffentlich.getFont().getStyle()
                         | java.awt.Font.BOLD));
@@ -397,7 +490,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblVeroeffentlich.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -412,12 +505,31 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblSteckbrief.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblSteckbrief, gridBagConstraints);
+
+        jList1.setVisibleRowCount(3);
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    jList1MouseClicked(evt);
+                }
+            });
+        jScrollPane3.setViewportView(jList1);
+        jList1.setCellRenderer(new SteckbriefListCellRenderer());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel7.add(jScrollPane3, gridBagConstraints);
 
         lblGeometrie5.setFont(lblGeometrie5.getFont().deriveFont(
                 lblGeometrie5.getFont().getStyle()
@@ -427,7 +539,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblGeometrie5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -446,7 +558,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -462,7 +574,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -476,7 +588,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblGeometrie6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -501,7 +613,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -564,50 +676,6 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel7.add(panArtControls2, gridBagConstraints);
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        taBeschreibung.setColumns(20);
-        taBeschreibung.setLineWrap(true);
-        taBeschreibung.setRows(5);
-        taBeschreibung.setWrapStyleWord(true);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
-                taBeschreibung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jScrollPane1.setViewportView(taBeschreibung);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        jPanel7.add(jScrollPane1, gridBagConstraints);
-
-        jList1.setVisibleRowCount(3);
-        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    jList1MouseClicked(evt);
-                }
-            });
-        jScrollPane3.setViewportView(jList1);
-        jList1.setCellRenderer(new SteckbriefListCellRenderer());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
-        jPanel7.add(jScrollPane3, gridBagConstraints);
-
         jButton1.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/treeicons/wunda_demo/star.png")));            // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -637,10 +705,30 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(6, 5, 0, 0);
         jPanel7.add(jButton1, gridBagConstraints);
         jButton1.setVisible(isEditable());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.jLabel1.text")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.colorcode}"),
+                jLabel1,
+                org.jdesktop.beansbinding.BeanProperty.create("background"));
+        binding.setConverter(COLORCODE_CONVERTER);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        jPanel7.add(jLabel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -775,6 +863,15 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         selectMainSteckbrief();
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void txtBezeichnung1FocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBezeichnung1FocusLost
+        // TODO add your handling code here:
+    } //GEN-LAST:event_txtBezeichnung1FocusLost
 
     /**
      * DOCUMENT ME!

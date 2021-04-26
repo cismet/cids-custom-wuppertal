@@ -59,6 +59,8 @@ import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
 import de.cismet.connectioncontext.ConnectionContext;
 
 /*
@@ -234,13 +236,23 @@ public class PfMapGenerator extends MapImageFactory {
         final Geometry geom = (pfBean != null) ? (Geometry)pfBean.getProperty("geometrie.geo_field") : null;
 
         if (geom != null) {
+            Color color = Color.RED;
+            final String colorString = (String)pfBean.getProperty("kampagne.colorcode");
+            if (colorString != null) {
+                try {
+                    color = Color.decode(colorString);
+                } catch (final Exception ex) {
+                    LOG.warn("color code couldn't be decoded, falling back to default color (red)", ex);
+                }
+            }
+
             final DefaultStyledFeature feature = new DefaultStyledFeature();
             feature.setGeometry(geom);
             feature.setHighlightingEnabled(true);
-            feature.setLinePaint(Color.RED);
-            feature.setFillingPaint(new Color(Color.RED.getRed(), Color.RED.getGreen(), Color.RED.getBlue(), 127));
+            feature.setLinePaint(color);
+            feature.setFillingPaint(new Color(color.getRed(), color.getGreen(), color.getBlue(), 127));
             feature.setLineWidth(3);
-            return feature;
+            return new CidsFeature(pfBean.getMetaObject());
         } else {
             return null;
         }
