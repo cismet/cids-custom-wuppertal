@@ -956,7 +956,6 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.error(" kann nicht geladen werden ", ex);
         }
     }
-
     @Override
     public boolean prepareForSave() {
         boolean save = true;
@@ -1202,7 +1201,6 @@ public class No2MessungEditor extends DefaultCustomObjectEditor implements CidsB
             panMesswerteAdd.setVisible(isEditor);
         }
     }
-
     /**
      * DOCUMENT ME!
      *
