@@ -318,11 +318,9 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panTitle.add(txtTitle, gridBagConstraints);
 
-        txtTitle1.setFont(new java.awt.Font("DejaVu Sans", 1, 18));                                           // NOI18N
+        txtTitle1.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
         txtTitle1.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            txtTitle1,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.txtTitle1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(txtTitle1, "Kampagne: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -347,9 +345,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
 
         lblBeschreibungTitle.setFont(lblBeschreibungTitle.getFont());
         lblBeschreibungTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBeschreibungTitle,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblBeschreibungTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibungTitle, "Allgemein");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -370,9 +366,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblBezeichnung.setFont(lblBezeichnung.getFont().deriveFont(
                 lblBezeichnung.getFont().getStyle()
                         | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBezeichnung,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblBezeichnung.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblBezeichnung, "Bezeichnung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -407,9 +401,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblBeschreibung.setFont(lblBeschreibung.getFont().deriveFont(
                 lblBeschreibung.getFont().getStyle()
                         | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBeschreibung,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblBeschreibung.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibung, "Beschreibung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -447,9 +439,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblBezeichnung1.setFont(lblBezeichnung1.getFont().deriveFont(
                 lblBezeichnung1.getFont().getStyle()
                         | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblBezeichnung1,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblBezeichnung1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblBezeichnung1, "Farbcode (#rrggbb):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -485,9 +475,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblVeroeffentlich.setFont(lblVeroeffentlich.getFont().deriveFont(
                 lblVeroeffentlich.getFont().getStyle()
                         | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblVeroeffentlich,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblVeroeffentlich.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblVeroeffentlich, "veröffentlicht für:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -500,9 +488,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblSteckbrief.setFont(lblSteckbrief.getFont().deriveFont(
                 lblSteckbrief.getFont().getStyle()
                         | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblSteckbrief,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblSteckbrief.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblSteckbrief, "Steckbrieftemplates:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -534,9 +520,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblGeometrie5.setFont(lblGeometrie5.getFont().deriveFont(
                 lblGeometrie5.getFont().getStyle()
                         | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblGeometrie5,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblGeometrie5.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblGeometrie5, "Geometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -583,9 +567,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         lblGeometrie6.setFont(lblGeometrie6.getFont().deriveFont(
                 lblGeometrie6.getFont().getStyle()
                         | java.awt.Font.BOLD));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblGeometrie6,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.lblGeometrie6.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblGeometrie6, "Zugeordnete Flächen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -677,10 +659,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         jPanel7.add(panArtControls2, gridBagConstraints);
 
         jButton1.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/treeicons/wunda_demo/star.png")));            // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.jButton1.text")); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/treeicons/wunda_demo/star.png"))); // NOI18N
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setFocusPainted(false);
@@ -710,9 +689,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         jPanel7.add(jButton1, gridBagConstraints);
         jButton1.setVisible(isEditable());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(PfKampagneEditor.class, "PfKampagneEditor.jLabel1.text")); // NOI18N
+        jLabel1.setOpaque(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -720,6 +697,8 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.colorcode}"),
                 jLabel1,
                 org.jdesktop.beansbinding.BeanProperty.create("background"));
+        binding.setSourceNullValue(java.awt.Color.red);
+        binding.setSourceUnreadableValue(java.awt.Color.red);
         binding.setConverter(COLORCODE_CONVERTER);
         bindingGroup.addBinding(binding);
 
