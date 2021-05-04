@@ -861,7 +861,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new RpdKategorieMonSearch());
+        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new RpdKategorieMonSearch(0.2d));
         filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -869,7 +869,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new FnpHauptnutzungenMonSearch());
+        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new FnpHauptnutzungenMonSearch(
+                    0.1d));
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -4048,7 +4049,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                         if ((property != null)
                                     && (property.getValue()
                                         instanceof PotenzialflaecheReportServerAction.PathReportProperty)) {
-                            final String propertyName = property.toString();
+                            final String propertyName = property.name();
                             final String path =
                                 ((PotenzialflaecheReportServerAction.PathReportProperty)property.getValue()).getPath();
                             final MetaClass metaClass = getForeignMetaClass(path);
@@ -4823,19 +4824,20 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                                                           : null;
 
         if (geometry != null) {
-            final Geometry bufferedGeom = geometry.buffer(-2);
-            bufferedGeom.setSRID(geometry.getSRID());
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
                 final CidsServerSearch search = searchLabelFieldPanel.getSearch();
                 if (search instanceof GeometrySearch) {
                     final GeometrySearch geometrySearch = (GeometrySearch)search;
-                    geometrySearch.setGeometry(bufferedGeom);
+                    geometrySearch.setGeometry(geometry);
+                    geometrySearch.setBuffer(-2d);
                     searchLabelFieldPanel.refresh();
                 }
             }
-            ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(bufferedGeom);
+            ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(geometry);
+            ((GeometrySearch)monSearchResultsList1.getSearch()).setBuffer(-2d);
             monSearchResultsList1.refresh();
-            ((GeometrySearch)monSearchResultsList2.getSearch()).setGeometry(bufferedGeom);
+            ((GeometrySearch)monSearchResultsList2.getSearch()).setGeometry(geometry);
+            ((GeometrySearch)monSearchResultsList2.getSearch()).setBuffer(-2d);
             monSearchResultsList2.refresh();
         } else {
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {

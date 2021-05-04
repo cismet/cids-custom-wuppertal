@@ -20,7 +20,6 @@ import Sirius.navigator.tools.MapImageFactory;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.newuser.User;
 
 import Sirius.util.MapImageFactoryConfiguration;
 
@@ -37,18 +36,16 @@ import edu.umd.cs.piccolo.util.PBounds;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import java.io.StringReader;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Properties;
 
-import de.cismet.cids.custom.utils.WundaBlauServerResources;
-import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction.PfMapConfiguration;
+import javax.imageio.ImageIO;
+
+import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportCreator;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
@@ -60,8 +57,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
-
-import de.cismet.connectioncontext.ConnectionContext;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -75,26 +70,26 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class PfMapGenerator extends MapImageFactory {
+public class PfMapFactory extends MapImageFactory {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            PfMapGenerator.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PfMapFactory.class);
     private static final double PPI = 72.156d;
     private static final double METERS_TO_INCH_FACTOR = 0.0254d;
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    protected MapImageFactoryConfiguration extractConfiguration(final String configuration) throws Exception {
-        return new ObjectMapper().readValue(configuration, PfMapConfiguration.class);
+    protected PotenzialflaecheReportCreator.MapConfiguration extractConfiguration(final String configuration)
+            throws Exception {
+        return new ObjectMapper().readValue(configuration, PotenzialflaecheReportCreator.MapConfiguration.class);
     }
 
     @Override
     protected BufferedImage generateMap(final MapImageFactoryConfiguration configuration) throws Exception {
-        if (configuration instanceof PfMapConfiguration) {
-            return generateMap((PfMapConfiguration)configuration);
+        if (configuration instanceof PotenzialflaecheReportCreator.MapConfiguration) {
+            return generateMap((PotenzialflaecheReportCreator.MapConfiguration)configuration);
         } else {
             throw new Exception("wrong configuration format");
         }
@@ -103,27 +98,30 @@ public class PfMapGenerator extends MapImageFactory {
     /**
      * DOCUMENT ME!
      *
-     * @param   configuration  DOCUMENT ME!
+     * @param   config  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    protected BufferedImage generateMap(final PfMapConfiguration configuration) throws Exception {
-        final Properties properties = getProperties(
-                WundaBlauServerResources.POTENZIALFLAECHEN_MAPFACTORY_PROPERTIES,
-                getConnectionContext());
+    protected BufferedImage generateMap(final PotenzialflaecheReportCreator.MapConfiguration config) throws Exception {
+        final File file = config.getFileFromCache();
+        if (Boolean.TRUE.equals(config.getUseCache())) {
+            if ((file != null) && file.exists() && file.isFile()) {
+                return ImageIO.read(file);
+            }
+        }
 
         final MetaClass mc;
-        if ((configuration.getType() == PfMapConfiguration.Type.PF_ORTHO)
-                    || (configuration.getType() == PfMapConfiguration.Type.PF_DGK)) {
+        if ((config.getType() == PotenzialflaecheReportCreator.Type.PF_ORTHO)
+                    || (config.getType() == PotenzialflaecheReportCreator.Type.PF_DGK)) {
             mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "PF_POTENZIALFLAECHE", getConnectionContext());
         } else {
             return null;
         }
 
         final Collection<Feature> features = new ArrayList();
-        for (final Integer id : configuration.getIds()) {
+        for (final Integer id : config.getIds()) {
             final MetaObject mo = SessionManager.getProxy()
                         .getMetaObject(
                             SessionManager.getSession().getUser(),
@@ -138,21 +136,21 @@ public class PfMapGenerator extends MapImageFactory {
             }
         }
 
-        final int mapHeight = configuration.getHeight();
-        final int mapWidth = configuration.getWidth();
+        final int mapHeight = config.getHeight();
+        final int mapWidth = config.getWidth();
 
-        final XBoundingBox boundingBox = genBoundingBox(features, configuration.getBuffer(), configuration.getSrs());
+        final XBoundingBox boundingBox = genBoundingBox(features, config.getBuffer(), config.getSrs());
         final double scaleDenominator = getScaleDenom(
                 mapWidth,
                 mapHeight,
                 boundingBox.getWidth(),
                 boundingBox.getHeight());
 
-        final String mapUrl = properties.getProperty("mapUrl_" + configuration.getType().name());
+        final String mapUrl = config.getMapUrl();
         final SimpleWMS simpleWms = new SimpleWMS(new SimpleWmsGetMapUrl(mapUrl));
         final HeadlessMapProvider mapProvider = new HeadlessMapProvider();
         mapProvider.setCenterMapOnResize(true);
-        mapProvider.setCrs(new Crs(configuration.getSrs(), "", "", true, true));
+        mapProvider.setCrs(new Crs(config.getSrs(), "", "", true, true));
         mapProvider.addLayer(simpleWms);
 
         for (final Feature feature : features) {
@@ -188,41 +186,21 @@ public class PfMapGenerator extends MapImageFactory {
 
         mapProvider.setBoundingBox(boundingBox);
 
-        final int mapDPI = Integer.parseInt(properties.getProperty("mapDPI_" + configuration.getType().name()));
+        final int mapDPI = config.getMapDpi();
 
         mapProvider.setFeatureResolutionFactor(mapDPI);
-        return (BufferedImage)mapProvider.getImageAndWait((int)PPI, mapDPI, mapWidth, mapHeight);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   serverResource     DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public static Properties getProperties(final WundaBlauServerResources serverResource,
-            final ConnectionContext connectionContext) throws Exception {
-        final User user = SessionManager.getSession().getUser();
-        final Object result = SessionManager.getProxy()
-                    .executeTask(
-                        user,
-                        GetServerResourceServerAction.TASK_NAME,
-                        "WUNDA_BLAU",
-                        serverResource.getValue(),
-                        connectionContext);
-        if (result instanceof Exception) {
-            throw (Exception)result;
-        } else if (result instanceof String) {
-            final Properties properties = new Properties();
-            properties.load(new StringReader((String)result));
-            return properties;
-        } else {
-            return null;
+        final BufferedImage image = (BufferedImage)mapProvider.getImageAndWait((int)PPI, mapDPI, mapWidth, mapHeight);
+        try {
+            if ((file != null) && (file.getParentFile() != null)) {
+                if (!file.getParentFile().exists()) {
+                    file.getParentFile().mkdir();
+                }
+                ImageIO.write(image, "png", file);
+            }
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
         }
+        return image;
     }
 
     /**
@@ -285,7 +263,7 @@ public class PfMapGenerator extends MapImageFactory {
      * DOCUMENT ME!
      *
      * @param   features  DOCUMENT ME!
-     * @param   buffer    properties DOCUMENT ME!
+     * @param   buffer    buffer DOCUMENT ME!
      * @param   srs       DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
