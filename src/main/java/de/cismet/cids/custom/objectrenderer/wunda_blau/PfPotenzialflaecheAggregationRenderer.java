@@ -134,6 +134,9 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                             new ServerActionParameter<>(
                                 CsvExportServerAction.ParameterType.BOOLEAN_NO.toString(),
                                 "nein"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.DISTINCT_ON.toString(),
+                                "id"),
                         };
                     DownloadManager.instance()
                             .add(
