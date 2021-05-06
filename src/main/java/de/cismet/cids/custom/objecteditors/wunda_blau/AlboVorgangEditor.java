@@ -1569,7 +1569,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
          * Creates a new VorgangBearbeitungTableModel object.
          */
         public VorgangBearbeitungTableModel() {
-            super(BEARBEITUNG_COLUMN_PROPERTIES, BEARBEITUNG_COLUMN_NAMES, BEARBEITUNG_COLUMN_CLASSES, true);
+            super(BEARBEITUNG_COLUMN_PROPERTIES, BEARBEITUNG_COLUMN_NAMES, BEARBEITUNG_COLUMN_CLASSES, true, false);
         }
     }
     /**

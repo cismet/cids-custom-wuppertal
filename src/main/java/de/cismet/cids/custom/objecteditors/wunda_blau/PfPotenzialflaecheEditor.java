@@ -230,8 +230,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JButton btnMassnahmen1;
     private javax.swing.JButton btnMenAbort4;
     private javax.swing.JButton btnMenAbort5;
+    private javax.swing.JButton btnMenAbort6;
     private javax.swing.JButton btnMenOk4;
     private javax.swing.JButton btnMenOk5;
+    private javax.swing.JButton btnMenOk6;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAeussereErschluessung;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAeussereErschluessung1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAktivierbarkeit;
@@ -264,6 +266,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField6;
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField8;
     private javax.swing.JDialog dlgFlaeche;
+    private javax.swing.JDialog dlgInterneHinweise;
     private javax.swing.JDialog dlgMassnahme;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
@@ -380,6 +383,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
@@ -462,6 +466,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.tools.gui.RoundedPanel panErweitert;
     private javax.swing.JPanel panFlaeche;
     private javax.swing.JPanel panFlaeche1;
+    private javax.swing.JPanel panFlaeche2;
     private javax.swing.JPanel panLageBody2;
     private javax.swing.JPanel panLageBody3;
     private javax.swing.JPanel panLageBody5;
@@ -471,6 +476,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel panMain;
     private javax.swing.JPanel panMenButtons4;
     private javax.swing.JPanel panMenButtons5;
+    private javax.swing.JPanel panMenButtons6;
     private javax.swing.JPanel panMessstellenausbauBody;
     private de.cismet.tools.gui.SemiRoundedPanel panMessstellenausbauTitle;
     private javax.swing.JPanel panNew;
@@ -487,6 +493,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JTextArea taFlaeche;
     private javax.swing.JTextArea taFlaecheDialog;
     private javax.swing.JTextArea taMassnahmeDialog;
+    private javax.swing.JTextArea taMassnahmeDialog1;
     private javax.swing.JTextArea taNotwendigeMassnahme;
     private javax.swing.JTextArea taNotwendigeMassnahme1;
     private javax.swing.JTextField txtBezeichnung;
@@ -551,45 +558,48 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initSchluesseltabellenBeans() {
-        new SwingWorker<List<CidsBean>, Void>() {
-
-                @Override
-                protected List<CidsBean> doInBackground() throws Exception {
-                    final MetaClass ST_MC = ClassCacheMultiple.getMetaClass(
-                            CidsBeanSupport.DOMAIN_NAME,
-                            "pf_schluesseltabelle",
-                            getConnectionContext());
-                    final String query = String.format(
-                            "SELECT %d, %s FROM %s",
-                            ST_MC.getID(),
-                            ST_MC.getPrimaryKey(),
-                            ST_MC.getTableName());
-                    final MetaObject[] mos = SessionManager.getProxy()
-                                .getMetaObjectByQuery(query, 0, getConnectionContext());
-                    final List<CidsBean> beans = new ArrayList<>();
-                    if (mos != null) {
-                        for (final MetaObject mo : mos) {
-                            if (mo != null) {
-                                beans.add(mo.getBean());
-                            }
-                        }
-                    }
-                    return beans;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        schluesseltabellenBeans.clear();
-                        final List<CidsBean> beans = get();
-                        schluesseltabellenBeans.addAll(beans);
-
-                        initPropertyToMetaClassMap();
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
+        try {
+//        new SwingWorker<List<CidsBean>, Void>() {
+//
+//                @Override
+//                protected List<CidsBean> doInBackground() throws Exception {
+            final MetaClass ST_MC = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "pf_schluesseltabelle",
+                    getConnectionContext());
+            final String query = String.format(
+                    "SELECT %d, %s FROM %s",
+                    ST_MC.getID(),
+                    ST_MC.getPrimaryKey(),
+                    ST_MC.getTableName());
+            final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(query, 0, getConnectionContext());
+            final List<CidsBean> beans = new ArrayList<>();
+            if (mos != null) {
+                for (final MetaObject mo : mos) {
+                    if (mo != null) {
+                        beans.add(mo.getBean());
                     }
                 }
-            }.execute();
+            }
+//                    return beans;
+//                }
+//
+//                @Override
+//                protected void done() {
+//                    try {
+//                        schluesseltabellenBeans.clear();
+//                        final List<CidsBean> beans = get();
+            schluesseltabellenBeans.addAll(beans);
+
+            initPropertyToMetaClassMap();
+//                    } catch (final Exception ex) {
+//                        LOG.error(ex, ex);
+//                    }
+//                }
+//            }.execute();
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
     }
 
     @Override
@@ -720,6 +730,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jButton3 = new javax.swing.JButton();
         jScrollPane9 = new javax.swing.JScrollPane();
         txtDefinition = new javax.swing.JEditorPane();
+        dlgInterneHinweise = new javax.swing.JDialog();
+        panFlaeche2 = new javax.swing.JPanel();
+        panMenButtons6 = new javax.swing.JPanel();
+        btnMenAbort6 = new javax.swing.JButton();
+        btnMenOk6 = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        taMassnahmeDialog1 = new javax.swing.JTextArea();
         jScrollPane5 = new javax.swing.JScrollPane();
         jPanel22 = new ScrollablePanel();
         panNew = new javax.swing.JPanel();
@@ -1217,6 +1234,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taFlaecheDialog.setLineWrap(true);
         taFlaecheDialog.setRows(5);
         taFlaecheDialog.setWrapStyleWord(true);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung_flaeche}"),
+                taFlaecheDialog,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         jScrollPane8.setViewportView(taFlaecheDialog);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1284,6 +1310,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taMassnahmeDialog.setLineWrap(true);
         taMassnahmeDialog.setRows(5);
         taMassnahmeDialog.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.notwendige_massnahmen}"),
+                taMassnahmeDialog,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         jScrollPane2.setViewportView(taMassnahmeDialog);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1358,6 +1393,82 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panDefinition.add(jScrollPane9, java.awt.BorderLayout.CENTER);
 
         panDialog.getContentPane().add(panDefinition, java.awt.BorderLayout.CENTER);
+
+        dlgInterneHinweise.setTitle("Notwendige Maßnahmen");
+        dlgInterneHinweise.setModal(true);
+        dlgInterneHinweise.setSize(new java.awt.Dimension(600, 400));
+
+        panFlaeche2.setMaximumSize(new java.awt.Dimension(300, 120));
+        panFlaeche2.setMinimumSize(new java.awt.Dimension(300, 120));
+        panFlaeche2.setPreferredSize(new java.awt.Dimension(300, 120));
+        panFlaeche2.setLayout(new java.awt.GridBagLayout());
+
+        panMenButtons6.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnMenAbort6, "Abbrechen");
+        btnMenAbort6.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbort6ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMenButtons6.add(btnMenAbort6, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnMenOk6, "Ok");
+        btnMenOk6.setMaximumSize(new java.awt.Dimension(85, 23));
+        btnMenOk6.setMinimumSize(new java.awt.Dimension(85, 23));
+        btnMenOk6.setPreferredSize(new java.awt.Dimension(85, 23));
+        btnMenOk6.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOk6ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMenButtons6.add(btnMenOk6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panFlaeche2.add(panMenButtons6, gridBagConstraints);
+
+        taMassnahmeDialog1.setColumns(20);
+        taMassnahmeDialog1.setLineWrap(true);
+        taMassnahmeDialog1.setRows(5);
+        taMassnahmeDialog1.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interne_hinweise}"),
+                taMassnahmeDialog1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane6.setViewportView(taMassnahmeDialog1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panFlaeche2.add(jScrollPane6, gridBagConstraints);
+
+        dlgInterneHinweise.getContentPane().add(panFlaeche2, java.awt.BorderLayout.CENTER);
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -1528,7 +1639,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         txtNummer.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NUMMER.name());
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
@@ -3761,7 +3872,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel24.add(panArtControls5, gridBagConstraints);
-        panArtControls4.setVisible(isEditable());
+        panArtControls5.setVisible(isEditable());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -3864,7 +3975,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmenActionPerformed
-        taMassnahmeDialog.setText((String)cidsBean.getProperty("notwendige_massnahmen"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgMassnahme, true);
     }                                                                                 //GEN-LAST:event_btnMassnahmenActionPerformed
 
@@ -3874,7 +3984,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlaecheActionPerformed
-        taFlaecheDialog.setText((String)cidsBean.getProperty("beschreibung_flaeche"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgFlaeche, true);
     }                                                                              //GEN-LAST:event_btnFlaecheActionPerformed
 
@@ -4039,41 +4148,41 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initPropertyToMetaClassMap() {
-        new SwingWorker<Map<String, MetaClass>, Void>() {
-
-                @Override
-                protected Map<String, MetaClass> doInBackground() throws Exception {
-                    final Map<String, MetaClass> map = new HashMap<>();
-                    for (final PotenzialflaecheReportServerAction.Property property
-                                : PotenzialflaecheReportServerAction.Property.values()) {
-                        if ((property != null)
-                                    && (property.getValue()
-                                        instanceof PotenzialflaecheReportServerAction.PathReportProperty)) {
-                            final String propertyName = property.name();
-                            final String path =
-                                ((PotenzialflaecheReportServerAction.PathReportProperty)property.getValue()).getPath();
-                            final MetaClass metaClass = getForeignMetaClass(path);
-                            if (metaClass != null) {
-                                map.put(propertyName, metaClass);
-                            }
-                        }
-                    }
-                    return map;
+//        new SwingWorker<Map<String, MetaClass>, Void>() {
+//
+//                @Override
+//                protected Map<String, MetaClass> doInBackground() throws Exception {
+        final Map<String, MetaClass> map = new HashMap<>();
+        for (final PotenzialflaecheReportServerAction.Property property
+                    : PotenzialflaecheReportServerAction.Property.values()) {
+            if ((property != null)
+                        && (property.getValue()
+                            instanceof PotenzialflaecheReportServerAction.PathReportProperty)) {
+                final String propertyName = property.name();
+                final String path = ((PotenzialflaecheReportServerAction.PathReportProperty)property.getValue())
+                            .getPath();
+                final MetaClass metaClass = getForeignMetaClass(path);
+                if (metaClass != null) {
+                    map.put(propertyName, metaClass);
                 }
+            }
+        }
+//                    return map;
+//                }
+//
+//                @Override
+//                protected void done() {
+//                    try {
+        pathToMetaClassMap.clear();
+//                        final Map<String, MetaClass> map = get();
+        pathToMetaClassMap.putAll(map);
 
-                @Override
-                protected void done() {
-                    try {
-                        pathToMetaClassMap.clear();
-                        final Map<String, MetaClass> map = get();
-                        pathToMetaClassMap.putAll(map);
-
-                        initDefinitions();
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                }
-            }.execute();
+        initDefinitions();
+//                    } catch (final Exception ex) {
+//                        LOG.error(ex, ex);
+//                    }
+//                }
+//            }.execute();
     }
 
     /**
@@ -4140,8 +4249,26 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnMassnahmen1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmen1ActionPerformed
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgInterneHinweise, true);
+    }                                                                                  //GEN-LAST:event_btnMassnahmen1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort6ActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_btnMassnahmen1ActionPerformed
+    } //GEN-LAST:event_btnMenAbort6ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk6ActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_btnMenOk6ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -4290,7 +4417,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             fillUsedProperties();
             markUsedFields();
             initManageableInputs();
-            toggleUsedInputs(false);
         }
     }
 
@@ -4305,64 +4431,65 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initDefinitions() {
-        new SwingWorker<Map<MetaClass, String>, Void>() {
+        try {
+//        new SwingWorker<Map<MetaClass, String>, Void>() {
+//
+//                @Override
+//                protected Map<MetaClass, String> doInBackground() throws Exception {
+            final Map<MetaClass, String> definitions = new HashMap<>();
+            for (final CidsBean schluesseltabellenBean : schluesseltabellenBeans) {
+                if (schluesseltabellenBean != null) {
+                    final String tableName = (String)schluesseltabellenBean.getProperty("table_name");
+                    if ((tableName != null)
+                                && Boolean.TRUE.equals(schluesseltabellenBean.getProperty("definition"))) {
+                        final MetaClass metaClass = CidsBean.getMetaClassFromTableName(
+                                schluesseltabellenBean.getMetaObject().getDomain(),
+                                tableName,
+                                getConnectionContext());
 
-                @Override
-                protected Map<MetaClass, String> doInBackground() throws Exception {
-                    final Map<MetaClass, String> definitions = new HashMap<>();
-                    for (final CidsBean schluesseltabellenBean : schluesseltabellenBeans) {
-                        if (schluesseltabellenBean != null) {
-                            final String tableName = (String)schluesseltabellenBean.getProperty("table_name");
-                            if ((tableName != null)
-                                        && Boolean.TRUE.equals(schluesseltabellenBean.getProperty("definition"))) {
-                                final MetaClass metaClass = CidsBean.getMetaClassFromTableName(
-                                        schluesseltabellenBean.getMetaObject().getDomain(),
-                                        tableName,
-                                        getConnectionContext());
-
-                                if (metaClass != null) {
-                                    final StringBuffer sb = new StringBuffer(String.format(
-                                                "<h3>%s:</h3>",
-                                                metaClass.getName()));
-                                    sb.append("<ul>");
-                                    final List<CidsBean> subSchluesseltabellenBeans = getMosForSchluesseltabelle(
-                                            metaClass);
-                                    if (subSchluesseltabellenBeans != null) {
-                                        for (final CidsBean subSchluesseltabellenBean : subSchluesseltabellenBeans) {
-                                            if (subSchluesseltabellenBean != null) {
-                                                final String name = (String)subSchluesseltabellenBean.getProperty(
-                                                        "name");
-                                                final String definition = (String)subSchluesseltabellenBean.getProperty(
-                                                        "definition");
-                                                sb.append(String.format(
-                                                        "<li><b>%s:</b> %s</li>",
-                                                        (name != null) ? name : "-",
-                                                        ((definition != null) && !definition.trim().isEmpty())
-                                                            ? definition.replaceAll("\n", "<br/>") : "-"));
-                                            }
-                                        }
+                        if (metaClass != null) {
+                            final StringBuffer sb = new StringBuffer(String.format(
+                                        "<h3>%s:</h3>",
+                                        metaClass.getName()));
+                            sb.append("<ul>");
+                            final List<CidsBean> subSchluesseltabellenBeans = getMosForSchluesseltabelle(
+                                    metaClass);
+                            if (subSchluesseltabellenBeans != null) {
+                                for (final CidsBean subSchluesseltabellenBean : subSchluesseltabellenBeans) {
+                                    if (subSchluesseltabellenBean != null) {
+                                        final String name = (String)subSchluesseltabellenBean.getProperty(
+                                                "name");
+                                        final String definition = (String)subSchluesseltabellenBean.getProperty(
+                                                "definition");
+                                        sb.append(String.format(
+                                                "<li><b>%s:</b> %s</li>",
+                                                (name != null) ? name : "-",
+                                                ((definition != null) && !definition.trim().isEmpty())
+                                                    ? definition.replaceAll("\n", "<br/>") : "-"));
                                     }
-                                    definitions.put(metaClass, sb.append("</ul>").toString());
                                 }
                             }
+                            definitions.put(metaClass, sb.append("</ul>").toString());
                         }
                     }
-                    return definitions;
                 }
+            }
+//                    return definitions;
+//                }
+//
+//                @Override
+//                protected void done() {
+//                    try {
+            definitions.clear();
+//                        final Map<MetaClass, String> definitions = get();
+            definitions.putAll(definitions);
 
-                @Override
-                protected void done() {
-                    try {
-                        definitions.clear();
-                        final Map<MetaClass, String> map = get();
-                        definitions.putAll(map);
-
-                        initLabelComponentTooltips();
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                }
-            }.execute();
+            initLabelComponentTooltips();
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+//                }
+//            }.execute();
     }
 
     /**
@@ -4626,6 +4753,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
+
+        toggleUsedInputs(false);
     }
 
     /**
@@ -4694,14 +4823,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      */
     public void toggleUsedInputs(final boolean enable) {
         if (isEditable()) {
-            if (usedProperties != null) {
-                for (final JComponent inputComponent : inputComponents) {
-                    if ((inputComponent != null) && (inputComponent != txtNummer)) {
-                        for (final String propertyName : componentToPropertiesMap.get(inputComponent)) {
-                            if (propertyName != null) {
-                                if (!usedProperties.contains(propertyName)) {
-                                    RendererTools.makeUneditable(inputComponent, !enable);
-                                }
+            for (final JComponent inputComponent : inputComponents) {
+                if ((inputComponent != null) && (inputComponent != txtNummer)) {
+                    for (final String propertyName : componentToPropertiesMap.get(inputComponent)) {
+                        if (propertyName != null) {
+                            if (!usedProperties.contains(propertyName)) {
+                                RendererTools.makeUneditable(inputComponent, !enable);
                             }
                         }
                     }
