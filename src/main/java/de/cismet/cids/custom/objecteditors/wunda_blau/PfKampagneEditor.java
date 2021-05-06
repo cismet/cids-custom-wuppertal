@@ -912,7 +912,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
                 LOG.error(ex, ex);
             }
 
-            final PotenzialflaecheSearch search = new PotenzialflaecheSearch();
+            final PotenzialflaecheSearch search = new PotenzialflaecheSearch(true);
             final PotenzialflaecheSearch.Configuration configuration = new PotenzialflaecheSearch.Configuration();
             configuration.addFilter(PotenzialflaecheReportServerAction.Property.KAMPAGNE, new MetaObjectNode(cidsBean));
             search.setConfiguration(configuration);
