@@ -61,13 +61,13 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel" name="alboFlaecheSearchPanel1">
+    <Container class="de.cismet.cids.custom.wunda_blau.search.AlboFlaecheWindowSearch" name="alboFlaecheSearchPanel1">
       <Properties>
         <Property name="name" type="java.lang.String" value="alboFlaecheSearchPanel1" noResource="true"/>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel(editable)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.wunda_blau.search.AlboFlaecheWindowSearch(editable)"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

@@ -104,10 +104,9 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
     public void setFilter(final PotenzialflaecheSearch.FilterInfo filter) {
         if (filter != null) {
             final PotenzialflaecheReportServerAction.Property prop = filter.getProperty();
+            jComboBox1.setSelectedItem(prop);
+            final Object value = filter.getValue();
             if (prop.getValue() instanceof PotenzialflaecheReportServerAction.PathReportProperty) {
-                jComboBox1.setSelectedItem(prop);
-                final Object value = filter.getValue();
-
                 if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
                     if (value instanceof MetaObjectNode) {
                         for (int index = 0; index < cbForeign.getModel().getSize(); index++) {
@@ -136,6 +135,24 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                         jTextField1.setText(String.valueOf(value));
                     }
                 }
+            } else if (prop.getValue() instanceof PotenzialflaecheReportServerAction.MonSearchReportProperty) {
+                if (value instanceof MetaObjectNode) {
+                    for (int index = 0; index < cbForeign.getModel().getSize(); index++) {
+                        final CidsBean cidsBean = (CidsBean)cbForeign.getModel().getElementAt(index);
+                        if (new MetaObjectNode(cidsBean).equals(((MetaObjectNode)value))) {
+                            cbForeign.setSelectedItem(cidsBean);
+                            break;
+                        }
+                    }
+                } else if (value instanceof Collection) {
+                    final Collection<CidsBean> selectedBeans = new ArrayList<>();
+                    for (final CidsBean cidsBean : defaultBindableLabelsPanel1.getElements()) {
+                        if (new MetaObjectNode(cidsBean).equals(((MetaObjectNode)value))) {
+                            selectedBeans.add(cidsBean);
+                        }
+                    }
+                    defaultBindableLabelsPanel1.setSelectedElements(selectedBeans);
+                }
             }
         }
     }
@@ -151,7 +168,12 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         final List<PotenzialflaecheReportServerAction.Property> props = new ArrayList<>();
         for (final PotenzialflaecheReportServerAction.Property prop
                     : PotenzialflaecheReportServerAction.Property.values()) {
-            if (prop.getValue() instanceof PotenzialflaecheReportServerAction.PathReportProperty) {
+            if (PotenzialflaecheReportServerAction.Property.BEBAUUNGSPLAN.equals(prop)
+                        || PotenzialflaecheReportServerAction.Property.FLURSTUECKE.equals(prop)) {
+                continue;
+            }
+            if ((prop.getValue() instanceof PotenzialflaecheReportServerAction.PathReportProperty)
+                        || (prop.getValue() instanceof PotenzialflaecheReportServerAction.MonSearchReportProperty)) {
                 props.add(prop);
             }
         }
@@ -380,9 +402,39 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                     jTextField1.setText("");
                     ((CardLayout)jPanel1.getLayout()).show(jPanel1, "text");
                 }
+            } else if (prop.getValue() instanceof PotenzialflaecheReportServerAction.MonSearchReportProperty) {
+                final PotenzialflaecheReportServerAction.MonSearchReportProperty value =
+                    ((PotenzialflaecheReportServerAction.MonSearchReportProperty)prop.getValue());
+                ((CardLayout)jPanel1.getLayout()).show(jPanel1, "foreign");
+                ((CardLayout)jPanel2.getLayout()).show(jPanel2, "single");
+                cbForeign.setSelectedItem(null);
+                defaultBindableLabelsPanel1.setSelectedElements(null);
+                new SwingWorker<MetaClass, Void>() {
+
+                        @Override
+                        protected MetaClass doInBackground() throws Exception {
+                            final MetaClass metaClass = ClassCacheMultiple.getMetaClass(
+                                    CidsBeanSupport.DOMAIN_NAME,
+                                    value.getTableName(),
+                                    getConnectionContext());
+                            return metaClass;
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                final MetaClass metaClass = get();
+                                cbForeign.setMetaClass(metaClass);
+                                defaultBindableLabelsPanel1.setMetaClass(metaClass);
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                        }
+                    }.execute();
             } else {
                 ((CardLayout)jPanel1.getLayout()).show(jPanel1, "none");
             }
+            jCheckBox2.setSelected(false);
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
@@ -416,6 +468,19 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
             jComboBox1.getSelectedItem();
 
         if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
+            if (jCheckBox2.isSelected()) {
+                final List<CidsBean> selectedElements = (List)defaultBindableLabelsPanel1.getSelectedElements();
+                final List<MetaObjectNode> mons = new ArrayList<>();
+                for (final CidsBean selectedElement : selectedElements) {
+                    mons.add(new MetaObjectNode(selectedElement));
+                }
+                return new PotenzialflaecheSearch.FilterInfo(prop, mons);
+            } else {
+                final MetaObjectNode mon = (cbForeign.getSelectedItem() != null)
+                    ? new MetaObjectNode((CidsBean)cbForeign.getSelectedItem()) : null;
+                return new PotenzialflaecheSearch.FilterInfo(prop, mon);
+            }
+        } else if (prop.getValue() instanceof PotenzialflaecheReportServerAction.MonSearchReportProperty) {
             if (jCheckBox2.isSelected()) {
                 final List<CidsBean> selectedElements = (List)defaultBindableLabelsPanel1.getSelectedElements();
                 final List<MetaObjectNode> mons = new ArrayList<>();
