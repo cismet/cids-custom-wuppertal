@@ -1013,7 +1013,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
-                new WohnlagenKategorisierungMonSearch());
+                new WohnlagenKategorisierungMonSearch(0.1d));
         filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -4432,10 +4432,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      */
     private void initDefinitions() {
         try {
-//        new SwingWorker<Map<MetaClass, String>, Void>() {
-//
-//                @Override
-//                protected Map<MetaClass, String> doInBackground() throws Exception {
             final Map<MetaClass, String> definitions = new HashMap<>();
             for (final CidsBean schluesseltabellenBean : schluesseltabellenBeans) {
                 if (schluesseltabellenBean != null) {
@@ -4474,22 +4470,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                     }
                 }
             }
-//                    return definitions;
-//                }
-//
-//                @Override
-//                protected void done() {
-//                    try {
-            definitions.clear();
-//                        final Map<MetaClass, String> definitions = get();
-            definitions.putAll(definitions);
+            this.definitions.clear();
+            this.definitions.putAll(definitions);
 
             initLabelComponentTooltips();
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
-//                }
-//            }.execute();
     }
 
     /**
@@ -4633,7 +4620,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      */
     private MetaClass getForeignMetaClass(final String path) {
         try {
-            final MetaObject metaObject = getCidsBean().getMetaObject();
+            final MetaObject metaObject = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        "pf_potenzialflaeche",
+                        getConnectionContext())
+                        .getMetaObject();
             final MemberAttributeInfo mai = metaObject.getAttributeByFieldName(path).getMai();
 
             final String domain = metaObject.getDomain();

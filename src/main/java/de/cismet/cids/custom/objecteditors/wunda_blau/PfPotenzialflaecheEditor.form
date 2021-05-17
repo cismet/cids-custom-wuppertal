@@ -2898,7 +2898,7 @@
                                     <Property name="opaque" type="boolean" value="false"/>
                                   </Properties>
                                   <AuxValues>
-                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(new WohnlagenKategorisierungMonSearch())"/>
+                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.SearchLabelsFieldPanel(new WohnlagenKategorisierungMonSearch(0.1d))"/>
                                   </AuxValues>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
