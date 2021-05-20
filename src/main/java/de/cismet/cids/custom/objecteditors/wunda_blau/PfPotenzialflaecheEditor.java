@@ -4358,33 +4358,33 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void refreshNummer() {
-        if (isEditable()) {
-            final CidsBean cidsBean = getCidsBean();
-            if (cidsBean != null) {
-                if ((cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
-                            && !"...".equals(cidsBean.getProperty("nummer"))) {
-                    try {
-                        cidsBean.setProperty("nummer", "...");
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    new SwingWorker<String, Void>() {
-
-                            @Override
-                            protected String doInBackground() throws Exception {
-                                return getNewSchluessel(getCidsBean(), getConnectionContext());
-                            }
-
-                            @Override
-                            protected void done() {
-                                try {
-                                    cidsBean.setProperty("nummer", get());
-                                } catch (final Exception ex) {
-                                    LOG.error(ex, ex);
-                                }
-                            }
-                        }.execute();
+        final CidsBean cidsBean = getCidsBean();
+        if (cidsBean != null) {
+            if (isEditable()
+                        && ((cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
+                            || ((String)cidsBean.getProperty("nummer")).startsWith("x-"))
+                        && !"...".equals(cidsBean.getProperty("nummer"))) {
+                try {
+                    cidsBean.setProperty("nummer", "...");
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
                 }
+                new SwingWorker<String, Void>() {
+
+                        @Override
+                        protected String doInBackground() throws Exception {
+                            return getNewSchluessel(getCidsBean(), getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                cidsBean.setProperty("nummer", get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                        }
+                    }.execute();
             }
         }
     }
@@ -4723,6 +4723,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 StringUtils.leftPad(String.valueOf((middle != null) ? middle : (max + 1)), 4, '0'),
                 (middle != null) ? numOf : 0);
     }
+
     /**
      * DOCUMENT ME!
      */
