@@ -51,7 +51,7 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel alboFlaecheSearchPanel1;
+    private de.cismet.cids.custom.wunda_blau.search.AlboFlaecheWindowSearch alboFlaecheSearchPanel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
@@ -91,7 +91,7 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        alboFlaecheSearchPanel1 = new de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel(editable);
+        alboFlaecheSearchPanel1 = new de.cismet.cids.custom.wunda_blau.search.AlboFlaecheWindowSearch(editable);
 
         setName("Form"); // NOI18N
         setOpaque(false);

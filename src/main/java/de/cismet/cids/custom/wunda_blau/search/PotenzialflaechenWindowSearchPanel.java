@@ -37,8 +37,20 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
     @Getter private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblFiller5;
+    private javax.swing.JLabel lblFiller6;
+    private javax.swing.JPanel pnlButtons;
+    private javax.swing.JPanel pnlMessung;
+    private javax.swing.JPanel pnlScrollPane;
+    private javax.swing.JPanel pnlSearchMode;
+    private javax.swing.JRadioButton rbAll;
+    private javax.swing.JRadioButton rbOne;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -50,6 +62,37 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public PotenzialflaecheSearch.Configuration createConfiguration() {
+        final PotenzialflaecheSearch.SearchMode searchMode = rbAll.isSelected() ? PotenzialflaecheSearch.SearchMode.AND
+                                                                                : PotenzialflaecheSearch.SearchMode.OR;
+
+        final PotenzialflaecheSearch.Configuration searchConfiguration = new PotenzialflaecheSearch.Configuration();
+        searchConfiguration.setSearchMode(searchMode);
+        searchConfiguration.getFilters().addAll(getFilters());
+
+        return searchConfiguration;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  configuration  DOCUMENT ME!
+     */
+    public void initFromConfiguration(final PotenzialflaecheSearch.Configuration configuration) {
+        if (configuration != null) {
+            rbAll.setSelected(!PotenzialflaecheSearch.SearchMode.OR.equals(configuration.getSearchMode()));
+            setFilters(configuration.getFilters());
+        } else {
+            rbAll.setSelected(true);
+            setFilters(null);
+        }
+    }
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
@@ -67,10 +110,94 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        pnlScrollPane = new javax.swing.JPanel();
+        pnlSearchMode = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        rbAll = new javax.swing.JRadioButton();
+        rbOne = new javax.swing.JRadioButton();
+        lblFiller5 = new javax.swing.JLabel();
+        pnlMessung = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        pnlButtons = new javax.swing.JPanel();
+        cbMapSearch = new javax.swing.JCheckBox();
+        lblFiller6 = new javax.swing.JLabel();
 
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        pnlScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    PotenzialflaechenWindowSearchPanel.class,
+                    "PotenzialflaechenWindowSearchPanel.pnlScrollPane.border.title"))); // NOI18N
+        pnlScrollPane.setLayout(new java.awt.GridBagLayout());
+
+        pnlSearchMode.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchPanel.class,
+                "PotenzialflaechenWindowSearchPanel.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        pnlSearchMode.add(jLabel1, gridBagConstraints);
+
+        rbAll.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            rbAll,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchPanel.class,
+                "PotenzialflaechenWindowSearchPanel.rbAll.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
+        pnlSearchMode.add(rbAll, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            rbOne,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchPanel.class,
+                "PotenzialflaechenWindowSearchPanel.rbOne.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        pnlSearchMode.add(rbOne, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFiller5,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchPanel.class,
+                "PotenzialflaechenWindowSearchPanel.lblFiller5.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlSearchMode.add(lblFiller5, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
+        pnlScrollPane.add(pnlSearchMode, gridBagConstraints);
+
+        pnlMessung.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnlMessung.setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 1, 0, 5));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -78,7 +205,7 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(jPanel1, gridBagConstraints);
+        jPanel2.add(jPanel1, gridBagConstraints);
 
         jButton1.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
@@ -101,7 +228,59 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
-        add(jButton1, gridBagConstraints);
+        jPanel2.add(jButton1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pnlMessung.add(jPanel2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlScrollPane.add(pnlMessung, gridBagConstraints);
+
+        pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlScrollPane.add(pnlButtons, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cbMapSearch,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchPanel.class,
+                "PotenzialflaechenWindowSearchPanel.cbMapSearch.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
+        pnlScrollPane.add(cbMapSearch, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFiller6,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchPanel.class,
+                "PotenzialflaechenWindowSearchPanel.lblFiller6.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlScrollPane.add(lblFiller6, gridBagConstraints);
+
+        jScrollPane1.setViewportView(pnlScrollPane);
+
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
     /**

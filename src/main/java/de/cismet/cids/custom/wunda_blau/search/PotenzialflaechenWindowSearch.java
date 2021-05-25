@@ -6,103 +6,57 @@
 *
 ****************************************************/
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
-import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.search.CidsSearchExecutor;
-import Sirius.navigator.search.dynamic.SearchControlListener;
-import Sirius.navigator.search.dynamic.SearchControlPanel;
 
-import Sirius.server.middleware.types.MetaClass;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
-
-import org.apache.log4j.Logger;
-
-import java.awt.Dimension;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.net.URL;
-
 import java.util.Arrays;
 
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.PotenzialflaecheSearch;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
-import de.cismet.cismap.commons.CrsTransformer;
-import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
  *
- * @author   daniel
+ * @author   jruiz
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
-    ActionTagProtected,
-    SearchControlListener,
-    PropertyChangeListener,
-    ConnectionContextStore {
+public class PotenzialflaechenWindowSearch extends AbstractAbfrageWindowSearch<PotenzialflaecheSearch.Configuration>
+        implements PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(PotenzialflaechenWindowSearch.class);
     private static final String ACTION_TAG = "custom.potenzialflaeche.search@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
-    private MetaClass metaClassFlaeche;
-    private MetaClass metaClassKampagne;
-    private ImageIcon icon;
-    private JPanel pnlSearchCancel;
-    private GeoSearchButton btnGeoSearch;
-    private MappingComponent mappingComponent;
-    private boolean geoSearchEnabled;
-
-    private ConnectionContext connectionContext = ConnectionContext.createDummy();
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JCheckBox cbMapSearch;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblFiller5;
-    private javax.swing.JLabel lblFiller6;
-    private javax.swing.JPanel pnlButtons;
-    private javax.swing.JPanel pnlMessung;
-    private javax.swing.JPanel pnlScrollPane;
-    private javax.swing.JPanel pnlSearchMode;
-    private de.cismet.cids.custom.wunda_blau.search.PotenzialflaechenWindowSearchPanel
-        potenzialflaechenWindowSearchPanel1;
-    private javax.swing.JRadioButton rbAll;
-    private javax.swing.JRadioButton rbOne;
-    // End of variables declaration//GEN-END:variables
+    private final PotenzialflaechenWindowSearchPanel searchPanel;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -110,316 +64,14 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
      * Creates a new PotenzialflaechenWindowSearch object.
      */
     public PotenzialflaechenWindowSearch() {
+        this.searchPanel = new PotenzialflaechenWindowSearchPanel();
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void initWithConnectionContext(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-        try {
-            metaClassFlaeche = ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "pf_potenzialflaeche",
-                    getConnectionContext());
-            metaClassKampagne = ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "pf_kampagne",
-                    getConnectionContext());
-
-            initComponents();
-
-            potenzialflaechenWindowSearchPanel1.initWithConnectionContext(connectionContext);
-
-            potenzialflaechenWindowSearchPanel1.setFilters(Arrays.asList(
-                    new PotenzialflaecheSearch.FilterInfo(
-                        PotenzialflaecheReportServerAction.Property.BEZEICHNUNG,
-                        "")));
-
-            pnlSearchCancel = new SearchControlPanel(this, getConnectionContext());
-            final Dimension max = pnlSearchCancel.getMaximumSize();
-            final Dimension min = pnlSearchCancel.getMinimumSize();
-            final Dimension pre = pnlSearchCancel.getPreferredSize();
-            pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
-                    new Double(max.getWidth()).intValue(),
-                    new Double(max.getHeight() + 5).intValue()));
-            pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
-                    new Double(min.getWidth()).intValue(),
-                    new Double(min.getHeight() + 5).intValue()));
-            pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
-                    new Double(pre.getWidth() + 6).intValue(),
-                    new Double(pre.getHeight() + 5).intValue()));
-            pnlButtons.add(pnlSearchCancel);
-
-            if (metaClassFlaeche != null) {
-                final byte[] iconDataFromMetaclass = metaClassFlaeche.getIconData();
-                if (iconDataFromMetaclass.length > 0) {
-                    LOG.info("Using icon from metaclass.");
-                    icon = new ImageIcon(metaClassFlaeche.getIconData());
-                } else {
-                    LOG.warn("Metaclass icon is not set. Trying to load default icon.");
-                    final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
-
-                    if (urlToIcon != null) {
-                        icon = new ImageIcon(urlToIcon);
-                    } else {
-                        icon = new ImageIcon(new byte[] {});
-                    }
-                }
-            }
-
-            pnlButtons.add(Box.createHorizontalStrut(5));
-
-            mappingComponent = CismapBroker.getInstance().getMappingComponent();
-            geoSearchEnabled = mappingComponent != null;
-            if (geoSearchEnabled) {
-                final PotenzialflaechenCreateSearchGeometryListener listener =
-                    new PotenzialflaechenCreateSearchGeometryListener(
-                        mappingComponent,
-                        new TreppenSearchTooltip(icon));
-                listener.addPropertyChangeListener(this);
-                btnGeoSearch = new GeoSearchButton(
-                        PotenzialflaechenCreateSearchGeometryListener.POTENZIALFLAECHEN_CREATE_SEARCH_GEOMETRY,
-                        mappingComponent,
-                        null,
-                        org.openide.util.NbBundle.getMessage(
-                            PotenzialflaechenWindowSearch.class,
-                            "PotenzialflaechenWindowSearch.btnGeoSearch.toolTipText"));
-                pnlButtons.add(btnGeoSearch);
-            }
-        } catch (final Throwable e) {
-            LOG.warn("Error in Constructor of PotenzialflaechenWindowSearch. Search will not work properly.", e);
-        }
-    }
-
-    @Override
-    public final ConnectionContext getConnectionContext() {
-        return connectionContext;
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
-     * content of this method is always regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        pnlScrollPane = new javax.swing.JPanel();
-        pnlSearchMode = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        rbAll = new javax.swing.JRadioButton();
-        rbOne = new javax.swing.JRadioButton();
-        lblFiller5 = new javax.swing.JLabel();
-        pnlMessung = new javax.swing.JPanel();
-        potenzialflaechenWindowSearchPanel1 =
-            new de.cismet.cids.custom.wunda_blau.search.PotenzialflaechenWindowSearchPanel();
-        pnlButtons = new javax.swing.JPanel();
-        cbMapSearch = new javax.swing.JCheckBox();
-        lblFiller6 = new javax.swing.JLabel();
-
-        setPreferredSize(new java.awt.Dimension(70, 20));
-        setLayout(new java.awt.BorderLayout());
-
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        pnlScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    PotenzialflaechenWindowSearch.class,
-                    "PotenzialflaechenWindowSearch.pnlScrollPane.border.title"))); // NOI18N
-        pnlScrollPane.setLayout(new java.awt.GridBagLayout());
-
-        pnlSearchMode.setLayout(new java.awt.GridBagLayout());
-
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.jLabel1.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        pnlSearchMode.add(jLabel1, gridBagConstraints);
-
-        buttonGroup1.add(rbAll);
-        rbAll.setSelected(true);
-        rbAll.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.rbAll.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
-        pnlSearchMode.add(rbAll, gridBagConstraints);
-
-        buttonGroup1.add(rbOne);
-        rbOne.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.rbOne.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        pnlSearchMode.add(rbOne, gridBagConstraints);
-
-        lblFiller5.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.lblFiller5.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        pnlSearchMode.add(lblFiller5, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
-        pnlScrollPane.add(pnlSearchMode, gridBagConstraints);
-
-        pnlMessung.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        pnlMessung.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        pnlMessung.add(potenzialflaechenWindowSearchPanel1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
-        pnlScrollPane.add(pnlMessung, gridBagConstraints);
-        pnlMessung.getAccessibleContext().setAccessibleName("Messung");
-
-        pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
-        pnlScrollPane.add(pnlButtons, gridBagConstraints);
-
-        cbMapSearch.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.cbMapSearch.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
-        pnlScrollPane.add(cbMapSearch, gridBagConstraints);
-
-        lblFiller6.setText(org.openide.util.NbBundle.getMessage(
-                PotenzialflaechenWindowSearch.class,
-                "PotenzialflaechenWindowSearch.lblFiller6.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        pnlScrollPane.add(lblFiller6, gridBagConstraints);
-
-        jScrollPane1.setViewportView(pnlScrollPane);
-
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
-    } // </editor-fold>//GEN-END:initComponents
-
-    @Override
-    public JComponent getSearchWindowComponent() {
-        return this;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   geometry  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
-        final Geometry searchGeometrie;
-        if (geometry != null) {
-            searchGeometrie = geometry;
-        } else {
-            if (cbMapSearch.isSelected()) {
-                searchGeometrie =
-                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
-                            .getGeometry();
-            } else {
-                searchGeometrie = null;
-            }
-        }
-        final Geometry transformedBoundingBox;
-        if (searchGeometrie != null) {
-            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(searchGeometrie);
-            transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
-        } else {
-            transformedBoundingBox = null;
-        }
-        final PotenzialflaecheSearch.SearchMode searchMode = rbAll.isSelected() ? PotenzialflaecheSearch.SearchMode.AND
-                                                                                : PotenzialflaecheSearch.SearchMode.OR;
-
-        final PotenzialflaecheSearch.Configuration searchConfiguration = new PotenzialflaecheSearch.Configuration();
-        searchConfiguration.getFilters().addAll(potenzialflaechenWindowSearchPanel1.getFilters());
-
-        return new PotenzialflaecheSearch(searchMode, searchConfiguration, transformedBoundingBox);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    @Override
-    public MetaObjectNodeServerSearch getServerSearch() {
-        return getServerSearch(null);
-    }
-
-    @Override
-    public ImageIcon getIcon() {
-        return icon;
-    }
-
-    @Override
-    public boolean checkActionTag() {
-        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
-    }
-
-    @Override
-    public MetaObjectNodeServerSearch assembleSearch() {
-        return getServerSearch();
-    }
-
-    @Override
-    public void searchStarted() {
-    }
-
-    @Override
-    public void searchDone(final int numberOfResults) {
-    }
-
-    @Override
-    public void searchCanceled() {
-    }
-
-    @Override
-    public boolean suppressEmptyResultMessage() {
-        return false;
+    public MetaObjectNodeServerSearch createServerSearch(final Geometry geometry) {
+        return new PotenzialflaecheSearch(searchPanel.createConfiguration(), geometry);
     }
 
     @Override
@@ -435,5 +87,75 @@ public class PotenzialflaechenWindowSearch extends javax.swing.JPanel implements
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search, getConnectionContext());
             }
         }
+    }
+
+    @Override
+    public ObjectMapper getObjectMapper() {
+        return PotenzialflaecheSearch.OBJECT_MAPPER;
+    }
+
+    @Override
+    public JPanel getSearchPanel() {
+        return searchPanel;
+    }
+
+    @Override
+    public GeoSearchButton createGeoSearchButton() {
+        final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
+        final PotenzialflaechenCreateSearchGeometryListener geometryListener =
+            new PotenzialflaechenCreateSearchGeometryListener(
+                mappingComponent,
+                new TreppenSearchTooltip(getIcon()));
+        geometryListener.addPropertyChangeListener(this);
+        return new GeoSearchButton(
+                PotenzialflaechenCreateSearchGeometryListener.POTENZIALFLAECHEN_CREATE_SEARCH_GEOMETRY,
+                mappingComponent,
+                null,
+                "Geo-Suche nach Potenzialflächen");
+    }
+
+    @Override
+    public String getTableName() {
+        return "pf_potenzialflaeche";
+    }
+
+    @Override
+    public String getArtificialId() {
+        return "pf.abfragen";
+    }
+
+    @Override
+    public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        super.initWithConnectionContext(connectionContext);
+        searchPanel.initWithConnectionContext(connectionContext);
+        searchPanel.setFilters(Arrays.asList(
+                new PotenzialflaecheSearch.FilterInfo(
+                    PotenzialflaecheReportServerAction.Property.BEZEICHNUNG,
+                    "")));
+    }
+
+    @Override
+    public PotenzialflaecheSearch.Configuration createConfiguration() {
+        return searchPanel.createConfiguration();
+    }
+
+    @Override
+    public void initFromConfiguration(final PotenzialflaecheSearch.Configuration configuration) {
+        searchPanel.initFromConfiguration(configuration);
+    }
+
+    @Override
+    public void initFromConfiguration(final Object configuration) {
+        initFromConfiguration((PotenzialflaecheSearch.Configuration)configuration);
+    }
+
+    @Override
+    public PotenzialflaecheSearch.Configuration readConfiguration(final String configuration) throws Exception {
+        return getObjectMapper().readValue(configuration, PotenzialflaecheSearch.Configuration.class);
+    }
+
+    @Override
+    public boolean checkActionTag() {
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG, getConnectionContext());
     }
 }

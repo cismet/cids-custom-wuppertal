@@ -58,7 +58,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(AlboFlaecheSearchPanel.class);
+    private static final Logger LOG = Logger.getLogger(AlboFlaecheArtSearchPanel.class);
 
     private static final DotDotDotCellRenderer DOTDOTDOT_CELL_RENDERER = new DotDotDotCellRenderer(60);
 

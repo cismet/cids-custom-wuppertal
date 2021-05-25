@@ -1489,6 +1489,7 @@ public class ObjectsPermissionsProviderPanel extends javax.swing.JPanel implemen
                 columnNames.toArray(new String[0]),
                 columnClasses.toArray(new Class[0]),
                 // columnEditable.toArray(new Boolean[0])
+                false,
                 false);
         }
 

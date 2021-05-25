@@ -116,6 +116,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
@@ -154,6 +156,51 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private static final String PREFIX_LABEL = "LABEL:";
     private static final String PREFIX_INPUT = "INPUT:";
 
+    private static Converter<String, Color> COLORCODE_CONVERTER = new Converter<String, Color>() {
+
+            @Override
+            public String convertReverse(final Color color) {
+                if (color == null) {
+                    return null;
+                }
+                final String hex = Integer.toHexString(color.getRGB());
+                return String.format("#%s", hex.substring(hex.length() - 6));
+            }
+
+            @Override
+            public Color convertForward(final String string) {
+                if (string == null) {
+                    return null;
+                }
+                return Color.decode(string);
+            }
+        };
+
+    private static Converter<String, Color> LUMINANCE_CONVERTER = new Converter<String, Color>() {
+
+            @Override
+            public String convertReverse(final Color color) {
+                if (color == null) {
+                    return null;
+                }
+                final String hex = Integer.toHexString(color.getRGB());
+                return String.format("#%s", hex.substring(hex.length() - 6));
+            }
+
+            @Override
+            public Color convertForward(final String string) {
+                if (string == null) {
+                    return null;
+                }
+                return checkLuminanceForWhite(Color.decode(string)) ? Color.WHITE : Color.BLACK;
+            }
+
+            private boolean checkLuminanceForWhite(final Color color) {
+                return (float)((0.2126 * color.getRed()) + (0.7152 * color.getGreen()) + (0.0722 * color.getBlue()))
+                            < 140;
+            }
+        };
+
     //~ Instance fields --------------------------------------------------------
 
     private final Point tooltipDialogPosition = new Point();
@@ -183,8 +230,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JButton btnMassnahmen1;
     private javax.swing.JButton btnMenAbort4;
     private javax.swing.JButton btnMenAbort5;
+    private javax.swing.JButton btnMenAbort6;
     private javax.swing.JButton btnMenOk4;
     private javax.swing.JButton btnMenOk5;
+    private javax.swing.JButton btnMenOk6;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAeussereErschluessung;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAeussereErschluessung1;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbAktivierbarkeit;
@@ -217,6 +266,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField6;
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableCheckboxField8;
     private javax.swing.JDialog dlgFlaeche;
+    private javax.swing.JDialog dlgInterneHinweise;
     private javax.swing.JDialog dlgMassnahme;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
@@ -333,6 +383,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
@@ -415,6 +466,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.tools.gui.RoundedPanel panErweitert;
     private javax.swing.JPanel panFlaeche;
     private javax.swing.JPanel panFlaeche1;
+    private javax.swing.JPanel panFlaeche2;
     private javax.swing.JPanel panLageBody2;
     private javax.swing.JPanel panLageBody3;
     private javax.swing.JPanel panLageBody5;
@@ -424,6 +476,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel panMain;
     private javax.swing.JPanel panMenButtons4;
     private javax.swing.JPanel panMenButtons5;
+    private javax.swing.JPanel panMenButtons6;
     private javax.swing.JPanel panMessstellenausbauBody;
     private de.cismet.tools.gui.SemiRoundedPanel panMessstellenausbauTitle;
     private javax.swing.JPanel panNew;
@@ -440,6 +493,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JTextArea taFlaeche;
     private javax.swing.JTextArea taFlaecheDialog;
     private javax.swing.JTextArea taMassnahmeDialog;
+    private javax.swing.JTextArea taMassnahmeDialog1;
     private javax.swing.JTextArea taNotwendigeMassnahme;
     private javax.swing.JTextArea taNotwendigeMassnahme1;
     private javax.swing.JTextField txtBezeichnung;
@@ -504,45 +558,48 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initSchluesseltabellenBeans() {
-        new SwingWorker<List<CidsBean>, Void>() {
-
-                @Override
-                protected List<CidsBean> doInBackground() throws Exception {
-                    final MetaClass ST_MC = ClassCacheMultiple.getMetaClass(
-                            CidsBeanSupport.DOMAIN_NAME,
-                            "pf_schluesseltabelle",
-                            getConnectionContext());
-                    final String query = String.format(
-                            "SELECT %d, %s FROM %s",
-                            ST_MC.getID(),
-                            ST_MC.getPrimaryKey(),
-                            ST_MC.getTableName());
-                    final MetaObject[] mos = SessionManager.getProxy()
-                                .getMetaObjectByQuery(query, 0, getConnectionContext());
-                    final List<CidsBean> beans = new ArrayList<>();
-                    if (mos != null) {
-                        for (final MetaObject mo : mos) {
-                            if (mo != null) {
-                                beans.add(mo.getBean());
-                            }
-                        }
-                    }
-                    return beans;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        schluesseltabellenBeans.clear();
-                        final List<CidsBean> beans = get();
-                        schluesseltabellenBeans.addAll(beans);
-
-                        initPropertyToMetaClassMap();
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
+        try {
+//        new SwingWorker<List<CidsBean>, Void>() {
+//
+//                @Override
+//                protected List<CidsBean> doInBackground() throws Exception {
+            final MetaClass ST_MC = ClassCacheMultiple.getMetaClass(
+                    CidsBeanSupport.DOMAIN_NAME,
+                    "pf_schluesseltabelle",
+                    getConnectionContext());
+            final String query = String.format(
+                    "SELECT %d, %s FROM %s",
+                    ST_MC.getID(),
+                    ST_MC.getPrimaryKey(),
+                    ST_MC.getTableName());
+            final MetaObject[] mos = SessionManager.getProxy().getMetaObjectByQuery(query, 0, getConnectionContext());
+            final List<CidsBean> beans = new ArrayList<>();
+            if (mos != null) {
+                for (final MetaObject mo : mos) {
+                    if (mo != null) {
+                        beans.add(mo.getBean());
                     }
                 }
-            }.execute();
+            }
+//                    return beans;
+//                }
+//
+//                @Override
+//                protected void done() {
+//                    try {
+//                        schluesseltabellenBeans.clear();
+//                        final List<CidsBean> beans = get();
+            schluesseltabellenBeans.addAll(beans);
+
+            initPropertyToMetaClassMap();
+//                    } catch (final Exception ex) {
+//                        LOG.error(ex, ex);
+//                    }
+//                }
+//            }.execute();
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
     }
 
     @Override
@@ -673,6 +730,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jButton3 = new javax.swing.JButton();
         jScrollPane9 = new javax.swing.JScrollPane();
         txtDefinition = new javax.swing.JEditorPane();
+        dlgInterneHinweise = new javax.swing.JDialog();
+        panFlaeche2 = new javax.swing.JPanel();
+        panMenButtons6 = new javax.swing.JPanel();
+        btnMenAbort6 = new javax.swing.JButton();
+        btnMenOk6 = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        taMassnahmeDialog1 = new javax.swing.JTextArea();
         jScrollPane5 = new javax.swing.JScrollPane();
         jPanel22 = new ScrollablePanel();
         panNew = new javax.swing.JPanel();
@@ -814,7 +878,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new RpdKategorieMonSearch());
+        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new RpdKategorieMonSearch(0.2d));
         filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -822,7 +886,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new FnpHauptnutzungenMonSearch());
+        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new FnpHauptnutzungenMonSearch(
+                    0.1d));
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -948,7 +1013,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
-                new WohnlagenKategorisierungMonSearch());
+                new WohnlagenKategorisierungMonSearch(0.1d));
         filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -1169,6 +1234,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taFlaecheDialog.setLineWrap(true);
         taFlaecheDialog.setRows(5);
         taFlaecheDialog.setWrapStyleWord(true);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung_flaeche}"),
+                taFlaecheDialog,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         jScrollPane8.setViewportView(taFlaecheDialog);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1236,6 +1310,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taMassnahmeDialog.setLineWrap(true);
         taMassnahmeDialog.setRows(5);
         taMassnahmeDialog.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.notwendige_massnahmen}"),
+                taMassnahmeDialog,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         jScrollPane2.setViewportView(taMassnahmeDialog);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1310,6 +1393,82 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panDefinition.add(jScrollPane9, java.awt.BorderLayout.CENTER);
 
         panDialog.getContentPane().add(panDefinition, java.awt.BorderLayout.CENTER);
+
+        dlgInterneHinweise.setTitle("Notwendige Maßnahmen");
+        dlgInterneHinweise.setModal(true);
+        dlgInterneHinweise.setSize(new java.awt.Dimension(600, 400));
+
+        panFlaeche2.setMaximumSize(new java.awt.Dimension(300, 120));
+        panFlaeche2.setMinimumSize(new java.awt.Dimension(300, 120));
+        panFlaeche2.setPreferredSize(new java.awt.Dimension(300, 120));
+        panFlaeche2.setLayout(new java.awt.GridBagLayout());
+
+        panMenButtons6.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnMenAbort6, "Abbrechen");
+        btnMenAbort6.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbort6ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMenButtons6.add(btnMenAbort6, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnMenOk6, "Ok");
+        btnMenOk6.setMaximumSize(new java.awt.Dimension(85, 23));
+        btnMenOk6.setMinimumSize(new java.awt.Dimension(85, 23));
+        btnMenOk6.setPreferredSize(new java.awt.Dimension(85, 23));
+        btnMenOk6.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOk6ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMenButtons6.add(btnMenOk6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panFlaeche2.add(panMenButtons6, gridBagConstraints);
+
+        taMassnahmeDialog1.setColumns(20);
+        taMassnahmeDialog1.setLineWrap(true);
+        taMassnahmeDialog1.setRows(5);
+        taMassnahmeDialog1.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interne_hinweise}"),
+                taMassnahmeDialog1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane6.setViewportView(taMassnahmeDialog1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panFlaeche2.add(jScrollPane6, gridBagConstraints);
+
+        dlgInterneHinweise.getContentPane().add(panFlaeche2, java.awt.BorderLayout.CENTER);
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -1448,7 +1607,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panBeschreibungTitle.setLayout(new java.awt.GridBagLayout());
 
         lblBeschreibungTitle.setFont(lblBeschreibungTitle.getFont());
-        lblBeschreibungTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblBeschreibungTitle.setForeground(java.awt.Color.white);
         org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibungTitle, "Allgemein");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1480,7 +1639,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         txtNummer.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NUMMER.name());
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
@@ -1931,8 +2090,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody2.add(filler21, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblLagetyp2, "Siedlungsräumliche Lage:");
-        lblLagetyp2.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.SIEDLUNGSRAEUMLICHE_LAGE.name());
+        lblLagetyp2.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.SIEDLUNGSRAEUMLICHE_LAGE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1940,8 +2098,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody2.add(lblLagetyp2, gridBagConstraints);
 
-        cbLagetyp2.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.SIEDLUNGSRAEUMLICHE_LAGE.name());
+        cbLagetyp2.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.SIEDLUNGSRAEUMLICHE_LAGE.name());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -2138,8 +2295,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panMessstellenausbauBody.add(filler29, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblFlaechennutzung2, "Bebauungspläne:");
-        lblFlaechennutzung2.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.BEBAUUNGSPLAN.name());
+        lblFlaechennutzung2.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.BEBAUUNGSPLAN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2237,7 +2393,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(lblVorhandeneBebauung1, "Bauordnungsrecht:");
         lblVorhandeneBebauung1.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_GENEHMIGUNG.name() + ";"
+                    + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_GENEHMIGUNG.toString() + ";"
                     + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_BAULAST.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -2294,8 +2450,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel5.add(jLabel1, gridBagConstraints);
 
-        dateStand1.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_STAND.name());
+        dateStand1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_STAND.name());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -2505,8 +2660,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody3.add(filler41, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblStadtbezirk3, "Bisherige Nutzung:");
-        lblStadtbezirk3.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.BISHERIGE_NUTZUNG.name());
+        lblStadtbezirk3.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.BISHERIGE_NUTZUNG.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2581,8 +2735,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody3.add(filler43, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblVorhandeneBebauung2, "Bestand Versiegelung:");
-        lblVorhandeneBebauung2.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.VERSIEGELUNG.name());
+        lblVorhandeneBebauung2.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.VERSIEGELUNG.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2590,8 +2743,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody3.add(lblVorhandeneBebauung2, gridBagConstraints);
 
-        cbVorhandeneBebauung3.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.VERSIEGELUNG.name());
+        cbVorhandeneBebauung3.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.VERSIEGELUNG.name());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -2763,8 +2915,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody3.add(filler47, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblAessereErschl1, "Klimainformationen:");
-        lblAessereErschl1.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.KLIMAINFORMATIONEN.name());
+        lblAessereErschl1.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.KLIMAINFORMATIONEN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3080,8 +3231,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMassnahmen.setContentAreaFilled(false);
         btnMassnahmen.setMaximumSize(new java.awt.Dimension(32, 32));
         btnMassnahmen.setMinimumSize(new java.awt.Dimension(32, 32));
-        btnMassnahmen.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
+        btnMassnahmen.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
         btnMassnahmen.setPreferredSize(new java.awt.Dimension(32, 32));
         btnMassnahmen.addActionListener(new java.awt.event.ActionListener() {
 
@@ -3336,8 +3486,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler63, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblAktivierbarkeit1, "Anzahl mögl. Wohneinheiten:");
-        lblAktivierbarkeit1.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.WOHNEINHEITEN.name());
+        lblAktivierbarkeit1.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.WOHNEINHEITEN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3369,8 +3518,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jFormattedTextField1.setColumns(5);
         jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
                 new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        jFormattedTextField1.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.WOHNEINHEITEN.name());
+        jFormattedTextField1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.WOHNEINHEITEN.name());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -3430,8 +3578,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler65, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblVerfuegbarkeit1, "Verfügbarkeit:");
-        lblVerfuegbarkeit1.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.VERFUEGBBARKEIT.name());
+        lblVerfuegbarkeit1.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.VERFUEGBBARKEIT.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3439,8 +3586,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblVerfuegbarkeit1, gridBagConstraints);
 
-        cbVerfuegbarkeit1.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.VERFUEGBBARKEIT.name());
+        cbVerfuegbarkeit1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.VERFUEGBBARKEIT.name());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -3462,8 +3608,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler66, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblAktivierbarkeit, "Verwertbarkeit:");
-        lblAktivierbarkeit.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.VERWERTBARKEIT.name());
+        lblAktivierbarkeit.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.VERWERTBARKEIT.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3564,8 +3709,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler69, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblRevitalisierung1, "Revitalisierung:");
-        lblRevitalisierung1.setName(PREFIX_LABEL
-                    + PotenzialflaecheReportServerAction.Property.REVITALISIERUNG.name());
+        lblRevitalisierung1.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.REVITALISIERUNG.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3573,8 +3717,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblRevitalisierung1, gridBagConstraints);
 
-        cbRevitalisierung1.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.REVITALISIERUNG.name());
+        cbRevitalisierung1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.REVITALISIERUNG.name());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -3706,8 +3849,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMassnahmen1.setContentAreaFilled(false);
         btnMassnahmen1.setMaximumSize(new java.awt.Dimension(32, 32));
         btnMassnahmen1.setMinimumSize(new java.awt.Dimension(32, 32));
-        btnMassnahmen1.setName(PREFIX_INPUT
-                    + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
+        btnMassnahmen1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
         btnMassnahmen1.setPreferredSize(new java.awt.Dimension(32, 32));
         btnMassnahmen1.addActionListener(new java.awt.event.ActionListener() {
 
@@ -3730,7 +3872,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel24.add(panArtControls5, gridBagConstraints);
-        panArtControls4.setVisible(isEditable());
+        panArtControls5.setVisible(isEditable());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -3833,7 +3975,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmenActionPerformed
-        taMassnahmeDialog.setText((String)cidsBean.getProperty("notwendige_massnahmen"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgMassnahme, true);
     }                                                                                 //GEN-LAST:event_btnMassnahmenActionPerformed
 
@@ -3843,7 +3984,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlaecheActionPerformed
-        taFlaecheDialog.setText((String)cidsBean.getProperty("beschreibung_flaeche"));
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgFlaeche, true);
     }                                                                              //GEN-LAST:event_btnFlaecheActionPerformed
 
@@ -4008,41 +4148,41 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initPropertyToMetaClassMap() {
-        new SwingWorker<Map<String, MetaClass>, Void>() {
-
-                @Override
-                protected Map<String, MetaClass> doInBackground() throws Exception {
-                    final Map<String, MetaClass> map = new HashMap<>();
-                    for (final PotenzialflaecheReportServerAction.Property property
-                                : PotenzialflaecheReportServerAction.Property.values()) {
-                        if ((property != null)
-                                    && (property.getValue()
-                                        instanceof PotenzialflaecheReportServerAction.PathReportProperty)) {
-                            final String propertyName = property.toString();
-                            final String path =
-                                ((PotenzialflaecheReportServerAction.PathReportProperty)property.getValue()).getPath();
-                            final MetaClass metaClass = getForeignMetaClass(path);
-                            if (metaClass != null) {
-                                map.put(propertyName, metaClass);
-                            }
-                        }
-                    }
-                    return map;
+//        new SwingWorker<Map<String, MetaClass>, Void>() {
+//
+//                @Override
+//                protected Map<String, MetaClass> doInBackground() throws Exception {
+        final Map<String, MetaClass> map = new HashMap<>();
+        for (final PotenzialflaecheReportServerAction.Property property
+                    : PotenzialflaecheReportServerAction.Property.values()) {
+            if ((property != null)
+                        && (property.getValue()
+                            instanceof PotenzialflaecheReportServerAction.PathReportProperty)) {
+                final String propertyName = property.name();
+                final String path = ((PotenzialflaecheReportServerAction.PathReportProperty)property.getValue())
+                            .getPath();
+                final MetaClass metaClass = getForeignMetaClass(path);
+                if (metaClass != null) {
+                    map.put(propertyName, metaClass);
                 }
+            }
+        }
+//                    return map;
+//                }
+//
+//                @Override
+//                protected void done() {
+//                    try {
+        pathToMetaClassMap.clear();
+//                        final Map<String, MetaClass> map = get();
+        pathToMetaClassMap.putAll(map);
 
-                @Override
-                protected void done() {
-                    try {
-                        pathToMetaClassMap.clear();
-                        final Map<String, MetaClass> map = get();
-                        pathToMetaClassMap.putAll(map);
-
-                        initDefinitions();
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                }
-            }.execute();
+        initDefinitions();
+//                    } catch (final Exception ex) {
+//                        LOG.error(ex, ex);
+//                    }
+//                }
+//            }.execute();
     }
 
     /**
@@ -4109,8 +4249,26 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnMassnahmen1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmen1ActionPerformed
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgInterneHinweise, true);
+    }                                                                                  //GEN-LAST:event_btnMassnahmen1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort6ActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_btnMassnahmen1ActionPerformed
+    } //GEN-LAST:event_btnMenAbort6ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk6ActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_btnMenOk6ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -4200,33 +4358,33 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void refreshNummer() {
-        if (isEditable()) {
-            final CidsBean cidsBean = getCidsBean();
-            if (cidsBean != null) {
-                if ((cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
-                            && !"...".equals(cidsBean.getProperty("nummer"))) {
-                    try {
-                        cidsBean.setProperty("nummer", "...");
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                    new SwingWorker<String, Void>() {
-
-                            @Override
-                            protected String doInBackground() throws Exception {
-                                return getNewSchluessel(getCidsBean(), getConnectionContext());
-                            }
-
-                            @Override
-                            protected void done() {
-                                try {
-                                    cidsBean.setProperty("nummer", get());
-                                } catch (final Exception ex) {
-                                    LOG.error(ex, ex);
-                                }
-                            }
-                        }.execute();
+        final CidsBean cidsBean = getCidsBean();
+        if (cidsBean != null) {
+            if (isEditable()
+                        && ((cidsBean.getMetaObject().getStatus() == MetaObject.NEW)
+                            || ((String)cidsBean.getProperty("nummer")).startsWith("x-"))
+                        && !"...".equals(cidsBean.getProperty("nummer"))) {
+                try {
+                    cidsBean.setProperty("nummer", "...");
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
                 }
+                new SwingWorker<String, Void>() {
+
+                        @Override
+                        protected String doInBackground() throws Exception {
+                            return getNewSchluessel(getCidsBean(), getConnectionContext());
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                cidsBean.setProperty("nummer", get());
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                            }
+                        }
+                    }.execute();
             }
         }
     }
@@ -4259,7 +4417,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             fillUsedProperties();
             markUsedFields();
             initManageableInputs();
-            toggleUsedInputs(false);
         }
     }
 
@@ -4274,64 +4431,52 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initDefinitions() {
-        new SwingWorker<Map<MetaClass, String>, Void>() {
+        try {
+            final Map<MetaClass, String> definitions = new HashMap<>();
+            for (final CidsBean schluesseltabellenBean : schluesseltabellenBeans) {
+                if (schluesseltabellenBean != null) {
+                    final String tableName = (String)schluesseltabellenBean.getProperty("table_name");
+                    if ((tableName != null)
+                                && Boolean.TRUE.equals(schluesseltabellenBean.getProperty("definition"))) {
+                        final MetaClass metaClass = CidsBean.getMetaClassFromTableName(
+                                schluesseltabellenBean.getMetaObject().getDomain(),
+                                tableName,
+                                getConnectionContext());
 
-                @Override
-                protected Map<MetaClass, String> doInBackground() throws Exception {
-                    final Map<MetaClass, String> definitions = new HashMap<>();
-                    for (final CidsBean schluesseltabellenBean : schluesseltabellenBeans) {
-                        if (schluesseltabellenBean != null) {
-                            final String tableName = (String)schluesseltabellenBean.getProperty("table_name");
-                            if ((tableName != null)
-                                        && Boolean.TRUE.equals(schluesseltabellenBean.getProperty("definition"))) {
-                                final MetaClass metaClass = CidsBean.getMetaClassFromTableName(
-                                        schluesseltabellenBean.getMetaObject().getDomain(),
-                                        tableName,
-                                        getConnectionContext());
-
-                                if (metaClass != null) {
-                                    final StringBuffer sb = new StringBuffer(String.format(
-                                                "<h3>%s:</h3>",
-                                                metaClass.getName()));
-                                    sb.append("<ul>");
-                                    final List<CidsBean> subSchluesseltabellenBeans = getMosForSchluesseltabelle(
-                                            metaClass);
-                                    if (subSchluesseltabellenBeans != null) {
-                                        for (final CidsBean subSchluesseltabellenBean : subSchluesseltabellenBeans) {
-                                            if (subSchluesseltabellenBean != null) {
-                                                final String name = (String)subSchluesseltabellenBean.getProperty(
-                                                        "name");
-                                                final String definition = (String)subSchluesseltabellenBean.getProperty(
-                                                        "definition");
-                                                sb.append(String.format(
-                                                        "<li><b>%s:</b> %s</li>",
-                                                        (name != null) ? name : "-",
-                                                        ((definition != null) && !definition.trim().isEmpty())
-                                                            ? definition.replaceAll("\n", "<br/>") : "-"));
-                                            }
-                                        }
+                        if (metaClass != null) {
+                            final StringBuffer sb = new StringBuffer(String.format(
+                                        "<h3>%s:</h3>",
+                                        metaClass.getName()));
+                            sb.append("<ul>");
+                            final List<CidsBean> subSchluesseltabellenBeans = getMosForSchluesseltabelle(
+                                    metaClass);
+                            if (subSchluesseltabellenBeans != null) {
+                                for (final CidsBean subSchluesseltabellenBean : subSchluesseltabellenBeans) {
+                                    if (subSchluesseltabellenBean != null) {
+                                        final String name = (String)subSchluesseltabellenBean.getProperty(
+                                                "name");
+                                        final String definition = (String)subSchluesseltabellenBean.getProperty(
+                                                "definition");
+                                        sb.append(String.format(
+                                                "<li><b>%s:</b> %s</li>",
+                                                (name != null) ? name : "-",
+                                                ((definition != null) && !definition.trim().isEmpty())
+                                                    ? definition.replaceAll("\n", "<br/>") : "-"));
                                     }
-                                    definitions.put(metaClass, sb.append("</ul>").toString());
                                 }
                             }
+                            definitions.put(metaClass, sb.append("</ul>").toString());
                         }
                     }
-                    return definitions;
                 }
+            }
+            this.definitions.clear();
+            this.definitions.putAll(definitions);
 
-                @Override
-                protected void done() {
-                    try {
-                        definitions.clear();
-                        final Map<MetaClass, String> map = get();
-                        definitions.putAll(map);
-
-                        initLabelComponentTooltips();
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                }
-            }.execute();
+            initLabelComponentTooltips();
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
     }
 
     /**
@@ -4475,7 +4620,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      */
     private MetaClass getForeignMetaClass(final String path) {
         try {
-            final MetaObject metaObject = getCidsBean().getMetaObject();
+            final MetaObject metaObject = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        "pf_potenzialflaeche",
+                        getConnectionContext())
+                        .getMetaObject();
             final MemberAttributeInfo mai = metaObject.getAttributeByFieldName(path).getMai();
 
             final String domain = metaObject.getDomain();
@@ -4574,6 +4723,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 StringUtils.leftPad(String.valueOf((middle != null) ? middle : (max + 1)), 4, '0'),
                 (middle != null) ? numOf : 0);
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -4595,6 +4745,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
+
+        toggleUsedInputs(false);
     }
 
     /**
@@ -4663,14 +4815,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      */
     public void toggleUsedInputs(final boolean enable) {
         if (isEditable()) {
-            if (usedProperties != null) {
-                for (final JComponent inputComponent : inputComponents) {
-                    if ((inputComponent != null) && (inputComponent != txtNummer)) {
-                        for (final String propertyName : componentToPropertiesMap.get(inputComponent)) {
-                            if (propertyName != null) {
-                                if (!usedProperties.contains(propertyName)) {
-                                    RendererTools.makeUneditable(inputComponent, !enable);
-                                }
+            for (final JComponent inputComponent : inputComponents) {
+                if ((inputComponent != null) && (inputComponent != txtNummer)) {
+                    for (final String propertyName : componentToPropertiesMap.get(inputComponent)) {
+                        if (propertyName != null) {
+                            if (!usedProperties.contains(propertyName)) {
+                                RendererTools.makeUneditable(inputComponent, !enable);
                             }
                         }
                     }
@@ -4780,7 +4930,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 dsf.setGeometry(geom);
                 dsf.setFillingPaint(Color.RED);
                 dsf.setTransparency(0.8f);
-                mappingComponent1.getFeatureCollection().addFeature(dsf);
+                mappingComponent1.getFeatureCollection().addFeature(new CidsFeature(getCidsBean().getMetaObject()));
             }
         }
     }
@@ -4793,19 +4943,20 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                                                           : null;
 
         if (geometry != null) {
-            final Geometry bufferedGeom = geometry.buffer(-2);
-            bufferedGeom.setSRID(geometry.getSRID());
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
                 final CidsServerSearch search = searchLabelFieldPanel.getSearch();
                 if (search instanceof GeometrySearch) {
                     final GeometrySearch geometrySearch = (GeometrySearch)search;
-                    geometrySearch.setGeometry(bufferedGeom);
+                    geometrySearch.setGeometry(geometry);
+                    geometrySearch.setBuffer(-2d);
                     searchLabelFieldPanel.refresh();
                 }
             }
-            ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(bufferedGeom);
+            ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(geometry);
+            ((GeometrySearch)monSearchResultsList1.getSearch()).setBuffer(-2d);
             monSearchResultsList1.refresh();
-            ((GeometrySearch)monSearchResultsList2.getSearch()).setGeometry(bufferedGeom);
+            ((GeometrySearch)monSearchResultsList2.getSearch()).setGeometry(geometry);
+            ((GeometrySearch)monSearchResultsList2.getSearch()).setBuffer(-2d);
             monSearchResultsList2.refresh();
         } else {
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
