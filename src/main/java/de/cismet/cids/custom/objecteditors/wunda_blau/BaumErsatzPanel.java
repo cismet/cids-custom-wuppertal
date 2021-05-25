@@ -119,7 +119,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public static final String FIELD__KONTROLLE = "n_kontrolle";                // baum_ersatz
     public static final String FIELD__DATE = "datum";                           // baum_kontrolle
     public static final String FIELD__DATUM = "pflanzdatum";                    // baum_ersatz
-    public static final String FIELD__ART = "fk_art";                           // baum_ersatz
+    public static final String FIELD__ART = "fk_art";                           // baum_ersatz 
+    public static final String FIELD__ART_ID = "fk_art.id";                     // baum_ersatz --> art
     public static final String FIELD__GEOM = "fk_geom";                         // baum_ersatz
     public static final String FIELD__SELBST = "selbststaendig";                // baum_ersatz
     public static final String FIELD__BIS = "umsetzung_bis";                    // baum_ersatz
@@ -133,6 +134,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_ersatz_geom
     
+    public static final String TABLE__NAME = "baum_ersatz";
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_SORTE = "baum_sorte";
     public static final String TABLE_NAME__KONTROLLE = "baum_kontrolle";
@@ -227,6 +229,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         dcBis.setName("dcBis"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umsetzung_bis}"), dcBis, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(dcBis.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -253,6 +257,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         dcDatum.setName("dcDatum"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.pflanzdatum}"), dcDatum, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         binding.setConverter(dcDatum.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -281,6 +287,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             cbGeomErsatz.setName("cbGeomErsatz"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomErsatz, BeanProperty.create("selectedItem"));
+            binding.setSourceNullValue(null);
+            binding.setSourceUnreadableValue(null);
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).getConverter());
             bindingGroup.addBinding(binding);
 
@@ -313,6 +321,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         cbArtE.setPreferredSize(new Dimension(100, 24));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArtE, BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         cbArtE.addActionListener(formListener);
@@ -340,6 +350,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         cbSorte.setName("cbSorte"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_sorte}"), cbSorte, BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -366,6 +378,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         txtAnzahl.setName("txtAnzahl"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl}"), txtAnzahl, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -393,6 +407,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         chSelbst.setName("chSelbst"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.selbststaendig}"), chSelbst, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -418,6 +434,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         txtFirma.setName("txtFirma"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.firma}"), txtFirma, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -494,7 +512,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.gridheight = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
+        gridBagConstraints.insets = new Insets(2, 5, 5, 5);
         panErsatz.add(panGeometrie, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -518,6 +536,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         taBemerkungE.setName("taBemerkungE"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungE, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkungE);
@@ -596,7 +616,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 10);
         semiRoundedPanel8.add(panKontAdd, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -625,7 +645,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panKontDaten.add(jScrollPaneKont, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -636,6 +655,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 20.0;
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         rpKont.add(panKontDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -644,7 +664,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         panKont.add(rpKont, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -654,7 +673,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 0, 0, 0);
         panErsatz.add(panKont, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -663,6 +682,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panErsatz, gridBagConstraints);
 
         filler4.setName("filler4"); // NOI18N
@@ -852,7 +872,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     
     private void refreshSorte() {
         if (cidsBean != null){
-            sorteArtSearch.setArtId((Integer)cidsBean.getProperty("fk_art.id"));
+            sorteArtSearch.setArtId((Integer)cidsBean.getProperty(FIELD__ART_ID));
 
             new SwingWorker<Void, Void>() {
 
@@ -889,55 +909,60 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         if (isEditor && (this.cidsBean != null)) {
             this.cidsBean.removePropertyChangeListener(changeListener);
         }
-        bindingGroup.unbind();
-        this.cidsBean = cidsBean;
-        if (this.cidsBean != null){
-            setKontrolleBeans(cidsBean.getBeanCollectionProperty(FIELD__KONTROLLE)); 
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                this.cidsBean,
-                getConnectionContext());
-        } else{
-            setKontrolleBeans(null);
-        }
-        
-        setMapWindow();
-        bindingGroup.bind();
-        final DivBeanTable kontrolleModel = new DivBeanTable(
-                    isEditor,
-                    cidsBean,
-                    FIELD__KONTROLLE,
-                    KONTROLLE_COL_NAMES,
-                    KONTROLLE_PROP_NAMES,                   
-                    KONTROLLE_PROP_TYPES);
-            xtKont.setModel(kontrolleModel);
-            xtKont.getColumn(0).setCellEditor(new DateCellEditor());
-            //xtKont.getColumnModel().getColumn(0).setCellRenderer(xtKont.getDefaultRenderer(String.class));
-            xtKont.getColumn(0).setPreferredWidth(20);
-            xtKont.packAll();
-            xtKont.addMouseMotionListener(new MouseAdapter(){
-                @Override
-		public void mouseMoved(MouseEvent e) {
-                    int row=xtKont.rowAtPoint(e.getPoint());
-                    int col=xtKont.columnAtPoint(e.getPoint());
-                    if(row>-1 && col>-1){
-                        Object value=xtKont.getValueAt(row, col);
-                        if(null!=value && !"".equals(value)){
-                            xtKont.setToolTipText(value.toString());
-                        }else{
-                            xtKont.setToolTipText(null);//keinTooltip anzeigen
+        try{
+      //  if (bindingGroup.getBinding(TABLE__NAME).isBound()){
+            bindingGroup.unbind();
+       // }
+            this.cidsBean = cidsBean;
+            if (this.cidsBean != null){
+                setKontrolleBeans(cidsBean.getBeanCollectionProperty(FIELD__KONTROLLE)); 
+                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                    bindingGroup,
+                    this.cidsBean,
+                    getConnectionContext());
+            } else{
+                setKontrolleBeans(null);
+            }
+
+            setMapWindow();
+            bindingGroup.bind();
+            final DivBeanTable kontrolleModel = new DivBeanTable(
+                        isEditor,
+                        cidsBean,
+                        FIELD__KONTROLLE,
+                        KONTROLLE_COL_NAMES,
+                        KONTROLLE_PROP_NAMES,                   
+                        KONTROLLE_PROP_TYPES);
+                xtKont.setModel(kontrolleModel);
+                xtKont.getColumn(0).setCellEditor(new DateCellEditor());
+                //xtKont.getColumnModel().getColumn(0).setCellRenderer(xtKont.getDefaultRenderer(String.class));
+                xtKont.getColumn(0).setPreferredWidth(20);
+                xtKont.packAll();
+                xtKont.addMouseMotionListener(new MouseAdapter(){
+                    @Override
+                    public void mouseMoved(MouseEvent e) {
+                        int row=xtKont.rowAtPoint(e.getPoint());
+                        int col=xtKont.columnAtPoint(e.getPoint());
+                        if(row>-1 && col>-1){
+                            Object value=xtKont.getValueAt(row, col);
+                            if(null!=value && !"".equals(value)){
+                                xtKont.setToolTipText(value.toString());
+                            }else{
+                                xtKont.setToolTipText(null);//keinTooltip anzeigen
+                            }
                         }
                     }
+                });
+            cbGeomErsatz.updateUI();
+            if (isEditor && (this.cidsBean != null)) {
+                cidsBean.addPropertyChangeListener(changeListener);
+                if(this.cidsBean.getProperty(FIELD__ART) != null){
+                    cbSorte.setEnabled(true);
                 }
-            });
-        cbGeomErsatz.updateUI();
-        if (isEditor && (this.cidsBean != null)) {
-            cidsBean.addPropertyChangeListener(changeListener);
-            if(this.cidsBean.getProperty(FIELD__ART) != null){
-                cbSorte.setEnabled(true);
             }
+        } catch (final Exception ex) {
+            Exceptions.printStackTrace(ex);
         }
-        
      /*   if (cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
             if (cidsBean.getProperty(FIELD__ART) != null){
                 cbSorte.setEnabled(true);

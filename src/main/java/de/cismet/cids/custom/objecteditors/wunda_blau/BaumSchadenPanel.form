@@ -563,7 +563,7 @@
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="18" weightX="1.0" weightY="0.0"/>
+                      <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="18" weightX="1.0" weightY="0.0"/>
                     </Constraint>
                   </Constraints>
 
@@ -588,7 +588,11 @@
                         <Property name="name" type="java.lang.String" value="txtAlter" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alter}" target="txtAlter" targetPath="text" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alter}" target="txtAlter" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="nullValue" type="java.lang.String" value=""/>
+                          <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -618,7 +622,11 @@
                         <Property name="name" type="java.lang.String" value="txtHoehe" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.hoehe}" target="txtHoehe" targetPath="text" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.hoehe}" target="txtHoehe" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="nullValue" type="java.lang.String" value=""/>
+                          <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -648,7 +656,11 @@
                         <Property name="name" type="java.lang.String" value="txtUmfang" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.umfang}" target="txtUmfang" targetPath="text" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.umfang}" target="txtUmfang" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="nullValue" type="java.lang.String" value=""/>
+                          <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -679,7 +691,10 @@
                         <Property name="name" type="java.lang.String" value="chPrivat" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.privatbaum}" target="chPrivat" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.privatbaum}" target="chPrivat" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -731,6 +746,8 @@
                       </Properties>
                       <BindingProperties>
                         <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_geom}" target="cbGeomSchaden" targetPath="selectedItem" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="java.lang.Object" value="null"/>
+                          <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
                           <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                             <Connection code="((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).getConverter()" type="code"/>
                           </Property>
@@ -828,7 +845,9 @@
                                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
                                         </Property>
-                                        <Property name="text" type="java.lang.String" value="Lage"/>
+                                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumSchadenPanel.lblKarte.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                                        </Property>
                                         <Property name="name" type="java.lang.String" value="lblKarte" noResource="true"/>
                                       </Properties>
                                       <Constraints>
@@ -865,7 +884,10 @@
                         <Property name="name" type="java.lang.String" value="chOhne" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ohne_schaden}" target="chOhne" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ohne_schaden}" target="chOhne" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -883,7 +905,10 @@
                         <Property name="name" type="java.lang.String" value="chKrone" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.kronenschaden}" target="chKrone" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.kronenschaden}" target="chKrone" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -901,7 +926,10 @@
                         <Property name="name" type="java.lang.String" value="chStamm" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.stammschaden}" target="chStamm" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.stammschaden}" target="chStamm" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -919,7 +947,10 @@
                         <Property name="name" type="java.lang.String" value="chWurzel" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.wurzelschaden}" target="chWurzel" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.wurzelschaden}" target="chWurzel" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -951,7 +982,10 @@
                         <Property name="name" type="java.lang.String" value="chSturm" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sturmschaden}" target="chSturm" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.sturmschaden}" target="chSturm" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -969,7 +1003,10 @@
                         <Property name="name" type="java.lang.String" value="chAbgest" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.abgestorben}" target="chAbgest" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.abgestorben}" target="chAbgest" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1015,7 +1052,10 @@
                         <Property name="name" type="java.lang.String" value="chBau" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.baumassnahme}" target="chBau" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.baumassnahme}" target="chBau" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1047,7 +1087,10 @@
                         <Property name="name" type="java.lang.String" value="chGutachten" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.gutachten}" target="chGutachten" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.gutachten}" target="chGutachten" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1093,7 +1136,10 @@
                         <Property name="name" type="java.lang.String" value="chBeratung" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.baumberatung}" target="chBeratung" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.baumberatung}" target="chBeratung" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1129,7 +1175,11 @@
                             <Property name="name" type="java.lang.String" value="taBemerkung" noResource="true"/>
                           </Properties>
                           <BindingProperties>
-                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="taBemerkung" targetPath="text" updateStrategy="0" immediately="false"/>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bemerkung}" target="taBemerkung" targetPath="text" updateStrategy="0" immediately="false">
+                              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="nullValue" type="java.lang.String" value=""/>
+                              <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                            </BindingProperty>
                           </BindingProperties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1157,7 +1207,10 @@
                         <Property name="name" type="java.lang.String" value="chFaellung" noResource="true"/>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.faellung}" target="chFaellung" targetPath="selected" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.faellung}" target="chFaellung" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1227,7 +1280,14 @@
                                 <Property name="visibleRowCount" type="int" value="3"/>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_wurzel}" target="lstWurzel" targetPath="elements" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_wurzel}" target="lstWurzel" targetPath="elements" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                  <Property name="incompletePathValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                </BindingProperty>
                               </BindingProperties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1366,7 +1426,14 @@
                                 <Property name="visibleRowCount" type="int" value="3"/>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_stamm}" target="lstStamm" targetPath="elements" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_stamm}" target="lstStamm" targetPath="elements" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                  <Property name="incompletePathValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                </BindingProperty>
                               </BindingProperties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1505,7 +1572,14 @@
                                 <Property name="visibleRowCount" type="int" value="3"/>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_krone}" target="lstKrone" targetPath="elements" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_krone}" target="lstKrone" targetPath="elements" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                  <Property name="incompletePathValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                </BindingProperty>
                               </BindingProperties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -1644,7 +1718,14 @@
                                 <Property name="visibleRowCount" type="int" value="3"/>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_massnahme}" target="lstMassnahme" targetPath="elements" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.arr_massnahme}" target="lstMassnahme" targetPath="elements" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                  <Property name="incompletePathValue" type="java.util.List" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                                    <ComponentRef name="null"/>
+                                  </Property>
+                                </BindingProperty>
                               </BindingProperties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -2149,68 +2230,93 @@
                     </DimensionLayout>
                   </Layout>
                 </Container>
-                <Component class="javax.swing.JLabel" name="lblBetrag">
+                <Container class="javax.swing.JPanel" name="panZahlung">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="11" style="1"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Betrag:"/>
-                    <Property name="name" type="java.lang.String" value="lblBetrag" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="panZahlung" noResource="true"/>
+                    <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.JTextField" name="txtBetrag">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="txtBetrag" noResource="true"/>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="text" source="Form" sourcePath="${cidsBean.betrag}" target="txtBetrag" targetPath="text" updateStrategy="0" immediately="false"/>
-                  </BindingProperties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                      <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="18" weightX="1.0" weightY="0.0"/>
                     </Constraint>
                   </Constraints>
-                </Component>
-                <Component class="javax.swing.JLabel" name="lblEingang">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="11" style="1"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="eingegangen:"/>
-                    <Property name="name" type="java.lang.String" value="lblEingang" noResource="true"/>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.JCheckBox" name="chEingang">
-                  <Properties>
-                    <Property name="contentAreaFilled" type="boolean" value="false"/>
-                    <Property name="name" type="java.lang.String" value="chEingang" noResource="true"/>
-                  </Properties>
-                  <BindingProperties>
-                    <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.eingegangen}" target="chEingang" targetPath="selected" updateStrategy="0" immediately="false"/>
-                  </BindingProperties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
-                    <AuxValue name="generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
-                  </AuxValues>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="lblBetrag">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="11" style="1"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Betrag:"/>
+                        <Property name="name" type="java.lang.String" value="lblBetrag" noResource="true"/>
+                      </Properties>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                          <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                        </Constraint>
+                      </Constraints>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="txtBetrag">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="txtBetrag" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.betrag}" target="txtBetrag" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="nullValue" type="java.lang.String" value=""/>
+                          <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                        </BindingProperty>
+                      </BindingProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                      </AuxValues>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                          <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                        </Constraint>
+                      </Constraints>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="lblEingang">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="11" style="1"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="eingegangen:"/>
+                        <Property name="name" type="java.lang.String" value="lblEingang" noResource="true"/>
+                      </Properties>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                          <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                        </Constraint>
+                      </Constraints>
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="chEingang">
+                      <Properties>
+                        <Property name="contentAreaFilled" type="boolean" value="false"/>
+                        <Property name="name" type="java.lang.String" value="chEingang" noResource="true"/>
+                      </Properties>
+                      <BindingProperties>
+                        <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.eingegangen}" target="chEingang" targetPath="selected" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="boolean" value="false"/>
+                          <Property name="incompletePathValue" type="boolean" value="false"/>
+                        </BindingProperty>
+                      </BindingProperties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                        <AuxValue name="generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+                      </AuxValues>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                          <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
+                        </Constraint>
+                      </Constraints>
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="jPanelFestsetzung">
@@ -2503,22 +2609,6 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.Box$Filler" name="filler7">
-                              <Properties>
-                                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[32767, 0]"/>
-                                </Property>
-                                <Property name="name" type="java.lang.String" value="filler7" noResource="true"/>
-                              </Properties>
-                              <AuxValues>
-                                <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="2" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="10" weightX="1.0" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
                             <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.BaumFestsetzungPanel" name="baumFestsetzungPanel">
                               <Properties>
                                 <Property name="name" type="java.lang.String" value="baumFestsetzungPanel" noResource="true"/>
@@ -2531,7 +2621,7 @@
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="1.0"/>
+                                  <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="1.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>

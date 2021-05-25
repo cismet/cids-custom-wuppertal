@@ -117,7 +117,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         panOrtstermin = new JPanel();
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
-        taBemerkung = new JTextArea();
+        taBemerkungOrt = new JTextArea();
         panTeil = new JPanel();
         rpTeil = new RoundedPanel();
         semiRoundedPanel7 = new SemiRoundedPanel();
@@ -162,15 +162,17 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         scpBemerkung.setName("scpBemerkung"); // NOI18N
         scpBemerkung.setOpaque(false);
 
-        taBemerkung.setLineWrap(true);
-        taBemerkung.setRows(2);
-        taBemerkung.setWrapStyleWord(true);
-        taBemerkung.setName("taBemerkung"); // NOI18N
+        taBemerkungOrt.setLineWrap(true);
+        taBemerkungOrt.setRows(2);
+        taBemerkungOrt.setWrapStyleWord(true);
+        taBemerkungOrt.setName("taBemerkungOrt"); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungOrt, BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
-        scpBemerkung.setViewportView(taBemerkung);
+        scpBemerkung.setViewportView(taBemerkungOrt);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -246,7 +248,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 10);
         semiRoundedPanel7.add(panTeilnehmerAdd, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -275,7 +277,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panTeilDaten.add(jScrollPaneTeil, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -286,6 +287,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         rpTeil.add(panTeilDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -294,7 +296,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         panTeil.add(rpTeil, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -347,6 +348,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panOrtstermin, gridBagConstraints);
 
         filler3.setName("filler3"); // NOI18N
@@ -427,7 +429,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     RoundedPanel rpTeil;
     JScrollPane scpBemerkung;
     SemiRoundedPanel semiRoundedPanel7;
-    JTextArea taBemerkung;
+    JTextArea taBemerkungOrt;
     JXTable xtTeil;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -516,7 +518,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public void dispose() {
         bindingGroup.unbind();
         cidsBean = null;
-    }
+        //panOrtstermin.dispose();
+    }//super.dispose();
 
     @Override
     public CidsBean getCidsBean() {
@@ -534,6 +537,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         if (isEditor && (this.cidsBean != null)) {
                 cidsBean.addPropertyChangeListener(changeListener);
         }
+       // if(this.cidsBean == null){
+        //    taBemerkung.setText(null);
+       // }
         final DivBeanTable teilnehmerModel = new DivBeanTable(
                     isEditor,
                     cidsBean,
@@ -557,6 +563,10 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     }
                 }
             });
+            
+            panOrtstermin.repaint();
+            panOrtstermin.updateUI();
+            taBemerkungOrt.updateUI();
     }
     public boolean prepareForSave() {
         boolean save = true;

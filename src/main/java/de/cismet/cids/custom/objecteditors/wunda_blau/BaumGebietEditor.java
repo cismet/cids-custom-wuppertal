@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
@@ -102,6 +103,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Locale;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
@@ -260,8 +262,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panControlsNewMeldungen;
     private JPanel panDaten;
     private JPanel panFiller;
-    private JPanel panFillerUnten;
-    private JPanel panFillerUnten2;
     private JPanel panFillerUnten3;
     private JPanel panGeometrie;
     private JPanel panLage;
@@ -400,7 +400,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         btnMenOkMeldung = new JButton();
         dcMeldung = new DefaultBindableDateChooser();
         sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
-        panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
@@ -439,7 +438,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         cbStatus = new DefaultBindableReferenceCombo() ;
         cbStrasse = new FastBindableReferenceCombo();
         btnCreateAktenzeichen = new JButton();
-        panFillerUnten2 = new JPanel();
         jPanelMeldungen = new JPanel();
         panFillerUnten3 = new JPanel();
         panMeldung = new JPanel();
@@ -513,27 +511,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         setLayout(new GridBagLayout());
 
-        panFillerUnten.setName(""); // NOI18N
-        panFillerUnten.setOpaque(false);
-
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
-        panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        add(panFillerUnten, gridBagConstraints);
-
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
@@ -601,7 +578,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         jPanelAllgemein.add(panGeometrie, gridBagConstraints);
 
         panDaten.setOpaque(false);
@@ -860,7 +837,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(cbStrasse, gridBagConstraints);
 
-        btnCreateAktenzeichen.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
+        btnCreateAktenzeichen.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/textblatt.png"))); // NOI18N
         btnCreateAktenzeichen.setToolTipText("Aktenzeichen automatisch generieren");
         btnCreateAktenzeichen.setMaximumSize(new Dimension(66, 50));
         btnCreateAktenzeichen.setMinimumSize(new Dimension(20, 19));
@@ -873,7 +850,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(btnCreateAktenzeichen, gridBagConstraints);
         btnCreateAktenzeichen.setVisible(isEditor);
@@ -884,29 +861,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         jPanelAllgemein.add(panDaten, gridBagConstraints);
-
-        panFillerUnten2.setName(""); // NOI18N
-        panFillerUnten2.setOpaque(false);
-
-        GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
-        panFillerUnten2.setLayout(panFillerUnten2Layout);
-        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelAllgemein.add(panFillerUnten2, gridBagConstraints);
 
         jTabbedPane.addTab("Allgemeine Informationen", jPanelAllgemein);
 
@@ -937,8 +893,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panMeldung.setOpaque(false);
         panMeldung.setLayout(new GridBagLayout());
 
-        rpMeldungliste.setMinimumSize(new Dimension(85, 202));
-        rpMeldungliste.setPreferredSize(new Dimension(85, 0));
+        rpMeldungliste.setMinimumSize(new Dimension(100, 202));
+        rpMeldungliste.setPreferredSize(new Dimension(100, 202));
         rpMeldungliste.setLayout(new GridBagLayout());
 
         lstMeldungen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1096,7 +1052,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         jPanelMeldungen.add(panMeldung, gridBagConstraints);
 
         jTabbedPane.addTab("Meldungen", jPanelMeldungen);
@@ -1326,7 +1282,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
             if (schluessel != null){
 
-                //hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));
+                hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));
                 
                 hnrSearch.setKeyId(Integer.parseInt(schluessel));
 
@@ -1742,19 +1698,22 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
                     @Override
                     protected void done() {
+                        final Collection check;
                         try {
-                            final Collection colStreets = get();
-                            cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
-                            List<CidsBean> streetBeans = new ArrayList<>();
-                            /*if (cidsBean.getProperty(FIELD__STRASSE) != null){
-                                for (final CidsBean cb : colStreets.toArray().){
-                                    if(cb.getProperty(FIELD__STRASSE_KEY).toString().equals(cidsBean.getProperty(FIELD__STRASSE).toString())){
-                                       streetBeans.add(cb);
-                                       break;
+                            check = get();
+                            if (check != null) {
+                                final Collection colStreets = check;
+                                cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
+                                List<CidsBean> streetBeans = new ArrayList<>();
+                                /*if (cidsBean.getProperty(FIELD__STRASSE) != null){
+                                    for (final CidsBean cb : colStreets.toArray().){
+                                        if(cb.getProperty(FIELD__STRASSE_KEY).toString().equals(cidsBean.getProperty(FIELD__STRASSE).toString())){
+                                           streetBeans.add(cb);
+                                           break;
+                                        }
                                     }
-                                }
-                            }*/
-                            
+                                }*/
+                            }
                         } catch (final InterruptedException | ExecutionException ex) {
                             LOG.fatal(ex, ex);
                         }

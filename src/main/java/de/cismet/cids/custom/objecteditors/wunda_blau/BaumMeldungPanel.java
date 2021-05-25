@@ -212,10 +212,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         btnMenAbortOrtstermin = new JButton();
         btnMenOkOrtstermin = new JButton();
         dcOrtstermin = new DefaultBindableDateChooser();
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
+        panInfo = new JPanel();
         lblApartner = new JLabel();
         panApartner = new JPanel();
         scpApartner = new JScrollPane();
@@ -374,17 +374,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         setOpaque(false);
         setLayout(new GridBagLayout());
 
-        filler3.setName("filler3"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        add(filler3, gridBagConstraints);
-
         pnlCard1.setName("pnlCard1"); // NOI18N
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new GridBagLayout());
@@ -394,6 +383,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         jPanelAllgemein.setName("jPanelAllgemein"); // NOI18N
         jPanelAllgemein.setOpaque(false);
         jPanelAllgemein.setLayout(new GridBagLayout());
+
+        panInfo.setMinimumSize(new Dimension(297, 230));
+        panInfo.setName("panInfo"); // NOI18N
+        panInfo.setOpaque(false);
+        panInfo.setPreferredSize(new Dimension(337, 230));
+        panInfo.setLayout(new GridBagLayout());
 
         lblApartner.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblApartner, "Ansprechpartner:");
@@ -405,7 +400,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        jPanelAllgemein.add(lblApartner, gridBagConstraints);
+        panInfo.add(lblApartner, gridBagConstraints);
 
         panApartner.setName("panApartner"); // NOI18N
         panApartner.setOpaque(false);
@@ -481,7 +476,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        jPanelAllgemein.add(panApartner, gridBagConstraints);
+        panInfo.add(panApartner, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
@@ -493,7 +488,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        jPanelAllgemein.add(lblBemerkung, gridBagConstraints);
+        panInfo.add(lblBemerkung, gridBagConstraints);
 
         scpBemerkung.setName("scpBemerkung"); // NOI18N
         scpBemerkung.setOpaque(false);
@@ -517,7 +512,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        jPanelAllgemein.add(scpBemerkung, gridBagConstraints);
+        panInfo.add(scpBemerkung, gridBagConstraints);
 
         panFillerUnten5.setName("panFillerUnten5"); // NOI18N
         panFillerUnten5.setOpaque(false);
@@ -538,7 +533,17 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        jPanelAllgemein.add(panFillerUnten5, gridBagConstraints);
+        panInfo.add(panFillerUnten5, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        jPanelAllgemein.add(panInfo, gridBagConstraints);
 
         jTabbedPane.addTab("Allgemeine Informationen", jPanelAllgemein);
 
@@ -584,6 +589,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         lstOrtstermine.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstOrtstermine.setFixedCellWidth(75);
         lstOrtstermine.setName("lstOrtstermine"); // NOI18N
+        lstOrtstermine.addPropertyChangeListener(formListener);
         scpLaufendeOrtstermine.setViewportView(lstOrtstermine);
 
         gridBagConstraints = new GridBagConstraints();
@@ -738,7 +744,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         jPanelOrtstermine.add(panOrtstermin, gridBagConstraints);
 
         jTabbedPane.addTab("Ortstermine", jPanelOrtstermine);
@@ -786,9 +792,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         rpSchadenliste.add(scpLaufendeSchaeden, gridBagConstraints);
 
         semiRoundedPanelSchaden.setBackground(Color.darkGray);
@@ -825,6 +832,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         rpSchadenliste.add(semiRoundedPanelSchaden, gridBagConstraints);
@@ -859,7 +867,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
@@ -871,8 +879,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 0, 0, 5);
         panSchaden.add(rpSchadenliste, gridBagConstraints);
 
         rpSchadeninfo.setName("rpSchadeninfo"); // NOI18N
@@ -921,6 +927,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         rpSchadeninfo.add(panSchaedenMain, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -929,7 +936,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 8.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         panSchaden.add(rpSchadeninfo, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -939,7 +945,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         jPanelSchaeden.add(panSchaden, gridBagConstraints);
 
         jTabbedPane.addTab("Schäden", jPanelSchaeden);
@@ -948,6 +954,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(0, 0, 10, 0);
         pnlCard1.add(jTabbedPane, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -964,7 +971,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
     // Code for dispatching events from components to event handlers.
 
-    private class FormListener implements ActionListener {
+    private class FormListener implements ActionListener, PropertyChangeListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == btnAddApartner) {
@@ -996,6 +1003,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             }
             else if (evt.getSource() == btnMenOkOrtstermin) {
                 BaumMeldungPanel.this.btnMenOkOrtsterminActionPerformed(evt);
+            }
+        }
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (evt.getSource() == lstOrtstermine) {
+                BaumMeldungPanel.this.lstOrtsterminePropertyChange(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
@@ -1178,6 +1191,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         }
     }//GEN-LAST:event_btnRemoveSchadenActionPerformed
 
+    private void lstOrtsterminePropertyChange(PropertyChangeEvent evt) {//GEN-FIRST:event_lstOrtsterminePropertyChange
+        //baumOrtsterminPanel.repaint();
+    }//GEN-LAST:event_lstOrtsterminePropertyChange
+
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
     public final BaumGebietEditor parentEditor;
@@ -1216,7 +1233,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JDialog dlgAddApartner;
     JDialog dlgAddOrtstermin;
     Box.Filler filler1;
-    Box.Filler filler3;
     JPanel jPanel8;
     JPanel jPanel9;
     JPanel jPanelAllgemein;
@@ -1243,6 +1259,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JPanel panFillerUnten3;
     JPanel panFillerUnten4;
     JPanel panFillerUnten5;
+    JPanel panInfo;
     JPanel panMenButtonsApartner;
     JPanel panMenButtonsOrtstermin;
     JPanel panOrtstermin;
@@ -1323,6 +1340,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         ortsterminBeans.clear();
         changedSchadenBeans.clear();
         changedOrtsterminBeans.clear();
+        //baumOrtsterminPanel.dispose();
+        //baumSchadenPanel.dispose();
+        
+        //((DefaultListModel<CidsBean>)lstOrtstermine.getModel()).clear();
     }
 
     @Override
