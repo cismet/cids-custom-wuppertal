@@ -803,7 +803,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      */
     private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
         try {
-            BrowserLauncher.openURL(ClientAlboProperties.getInstance().getWz_klassifikation_link());
+            BrowserLauncher.openURL(ClientAlboProperties.getInstance().getWzKlassifikationLink());
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }

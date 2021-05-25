@@ -58,10 +58,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheArbeitssta
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkungenPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
-import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
-import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -75,7 +73,6 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
@@ -590,16 +587,17 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                         CismapBroker.getInstance().getMappingComponent())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
+            final String name = String.valueOf(System.currentTimeMillis());
             DownloadManager.instance()
                     .add(
                         new ByteArrayActionDownload(
                             AlboExportServerAction.TASK_NAME,
-                            null,
+                            name,
                             null,
                             "Schnittstellen-Export",
                             jobname,
-                            "export",
-                            ".csv",
+                            name,
+                            ".zip",
                             getConnectionContext()));
         }
     } //GEN-LAST:event_btnReport1ActionPerformed
