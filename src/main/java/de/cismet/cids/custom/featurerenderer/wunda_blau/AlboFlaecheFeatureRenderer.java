@@ -40,23 +40,23 @@ public class AlboFlaecheFeatureRenderer extends CustomCidsFeatureRenderer {
     public Paint getFillingStyle() {
         switch ((String)metaObject.getBean().getProperty("fk_art.schluessel")) {
             case "altablagerung": {
-                return Color.getColor(ClientAlboProperties.getInstance().getAltablagerung_color(), Color.BLUE);
+                return Color.getColor(ClientAlboProperties.getInstance().getAltablagerungColor(), Color.BLUE);
             }
             case "altstandort": {
-                return Color.getColor(ClientAlboProperties.getInstance().getAltstandort_color(), Color.CYAN);
+                return Color.getColor(ClientAlboProperties.getInstance().getAltstandortColor(), Color.CYAN);
             }
             case "betriebsstandort": {
-                return Color.getColor(ClientAlboProperties.getInstance().getBetriebsstandort_color(), Color.PINK);
+                return Color.getColor(ClientAlboProperties.getInstance().getBetriebsstandortColor(), Color.PINK);
             }
             case "sonstige": {
-                return Color.getColor(ClientAlboProperties.getInstance().getSonstige_color(),
+                return Color.getColor(ClientAlboProperties.getInstance().getSonstigeColor(),
                         Color.MAGENTA);
             }
             case "materialaufbringung": {
-                return Color.getColor(ClientAlboProperties.getInstance().getMaterialaufbringung_color(), Color.YELLOW);
+                return Color.getColor(ClientAlboProperties.getInstance().getMaterialaufbringungColor(), Color.YELLOW);
             }
             case "ohne_verdacht": {
-                return Color.getColor(ClientAlboProperties.getInstance().getOhne_verdacht_color(), Color.GREEN);
+                return Color.getColor(ClientAlboProperties.getInstance().getOhneVerdachtColor(), Color.GREEN);
             }
         }
         return Color.GRAY;
