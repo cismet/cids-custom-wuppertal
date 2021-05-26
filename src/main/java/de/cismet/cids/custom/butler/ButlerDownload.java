@@ -593,7 +593,7 @@ public class ButlerDownload extends HttpDownload implements ConnectionContextPro
                 try {
                     fileExists = (WebAccessManager.getInstance().doRequest(url) != null);
                 } catch (BadHttpStatusCodeException e) {
-                    if (e.getStatuscode() == 404 || e.getStatuscode() == 403) {
+                    if ((e.getStatuscode() == 404) || (e.getStatuscode() == 403)) {
                         if (log.isDebugEnabled()) {
                             log.debug("Resultfile for order " + requestId + " not exists. Trying again");
                         }
