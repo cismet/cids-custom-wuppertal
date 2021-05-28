@@ -76,16 +76,10 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisLandparcelAggregationRenderer;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
-import de.cismet.cids.custom.wunda_blau.search.server.AlkisLandparcelGeometryMonSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BodenrichtwertZoneMonSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.FnpHauptnutzungenMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.GeometrySearch;
 import de.cismet.cids.custom.wunda_blau.search.server.KstGeometryMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.PfPotenzialflaecheNextSchluesselServerSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.RpdKategorieMonSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.StadtraumtypMonSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.WohnlagenKategorisierungMonSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.RestApiMonGeometrySearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -337,13 +331,14 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler72;
     private javax.swing.Box.Filler filler73;
     private javax.swing.Box.Filler filler74;
-    private javax.swing.Box.Filler filler75;
     private javax.swing.Box.Filler filler76;
+    private javax.swing.Box.Filler filler77;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -378,6 +373,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -448,6 +444,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
     private de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<MetaObjectNode> monSearchResultsList1;
     private de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<MetaObjectNode> monSearchResultsList2;
+    private de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<MetaObjectNode> monSearchResultsList3;
     private de.cismet.tools.gui.RoundedPanel panAllgemein;
     private de.cismet.tools.gui.RoundedPanel panAllgemein3;
     private de.cismet.tools.gui.RoundedPanel panAllgemein6;
@@ -485,7 +482,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel1;
     private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel2;
     private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel3;
-    private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel4;
     private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel5;
     private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel6;
     private de.cismet.cids.editors.SearchLabelsFieldPanel searchLabelsFieldPanel7;
@@ -636,13 +632,13 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         RendererTools.makeUneditable(monSearchResultsList1, true);
         RendererTools.makeUneditable(monSearchResultsList2, true);
+        RendererTools.makeUneditable(monSearchResultsList3, true);
         RendererTools.makeUneditable(txtNummer, true);
 
         searchLabelFieldPanels.addAll(Arrays.asList(
                 searchLabelsFieldPanel1,
                 searchLabelsFieldPanel2,
                 searchLabelsFieldPanel3,
-                searchLabelsFieldPanel4,
                 searchLabelsFieldPanel5,
                 searchLabelsFieldPanel6,
                 searchLabelsFieldPanel7));
@@ -772,6 +768,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 new java.awt.Dimension(32767, 28));
         lblBezeichnung = new javax.swing.JLabel();
         txtBezeichnung = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
         jPanel7 = new javax.swing.JPanel();
         filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
@@ -809,7 +806,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         monSearchResultsList1 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
-                new AlkisLandparcelGeometryMonSearch());
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.FLURSTUECKE.getValue()).createMonServerSearch());
         filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -878,7 +876,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new RpdKategorieMonSearch(0.2d));
+        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.REGIONALPLAN.getValue()).createMonServerSearch());
         filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -886,8 +886,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new FnpHauptnutzungenMonSearch(
-                    0.1d));
+        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.FLAECHENNUTZUNGSPLAN.getValue())
+                            .createMonServerSearch());
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -895,7 +897,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel4 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new BplaeneMonSearch(), true);
+        jScrollPane11 = new javax.swing.JScrollPane();
+        monSearchResultsList3 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.BEBAUUNGSPLAN.getValue()).createMonServerSearch());
         filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -995,16 +1000,17 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 NULLABLE_OPTION,
                 SORTING_OPTION);
         jPanel17 = new javax.swing.JPanel();
-        filler75 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30),
-                new java.awt.Dimension(0, 30),
-                new java.awt.Dimension(32767, 30));
         lblVorhandeneBebauung3 = new javax.swing.JLabel();
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         jScrollPane4 = new javax.swing.JScrollPane();
         monSearchResultsList2 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
-                new BodenrichtwertZoneMonSearch());
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.getValue()).createMonServerSearch());
+        filler77 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -1013,7 +1019,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
-                new WohnlagenKategorisierungMonSearch(0.1d));
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.WOHNLAGEN.getValue()).createMonServerSearch());
         filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -1021,7 +1028,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new StadtraumtypMonSearch());
+        searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.STADTRAUMTYPEN.getValue()).createMonServerSearch());
         filler47 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(0, 28),
                 new java.awt.Dimension(32767, 28));
@@ -1687,10 +1696,30 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 3.0;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(txtBezeichnung, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "veröffentlicht");
+        jCheckBox1.setContentAreaFilled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.veroeffentlicht}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        jPanel3.add(jCheckBox1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2307,17 +2336,22 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 13;
         panMessstellenausbauBody.add(filler36, gridBagConstraints);
 
-        searchLabelsFieldPanel4.setOpaque(false);
-        searchLabelsFieldPanel4.setLayout(new java.awt.FlowLayout());
+        monSearchResultsList3.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        monSearchResultsList3.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BEBAUUNGSPLAN.name());
+        monSearchResultsList3.setVisibleRowCount(3);
+        jScrollPane11.setViewportView(monSearchResultsList3);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panMessstellenausbauBody.add(searchLabelsFieldPanel4, gridBagConstraints);
+        panMessstellenausbauBody.add(jScrollPane11, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2338,6 +2372,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         panMessstellenausbauBody.add(filler33, gridBagConstraints);
 
         jPanel12.setOpaque(false);
@@ -2494,7 +2529,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel10.add(panPlanungsrecht, gridBagConstraints);
 
@@ -2804,25 +2838,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         jPanel17.setOpaque(false);
         jPanel17.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel17.add(filler75, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblVorhandeneBebauung3, "Bodenrichtwert(e):");
         lblVorhandeneBebauung3.setName(PREFIX_LABEL
                     + PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
         jPanel17.add(lblVorhandeneBebauung3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 13;
         gridBagConstraints.weighty = 1.0;
         jPanel17.add(filler9, gridBagConstraints);
 
@@ -2841,12 +2873,19 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel17.add(jScrollPane4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel17.add(filler77, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panLageBody3.add(jPanel17, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2875,7 +2914,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panLageBody3.add(searchLabelsFieldPanel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2957,7 +2995,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
@@ -4680,9 +4718,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             final Geometry geom = (cidsBean != null) ? (Geometry)cidsBean.getProperty("geometrie.geo_field") : null;
 
             if (geom != null) {
+                final RestApiMonGeometrySearch search = (RestApiMonGeometrySearch)
+                    ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                        PotenzialflaecheReportServerAction.Property.STADTBEZIRK.getValue()).createMonServerSearch();
+                search.setGeometry(geom);
                 final Collection<MetaObjectNode> mons = SessionManager.getProxy()
-                            .customServerSearch(new KstGeometryMonSearch(KstGeometryMonSearch.SearchFor.BEZIRK, geom),
-                                connectionContext);
+                            .customServerSearch(search, connectionContext);
                 if (mons != null) {
                     for (final MetaObjectNode mon : mons) {
                         if (mon != null) {
@@ -4958,12 +4999,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             ((GeometrySearch)monSearchResultsList2.getSearch()).setGeometry(geometry);
             ((GeometrySearch)monSearchResultsList2.getSearch()).setBuffer(-2d);
             monSearchResultsList2.refresh();
+            ((GeometrySearch)monSearchResultsList3.getSearch()).setGeometry(geometry);
+            ((GeometrySearch)monSearchResultsList3.getSearch()).setBuffer(-2d);
+            monSearchResultsList3.refresh();
         } else {
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
                 searchLabelFieldPanel.clear();
             }
             monSearchResultsList1.removeAll();
             monSearchResultsList2.removeAll();
+            monSearchResultsList3.removeAll();
         }
     }
 
