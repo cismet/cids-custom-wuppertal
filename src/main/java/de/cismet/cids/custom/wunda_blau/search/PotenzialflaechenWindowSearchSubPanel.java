@@ -67,10 +67,15 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTextField jTextField1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
@@ -106,7 +111,10 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
             final PotenzialflaecheReportServerAction.Property prop = filter.getProperty();
             jComboBox1.setSelectedItem(prop);
             final Object value = filter.getValue();
-            if (prop.getValue() instanceof PotenzialflaecheReportServerAction.PathReportProperty) {
+            if (PotenzialflaecheReportServerAction.Property.GROESSE.equals(prop)) {
+                jSpinner1.setValue(((Double[])value)[0]);
+                jSpinner2.setValue(((Double[])value)[1]);
+            } else if (prop.getValue() instanceof PotenzialflaecheReportServerAction.PathReportProperty) {
                 if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
                     if (value instanceof MetaObjectNode) {
                         for (int index = 0; index < cbForeign.getModel().getSize(); index++) {
@@ -173,7 +181,8 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                 continue;
             }
             if ((prop.getValue() instanceof PotenzialflaecheReportServerAction.PathReportProperty)
-                        || (prop.getValue() instanceof PotenzialflaecheReportServerAction.MonSearchReportProperty)) {
+                        || (prop.getValue() instanceof PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                        || PotenzialflaecheReportServerAction.Property.GROESSE.equals(prop)) {
                 props.add(prop);
             }
         }
@@ -214,6 +223,11 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
         jLabel2 = new javax.swing.JLabel();
         jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel5 = new javax.swing.JLabel();
+        jSpinner2 = new javax.swing.JSpinner();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -345,6 +359,43 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                         PotenzialflaechenWindowSearchSubPanel.class,
                         "PotenzialflaechenWindowSearchSubPanel.jPanel4.AccessibleContext.accessibleName")); // NOI18N
 
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel4,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchSubPanel.class,
+                "PotenzialflaechenWindowSearchSubPanel.jLabel4.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel5.add(jLabel4, gridBagConstraints);
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel5.add(jSpinner1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel5,
+            org.openide.util.NbBundle.getMessage(
+                PotenzialflaechenWindowSearchSubPanel.class,
+                "PotenzialflaechenWindowSearchSubPanel.jLabel5.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel5.add(jLabel5, gridBagConstraints);
+
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel5.add(jSpinner2, gridBagConstraints);
+
+        jPanel1.add(jPanel5, "double");
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
@@ -361,7 +412,11 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         try {
             final PotenzialflaecheReportServerAction.Property prop = (PotenzialflaecheReportServerAction.Property)
                 jComboBox1.getSelectedItem();
-            if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
+            if (PotenzialflaecheReportServerAction.Property.GROESSE.equals(prop)) {
+                jSpinner1.setValue(0d);
+                jSpinner2.setValue(0d);
+                ((CardLayout)jPanel1.getLayout()).show(jPanel1, "double");
+            } else if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
                 final PotenzialflaecheReportServerAction.KeytableReportProperty value =
                     (PotenzialflaecheReportServerAction.KeytableReportProperty)prop.getValue();
 
@@ -467,7 +522,11 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         final PotenzialflaecheReportServerAction.Property prop = (PotenzialflaecheReportServerAction.Property)
             jComboBox1.getSelectedItem();
 
-        if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
+        if (PotenzialflaecheReportServerAction.Property.GROESSE.equals(prop)) {
+            return new PotenzialflaecheSearch.FilterInfo(
+                    prop,
+                    new Double[] { (Double)jSpinner1.getValue(), (Double)jSpinner2.getValue() });
+        } else if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
             if (jCheckBox2.isSelected()) {
                 final List<CidsBean> selectedElements = (List)defaultBindableLabelsPanel1.getSelectedElements();
                 final List<MetaObjectNode> mons = new ArrayList<>();
