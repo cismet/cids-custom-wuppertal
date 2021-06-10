@@ -47,8 +47,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -133,6 +131,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             LOG.error("Could not read property file with defined boxes for butler 1", ex);
         }
     }
+
+    private static Integer X = null;
+    private static Integer Y = null;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -582,26 +583,38 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @return  DOCUMENT ME!
      */
     public static Dimension getPreferredPositionOnScreen() {
-        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
-        final Dimension ret = new Dimension(-1, -1);
-        final int x = backingStore.getInt(X_POS, -1);
-        final int y = backingStore.getInt(Y_POS, -1);
-        ret.setSize(x, y);
-        return ret;
+//        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
+//        final Dimension ret = new Dimension(-1, -1);
+//        final int x = backingStore.getInt(X_POS, -1);
+//        final int y = backingStore.getInt(Y_POS, -1);
+//        ret.setSize(x, y);
+//        return ret;
+        final int x;
+        final int y;
+        if ((X != null) && (Y != null)) {
+            x = X;
+            y = Y;
+        } else {
+            x = -1;
+            y = -1;
+        }
+        return new Dimension(x, y);
     }
 
     /**
      * DOCUMENT ME!
      */
     public void storePreferredPositionOnScreen() {
-        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
-        backingStore.putInt(X_POS, this.getX());
-        backingStore.putInt(Y_POS, this.getY());
-        try {
-            backingStore.flush();
-        } catch (BackingStoreException ex) {
-            LOG.warn("Error when storing preferres position on screen", ex);
-        }
+        X = getX();
+        Y = getY();
+//        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
+//        backingStore.putInt(X_POS, this.getX());
+//        backingStore.putInt(Y_POS, this.getY());
+//        try {
+//            backingStore.flush();
+//        } catch (BackingStoreException ex) {
+//            LOG.warn("Error when storing preferres position on screen", ex);
+//        }
     }
 
     /**
