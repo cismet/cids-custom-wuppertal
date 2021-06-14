@@ -213,10 +213,10 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     private BaumErsatzPanel baumErsatzPanel;
     private JButton btnChangeSchaden;
     private ComboBoxFilterDialog comboBoxFilterDialogSchaden;
-    private Box.Filler filler3;
     private JScrollPane jScrollPaneMeldung;
     private JLabel lblGebiet_Meldung;
     private JPanel panContent;
+    private JPanel panErsatz;
     JPanel panErsatzMain;
     private JPanel panFillerUnten;
     private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
@@ -271,13 +271,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         comboBoxFilterDialogSchaden = new ComboBoxFilterDialog(null, new BaumSchadenLightweightSearch(), "Gebiet-Meldung-Schaden auswählen", getConnectionContext());
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
+        panErsatz = new JPanel();
         lblGebiet_Meldung = new JLabel();
         jScrollPaneMeldung = new JScrollPane();
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panErsatzMain = new JPanel();
-        baumErsatzPanel = new BaumErsatzPanel();
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(null, true, this.getConnectionContext());
 
         setLayout(new GridBagLayout());
 
@@ -306,28 +306,30 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
 
+        panErsatz.setOpaque(false);
+        panErsatz.setLayout(new GridBagLayout());
+
         lblGebiet_Meldung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblGebiet_Meldung.setText("Gebiet-Meldung-Schaden:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panContent.add(lblGebiet_Meldung, gridBagConstraints);
+        panErsatz.add(lblGebiet_Meldung, gridBagConstraints);
 
         xtSchaden.setModel(new ErsatzSchadenTableModel());
         xtSchaden.setVisibleRowCount(1);
         jScrollPaneMeldung.setViewportView(xtSchaden);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panContent.add(jScrollPaneMeldung, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 2, 2, 2);
+        panErsatz.add(jScrollPaneMeldung, gridBagConstraints);
 
         btnChangeSchaden.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
         btnChangeSchaden.setToolTipText("Gebiet - Meldung - Schaden zuweisen");
@@ -338,10 +340,10 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
-        panContent.add(btnChangeSchaden, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 0);
+        panErsatz.add(btnChangeSchaden, gridBagConstraints);
         btnChangeSchaden.setVisible(isEditor);
 
         panErsatzMain.setOpaque(false);
@@ -353,18 +355,10 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panErsatzMain.add(baumErsatzPanel, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panErsatzMain.add(filler3, gridBagConstraints);
+        panErsatzMain.add(baumErsatzPanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -373,7 +367,17 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panContent.add(panErsatzMain, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 0, 0, 0);
+        panErsatz.add(panErsatzMain, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panContent.add(panErsatz, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -513,6 +517,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 xtSchaden.getTableHeader().setForeground(Color.BLACK);
                 setSchadenTable((CidsBean)cidsBean.getProperty(FIELD__FK_SCHADEN));
             }
+            xtSchaden.getColumn(2).setMaxWidth(70);
+            xtSchaden.getColumn(1).setMaxWidth(150);
             xtSchaden.addMouseMotionListener(new MouseAdapter(){
                 @Override
 		public void mouseMoved(MouseEvent e) {

@@ -47,6 +47,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -135,7 +136,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         if(parentEditor != null){
             dcDatum = new DefaultBindableDateChooser();
         }
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
         FormListener formListener = new FormListener();
 
@@ -156,7 +156,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(0, 0, 2, 5);
         panOrtstermin.add(lblBemerkung, gridBagConstraints);
 
         scpBemerkung.setName("scpBemerkung"); // NOI18N
@@ -168,8 +168,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         taBemerkungOrt.setName("taBemerkungOrt"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungOrt, BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkungOrt);
@@ -217,6 +217,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         panTeilnehmerAdd.setLayout(new GridBagLayout());
 
         btnAddTeilnehmer.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddTeilnehmer.setBorderPainted(false);
+        btnAddTeilnehmer.setContentAreaFilled(false);
         btnAddTeilnehmer.setName("btnAddTeilnehmer"); // NOI18N
         btnAddTeilnehmer.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -226,6 +228,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         panTeilnehmerAdd.add(btnAddTeilnehmer, gridBagConstraints);
 
         btnRemTeilnehmer.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemTeilnehmer.setBorderPainted(false);
+        btnRemTeilnehmer.setContentAreaFilled(false);
         btnRemTeilnehmer.setName("btnRemTeilnehmer"); // NOI18N
         btnRemTeilnehmer.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -254,7 +258,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         rpTeil.add(semiRoundedPanel7, gridBagConstraints);
@@ -266,7 +270,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         jScrollPaneTeil.setName("jScrollPaneTeil"); // NOI18N
 
         xtTeil.setName("xtTeil"); // NOI18N
-        xtTeil.setVisibleRowCount(7);
         jScrollPaneTeil.setViewportView(xtTeil);
 
         gridBagConstraints = new GridBagConstraints();
@@ -287,7 +290,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
         rpTeil.add(panTeilDaten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -302,10 +304,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new Insets(5, 0, 0, 2);
         panOrtstermin.add(panTeil, gridBagConstraints);
 
         if(parentEditor != null){
@@ -320,7 +321,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             gridBagConstraints.gridy = 0;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
-            gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+            gridBagConstraints.insets = new Insets(2, 0, 4, 5);
             panOrtstermin.add(lblDatum, gridBagConstraints);
         }
 
@@ -335,9 +336,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
-            gridBagConstraints.weighty = 1.0;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             panOrtstermin.add(dcDatum, gridBagConstraints);
         }
@@ -345,22 +345,11 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        add(panOrtstermin, gridBagConstraints);
-
-        filler3.setName("filler3"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        add(filler3, gridBagConstraints);
+        add(panOrtstermin, gridBagConstraints);
 
         bindingGroup.bind();
     }
@@ -417,7 +406,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     JButton btnRemTeilnehmer;
     DefaultBindableDateChooser dcDatum;
     Box.Filler filler2;
-    Box.Filler filler3;
     JScrollPane jScrollPaneTeil;
     JLabel lblBemerkung;
     JLabel lblDatum;
@@ -440,7 +428,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      * Creates a new BaumMeldungPanel object.
      */
     public BaumOrtsterminPanel() {
-        this(null,null,true);
+        this(null,null,false, ConnectionContext.createDeprecated());
         teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
                 CidsBeanSupport.DOMAIN_NAME,
                 TABLE_NAME__TEILNEHMER,
@@ -455,7 +443,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      * @param parentEditor
      * @param  editable  DOCUMENT ME!
      */
-    public BaumOrtsterminPanel(final BaumMeldungPanel parentPanel, final BaumOrtsterminEditor parentEditor, final boolean editable) {
+  /*  public BaumOrtsterminPanel(final BaumMeldungPanel parentPanel, final BaumOrtsterminEditor parentEditor, final boolean editable) {
         this.isEditor = editable;
         initComponents();
         this.connectionContext = null;
@@ -465,7 +453,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 CidsBeanSupport.DOMAIN_NAME,
                 TABLE_NAME__TEILNEHMER,
                 connectionContext);
-    }
+    }*/
  
     /**
      * Creates new form BaumMeldungPanel.
@@ -528,45 +516,47 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
-        if (isEditor && (this.cidsBean != null)) {
-            this.cidsBean.removePropertyChangeListener(changeListener);
-        }
-        bindingGroup.unbind();
-        this.cidsBean = cidsBean;
-        bindingGroup.bind();
-        if (isEditor && (this.cidsBean != null)) {
-                cidsBean.addPropertyChangeListener(changeListener);
-        }
-       // if(this.cidsBean == null){
-        //    taBemerkung.setText(null);
-       // }
-        final DivBeanTable teilnehmerModel = new DivBeanTable(
-                    isEditor,
-                    cidsBean,
-                    FIELD__TEILNEHMER,
-                    TEILNEHMER_COL_NAMES,
-                    TEILNEHMER_PROP_NAMES,                   
-                    TEILNEHMER_PROP_TYPES);
-            xtTeil.setModel(teilnehmerModel);
-            xtTeil.addMouseMotionListener(new MouseAdapter(){
-                @Override
-		public void mouseMoved(MouseEvent e) {
-                    int row=xtTeil.rowAtPoint(e.getPoint());
-                    int col=xtTeil.columnAtPoint(e.getPoint());
-                    if(row>-1 && col>-1){
-                        Object value=xtTeil.getValueAt(row, col);
-                        if(null!=value && !"".equals(value)){
-                            xtTeil.setToolTipText(value.toString());
-                        }else{
-                            xtTeil.setToolTipText(null);//keinTooltip anzeigen
+        if (!(Objects.equals(this.cidsBean, cidsBean))){
+            if (isEditor && (this.cidsBean != null)) {
+                this.cidsBean.removePropertyChangeListener(changeListener);
+            }
+            bindingGroup.unbind();
+            this.cidsBean = cidsBean;
+            bindingGroup.bind();
+            if (isEditor && (this.cidsBean != null)) {
+                    cidsBean.addPropertyChangeListener(changeListener);
+            }
+           // if(this.cidsBean == null){
+            //    taBemerkung.setText(null);
+           // }
+            final DivBeanTable teilnehmerModel = new DivBeanTable(
+                        isEditor,
+                        cidsBean,
+                        FIELD__TEILNEHMER,
+                        TEILNEHMER_COL_NAMES,
+                        TEILNEHMER_PROP_NAMES,                   
+                        TEILNEHMER_PROP_TYPES);
+                xtTeil.setModel(teilnehmerModel);
+                xtTeil.addMouseMotionListener(new MouseAdapter(){
+                    @Override
+                    public void mouseMoved(MouseEvent e) {
+                        int row=xtTeil.rowAtPoint(e.getPoint());
+                        int col=xtTeil.columnAtPoint(e.getPoint());
+                        if(row>-1 && col>-1){
+                            Object value=xtTeil.getValueAt(row, col);
+                            if(null!=value && !"".equals(value)){
+                                xtTeil.setToolTipText(value.toString());
+                            }else{
+                                xtTeil.setToolTipText(null);//keinTooltip anzeigen
+                            }
                         }
                     }
-                }
-            });
-            
-            panOrtstermin.repaint();
-            panOrtstermin.updateUI();
-            taBemerkungOrt.updateUI();
+                });
+
+                panOrtstermin.repaint();
+                panOrtstermin.updateUI();
+                taBemerkungOrt.updateUI();
+        }
     }
     public boolean prepareForSave() {
         boolean save = true;

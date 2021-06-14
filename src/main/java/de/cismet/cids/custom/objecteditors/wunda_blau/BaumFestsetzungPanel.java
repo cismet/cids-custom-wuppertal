@@ -20,18 +20,10 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import org.apache.log4j.Logger;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -48,11 +40,16 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.Box;
+import java.util.Objects;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -76,6 +73,17 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     //~ Static fields/initializers ---------------------------------------------
     private static final Logger LOG = Logger.getLogger(BaumFestsetzungPanel.class);
     
+    private static final MetaClass MC__ART;
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                BaumErsatzPanel.class.getSimpleName());
+        MC__ART = ClassCacheMultiple.getMetaClass(
+                "WUNDA_BLAU",
+                "BAUM_ART",
+                connectionContext);
+    }
+    
     
     public static final String FIELD__ART = "fk_art";                           // baum_festsetzung
     public static final String FIELD__GEOM = "fk_geom";                         // baum_festsetzung
@@ -98,14 +106,15 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        panContent = new RoundedPanel();
+        panContent = new JPanel();
         panFest = new JPanel();
         lblHoehe = new JLabel();
         txtHoeheF = new JTextField();
         lblUmfang = new JLabel();
         txtUmfangF = new JTextField();
         lblArt = new JLabel();
-        cbArtF = new DefaultBindableScrollableComboBox();
+        cbArtF = new DefaultBindableReferenceCombo(MC__ART);
+        ;
         lblGeom = new JLabel();
         if (isEditor){
             cbGeomFest = new DefaultCismapGeometryComboBoxEditor();
@@ -124,10 +133,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         setOpaque(false);
         setLayout(new GridBagLayout());
 
-        panContent.setMinimumSize(new Dimension(716, 488));
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
-        panContent.setPreferredSize(new Dimension(569, 488));
         panContent.setLayout(new GridBagLayout());
 
         panFest.setName("panFest"); // NOI18N
@@ -149,8 +156,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         txtHoeheF.setName("txtHoeheF"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), txtHoeheF, BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -177,8 +184,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         txtUmfangF.setName("txtUmfangF"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umfang}"), txtUmfangF, BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -274,8 +281,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         taBemerkungF.setName("taBemerkungF"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungF, BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkungF);
@@ -361,7 +368,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 5, 5);
+        gridBagConstraints.insets = new Insets(5, 0, 0, 2);
         panContent.add(panGeometrie, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -371,7 +378,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
@@ -386,20 +392,22 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
             @Override
             public void propertyChange(final PropertyChangeEvent evt) {
-                if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
-                    //parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                    //LOG.warn(evt.getPropertyName());
-                    parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
-                    parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                    parentPanel.setChangedFestBeans(cidsBean);
-                }
-                if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
-                    parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
-                    parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                    parentPanel.setChangedFestBeans(cidsBean);
-                }
-                if (FIELD__GEOM.equals(evt.getPropertyName())){
-                    setMapWindow();
+                if (!(Objects.equals(evt.getOldValue(), evt.getNewValue()))){
+                    if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
+                        //parentPanel.getCidsBean().setArtificialChangeFlag(true);
+                        //LOG.warn(evt.getPropertyName());
+                        parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
+                        parentPanel.getCidsBean().setArtificialChangeFlag(true);
+                        parentPanel.setChangedFestBeans(cidsBean);
+                    }
+                    if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
+                        parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
+                        parentPanel.getCidsBean().setArtificialChangeFlag(true);
+                        parentPanel.setChangedFestBeans(cidsBean);
+                    }
+                    if (FIELD__GEOM.equals(evt.getPropertyName())){
+                        setMapWindow();
+                    }
                 }
             }
         };
@@ -434,7 +442,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
      * Creates a new BaumFestsetzungPanel object.
      */
     public BaumFestsetzungPanel() {
-        this(null,true);
+        this(null,false, ConnectionContext.createDeprecated());
     }
 
     
@@ -444,7 +452,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
      * @param parentPanel
      * @param  editable  DOCUMENT ME!
      */
-    public BaumFestsetzungPanel(final BaumSchadenPanel parentPanel, final boolean editable) {
+  /*  public BaumFestsetzungPanel(final BaumSchadenPanel parentPanel, final boolean editable) {
         this.isEditor = editable;
         initComponents();
         if (isEditor) {
@@ -452,7 +460,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         this.connectionContext = null;
         this.parentPanel = parentPanel;
-    }
+    }*/
  
     /**
      * Creates new form BaumFestsetzungPanel.
@@ -508,30 +516,32 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
-        if (isEditor && (this.cidsBean != null)) {
-            this.cidsBean.removePropertyChangeListener(changeListener);
-        }
-        try{
-            bindingGroup.unbind();
-            this.cidsBean = cidsBean;
-            if (this.cidsBean != null){
-                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                    bindingGroup,
-                    this.cidsBean,
-                    getConnectionContext());
-            } 
-
-            setMapWindow();
-            bindingGroup.bind();
+        if (!(Objects.equals(this.cidsBean, cidsBean))){
             if (isEditor && (this.cidsBean != null)) {
-                    cidsBean.addPropertyChangeListener(changeListener);
+                this.cidsBean.removePropertyChangeListener(changeListener);
             }
-            cbGeomFest.updateUI();
-        } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
-        }
+            try{
+                bindingGroup.unbind();
+                this.cidsBean = cidsBean;
+                if (this.cidsBean != null){
+                    DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                        bindingGroup,
+                        this.cidsBean,
+                        getConnectionContext());
+                } 
+
+                setMapWindow();
+                bindingGroup.bind();
+                if (isEditor && (this.cidsBean != null)) {
+                        cidsBean.addPropertyChangeListener(changeListener);
+                }
+                cbGeomFest.updateUI();
+            } catch (final Exception ex) {
+                Exceptions.printStackTrace(ex);
+            }
             
         //cbGeomFest.updateUI();
+        }
         
     }
     

@@ -62,6 +62,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -155,16 +156,18 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.objecteditors.wunda_blau.BaumSchadenPanel baumSchadenPanel;
-    private javax.swing.JButton btnChangeGebiet;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialogGebiet;
-    private javax.swing.JScrollPane jScrollPaneMeldung;
-    private javax.swing.JLabel lblGebiet_Meldung;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panFillerUnten;
-    javax.swing.JPanel panSchaden;
-    private org.jdesktop.swingx.JXTable xtMeldung;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    private BaumSchadenPanel baumSchadenPanel;
+    private JButton btnChangeGebiet;
+    private ComboBoxFilterDialog comboBoxFilterDialogGebiet;
+    private Box.Filler filler1;
+    private JScrollPane jScrollPaneMeldung;
+    private JLabel lblGebiet_Meldung;
+    private JPanel panAll;
+    private JPanel panContent;
+    private JPanel panFillerUnten;
+    JPanel panSchaden;
+    private JXTable xtMeldung;
+    private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -203,118 +206,134 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+        GridBagConstraints gridBagConstraints;
+        bindingGroup = new BindingGroup();
 
-        comboBoxFilterDialogGebiet = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(null, new de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch(), "Gebiet-Meldung auswählen", getConnectionContext());
-        panFillerUnten = new javax.swing.JPanel();
+        comboBoxFilterDialogGebiet = new ComboBoxFilterDialog(null, new BaumMeldungLightweightSearch(), "Gebiet-Meldung auswählen", getConnectionContext());
+        panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
-        lblGebiet_Meldung = new javax.swing.JLabel();
-        jScrollPaneMeldung = new javax.swing.JScrollPane();
-        xtMeldung = new org.jdesktop.swingx.JXTable();
-        btnChangeGebiet = new javax.swing.JButton();
-        panSchaden = new javax.swing.JPanel();
-        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(null, this, true);
+        panAll = new JPanel();
+        filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        panSchaden = new JPanel();
+        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(null, this, true, this.getConnectionContext());
+        btnChangeGebiet = new JButton();
+        jScrollPaneMeldung = new JScrollPane();
+        xtMeldung = new JXTable();
+        lblGebiet_Meldung = new JLabel();
 
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new GridBagLayout());
 
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
+        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        panFillerUntenLayout.setVerticalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         add(panFillerUnten, gridBagConstraints);
 
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
-        panContent.setLayout(new java.awt.GridBagLayout());
+        panContent.setLayout(new GridBagLayout());
 
-        lblGebiet_Meldung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblGebiet_Meldung.setText("Gebiet-Meldung:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        panAll.setOpaque(false);
+        panAll.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
+        panAll.add(filler1, gridBagConstraints);
+
+        panSchaden.setOpaque(false);
+        panSchaden.setLayout(new GridBagLayout());
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean}"), baumSchadenPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
-        panContent.add(lblGebiet_Meldung, gridBagConstraints);
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        panSchaden.add(baumSchadenPanel, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        panAll.add(panSchaden, gridBagConstraints);
+
+        btnChangeGebiet.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
+        btnChangeGebiet.setToolTipText("Gebiet - Meldung zuweisen");
+        btnChangeGebiet.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnChangeGebietActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 0);
+        panAll.add(btnChangeGebiet, gridBagConstraints);
+        btnChangeGebiet.setVisible(isEditor);
 
         xtMeldung.setModel(new SchadenMeldungTableModel());
         xtMeldung.setVisibleRowCount(1);
         jScrollPaneMeldung.setViewportView(xtMeldung);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panContent.add(jScrollPaneMeldung, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panAll.add(jScrollPaneMeldung, gridBagConstraints);
 
-        btnChangeGebiet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
-        btnChangeGebiet.setToolTipText("Gebiet - Meldung zuweisen");
-        btnChangeGebiet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChangeGebietActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        panContent.add(btnChangeGebiet, gridBagConstraints);
-        btnChangeGebiet.setVisible(isEditor);
-
-        panSchaden.setOpaque(false);
-        panSchaden.setLayout(new java.awt.GridBagLayout());
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"), baumSchadenPanel, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        lblGebiet_Meldung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblGebiet_Meldung.setText("Gebiet-Meldung:");
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        panSchaden.add(baumSchadenPanel, gridBagConstraints);
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panAll.add(lblGebiet_Meldung, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panContent.add(panSchaden, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panContent.add(panAll, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
@@ -423,6 +442,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 xtMeldung.getTableHeader().setForeground(Color.BLACK);
                 setMeldungTable((CidsBean)cidsBean.getProperty(FIELD__MELDUNG));
             }
+            xtMeldung.getColumn(2).setMaxWidth(150);
             xtMeldung.addMouseMotionListener(new MouseAdapter(){
                 @Override
 		public void mouseMoved(MouseEvent e) {

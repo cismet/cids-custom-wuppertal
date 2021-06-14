@@ -192,10 +192,10 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     private BaumFestsetzungPanel baumFestsetzungPanel;
     private JButton btnChangeSchaden;
     private ComboBoxFilterDialog comboBoxFilterDialogSchaden;
-    private Box.Filler filler3;
     private JScrollPane jScrollPaneMeldung;
     private JLabel lblGebiet_Meldung;
     private JPanel panContent;
+    private JPanel panFest;
     JPanel panFestMain;
     private JPanel panFillerUnten;
     private JXTable xtSchaden;
@@ -248,13 +248,13 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         comboBoxFilterDialogSchaden = new ComboBoxFilterDialog(null, new BaumSchadenLightweightSearch(), "Gebiet-Meldung-Schaden auswählen", getConnectionContext());
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
+        panFest = new JPanel();
         lblGebiet_Meldung = new JLabel();
         jScrollPaneMeldung = new JScrollPane();
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panFestMain = new JPanel();
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        baumFestsetzungPanel = new BaumFestsetzungPanel();
+        baumFestsetzungPanel = baumFestsetzungPanel = new BaumFestsetzungPanel(null, true, this.getConnectionContext());
 
         setLayout(new GridBagLayout());
 
@@ -283,28 +283,29 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
 
+        panFest.setOpaque(false);
+        panFest.setLayout(new GridBagLayout());
+
         lblGebiet_Meldung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblGebiet_Meldung.setText("Gebiet-Meldung-Schaden:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panContent.add(lblGebiet_Meldung, gridBagConstraints);
+        panFest.add(lblGebiet_Meldung, gridBagConstraints);
 
         xtSchaden.setModel(new FestSchadenTableModel());
         xtSchaden.setVisibleRowCount(1);
         jScrollPaneMeldung.setViewportView(xtSchaden);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panContent.add(jScrollPaneMeldung, gridBagConstraints);
+        panFest.add(jScrollPaneMeldung, gridBagConstraints);
 
         btnChangeSchaden.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
         btnChangeSchaden.setToolTipText("Gebiet - Meldung - Schaden zuweisen");
@@ -315,40 +316,42 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
-        panContent.add(btnChangeSchaden, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 5, 5, 2);
+        panFest.add(btnChangeSchaden, gridBagConstraints);
         btnChangeSchaden.setVisible(isEditor);
 
         panFestMain.setOpaque(false);
         panFestMain.setLayout(new GridBagLayout());
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panFestMain.add(filler3, gridBagConstraints);
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean}"), baumFestsetzungPanel, BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panFestMain.add(baumFestsetzungPanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panContent.add(panFestMain, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(10, 0, 0, 0);
+        panFest.add(panFestMain, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panContent.add(panFest, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

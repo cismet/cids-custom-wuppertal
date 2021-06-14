@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.server.localserver.attribute.ObjectAttribute;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -204,6 +205,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private SwingWorker worker_name;
     private SwingWorker worker_versatz;
     
+    
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
             AdresseLightweightSearch.Subject.HNR,
             ADRESSE_TOSTRING_TEMPLATE,
@@ -240,7 +242,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private DefaultBindableDateChooser dcMeldung;
     private JDialog dlgAddMeldung;
     private Box.Filler filler3;
-    private JPanel jPanel8;
     private JPanel jPanelAllgemein;
     private JPanel jPanelMeldungen;
     JTabbedPane jTabbedPane;
@@ -250,8 +251,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblGeom;
     private JLabel lblHnr;
     private JLabel lblKarte;
-    private JLabel lblMeldung;
-    private JLabel lblMeldungen;
     private JLabel lblName;
     private JLabel lblStatus;
     private JLabel lblStrasse;
@@ -262,7 +261,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panControlsNewMeldungen;
     private JPanel panDaten;
     private JPanel panFiller;
-    private JPanel panFillerUnten3;
+    private JPanel panFillerUnten4;
+    private JPanel panGebiet;
     private JPanel panGeometrie;
     private JPanel panLage;
     private JPanel panMeldung;
@@ -272,12 +272,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panZusatz;
     private JPanel pnlCard1;
     private RoundedPanel rpKarte;
-    private RoundedPanel rpMeldunginfo;
-    private RoundedPanel rpMeldungliste;
     private JScrollPane scpBemerkung;
     private JScrollPane scpLaufendeMeldungen;
-    private SemiRoundedPanel semiRoundedPanel4;
-    private SemiRoundedPanel semiRoundedPanel5;
     private SemiRoundedPanel semiRoundedPanel7;
     private JSeparator sepStatus;
     private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
@@ -401,6 +397,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         dcMeldung = new DefaultBindableDateChooser();
         sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
         panContent = new RoundedPanel();
+        panGebiet = new JPanel();
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
@@ -439,22 +436,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         cbStrasse = new FastBindableReferenceCombo();
         btnCreateAktenzeichen = new JButton();
         jPanelMeldungen = new JPanel();
-        panFillerUnten3 = new JPanel();
         panMeldung = new JPanel();
-        rpMeldungliste = new RoundedPanel();
+        panMeldungenMain = new JPanel();
+        baumMeldungPanel = baumMeldungPanel = new BaumMeldungPanel(this, true, this.getConnectionContext());
         scpLaufendeMeldungen = new JScrollPane();
         lstMeldungen = new JList();
-        semiRoundedPanel4 = new SemiRoundedPanel();
-        lblMeldungen = new JLabel();
-        jPanel8 = new JPanel();
         panControlsNewMeldungen = new JPanel();
         btnAddNewMeldung = new JButton();
         btnRemoveMeldung = new JButton();
-        rpMeldunginfo = new RoundedPanel();
-        semiRoundedPanel5 = new SemiRoundedPanel();
-        lblMeldung = new JLabel();
-        panMeldungenMain = new JPanel();
-        baumMeldungPanel = baumMeldungPanel = new BaumMeldungPanel(this, true);
+        panFillerUnten4 = new JPanel();
 
         dlgAddMeldung.setTitle("Meldungsdatum");
         dlgAddMeldung.setModal(true);
@@ -514,6 +504,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
+
+        panGebiet.setOpaque(false);
+        panGebiet.setLayout(new GridBagLayout());
 
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new GridBagLayout());
@@ -869,33 +862,33 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelMeldungen.setOpaque(false);
         jPanelMeldungen.setLayout(new GridBagLayout());
 
-        panFillerUnten3.setName(""); // NOI18N
-        panFillerUnten3.setOpaque(false);
-
-        GroupLayout panFillerUnten3Layout = new GroupLayout(panFillerUnten3);
-        panFillerUnten3.setLayout(panFillerUnten3Layout);
-        panFillerUnten3Layout.setHorizontalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten3Layout.setVerticalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelMeldungen.add(panFillerUnten3, gridBagConstraints);
-
         panMeldung.setOpaque(false);
         panMeldung.setLayout(new GridBagLayout());
 
-        rpMeldungliste.setMinimumSize(new Dimension(100, 202));
-        rpMeldungliste.setPreferredSize(new Dimension(100, 202));
-        rpMeldungliste.setLayout(new GridBagLayout());
+        panMeldungenMain.setOpaque(false);
+        panMeldungenMain.setLayout(new GridBagLayout());
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstMeldungen, ELProperty.create("${selectedElement}"), baumMeldungPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panMeldungenMain.add(baumMeldungPanel, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        panMeldung.add(panMeldungenMain, gridBagConstraints);
 
         lstMeldungen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstMeldungen.setFixedCellWidth(75);
@@ -911,41 +904,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        rpMeldungliste.add(scpLaufendeMeldungen, gridBagConstraints);
-
-        semiRoundedPanel4.setBackground(Color.darkGray);
-        semiRoundedPanel4.setMinimumSize(new Dimension(60, 25));
-        semiRoundedPanel4.setLayout(new GridBagLayout());
-
-        lblMeldungen.setForeground(new Color(255, 255, 255));
-        lblMeldungen.setText("Meldungen");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanel4.add(lblMeldungen, gridBagConstraints);
-
-        jPanel8.setOpaque(false);
-        jPanel8.setPreferredSize(new Dimension(1, 1));
-
-        GroupLayout jPanel8Layout = new GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        semiRoundedPanel4.add(jPanel8, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpMeldungliste.add(semiRoundedPanel4, gridBagConstraints);
+        panMeldung.add(scpLaufendeMeldungen, gridBagConstraints);
 
         panControlsNewMeldungen.setOpaque(false);
         panControlsNewMeldungen.setLayout(new GridBagLayout());
@@ -985,65 +944,28 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        rpMeldungliste.add(panControlsNewMeldungen, gridBagConstraints);
+        panMeldung.add(panControlsNewMeldungen, gridBagConstraints);
+
+        panFillerUnten4.setName(""); // NOI18N
+        panFillerUnten4.setOpaque(false);
+
+        GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
+        panFillerUnten4.setLayout(panFillerUnten4Layout);
+        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 0, 0, 5);
-        panMeldung.add(rpMeldungliste, gridBagConstraints);
-
-        rpMeldunginfo.setLayout(new GridBagLayout());
-
-        semiRoundedPanel5.setBackground(Color.darkGray);
-        semiRoundedPanel5.setLayout(new GridBagLayout());
-
-        lblMeldung.setForeground(new Color(255, 255, 255));
-        lblMeldung.setText("Meldung");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanel5.add(lblMeldung, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpMeldunginfo.add(semiRoundedPanel5, gridBagConstraints);
-
-        panMeldungenMain.setOpaque(false);
-        panMeldungenMain.setLayout(new GridBagLayout());
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstMeldungen, ELProperty.create("${selectedElement}"), baumMeldungPanel, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMeldungenMain.add(baumMeldungPanel, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        rpMeldunginfo.add(panMeldungenMain, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 8.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        panMeldung.add(rpMeldunginfo, gridBagConstraints);
+        panMeldung.add(panFillerUnten4, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1070,7 +992,16 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panContent.add(pnlCard1, gridBagConstraints);
+        panGebiet.add(pnlCard1, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panContent.add(panGebiet, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1207,6 +1138,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             String hnr = "x";
             if (this.cidsBean.getProperty(FIELD__HNR) != null) {
                 hnr = this.cidsBean.getProperty(FIELD__HNR).toString();
+                hnr = hnr.trim();
+                hnr = hnr.replace(" ", "-");
             }
             if (this.cidsBean.getProperty(FIELD__STRASSE) != null && !this.cidsBean.getProperty(FIELD__NAME).toString().isEmpty()){
                 aktenzeichen = this.cidsBean.getProperty(FIELD__STRASSE).toString()
@@ -1248,14 +1181,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  propName  DOCUMENT ME!
      */
-    private void sortListNew(final String propName) {
+    /*private void sortListNew(final String propName) {
         bindingGroup.unbind();
         final List<CidsBean> changeCol = CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 propName);
         Collections.sort(changeCol, AlphanumComparator.getInstance());
         bindingGroup.bind();
-    }
+    }*/
 
     
 
@@ -1305,6 +1238,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
+        final ObjectAttribute[] objAtt = cidsBean.getMetaObject().getAttribs();
+            for (final ObjectAttribute changedAtt : objAtt) {
+                    if (changedAtt.isChanged()) {
+                        
+                    }
+            }
       /*  boolean errorOccured = false;
         for (final CidsBean meldungBean : meldungBeans) {
             try {
@@ -1449,6 +1388,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @version  $Revision$, $Date$
      */
+    /*
     private class CustomJListModel extends AbstractListModel<CidsBean> {
 
         //~ Instance fields ----------------------------------------------------
@@ -1480,7 +1420,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
          * Creates a new CustomJListModel object.
          *
          * @param  listPropertyName  DOCUMENT ME!
-         */
+         *
         public CustomJListModel(final String listPropertyName) {
             this.listPropertyName = listPropertyName;
         }
@@ -1491,7 +1431,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
          * DOCUMENT ME!
          *
          * @return  DOCUMENT ME!
-         */
+         *
         private List<CidsBean> getBeanList() {
             if ((cidsBean != null) && (listPropertyName != null)) {
                 final Object colObj = cidsBean.getProperty(listPropertyName);
@@ -1504,7 +1444,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         /**
          * DOCUMENT ME!
-         */
+         *
         public void refresh() {
             fireContentsChanged(this, 0, getBeanList().size() - 1);
         }
@@ -1523,7 +1463,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
             return l.get(index);
         }
-    }
+    }*/
     /**
      * DOCUMENT ME!
      */

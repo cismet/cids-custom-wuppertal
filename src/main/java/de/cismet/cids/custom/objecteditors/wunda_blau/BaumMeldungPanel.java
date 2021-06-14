@@ -12,7 +12,12 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.DescriptionPaneFS;
+import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
+import Sirius.server.newuser.permission.Policy;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import org.apache.log4j.Logger;
 
@@ -30,6 +35,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.BaumAnsprechpartnerRenderer;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumArtLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -45,15 +52,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
+import javax.swing.AbstractListModel;
 import javax.swing.Box;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -183,6 +194,13 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumMeldungPanel.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumMeldungPanel.prepareForSave().JOptionPane.title";
+    public static final String BUNDLE_PANE_PREFIX_SELECTION =
+        "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX_SELECTION =
+        "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE_SELECTION = "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.title";
+    public static final String BUNDLE_PANE_SELECTION =
+        "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message";
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -218,50 +236,37 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panInfo = new JPanel();
         lblApartner = new JLabel();
         panApartner = new JPanel();
+        lblBemerkung = new JLabel();
+        scpBemerkung = new JScrollPane();
+        taBemerkung = new JTextArea();
+        panFillerUnten5 = new JPanel();
+        btnApartner = new JButton();
         scpApartner = new JScrollPane();
         lstApartner = new JList();
         panButtonsApartner = new JPanel();
         btnAddApartner = new JButton();
         btnRemoveApartner = new JButton();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        lblBemerkung = new JLabel();
-        scpBemerkung = new JScrollPane();
-        taBemerkung = new JTextArea();
-        panFillerUnten5 = new JPanel();
         jPanelOrtstermine = new JPanel();
-        panFillerUnten3 = new JPanel();
         panOrtstermin = new JPanel();
-        rpOrtsterminliste = new RoundedPanel();
+        panOrtstermineMain = new JPanel();
+        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(this,null, true, this.connectionContext);
         scpLaufendeOrtstermine = new JScrollPane();
         lstOrtstermine = new JList();
-        semiRoundedPanelOrt = new SemiRoundedPanel();
-        lblOrtstermine = new JLabel();
-        jPanel8 = new JPanel();
         panControlsNewOrtstermine = new JPanel();
         btnAddNewOrtstermin = new JButton();
         btnRemoveOrtstermin = new JButton();
-        rpOrtstermininfo = new RoundedPanel();
-        semiRoundedPanel5 = new SemiRoundedPanel();
-        lblOrtstermin = new JLabel();
-        panOrtstermineMain = new JPanel();
-        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(this,null, true);
+        panFillerUnten3 = new JPanel();
         jPanelSchaeden = new JPanel();
         panFillerUnten4 = new JPanel();
         panSchaden = new JPanel();
-        rpSchadenliste = new RoundedPanel();
         scpLaufendeSchaeden = new JScrollPane();
         lstSchaeden = new JList();
-        semiRoundedPanelSchaden = new SemiRoundedPanel();
-        lblSchaeden = new JLabel();
-        jPanel9 = new JPanel();
+        panSchaedenMain = new JPanel();
+        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(this, null, true, this.connectionContext);
         panControlsNewSchaden = new JPanel();
         btnAddNewSchaden = new JButton();
         btnRemoveSchaden = new JButton();
-        rpSchadeninfo = new RoundedPanel();
-        semiRoundedPanel6 = new SemiRoundedPanel();
-        lblSchaden = new JLabel();
-        panSchaedenMain = new JPanel();
-        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(this, null, true);
 
         FormListener formListener = new FormListener();
 
@@ -396,6 +401,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
@@ -405,6 +411,85 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panApartner.setName("panApartner"); // NOI18N
         panApartner.setOpaque(false);
         panApartner.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        panInfo.add(panApartner, gridBagConstraints);
+
+        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
+        lblBemerkung.setName("lblBemerkung"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panInfo.add(lblBemerkung, gridBagConstraints);
+
+        scpBemerkung.setName("scpBemerkung"); // NOI18N
+        scpBemerkung.setOpaque(false);
+
+        taBemerkung.setLineWrap(true);
+        taBemerkung.setRows(2);
+        taBemerkung.setWrapStyleWord(true);
+        taBemerkung.setName("taBemerkung"); // NOI18N
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpBemerkung.setViewportView(taBemerkung);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panInfo.add(scpBemerkung, gridBagConstraints);
+
+        panFillerUnten5.setName("panFillerUnten5"); // NOI18N
+        panFillerUnten5.setOpaque(false);
+
+        GroupLayout panFillerUnten5Layout = new GroupLayout(panFillerUnten5);
+        panFillerUnten5.setLayout(panFillerUnten5Layout);
+        panFillerUnten5Layout.setHorizontalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten5Layout.setVerticalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        panInfo.add(panFillerUnten5, gridBagConstraints);
+
+        btnApartner.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/icon-explorerwindow.png"))); // NOI18N
+        btnApartner.setBorderPainted(false);
+        btnApartner.setContentAreaFilled(false);
+        btnApartner.setFocusPainted(false);
+        btnApartner.setName("btnApartner"); // NOI18N
+        btnApartner.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new Insets(15, 0, 5, 5);
+        panInfo.add(btnApartner, gridBagConstraints);
 
         scpApartner.setMinimumSize(new Dimension(258, 66));
         scpApartner.setName("scpApartner"); // NOI18N
@@ -412,7 +497,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         lstApartner.setFont(new Font("Dialog", 0, 12)); // NOI18N
         lstApartner.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstApartner.setName("lstApartner"); // NOI18N
-        lstApartner.setVisibleRowCount(3);
 
         ELProperty eLProperty = ELProperty.create("${cidsBean.arr_ansprechpartner}");
         JListBinding jListBinding = SwingBindings.createJListBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstApartner);
@@ -421,16 +505,15 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         scpApartner.setViewportView(lstApartner);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panApartner.add(scpApartner, gridBagConstraints);
+        panInfo.add(scpApartner, gridBagConstraints);
 
         panButtonsApartner.setName("panButtonsApartner"); // NOI18N
         panButtonsApartner.setOpaque(false);
@@ -461,79 +544,13 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panButtonsApartner.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(10, 2, 2, 2);
-        panApartner.add(panButtonsApartner, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        panInfo.add(panApartner, gridBagConstraints);
-
-        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
-        lblBemerkung.setName("lblBemerkung"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panInfo.add(lblBemerkung, gridBagConstraints);
-
-        scpBemerkung.setName("scpBemerkung"); // NOI18N
-        scpBemerkung.setOpaque(false);
-
-        taBemerkung.setLineWrap(true);
-        taBemerkung.setRows(2);
-        taBemerkung.setWrapStyleWord(true);
-        taBemerkung.setName("taBemerkung"); // NOI18N
-
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        scpBemerkung.setViewportView(taBemerkung);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panInfo.add(scpBemerkung, gridBagConstraints);
-
-        panFillerUnten5.setName("panFillerUnten5"); // NOI18N
-        panFillerUnten5.setOpaque(false);
-
-        GroupLayout panFillerUnten5Layout = new GroupLayout(panFillerUnten5);
-        panFillerUnten5.setLayout(panFillerUnten5Layout);
-        panFillerUnten5Layout.setHorizontalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten5Layout.setVerticalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        panInfo.add(panFillerUnten5, gridBagConstraints);
+        panInfo.add(panButtonsApartner, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -551,37 +568,38 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         jPanelOrtstermine.setOpaque(false);
         jPanelOrtstermine.setLayout(new GridBagLayout());
 
-        panFillerUnten3.setName(""); // NOI18N
-        panFillerUnten3.setOpaque(false);
+        panOrtstermin.setName("panOrtstermin"); // NOI18N
+        panOrtstermin.setOpaque(false);
+        panOrtstermin.setLayout(new GridBagLayout());
 
-        GroupLayout panFillerUnten3Layout = new GroupLayout(panFillerUnten3);
-        panFillerUnten3.setLayout(panFillerUnten3Layout);
-        panFillerUnten3Layout.setHorizontalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten3Layout.setVerticalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panOrtstermineMain.setName("panOrtstermineMain"); // NOI18N
+        panOrtstermineMain.setOpaque(false);
+        panOrtstermineMain.setLayout(new GridBagLayout());
+
+        baumOrtsterminPanel.setName("baumOrtsterminPanel"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstOrtstermine, ELProperty.create("${selectedElement}"), baumOrtsterminPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanelOrtstermine.add(panFillerUnten3, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 0, 3, 0);
+        panOrtstermineMain.add(baumOrtsterminPanel, gridBagConstraints);
 
-        panOrtstermin.setMinimumSize(new Dimension(297, 230));
-        panOrtstermin.setName("panOrtstermin"); // NOI18N
-        panOrtstermin.setOpaque(false);
-        panOrtstermin.setPreferredSize(new Dimension(337, 230));
-        panOrtstermin.setLayout(new GridBagLayout());
-
-        rpOrtsterminliste.setMinimumSize(new Dimension(100, 202));
-        rpOrtsterminliste.setName("rpOrtsterminliste"); // NOI18N
-        rpOrtsterminliste.setPreferredSize(new Dimension(100, 202));
-        rpOrtsterminliste.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 5, 5);
+        panOrtstermin.add(panOrtstermineMain, gridBagConstraints);
 
         scpLaufendeOrtstermine.setName("scpLaufendeOrtstermine"); // NOI18N
 
@@ -597,45 +615,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        rpOrtsterminliste.add(scpLaufendeOrtstermine, gridBagConstraints);
-
-        semiRoundedPanelOrt.setBackground(Color.darkGray);
-        semiRoundedPanelOrt.setMinimumSize(new Dimension(100, 25));
-        semiRoundedPanelOrt.setName("semiRoundedPanelOrt"); // NOI18N
-        semiRoundedPanelOrt.setPreferredSize(new Dimension(100, 25));
-        semiRoundedPanelOrt.setLayout(new GridBagLayout());
-
-        lblOrtstermine.setForeground(new Color(255, 255, 255));
-        lblOrtstermine.setText("Ortstermine");
-        lblOrtstermine.setName("lblOrtstermine"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanelOrt.add(lblOrtstermine, gridBagConstraints);
-
-        jPanel8.setName("jPanel8"); // NOI18N
-        jPanel8.setOpaque(false);
-        jPanel8.setPreferredSize(new Dimension(1, 1));
-
-        GroupLayout jPanel8Layout = new GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        semiRoundedPanelOrt.add(jPanel8, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpOrtsterminliste.add(semiRoundedPanelOrt, gridBagConstraints);
+        panOrtstermin.add(scpLaufendeOrtstermine, gridBagConstraints);
 
         panControlsNewOrtstermine.setName("panControlsNewOrtstermine"); // NOI18N
         panControlsNewOrtstermine.setOpaque(false);
@@ -670,72 +650,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        rpOrtsterminliste.add(panControlsNewOrtstermine, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 0, 0, 5);
-        panOrtstermin.add(rpOrtsterminliste, gridBagConstraints);
-
-        rpOrtstermininfo.setName("rpOrtstermininfo"); // NOI18N
-        rpOrtstermininfo.setLayout(new GridBagLayout());
-
-        semiRoundedPanel5.setBackground(Color.darkGray);
-        semiRoundedPanel5.setName("semiRoundedPanel5"); // NOI18N
-        semiRoundedPanel5.setLayout(new GridBagLayout());
-
-        lblOrtstermin.setForeground(new Color(255, 255, 255));
-        lblOrtstermin.setText("Ortstermin");
-        lblOrtstermin.setName("lblOrtstermin"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanel5.add(lblOrtstermin, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpOrtstermininfo.add(semiRoundedPanel5, gridBagConstraints);
-
-        panOrtstermineMain.setName("panOrtstermineMain"); // NOI18N
-        panOrtstermineMain.setOpaque(false);
-        panOrtstermineMain.setLayout(new GridBagLayout());
-
-        baumOrtsterminPanel.setName("baumOrtsterminPanel"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstOrtstermine, ELProperty.create("${selectedElement}"), baumOrtsterminPanel, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panOrtstermineMain.add(baumOrtsterminPanel, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        rpOrtstermininfo.add(panOrtstermineMain, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 8.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        panOrtstermin.add(rpOrtstermininfo, gridBagConstraints);
+        panOrtstermin.add(panControlsNewOrtstermine, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -746,6 +661,27 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         jPanelOrtstermine.add(panOrtstermin, gridBagConstraints);
+
+        panFillerUnten3.setName(""); // NOI18N
+        panFillerUnten3.setOpaque(false);
+
+        GroupLayout panFillerUnten3Layout = new GroupLayout(panFillerUnten3);
+        panFillerUnten3.setLayout(panFillerUnten3Layout);
+        panFillerUnten3Layout.setHorizontalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten3Layout.setVerticalGroup(panFillerUnten3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        jPanelOrtstermine.add(panFillerUnten3, gridBagConstraints);
 
         jTabbedPane.addTab("Ortstermine", jPanelOrtstermine);
 
@@ -778,9 +714,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panSchaden.setOpaque(false);
         panSchaden.setLayout(new GridBagLayout());
 
-        rpSchadenliste.setName("rpSchadenliste"); // NOI18N
-        rpSchadenliste.setLayout(new GridBagLayout());
-
         scpLaufendeSchaeden.setName("scpLaufendeSchaeden"); // NOI18N
 
         lstSchaeden.setModel(new DefaultListModel());
@@ -792,50 +725,38 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        rpSchadenliste.add(scpLaufendeSchaeden, gridBagConstraints);
+        panSchaden.add(scpLaufendeSchaeden, gridBagConstraints);
 
-        semiRoundedPanelSchaden.setBackground(Color.darkGray);
-        semiRoundedPanelSchaden.setMinimumSize(new Dimension(60, 25));
-        semiRoundedPanelSchaden.setName("semiRoundedPanelSchaden"); // NOI18N
-        semiRoundedPanelSchaden.setLayout(new GridBagLayout());
+        panSchaedenMain.setName("panSchaedenMain"); // NOI18N
+        panSchaedenMain.setOpaque(false);
+        panSchaedenMain.setLayout(new GridBagLayout());
 
-        lblSchaeden.setForeground(new Color(255, 255, 255));
-        lblSchaeden.setText("Schäden");
-        lblSchaeden.setName("lblSchaeden"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanelSchaden.add(lblSchaeden, gridBagConstraints);
+        baumSchadenPanel.setName("baumSchadenPanel"); // NOI18N
 
-        jPanel9.setName("jPanel9"); // NOI18N
-        jPanel9.setOpaque(false);
-        jPanel9.setPreferredSize(new Dimension(1, 1));
-
-        GroupLayout jPanel9Layout = new GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        semiRoundedPanelSchaden.add(jPanel9, gridBagConstraints);
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstSchaeden, ELProperty.create("${selectedElement}"), baumSchadenPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        panSchaedenMain.add(baumSchadenPanel, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        rpSchadenliste.add(semiRoundedPanelSchaden, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        panSchaden.add(panSchaedenMain, gridBagConstraints);
 
         panControlsNewSchaden.setName("panControlsNewSchaden"); // NOI18N
         panControlsNewSchaden.setOpaque(false);
@@ -860,83 +781,17 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         btnRemoveSchaden.setPreferredSize(new Dimension(39, 25));
         btnRemoveSchaden.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewSchaden.add(btnRemoveSchaden, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        rpSchadenliste.add(panControlsNewSchaden, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        panSchaden.add(rpSchadenliste, gridBagConstraints);
-
-        rpSchadeninfo.setName("rpSchadeninfo"); // NOI18N
-        rpSchadeninfo.setLayout(new GridBagLayout());
-
-        semiRoundedPanel6.setBackground(Color.darkGray);
-        semiRoundedPanel6.setName("semiRoundedPanel6"); // NOI18N
-        semiRoundedPanel6.setLayout(new GridBagLayout());
-
-        lblSchaden.setForeground(new Color(255, 255, 255));
-        lblSchaden.setText("Schaden");
-        lblSchaden.setName("lblSchaden"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        semiRoundedPanel6.add(lblSchaden, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpSchadeninfo.add(semiRoundedPanel6, gridBagConstraints);
-
-        panSchaedenMain.setName("panSchaedenMain"); // NOI18N
-        panSchaedenMain.setOpaque(false);
-        panSchaedenMain.setLayout(new GridBagLayout());
-
-        baumSchadenPanel.setName("baumSchadenPanel"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstSchaeden, ELProperty.create("${selectedElement}"), baumSchadenPanel, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        panSchaedenMain.add(baumSchadenPanel, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-        rpSchadeninfo.add(panSchaedenMain, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 8.0;
-        panSchaden.add(rpSchadeninfo, gridBagConstraints);
+        panSchaden.add(panControlsNewSchaden, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -979,6 +834,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             }
             else if (evt.getSource() == btnRemoveApartner) {
                 BaumMeldungPanel.this.btnRemoveApartnerActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnApartner) {
+                BaumMeldungPanel.this.btnApartnerActionPerformed(evt);
             }
             else if (evt.getSource() == btnAddNewOrtstermin) {
                 BaumMeldungPanel.this.btnAddNewOrtsterminActionPerformed(evt);
@@ -1195,6 +1053,34 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         //baumOrtsterminPanel.repaint();
     }//GEN-LAST:event_lstOrtsterminePropertyChange
 
+    private void btnApartnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApartnerActionPerformed
+        final JDialog dialog = new JDialog((Frame)null,
+            "Ansprechpartnerinformationen",
+            true);
+        final Collection<MetaObjectNode> mons = new ArrayList<>();
+        
+        
+        final Object selection = lstApartner.getSelectedValue();
+        if (selection != null){
+            if (selection instanceof CidsBean) {
+                final CidsBean selectedBean = (CidsBean)selection;
+                final MetaObjectNode metaObjectNode = new MetaObjectNode(selectedBean);
+                mons.add(metaObjectNode);
+            }
+            dialog.setContentPane(new DescriptionPaneDialogWrapperPanel(mons));
+            dialog.setSize(1200, 800);
+            StaticSwingTools.showDialog(this, dialog, true);
+        } else {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_PREFIX_SELECTION)
+                        + NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_SELECTION)
+                        + NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_SUFFIX_SELECTION),
+                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_SELECTION),
+                JOptionPane.WARNING_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnApartnerActionPerformed
+
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
     public final BaumGebietEditor parentEditor;
@@ -1214,13 +1100,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     private SwingWorker worker_ortstermin;
     private SwingWorker worker_schaden;
     
-    
+    //private final BaumOrtsterminListLightweightSearch ortsterminSearch;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     BaumOrtsterminPanel baumOrtsterminPanel;
     BaumSchadenPanel baumSchadenPanel;
     JButton btnAddApartner;
     JButton btnAddNewOrtstermin;
     JButton btnAddNewSchaden;
+    JButton btnApartner;
     JButton btnMenAbortApartner;
     JButton btnMenAbortOrtstermin;
     JButton btnMenOkApartner;
@@ -1233,8 +1120,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JDialog dlgAddApartner;
     JDialog dlgAddOrtstermin;
     Box.Filler filler1;
-    JPanel jPanel8;
-    JPanel jPanel9;
     JPanel jPanelAllgemein;
     JPanel jPanelOrtstermine;
     JPanel jPanelSchaeden;
@@ -1243,10 +1128,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JLabel lblAuswaehlenApartner;
     JLabel lblAuswaehlenOrtstermin;
     JLabel lblBemerkung;
-    JLabel lblOrtstermin;
-    JLabel lblOrtstermine;
-    JLabel lblSchaden;
-    JLabel lblSchaeden;
     JList lstApartner;
     JList lstOrtstermine;
     JList lstSchaeden;
@@ -1267,18 +1148,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JPanel panSchaden;
     JPanel panSchaedenMain;
     JPanel pnlCard1;
-    RoundedPanel rpOrtstermininfo;
-    RoundedPanel rpOrtsterminliste;
-    RoundedPanel rpSchadeninfo;
-    RoundedPanel rpSchadenliste;
     JScrollPane scpApartner;
     JScrollPane scpBemerkung;
     JScrollPane scpLaufendeOrtstermine;
     JScrollPane scpLaufendeSchaeden;
-    SemiRoundedPanel semiRoundedPanel5;
-    SemiRoundedPanel semiRoundedPanel6;
-    SemiRoundedPanel semiRoundedPanelOrt;
-    SemiRoundedPanel semiRoundedPanelSchaden;
     JTextArea taBemerkung;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -1289,7 +1162,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      * Creates a new BaumMeldungPanel object.
      */
     public BaumMeldungPanel() {
-        this(null,true);
+        this(null,false, ConnectionContext.createDeprecated());
     }
 
     
@@ -1299,12 +1172,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      * @param parentEditor
      * @param  editable  DOCUMENT ME!
      */
-    public BaumMeldungPanel(final BaumGebietEditor parentEditor, final boolean editable) {
+  /*  public BaumMeldungPanel(final BaumGebietEditor parentEditor, final boolean editable) {
         this.isEditor = editable;
         initComponents();
         this.connectionContext = null;
         this.parentEditor = parentEditor;
-    }
+    }*/
  
     /**
      * Creates new form BaumMeldungPanel.
@@ -1319,6 +1192,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         this.connectionContext = connectionContext;
         initComponents();
         this.parentEditor = parentEditor;
+        /*this.ortsterminSearch = new BaumOrtsterminListLightweightSearch(
+                "%1$2s",
+                new String[] { "NAME" });*/
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1353,6 +1229,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
+        if (!(Objects.equals(this.cidsBean, cidsBean))){
         if (isEditor && (this.cidsBean != null)) {
             this.cidsBean.removePropertyChangeListener(changeListener);
         }
@@ -1363,6 +1240,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                 cidsBean.addPropertyChangeListener(changeListener);
         }
         if (this.cidsBean != null){
+  //          lstOrtstermine.setModel(new JList<>(new Object[] { "wird geladen..." }).getModel());
             final String WHERE = " where "
                     + cidsBean.getProperty(FIELD__ID).toString()
                     + " = "
@@ -1374,6 +1252,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         dlgAddOrtstermin.getRootPane().setDefaultButton(btnMenOkOrtstermin);
         dlgAddApartner.pack();
         dlgAddApartner.getRootPane().setDefaultButton(btnMenOkApartner);
+        }
     }
     
     
@@ -1516,6 +1395,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      */
     public void setOrtsterminBeans(final List<CidsBean> cidsBeans) {
         baumOrtsterminPanel.setCidsBean(null);
+      //  lstOrtstermine.setModel(new DefaultListModel());
         ((DefaultListModel)lstOrtstermine.getModel()).clear();
         this.ortsterminBeans.clear();
         if(cidsBeans != null){
@@ -1600,7 +1480,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     public List<CidsBean> getSchadenBeans() {
         return schadenBeans;
     }
-    
+        
     private void valueFromOtherTable(final String tableName,
             final String whereClause,
             final WhichCase fall) {
@@ -1681,5 +1561,30 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             worker_schaden.execute();
         }
     }
-    
-}
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public class DescriptionPaneDialogWrapperPanel extends JPanel
+            implements BaumAnsprechpartnerRenderer.BaumAnsprechpartnerDescriptionPaneParent {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final DescriptionPaneFS pane = new DescriptionPaneFS();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new TestBlubbPanel object.
+         *
+         * @param  mons  DOCUMENT ME!
+         */
+        private DescriptionPaneDialogWrapperPanel(final Collection<MetaObjectNode> mons) {
+            setLayout(new BorderLayout());
+            add(pane, BorderLayout.CENTER);
+            pane.gotoMetaObjectNodes(mons.toArray(new MetaObjectNode[0]));
+        }
+    }
+      
+   }

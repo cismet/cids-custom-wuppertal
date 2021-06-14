@@ -179,7 +179,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnAddTelefon;
     private JButton btnRemTelefon;
-    private Box.Filler filler2;
+    private Box.Filler filler1;
     private Box.Filler filler3;
     private JFormattedTextField ftxtPlz;
     private JScrollPane jScrollPaneTelefon;
@@ -197,7 +197,8 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     private JPanel panTel;
     private JPanel panTelefon;
     private JPanel panTelefonAdd;
-    private JTextField txtBemerkung;
+    private JScrollPane scpBemerkung;
+    private JTextArea taBemerkung;
     private JTextField txtHnr;
     private JTextField txtMail;
     private JTextField txtName;
@@ -281,11 +282,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         panTelefonAdd = new JPanel();
         btnAddTelefon = new JButton();
         btnRemTelefon = new JButton();
-        filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         lblMail = new JLabel();
         txtMail = new JTextField();
         lblBemerkung = new JLabel();
-        txtBemerkung = new JTextField();
+        scpBemerkung = new JScrollPane();
+        taBemerkung = new JTextArea();
         panFillerUnten1 = new JPanel();
         panFillerUnten = new JPanel();
 
@@ -428,12 +430,14 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtOrt, gridBagConstraints);
 
+        panTelefon.setOpaque(false);
         panTelefon.setLayout(new GridBagLayout());
 
         panTel.setMinimumSize(new Dimension(26, 80));
+        panTel.setOpaque(false);
         panTel.setLayout(new GridBagLayout());
 
-        xtTelefon.setVisibleRowCount(4);
+        xtTelefon.setVisibleRowCount(6);
         jScrollPaneTelefon.setViewportView(xtTelefon);
 
         gridBagConstraints = new GridBagConstraints();
@@ -461,6 +465,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         panTelefonAdd.setAlignmentX(0.0F);
         panTelefonAdd.setAlignmentY(1.0F);
         panTelefonAdd.setFocusable(false);
+        panTelefonAdd.setOpaque(false);
         panTelefonAdd.setLayout(new GridBagLayout());
 
         btnAddTelefon.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
@@ -470,8 +475,9 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             }
         });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panTelefonAdd.add(btnAddTelefon, gridBagConstraints);
 
@@ -482,7 +488,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             }
         });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
@@ -490,17 +496,17 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
-        panTelefonAdd.add(filler2, gridBagConstraints);
+        panTelefonAdd.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 2, 2, 2);
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         panTelefon.add(panTelefonAdd, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -547,17 +553,28 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBemerkung, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, BeanProperty.create("text"));
+        scpBemerkung.setOpaque(false);
+
+        taBemerkung.setLineWrap(true);
+        taBemerkung.setRows(2);
+        taBemerkung.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        scpBemerkung.setViewportView(taBemerkung);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(txtBemerkung, gridBagConstraints);
+        panDaten.add(scpBemerkung, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -732,7 +749,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             RendererTools.makeReadOnly(txtHnr);
             RendererTools.makeReadOnly(txtStrasse);
             RendererTools.makeReadOnly(txtName);
-            RendererTools.makeReadOnly(txtBemerkung);
+            RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(xtTelefon);
         }
     }
@@ -909,7 +926,8 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             worker_key.execute();
         }
     }
-
+    public interface BaumAnsprechpartnerDescriptionPaneParent {
+    }
     //~ Inner Classes ----------------------------------------------------------
     /**
      * DOCUMENT ME!

@@ -8,8 +8,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
-
-import de.cismet.cids.custom.objecteditors.wunda_blau.BaumGebietEditor;
+import de.cismet.cids.custom.objecteditors.wunda_blau.BaumAnsprechpartnerEditor;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
@@ -20,14 +19,14 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumGebietRenderer extends BaumGebietEditor {
+public class BaumAnsprechpartnerRenderer extends BaumAnsprechpartnerEditor {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new BaumGebietRenderer object.
+     * Creates a new BaumAnsprechpartnerRenderer object.
      */
-    public BaumGebietRenderer() {
+    public BaumAnsprechpartnerRenderer() {
         super(false);
     }
 
@@ -49,7 +48,7 @@ public class BaumGebietRenderer extends BaumGebietEditor {
             "WUNDA_BLAU",
             null,
             false,
-            "baum_gebiet",
+            "baum_ansprechpartner",
             1,
             1280,
             1024);
