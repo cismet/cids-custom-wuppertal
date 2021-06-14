@@ -1755,6 +1755,10 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             }
 
             labelsPanels.clear();
+            blpKrone.clear();
+            blpStamm.clear();
+            blpWurzel.clear();
+            blpMassnahme.clear();
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
             if (this.cidsBean != null){
@@ -1841,16 +1845,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             }
 
             if(cidsBean != null){
-                labelsPanels.clear();
                 labelsPanels.addAll(Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme));
-
-             /*   for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme)) {
-                    labelsPanel.reload(false);
-                }
-            } else {
-                for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme)) {
-                    labelsPanel.repaint();
-                }*/
             }
         }
     }
