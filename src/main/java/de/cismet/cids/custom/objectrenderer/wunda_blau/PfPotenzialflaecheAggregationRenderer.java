@@ -137,6 +137,9 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                             new ServerActionParameter<>(
                                 CsvExportServerAction.ParameterType.DISTINCT_ON.toString(),
                                 "id"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.CHARSET.toString(),
+                                "LATIN9"),
                         };
                     DownloadManager.instance()
                             .add(
@@ -269,7 +272,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (cidsBeans != null) {
             ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(), "loader");
             new SwingWorker<List<CidsBean>, Void>() {
@@ -309,7 +312,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                 }.execute();
             StaticSwingTools.showDialog(this, jDialog1, true);
         }
-    } //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {

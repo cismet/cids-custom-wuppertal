@@ -37,6 +37,7 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
     @Getter private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -110,6 +111,7 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
         pnlSearchMode = new javax.swing.JPanel();
@@ -149,6 +151,7 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         pnlSearchMode.add(jLabel1, gridBagConstraints);
 
+        buttonGroup1.add(rbAll);
         rbAll.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             rbAll,
@@ -162,6 +165,7 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
         pnlSearchMode.add(rbAll, gridBagConstraints);
 
+        buttonGroup1.add(rbOne);
         org.openide.awt.Mnemonics.setLocalizedText(
             rbOne,
             org.openide.util.NbBundle.getMessage(
