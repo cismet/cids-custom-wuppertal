@@ -13,8 +13,6 @@ import java.awt.Stroke;
 
 import javax.swing.JComponent;
 
-import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
-
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
 import de.cismet.cismap.commons.Refreshable;
@@ -23,10 +21,8 @@ import de.cismet.cismap.commons.gui.piccolo.CustomFixedWidthStroke;
 /**
  * DOCUMENT ME!
  *
- * @author   reinhard.verkennis
  * @version  $Revision$, $Date$
  */
-
 public class PfPotenzialflaecheFeatureRenderer extends CustomCidsFeatureRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
