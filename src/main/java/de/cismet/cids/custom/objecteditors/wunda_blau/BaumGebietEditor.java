@@ -146,10 +146,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 }
         };   
     public static final String GEOMTYPE = "Point";
+    public static boolean azGeneriert = false;
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = {
             AdresseLightweightSearch.Subject.HNR.toString()
         };
+    
+    private List<CidsBean> noSaveToDeleteBeansMeldung = new ArrayList<>();
 
     private static final Logger LOG = Logger.getLogger(BaumGebietEditor.class);
 
@@ -186,6 +189,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_TITLE = "BaumGebietEditor.prepareForSave().JOptionPane.title";
     
     private static final String TITLE_NEW_GEBIET = "ein neues Gebiet (mit Meldung) anlegen...";
+    private static Color colorAlarm = new java.awt.Color(255, 0, 0);
+    private static Color colorNormal = new java.awt.Color(0, 0, 0);
     //~ Enums ------------------------------------------------------------------
 
     /**
@@ -1037,8 +1042,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     "WUNDA_BLAU",
                     "BAUM_MELDUNG",
                     getConnectionContext());
-            final int gebietId = cidsBean.getPrimaryKeyValue();
-            beanMeldung.setProperty("fk_gebiet", gebietId);
+            beanMeldung.setProperty("fk_gebiet", this.cidsBean);
             
             final java.util.Date selDate = dcMeldung.getDate();
             java.util.Calendar cal = Calendar.getInstance();
@@ -1050,9 +1054,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             java.sql.Date beanDate = new java.sql.Date(cal.getTime().getTime());
             
             beanMeldung.setProperty("datum", beanDate);
-            
+            CidsBean beanMeldungPersist = beanMeldung.persist(getConnectionContext());
+            //fuellen fuer evtl Loeschen
+            noSaveToDeleteBeansMeldung.add(beanMeldungPersist);
             //Meldungen erweitern:
-            meldungBeans.add(beanMeldung);
+            meldungBeans.add(beanMeldungPersist);
             
             
             //Refresh:
@@ -1060,7 +1066,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             bindingGroup.unbind();
             Collections.sort((List)meldungBeans, DATE_COMPARATOR);
             bindingGroup.bind();
-            lstMeldungen.setSelectedValue(beanMeldung, true);
+            lstMeldungen.setSelectedValue(beanMeldungPersist, true);
             
         } catch (Exception ex) {
             LOG.error(ex, ex);
@@ -1161,6 +1167,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             }
             try {
                 this.cidsBean.setProperty(FIELD__AZ, aktenzeichen);
+                lblAktenzeichen.setForeground(colorNormal);
+                azGeneriert = true;
             } catch (final Exception ex) {
                 LOG.error(ex, ex);
             } 
@@ -1533,6 +1541,19 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
+        baumMeldungPanel.editorClosed(ece);
+        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
+            for (CidsBean toDelete : noSaveToDeleteBeansMeldung){
+                LOG.fatal(toDelete);
+                try{
+                    toDelete.delete();
+                    toDelete.persist(getConnectionContext());
+                    LOG.fatal(toDelete);
+                } catch (Exception ex){
+                    LOG.error("Cannot delete created Meldung", ex);
+                }
+            }
+        }
     }
 
     @Override
@@ -1546,6 +1567,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         // To change body of generated methods, choose Tools | Templates.
         if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
             setMapWindow();
+        }
+        if (evt.getPropertyName().equals(FIELD__AZ) || 
+                evt.getPropertyName().equals(FIELD__STRASSE) || 
+                evt.getPropertyName().equals(FIELD__HNR) || 
+                evt.getPropertyName().equals(FIELD__NAME)){
+            if (this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW || azGeneriert){
+                lblAktenzeichen.setForeground(colorAlarm);
+            }
         }
     }
     

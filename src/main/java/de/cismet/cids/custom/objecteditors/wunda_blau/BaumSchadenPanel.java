@@ -17,6 +17,7 @@ import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
@@ -61,10 +62,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Box;
@@ -74,13 +78,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -128,6 +137,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     private List<CidsBean> festBeans = new ArrayList<>();
     private final List<CidsBean> changedFestBeans = new ArrayList<>();
     private final List<CidsBean> deletedFestBeans = new ArrayList<>();
+    private final Map <String, List<CidsBean>> ersatzBeanMap = new HashMap <>();
+    private final Map <String, List<CidsBean>> festBeanMap = new HashMap <>();
     private static final Logger LOG = Logger.getLogger(BaumSchadenPanel.class);
     
     private static DefaultBindableReferenceCombo.Option SORTING_OPTION =
@@ -228,9 +239,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         lblPrivat = new JLabel();
         chPrivat = new JCheckBox();
         lblHoehe = new JLabel();
-        txtHoehe = new JTextField();
         lblUmfang = new JLabel();
-        txtUmfang = new JTextField();
         lblArt = new JLabel();
         if(isEditor){
             cbArt = new DefaultBindableScrollableComboBox(MC__ART);
@@ -278,6 +287,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         taBemerkung = new JTextArea();
         lblFaellung = new JLabel();
         chFaellung = new JCheckBox();
+        spHoehe = new JSpinner();
+        spUmfang = new JSpinner();
         filler7 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         jPanelErsatzpflanzung = new JPanel();
         panErsatz = new JPanel();
@@ -343,8 +354,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         txtAlter.setName("txtAlter"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.alter}"), txtAlter, BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -395,22 +406,6 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panSchaden.add(lblHoehe, gridBagConstraints);
 
-        txtHoehe.setName("txtHoehe"); // NOI18N
-        txtHoehe.setPreferredSize(new Dimension(40, 19));
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), txtHoehe, BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panSchaden.add(txtHoehe, gridBagConstraints);
-
         lblUmfang.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblUmfang, "Umfang [cm]:");
         lblUmfang.setName("lblUmfang"); // NOI18N
@@ -422,22 +417,6 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panSchaden.add(lblUmfang, gridBagConstraints);
-
-        txtUmfang.setMinimumSize(new Dimension(40, 19));
-        txtUmfang.setName("txtUmfang"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umfang}"), txtUmfang, BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panSchaden.add(txtUmfang, gridBagConstraints);
 
         lblArt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblArt, "Art:");
@@ -1013,6 +992,39 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(chFaellung, gridBagConstraints);
 
+        spHoehe.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spHoehe.setModel(new SpinnerNumberModel(0.0d, 0.0d, 100.0d, 0.1d));
+        spHoehe.setName("spHoehe"); // NOI18N
+        spHoehe.setPreferredSize(new Dimension(75, 20));
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), spHoehe, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panSchaden.add(spHoehe, gridBagConstraints);
+
+        spUmfang.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spUmfang.setModel(new SpinnerNumberModel(0.0d, 0.0d, 1000.0d, 1.0d));
+        spUmfang.setName("spUmfang"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umfang}"), spUmfang, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panSchaden.add(spUmfang, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1361,10 +1373,20 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                 "WUNDA_BLAU",
                 "BAUM_ERSATZ",
                 getConnectionContext());
-            beanErsatz.setProperty(FIELD__FK_SCHADEN, cidsBean);
+            CidsBean beanSchaden = cidsBean;
+            beanSchaden.getMetaObject().setStatus(MetaObject.MODIFIED);
+            beanErsatz.setProperty(FIELD__FK_SCHADEN, beanSchaden);
 
+            
             //Ersatzpflanzungen erweitern:
-            ersatzBeans.add(beanErsatz);
+            if (ersatzBeans != null){
+                ersatzBeans.add(beanErsatz);
+            } else{
+                List<CidsBean> tempList = new ArrayList<>();
+                tempList.add(beanErsatz);
+                ersatzBeanMap.replace(cidsBean.getProperty(FIELD__ID).toString(), tempList);
+                ersatzBeans = tempList;
+            }
             ((DefaultListModel)lstErsatz.getModel()).addElement(beanErsatz);
             changedErsatzBeans.add(beanErsatz);
 
@@ -1382,7 +1404,10 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         final Object selectedObject = lstErsatz.getSelectedValue();
 
         if (selectedObject instanceof CidsBean) {
-
+            String schadenValue = this.cidsBean.getProperty(FIELD__ID).toString();
+            //String ersatzValue = ((CidsBean) selectedObject).getProperty(FIELD__ID).toString();
+            //Integer indexErsatz = (ersatzBeanMap.get(schadenValue)).indexOf(selectedObject);
+            Boolean deleteSuccess = (ersatzBeanMap.get(schadenValue)).remove((CidsBean)selectedObject);
             if (ersatzBeans != null) {
                 ersatzBeans.remove((CidsBean)selectedObject);
                 ((DefaultListModel)lstErsatz.getModel()).removeElement(selectedObject);
@@ -1407,10 +1432,18 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             beanFest.setProperty(FIELD__FK_SCHADEN, cidsBean);
 
             //Festsetzungen erweitern:
-            festBeans.add(beanFest);
+            if (festBeans != null){
+                festBeans.add(beanFest);
+            } else{
+                List<CidsBean> tempList = new ArrayList<>();
+                tempList.add(beanFest);
+                festBeanMap.replace(cidsBean.getProperty(FIELD__ID).toString(), tempList);
+                festBeans = tempList;
+            }
+            
             ((DefaultListModel)lstFest.getModel()).addElement(beanFest);
             changedFestBeans.add(beanFest);
-
+            
             //Refresh:
             lstFest.setSelectedValue(beanFest, true);
             cidsBean.setArtificialChangeFlag(true);
@@ -1425,7 +1458,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         final Object selectedObject = lstFest.getSelectedValue();
 
         if (selectedObject instanceof CidsBean) {
-
+            String schadenValue = this.cidsBean.getProperty(FIELD__ID).toString();
+            Boolean deleteSuccess = (festBeanMap.get(schadenValue)).remove((CidsBean)selectedObject);
             if (festBeans != null) {
                 festBeans.remove((CidsBean)selectedObject);
                 ((DefaultListModel)lstFest.getModel()).removeElement(selectedObject);
@@ -1547,11 +1581,11 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     JScrollPane scpLaufendeErsatz;
     JScrollPane scpLaufendeFest;
     SemiRoundedPanel semiRoundedPanel7;
+    JSpinner spHoehe;
+    JSpinner spUmfang;
     JTextArea taBemerkung;
     JTextField txtAlter;
     JTextField txtBetrag;
-    JTextField txtHoehe;
-    JTextField txtUmfang;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -1603,7 +1637,9 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             this.connectionContext = ConnectionContext.createDeprecated();
         }
         initComponents();
-
+        if (isEditor) {
+            ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setLocalRenderFeatureString(FIELD__GEOM);
+        }
         for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme)) {
             labelsPanel.initWithConnectionContext(connectionContext);
         }
@@ -1614,9 +1650,52 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-
+        
+        try {
+            this.cidsBean.setProperty(FIELD__HOEHE, new DecimalFormat("00.0").format(spHoehe.getValue())); 
+        } catch (final Exception ex) {
+            LOG.warn("Height not formatted.", ex);
+            save = false;
+        }
+        /*
+        // Ampere muss angegeben werden
+        try {
+            if (ftxtAmpere.getText().trim().isEmpty()) {
+                LOG.warn("No ampere specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_NOAMPERE));
+            } else {
+                try {
+                    if (Integer.parseInt(ftxtAmpere.getText()) <= 0) {
+                        errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGAMPERE));
+                    }
+                } catch (NumberFormatException e) {
+                    LOG.warn("Wrong ampere specified. Skip persisting.", e);
+                    errorMessage.append(NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_WRONGAMPERE));
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Ampere not given.", ex);
+            save = false;
+        }*/
         boolean errorOccured = false;
-        if (ersatzBeans != null){
+        List<CidsBean> toSaveListErsatz; 
+                try {
+                      for (final String idValue : ersatzBeanMap.keySet()){
+                          List<CidsBean> listErsatz = ersatzBeanMap.get(idValue);
+                          if (listErsatz != null){
+                            for (final CidsBean beanErsatz : listErsatz){
+                               /* if (beanErsatz.getMetaObject().getStatus() == MetaObject.TO_DELETE){
+                                    beanErsatz.delete();
+                                }*/
+                                beanErsatz.persist(getConnectionContext());
+                            }
+                          }
+                      }
+                 } catch (final Exception ex) {
+                    errorOccured = true;
+                    LOG.error(ex, ex);
+                }     
+         /*if (ersatzBeans != null){
             for (final CidsBean ersatzBean : changedErsatzBeans) {
                 try {
                     ersatzBean.persist(getConnectionContext());
@@ -1628,12 +1707,14 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         }
         if (errorOccured) {
             return false;
-        }
-        if (deletedErsatzBeans != null){
+        }*/
+       if (deletedErsatzBeans != null){
             for (final CidsBean ersatzBean : deletedErsatzBeans) {
                 try {
-                    ersatzBean.delete();
-                    ersatzBean.persist(getConnectionContext());
+                    if (ersatzBean.getMetaObject().getStatus() != MetaObject.NEW){
+                        ersatzBean.delete();
+                        ersatzBean.persist(getConnectionContext());
+                    }
                 } catch (final Exception ex) {
                     errorOccured = true;
                     LOG.error(ex, ex);
@@ -1643,7 +1724,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         if (errorOccured) {
             return false;
         }
-        
+        /*
         if (festBeans != null){
             for (final CidsBean festBean : changedFestBeans) {
                 try {
@@ -1656,12 +1737,28 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         }
         if (errorOccured) {
             return false;
+        }*/
+        List<CidsBean> toSaveListFest; 
+        try {
+              for (final String idValue : festBeanMap.keySet()){
+                  List<CidsBean> listFest = festBeanMap.get(idValue);
+                  if (listFest != null){
+                    for (final CidsBean beanFest : listFest){
+                        beanFest.persist(getConnectionContext());
+                    }
+                  }
+              }
+         } catch (final Exception ex) {
+            errorOccured = true;
+            LOG.error(ex, ex);
         }
         if (deletedFestBeans != null){
             for (final CidsBean festBean : deletedFestBeans) {
                 try {
-                    festBean.delete();
-                    festBean.persist(getConnectionContext());
+                    if (festBean.getMetaObject().getStatus() != MetaObject.NEW){
+                        festBean.delete();
+                        festBean.persist(getConnectionContext());
+                    }
                 } catch (final Exception ex) {
                     errorOccured = true;
                     LOG.error(ex, ex);
@@ -1766,9 +1863,17 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                         + cidsBean.getProperty(FIELD__ID).toString()
                         + " = "
                         + FIELD__FK_SCHADEN;
-                valueFromOtherTable(BaumSchadenEditor.TABLE__ERSATZ, WHERE, whatToDoForTree.ersatz);  
-                valueFromOtherTable(BaumSchadenEditor.TABLE__FEST, WHERE, whatToDoForTree.fest);
-
+                //Aus Speicher holen bzw. dem Speicher hinzufuegen
+                if (ersatzBeanMap.containsKey(cidsBean.getProperty(FIELD__ID).toString())){
+                    setErsatzBeans(ersatzBeanMap.get(cidsBean.getProperty(FIELD__ID).toString()));
+                } else {
+                    valueFromOtherTable(BaumSchadenEditor.TABLE__ERSATZ, WHERE, whatToDoForTree.ersatz, cidsBean.getProperty(FIELD__ID).toString());  
+                }
+                if (festBeanMap.containsKey(cidsBean.getProperty(FIELD__ID).toString())){
+                    setFestBeans(festBeanMap.get(cidsBean.getProperty(FIELD__ID).toString()));
+                } else {
+                    valueFromOtherTable(BaumSchadenEditor.TABLE__FEST, WHERE, whatToDoForTree.fest, cidsBean.getProperty(FIELD__ID).toString());
+                }
                 DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                     bindingGroup,
                     this.cidsBean,
@@ -1847,7 +1952,14 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             if(cidsBean != null){
                 labelsPanels.addAll(Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme));
             }
+            cbGeomSchaden.updateUI();
         }
+    }
+    
+    private void setReadOnly(){
+        
+            RendererTools.makeDoubleSpinnerWithoutButtons(spHoehe, 1);
+            RendererTools.makeReadOnly(spHoehe);
     }
     
     public void prepareErsatz(){
@@ -1912,14 +2024,14 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             baumErsatzPanel.setCidsBean(null);
             ((DefaultListModel)lstErsatz.getModel()).clear(); 
 
-            this.ersatzBeans.clear();
+            //this.ersatzBeans.clear();
             if (cidsBeans != null){
                 cidsBeans.sort(ID_COMPARATOR);
                 for(final Object bean:cidsBeans){
                     ((DefaultListModel)lstErsatz.getModel()).addElement(bean);
                 }
-                this.ersatzBeans = cidsBeans;
             }
+            this.ersatzBeans = cidsBeans;
             prepareErsatz();
         } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
@@ -1930,14 +2042,14 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         try {
             baumFestsetzungPanel.setCidsBean(null);
             ((DefaultListModel)lstFest.getModel()).clear();
-            this.festBeans.clear();
+            //this.festBeans.clear();
             if (cidsBeans != null){
                 cidsBeans.sort(ID_COMPARATOR);
                 for(final Object bean:cidsBeans){
                     ((DefaultListModel)lstFest.getModel()).addElement(bean);
                 }
-                this.festBeans = cidsBeans;
             }
+            this.festBeans = cidsBeans;
             prepareFest();
         } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
@@ -2042,9 +2154,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             800,
             600);
     }
-    private void valueFromOtherTable(final String tableName,
-            final String whereClause,
-            final whatToDoForTree toDo){
+    
+    private void valueFromOtherTable(final String tableName, final String whereClause, final whatToDoForTree toDo, final String idValue){
             final SwingWorker<MetaObject[], Void> worker;
             worker = new SwingWorker<MetaObject[], Void>() {
             
@@ -2066,10 +2177,14 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                             }
                             switch(toDo){
                                 case ersatz: {
+                                    // ersatzBeanMap ergaenzen
+                                    ersatzBeanMap.put(idValue, oneToNList);
                                     setErsatzBeans(oneToNList);
                                     break;
                                 }
                                 case fest: {
+                                    // festBeanMap ergaenzen
+                                    festBeanMap.put(idValue, oneToNList);
                                     setFestBeans(oneToNList);
                                     break;
                                 }
@@ -2078,10 +2193,12 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                         } else {
                             switch(toDo){
                                 case ersatz: {
+                                    ersatzBeanMap.put(idValue, null);
                                     setErsatzBeans(null);
                                     break;
                                 }
                                 case fest: {
+                                    festBeanMap.put(idValue, null);
                                     setFestBeans(null);
                                     break;
                                 }

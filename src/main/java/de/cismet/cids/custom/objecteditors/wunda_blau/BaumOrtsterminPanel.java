@@ -467,9 +467,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             final ConnectionContext connectionContext) {
         this.isEditor = editable;
         this.connectionContext = connectionContext;
-        initComponents();
         this.parentEditor = parentEditor;
         this.parentPanel = parentPanel;
+        initComponents();
         teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
                 CidsBeanSupport.DOMAIN_NAME,
                 TABLE_NAME__TEILNEHMER,

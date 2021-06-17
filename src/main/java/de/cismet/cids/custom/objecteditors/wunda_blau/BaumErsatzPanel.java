@@ -937,6 +937,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                         getConnectionContext());
                 } else{
                     setKontrolleBeans(null);
+                    cbSorte.setEnabled(false);
                 }
 
                 setMapWindow();
@@ -973,6 +974,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                         }
                     });
                 cbGeomErsatz.updateUI();
+                cbSorte.updateUI();
                 if (isEditor && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
                     if(this.cidsBean.getProperty(FIELD__ART) != null){
