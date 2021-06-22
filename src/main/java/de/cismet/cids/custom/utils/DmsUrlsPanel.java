@@ -178,6 +178,7 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
                         if (e.getActionCommand().equals(DmsUrlPanel.DELETE_ACTION_COMMAND)) {
                             DmsUrlsPanel.this.remove(docPanel);
                             DmsUrlsPanel.this.revalidate();
+                            dmsUrls.remove(docPanel.getDMSUrlBean());
                             repaint();
                         }
                     }
