@@ -17,7 +17,6 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.wunda_blau.search.server.StrAdrGeplanteAdresseStrasseSearch;
 
 import org.apache.log4j.Logger;
 
@@ -35,8 +34,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import javax.swing.*;
+
+import de.cismet.cids.custom.wunda_blau.search.server.StrAdrGeplanteAdresseStrasseSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -56,7 +58,6 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -72,15 +73,16 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
     private static final Logger LOG = Logger.getLogger(StrAdrGeplanteAdresseEditor.class);
     public static final String STRASSENNAME_TOSTRING_TEMPLATE = "%1$2s";
-    public static final String[] STRASSENNAME_TOSTRING_FIELDS = {"anzeige"};
+    public static final String[] STRASSENNAME_TOSTRING_FIELDS = { "anzeige" };
+
     //~ Instance fields --------------------------------------------------------
 
     protected Object hausnr;
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
     private final StrAdrGeplanteAdresseStrasseSearch strasseSearch = new StrAdrGeplanteAdresseStrasseSearch(
-                STRASSENNAME_TOSTRING_TEMPLATE,
-                STRASSENNAME_TOSTRING_FIELDS);
+            STRASSENNAME_TOSTRING_TEMPLATE,
+            STRASSENNAME_TOSTRING_FIELDS);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbAntragsteller;
@@ -178,15 +180,15 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         jLabel1 = new javax.swing.JLabel();
         txtAdr_zusatz = new javax.swing.JTextField();
         cbStrassenname = new de.cismet.cids.editors.FastBindableReferenceCombo(
-            strasseSearch,
-            strasseSearch.getRepresentationPattern(),
-            strasseSearch.getRepresentationFields());
+                strasseSearch,
+                strasseSearch.getRepresentationPattern(),
+                strasseSearch.getRepresentationFields());
         ftxHausnr = new javax.swing.JFormattedTextField();
         lblSchluessel = new javax.swing.JLabel();
-        if (isEditor){
+        if (isEditor) {
             jLabel3 = new javax.swing.JLabel();
         }
-        if (isEditor){
+        if (isEditor) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         rpKarte = new de.cismet.tools.gui.RoundedPanel();
@@ -209,14 +211,14 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         dcBauantrag = new de.cismet.cids.editors.DefaultBindableDateChooser();
         dcVorhanden = new de.cismet.cids.editors.DefaultBindableDateChooser();
         dcHistorisch = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        cbGrund = new DefaultBindableReferenceCombo(true) ;
+        cbGrund = new DefaultBindableReferenceCombo(true);
         jLabel14 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         dcAlkis = new de.cismet.cids.editors.DefaultBindableDateChooser();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        cbVorhaben = new DefaultBindableReferenceCombo(false) ;
-        cbAntragsteller = new DefaultBindableReferenceCombo(false) ;
+        cbVorhaben = new DefaultBindableReferenceCombo(false);
+        cbAntragsteller = new DefaultBindableReferenceCombo(false);
         panFillerMitteWasDatum = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -224,16 +226,18 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panFillerRechts.setName(""); // NOI18N
         panFillerRechts.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerRechtsLayout = new javax.swing.GroupLayout(panFillerRechts);
+        final javax.swing.GroupLayout panFillerRechtsLayout = new javax.swing.GroupLayout(panFillerRechts);
         panFillerRechts.setLayout(panFillerRechtsLayout);
         panFillerRechtsLayout.setHorizontalGroup(
-            panFillerRechtsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerRechtsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerRechtsLayout.setVerticalGroup(
-            panFillerRechtsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerRechtsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -246,16 +250,18 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
+        final javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
         panFillerUntenLayout.setHorizontalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -273,8 +279,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panAdresse.setOpaque(false);
         panAdresse.setLayout(new java.awt.GridBagLayout());
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel12.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel12.text")); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel12.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel12.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
@@ -282,8 +290,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 15, 2, 2);
         panAdresse.add(jLabel12, gridBagConstraints);
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel13.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel13.text")); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel13.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel13.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
@@ -291,8 +301,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
         panAdresse.add(jLabel13, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel1.text")); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -302,14 +314,21 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
         txtAdr_zusatz.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.adr_zusatz}"), txtAdr_zusatz, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.adr_zusatz}"),
+                txtAdr_zusatz,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txtAdr_zusatz.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtAdr_zusatzFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtAdr_zusatzFocusLost(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
@@ -319,27 +338,38 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panAdresse.add(txtAdr_zusatz, gridBagConstraints);
 
         ((FastBindableReferenceCombo)cbStrassenname).setSorted(false);
-        //((FastBindableReferenceCombo)cbStrassenname).setLocale(Locale.GERMAN);
+        // ((FastBindableReferenceCombo)cbStrassenname).setLocale(Locale.GERMAN);
         cbStrassenname.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_strasse_id}"), cbStrassenname, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_strasse_id}"),
+                cbStrassenname,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbStrassenname.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cbStrassennameMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    cbStrassennameMouseClicked(evt);
+                }
+            });
         cbStrassenname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbStrassennameActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbStrassennameActionPerformed(evt);
+                }
+            });
         cbStrassenname.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                cbStrassennamePropertyChange(evt);
-            }
-        });
+
+                @Override
+                public void propertyChange(final java.beans.PropertyChangeEvent evt) {
+                    cbStrassennamePropertyChange(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -349,9 +379,15 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 2);
         panAdresse.add(cbStrassenname, gridBagConstraints);
 
-        ftxHausnr.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###"))));
+        ftxHausnr.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###"))));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnr}"), ftxHausnr, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnr}"),
+                ftxHausnr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -373,13 +409,15 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(7, 4, 6, 5);
         panAdresse.add(lblSchluessel, gridBagConstraints);
 
-        if (isEditor){
-            jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        if (isEditor) {
+            jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
         }
-        if (isEditor){
-            jLabel3.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel3.text")); // NOI18N
+        if (isEditor) {
+            jLabel3.setText(org.openide.util.NbBundle.getMessage(
+                    StrAdrGeplanteAdresseEditor.class,
+                    "StrAdrGeplanteAdresseEditor.jLabel3.text")); // NOI18N
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 1;
@@ -388,17 +426,21 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
             panAdresse.add(jLabel3, gridBagConstraints);
         }
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"), cbGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 1;
@@ -454,16 +496,19 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panFillerRechtsAdresse.setName(""); // NOI18N
         panFillerRechtsAdresse.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerRechtsAdresseLayout = new javax.swing.GroupLayout(panFillerRechtsAdresse);
+        final javax.swing.GroupLayout panFillerRechtsAdresseLayout = new javax.swing.GroupLayout(
+                panFillerRechtsAdresse);
         panFillerRechtsAdresse.setLayout(panFillerRechtsAdresseLayout);
         panFillerRechtsAdresseLayout.setHorizontalGroup(
-            panFillerRechtsAdresseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerRechtsAdresseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerRechtsAdresseLayout.setVerticalGroup(
-            panFillerRechtsAdresseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerRechtsAdresseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -482,8 +527,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.weighty = 0.9;
         panHaupt.add(panAdresse, gridBagConstraints);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel11.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel11.text")); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel11.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel11.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -495,14 +542,21 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
         txtBemerkung.setName(""); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"), txtBemerkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                txtBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txtBemerkung.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtBemerkungPropertyChange(evt);
-            }
-        });
+
+                @Override
+                public void propertyChange(final java.beans.PropertyChangeEvent evt) {
+                    txtBemerkungPropertyChange(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -516,16 +570,18 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panFillerRechtsHaupt.setName(""); // NOI18N
         panFillerRechtsHaupt.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerRechtsHauptLayout = new javax.swing.GroupLayout(panFillerRechtsHaupt);
+        final javax.swing.GroupLayout panFillerRechtsHauptLayout = new javax.swing.GroupLayout(panFillerRechtsHaupt);
         panFillerRechtsHaupt.setLayout(panFillerRechtsHauptLayout);
         panFillerRechtsHauptLayout.setHorizontalGroup(
-            panFillerRechtsHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerRechtsHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerRechtsHauptLayout.setVerticalGroup(
-            panFillerRechtsHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerRechtsHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -538,16 +594,18 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panFillerUntenHaupt.setName(""); // NOI18N
         panFillerUntenHaupt.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenHauptLayout = new javax.swing.GroupLayout(panFillerUntenHaupt);
+        final javax.swing.GroupLayout panFillerUntenHauptLayout = new javax.swing.GroupLayout(panFillerUntenHaupt);
         panFillerUntenHaupt.setLayout(panFillerUntenHauptLayout);
         panFillerUntenHauptLayout.setHorizontalGroup(
-            panFillerUntenHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUntenHauptLayout.setVerticalGroup(
-            panFillerUntenHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenHauptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -569,8 +627,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panWasDatum.setOpaque(false);
         panWasDatum.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel4.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel4.text")); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel4.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel4.text")); // NOI18N
         jLabel4.setRequestFocusEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -580,8 +640,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panWasDatum.add(jLabel4, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel5.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel5.text")); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel5.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -590,8 +652,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panWasDatum.add(jLabel5, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel6.text")); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel6.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -600,8 +664,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panWasDatum.add(jLabel6, gridBagConstraints);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel7.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel7.text")); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel7.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -610,8 +676,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panWasDatum.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel8.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel8.text")); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel8.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel8.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -620,7 +688,12 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panWasDatum.add(jLabel8, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_geplant}"), dcGeplant, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_geplant}"),
+                dcGeplant,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcGeplant.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -632,7 +705,12 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 2);
         panWasDatum.add(dcGeplant, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_bauantrag}"), dcBauantrag, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_bauantrag}"),
+                dcBauantrag,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcBauantrag.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -644,7 +722,12 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 2);
         panWasDatum.add(dcBauantrag, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_vorhanden}"), dcVorhanden, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_vorhanden}"),
+                dcVorhanden,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcVorhanden.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -658,15 +741,22 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
         dcHistorisch.setName(""); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_historisch}"), dcHistorisch, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_historisch}"),
+                dcHistorisch,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcHistorisch.getConverter());
         bindingGroup.addBinding(binding);
 
         dcHistorisch.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                dcHistorischPropertyChange(evt);
-            }
-        });
+
+                @Override
+                public void propertyChange(final java.beans.PropertyChangeEvent evt) {
+                    dcHistorischPropertyChange(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -675,14 +765,21 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 2);
         panWasDatum.add(dcHistorisch, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.grund}"), cbGrund, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.grund}"),
+                cbGrund,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbGrund.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbGrundItemStateChanged(evt);
-            }
-        });
+
+                @Override
+                public void itemStateChanged(final java.awt.event.ItemEvent evt) {
+                    cbGrundItemStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -693,8 +790,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panWasDatum.add(cbGrund, gridBagConstraints);
         cbGrund.getAccessibleContext().setAccessibleName("");
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel14.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel14.text")); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel14.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel14.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -703,10 +802,13 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panWasDatum.add(jLabel14, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));                                                    // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/dialog-warning.png"))); // NOI18N
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel2.text")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/dialog-warning.png"))); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel2.text"));                                                   // NOI18N
         jLabel2.setToolTipText("Gebäude noch nicht eingemessen.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -719,14 +821,21 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         dcAlkis.setEnabled(false);
         dcAlkis.setName(""); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_alkis}"), dcAlkis, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dat_alkis}"),
+                dcAlkis,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         bindingGroup.addBinding(binding);
 
         dcAlkis.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                dcAlkisPropertyChange(evt);
-            }
-        });
+
+                @Override
+                public void propertyChange(final java.beans.PropertyChangeEvent evt) {
+                    dcAlkisPropertyChange(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -735,8 +844,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 2);
         panWasDatum.add(dcAlkis, gridBagConstraints);
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel9.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel9.text")); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel9.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel9.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -744,8 +855,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panWasDatum.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel10.setText(org.openide.util.NbBundle.getMessage(StrAdrGeplanteAdresseEditor.class, "StrAdrGeplanteAdresseEditor.jLabel10.text")); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11));  // NOI18N
+        jLabel10.setText(org.openide.util.NbBundle.getMessage(
+                StrAdrGeplanteAdresseEditor.class,
+                "StrAdrGeplanteAdresseEditor.jLabel10.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -755,7 +868,12 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
 
         cbVorhaben.setSelectedIndex(0);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vorhaben}"), cbVorhaben, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vorhaben}"),
+                cbVorhaben,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -765,7 +883,12 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 2);
         panWasDatum.add(cbVorhaben, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.antrag}"), cbAntragsteller, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.antrag}"),
+                cbAntragsteller,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -778,16 +901,19 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         panFillerMitteWasDatum.setName(""); // NOI18N
         panFillerMitteWasDatum.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerMitteWasDatumLayout = new javax.swing.GroupLayout(panFillerMitteWasDatum);
+        final javax.swing.GroupLayout panFillerMitteWasDatumLayout = new javax.swing.GroupLayout(
+                panFillerMitteWasDatum);
         panFillerMitteWasDatum.setLayout(panFillerMitteWasDatumLayout);
         panFillerMitteWasDatumLayout.setHorizontalGroup(
-            panFillerMitteWasDatumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerMitteWasDatumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerMitteWasDatumLayout.setVerticalGroup(
-            panFillerMitteWasDatumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerMitteWasDatumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -817,92 +943,94 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         add(panHaupt, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dcAlkisPropertyChange(final java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dcAlkisPropertyChange
+    private void dcAlkisPropertyChange(final java.beans.PropertyChangeEvent evt) { //GEN-FIRST:event_dcAlkisPropertyChange
         alkisDatumIsSet();
-    }//GEN-LAST:event_dcAlkisPropertyChange
+    }                                                                              //GEN-LAST:event_dcAlkisPropertyChange
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtAdr_zusatzFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAdr_zusatzFocusLost
+    private void txtAdr_zusatzFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtAdr_zusatzFocusLost
         String zusatz = txtAdr_zusatz.getText().trim();
         zusatz = "   " + zusatz;
         txtAdr_zusatz.setText(zusatz);                                         // Drei Leerzeichen + Buchstabe
-    }//GEN-LAST:event_txtAdr_zusatzFocusLost
+    }                                                                          //GEN-LAST:event_txtAdr_zusatzFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrassennameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrassennameActionPerformed
+    private void cbStrassennameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrassennameActionPerformed
         setAddressNoEdit();
         if (cbStrassenname.getSelectedItem() != null) {
-            lblSchluessel.setText(String.valueOf(getOtherTableValue("str_adr_strasse", getMyWhere(cbStrassenname.getSelectedItem().toString()))
+            lblSchluessel.setText(String.valueOf(
+                    getOtherTableValue("str_adr_strasse", getMyWhere(cbStrassenname.getSelectedItem().toString()))
                                 .getProperty("schluessel.name")));
         }
-    }//GEN-LAST:event_cbStrassennameActionPerformed
+    }                                                                                  //GEN-LAST:event_cbStrassennameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dcHistorischPropertyChange(final java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dcHistorischPropertyChange
+    private void dcHistorischPropertyChange(final java.beans.PropertyChangeEvent evt) { //GEN-FIRST:event_dcHistorischPropertyChange
         histDatumIsSet();
-    }//GEN-LAST:event_dcHistorischPropertyChange
+    }                                                                                   //GEN-LAST:event_dcHistorischPropertyChange
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrassennamePropertyChange(final java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cbStrassennamePropertyChange
+    private void cbStrassennamePropertyChange(final java.beans.PropertyChangeEvent evt) { //GEN-FIRST:event_cbStrassennamePropertyChange
         if (cbStrassenname.getSelectedItem() != null) {
-            lblSchluessel.setText(String.valueOf(getOtherTableValue("str_adr_strasse", getMyWhere(cbStrassenname.getSelectedItem().toString()))
+            lblSchluessel.setText(String.valueOf(
+                    getOtherTableValue("str_adr_strasse", getMyWhere(cbStrassenname.getSelectedItem().toString()))
                                 .getProperty("schluessel.name")));
         }
-    }//GEN-LAST:event_cbStrassennamePropertyChange
+    }                                                                                     //GEN-LAST:event_cbStrassennamePropertyChange
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBemerkungPropertyChange(final java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtBemerkungPropertyChange
+    private void txtBemerkungPropertyChange(final java.beans.PropertyChangeEvent evt) { //GEN-FIRST:event_txtBemerkungPropertyChange
         checkEdit();
-    }//GEN-LAST:event_txtBemerkungPropertyChange
+    }                                                                                   //GEN-LAST:event_txtBemerkungPropertyChange
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrassennameMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbStrassennameMouseClicked
+    private void cbStrassennameMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_cbStrassennameMouseClicked
         final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty("fk_strasse_id");
         final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
         umlautCollator.setStrength(Collator.SECONDARY);
         Collections.sort(cblStrassen, umlautCollator);
         cbStrassenname.setModel(new DefaultComboBoxModel(cblStrassen.toArray()));
-    }//GEN-LAST:event_cbStrassennameMouseClicked
+    }                                                                              //GEN-LAST:event_cbStrassennameMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGrundItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbGrundItemStateChanged
+    private void cbGrundItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cbGrundItemStateChanged
         grundIsSet();
-    }//GEN-LAST:event_cbGrundItemStateChanged
+    }                                                                          //GEN-LAST:event_cbGrundItemStateChanged
     /**
      * DOCUMENT ME!
      */
@@ -1317,12 +1445,13 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
             if (myCB.getMetaObject().getStatus() == MetaObject.NEW) {
                 if (dcHistorisch.getDate() == null) {
                     if (cbStrassenname.getSelectedItem() != null) {
-                        final String myStrasse = getOtherTableValue("str_adr_strasse",
+                        final String myStrasse = getOtherTableValue(
+                                    "str_adr_strasse",
                                     getMyWhere(cbStrassenname.getSelectedItem().toString())).getProperty("id")
                                     .toString();
                         final String myHausnummer = ftxHausnr.getText();
                         final String myZusatz = txtAdr_zusatz.getText().trim();
-                        String myQuery = " where fk_strasse_id = " + myStrasse + " and hausnr = " + myHausnummer
+                        final String myQuery = " where fk_strasse_id = " + myStrasse + " and hausnr = " + myHausnummer
                                     + " and trim(adr_zusatz) ilike '" + myZusatz + "' and dat_historisch is null";
 
                         if (getOtherTableValue("str_adr_geplante_adresse", myQuery) != null) {
@@ -1404,16 +1533,20 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
-    } 
-    
-    private void loadStreets(){
-        new SwingWorker<Void, Void>(){
-            @Override
-            protected Void doInBackground(){
-                ((FastBindableReferenceCombo)cbStrassenname).refreshModel();
-                return null;
-            }
-        }.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void loadStreets() {
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() {
+                    ((FastBindableReferenceCombo)cbStrassenname).refreshModel();
+                    return null;
+                }
+            }.execute();
     }
 
     @Override
