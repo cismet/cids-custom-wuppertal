@@ -288,7 +288,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
         panName.add(lblHauptart, gridBagConstraints);
 
         cbHauptart.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        cbHauptart.setMaximumRowCount(6);
+        cbHauptart.setMaximumRowCount(20);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_hauptart}"), cbHauptart, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);

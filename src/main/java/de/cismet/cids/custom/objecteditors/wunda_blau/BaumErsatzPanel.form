@@ -233,6 +233,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="12" style="0"/>
                     </Property>
+                    <Property name="maximumRowCount" type="int" value="15"/>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
@@ -277,6 +278,10 @@
                 </Component>
                 <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbSorte">
                   <Properties>
+                    <Property name="maximumRowCount" type="int" value="12"/>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="cbSorte" noResource="true"/>
                   </Properties>
@@ -447,6 +452,7 @@
                 </Component>
                 <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbStrasse">
                   <Properties>
+                    <Property name="maximumRowCount" type="int" value="20"/>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new LoadModelCb()" type="code"/>
                     </Property>
@@ -485,6 +491,7 @@
                 </Component>
                 <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbHNr">
                   <Properties>
+                    <Property name="maximumRowCount" type="int" value="20"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="cbHNr" noResource="true"/>
                   </Properties>

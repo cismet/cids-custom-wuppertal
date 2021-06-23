@@ -99,6 +99,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Locale;
 import javax.swing.JList;
 import javax.swing.plaf.basic.ComboPopup;
@@ -654,6 +655,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHnr, gridBagConstraints);
 
+        cbHNr.setMaximumRowCount(20);
         cbHNr.setEnabled(false);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
@@ -768,6 +770,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 2;
         panDaten.add(panFiller, gridBagConstraints);
 
+        cbStrasse.setMaximumRowCount(20);
         cbStrasse.setModel(new LoadModelCb());
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));

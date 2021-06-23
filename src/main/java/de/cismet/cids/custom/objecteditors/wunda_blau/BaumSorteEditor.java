@@ -274,7 +274,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         panName.add(lblArt, gridBagConstraints);
 
         cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        cbArt.setMaximumRowCount(6);
+        cbArt.setMaximumRowCount(20);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArt, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);

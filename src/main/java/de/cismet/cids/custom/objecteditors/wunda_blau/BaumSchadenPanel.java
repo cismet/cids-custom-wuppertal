@@ -354,8 +354,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         txtAlter.setName("txtAlter"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.alter}"), txtAlter, BeanProperty.create("text"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
+        binding.setSourceNullValue("null");
+        binding.setSourceUnreadableValue("null");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -432,6 +432,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
 
         if(isEditor){
             cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
+            cbArt.setMaximumRowCount(15);
             cbArt.setName("cbArt"); // NOI18N
             cbArt.setPreferredSize(new Dimension(100, 24));
 

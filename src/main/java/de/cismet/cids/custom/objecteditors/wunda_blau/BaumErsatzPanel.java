@@ -390,6 +390,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         panInhalt.add(lblArt, gridBagConstraints);
 
         cbArtE.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbArtE.setMaximumRowCount(15);
         cbArtE.setName("cbArtE"); // NOI18N
         cbArtE.setPreferredSize(new Dimension(100, 24));
 
@@ -420,6 +421,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblSorte, gridBagConstraints);
 
+        cbSorte.setMaximumRowCount(12);
         cbSorte.setEnabled(false);
         cbSorte.setName("cbSorte"); // NOI18N
 
@@ -549,6 +551,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblStrasse, gridBagConstraints);
 
+        cbStrasse.setMaximumRowCount(20);
         cbStrasse.setModel(new LoadModelCb());
         cbStrasse.setName("cbStrasse"); // NOI18N
 
@@ -576,6 +579,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblHnr, gridBagConstraints);
 
+        cbHNr.setMaximumRowCount(20);
         cbHNr.setEnabled(false);
         cbHNr.setName("cbHNr"); // NOI18N
 
@@ -817,14 +821,14 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             if (evt.getSource() == cbArtE) {
                 BaumErsatzPanel.this.cbArtEActionPerformed(evt);
             }
+            else if (evt.getSource() == cbStrasse) {
+                BaumErsatzPanel.this.cbStrasseActionPerformed(evt);
+            }
             else if (evt.getSource() == btnAddKont) {
                 BaumErsatzPanel.this.btnAddKontActionPerformed(evt);
             }
             else if (evt.getSource() == btnRemKont) {
                 BaumErsatzPanel.this.btnRemKontActionPerformed(evt);
-            }
-            else if (evt.getSource() == cbStrasse) {
-                BaumErsatzPanel.this.cbStrasseActionPerformed(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
