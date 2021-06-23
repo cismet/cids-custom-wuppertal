@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -119,6 +120,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         if (isEditor){
             cbGeomFest = new DefaultCismapGeometryComboBoxEditor();
         }
+        lblDatum = new JLabel();
+        dcDatum = new DefaultBindableDateChooser();
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
         taBemerkungF = new JTextArea();
@@ -214,8 +217,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         cbArtF.setPreferredSize(new Dimension(100, 24));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArtF, BeanProperty.create("selectedItem"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -260,12 +261,40 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             panFest.add(cbGeomFest, gridBagConstraints);
         }
 
+        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDatum.setText(NbBundle.getMessage(BaumFestsetzungPanel.class, "BaumFestsetzungPanel.lblDatum.text")); // NOI18N
+        lblDatum.setName("lblDatum"); // NOI18N
+        lblDatum.setRequestFocusEnabled(false);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 4, 5);
+        panFest.add(lblDatum, gridBagConstraints);
+
+        dcDatum.setName("dcDatum"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(dcDatum.getConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panFest.add(dcDatum, gridBagConstraints);
+
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
         lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -289,7 +318,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -416,8 +445,10 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JComboBox<String> cbArtF;
     JComboBox cbGeomFest;
+    DefaultBindableDateChooser dcDatum;
     JLabel lblArt;
     JLabel lblBemerkung;
+    JLabel lblDatum;
     JLabel lblGeom;
     JLabel lblHoehe;
     JLabel lblKarte;

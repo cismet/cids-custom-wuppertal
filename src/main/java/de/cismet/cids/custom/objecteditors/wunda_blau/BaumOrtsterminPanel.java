@@ -329,6 +329,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             dcDatum.setName("dcDatum"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
+            binding.setConverter(dcDatum.getConverter());
             bindingGroup.addBinding(binding);
 
         }

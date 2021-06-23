@@ -20,6 +20,7 @@ import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumArtLightweightSearch;
 import org.apache.log4j.Logger;
 
@@ -55,6 +56,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -63,19 +65,27 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import javax.swing.Box;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import javax.swing.plaf.basic.ComboPopup;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -85,6 +95,7 @@ import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingx.JXTable;
 import org.openide.awt.Mnemonics;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 /**
  * DOCUMENT ME!
@@ -109,8 +120,18 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 connectionContext);
     }
     
+    private static final ComboBoxModel MUST_SET_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten bitte zuweisen......"});
+    private static final ComboBoxModel LOAD_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten werden geladen......"});
+    
+    private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
+            AdresseLightweightSearch.Subject.HNR,
+            ADRESSE_TOSTRING_TEMPLATE,
+            ADRESSE_TOSTRING_FIELDS);
+    
     public static final String FIELD__KONTROLLE = "n_kontrolle";                // baum_ersatz
     public static final String FIELD__DATE = "datum";                           // baum_kontrolle
+    public static final String FIELD__STRASSE = "fk_strasse.strassenschluessel";// baum_ersatz
+    public static final String FIELD__HNR = "fk_adresse";                       // baum_ersatz
     public static final String FIELD__DATUM = "pflanzdatum";                    // baum_ersatz
     public static final String FIELD__ART = "fk_art";                           // baum_ersatz 
     public static final String FIELD__ART_ID = "fk_art.id";                     // baum_ersatz --> art
@@ -123,6 +144,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public static final String FIELD__KONTROLLE_BEMERKUNG = "bemerkung";        // baum_ersatz
     public static final String FIELD__KONTROLLE_DATUM = "datum";                // baum_ersatz
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_ersatz
+    public static final String FIELD__STRASSE_NAME = "name";                    // strasse
+    public static final String FIELD__STRASSE_KEY = "strassenschluessel";       // strasse
     
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_ersatz_geom
@@ -140,6 +163,20 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     private static final Class[] KONTROLLE_PROP_TYPES = new Class[] {
             Date.class,
             String.class
+        };
+     private static final String[] STRASSE_COL_NAMES = new String[] { "Name", "Strassenschluessel"};
+    private static final String[] STRASSE_PROP_NAMES = new String[] {
+            FIELD__STRASSE_NAME,
+            FIELD__STRASSE_KEY
+        };
+    private static final Class[] STRASSE_PROP_TYPES = new Class[] {
+            String.class,
+            Integer.class
+        };
+    
+    public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
+    public static final String[] ADRESSE_TOSTRING_FIELDS = {
+            AdresseLightweightSearch.Subject.HNR.toString()
         };
     
     /**
@@ -182,6 +219,20 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         if (isEditor){
             cbGeomErsatz = new DefaultCismapGeometryComboBoxEditor();
         }
+        lblStrasse = new JLabel();
+        cbStrasse = new FastBindableReferenceCombo();
+        lblHnr = new JLabel();
+        cbHNr = new FastBindableReferenceCombo(
+            hnrSearch,
+            hnrSearch.getRepresentationPattern(),
+            hnrSearch.getRepresentationFields()
+        );
+        panGeometrie = new JPanel();
+        panLage = new JPanel();
+        rpKarte = new RoundedPanel();
+        panPreviewMap = new DefaultPreviewMapPanel();
+        semiRoundedPanel7 = new SemiRoundedPanel();
+        lblKarte = new JLabel();
         panKont = new JPanel();
         rpKont = new RoundedPanel();
         semiRoundedPanel8 = new SemiRoundedPanel();
@@ -193,12 +244,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         panKontDaten = new JPanel();
         jScrollPaneKont = new JScrollPane();
         xtKont = new JXTable();
-        panGeometrie = new JPanel();
-        panLage = new JPanel();
-        rpKarte = new RoundedPanel();
-        panPreviewMap = new DefaultPreviewMapPanel();
-        semiRoundedPanel7 = new SemiRoundedPanel();
-        lblKarte = new JLabel();
 
         FormListener formListener = new FormListener();
 
@@ -214,10 +259,10 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         panErsatz.setOpaque(false);
         panErsatz.setLayout(new GridBagLayout());
 
-        panInhalt.setMinimumSize(new Dimension(450, 10));
+        panInhalt.setMinimumSize(new Dimension(100, 10));
         panInhalt.setName("panInhalt"); // NOI18N
         panInhalt.setOpaque(false);
-        panInhalt.setPreferredSize(new Dimension(450, 207));
+        panInhalt.setPreferredSize(new Dimension(520, 270));
         panInhalt.setLayout(new GridBagLayout());
 
         lblBis.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -226,7 +271,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblBis.setRequestFocusEnabled(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
@@ -242,7 +287,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -253,7 +298,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblAnzahl.setName("lblAnzahl"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -270,7 +315,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -282,7 +327,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblDatum.setRequestFocusEnabled(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
@@ -298,7 +343,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -309,7 +354,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblSelbst.setName("lblSelbst"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -326,7 +371,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -337,7 +382,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblArt.setName("lblArt"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -356,7 +401,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         cbArtE.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -368,7 +413,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblSorte.setName("lblSorte"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -385,7 +430,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -397,7 +442,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblFirma.setName("lblFirma"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -413,7 +458,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -425,7 +470,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -449,7 +494,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -463,7 +508,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblGeom.setName("lblGeom"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -484,7 +529,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         if (isEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridy = 1;
             gridBagConstraints.gridwidth = 3;
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -492,11 +537,136 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             panInhalt.add(cbGeomErsatz, gridBagConstraints);
         }
 
+        lblStrasse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblStrasse, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblStrasse.text")); // NOI18N
+        lblStrasse.setName("lblStrasse"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panInhalt.add(lblStrasse, gridBagConstraints);
+
+        cbStrasse.setModel(new LoadModelCb());
+        cbStrasse.setName("cbStrasse"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cbStrasse.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panInhalt.add(cbStrasse, gridBagConstraints);
+
+        lblHnr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblHnr, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblHnr.text")); // NOI18N
+        lblHnr.setName("lblHnr"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panInhalt.add(lblHnr, gridBagConstraints);
+
+        cbHNr.setEnabled(false);
+        cbHNr.setName("cbHNr"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panInhalt.add(cbHNr, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         panErsatz.add(panInhalt, gridBagConstraints);
+
+        panGeometrie.setName("panGeometrie"); // NOI18N
+        panGeometrie.setOpaque(false);
+        panGeometrie.setLayout(new GridBagLayout());
+
+        panLage.setMinimumSize(new Dimension(300, 142));
+        panLage.setName("panLage"); // NOI18N
+        panLage.setOpaque(false);
+        panLage.setLayout(new GridBagLayout());
+
+        rpKarte.setName(""); // NOI18N
+        rpKarte.setLayout(new GridBagLayout());
+
+        panPreviewMap.setName("panPreviewMap"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        rpKarte.add(panPreviewMap, gridBagConstraints);
+
+        semiRoundedPanel7.setBackground(Color.darkGray);
+        semiRoundedPanel7.setName("semiRoundedPanel7"); // NOI18N
+        semiRoundedPanel7.setLayout(new GridBagLayout());
+
+        lblKarte.setForeground(new Color(255, 255, 255));
+        Mnemonics.setLocalizedText(lblKarte, "Lage");
+        lblKarte.setName("lblKarte"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
+        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panLage.add(rpKarte, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panGeometrie.add(panLage, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 10, 0, 0);
+        panErsatz.add(panGeometrie, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        panDaten.add(panErsatz, gridBagConstraints);
 
         panKont.setMaximumSize(new Dimension(410, 32767));
         panKont.setMinimumSize(new Dimension(410, 25));
@@ -620,88 +790,17 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         panKont.add(rpKont, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        panErsatz.add(panKont, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        panDaten.add(panErsatz, gridBagConstraints);
-
-        panGeometrie.setName("panGeometrie"); // NOI18N
-        panGeometrie.setOpaque(false);
-        panGeometrie.setPreferredSize(new Dimension(300, 150));
-        panGeometrie.setLayout(new GridBagLayout());
-
-        panLage.setMinimumSize(new Dimension(300, 142));
-        panLage.setName("panLage"); // NOI18N
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
-
-        rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
-
-        panPreviewMap.setName("panPreviewMap"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        rpKarte.add(panPreviewMap, gridBagConstraints);
-
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setName("semiRoundedPanel7"); // NOI18N
-        semiRoundedPanel7.setLayout(new GridBagLayout());
-
-        lblKarte.setForeground(new Color(255, 255, 255));
-        Mnemonics.setLocalizedText(lblKarte, "Lage");
-        lblKarte.setName("lblKarte"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panLage.add(rpKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panGeometrie.add(panLage, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 0, 0, 0);
-        panDaten.add(panGeometrie, gridBagConstraints);
+        panDaten.add(panKont, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -724,6 +823,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             else if (evt.getSource() == btnRemKont) {
                 BaumErsatzPanel.this.btnRemKontActionPerformed(evt);
             }
+            else if (evt.getSource() == cbStrasse) {
+                BaumErsatzPanel.this.cbStrasseActionPerformed(evt);
+            }
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -742,6 +844,14 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             refreshSorte();
         }
     }//GEN-LAST:event_cbArtEActionPerformed
+
+    private void cbStrasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+        if (cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
+            cbHNr.setSelectedItem(null);
+            cbHNr.setEnabled(true);
+            refreshHnr();
+        }
+    }//GEN-LAST:event_cbStrasseActionPerformed
 
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
@@ -778,7 +888,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     JButton btnRemKont;
     JComboBox<String> cbArtE;
     JComboBox cbGeomErsatz;
+    FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbSorte;
+    FastBindableReferenceCombo cbStrasse;
     JCheckBox chSelbst;
     DefaultBindableDateChooser dcBis;
     DefaultBindableDateChooser dcDatum;
@@ -791,10 +903,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     JLabel lblDatum;
     JLabel lblFirma;
     JLabel lblGeom;
+    JLabel lblHnr;
     JLabel lblKarte;
     JLabel lblKont;
     JLabel lblSelbst;
     JLabel lblSorte;
+    JLabel lblStrasse;
     JPanel panDaten;
     JPanel panErsatz;
     JPanel panGeometrie;
@@ -980,6 +1094,27 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                     if(this.cidsBean.getProperty(FIELD__ART) != null){
                         cbSorte.setEnabled(true);
                     }
+                    }
+                if(isEditor){
+                    StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
+                    {
+                        final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0))
+                                    .getList();
+                        final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
+                        cbHNr.addActionListener(new ActionListener() {
+
+                                @Override
+                                public void actionPerformed(final ActionEvent e) {
+                                    final Object selectedValue = pop.getSelectedValue();
+                                    txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
+                                }
+                            });
+                    }
+                }
+                initComboboxHnr();
+                if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
+                    cbHNr.setEnabled(true);
+                    searchStreets();
                 }
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
@@ -992,8 +1127,40 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 cbSorte.setEnabled(false);
             }*/
         }
+        
+        
     }
     
+    
+    private Collection setStrasseCb(){
+        final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty(FIELD__STRASSE);
+        final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
+        umlautCollator.setStrength(Collator.SECONDARY);
+        Collections.sort(cblStrassen, umlautCollator);
+        return cblStrassen;
+    }
+    
+    private void refreshHnr() { 
+        if (cidsBean != null){
+            String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
+            if (schluessel != null){
+
+                hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));
+                
+                hnrSearch.setKeyId(Integer.parseInt(schluessel));
+
+                new SwingWorker<Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            cbHNr.refreshModel();
+
+                            return null;
+                        }
+                    }.execute();
+            }
+        }
+    }
     
     /**
      * DOCUMENT ME!
@@ -1048,4 +1215,80 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             }
         }
     }
+    
+    private void initComboboxHnr() {
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    cbHNr.refreshModel();
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        get();
+                    } catch (final InterruptedException | ExecutionException ex) {
+                        LOG.error(ex, ex);
+                    }  finally {
+                        refreshHnr();
+                    }
+                }
+            }.execute();
+    }
+    
+    
+    private void searchStreets() {
+        if (getCidsBean() != null) {
+            new SwingWorker<Collection, Void>() {
+
+                    @Override
+                    protected Collection doInBackground() throws Exception {
+ /*
+                        if (cidsBean == null || cidsBean.getProperty(FIELD__STRASSE) == null) {
+                            cbStrasse.setModel(new MustSetModelCb());
+                            return null;
+                        }*/
+
+                        return setStrasseCb();
+                    }
+
+                    @Override
+                    protected void done() {
+                        final Collection check;
+                        try {
+                            check = get();
+                            if (check != null) {
+                                final Collection colStreets = check;
+                                cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
+                                List<CidsBean> streetBeans = new ArrayList<>();
+                                /*if (cidsBean.getProperty(FIELD__STRASSE) != null){
+                                    for (final CidsBean cb : colStreets.toArray().){
+                                        if(cb.getProperty(FIELD__STRASSE_KEY).toString().equals(cidsBean.getProperty(FIELD__STRASSE).toString())){
+                                           streetBeans.add(cb);
+                                           break;
+                                        }
+                                    }
+                                }*/
+                            }
+                        } catch (final InterruptedException | ExecutionException ex) {
+                            LOG.fatal(ex, ex);
+                        }
+                    }
+                }.execute();
+        }
+    }
+      
+    class LoadModelCb extends DefaultComboBoxModel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new LoadModelCb object.
+         */
+        public LoadModelCb() {
+            super(new String[] { "Die Daten werden geladen......"});
+        }
+    } 
 }

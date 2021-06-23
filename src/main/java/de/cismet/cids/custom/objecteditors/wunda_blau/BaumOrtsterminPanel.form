@@ -293,7 +293,11 @@
             <Property name="name" type="java.lang.String" value="dcDatum" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.datum}" target="dcDatum" targetPath="date" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.datum}" target="dcDatum" targetPath="date" updateStrategy="0" immediately="false">
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="dcDatum.getConverter()" type="code"/>
+              </Property>
+            </BindingProperty>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>

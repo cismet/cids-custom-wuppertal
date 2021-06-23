@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.DescriptionPaneFS;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
@@ -69,6 +68,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -77,6 +77,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -236,6 +238,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
         panInfo = new JPanel();
+        lblAbgenommen = new JLabel();
+        chAbgenommen = new JCheckBox();
         lblApartner = new JLabel();
         panApartner = new JPanel();
         lblBemerkung = new JLabel();
@@ -397,12 +401,42 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panInfo.setPreferredSize(new Dimension(337, 230));
         panInfo.setLayout(new GridBagLayout());
 
+        lblAbgenommen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblAbgenommen, NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblAbgenommen.text")); // NOI18N
+        lblAbgenommen.setName("lblAbgenommen"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panInfo.add(lblAbgenommen, gridBagConstraints);
+
+        chAbgenommen.setContentAreaFilled(false);
+        chAbgenommen.setName("chAbgenommen"); // NOI18N
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.abgenommen}"), chAbgenommen, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        chAbgenommen.addChangeListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panInfo.add(chAbgenommen, gridBagConstraints);
+
         lblApartner.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblApartner, "Ansprechpartner:");
         lblApartner.setName("lblApartner"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
@@ -415,7 +449,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panApartner.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -427,7 +461,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
@@ -443,14 +477,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         taBemerkung.setWrapStyleWord(true);
         taBemerkung.setName("taBemerkung"); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
@@ -473,7 +507,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -488,7 +522,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         btnApartner.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new Insets(15, 0, 5, 5);
         panInfo.add(btnApartner, gridBagConstraints);
@@ -508,7 +542,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -547,7 +581,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -828,17 +862,17 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
     // Code for dispatching events from components to event handlers.
 
-    private class FormListener implements ActionListener, PropertyChangeListener {
+    private class FormListener implements ActionListener, PropertyChangeListener, ChangeListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
-            if (evt.getSource() == btnAddApartner) {
+            if (evt.getSource() == btnApartner) {
+                BaumMeldungPanel.this.btnApartnerActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnAddApartner) {
                 BaumMeldungPanel.this.btnAddApartnerActionPerformed(evt);
             }
             else if (evt.getSource() == btnRemoveApartner) {
                 BaumMeldungPanel.this.btnRemoveApartnerActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnApartner) {
-                BaumMeldungPanel.this.btnApartnerActionPerformed(evt);
             }
             else if (evt.getSource() == btnAddNewOrtstermin) {
                 BaumMeldungPanel.this.btnAddNewOrtsterminActionPerformed(evt);
@@ -869,6 +903,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getSource() == lstOrtstermine) {
                 BaumMeldungPanel.this.lstOrtsterminePropertyChange(evt);
+            }
+        }
+
+        public void stateChanged(ChangeEvent evt) {
+            if (evt.getSource() == chAbgenommen) {
+                BaumMeldungPanel.this.chAbgenommenStateChanged(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
@@ -1101,6 +1141,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         
     }//GEN-LAST:event_btnApartnerActionPerformed
 
+    private void chAbgenommenStateChanged(ChangeEvent evt) {//GEN-FIRST:event_chAbgenommenStateChanged
+        isAbgenommen();
+    }//GEN-LAST:event_chAbgenommenStateChanged
+
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
     public final BaumGebietEditor parentEditor;
@@ -1136,6 +1180,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JButton btnRemoveOrtstermin;
     JButton btnRemoveSchaden;
     JComboBox cbApartner;
+    JCheckBox chAbgenommen;
     DefaultBindableDateChooser dcOrtstermin;
     JDialog dlgAddApartner;
     JDialog dlgAddOrtstermin;
@@ -1144,6 +1189,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JPanel jPanelOrtstermine;
     JPanel jPanelSchaeden;
     JTabbedPane jTabbedPane;
+    JLabel lblAbgenommen;
     JLabel lblApartner;
     JLabel lblAuswaehlenApartner;
     JLabel lblAuswaehlenOrtstermin;
@@ -1286,6 +1332,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                 setSchadenBeans(null);
             }
             bindingGroup.bind();
+            isAbgenommen();
             dlgAddOrtstermin.pack();
             dlgAddOrtstermin.getRootPane().setDefaultButton(btnMenOkOrtstermin);
             dlgAddApartner.pack();
@@ -1392,6 +1439,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             return false;
         }
         return save;
+    }
+    
+    private void isAbgenommen() {
+        if (chAbgenommen.isSelected()) {
+            lblAbgenommen.setForeground(Color.black);
+        } else {
+            lblAbgenommen.setForeground(Color.red);
+        }
     }
     
     public void prepareSchaden(){

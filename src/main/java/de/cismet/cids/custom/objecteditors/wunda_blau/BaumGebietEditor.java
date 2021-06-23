@@ -12,12 +12,10 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.server.localserver.attribute.ObjectAttribute;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -60,14 +58,12 @@ import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -90,7 +86,6 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -104,9 +99,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Locale;
-import javax.swing.AbstractListModel;
 import javax.swing.JList;
 import javax.swing.plaf.basic.ComboPopup;
 import org.jdesktop.swingbinding.JListBinding;
@@ -242,7 +235,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JButton btnRemoveMeldung;
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
-    private DefaultBindableReferenceCombo cbStatus;
     FastBindableReferenceCombo cbStrasse;
     private DefaultBindableDateChooser dcMeldung;
     private JDialog dlgAddMeldung;
@@ -257,7 +249,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblHnr;
     private JLabel lblKarte;
     private JLabel lblName;
-    private JLabel lblStatus;
     private JLabel lblStrasse;
     private JList lstMeldungen;
     private JPanel panAddMeldung;
@@ -280,7 +271,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JScrollPane scpBemerkung;
     private JScrollPane scpLaufendeMeldungen;
     private SemiRoundedPanel semiRoundedPanel7;
-    private JSeparator sepStatus;
     private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JTextArea taBemerkung;
     private JTextField txtAktenzeichen;
@@ -435,9 +425,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         panFiller = new JPanel();
-        sepStatus = new JSeparator();
-        lblStatus = new JLabel();
-        cbStatus = new DefaultBindableReferenceCombo() ;
         cbStrasse = new FastBindableReferenceCombo();
         btnCreateAktenzeichen = new JButton();
         jPanelMeldungen = new JPanel();
@@ -780,41 +767,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         panDaten.add(panFiller, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(10, 0, 5, 0);
-        panDaten.add(sepStatus, gridBagConstraints);
-
-        lblStatus.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblStatus.setText("Status:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblStatus, gridBagConstraints);
-
-        cbStatus.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        cbStatus.setMaximumRowCount(6);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_status}"), cbStatus, BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(cbStatus, gridBagConstraints);
 
         cbStrasse.setModel(new LoadModelCb());
 
