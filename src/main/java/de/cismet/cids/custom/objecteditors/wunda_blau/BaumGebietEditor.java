@@ -12,10 +12,13 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.localserver.attribute.ObjectAttribute;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -87,6 +90,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumChildLightweightSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
@@ -99,7 +103,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Locale;
 import javax.swing.JList;
 import javax.swing.plaf.basic.ComboPopup;
@@ -141,10 +144,16 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         };   
     public static final String GEOMTYPE = "Point";
     public static boolean azGeneriert = false;
+    Collection<CidsBean> beansMeldung = new ArrayList<>();
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = {
             AdresseLightweightSearch.Subject.HNR.toString()
         };
+    
+    public static final String CHILD_TOSTRING_TEMPLATE = "%s";
+    public static final String[] CHILD_TOSTRING_FIELDS = {"datum"};
+    public static final String CHILD_TABLE = "baum_meldung";
+    public static final String CHILD_FK = "fk_meldung";
     
     private List<CidsBean> noSaveToDeleteBeansMeldung = new ArrayList<>();
 
@@ -159,12 +168,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_gebiet
     public static final String FIELD__MELDUNGEN = "n_meldungen";                // baum_gebiet
     public static final String FIELD__DATUM = "datum";                          // baum_meldung
+    public static final String FIELD__GEBIET = "fk_gebiet";                     // baum_meldung
     public static final String FIELD__STRASSE_NAME = "name";                    // strasse
     public static final String FIELD__STRASSE_KEY = "strassenschluessel";       // strasse
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_gebiet_geombaum_gebiet
     public static final String TABLE_NAME = "baum_gebiet";
     public static final String TABLE_GEOM = "geom";
+    public static final String TABLE_MELDUNG = "baum_meldung";
     public static final String TABLE_ADRESSE = "adresse";
 
     public static final String BUNDLE_NOLOAD = "BaumGebietEditor.loadPictureWithUrl().noLoad";
@@ -181,7 +192,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumGebietEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumGebietEditor.prepareForSave().JOptionPane.title";
-    
+    public static final String BUNDLE_PANE_TITLE_MELDUNG=
+            "BaumGebietEditor.btnRemoveMeldungActionPerformed().JOptionPane.title";
+    public static final String BUNDLE_DEL_MELDUNG =
+        "BaumGebietEditor.btnRemoveMeldungActionPerformed().JOptionPane.message";
     private static final String TITLE_NEW_GEBIET = "ein neues Gebiet (mit Meldung) anlegen...";
     private static Color colorAlarm = new java.awt.Color(255, 0, 0);
     private static Color colorNormal = new java.awt.Color(0, 0, 0);
@@ -209,6 +223,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             AdresseLightweightSearch.Subject.HNR,
             ADRESSE_TOSTRING_TEMPLATE,
             ADRESSE_TOSTRING_FIELDS);
+    
+    private final BaumChildLightweightSearch meldungSearch = new BaumChildLightweightSearch(
+            CHILD_TOSTRING_TEMPLATE,
+            CHILD_TOSTRING_FIELDS,
+            CHILD_TABLE,
+            CHILD_FK);
     
     private Boolean redundantName = false;
 
@@ -1030,24 +1050,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }//GEN-LAST:event_btnMenOkMeldungActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void refreshLabels() {
-    /*    final CidsBean bean = edMeldung.getCidsBean();
-
-        if (bean != null) {
-            lblMeldung.setText("Meldung: " + toString(bean.getProperty("schluessel")) + "  "
-                        + toString(bean.getProperty("name")));
-        } else {
-            lblMeldung.setText("Fläche");
-        }
-        lstMeldungen.repaint();
-
-        if (edMeldung.getCidsBean() != null) {
-            lstMeldungen.setSelectedValue(edMeldung.getCidsBean(), true);
-        }*/
-    }
 
     private String toString(final Object o) {
         if (o == null) {
@@ -1070,18 +1072,26 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         final Object selectedObject = lstMeldungen.getSelectedValue();
 
         if (selectedObject instanceof CidsBean) {
-            //final List<CidsBean> meldungBeans = cidsBean.getBeanCollectionProperty(FIELD__MELDUNGEN);
-
             if (meldungBeans != null) {
-                meldungBeans.remove((CidsBean)selectedObject);
-                //((CustomJListModel)lstMeldungen.getModel()).refresh();
-                //lstMeldungen.getSelectionModel().clearSelection();
+                //Loeschen, nur wenn die Meldung keine Unterobjekte hat
+                if (baumMeldungPanel.getSchadenBeans().isEmpty() && baumMeldungPanel.getOrtsterminBeans().isEmpty()){
+                    meldungBeans.remove((CidsBean)selectedObject);
                 if (meldungBeans != null && meldungBeans.size() > 0) {
                     lstMeldungen.setSelectedIndex(0);
                 }else{
                     lstMeldungen.clearSelection();
                 }
+                } else {
+                    //Meldung, Schaden hat Unterobjekte
+                    JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(this),
+                            NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_DEL_MELDUNG),
+                            NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_MELDUNG),
+                            JOptionPane.WARNING_MESSAGE);
+                }
+                
             }
+     //   }
         }
     }//GEN-LAST:event_btnRemoveMeldungActionPerformed
 
@@ -1138,20 +1148,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
         
     }//GEN-LAST:event_btnCreateAktenzeichenActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  propName  DOCUMENT ME!
-     */
-    /*private void sortListNew(final String propName) {
-        bindingGroup.unbind();
-        final List<CidsBean> changeCol = CidsBeanSupport.getBeanCollectionFromProperty(
-                cidsBean,
-                propName);
-        Collections.sort(changeCol, AlphanumComparator.getInstance());
-        bindingGroup.bind();
-    }*/
 
     
 
@@ -1216,9 +1212,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.error(ex, ex);
             }
         }*/
-      if (!baumMeldungPanel.prepareForSave()){
+     /* if (!baumMeldungPanel.prepareForSave()){
           return false;
-      }
+      }*/
         // name vorhanden
         try {
             if (txtAktenzeichen.getText().trim().isEmpty()) {
@@ -1305,20 +1301,42 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             setMapWindow();
             
             bindingGroup.bind();
-            
-            if (meldungBeans != null && meldungBeans.size() > 0) {
-                lstMeldungen.setSelectedIndex(0);
+            try{
+                meldungSearch.setParentId(this.cidsBean.getPrimaryKeyValue());
+                meldungSearch.setFkField(FIELD__GEBIET);
+                meldungSearch.setTable(TABLE_MELDUNG);
+                final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        meldungSearch,
+                        getConnectionContext());
+                final List<CidsBean> beans = new ArrayList<>();
+                if (!mons.isEmpty()) {
+                    for (final MetaObjectNode mon : mons) {
+                        beans.add(SessionManager.getProxy().getMetaObject(
+                                mon.getObjectId(),
+                                mon.getClassId(),
+                                "WUNDA_BLAU",
+                                getConnectionContext()).getBean());
+                    }
+                }
+
+                if (meldungBeans != null && meldungBeans.size() > 0) {
+                    lstMeldungen.setSelectedIndex(0);
+                }
+                if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
+                    cbHNr.setEnabled(true);
+                    searchStreets();
+                }
+            } catch (final ConnectionException ex) {
+                Exceptions.printStackTrace(ex);
+                LOG.error("Bean not set.", ex);
             }
-            if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
-                cbHNr.setEnabled(true);
-                searchStreets();
-            }
-        } catch (final Exception ex) {
+        } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
-            LOG.error("Bean not set.", ex);
         }
     }
     
+        
     
     /**
      * DOCUMENT ME!
@@ -1346,87 +1364,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public List<CidsBean> getMeldungBeans() {
         return meldungBeans;
     }
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    /*
-    private class CustomJListModel extends AbstractListModel<CidsBean> {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private final String listPropertyName;
-        private final Comparator beanComparator = new Comparator<CidsBean>() {
-
-                @Override
-                public int compare(final CidsBean o1, final CidsBean o2) {
-                    final String o1String = String.valueOf(o1.getProperty("datum"));
-                    final String o2String = String.valueOf(o2.getProperty("datum"));
-
-                    try {
-                        final Integer o1Int = Integer.parseInt(o1String);
-                        final Integer o2Int = Integer.parseInt(o2String);
-
-                        return o1Int.compareTo(o2Int);
-                    } catch (NumberFormatException e) {
-                        // do nothing
-                    }
-
-                    return String.valueOf(o1).compareTo(String.valueOf(o2));
-                }
-            };
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new CustomJListModel object.
-         *
-         * @param  listPropertyName  DOCUMENT ME!
-         *
-        public CustomJListModel(final String listPropertyName) {
-            this.listPropertyName = listPropertyName;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         *
-        private List<CidsBean> getBeanList() {
-            if ((cidsBean != null) && (listPropertyName != null)) {
-                final Object colObj = cidsBean.getProperty(listPropertyName);
-                if (colObj instanceof Collection) {
-                    return (List<CidsBean>)colObj;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-        public void refresh() {
-            fireContentsChanged(this, 0, getBeanList().size() - 1);
-        }
-
-        @Override
-        public int getSize() {
-            return getBeanList().size();
-        }
-
-        @Override
-        public CidsBean getElementAt(final int index) {
-            final List<CidsBean> l = new ArrayList<>();
-            l.addAll(getBeanList());
-
-            Collections.sort(l, beanComparator);
-
-            return l.get(index);
-        }
-    }*/
+    
     /**
      * DOCUMENT ME!
      */
@@ -1611,12 +1549,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
                     @Override
                     protected Collection doInBackground() throws Exception {
- /*
-                        if (cidsBean == null || cidsBean.getProperty(FIELD__STRASSE) == null) {
-                            cbStrasse.setModel(new MustSetModelCb());
-                            return null;
-                        }*/
-
                         return setStrasseCb();
                     }
 
@@ -1629,14 +1561,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                                 final Collection colStreets = check;
                                 cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
                                 List<CidsBean> streetBeans = new ArrayList<>();
-                                /*if (cidsBean.getProperty(FIELD__STRASSE) != null){
-                                    for (final CidsBean cb : colStreets.toArray().){
-                                        if(cb.getProperty(FIELD__STRASSE_KEY).toString().equals(cidsBean.getProperty(FIELD__STRASSE).toString())){
-                                           streetBeans.add(cb);
-                                           break;
-                                        }
-                                    }
-                                }*/
                             }
                         } catch (final InterruptedException | ExecutionException ex) {
                             LOG.fatal(ex, ex);
