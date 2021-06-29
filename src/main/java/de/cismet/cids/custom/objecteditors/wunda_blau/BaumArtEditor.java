@@ -12,9 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -56,10 +58,12 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -75,6 +79,9 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BaumArtEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String REDUNDANT_TABLE = "baum_art";
 
     public static final String FIELD__SCHLUESSEL = "schluessel";            // baum_art
     public static final String FIELD__NAME = "name";                        // baum_art
@@ -113,10 +120,14 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     private SwingWorker worker_name;
 
     private Boolean redundantName = false;
-    private Boolean redundantKey = false;
     private static String TITLE_NEW_ART = "eine neue Baumart anlegen..."; 
 
     private boolean isEditor = true;
+    private final RedundantObjectSearch artSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableReferenceCombo cbHauptart;
@@ -385,7 +396,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
                 LOG.warn("No Hauptart specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumArtEditor.class, BUNDLE_NOMAIN));
             } 
-        } catch (final Exception ex) {
+        } catch (final MissingResourceException ex) {
             LOG.warn("Hauptart not given.", ex);
             save = false;
         }
@@ -443,39 +454,25 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
      *
      * @param  field  DOCUMENT ME!
      */
-    private void checkNameMain(final String field_name, final String field_main, final String field_main_id) {
-        if (cidsBean.getProperty(field_main_id)!= null){
-         
-            // Worker Aufruf, ob das Objekt schon existiert
-            valueFromOtherTable(
-                TABLE_NAME,
-                " where "
-                        + field_name
-                        + " ilike '"
-                        + txtName.getText().trim()
-                        + "' and "
-                        + field_main
-                        + " = "
-                        + cidsBean.getProperty(field_main_id).toString()
-                        + " and "
-                        + FIELD__ID
-                        + " <> "
-                        + cidsBean.getProperty(FIELD__ID));   
+    private void checkNameMain(final String field_name, final String field_main) {
+        Object selection = cbHauptart.getSelectedItem();
+        if (selection!= null && selection instanceof CidsBean){
+            Integer mainId = ((CidsBean)selection).getPrimaryKeyValue();
+         // Worker Aufruf, ob das Objekt schon existiert
+            final Collection<String> conditions = new ArrayList<>();
+            conditions.add(field_name + " ilike '" + txtName.getText().trim() + "'");
+            conditions.add(field_main + " = " + mainId);
+            conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+            valueFromOtherTable(conditions); 
         }
     }
     
     private void checkName(final String field_name) {
         // Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(
-            TABLE_NAME,
-            " where "
-                    + field_name
-                    + " ilike '"
-                    + txtName.getText().trim()
-                    + "' and "
-                    + FIELD__ID
-                    + " <> "
-                    + cidsBean.getProperty(FIELD__ID)); 
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(field_name + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        valueFromOtherTable(conditions); 
     }
 
     /**
@@ -483,7 +480,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
      */
     private void checkAttributes() {  
          if (txtName.getText().equals("nicht genauer spezifiziert")){
-            checkNameMain(FIELD__NAME, FIELD__MAIN, FIELD__MAIN_ID);
+            checkNameMain(FIELD__NAME, FIELD__MAIN);
         } else {
             checkName(FIELD__NAME);
          }
@@ -491,7 +488,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     
     private void checkAttributesMain() { 
         if (txtName.getText().equals("nicht genauer spezifiziert")){
-            checkNameMain(FIELD__NAME, FIELD__MAIN, FIELD__MAIN_ID);
+            checkNameMain(FIELD__NAME, FIELD__MAIN);
         }
     }
 
@@ -526,65 +523,38 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     /**
      * DOCUMENT ME!
      *
-     * @param  tableName    DOCUMENT ME!
-     * @param  whereClause  DOCUMENT ME!
-     * @param  fall         DOCUMENT ME!
+     * @param  where        DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause) {
-        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
+    private void valueFromOtherTable(final Collection<String> where) {
+        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
 
                 @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
+                protected Collection doInBackground() throws Exception {
+                    artSearch.setWhere(where);
+                    artSearch.setTable(REDUNDANT_TABLE);
+                    return SessionManager.getProxy().customServerSearch(
+                            SessionManager.getSession().getUser(),
+                            artSearch,
+                            getConnectionContext());
                 }
 
                 @Override
                 protected void done() {
-                    final CidsBean check;
+                    final Collection<MetaObjectNode> check;
                     try {
                         if (!isCancelled()) {
                             check = get();
-                            if (check != null) {
-                                //switch (fall) {
-                                 //   case REDUNDANT_ATT_KEY: {  // check redundant key
-                                  //      redundantKey = true;
-                                  //      break;
-                                  //  }
-                                  //  case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = true;
-                                  //      break;
-                                   // }
-                                //}
-                            } else {
-                              //  switch (fall) {
-                                //    case REDUNDANT_ATT_KEY: {  // check redundant key
-                                 //       redundantKey = false;
-                                 //       break;
-                                //    }
-                                //    case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = false;
-                                    //    break;
-                                  //  }
-                                }
+                            redundantName = !check.isEmpty();
                             }
-                        //}
                     } catch (InterruptedException | ExecutionException e) {
                         LOG.warn("problem in Worker: load values.", e);
                     }
                 }
             };
-    //    if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)) {
             if (worker_name != null) {
                 worker_name.cancel(true);
             }
             worker_name = worker;
             worker_name.execute();
-     //   } else {
-     //       if (worker_key != null) {
-      //          worker_key.cancel(true);
-      //      }
-      //      worker_key = worker;
-      //      worker_key.execute();
-      //  }
     }
 }

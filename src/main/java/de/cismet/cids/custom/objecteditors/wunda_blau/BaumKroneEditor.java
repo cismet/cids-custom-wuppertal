@@ -12,9 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -44,6 +46,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -58,8 +61,9 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.util.ArrayList;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import java.util.Collection;
 import java.util.MissingResourceException;
 
 /**
@@ -77,6 +81,9 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BaumKroneEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String REDUNDANT_TABLE = "baum_krone";
 
     public static final String TABLE_NAME = "baum_krone";
     public static final String FIELD__NAME = "name";
@@ -103,7 +110,11 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
-
+    private final RedundantObjectSearch kroneSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
@@ -408,16 +419,10 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
      */
     private void checkName(final String field) {
         // Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(
-            TABLE_NAME,
-            " where "
-                    + field
-                    + " ilike '"
-                    + txtName.getText().trim()
-                    + "' and "
-                    + FIELD__ID
-                    + " <> "
-                    + cidsBean.getProperty(FIELD__ID));
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(field + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        valueFromOtherTable(conditions);
     }
 
     /**
@@ -430,26 +435,29 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     /**
      * DOCUMENT ME!
      *
-     * @param  tableName    DOCUMENT ME!
-     * @param  whereClause  DOCUMENT ME!
+     * @param  where        DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause) {
-        final SwingWorker<CidsBean, Void> worker;
-        worker = new SwingWorker<CidsBean, Void>() {
+    private void valueFromOtherTable(final Collection<String> where) {
+        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
             
             @Override
-            protected CidsBean doInBackground() throws Exception {
-                return getOtherTableValue(tableName, whereClause, getConnectionContext());
+            protected Collection<MetaObjectNode> doInBackground() throws Exception {
+                kroneSearch.setWhere(where);
+                kroneSearch.setTable(REDUNDANT_TABLE);
+                return SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        kroneSearch,
+                        getConnectionContext());
             }
             
             @Override
             protected void done() {
-                final CidsBean check;
+                final Collection<MetaObjectNode> check;
                 try {
                     if (!isCancelled()) {
                         check = get();
-                        redundantName = check != null;
+                        redundantName = !check.isEmpty();
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     LOG.warn("problem in Worker: load values.", e);

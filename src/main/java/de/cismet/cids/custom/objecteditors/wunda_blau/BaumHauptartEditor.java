@@ -12,9 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -56,7 +58,9 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * DOCUMENT ME!
@@ -72,6 +76,9 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BaumHauptartEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String REDUNDANT_TABLE = "baum_hauptart";
 
     public static final String FIELD__SCHLUESSEL = "schluessel";            // baum_hauptart
     public static final String FIELD__NAME = "name";                        // baum_hauptart
@@ -112,6 +119,11 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     private static String TITLE_NEW_HAUPTART = "eine neue Hauptart anlegen..."; 
 
     private boolean isEditor = true;
+    private final RedundantObjectSearch hauptartSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
@@ -392,17 +404,10 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
      */
     private void checkName(final String field, final OtherTableCases fall) {
         // Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(
-            TABLE_NAME,
-            " where "
-                    + field
-                    + " ilike '"
-                    + txtName.getText().trim()
-                    + "' and "
-                    + FIELD__ID
-                    + " <> "
-                    + cidsBean.getProperty(FIELD__ID),
-            fall);
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(field + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        valueFromOtherTable(conditions, fall);
     }
 
     /**
@@ -444,45 +449,36 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     /**
      * DOCUMENT ME!
      *
-     * @param  tableName    DOCUMENT ME!
-     * @param  whereClause  DOCUMENT ME!
+     * @param  where        DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause, final OtherTableCases fall) {
-        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
-
+    private void valueFromOtherTable(final Collection<String> where, final OtherTableCases fall) {
+        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
+            
                 @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
-                }
+                protected Collection<MetaObjectNode> doInBackground() throws Exception {
+                    hauptartSearch.setWhere(where);
+                    hauptartSearch.setTable(REDUNDANT_TABLE);
+                    return SessionManager.getProxy().customServerSearch(
+                            SessionManager.getSession().getUser(),
+                            hauptartSearch,
+                            getConnectionContext());
+                } 
 
                 @Override
                 protected void done() {
-                    final CidsBean check;
+                    final Collection<MetaObjectNode> check;
                     try {
                         if (!isCancelled()) {
                             check = get();
-                            if (check != null) {
-                                switch (fall) {
-                                    case REDUNDANT_ATT_KEY: {  // check redundant key
-                                        redundantKey = true;
-                                        break;
-                                    }
-                                    case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = true;
-                                        break;
-                                    }
+                            switch (fall) {
+                                case REDUNDANT_ATT_KEY: {  // check redundant key
+                                    redundantKey = !check.isEmpty();
+                                    break;
                                 }
-                            } else {
-                                switch (fall) {
-                                    case REDUNDANT_ATT_KEY: {  // check redundant key
-                                        redundantKey = false;
-                                        break;
-                                    }
-                                    case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = false;
-                                        break;
-                                    }
+                                case REDUNDANT_ATT_NAME: { // check redundant name
+                                    redundantName = !check.isEmpty();
+                                    break;
                                 }
                             }
                         }

@@ -12,9 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -59,7 +61,9 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.MissingResourceException;
 
 /**
@@ -77,6 +81,9 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BaumMassnahmeEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String REDUNDANT_TABLE = "baum_massnahme";
 
     public static final String TABLE_NAME = "baum_massnahme";
     public static final String FIELD__NAME = "name";
@@ -103,7 +110,11 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
-
+    private final RedundantObjectSearch massSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Box.Filler filler3;
@@ -418,16 +429,10 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
      */
     private void checkName(final String field) {
         // Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(
-            TABLE_NAME,
-            " where "
-                    + field
-                    + " ilike '"
-                    + txtName.getText().trim()
-                    + "' and "
-                    + FIELD__ID
-                    + " <> "
-                    + cidsBean.getProperty(FIELD__ID));
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(field + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        valueFromOtherTable(conditions);
     }
 
     /**
@@ -440,26 +445,29 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     /**
      * DOCUMENT ME!
      *
-     * @param  tableName    DOCUMENT ME!
-     * @param  whereClause  DOCUMENT ME!
+     * @param  where  DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause) {
-        final SwingWorker<CidsBean, Void> worker;
-        worker = new SwingWorker<CidsBean, Void>() {
+    private void valueFromOtherTable(final Collection<String> where) {
+        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
             
             @Override
-            protected CidsBean doInBackground() throws Exception {
-                return getOtherTableValue(tableName, whereClause, getConnectionContext());
+            protected Collection<MetaObjectNode> doInBackground() throws Exception {
+                massSearch.setWhere(where);
+                massSearch.setTable(REDUNDANT_TABLE);
+                return SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        massSearch,
+                        getConnectionContext());
             }
             
             @Override
             protected void done() {
-                final CidsBean check;
+                final Collection<MetaObjectNode> check;
                 try {
                     if (!isCancelled()) {
                         check = get();
-                        redundantName = check != null;
+                        redundantName = !check.isEmpty();
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     LOG.warn("problem in Worker: load values.", e);

@@ -12,9 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -56,9 +58,11 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.MissingResourceException;
 
 /**
@@ -75,6 +79,9 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BaumSorteEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String REDUNDANT_TABLE = "baum_sorte";
  
     public static final String FIELD__NAME = "name";                            // baum_sorte
     public static final String FIELD__MAIN = "fk_art";                          // baum_sorte
@@ -104,6 +111,11 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     private static String TITLE_NEW_SORTE = "eine neue Sorte anlegen..."; 
 
     private boolean isEditor = true;
+    private final RedundantObjectSearch sorteSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableReferenceCombo cbArt;
@@ -426,32 +438,21 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
      *
      * @param  field  DOCUMENT ME!
      */
-    private void checkNameMain(final String field_name, final String field_main, final String field_main_id) {
-        if (cidsBean.getProperty(field_main_id)!= null){
-         
-            // Worker Aufruf, ob das Objekt schon existiert
-            valueFromOtherTable(
-                TABLE_NAME,
-                " where "
-                        + field_name
-                        + " ilike '"
-                        + txtName.getText().trim()
-                        + "' and "
-                        + field_main
-                        + " = "
-                        + cidsBean.getProperty(field_main_id).toString()
-                        + " and "
-                        + FIELD__ID
-                        + " <> "
-                        + cidsBean.getProperty(FIELD__ID));   
+    private void checkNameMain(final String field_name, final String field_main) {
+        Object selection = cbArt.getSelectedItem();
+        if (selection!= null && selection instanceof CidsBean){
+            Integer mainId = ((CidsBean)selection).getPrimaryKeyValue();
+         // Worker Aufruf, ob das Objekt schon existiert
+            final Collection<String> conditions = new ArrayList<>();
+            conditions.add(field_name + " ilike '" + txtName.getText().trim() + "'");
+            conditions.add(field_main + " = " + mainId);
+            conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+            valueFromOtherTable(conditions); 
         }
     }
     
-
-   
-    
     private void checkAttributesMain() { 
-        checkNameMain(FIELD__NAME, FIELD__MAIN, FIELD__MAIN_ID);
+        checkNameMain(FIELD__NAME, FIELD__MAIN);
     }
 
     @Override
@@ -485,26 +486,29 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     /**
      * DOCUMENT ME!
      *
-     * @param  tableName    DOCUMENT ME!
-     * @param  whereClause  DOCUMENT ME!
-     * @param  fall         DOCUMENT ME!
+     * @param  where  DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause) {
-        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
-
-                @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    final CidsBean check;
-                    try {
-                        if (!isCancelled()) {
-                            check = get();
-                            redundantName = check != null; 
-                        }
+    private void valueFromOtherTable(final Collection<String> where) {
+        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
+            
+            @Override
+            protected Collection<MetaObjectNode> doInBackground() throws Exception {
+                sorteSearch.setWhere(where);
+                sorteSearch.setTable(REDUNDANT_TABLE);
+                return SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        sorteSearch,
+                        getConnectionContext());
+            }
+            
+            @Override
+            protected void done() {
+                final Collection<MetaObjectNode> check;
+                try {
+                    if (!isCancelled()) {
+                        check = get();
+                        redundantName = !check.isEmpty();
+                    }
                     } catch (InterruptedException | ExecutionException e) {
                         LOG.warn("problem in Worker: load values.", e);
                     }

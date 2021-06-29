@@ -12,9 +12,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -28,7 +30,6 @@ import org.jdesktop.beansbinding.ELProperty;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -41,8 +42,6 @@ import java.awt.event.FocusEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import java.net.URL;
 
 import java.text.DecimalFormat;
 
@@ -70,26 +69,15 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
-import de.cismet.security.WebAccessManager;
-
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 import de.cismet.cids.custom.objecteditors.wunda_blau.BaumAnsprechpartnerEditor.TelefonCellEditor;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import java.awt.Component;
-import java.awt.event.MouseEvent;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.EventObject;
-import java.util.Locale;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
+import java.util.ArrayList;
+import java.util.Collection;
 import org.jdesktop.swingx.JXTable;
 
 /**
@@ -107,6 +95,9 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BaumAnsprechpartnerEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String REDUNDANT_TABLE = "baum_ansprechpartner";
 
     public static final String TABLE_NAME = "baum_ansprechpartner";
     public static final String FIELD__NAME = "name";
@@ -158,7 +149,6 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
     private SwingWorker worker_key;
     private SwingWorker worker_name;
-    private SwingWorker worker_url;
 
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
@@ -175,6 +165,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     private final RegexPatternFormatter telPatternFormatter = new RegexPatternFormatter(
             TEL_FILLING_PATTERN,
             TEL_MATCHING_PATTERN);
+    
+    private final RedundantObjectSearch apSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnAddTelefon;
@@ -799,17 +795,10 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
      */
     private void checkName(final String field, final OtherTableCases fall) {
         // Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(
-            TABLE_NAME,
-            " where "
-                    + field
-                    + " ilike '"
-                    + txtName.getText().trim()
-                    + "' and "
-                    + FIELD__ID
-                    + " <> "
-                    + cidsBean.getProperty(FIELD__ID),
-            fall);
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(field + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        valueFromOtherTable(conditions, fall);
     }
 
     /**
@@ -819,91 +808,40 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         checkName(FIELD__NAME, OtherTableCases.REDUNDANT_ATT_NAME);
         checkName(FIELD__SCHLUESSEL, OtherTableCases.REDUNDANT_ATT_KEY);
     }
+    
     /**
      * DOCUMENT ME!
      *
-     * @param  url        DOCUMENT ME!
-     * @param  showLabel  DOCUMENT ME!
-     */
-    private void checkUrl(final String url, final JLabel showLabel) {
-        showLabel.setIcon(statusFalsch);
-        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-
-                @Override
-                protected Boolean doInBackground() throws Exception {
-                    return WebAccessManager.getInstance().checkIfURLaccessible(new URL(url));
-                }
-
-                @Override
-                protected void done() {
-                    final Boolean check;
-                    try {
-                        if (!isCancelled()) {
-                            check = get();
-                            if (check) {
-                                showLabel.setIcon(statusOk);
-                                showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                            } else {
-                                showLabel.setIcon(statusFalsch);
-                                showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                            }
-                        }
-                    } catch (InterruptedException | ExecutionException e) {
-                        showLabel.setIcon(statusFalsch);
-                        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                        LOG.warn("URL Check Problem in Worker.", e);
-                    }
-                }
-            };
-        if (worker_url != null) {
-            worker_url.cancel(true);
-        }
-        worker_url = worker;
-        worker_url.execute();
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  tableName    DOCUMENT ME!
-     * @param  whereClause  DOCUMENT ME!
+     * @param  where        DOCUMENT ME!
      * @param  fall         DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName, final String whereClause, final OtherTableCases fall) {
-        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
-
+    private void valueFromOtherTable(final Collection<String> where, final OtherTableCases fall) {
+        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
+            
                 @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
-                }
+                protected Collection<MetaObjectNode> doInBackground() throws Exception {
+                    apSearch.setWhere(where);
+                    apSearch.setTable(REDUNDANT_TABLE);
+                    return SessionManager.getProxy().customServerSearch(
+                            SessionManager.getSession().getUser(),
+                            apSearch,
+                            getConnectionContext());
+                } 
 
                 @Override
                 protected void done() {
-                    final CidsBean check;
+                    final Collection<MetaObjectNode> check;
                     try {
                         if (!isCancelled()) {
                             check = get();
-                            if (check != null) {
-                                switch (fall) {
-                                    case REDUNDANT_ATT_KEY: {  // check redundant key
-                                        redundantKey = true;
-                                        break;
-                                    }
-                                    case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = true;
-                                        break;
-                                    }
+                            switch (fall) {
+                                case REDUNDANT_ATT_KEY: {  // check redundant key
+                                    redundantKey = !check.isEmpty();
+                                    break;
                                 }
-                            } else {
-                                switch (fall) {
-                                    case REDUNDANT_ATT_KEY: {  // check redundant key
-                                        redundantKey = false;
-                                        break;
-                                    }
-                                    case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = false;
-                                        break;
-                                    }
+                                case REDUNDANT_ATT_NAME: { // check redundant name
+                                    redundantName = !check.isEmpty();
+                                    break;
                                 }
                             }
                         }

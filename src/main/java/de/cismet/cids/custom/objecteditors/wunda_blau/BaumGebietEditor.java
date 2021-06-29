@@ -88,9 +88,9 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumChildLightweightSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
@@ -158,6 +158,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private List<CidsBean> noSaveToDeleteBeansMeldung = new ArrayList<>();
 
     private static final Logger LOG = Logger.getLogger(BaumGebietEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String REDUNDANT_TABLE = "baum_gebiet";
 
     public static final String FIELD__NAME = "name";                            // baum_gebiet
     public static final String FIELD__AZ = "aktenzeichen";                      // baum_gebiet
@@ -179,8 +182,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_ADRESSE = "adresse";
 
     public static final String BUNDLE_NOLOAD = "BaumGebietEditor.loadPictureWithUrl().noLoad";
-    public static final String BUNDLE_NONAME = "BaumGebietEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumGebietEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_NOAZ = "BaumGebietEditor.prepareForSave().noAz";
+    public static final String BUNDLE_DUPLICATEAZ = "BaumGebietEditor.prepareForSave().duplicateAz";
     public static final String BUNDLE_NOSTREET = "BaumGebietEditor.prepareForSave().noStrasse";
     public static final String BUNDLE_NOGEOM = "BaumGebietEditor.prepareForSave().noGeom";
     public static final String BUNDLE_WRONGGEOM = "BaumGebietEditor.prepareForSave().wrongGeom";
@@ -206,17 +209,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @version  $Revision$, $Date$
      */
-    private static enum OtherTableCases {
-
-        //~ Enum constants -----------------------------------------------------
-
-        SET_VALUE, REDUNDANT_ATT_NAME
-    }
+//~ Enum constants -----------------------------------------------------
+    
 
     //~ Instance fields --------------------------------------------------------
     private List<CidsBean> meldungBeans;
     private SwingWorker worker_name;
-    private SwingWorker worker_versatz;
     
     
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
@@ -246,6 +244,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             String.class,
             Integer.class
         };
+    
+    private final RedundantObjectSearch gebietSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumMeldungPanel baumMeldungPanel;
@@ -1156,17 +1160,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void checkName() {
         // Worker Aufruf, ob das Objekt schon existiert
-        valueFromOtherTable(TABLE_NAME,
-            " where "
-                    + FIELD__AZ
-                    + " ilike '"
-                    + txtAktenzeichen.getText().trim()
-                    + "' and "
-                    + FIELD__ID
-                    + " <> "
-                    + cidsBean.getProperty(FIELD__ID),
-            FIELD__NAME,
-            OtherTableCases.REDUNDANT_ATT_NAME);
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(FIELD__AZ + " ilike '" + txtAktenzeichen.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        valueFromOtherTable(conditions);
     }
 
     private void refreshHnr() { 
@@ -1219,11 +1216,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             if (txtAktenzeichen.getText().trim().isEmpty()) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOAZ));
             } else {
                 if (redundantName) {
                     LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATENAME));
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATEAZ));
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -1475,72 +1472,39 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     /**
      * DOCUMENT ME!
      *
-     * @param  tableName     DOCUMENT ME!
-     * @param  whereClause   DOCUMENT ME!
-     * @param  propertyName  DOCUMENT ME!
-     * @param  fall          DOCUMENT ME!
+     * @param  where         DOCUMENT ME!
      */
-    private void valueFromOtherTable(final String tableName,
-            final String whereClause,
-            final String propertyName,
-            final OtherTableCases fall) {
-        final SwingWorker<CidsBean, Void> worker = new SwingWorker<CidsBean, Void>() {
-
-                @Override
-                protected CidsBean doInBackground() throws Exception {
-                    return getOtherTableValue(tableName, whereClause, getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    final CidsBean check;
-                    try {
-                        if (!isCancelled()) {
-                            check = get();
-                            if (check != null) {
-                                switch (fall) {
-                                    case SET_VALUE: {          // set default value
-                                        try {
-                                            cidsBean.setProperty(
-                                                propertyName,
-                                                check);
-                                        } catch (Exception ex) {
-                                            LOG.warn("setVersatz: Versatz not set.", ex);
-                                        }
-                                        break;
-                                    }
-                                    case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = true;
-                                        break;
-                                    }
-                                }
-                            } else {
-                                switch (fall) {
-                                    case REDUNDANT_ATT_NAME: { // check redundant name
-                                        redundantName = false;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+    private void valueFromOtherTable(final Collection<String> where) {
+        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
+            
+            @Override
+            protected Collection<MetaObjectNode> doInBackground() throws Exception {
+                gebietSearch.setWhere(where);
+                gebietSearch.setTable(REDUNDANT_TABLE);
+                return SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        gebietSearch,
+                        getConnectionContext());
+            }
+            
+            @Override
+            protected void done() {
+                final Collection<MetaObjectNode> check;
+                try {
+                    if (!isCancelled()) {
+                        check = get();
+                        redundantName = !check.isEmpty();
+                    }
                     } catch (InterruptedException | ExecutionException e) {
                         LOG.warn("problem in Worker: load values.", e);
                     }
                 }
             };
-        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)) {
-            if (worker_name != null) {
-                worker_name.cancel(true);
-            }
-            worker_name = worker;
-            worker_name.execute();
-        } else {
-            if (worker_versatz != null) {
-                worker_versatz.cancel(true);
-            }
-            worker_versatz = worker;
-            worker_versatz.execute();
+        if (worker_name != null) {
+            worker_name.cancel(true);
         }
+        worker_name = worker;
+        worker_name.execute();
     }
     
     private void searchStreets() {

@@ -12,10 +12,8 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
@@ -28,9 +26,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -41,23 +37,13 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
-
-
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumSchadenLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -77,40 +63,23 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 
 import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
-import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.util.List;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.logging.Level;
-import javax.swing.JList;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingbinding.JListBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXTable;
 /**
  * DOCUMENT ME!
