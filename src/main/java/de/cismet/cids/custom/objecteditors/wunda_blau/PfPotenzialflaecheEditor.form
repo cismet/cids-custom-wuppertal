@@ -1600,6 +1600,9 @@
                                   <BindingProperties>
                                     <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_siedlungsraeumliche_lage}" target="cbLagetyp2" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                                   </BindingProperties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbLagetyp2ActionPerformed"/>
+                                  </Events>
                                   <AuxValues>
                                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION)"/>
                                     <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>

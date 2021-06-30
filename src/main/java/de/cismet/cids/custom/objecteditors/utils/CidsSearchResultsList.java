@@ -56,6 +56,13 @@ public class CidsSearchResultsList<O> extends JList<O> implements ConnectionCont
             }
         };
 
+    private static final ListModel MODEL_EMPTY = new DefaultListModel() {
+
+            {
+                add(0, "keine");
+            }
+        };
+
     //~ Instance fields --------------------------------------------------------
 
     @Getter ConnectionContext connectionContext = ConnectionContext.createDummy();
@@ -105,11 +112,15 @@ public class CidsSearchResultsList<O> extends JList<O> implements ConnectionCont
                         try {
                             final Collection<O> results = get();
                             if (results != null) {
-                                final DefaultListModel<O> model = new DefaultListModel<>();
-                                for (final O result : results) {
-                                    model.addElement(result);
+                                if (results.isEmpty()) {
+                                    setModel(MODEL_EMPTY);
+                                } else {
+                                    final DefaultListModel<O> model = new DefaultListModel<>();
+                                    for (final O result : results) {
+                                        model.addElement(result);
+                                    }
+                                    setModel(model);
                                 }
-                                setModel(model);
                             }
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
