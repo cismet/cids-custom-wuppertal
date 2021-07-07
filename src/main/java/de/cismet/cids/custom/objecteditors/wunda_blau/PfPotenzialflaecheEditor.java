@@ -43,6 +43,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -76,6 +77,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisLandparcelAggregationRenderer;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.GeometrySearch;
 import de.cismet.cids.custom.wunda_blau.search.server.KstGeometryMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.PfPotenzialflaecheNextSchluesselServerSearch;
@@ -217,6 +219,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private final List<String> usedProperties = new ArrayList();
 
     private final List<CidsBean> schluesseltabellenBeans = new ArrayList<>();
+
+    private final ComponentListener dialogComponentListener = new ComponentAdapter() {
+
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                if (dlgFlaeche.equals(e.getSource())) {
+                    dlgFlaeche.doLayout();
+                    taFlaecheDialog.setSize(dlgFlaeche.getWidth() - 5, taFlaecheDialog.getHeight());
+                } else if (dlgMassnahme.equals(e.getSource())) {
+                    dlgMassnahme.doLayout();
+                    taMassnahmeDialog.setSize(
+                        dlgMassnahme.getWidth()
+                                - 5,
+                        taMassnahmeDialog.getHeight());
+                }
+            }
+        };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlaeche;
@@ -666,26 +685,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panTitle.init();
         panFooter.init();
 
-        dlgFlaeche.addComponentListener(new ComponentAdapter() {
-
-                @Override
-                public void componentResized(final ComponentEvent e) {
-                    dlgFlaeche.doLayout();
-                    taFlaecheDialog.setSize(dlgFlaeche.getWidth() - 5, taFlaecheDialog.getHeight());
-                }
-            });
-
-        dlgMassnahme.addComponentListener(new ComponentAdapter() {
-
-                @Override
-                public void componentResized(final ComponentEvent e) {
-                    dlgMassnahme.doLayout();
-                    taMassnahmeDialog.setSize(
-                        dlgMassnahme.getWidth()
-                                - 5,
-                        taMassnahmeDialog.getHeight());
-                }
-            });
+        dlgFlaeche.addComponentListener(dialogComponentListener);
+        dlgMassnahme.addComponentListener(dialogComponentListener);
 
         if (!isEditable()) {
             RendererTools.makeReadOnly(bindingGroup, "cidsBean");
@@ -2371,7 +2372,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panMessstellenausbauBody.add(filler30, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblFlaechennutzung3, "Festsetzungen:");
+        org.openide.awt.Mnemonics.setLocalizedText(lblFlaechennutzung3, "B-Plan-Informationen:");
         lblFlaechennutzung3.setName(PREFIX_LABEL
                     + PotenzialflaecheReportServerAction.Property.FESTSETZUNGEN_BPLAN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -4451,10 +4452,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
         panTitle.refreshTitle();
 
-        bindingGroup.unbind();
         if (cidsBean != null) {
             if (isEditable() && (MetaObject.NEW == cidsBean.getMetaObject().getStatus())
                         && (cidsBean.getProperty("erzeugt_aus") == null)) {
@@ -4567,26 +4568,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                     });
             }
         }
-
-        lblBeschreibungTitle3.addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final MouseEvent evt) {
-                    showOrHidePopup(
-                        (JComponent)evt.getSource(),
-                        "<h3>Inhalte und Reihenfolge für den Beschreibungstext</h3>"
-                                + "<ol>"
-                                + "<li>Historie / Geschichte der Fläche / Hintergrundwissen</li>"
-                                + "<li>Lage (Verkehr/Infrastrukturausstattung)</li>"
-                                + "<li>Eigentümer/innen</li>"
-                                + "<li>Anlass / Planungsziel</li>"
-                                + "<li>Planungsstand</li>"
-                                + "<li>Sachstand</li>"
-                                + "<li>Hinweise Altlasten</li>"
-                                + "<li>Hinweise Klima</li>"
-                                + "</ol>");
-                }
-            });
     }
 
     /**
@@ -4902,7 +4883,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             final double m2 = Math.round(area * 100) / 100.0;
             final double ha = Math.round(area / 1000) / 10.0;
             lblFlaechengroesseWert.setText(String.format(
-                    "%.2f m² (circa %.1f ha)",
+                    "%,.2f m² (circa %,.1f ha)",
                     m2,
                     ha));
         }
@@ -4914,6 +4895,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         }
         mappingComponent1.dispose();
+        dlgFlaeche.dispose();
+        dlgMassnahme.dispose();
+        panDialog.dispose();
+        dlgInterneHinweise.dispose();
+        setCidsBean(null);
     }
 
     @Override
@@ -5022,7 +5008,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
             ((GeometrySearch)monSearchResultsList2.getSearch()).setBuffer(-2d);
             monSearchResultsList2.refresh();
             ((GeometrySearch)monSearchResultsList3.getSearch()).setGeometry(geometry);
-            ((GeometrySearch)monSearchResultsList3.getSearch()).setBuffer(-2d);
+            ((GeometrySearch)monSearchResultsList3.getSearch()).setBuffer(-3d); // per mail so gewünscht
             monSearchResultsList3.refresh();
         } else {
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
