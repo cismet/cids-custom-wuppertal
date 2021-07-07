@@ -2019,7 +2019,7 @@
                                 </Component>
                                 <Component class="javax.swing.JLabel" name="lblFlaechennutzung3">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="Festsetzungen:"/>
+                                    <Property name="text" type="java.lang.String" value="B-Plan-Informationen:"/>
                                     <Property name="name" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.FESTSETZUNGEN_BPLAN.name()" type="code"/>
                                     </Property>
