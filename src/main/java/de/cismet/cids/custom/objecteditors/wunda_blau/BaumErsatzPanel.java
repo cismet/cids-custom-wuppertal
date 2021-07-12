@@ -556,6 +556,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         cbStrasse.setName("cbStrasse"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         cbStrasse.addActionListener(formListener);
@@ -584,6 +586,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         cbHNr.setName("cbHNr"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1116,7 +1120,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                     }
                 }
                 initComboboxHnr();
-                if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
+                if(this.cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
                     cbHNr.setEnabled(true);
                     searchStreets();
                 }

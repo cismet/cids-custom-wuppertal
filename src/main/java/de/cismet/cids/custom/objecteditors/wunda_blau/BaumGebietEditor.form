@@ -79,6 +79,49 @@
     </Container>
     <Component class="de.cismet.cids.editors.converters.SqlDateToUtilDateConverter" name="sqlDateToUtilDateConverter">
     </Component>
+    <Container class="javax.swing.JPanel" name="panTitle">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblTitle">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="DejaVu Sans" size="18" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+              <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="0.0"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnReport">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/de/cismet/cids/custom/icons/printer.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="PDF-Bericht zum aktuell betrachteten Gebiet erstellen"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="contentAreaFilled" type="boolean" value="false"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+              <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="13" weightX="0.0" weightY="0.0"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+      </SubComponents>
+    </Container>
   </NonVisualComponents>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -595,7 +638,7 @@
                                     <BindingProperty name="cidsBean" source="lstMeldungen" sourcePath="${selectedElement}" target="baumMeldungPanel" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
                                   </BindingProperties>
                                   <AuxValues>
-                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumMeldungPanel = new BaumMeldungPanel(this, true, this.getConnectionContext());"/>
+                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumMeldungPanel = new BaumMeldungPanel(this, isEditor, this.getConnectionContext());"/>
                                   </AuxValues>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

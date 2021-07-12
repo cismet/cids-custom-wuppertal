@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.localserver.attribute.ObjectAttribute;
 
 import Sirius.server.middleware.types.MetaClass;
@@ -23,6 +22,7 @@ import Sirius.server.middleware.types.MetaObjectNode;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 
 import org.apache.log4j.Logger;
 
@@ -95,6 +95,7 @@ import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Component;
 import java.text.Collator;
@@ -117,6 +118,7 @@ import org.jdesktop.swingbinding.SwingBindings;
 public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
     BindingGroupStore,
+    TitleComponentProvider,
     PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -199,6 +201,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             "BaumGebietEditor.btnRemoveMeldungActionPerformed().JOptionPane.title";
     public static final String BUNDLE_DEL_MELDUNG =
         "BaumGebietEditor.btnRemoveMeldungActionPerformed().JOptionPane.message";
+    public static final String BUNDLE_LOAD_ERROR =
+    "BaumGebietEditor.loadChildren().error";
     private static final String TITLE_NEW_GEBIET = "ein neues Gebiet (mit Meldung) anlegen...";
     private static Color colorAlarm = new java.awt.Color(255, 0, 0);
     private static Color colorNormal = new java.awt.Color(0, 0, 0);
@@ -216,7 +220,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private List<CidsBean> meldungBeans;
     private SwingWorker worker_name;
     
-    
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
             AdresseLightweightSearch.Subject.HNR,
             ADRESSE_TOSTRING_TEMPLATE,
@@ -231,6 +234,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
+    private boolean areChildrenLoad = false;
     
     private static final ComboBoxModel MUST_SET_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten bitte zuweisen......"});
     private static final ComboBoxModel LOAD_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten werden geladen......"});
@@ -251,6 +255,17 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             null,
             REDUNDANT_TABLE);
 
+    private static final ListModel MODEL_ERROR = new DefaultListModel() {
+            {
+                add(0, "[Fehler beim Laden]");
+            }
+        };
+    private static final ListModel MODEL_LOAD = new DefaultListModel() {
+
+            {
+                add(0, "Wird geladen...");
+            }
+        };
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumMeldungPanel baumMeldungPanel;
     private JButton btnAddNewMeldung;
@@ -258,6 +273,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JButton btnMenAbortMeldung;
     private JButton btnMenOkMeldung;
     private JButton btnRemoveMeldung;
+    private JButton btnReport;
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbStrasse;
@@ -275,6 +291,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblKarte;
     private JLabel lblName;
     private JLabel lblStrasse;
+    private JLabel lblTitle;
     private JList lstMeldungen;
     private JPanel panAddMeldung;
     private JPanel panBemerkung;
@@ -290,6 +307,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panMeldungenMain;
     private JPanel panMenButtonsMeldung;
     private DefaultPreviewMapPanel panPreviewMap;
+    private JPanel panTitle;
     private JPanel panZusatz;
     private JPanel pnlCard1;
     private RoundedPanel rpKarte;
@@ -416,6 +434,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         btnMenOkMeldung = new JButton();
         dcMeldung = new DefaultBindableDateChooser();
         sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
+        panTitle = new JPanel();
+        lblTitle = new JLabel();
+        btnReport = new JButton();
         panContent = new RoundedPanel();
         panGebiet = new JPanel();
         pnlCard1 = new JPanel();
@@ -455,7 +476,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelMeldungen = new JPanel();
         panMeldung = new JPanel();
         panMeldungenMain = new JPanel();
-        baumMeldungPanel = baumMeldungPanel = new BaumMeldungPanel(this, true, this.getConnectionContext());
+        baumMeldungPanel = baumMeldungPanel = new BaumMeldungPanel(this, isEditor, this.getConnectionContext());
         scpLaufendeMeldungen = new JScrollPane();
         lstMeldungen = new JList();
         panControlsNewMeldungen = new JPanel();
@@ -515,6 +536,35 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panAddMeldung.add(dcMeldung, gridBagConstraints);
 
         dlgAddMeldung.getContentPane().add(panAddMeldung, BorderLayout.CENTER);
+
+        panTitle.setOpaque(false);
+        panTitle.setLayout(new GridBagLayout());
+
+        lblTitle.setFont(new Font("DejaVu Sans", 1, 18)); // NOI18N
+        lblTitle.setForeground(new Color(255, 255, 255));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        panTitle.add(lblTitle, gridBagConstraints);
+
+        btnReport.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+        btnReport.setToolTipText("PDF-Bericht zum aktuell betrachteten Gebiet erstellen");
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        panTitle.add(btnReport, gridBagConstraints);
 
         setLayout(new GridBagLayout());
 
@@ -1109,7 +1159,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     private void btnCreateAktenzeichenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAktenzeichenActionPerformed
         if (this.cidsBean != null){
-            String aktenzeichen = "";
+            String aktenzeichen;
             String hnr = "x";
             if (this.cidsBean.getProperty(FIELD__HNR) != null) {
                 hnr = this.cidsBean.getProperty(FIELD__HNR).toString();
@@ -1153,6 +1203,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         
     }//GEN-LAST:event_btnCreateAktenzeichenActionPerformed
 
+    private void btnReportActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        
+    }//GEN-LAST:event_btnReportActionPerformed
+
     
 
     /**
@@ -1167,7 +1221,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     private void refreshHnr() { 
-        if (cidsBean != null){
+        if (cidsBean != null && cidsBean.getProperty(FIELD__STRASSE) != null){
             String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
             if (schluessel != null){
 
@@ -1192,6 +1246,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
     @Override
     public boolean prepareForSave() {
+        if (!areChildrenLoad){
+            return false;
+        }
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         final ObjectAttribute[] objAtt = cidsBean.getMetaObject().getAttribs();
@@ -1270,70 +1327,62 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
-        try {
-            if (isEditor && (this.cidsBean != null)) {
-                LOG.info("remove propchange baum_gebiet: " + this.cidsBean);
-                this.cidsBean.removePropertyChangeListener(this);
-            }
-            bindingGroup.unbind();
-            this.cidsBean = cb;
-            if (isEditor && (this.cidsBean != null)) {
-                LOG.info("add propchange baum_gebiet: " + this.cidsBean);
-                this.cidsBean.addPropertyChangeListener(this);
-            }
-            
-            if (this.cidsBean != null){
-                setMeldungBeans(cidsBean.getBeanCollectionProperty(FIELD__MELDUNGEN));   
-            }
-            if (meldungBeans != null) {
-                Collections.sort((List)meldungBeans, DATE_COMPARATOR);
-            }
-
-            // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
-            // evtl. kann dies verbessert werden.
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+        if (isEditor && (this.cidsBean != null)) {
+            LOG.info("remove propchange baum_gebiet: " + this.cidsBean);
+            this.cidsBean.removePropertyChangeListener(this);
+        }
+        bindingGroup.unbind();
+        this.cidsBean = cb;
+        if (isEditor && (this.cidsBean != null)) {
+            LOG.info("add propchange baum_gebiet: " + this.cidsBean);
+            this.cidsBean.addPropertyChangeListener(this);
+        }
+        if (this.cidsBean != null){
+            setMeldungBeans(cidsBean.getBeanCollectionProperty(FIELD__MELDUNGEN));
+        }
+        if (meldungBeans != null) {
+            Collections.sort((List)meldungBeans, DATE_COMPARATOR);
+        }
+        // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
+        // evtl. kann dies verbessert werden.
+        DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 cb,
                 getConnectionContext());
-            setMapWindow();
-            
-            bindingGroup.bind();
-            try{
-                meldungSearch.setParentId(this.cidsBean.getPrimaryKeyValue());
-                meldungSearch.setFkField(FIELD__GEBIET);
-                meldungSearch.setTable(TABLE_MELDUNG);
-                final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(
-                        SessionManager.getSession().getUser(),
-                        meldungSearch,
-                        getConnectionContext());
-                final List<CidsBean> beans = new ArrayList<>();
-                if (!mons.isEmpty()) {
-                    for (final MetaObjectNode mon : mons) {
-                        beans.add(SessionManager.getProxy().getMetaObject(
-                                mon.getObjectId(),
-                                mon.getClassId(),
-                                "WUNDA_BLAU",
-                                getConnectionContext()).getBean());
-                    }
-                }
-
-                if (meldungBeans != null && meldungBeans.size() > 0) {
-                    lstMeldungen.setSelectedIndex(0);
-                }
-                if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
-                    cbHNr.setEnabled(true);
-                    searchStreets();
-                }
-            } catch (final ConnectionException ex) {
-                Exceptions.printStackTrace(ex);
-                LOG.error("Bean not set.", ex);
-            }
-        } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+        setMapWindow();
+        bindingGroup.bind();
+        if (meldungBeans != null && meldungBeans.size() > 0) {
+            lstMeldungen.setSelectedIndex(0);
         }
+        if(this.cidsBean != null){
+            loadChildren(this.cidsBean.getPrimaryKeyValue());
+        }
+        /*
+        meldungSearch.setParentId(this.cidsBean.getPrimaryKeyValue());
+        meldungSearch.setFkField(FIELD__GEBIET);
+        meldungSearch.setTable(TABLE_MELDUNG);
+        final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(
+        SessionManager.getSession().getUser(),
+        meldungSearch,
+        getConnectionContext());
+        final List<CidsBean> beans = new ArrayList<>();
+        if (!mons.isEmpty()) {
+        for (final MetaObjectNode mon : mons) {
+        beans.add(SessionManager.getProxy().getMetaObject(
+        mon.getObjectId(),
+        mon.getClassId(),
+        "WUNDA_BLAU",
+        getConnectionContext()).getBean());
+        }
+        }*/
+        if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
+            cbHNr.setEnabled(true);
+            searchStreets();
+        }
+        setTitle(getTitle());
+        btnReport.setVisible(false);
     }
-    
-        
+       
     
     /**
      * DOCUMENT ME!
@@ -1423,10 +1472,22 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         if (this.isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         }
+        if (isEditor){
+            BaumChildrenLoader.getInstanceEditor().clearAllMaps();
+            BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(false);
+        } else {
+            BaumChildrenLoader.getInstanceRenderer().clearAllMaps();
+            BaumChildrenLoader.getInstanceRenderer().setLoadingCompletedWithoutError(false);
+        }
+        baumMeldungPanel.dispose();
     }
     
     @Override
-    public void setTitle(final String string) {
+    public void setTitle(String title) {
+        if (title == null) {
+            title = "<Error>";
+        }
+        lblTitle.setText(title);
     }
 
     @Override
@@ -1533,6 +1594,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 }.execute();
         }
     }
+
+    @Override
+    public JComponent getTitleComponent() {
+        return panTitle;
+    }
         
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1609,6 +1675,45 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     }  finally {
                         refreshHnr();
                     }
+                }
+            }.execute();
+    }
+    
+    private void loadChildren(final Integer id) {
+        new SwingWorker<Boolean, Void>() {
+
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    //((DefaultListModel)baumMeldungPanel.lstOrtstermine.getModel()).addElement("lade...");
+                    if(isEditor){
+                        
+                        //BaumChildrenLoader.getInstanceEditor().clearAllMaps();
+                        return BaumChildrenLoader.getInstanceEditor().loadChildrenMeldung(id, getConnectionContext());
+                    } else{
+                        return BaumChildrenLoader.getInstanceRenderer().loadChildrenMeldung(id, getConnectionContext());
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        areChildrenLoad = get();
+                        if(isEditor){
+                            BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(areChildrenLoad);
+                        } else {
+                            BaumChildrenLoader.getInstanceRenderer().setLoadingCompletedWithoutError(areChildrenLoad);
+                        }
+                        if (!areChildrenLoad){
+                            setTitle(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_LOAD_ERROR));
+                        } else{
+                            if (isEditor){
+                                btnAddNewMeldung.setEnabled(true);
+                                btnRemoveMeldung.setEnabled(true);
+                            }
+                        }
+                    } catch (final InterruptedException | ExecutionException ex) {
+                        LOG.error(ex, ex);
+                    }  
                 }
             }.execute();
     }

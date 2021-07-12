@@ -75,6 +75,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.MissingResourceException;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -93,9 +94,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
-    private List<CidsBean> festBeans = new ArrayList<>();
     private MetaClass schadenMetaClass;
-    private final List<CidsBean> deletedFestBeans = new ArrayList<>();
     private static final Logger LOG = Logger.getLogger(BaumFestsetzungEditor.class);
  
     private static final String[] SCHADEN_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Meldungsdatum", "Id", "gef. Art" };
@@ -133,11 +132,15 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_NAME__SCHADEN = "baum_schaden";
     
+    
+    public static final String BUNDLE_NOSCHADEN = 
+            "BaumFestsetzungEditor.prepareForSave().noSchaden";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.prefix";
+            "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumFestsetzungEditor.prepareForSave().JOptionPane.title";
+            "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumFestsetzungEditor.prepareForSave().JOptionPane.title";
     
     
 
@@ -384,28 +387,17 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         final StringBuilder errorMessage = new StringBuilder();
         
         boolean errorOccured = false;
-        for (final CidsBean festBean : festBeans) {
-            try {
-                festBean.persist(getConnectionContext());
-            } catch (final Exception ex) {
-                errorOccured = true;
-                LOG.error(ex, ex);
+        
+        save = baumFestsetzungPanel.prepareForSave();
+        // Schaden muss angegeben werden
+        try {
+            if (this.cidsBean.getProperty(FIELD__FK_SCHADEN)== null) {
+                LOG.warn("No schaden specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NOSCHADEN));
             }
-        }
-        if (errorOccured) {
-            return false;
-        }
-        for (final CidsBean festBean : deletedFestBeans) {
-            try {
-                festBean.delete();
-                festBean.persist(getConnectionContext());
-            } catch (final Exception ex) {
-                errorOccured = true;
-                LOG.error(ex, ex);
-            }
-        }
-        if (errorOccured) {
-            return false;
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Schaden not given.", ex);
+            save = false;
         }
 
         if (errorMessage.length() > 0) {

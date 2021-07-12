@@ -459,7 +459,10 @@
                     <Property name="name" type="java.lang.String" value="cbStrasse" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_strasse}" target="cbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_strasse}" target="cbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="java.lang.Object" value="null"/>
+                      <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbStrasseActionPerformed"/>
@@ -496,7 +499,10 @@
                     <Property name="name" type="java.lang.String" value="cbHNr" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_adresse}" target="cbHNr" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                    <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_adresse}" target="cbHNr" targetPath="selectedItem" updateStrategy="0" immediately="false">
+                      <Property name="nullValue" type="java.lang.Object" value="null"/>
+                      <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
+                    </BindingProperty>
                   </BindingProperties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.FastBindableReferenceCombo(&#xa;    hnrSearch,&#xa;    hnrSearch.getRepresentationPattern(),&#xa;    hnrSearch.getRepresentationFields()&#xa;)"/>

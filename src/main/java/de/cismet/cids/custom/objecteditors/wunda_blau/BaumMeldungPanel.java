@@ -12,11 +12,10 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.DescriptionPaneFS;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import org.apache.log4j.Logger;
 
@@ -31,11 +30,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaumAnsprechpartnerRenderer;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumChildLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -60,8 +57,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.Box;
@@ -78,6 +73,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -151,12 +147,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                 }
         };
      
-    private static enum WhichCase {
+   /* private static enum WhichCase {
 
         //~ Enum constants -----------------------------------------------------
 
         ORTSTERMIN, SCHADEN
-    }
+    }*/
     
     private List<CidsBean> ortsterminBeans = new ArrayList<>();
     private List<CidsBean> changedOrtsterminBeans = new ArrayList<>();
@@ -165,15 +161,19 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     private List<CidsBean> noSaveToDeleteBeansSchaden = new ArrayList<>();
     private final List<CidsBean> deletedOrtsterminBeans = new ArrayList<>();
     private final List<CidsBean> deletedSchadenBeans = new ArrayList<>();
-    private final Map <String, List<CidsBean>> schadenBeanMap = new HashMap <>();
-    private final Map <String, List<CidsBean>> ortsterminBeanMap = new HashMap <>();
+    //private final Map <String, List<CidsBean>> schadenBeanMap = new HashMap <>();
+    //private final Map <String, List<CidsBean>> ortsterminBeanMap = new HashMap <>();
+    private BaumChildrenLoader.Listener loadChildrenListenerEditor;
+    private BaumChildrenLoader.Listener loadChildrenListenerRenderer;
+    
+    
     private static final Logger LOG = Logger.getLogger(BaumMeldungPanel.class);
-    public static final String CHILD_TOSTRING_TEMPLATE = "%s";
-    public static final String[] ORT_TOSTRING_FIELDS = {"datum"};
-    public static final String ORT_TABLE = "baum_ortstermin";
-    public static final String[] SCHADEN_TOSTRING_FIELDS = {"id"};
-    public static final String SCHADEN_TABLE = "baum_schaden";
-    public static final String CHILD_FK = "fk_meldung";
+    //public static final String CHILD_TOSTRING_TEMPLATE = "%s";
+    //public static final String[] ORT_TOSTRING_FIELDS = {"datum"};
+    //public static final String ORT_TABLE = "baum_ortstermin";
+    //public static final String[] SCHADEN_TOSTRING_FIELDS = {"id"};
+    //public static final String SCHADEN_TABLE = "baum_schaden";
+    //public static final String CHILD_FK = "fk_meldung";
     
     public static final String FIELD__APARTNER = "arr_ansprechpartner";         // baum_meldung
     public static final String FIELD__DATUM = "datum";                          // baum_ortstermin
@@ -213,6 +213,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumMeldungPanel.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumMeldungPanel.prepareForSave().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_ERROR_ORT = "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_ERROR_SCHADEN = "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.title";
+    public static final String BUNDLE_ERROR_ORT = "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.meldung";
+    public static final String BUNDLE_ERROR_SCHADEN = "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.meldung";
     public static final String BUNDLE_PANE_PREFIX_SELECTION =
         "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX_SELECTION =
@@ -221,7 +225,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     public static final String BUNDLE_PANE_SELECTION =
         "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message";
 
-    private final BaumChildLightweightSearch searchMeldung = new BaumChildLightweightSearch(
+    /*private final BaumChildLightweightSearch searchMeldung = new BaumChildLightweightSearch(
             CHILD_TOSTRING_TEMPLATE,
             ORT_TOSTRING_FIELDS,
             ORT_TABLE,
@@ -230,7 +234,19 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             CHILD_TOSTRING_TEMPLATE,
             SCHADEN_TOSTRING_FIELDS,
             SCHADEN_TABLE,
-            CHILD_FK);
+            CHILD_FK);*/
+    
+    private static final ListModel MODEL_ERROR = new DefaultListModel() {
+            {
+                add(0, "FEHLER!");
+            }
+        };
+   /* private static final ListModel MODEL_LOAD = new DefaultListModel() {
+
+            {
+                add(0, "wird geladen...");
+            }
+        };*/
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
@@ -281,7 +297,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         jPanelOrtstermine = new JPanel();
         panOrtstermin = new JPanel();
         panOrtstermineMain = new JPanel();
-        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(this,null, true, this.connectionContext);
+        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(this,null, isEditor, this.connectionContext);
+        lblLadenOrt = new JLabel();
         scpLaufendeOrtstermine = new JScrollPane();
         lstOrtstermine = new JList();
         panControlsNewOrtstermine = new JPanel();
@@ -291,10 +308,11 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         jPanelSchaeden = new JPanel();
         panFillerUnten4 = new JPanel();
         panSchaden = new JPanel();
+        lblLadenSchaden = new JLabel();
         scpLaufendeSchaeden = new JScrollPane();
         lstSchaeden = new JList();
         panSchaedenMain = new JPanel();
-        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(this, null, true, this.connectionContext);
+        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(this, null, isEditor, this.connectionContext);
         panControlsNewSchaden = new JPanel();
         btnAddNewSchaden = new JButton();
         btnRemoveSchaden = new JButton();
@@ -662,9 +680,24 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(0, 5, 5, 5);
         panOrtstermin.add(panOrtstermineMain, gridBagConstraints);
 
+        lblLadenOrt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLadenOrt.setForeground(new Color(153, 153, 153));
+        Mnemonics.setLocalizedText(lblLadenOrt, NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        lblLadenOrt.setName("lblLadenOrt"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panOrtstermin.add(lblLadenOrt, gridBagConstraints);
+
         scpLaufendeOrtstermine.setName("scpLaufendeOrtstermine"); // NOI18N
 
-        lstOrtstermine.setModel(new DefaultListModel());
+        lstOrtstermine.setModel(new DefaultListModel<>()
+        );
         lstOrtstermine.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstOrtstermine.setFixedCellWidth(75);
         lstOrtstermine.setName("lstOrtstermine"); // NOI18N
@@ -683,6 +716,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panControlsNewOrtstermine.setLayout(new GridBagLayout());
 
         btnAddNewOrtstermin.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewOrtstermin.setEnabled(false);
         btnAddNewOrtstermin.setMaximumSize(new Dimension(39, 20));
         btnAddNewOrtstermin.setMinimumSize(new Dimension(39, 20));
         btnAddNewOrtstermin.setName("btnAddNewOrtstermin"); // NOI18N
@@ -695,6 +729,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panControlsNewOrtstermine.add(btnAddNewOrtstermin, gridBagConstraints);
 
         btnRemoveOrtstermin.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveOrtstermin.setEnabled(false);
         btnRemoveOrtstermin.setMaximumSize(new Dimension(39, 20));
         btnRemoveOrtstermin.setMinimumSize(new Dimension(39, 20));
         btnRemoveOrtstermin.setName("btnRemoveOrtstermin"); // NOI18N
@@ -775,6 +810,20 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panSchaden.setOpaque(false);
         panSchaden.setLayout(new GridBagLayout());
 
+        lblLadenSchaden.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLadenSchaden.setForeground(new Color(153, 153, 153));
+        Mnemonics.setLocalizedText(lblLadenSchaden, NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblLadenSchaden.text")); // NOI18N
+        lblLadenSchaden.setName("lblLadenSchaden"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panSchaden.add(lblLadenSchaden, gridBagConstraints);
+
         scpLaufendeSchaeden.setName("scpLaufendeSchaeden"); // NOI18N
 
         lstSchaeden.setModel(new DefaultListModel());
@@ -824,6 +873,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panControlsNewSchaden.setLayout(new GridBagLayout());
 
         btnAddNewSchaden.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewSchaden.setEnabled(false);
         btnAddNewSchaden.setMaximumSize(new Dimension(39, 20));
         btnAddNewSchaden.setMinimumSize(new Dimension(39, 20));
         btnAddNewSchaden.setName("btnAddNewSchaden"); // NOI18N
@@ -836,6 +886,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panControlsNewSchaden.add(btnAddNewSchaden, gridBagConstraints);
 
         btnRemoveSchaden.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveSchaden.setEnabled(false);
         btnRemoveSchaden.setMaximumSize(new Dimension(39, 20));
         btnRemoveSchaden.setMinimumSize(new Dimension(39, 20));
         btnRemoveSchaden.setName("btnRemoveSchaden"); // NOI18N
@@ -967,8 +1018,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         final Object selection = lstApartner.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
-                    NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_AP_QUESTION),
-                    NbBundle.getMessage(EmobradLadestationEditor.class, BUNDLE_AP_TITLE),
+                    NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_AP_QUESTION),
+                    NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_AP_TITLE),
                     JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
@@ -989,29 +1040,37 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     }//GEN-LAST:event_btnRemoveApartnerActionPerformed
 
     private void btnAddNewOrtsterminActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewOrtsterminActionPerformed
-        try {
-            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this), dlgAddOrtstermin, true);
-        } catch (Exception e) {
-            LOG.error("Cannot add new BaumOrtstermin object", e);
+        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+            System.out.println("Add");
+            try {
+                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this), dlgAddOrtstermin, true);
+            } catch (Exception e) {
+                LOG.error("Cannot add new BaumOrtstermin object", e);
+            }
         }
     }//GEN-LAST:event_btnAddNewOrtsterminActionPerformed
 
     private void btnRemoveOrtsterminActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrtsterminActionPerformed
-        final Object selectedObject = lstOrtstermine.getSelectedValue();
+        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+            final Object selectedObject = lstOrtstermine.getSelectedValue();
 
-        if (selectedObject instanceof CidsBean) {
-            if (ortsterminBeans != null){
-                String meldungValue = this.cidsBean.getProperty(FIELD__ID).toString();
-                Boolean deleteSuccess = (ortsterminBeanMap.get(meldungValue)).remove((CidsBean)selectedObject);
-                if (ortsterminBeans != null) {
-                    ortsterminBeans.remove((CidsBean)selectedObject);
-                    ((DefaultListModel)lstOrtstermine.getModel()).removeElement(selectedObject);
-                    deletedOrtsterminBeans.add((CidsBean)selectedObject);
-                    parentEditor.getCidsBean().setArtificialChangeFlag(true);
-                    if (ortsterminBeans != null && ortsterminBeans.size() > 0) {
-                        lstOrtstermine.setSelectedIndex(0);
-                    }else{
-                        lstOrtstermine.clearSelection();
+            if (selectedObject instanceof CidsBean) {
+                if (ortsterminBeans != null){
+                    //String meldungValue = this.cidsBean.getProperty(FIELD__ID).toString();
+                    Boolean deleteSuccess = false;
+                    if (isEditor){      
+                        deleteSuccess = BaumChildrenLoader.getInstanceEditor().removeOrt(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    } 
+                    if (ortsterminBeans != null) {
+                        ortsterminBeans.remove((CidsBean)selectedObject);
+                        ((DefaultListModel)lstOrtstermine.getModel()).removeElement(selectedObject);
+                        deletedOrtsterminBeans.add((CidsBean)selectedObject);
+                        parentEditor.getCidsBean().setArtificialChangeFlag(true);
+                        if (ortsterminBeans != null && ortsterminBeans.size() > 0) {
+                            lstOrtstermine.setSelectedIndex(0);
+                        }else{
+                            lstOrtstermine.clearSelection();
+                        }
                     }
                 }
             }
@@ -1043,13 +1102,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             beanOrtstermin.setProperty(FIELD__FK_MELDUNG, cidsBean);
 
             //Meldungen erweitern:
-            if (ortsterminBeans != null){
-                ortsterminBeans.add(beanOrtstermin);
-            } else{
-                List<CidsBean> tempList = new ArrayList<>();
-                tempList.add(beanOrtstermin);
-                ortsterminBeanMap.replace(cidsBean.getProperty(FIELD__ID).toString(), tempList);
-                ortsterminBeans = tempList;
+            if (isEditor){
+                BaumChildrenLoader.getInstanceEditor().addOrt(cidsBean.getPrimaryKeyValue(), beanOrtstermin);
             }
             ((DefaultListModel)lstOrtstermine.getModel()).addElement(beanOrtstermin);
             changedOrtsterminBeans.add(beanOrtstermin);
@@ -1065,76 +1119,86 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     }//GEN-LAST:event_btnMenOkOrtsterminActionPerformed
 
     private void btnAddNewSchadenActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewSchadenActionPerformed
-        try{
-        //schadenBean erzeugen und vorbelegen:
-            final CidsBean beanSchaden = CidsBean.createNewCidsBeanFromTableName(
-                "WUNDA_BLAU",
-                "BAUM_SCHADEN",
-                getConnectionContext());
-            beanSchaden.setProperty(FIELD__FK_MELDUNG, cidsBean);
-            beanSchaden.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_BAU, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_BERATUNG, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_EINGANG, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_FAELLUNG, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_KRONE, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_OHNE, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_PRIVAT, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_STAMM, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_STURM, false);
-            beanSchaden.setProperty(FIELD__SCHADEN_WURZEL, false);
+        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+            try{
+            //schadenBean erzeugen und vorbelegen:
+                final CidsBean beanSchaden = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    "BAUM_SCHADEN",
+                    getConnectionContext());
+                beanSchaden.setProperty(FIELD__FK_MELDUNG, cidsBean);
+                beanSchaden.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_BAU, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_BERATUNG, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_EINGANG, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_FAELLUNG, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_KRONE, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_OHNE, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_PRIVAT, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_STAMM, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_STURM, false);
+                beanSchaden.setProperty(FIELD__SCHADEN_WURZEL, false);
 
-            CidsBean beanSchadenPersist = beanSchaden.persist(connectionContext);
-            //fuellen fuer evtl Loeschen
-            noSaveToDeleteBeansSchaden.add(beanSchadenPersist);
-            //schaden erweitern:
-            if (schadenBeans != null){
-                schadenBeans.add(beanSchadenPersist);
-            } else{
-                List<CidsBean> tempList = new ArrayList<>();
-                tempList.add(beanSchadenPersist);
-                schadenBeanMap.replace(cidsBean.getProperty(FIELD__ID).toString(), tempList);
-                schadenBeans = tempList;
+                CidsBean beanSchadenPersist = beanSchaden.persist(connectionContext);
+                //fuellen fuer evtl Loeschen
+                noSaveToDeleteBeansSchaden.add(beanSchadenPersist);
+                //schaden erweitern:
+                /*if (schadenBeans != null){
+                    schadenBeans.add(beanSchadenPersist);
+                } else{
+                    List<CidsBean> tempList = new ArrayList<>();
+                    tempList.add(beanSchadenPersist);
+                    schadenBeanMap.replace(cidsBean.getProperty(FIELD__ID).toString(), tempList);
+                    schadenBeans = tempList;
+                }*/
+                if (isEditor){
+                    BaumChildrenLoader.getInstanceEditor().addSchaden(cidsBean.getPrimaryKeyValue(), beanSchadenPersist);
+                }
+                ((DefaultListModel)lstSchaeden.getModel()).addElement(beanSchadenPersist);
+                changedSchadenBeans.add(beanSchadenPersist);
+
+                //Refresh:
+                lstSchaeden.setSelectedValue(beanSchadenPersist, true);
+                cidsBean.setArtificialChangeFlag(true);
+                parentEditor.getCidsBean().setArtificialChangeFlag(true);
+            } catch (Exception e) {
+                LOG.error("Cannot add new BaumSchaden object", e);
             }
-            ((DefaultListModel)lstSchaeden.getModel()).addElement(beanSchadenPersist);
-            changedSchadenBeans.add(beanSchadenPersist);
-
-            //Refresh:
-            lstSchaeden.setSelectedValue(beanSchadenPersist, true);
-            cidsBean.setArtificialChangeFlag(true);
-            parentEditor.getCidsBean().setArtificialChangeFlag(true);
-        } catch (Exception e) {
-            LOG.error("Cannot add new BaumSchaden object", e);
         }
     }//GEN-LAST:event_btnAddNewSchadenActionPerformed
 
     private void btnRemoveSchadenActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveSchadenActionPerformed
-        final Object selectedObject = lstSchaeden.getSelectedValue();
+        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+            final Object selectedObject = lstSchaeden.getSelectedValue();
 
-        if (selectedObject instanceof CidsBean) {
+            if (selectedObject instanceof CidsBean) {
 
-            if (schadenBeans != null) {
-                //Loeschen, nur wenn der Schaden keine Unterobjekte hat
-                if (baumSchadenPanel.getErsatzBeans().isEmpty() && baumSchadenPanel.getFestBeans().isEmpty()){
-                    schadenBeans.remove((CidsBean)selectedObject);
-                    ((DefaultListModel)lstSchaeden.getModel()).removeElement(selectedObject);
-                    deletedSchadenBeans.add((CidsBean)selectedObject);
-                    parentEditor.getCidsBean().setArtificialChangeFlag(true);
-                    if (schadenBeans != null && schadenBeans.size() > 0) {
-                        lstSchaeden.setSelectedIndex(0);
-                    }else{
-                        lstSchaeden.clearSelection();
+                if (schadenBeans != null) {
+                    //Loeschen, nur wenn der Schaden keine Unterobjekte hat
+                    if (baumSchadenPanel.getErsatzBeans().isEmpty() && baumSchadenPanel.getFestBeans().isEmpty()){
+                        schadenBeans.remove((CidsBean)selectedObject);
+                        ((DefaultListModel)lstSchaeden.getModel()).removeElement(selectedObject);
+                        deletedSchadenBeans.add((CidsBean)selectedObject);
+                        parentEditor.getCidsBean().setArtificialChangeFlag(true);
+                        Boolean deleteSuccess = false;
+                        if (isEditor){      
+                            deleteSuccess = BaumChildrenLoader.getInstanceEditor().removeSchaden(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                        }
+                        if (schadenBeans != null && schadenBeans.size() > 0) {
+                            lstSchaeden.setSelectedIndex(0);
+                        }else{
+                            lstSchaeden.clearSelection();
+                        }
+                    } else {
+                        //Meldung, Schaden hat Unterobjekte
+                        JOptionPane.showMessageDialog(
+                                StaticSwingTools.getParentFrame(this),
+                                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_DEL_SCHADEN),
+                                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_SCHADEN),
+                                JOptionPane.WARNING_MESSAGE);
                     }
-                } else {
-                    //Meldung, Schaden hat Unterobjekte
-                    JOptionPane.showMessageDialog(
-                            StaticSwingTools.getParentFrame(this),
-                            NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_DEL_SCHADEN),
-                            NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_SCHADEN),
-                            JOptionPane.WARNING_MESSAGE);
-                }
-                
+                }    
             }
         }
     }//GEN-LAST:event_btnRemoveSchadenActionPerformed
@@ -1178,6 +1242,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;
     public final BaumGebietEditor parentEditor;
+    
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
@@ -1188,12 +1253,15 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             }
         };
     
+    /*private final LoaderListener loaderListener = new LoaderListener(){
+        
+    };*/
     private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
-    
+    /*
     private SwingWorker worker_ortstermin;
     private SwingWorker worker_schaden;
-    
+    */
     //private final BaumOrtsterminListLightweightSearch ortsterminSearch;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     BaumOrtsterminPanel baumOrtsterminPanel;
@@ -1224,6 +1292,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JLabel lblAuswaehlenApartner;
     JLabel lblAuswaehlenOrtstermin;
     JLabel lblBemerkung;
+    JLabel lblLadenOrt;
+    JLabel lblLadenSchaden;
     JList lstApartner;
     JList lstOrtstermine;
     JList lstSchaeden;
@@ -1286,8 +1356,17 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             final ConnectionContext connectionContext) {
         this.isEditor = editable;
         this.connectionContext = connectionContext;
+        System.out.println("BMPvor");
         initComponents();
+        System.out.println("BMPnach");
         this.parentEditor = parentEditor;
+        if (isEditor){
+            loadChildrenListenerEditor = new LoaderListener();
+            BaumChildrenLoader.getInstanceEditor().addListener(loadChildrenListenerEditor);
+        } else{
+            loadChildrenListenerRenderer = new LoaderListener();
+            BaumChildrenLoader.getInstanceRenderer().addListener(loadChildrenListenerRenderer);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1312,7 +1391,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         noSaveToDeleteBeansSchaden.clear();
         //baumOrtsterminPanel.dispose();
         //baumSchadenPanel.dispose();
-        
+        if(isEditor){
+            BaumChildrenLoader.getInstanceEditor().removeListener(loadChildrenListenerEditor);
+            BaumChildrenLoader.getInstanceEditor().clearAllMaps();
+        } else {
+            BaumChildrenLoader.getInstanceRenderer().removeListener(loadChildrenListenerRenderer);
+            BaumChildrenLoader.getInstanceRenderer().clearAllMaps();
+        }
+        baumSchadenPanel.dispose();
         //((DefaultListModel<CidsBean>)lstOrtstermine.getModel()).clear();
     }
 
@@ -1333,32 +1419,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                     cidsBean.addPropertyChangeListener(changeListener);
             }
             if (this.cidsBean != null){
-                if (ortsterminBeanMap.containsKey(cidsBean.getProperty(FIELD__ID).toString())){
-                    setOrtsterminBeans(ortsterminBeanMap.get(cidsBean.getProperty(FIELD__ID).toString()));
-                } else {
-                    try{
-                        searchMeldung.setParentId(this.cidsBean.getPrimaryKeyValue());
-                        final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(
-                                SessionManager.getSession().getUser(),
-                                searchMeldung,
-                                getConnectionContext());
-                        final List<CidsBean> beansOrt = new ArrayList<>();
-                        if (!mons.isEmpty()) {
-                            for (final MetaObjectNode mon : mons) {
-                                beansOrt.add(SessionManager.getProxy().getMetaObject(
-                                        mon.getObjectId(),
-                                        mon.getClassId(),
-                                        "WUNDA_BLAU",
-                                        getConnectionContext()).getBean());
-                            }
-                        }
-                        ortsterminBeanMap.put(cidsBean.getProperty(FIELD__ID).toString(), beansOrt);
-                         setOrtsterminBeans(beansOrt);
-                    }   catch (ConnectionException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                }
-                if (schadenBeanMap.containsKey(cidsBean.getProperty(FIELD__ID).toString())){
+           
+                //lstOrtstermine.setModel(MODEL_LOAD);
+     System.out.println("sCBM");           
+                zeigeKinderOrt();
+                zeigeKinderSchaden();
+                /*if (schadenBeanMap.containsKey(cidsBean.getProperty(FIELD__ID).toString())){
                     setSchadenBeans(schadenBeanMap.get(cidsBean.getProperty(FIELD__ID).toString()));
                 } else {
                     try{
@@ -1382,7 +1448,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                     }   catch (ConnectionException ex) {
                         Exceptions.printStackTrace(ex);
                     }
-                }
+                }*/
             }else {
                 setOrtsterminBeans(null);
                 setSchadenBeans(null);
@@ -1393,6 +1459,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             dlgAddOrtstermin.getRootPane().setDefaultButton(btnMenOkOrtstermin);
             dlgAddApartner.pack();
             dlgAddApartner.getRootPane().setDefaultButton(btnMenOkApartner);
+            if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                allowAddRemove();
+            }
         }
     }
     
@@ -1429,10 +1498,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                 LOG.error(ex, ex);
             }
         }*/
-       List<CidsBean> toSaveListOrtstermin; 
         try {
-              for (final String idValue : ortsterminBeanMap.keySet()){
-                  List<CidsBean> listOrtstermin = ortsterminBeanMap.get(idValue);
+              for (final Object key : BaumChildrenLoader.getInstanceEditor().getMapOrt().keySet()){
+                   List<CidsBean> listOrtstermin = (List<CidsBean>) BaumChildrenLoader.getInstanceEditor().getMapOrt().get(key);
                   if (listOrtstermin != null){
                     for (final CidsBean beanOrtstermin : listOrtstermin){
                         beanOrtstermin.persist(getConnectionContext());
@@ -1532,8 +1600,22 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                     return compoId;
                 }
             });
-        
-        //Collections.sort((List)schadenBeans, ID_COMPARATOR);
+        if (schadenBeans != null && schadenBeans.size() > 0) {
+            //Collections.sort((List)schadenBeans, ID_COMPARATOR);
+        }
+    }
+    
+    public void allowAddRemove(){
+        if (isEditor){
+            if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+                btnAddNewOrtstermin.setEnabled(true);
+                btnAddNewSchaden.setEnabled(true);
+                btnRemoveOrtstermin.setEnabled(true);
+                btnRemoveSchaden.setEnabled(true);
+                lblLadenOrt.setVisible(false);
+                lblLadenSchaden.setVisible(false);
+            }
+        }
     }
     
     public void prepareOrtstermin(){
@@ -1564,8 +1646,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                 return compoDatum;
             }
         }); 
-        
-        Collections.sort((List)ortsterminBeans, DATE_COMPARATOR);
+        if (ortsterminBeans != null && ortsterminBeans.size() > 0) {
+            //Collections.sort((List)ortsterminBeans, DATE_COMPARATOR);
+        }
     }
     /**
      * DOCUMENT ME!
@@ -1577,7 +1660,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             baumOrtsterminPanel.setCidsBean(null);
             ((DefaultListModel)lstOrtstermine.getModel()).clear();
             if(cidsBeans != null){
-                cidsBeans.sort(DATE_COMPARATOR);
+                //cidsBeans.sort(DATE_COMPARATOR);
                 for(final Object bean:cidsBeans){
                     ((DefaultListModel)lstOrtstermine.getModel()).addElement(bean);
                 }
@@ -1641,7 +1724,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         ((DefaultListModel)lstSchaeden.getModel()).clear();
         //this.schadenBeans.clear();
         if(cidsBeans != null){
-            cidsBeans.sort(ID_COMPARATOR);
+            //cidsBeans.sort(ID_COMPARATOR);
             for(final Object bean:cidsBeans){
                 ((DefaultListModel)lstSchaeden.getModel()).addElement(bean);
             }
@@ -1651,7 +1734,38 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         prepareSchaden();
     }
     
+    private void zeigeKinderOrt(){
+        //lstOrtstermine.setModel(new DefaultListModel());
+        if (isEditor){      
+            setOrtsterminBeans(BaumChildrenLoader.getInstanceEditor().getMapValueOrt(cidsBean.getPrimaryKeyValue()));
+        } else {
+            setOrtsterminBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueOrt(cidsBean.getPrimaryKeyValue()));
+        }
+    }
     
+    private void zeigeKinderSchaden(){
+        if (isEditor){      
+            setSchadenBeans(BaumChildrenLoader.getInstanceEditor().getMapValueSchaden(cidsBean.getPrimaryKeyValue()));
+        } else {
+            setSchadenBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueSchaden(cidsBean.getPrimaryKeyValue()));
+        }
+    }
+    
+    private void zeigeErrorOrt(){
+        scpLaufendeOrtstermine.setViewportView(new JList<>(MODEL_ERROR));
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_ERROR_ORT),
+                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_ERROR_ORT),
+                JOptionPane.WARNING_MESSAGE);
+    }
+    
+    private void zeigeErrorSchaden(){
+        scpLaufendeSchaeden.setViewportView(new JList<>(MODEL_ERROR));
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_ERROR_SCHADEN),
+                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_ERROR_SCHADEN),
+                JOptionPane.WARNING_MESSAGE);
+    }
     /**
      * DOCUMENT ME!
      *
@@ -1686,5 +1800,62 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             pane.gotoMetaObjectNodes(mons.toArray(new MetaObjectNode[0]));
         }
     }
-      
+     
+    
+            
+    class LoaderListener implements BaumChildrenLoader.Listener{
+
+        @Override
+        public void loadingCompleteSchaden(Integer idMeldung) {
+            if(Objects.equals(cidsBean.getPrimaryKeyValue(), idMeldung)){
+                lblLadenSchaden.setVisible(false);
+                zeigeKinderSchaden();
+            }
+        }
+
+        @Override
+        public void loadingCompleteOrt(Integer idMeldung) {
+            if(Objects.equals(cidsBean.getPrimaryKeyValue(), idMeldung)){
+                System.out.println("lCO");
+                lblLadenOrt.setVisible(false);
+                zeigeKinderOrt();
+            }
+        }
+        
+        @Override
+        public void loadingErrorOrt(Integer idMeldung) {
+            zeigeErrorOrt();
+        }
+
+        @Override
+        public void loadingErrorSchaden(Integer idMeldung) {
+             zeigeErrorSchaden();
+        }
+
+        @Override
+        public void loadingComplete() {
+            allowAddRemove();
+        }
+
+        @Override
+        public void loadingCompleteFest(Integer idMeldung) {
+            
+        }
+
+        @Override
+        public void loadingCompleteErsatz(Integer idMeldung) {
+            
+        }
+
+        @Override
+        public void loadingErrorFest(Integer idMeldung) {
+            
+        }
+
+        @Override
+        public void loadingErrorErsatz(Integer idMeldung) {
+           
+        }
+        
+    }
    }

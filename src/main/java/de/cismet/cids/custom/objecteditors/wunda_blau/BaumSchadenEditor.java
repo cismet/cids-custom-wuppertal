@@ -14,6 +14,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 
 import org.apache.log4j.Logger;
 
@@ -50,8 +51,6 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -68,6 +67,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -141,7 +141,8 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String BUNDLE_M_TITLE = "BaumSchadenEditor.btnRemoveMassnahmeActionPerformed().title";
     public static final String BUNDLE_M_ERRORTITLE = "BaumSchadenEditorEditor.btnRemoveMassnahmeActionPerformed().errortitle";
     public static final String BUNDLE_M_ERRORTEXT = "BaumSchadenEditor.btnRemoveMassnahmeActionPerformed().errortext";
-
+    public static final String BUNDLE_LOAD_ERROR =
+    "BaumSchadenEditor.loadChildren().error";
 
     //~ Enums ------------------------------------------------------------------
 
@@ -151,9 +152,12 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      * @version  $Revision$, $Date$
      */
     
-
+    
+    private BaumChildrenLoader childHandler;
     //~ Instance fields --------------------------------------------------------
     private boolean isEditor = true;
+    
+    private boolean areChildrenLoad = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumSchadenPanel baumSchadenPanel;
@@ -215,7 +219,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         panAll = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         panSchaden = new JPanel();
-        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(null, this, true, this.getConnectionContext());
+        baumSchadenPanel = baumSchadenPanel = new BaumSchadenPanel(null, this, isEditor, this.getConnectionContext());
         btnChangeGebiet = new JButton();
         jScrollPaneMeldung = new JScrollPane();
         xtMeldung = new JXTable();
@@ -433,7 +437,9 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            
+            if(this.cidsBean != null){
+                loadChildren(this.cidsBean.getPrimaryKeyValue());
+            }
             if (this.cidsBean != null){
             xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
             if(cidsBean.getProperty(FIELD__MELDUNG) == null){
@@ -458,6 +464,9 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                     }
                 }
             });
+            if(this.cidsBean != null){
+                loadChildren(this.cidsBean.getPrimaryKeyValue());
+            }
         }
             
         } catch (final Exception ex) {
@@ -509,6 +518,14 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         if (this.isEditor) {
             //((DefaultCismapGeometryComboBoxEditor)baumSchadenPanel.cbGeomSchaden).dispose();
         }
+        if (isEditor){
+            BaumChildrenLoader.getInstanceEditor().clearAllMaps();
+            BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(false);
+        } else {
+            BaumChildrenLoader.getInstanceRenderer().clearAllMaps();
+            BaumChildrenLoader.getInstanceRenderer().setLoadingCompletedWithoutError(false);
+        }
+        baumSchadenPanel.dispose();
     }
     
     @Override
@@ -530,7 +547,36 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         // To change body of generated methods, choose Tools | Templates.
         
     }
-    
+    private void loadChildren(final Integer id) {
+        new SwingWorker<Boolean, Void>() {
+
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    if(isEditor){
+                        return BaumChildrenLoader.getInstanceEditor().loadChildrenForSchaden(id, getConnectionContext());
+                    } else{
+                        return BaumChildrenLoader.getInstanceRenderer().loadChildrenForSchaden(id, getConnectionContext());
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        areChildrenLoad = get();
+                        if(isEditor){
+                            BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(areChildrenLoad);
+                        } else {
+                            BaumChildrenLoader.getInstanceRenderer().setLoadingCompletedWithoutError(areChildrenLoad);
+                        }
+                        if (!areChildrenLoad){
+                            setTitle(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_LOAD_ERROR));
+                        }
+                    } catch (final InterruptedException | ExecutionException ex) {
+                        LOG.error(ex, ex);
+                    }  
+                }
+            }.execute();
+    }
     
     
     
