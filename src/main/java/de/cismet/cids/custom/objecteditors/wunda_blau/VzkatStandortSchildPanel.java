@@ -45,6 +45,7 @@ import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -115,10 +116,15 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JLabel lblBemerkung;
     private javax.swing.JLabel lblBeschriftung;
+    private javax.swing.JLabel lblGueltig;
+    private javax.swing.JLabel lblGueltig1;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblPosition;
     private javax.swing.JLabel lblVerfuegungsnummer;
@@ -203,7 +209,6 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         fillBemerkungBodyLeft = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        txtVerfuegungsnummer = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         cbStvo = new DefaultBindableReferenceCombo(mcVzkatStvo, true, false);
         cbVerkehrszeichen = new de.cismet.cids.editors.FastBindableReferenceCombo(
@@ -222,6 +227,12 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         cbZeichenPrivat = new javax.swing.JCheckBox();
         cbSchildPrivat = new javax.swing.JCheckBox();
+        jPanel5 = new javax.swing.JPanel();
+        lblGueltig = new javax.swing.JLabel();
+        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
+        lblGueltig1 = new javax.swing.JLabel();
+        txtVerfuegungsnummer = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
 
         setOpaque(false);
@@ -416,27 +427,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         panBeschreibungBodyLeft.add(lblBemerkung, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         panBeschreibungBodyLeft.add(fillBemerkungBodyLeft, gridBagConstraints);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verfuegungsnummer}"),
-                txtVerfuegungsnummer,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panBeschreibungBodyLeft.add(txtVerfuegungsnummer, gridBagConstraints);
 
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -456,7 +450,7 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel3.add(cbStvo, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_zeichen}"),
@@ -709,6 +703,99 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panBeschreibungBodyLeft.add(cbSchildPrivat, gridBagConstraints);
 
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        lblGueltig.setFont(lblGueltig.getFont().deriveFont(lblGueltig.getFont().getStyle() | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGueltig,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblGueltig.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 0);
+        jPanel5.add(lblGueltig, gridBagConstraints);
+
+        jXDatePicker1.setMaximumSize(new java.awt.Dimension(150, 32));
+        jXDatePicker1.setMinimumSize(new java.awt.Dimension(150, 32));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gueltig_bis}"),
+                jXDatePicker1,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(new SqlTimestampToUtilDateConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        jPanel5.add(jXDatePicker1, gridBagConstraints);
+
+        jXDatePicker2.setMaximumSize(new java.awt.Dimension(150, 32));
+        jXDatePicker2.setMinimumSize(new java.awt.Dimension(150, 32));
+        jXDatePicker2.setName(""); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gueltig_von}"),
+                jXDatePicker2,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(new SqlTimestampToUtilDateConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        jPanel5.add(jXDatePicker2, gridBagConstraints);
+
+        lblGueltig1.setFont(lblGueltig1.getFont().deriveFont(lblGueltig1.getFont().getStyle() | java.awt.Font.BOLD));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGueltig1,
+            org.openide.util.NbBundle.getMessage(
+                VzkatStandortSchildPanel.class,
+                "VzkatStandortSchildPanel.lblGueltig1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 0);
+        jPanel5.add(lblGueltig1, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verfuegungsnummer}"),
+                txtVerfuegungsnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel5.add(txtVerfuegungsnummer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panBeschreibungBodyLeft.add(jPanel5, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -883,6 +970,10 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
                     }
                 });
         }
+        lblGueltig.setVisible(editable);
+        jXDatePicker1.setVisible(editable);
+        lblGueltig1.setVisible(editable);
+        jXDatePicker2.setVisible(editable);
 
         new SwingWorker<Void, Void>() {
 

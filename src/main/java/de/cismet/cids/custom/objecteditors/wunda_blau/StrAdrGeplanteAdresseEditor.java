@@ -34,8 +34,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import javax.swing.*;
+
+import de.cismet.cids.custom.wunda_blau.search.server.StrAdrGeplanteAdresseStrasseSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -69,12 +72,17 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(StrAdrGeplanteAdresseEditor.class);
+    public static final String STRASSENNAME_TOSTRING_TEMPLATE = "%1$2s";
+    public static final String[] STRASSENNAME_TOSTRING_FIELDS = { "anzeige" };
 
     //~ Instance fields --------------------------------------------------------
 
     protected Object hausnr;
     private CidsBean cidsBean = null;
     private boolean isEditor = true;
+    private final StrAdrGeplanteAdresseStrasseSearch strasseSearch = new StrAdrGeplanteAdresseStrasseSearch(
+            STRASSENNAME_TOSTRING_TEMPLATE,
+            STRASSENNAME_TOSTRING_FIELDS);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbAntragsteller;
@@ -171,10 +179,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         jLabel13 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtAdr_zusatz = new javax.swing.JTextField();
-        cbStrassenname = new FastBindableReferenceCombo(
-                "select s.id, s.name AS strname, k.name AS schluessel, s.name || ' (' || k.name || ')' as anzeige from str_adr_strasse s left join str_adr_strasse_schluessel k on s.schluessel = k.id where k.name::int < 4000 order by s.name",
-                "%1$2s",
-                new String[] { "anzeige", "schluessel" });
+        cbStrassenname = new de.cismet.cids.editors.FastBindableReferenceCombo(
+                strasseSearch,
+                strasseSearch.getRepresentationPattern(),
+                strasseSearch.getRepresentationFields());
         ftxHausnr = new javax.swing.JFormattedTextField();
         lblSchluessel = new javax.swing.JLabel();
         if (isEditor) {
@@ -329,8 +337,8 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 2, 0);
         panAdresse.add(txtAdr_zusatz, gridBagConstraints);
 
-        // ((FastBindableReferenceCombo)cbStrassenname).setLocale(Locale.GERMAN);
         ((FastBindableReferenceCombo)cbStrassenname).setSorted(false);
+        // ((FastBindableReferenceCombo)cbStrassenname).setLocale(Locale.GERMAN);
         cbStrassenname.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -434,10 +442,10 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         }
         if (isEditor) {
             gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 1;
-            gridBagConstraints.gridwidth = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.gridwidth = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 2);
             panAdresse.add(cbGeom, gridBagConstraints);
@@ -1443,9 +1451,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
                                     .toString();
                         final String myHausnummer = ftxHausnr.getText();
                         final String myZusatz = txtAdr_zusatz.getText().trim();
-                        String myQuery = null;
-
-                        myQuery = " where fk_strasse_id = " + myStrasse + " and hausnr = " + myHausnummer
+                        final String myQuery = " where fk_strasse_id = " + myStrasse + " and hausnr = " + myHausnummer
                                     + " and trim(adr_zusatz) ilike '" + myZusatz + "' and dat_historisch is null";
 
                         if (getOtherTableValue("str_adr_geplante_adresse", myQuery) != null) {
@@ -1469,7 +1475,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
                             "historischVorhanden"));
                 }
             }
-        } catch (Exception ex) {
+        } catch (MissingResourceException ex) {
             Exceptions.printStackTrace(ex);
         }
 
@@ -1514,6 +1520,7 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
             panPreviewMap.initMap(cb, "georeferenz.geo_field");
 
             bindingGroup.bind();
+            loadStreets();
             if (cb.getMetaObject().getStatus() == MetaObject.NEW) {
                 // Defaultwerte setzen
                 this.cidsBean.setProperty(
@@ -1526,6 +1533,20 @@ public class StrAdrGeplanteAdresseEditor extends DefaultCustomObjectEditor imple
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void loadStreets() {
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() {
+                    ((FastBindableReferenceCombo)cbStrassenname).refreshModel();
+                    return null;
+                }
+            }.execute();
     }
 
     @Override

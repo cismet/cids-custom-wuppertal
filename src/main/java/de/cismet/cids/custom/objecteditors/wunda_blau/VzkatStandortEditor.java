@@ -1369,7 +1369,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel11.add(jPanel2, gridBagConstraints);
-        jPanel2.setVisible(false);
+        jPanel2.setVisible(isEditable());
 
         add(jPanel11, "main");
 
@@ -2531,8 +2531,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         jButton3.setEnabled(false);
         final VzkatSchilderSearch schilderSearch = new VzkatSchilderSearch();
         schilderSearch.setStandortId((Integer)standortBean.getProperty("id"));
-        schilderSearch.setActiveTimestamp((jXDatePicker1.getDate() != null)
-                ? new Timestamp(jXDatePicker1.getDate().getTime() + (1000 * 60 * 60 * 24) - 1) : null);
+        schilderSearch.setActiveDate(jXDatePicker1.getDate());
         new SwingWorker<Void, Void>() {
 
                 @Override
