@@ -61,15 +61,19 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
      * @return  DOCUMENT ME!
      */
     public String getTitle() {
-        if (editor.getCidsBean().getProperty("bezeichnung") == null) {
-            return String.format(
-                    "neue Potenzialfläche der Kampagne \"%s\"",
-                    (String)editor.getCidsBean().getProperty("kampagne.bezeichnung"));
+        if ((editor != null) && (editor.getCidsBean() != null)) {
+            if (editor.getCidsBean().getProperty("bezeichnung") == null) {
+                return String.format(
+                        "neue Potenzialfläche der Kampagne \"%s\"",
+                        (String)editor.getCidsBean().getProperty("kampagne.bezeichnung"));
+            } else {
+                return String.format(
+                        "%s: %s",
+                        (String)editor.getCidsBean().getProperty("kampagne.bezeichnung"),
+                        (String)editor.getCidsBean().getProperty("bezeichnung"));
+            }
         } else {
-            return String.format(
-                    "%s: %s",
-                    (String)editor.getCidsBean().getProperty("kampagne.bezeichnung"),
-                    (String)editor.getCidsBean().getProperty("bezeichnung"));
+            return null;
         }
     }
 
