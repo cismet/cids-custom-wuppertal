@@ -19,8 +19,6 @@ import Sirius.server.localserver.attribute.MemberAttributeInfo;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
-import com.google.common.collect.Lists;
-
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -84,7 +82,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
 
     //~ Instance fields --------------------------------------------------------
 
-    private QuerySearchResultsAction csvAction = new QuerySearchResultsAction() {
+    private final QuerySearchResultsAction csvAction = new QuerySearchResultsAction() {
 
             @Override
             public String getName() {
@@ -101,13 +99,14 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                             cidsBeansTableActionPanel1.getAttributeNames().size());
                     final List<String> fields = new ArrayList<>(
                             cidsBeansTableActionPanel1.getAttributeNames().size());
-                    for (final String attrKey
-                                : cidsBeansTableActionPanel1.getAttributesToDisplay().get(
-                                    cidsBeansTableActionPanel1.getMetaClass())) {
-                        final MemberAttributeInfo mai = (MemberAttributeInfo)cidsBeansTableActionPanel1
-                                    .getMetaClass().getMemberAttributeInfos().get(attrKey);
-                        columnNames.add(cidsBeansTableActionPanel1.getAttributeNames().get(attrKey));
-                        fields.add(mai.getFieldName());
+                    final List<String> keys = cidsBeansTableActionPanel1.getKeys();
+                    if (keys != null) {
+                        for (final String attrKey : keys) {
+                            final MemberAttributeInfo mai = (MemberAttributeInfo)
+                                cidsBeansTableActionPanel1.getMetaClass().getMemberAttributeInfos().get(attrKey);
+                            columnNames.add(cidsBeansTableActionPanel1.getAttributeNames().get(attrKey));
+                            fields.add(mai.getFieldName());
+                        }
                     }
 
                     final List<MetaObjectNode> mons = new ArrayList<>();
@@ -324,10 +323,10 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
 //        bindingGroup.unbind();
         this.cidsBeans = cidsBeans;
         if (cidsBeans != null) {
-            ((CidsBeansTableModel)jXTable1.getModel()).setCidsBeans(Lists.newArrayList(cidsBeans));
 //            bindingGroup.bind();
         }
-        ((CidsBeansTableModel)jXTable1.getModel()).setCidsBeans(new ArrayList<>(cidsBeans));
+        ((CidsBeansTableModel)jXTable1.getModel()).setCidsBeans((cidsBeans != null) ? new ArrayList<>(cidsBeans)
+                                                                                    : null);
     }
 
     @Override

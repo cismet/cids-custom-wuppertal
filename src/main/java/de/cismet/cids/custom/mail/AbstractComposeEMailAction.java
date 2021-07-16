@@ -11,10 +11,9 @@
  */
 package de.cismet.cids.custom.mail;
 
-import com.google.common.collect.Lists;
-
 import java.awt.event.ActionEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.cismet.cids.utils.abstracts.AbstractCidsBeanAction;
@@ -39,9 +38,16 @@ public abstract class AbstractComposeEMailAction extends AbstractCidsBeanAction 
     public void actionPerformed(final ActionEvent e) {
         final Template template = new EMailTemplateChooserDialog().showDialogAndReturnBody();
         final List<String> eMailAddresses = fetchEMailAddresses();
-
         if (template != null) {
-            for (final List<String> partitionedEMailAddresses : Lists.partition(eMailAddresses, MAX_ADDRESSES_PER_MAIL)) {
+            final List<List<String>> partitions = new ArrayList<>();
+
+            for (int index = 0; index < eMailAddresses.size(); index += MAX_ADDRESSES_PER_MAIL) {
+                partitions.add(eMailAddresses.subList(
+                        index,
+                        Math.min(index + MAX_ADDRESSES_PER_MAIL, eMailAddresses.size())));
+            }
+
+            for (final List<String> partitionedEMailAddresses : partitions) {
                 final EMailComposer mail = new EMailComposer();
                 mail.setBcc(partitionedEMailAddresses);
                 mail.setBody(template.getBody());
