@@ -1260,7 +1260,7 @@
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_kategorie}" target="cbRvrKat" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo();&#xa;"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo(false);&#xa;"/>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
               <Constraints>

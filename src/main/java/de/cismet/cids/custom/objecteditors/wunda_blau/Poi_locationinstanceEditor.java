@@ -552,7 +552,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 lblRvrPrio = new javax.swing.JLabel();
                 cbRvrPrio = new DefaultBindableReferenceCombo(true);
                 lblRvrKat = new javax.swing.JLabel();
-                cbRvrKat = new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo();
+                cbRvrKat = new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo(false);
                 ;
                 lblHeader3 = new javax.swing.JLabel();
                 lblImageUrl = new javax.swing.JLabel();
