@@ -13,9 +13,11 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
@@ -27,6 +29,8 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
@@ -48,6 +52,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import javax.swing.JComboBox;
@@ -90,18 +96,20 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     }
     
     
+    public static final String FIELD__ID = "id";                           // baum_festsetzung
     public static final String FIELD__ART = "fk_art";                           // baum_festsetzung
     public static final String FIELD__UMFANG = "umfang";                        // baum_festsetzung
     public static final String FIELD__DATUM = "datum";                        // baum_festsetzung
     public static final String FIELD__GEOM = "fk_geom";                         // baum_festsetzung
     public static final String FIELD__BEMERKUNG = "bemerkung";                  // baum_festsetzung
-    public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_festsetzung
+   // public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_festsetzung
     
     
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_festsetzung_geom
     
     public static final String TABLE_GEOM = "geom";
+    public static final String TABLE__NAME = "baum_festsetzung";
     public static final String BUNDLE_NOART = 
             "BaumFestsetzungPanel.prepareForSave().noArt";
     public static final String BUNDLE_NOUMFANG = 
@@ -268,8 +276,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             cbGeomFest.setName("cbGeomFest"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomFest, BeanProperty.create("selectedItem"));
-            binding.setSourceNullValue(null);
-            binding.setSourceUnreadableValue(null);
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomFest).getConverter());
             bindingGroup.addBinding(binding);
 
@@ -447,18 +453,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             @Override
             public void propertyChange(final PropertyChangeEvent evt) {
                 if (!(Objects.equals(evt.getOldValue(), evt.getNewValue()))){
-                    if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
-                        //parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                        //LOG.warn(evt.getPropertyName());
-                        parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
-                        parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                        parentPanel.setChangedFestBeans(cidsBean);
-                    }
-                    if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
-                        parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
-                        parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                        parentPanel.setChangedFestBeans(cidsBean);
-                    }
+                    setChangeFlag();
                     if (FIELD__GEOM.equals(evt.getPropertyName())){
                         setMapWindow();
                     }
@@ -531,7 +526,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             "WUNDA_BLAU",
             null,
             true,
-            "baum_festsetzung",
+            TABLE__NAME,
             1,
             800,
             600);
@@ -543,16 +538,25 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         
     @Override
     public void dispose() {
-        bindingGroup.unbind();
+        //bindingGroup.unbind();
         cidsBean = null;
-        if (this.isEditor) {
+        if (this.isEditor && cbGeomFest != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).dispose();
+            ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(null);
+            cbGeomFest = null;
         }
     }
 
     @Override
     public CidsBean getCidsBean() {
         return this.cidsBean;
+    }
+    
+   
+    public void editorClosed(final EditorClosedEvent ece) {
+        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
+            
+        }
     }
 
     @Override
@@ -569,14 +573,26 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                         bindingGroup,
                         this.cidsBean,
                         getConnectionContext());
-                } 
-
+                    //Wenn mit mehreren Geoms(Liste) gearbeitet wird
+                    if (isEditor ) {
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(cidsBean.getMetaObject());
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).initForNewBinding();
+                    }
+                } else{
+                    if (isEditor) {
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).initForNewBinding();
+                        cbGeomFest.setSelectedIndex(-1);
+                    }
+                }
+                
                 setMapWindow();
                 bindingGroup.bind();
                 if (isEditor && (this.cidsBean != null)) {
-                        cidsBean.addPropertyChangeListener(changeListener);
+                    cidsBean.addPropertyChangeListener(changeListener);
                 }
-                cbGeomFest.updateUI();
+                if (isEditor){
+                    cbGeomFest.updateUI();
+                }
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -585,17 +601,27 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         
     }
-    public boolean prepareForSave() {
-        return everythingOk(cidsBean);
-    }
     
-    public boolean everythingOk (CidsBean cbOkay){
+    public void setChangeFlag(){
+        if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
+            //parentPanel.getCidsBean().setArtificialChangeFlag(true);
+            //LOG.warn(evt.getPropertyName());
+            parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
+            parentPanel.getCidsBean().setArtificialChangeFlag(true);
+            parentPanel.setChangedFestBeans(cidsBean);
+        }
+        if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
+            parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
+            parentPanel.getCidsBean().setArtificialChangeFlag(true);
+            parentPanel.setChangedFestBeans(cidsBean);
+        }
+    }
+    public boolean prepareForSave(final CidsBean saveBean) {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         // Art muss angegeben werden
         try {
-            //if (cbArtF.getSelectedItem() == null) {
-            if (cbOkay.getProperty(FIELD__ART) == null){//cbOkay.getProperty(FIELD__ART).toString().isEmpty()){
+            if (saveBean.getProperty(FIELD__ART) == null){
                 LOG.warn("No art specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOART));
             }
@@ -605,8 +631,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         //Umfang muss vorhanden sein
         try {
-            //if (txtUmfangF.getText().trim().isEmpty()) {
-            if (cbOkay.getProperty(FIELD__UMFANG) == null){
+            if (saveBean.getProperty(FIELD__UMFANG) == null){
                 LOG.warn("No umfang specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOUMFANG));
             } 
@@ -616,13 +641,11 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         // georeferenz muss gefüllt sein
         try {
-            //if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
-            if (cbOkay.getProperty(FIELD__GEOREFERENZ) == null){
+            if (saveBean.getProperty(FIELD__GEOM) == null){
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOGEOM));
             } else {
-                //final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
-                final CidsBean geom_pos = (CidsBean)cbOkay.getProperty(FIELD__GEOREFERENZ);
+                final CidsBean geom_pos = (CidsBean)saveBean.getProperty(FIELD__GEOM);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WRONGGEOM));
@@ -634,7 +657,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         // Datum muss angegeben werden
         try {
-            if (cbOkay.getProperty(FIELD__DATUM) == null) {
+            if (saveBean.getProperty(FIELD__DATUM) == null) {
                 LOG.warn("No datum specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NODATE));
             }

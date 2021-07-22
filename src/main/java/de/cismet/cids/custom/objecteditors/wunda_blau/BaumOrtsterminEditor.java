@@ -27,9 +27,6 @@ import org.openide.util.NbBundle;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -60,18 +57,12 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungSearch;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -80,12 +71,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.MissingResourceException;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.JXTable;
 /**
  * DOCUMENT ME!
  *
@@ -366,16 +351,14 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         
-        if (!baumOrtsterminPanel.prepareForSave()){
-          return false;
-        }
+        boolean noErrorOccured = baumOrtsterminPanel.prepareForSave(this.cidsBean);
         try {
             if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
                 LOG.warn("No meldung specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
             }
         } catch (final MissingResourceException ex) {
-            LOG.warn("Geom not given.", ex);
+            LOG.warn("Meldung not given.", ex);
             save = false;
         }
 
@@ -390,7 +373,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
             return false;
         }
-        return save;
+        return save && noErrorOccured;
     }
 
     @Override
@@ -559,6 +542,9 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
+        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
+            baumOrtsterminPanel.editorClosed(ece);
+        }
     }
 
     @Override

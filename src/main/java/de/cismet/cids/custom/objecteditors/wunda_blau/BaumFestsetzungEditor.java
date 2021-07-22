@@ -131,6 +131,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_NAME__SCHADEN = "baum_schaden";
+    public static final String TABLE__NAME = "baum_festsetzung";
     
     
     public static final String BUNDLE_NOSCHADEN = 
@@ -386,9 +387,9 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         
-        boolean errorOccured = false;
+        boolean noErrorOccured = true;
         
-        save = baumFestsetzungPanel.prepareForSave();
+        noErrorOccured = baumFestsetzungPanel.prepareForSave(this.cidsBean);
         // Schaden muss angegeben werden
         try {
             if (this.cidsBean.getProperty(FIELD__FK_SCHADEN)== null) {
@@ -410,7 +411,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
 
             return false;
         }
-        return save;
+        return save & noErrorOccured;
     }
 
     @Override
@@ -526,7 +527,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
             "WUNDA_BLAU",
             null,
             true,
-            "baum_festsetzung",
+            TABLE__NAME,
             1,
             800,
             600);

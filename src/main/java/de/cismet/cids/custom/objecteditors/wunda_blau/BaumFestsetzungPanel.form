@@ -185,8 +185,6 @@
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_geom}" target="cbGeomFest" targetPath="selectedItem" updateStrategy="0" immediately="false">
-                  <Property name="nullValue" type="java.lang.Object" value="null"/>
-                  <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                     <Connection code="((DefaultCismapGeometryComboBoxEditor)cbGeomFest).getConverter()" type="code"/>
                   </Property>

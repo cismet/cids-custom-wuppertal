@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
@@ -43,6 +44,8 @@ import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -59,6 +62,7 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -66,11 +70,14 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.Collator;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Box;
@@ -82,6 +89,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
@@ -110,6 +118,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
     private static final DefaultComboBoxModel NO_SELECTION_MODEL = new DefaultComboBoxModel(new Object[] {});
     private static final MetaClass MC__ART;
+
+    public static final String GEOMTYPE = "Polygon";
     static {
         final ConnectionContext connectionContext = ConnectionContext.create(
                 ConnectionContext.Category.STATIC,
@@ -154,6 +164,21 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_SORTE = "baum_sorte";
     public static final String TABLE_NAME__KONTROLLE = "baum_kontrolle";
+    
+    public static final String BUNDLE_NOSTREET = "BaumErsatzPanel.prepareForSave().noStrasse";
+    public static final String BUNDLE_NOGEOM = "BaumErsatzPanel.prepareForSave().noGeom";
+    public static final String BUNDLE_WRONGGEOM = "BaumErsatzPanel.prepareForSave().wrongGeom";
+    public static final String BUNDLE_NOART = "BaumErsatzPanel.prepareForSave().noArt";
+    public static final String BUNDLE_WRONGCOUNT = "BaumErsatzPanel.prepareForSave().wrongAnzahl";
+    public static final String BUNDLE_NOCOUNT = "BaumErsatzPanel.prepareForSave().noAnzahl";
+    public static final String BUNDLE_NOCONTROLDATE = "BaumErsatzPanel.prepareForSave().noKontrolleDatum";
+    public static final String BUNDLE_FUTUREDATE = "BaumErsatzPanel.prepareForSave().zukunftsDatum";
+    public static final String BUNDLE_NOCONTROLTEXT = "BaumErsatzPanel.prepareForSave().noControlText";
+    public static final String BUNDLE_PANE_PREFIX =
+        "BaumErsatzPanel.prepareForSave().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "BaumErsatzPanel.prepareForSave().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "BaumErsatzPanel.prepareForSave().JOptionPane.title";
     
     private static final String[] KONTROLLE_COL_NAMES = new String[] { "Datum", "Bemerkung"};
     private static final String[] KONTROLLE_PROP_NAMES = new String[] {
@@ -522,8 +547,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             cbGeomErsatz.setName("cbGeomErsatz"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomErsatz, BeanProperty.create("selectedItem"));
-            binding.setSourceNullValue(null);
-            binding.setSourceUnreadableValue(null);
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).getConverter());
             bindingGroup.addBinding(binding);
 
@@ -839,10 +862,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
     private void btnAddKontActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddKontActionPerformed
         TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
+        setChangeFlag();
     }//GEN-LAST:event_btnAddKontActionPerformed
 
     private void btnRemKontActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
         TableUtils.removeObjectsFromTable(xtKont);
+        setChangeFlag();
     }//GEN-LAST:event_btnRemKontActionPerformed
 
     private void cbArtEActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbArtEActionPerformed
@@ -866,23 +891,15 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     private final BaumSchadenPanel parentPanel;
     private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
+    
+    private SwingWorker worker_hnr;
+    private SwingWorker worker_strasse;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
             public void propertyChange(final PropertyChangeEvent evt) {
                 if (!(Objects.equals(evt.getOldValue(), evt.getNewValue()))){
-                    if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
-                        //parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                        //LOG.warn(evt.getPropertyName());
-                        parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
-                        parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                        parentPanel.setChangedErsatzBeans(cidsBean);
-                    }
-                    if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
-                        parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
-                        parentPanel.getCidsBean().setArtificialChangeFlag(true);
-                        parentPanel.setChangedErsatzBeans(cidsBean);
-                    }
+                    setChangeFlag();
                     if (FIELD__GEOM.equals(evt.getPropertyName())){
                         setMapWindow();
                     }
@@ -1000,7 +1017,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             "WUNDA_BLAU",
             null,
             true,
-            "baum_ersatz",
+            TABLE__NAME,
             1,
             800,
             600);
@@ -1021,6 +1038,21 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         }
     }
     
+    public void setChangeFlag(){
+        if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
+            //parentPanel.getCidsBean().setArtificialChangeFlag(true);
+            //LOG.warn(evt.getPropertyName());
+            parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
+            parentPanel.getCidsBean().setArtificialChangeFlag(true);
+            parentPanel.setChangedErsatzBeans(cidsBean);
+        }
+        if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
+            parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
+            parentPanel.getCidsBean().setArtificialChangeFlag(true);
+            parentPanel.setChangedErsatzBeans(cidsBean);
+        }
+    }
+    
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
@@ -1028,10 +1060,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         
     @Override
     public void dispose() {
-        bindingGroup.unbind();
+       // bindingGroup.unbind();
         cidsBean = null;
-        if (this.isEditor) {
+        if (this.isEditor && cbGeomErsatz != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).dispose();
+            ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(null);
+            cbGeomErsatz = null;
         }
     }
 
@@ -1039,7 +1073,119 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public CidsBean getCidsBean() {
         return this.cidsBean;
     }
+    
+     public void editorClosed(final EditorClosedEvent ece) {
+        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
+            
+        }
+    }
+    
+    public boolean prepareForSave(final CidsBean saveBean) {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+        
+        // Straße muss angegeben werden
+        try {
+            if (saveBean.getProperty(FIELD__STRASSE) == null) {
+                LOG.warn("No strasse specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
+            } 
+        } catch (final MissingResourceException ex) {
+            LOG.warn("strasse not given.", ex);
+            save = false;
+        }
+       
 
+        // georeferenz muss gefüllt sein
+        try {
+            if (saveBean.getProperty(FIELD__GEOREFERENZ) == null) {
+                LOG.warn("No geom specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
+            } else {
+                final CidsBean geom_pos = (CidsBean)saveBean.getProperty(FIELD__GEOREFERENZ);
+                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                    LOG.warn("Wrong geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOM));
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Geom not given.", ex);
+            save = false;
+        }
+        
+        // Anzahl muss, wenn angegeben, eine Ganzzahl sein; Pflichtattribut, wenn gepflanzt
+        try {
+            if (saveBean.getProperty(FIELD__ANZAHL) != null) {
+                try {
+                    Integer.parseInt(saveBean.getProperty(FIELD__ANZAHL).toString());
+                } catch (NumberFormatException e) {
+                    LOG.warn("Wrong count specified. Skip persisting.", e);
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGCOUNT));
+                }
+            } else{
+                if (saveBean.getProperty(FIELD__DATUM) != null){
+                    LOG.warn("No geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Count not given.", ex);
+            save = false;
+        }
+        
+        //Art muss angegeben werden
+        try {
+            if (saveBean.getProperty(FIELD__DATUM) != null && saveBean.getProperty(FIELD__ART) == null) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOART));
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Countl not given.", ex);
+            save = false;
+        }
+        
+        //Kontrolle
+        try{
+            Collection<CidsBean> controlCollection =  saveBean.getBeanCollectionProperty(FIELD__KONTROLLE);
+            final Date jetztDatum = new java.sql.Date(System.currentTimeMillis());
+            for (final CidsBean controlBean:controlCollection){
+                //Datum vorhanden
+                if (controlBean.getProperty(FIELD__KONTROLLE_DATUM)== null) {
+                    LOG.warn("No kontolldatum specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLDATE));
+                } else{
+                    //Datum nicht in der Zukunft
+                    final Object controllDate = controlBean.getProperty(FIELD__KONTROLLE_DATUM);
+                    if (controllDate instanceof Date){
+                        if (((Date)controllDate).after(jetztDatum)){
+                            LOG.warn("Wrong kontolldatum specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATE));
+                        }
+                    }
+                }
+                //Bemerkung vorhanden
+                if (controlBean.getProperty(FIELD__KONTROLLE_BEMERKUNG)== null) {
+                    LOG.warn("No bemerkung specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLTEXT));
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Teilnehmer not correct.", ex);
+            save = false;
+        }
+        
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+
+            return false;
+        }
+        return save;
+    }
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
@@ -1057,11 +1203,20 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                         bindingGroup,
                         this.cidsBean,
                         getConnectionContext());
+                    //Wenn mit mehreren Geoms(Liste) gearbeitet wird
+                    if (isEditor) {
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(cidsBean.getMetaObject());
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).initForNewBinding();
+                    }
+                
                 } else{
                     setKontrolleBeans(null);
                     cbSorte.setEnabled(false);
+                    if (isEditor) {
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).initForNewBinding();
+                        cbGeomErsatz.setSelectedIndex(-1);
+                    }
                 }
-
                 setMapWindow();
                 bindingGroup.bind();
                 final DivBeanTable kontrolleModel = new DivBeanTable(
@@ -1095,7 +1250,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                             }
                         }
                     });
-                cbGeomErsatz.updateUI();
+                if(isEditor){
+                    cbGeomErsatz.updateUI();
+                }
                 cbSorte.updateUI();
                 if (isEditor && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
@@ -1243,7 +1400,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                         refreshHnr();
                     }
                 }
-            }.execute();
+            };//.execute();
+            if (worker_hnr != null) {
+                worker_hnr.cancel(true);
+            }
+            worker_hnr.execute();
     }
     
     
@@ -1284,7 +1445,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                             LOG.fatal(ex, ex);
                         }
                     }
-                }.execute();
+                    
+                };//.execute();
+                if (worker_strasse != null) {
+                    worker_strasse.cancel(true);
+                }
+                worker_strasse.execute();    
         }
     }
       

@@ -67,6 +67,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
@@ -111,19 +113,26 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__ID = "id";                                // baum_schaden
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_schaden
     public static final String FIELD__MELDUNG = "fk_meldung";                   // baum_ortstermin
+    public static final String FIELD__SCHADEN = "fk_schaden";                   // baum_ersatz/fest
     public static final String FIELD__MELDUNG_ID = "fk_meldung.id";             // baum_meldung
     public static final String FIELD__MELDUNG_DATUM = "fk_meldung.datum";       // baum_meldung
     public static final String FIELD__GEBIET_AZ = "fk_meldung.fk_gebiet.aktenzeichen";       // baum_gebiet
     
     public static final String TABLE__ERSATZ = "baum_ersatz";
     public static final String TABLE__FEST = "baum_festsetzung";
-    public static final String TABLE_NAME__MELDUNG = "baum_meldung";
+    public static final String TABLE__MELDUNG = "baum_meldung";
+    public static final String TABLE_NAME = "baum_schaden";
     
     public static final String BUNDLE_PANE_PREFIX =
         "BaumSchadenEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumSchadenEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumSchadenEditor.prepareForSave().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_PERSIST = "BaumSchadenEditor.editorClose().JOptionPane.title";
+    public static final String BUNDLE_PANE_PREFIX_ERSATZ = "BaumSchadenEditor.editorClose().JOptionPane.errorErsatz";
+    public static final String BUNDLE_PANE_PREFIX_FEST = "BaumSchadenEditor.editorClose().JOptionPane.errorFest";
+    public static final String BUNDLE_PANE_KONTROLLE = "BaumSchadenEditor.editorClose().JOptionPane.kontrolle";
+    public static final String BUNDLE_PANE_ADMIN = "BaumSchadenEditor.editorClose().JOptionPane.admin";
     
     public static final String BUNDLE_W_QUESTION = "BaumSchadenEditor.btnRemoveWurzelActionPerformed().question";
     public static final String BUNDLE_W_TITLE = "BaumSchadenEditor.btnRemoveWurzelActionPerformed().title";
@@ -143,6 +152,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String BUNDLE_M_ERRORTEXT = "BaumSchadenEditor.btnRemoveMassnahmeActionPerformed().errortext";
     public static final String BUNDLE_LOAD_ERROR =
     "BaumSchadenEditor.loadChildren().error";
+    public static final String BUNDLE_NOMELDUNG = "BaumSchadenEditor.prepareForSave().noMeldung";
 
     //~ Enums ------------------------------------------------------------------
 
@@ -199,7 +209,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         initComponents();
         setReadOnly();
         if (isEditor) {
-           // ((DefaultCismapGeometryComboBoxEditor)baumSchadenPanel.cbGeomSchaden).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
+          // ((DefaultCismapGeometryComboBoxEditor)baumSchadenPanel.cbGeomSchaden).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         }
     }
 
@@ -390,11 +400,16 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-        
-        if (!baumSchadenPanel.prepareForSave()){
-          return false;
+        boolean noErrorOccured = baumSchadenPanel.prepareForSave(this.cidsBean);
+        try {
+            if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
+                LOG.warn("No meldung specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Meldung not given.", ex);
+            save = false;
         }
-        
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -406,7 +421,32 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
             return false;
         }
-        return save;
+        /*
+        if (noErrorOccured &&  save){
+            final List<CidsBean> listErsatz = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(this.cidsBean.getPrimaryKeyValue());
+            final List<CidsBean> listFest = BaumChildrenLoader.getInstanceEditor().getMapValueFest(this.cidsBean.getPrimaryKeyValue());
+            //Ersatzpflanzungen persisten
+            if (listErsatz != null && !(listErsatz.isEmpty())){
+                for (final CidsBean ersatzBean : listErsatz) {
+                    try {
+                        ersatzBean.persist(getConnectionContext());
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }
+            //Festsetzungen persisten
+            if (listFest != null && !(listFest.isEmpty())){
+                for (final CidsBean festBean : listFest) {
+                    try {
+                        festBean.persist(getConnectionContext());
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }
+        }*/
+        return save && noErrorOccured;
     }
 
     @Override
@@ -434,10 +474,10 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cb,
+                this.cidsBean,
                 getConnectionContext());
             bindingGroup.bind();
-            if(this.cidsBean != null){
+            if(this.cidsBean != null && this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
                 loadChildren(this.cidsBean.getPrimaryKeyValue());
             }
             if (this.cidsBean != null){
@@ -464,11 +504,16 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                     }
                 }
             });
-            if(this.cidsBean != null){
-                loadChildren(this.cidsBean.getPrimaryKeyValue());
-            }
         }
-            
+    /*    if(isEditor){
+            if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                CidsBean newBean = this.cidsBean.persist(getConnectionContext());
+                bindingGroup.unbind();
+                this.cidsBean = newBean;
+                this.cidsBean.getMetaObject().setStatus(MetaObject.MODIFIED);
+                bindingGroup.bind();
+            }
+        }    */
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -492,12 +537,11 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         final MappingComponent mc = new MappingComponent();
         CismapBroker.getInstance().setMappingComponent(mc);
-        DevelopmentTools.createEditorFromRestfulConnection(
-            DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
+        DevelopmentTools.createEditorFromRestfulConnection(DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
             "WUNDA_BLAU",
             null,
             true,
-            "baum_schaden",
+            TABLE__MELDUNG,
             1,
             800,
             600);
@@ -516,8 +560,13 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public void dispose() {
         super.dispose();
         if (this.isEditor) {
-            //((DefaultCismapGeometryComboBoxEditor)baumSchadenPanel.cbGeomSchaden).dispose();
+//            ((DefaultCismapGeometryComboBoxEditor)baumSchadenPanel.cbGeomSchaden).dispose();
         }
+        baumSchadenPanel.dispose();
+    }
+    
+    
+    public void clearBaumChildrenLoader(){
         if (isEditor){
             BaumChildrenLoader.getInstanceEditor().clearAllMaps();
             BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(false);
@@ -525,15 +574,66 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             BaumChildrenLoader.getInstanceRenderer().clearAllMaps();
             BaumChildrenLoader.getInstanceRenderer().setLoadingCompletedWithoutError(false);
         }
-        baumSchadenPanel.dispose();
     }
-    
     @Override
     public void setTitle(final String string) {
     }
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
+        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
+            baumSchadenPanel.editorClosed(ece);
+           
+        }
+        if(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS == ece.getStatus()){
+            List<CidsBean> listErsatz = new ArrayList<>();
+            final Map<Integer, List<CidsBean>> mapErsatz = BaumChildrenLoader.getInstanceEditor().getMapErsatz();
+            for(final Integer key:mapErsatz.keySet()){
+                listErsatz = mapErsatz.get(key);
+            }
+            List<CidsBean> listFest = new ArrayList<>();
+            final Map<Integer, List<CidsBean>> mapFest = BaumChildrenLoader.getInstanceEditor().getMapFest();
+            for(final Integer key:mapFest.keySet()){
+                listFest = mapFest.get(key);
+            }
+            //Ersatzpflanzungen persisten
+            if (listErsatz != null && !(listErsatz.isEmpty())){
+                for (final CidsBean ersatzBean : listErsatz) {
+                    try {
+                        ersatzBean.setProperty(FIELD__SCHADEN, ece.getSavedBean());
+                        ersatzBean.persist(getConnectionContext());
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                            NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_PREFIX_ERSATZ)
+                                    + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_KONTROLLE)
+                                    + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_ADMIN)
+                                    + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_SUFFIX),
+                            NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+            //Festsetzungen persisten
+            if (listFest != null && !(listFest.isEmpty())){
+                for (final CidsBean festBean : listFest) {
+                    try {
+                        festBean.setProperty(FIELD__SCHADEN, ece.getSavedBean());
+                        festBean.persist(getConnectionContext());
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                            NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_PREFIX_FEST)
+                                    + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_KONTROLLE)
+                                    + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_ADMIN)
+                                    + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_SUFFIX),
+                            NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        }
+        clearBaumChildrenLoader();
     }
 
     @Override

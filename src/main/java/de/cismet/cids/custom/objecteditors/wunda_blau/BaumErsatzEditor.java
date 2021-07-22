@@ -14,9 +14,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
-import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 
 import org.apache.log4j.Logger;
 
@@ -68,8 +66,6 @@ import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.event.MouseAdapter;
@@ -78,6 +74,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.MissingResourceException;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -155,8 +152,11 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_ersatz_geom
     
     public static final String TABLE_GEOM = "geom";
-    public static final String TABLE_NAME__SCHADEN = "baum_schaden";
+    public static final String TABLE__SCHADEN = "baum_schaden";
+    public static final String TABLE__NAME = "baum_ersatz";
     
+    public static final String BUNDLE_NOSCHADEN =
+        "BaumErsatzEditor.prepareForSave().noSchaden";
     public static final String BUNDLE_PANE_PREFIX =
         "BaumErsatzEditor.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
@@ -219,9 +219,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        schadenMetaClass = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                TABLE_NAME__SCHADEN,
+        schadenMetaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME,
+                TABLE__SCHADEN,
                 connectionContext);
         setReadOnly();
         if (isEditor) {
@@ -249,7 +248,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panErsatzMain = new JPanel();
-        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(null, true, this.getConnectionContext());
+        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(null, isEditor, this.getConnectionContext());
 
         setLayout(new GridBagLayout());
 
@@ -411,30 +410,15 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-        
-        boolean errorOccured = false;
-        for (final CidsBean ersatzBean : ersatzBeans) {
-            try {
-                ersatzBean.persist(getConnectionContext());
-            } catch (final Exception ex) {
-                errorOccured = true;
-                LOG.error(ex, ex);
+        boolean noErrorOccured = baumErsatzPanel.prepareForSave(this.cidsBean);
+        try {
+            if (cidsBean.getProperty(FIELD__SCHADEN_ID) == null) {
+                LOG.warn("No schaden specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSCHADEN));
             }
-        }
-        if (errorOccured) {
-            return false;
-        }
-        for (final CidsBean ersatzBean : deletedErsatzBeans) {
-            try {
-                ersatzBean.delete();
-                ersatzBean.persist(getConnectionContext());
-            } catch (final Exception ex) {
-                errorOccured = true;
-                LOG.error(ex, ex);
-            }
-        }
-        if (errorOccured) {
-            return false;
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Schaden not given.", ex);
+            save = false;
         }
 
         if (errorMessage.length() > 0) {
@@ -447,7 +431,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
             return false;
         }
-        return save;
+        return save && noErrorOccured;
     }
 
     @Override
@@ -460,13 +444,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
             if (isEditor && (this.cidsBean != null)) {
-                LOG.info("remove propchange baum_schaden: " + this.cidsBean);
+                LOG.info("remove propchange baum_ersatz: " + this.cidsBean);
                 this.cidsBean.removePropertyChangeListener(this);
             }
             bindingGroup.unbind();
             this.cidsBean = cb;
             if (isEditor && (this.cidsBean != null)) {
-                LOG.info("add propchange baum_schaden: " + this.cidsBean);
+                LOG.info("add propchange baum_ersatz: " + this.cidsBean);
                 this.cidsBean.addPropertyChangeListener(this);
             }
             
@@ -477,7 +461,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 bindingGroup,
                 cb,
                 getConnectionContext());
-            setMapWindow();
+            //setMapWindow();
             bindingGroup.bind();
             
             if (this.cidsBean != null){
@@ -519,7 +503,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         schadenBeans.add(schadenBean);
         ((ErsatzSchadenTableModel)xtSchaden.getModel()).setCidsBeans(schadenBeans);
     }
-
+    /*
     public void setMapWindow() {
         final CidsBean cb = this.getCidsBean();
         try {
@@ -546,7 +530,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Map window not set.", ex);
         }
     }
-    
+    */
     /**
      * DOCUMENT ME!
      */
@@ -560,12 +544,11 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         final MappingComponent mc = new MappingComponent();
         CismapBroker.getInstance().setMappingComponent(mc);
-        DevelopmentTools.createEditorFromRestfulConnection(
-            DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
+        DevelopmentTools.createEditorFromRestfulConnection(DevelopmentTools.RESTFUL_CALLSERVER_CALLSERVER,
             "WUNDA_BLAU",
             null,
             true,
-            "baum_schaden",
+            TABLE__NAME,
             1,
             800,
             600);

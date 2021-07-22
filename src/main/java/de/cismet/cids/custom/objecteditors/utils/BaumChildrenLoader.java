@@ -28,7 +28,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * DOCUMENT ME!
@@ -58,7 +57,7 @@ public class BaumChildrenLoader {
     @Getter public Map <Integer, List<CidsBean>> mapSchaden = new HashMap <>();
     @Getter public Map <Integer, List<CidsBean>> mapOrt = new HashMap <>();
     public Collection<Listener> listeners =  new ArrayList<>();
-    //public final Map <Integer, List<CidsBean>> mapMeldung = new HashMap <>();
+    @Getter public final Map <Integer, List<CidsBean>> mapMeldung = new HashMap <>();
     //~ Methods ----------------------------------------------------------------
 
     public boolean loadChildrenMeldung(Integer gebietId, ConnectionContext connectionContext) throws ConnectionException{
@@ -82,6 +81,11 @@ public class BaumChildrenLoader {
                             connectionContext).getBean());
                 }
             }
+            
+            if(!mapMeldung.containsKey(gebietId)){
+                mapMeldung.put(gebietId, beansMeldung);
+            }
+            fireLoadingCompleteMeldung();
             for(CidsBean beanMeldung:beansMeldung){
                 if(loadChildrenSchaden(beanMeldung.getPrimaryKeyValue(), connectionContext)){
                     //fireLoadingCompleteSchaden(beanMeldung.getPrimaryKeyValue());
@@ -180,7 +184,10 @@ public class BaumChildrenLoader {
                     fireLoadingCompleteSchaden(id);
                 for(CidsBean beanSchaden:beansSchaden){
                // for(CidsBean beanSchaden:beanArraySchaden){;
-                    return loadChildrenForSchaden(beanSchaden.getPrimaryKeyValue(), connectionContext);
+                    //return loadChildrenForSchaden(beanSchaden.getPrimaryKeyValue(), connectionContext);
+                    if(!(loadChildrenForSchaden(beanSchaden.getPrimaryKeyValue(), connectionContext))){
+                        return false;
+                    }
                 }
             }
         }catch (ConnectionException ex) {
@@ -260,6 +267,9 @@ public class BaumChildrenLoader {
                 FK_GEBIET);
     }
 
+    public List<CidsBean> getMapValueMeldung(Integer key){
+        return mapMeldung.get(key);
+    }
     public List<CidsBean> getMapValueSchaden(Integer key){
         return mapSchaden.get(key);
     }
@@ -278,6 +288,7 @@ public class BaumChildrenLoader {
         mapSchaden.clear();
         mapErsatz.clear();
         mapFest.clear();
+        mapMeldung.clear();
     }
     
     public void setLoadingCompletedWithoutError(final Boolean status){
@@ -304,6 +315,10 @@ public class BaumChildrenLoader {
         return removeFromMap(idSchaden, beanErsatz, mapErsatz);
     }
     
+    public boolean removeMeldung (Integer idGebiet, CidsBean beanMeldung){
+        return removeFromMap(idGebiet, beanMeldung, mapMeldung);
+    }
+    
     public void addOrt (Integer idMeldung, CidsBean beanOrt){
        /* List<CidsBean> tempList = new ArrayList<>();
         if (mapOrt.get(idMeldung) != null){
@@ -319,6 +334,10 @@ public class BaumChildrenLoader {
     
     public void addSchaden (Integer idMeldung, CidsBean beanSchaden){
         addToMap(idMeldung, beanSchaden, mapSchaden);
+    }
+    
+    public void addMeldung (Integer idMeldung, CidsBean beanMeldung){
+        addToMap(idMeldung, beanMeldung, mapMeldung);
     }
     
     public void addErsatz (Integer idSchaden, CidsBean beanErsatz){
@@ -383,6 +402,12 @@ public class BaumChildrenLoader {
         }
     }
     
+    private void fireLoadingCompleteMeldung() {
+        for (Listener listener:listeners){
+            listener.loadingCompleteMeldung();
+        }
+    }
+    
     private void fireLoadingCompleteOrt(Integer primaryKeyValue) {
         for (Listener listener:listeners){
             listener.loadingCompleteOrt(primaryKeyValue);
@@ -439,6 +464,10 @@ public class BaumChildrenLoader {
          * DOCUMENT ME!
          */
         void loadingComplete();
+        /**
+         * DOCUMENT ME!
+         */
+        void loadingCompleteMeldung();
         /**
          * DOCUMENT ME!
          * @param idMeldung
