@@ -123,14 +123,14 @@
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>7.2.5</version>
+                <version>7.3.1</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>7.2.3</version>
+                <version>7.3.1</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -466,13 +466,6 @@
             <scope>compile</scope>
             <type>jar</type>
         </dependency>        
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>10.0</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
         <!-- END: unmanaged dependencies -->
        
         <!-- BEGIN: Test dependencies -->    
