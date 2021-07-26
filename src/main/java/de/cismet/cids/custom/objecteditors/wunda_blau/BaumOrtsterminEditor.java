@@ -87,9 +87,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     private static final Comparator<Object> COMPARATOR = new Comparator<Object>() {
 
             @Override
-           /* public int compare(final Object o1, final Object o2) {
-                return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
-            }*/
             public int compare(final Object o1, final Object o2) {
                     return String.valueOf(o1).compareTo(String.valueOf(o2));
                 }
@@ -148,7 +145,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
 
@@ -168,7 +165,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     //~ Instance fields --------------------------------------------------------
     
-    private MetaClass teilnehmerMetaClass;
+    //private MetaClass teilnehmerMetaClass;
 
     private boolean isEditor = true;
     
@@ -397,7 +394,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            //searchMeldungen();
             
             xtMeldung.getColumn(2).setWidth(100);
             xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
@@ -432,7 +428,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     private void setMeldungTable(CidsBean meldungBean){
         List<CidsBean> meldungBeans = new ArrayList<>();
         meldungBeans.add(meldungBean);
-        //xtMeldung.setModel(new OrtsterminMeldungTableModel());
         ((OrtsterminMeldungTableModel)xtMeldung.getModel()).setCidsBeans(meldungBeans);
     }
     
@@ -533,7 +528,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     @Override
     public void dispose() {
         super.dispose();
-     //   ((OrtsterminMeldungTableModel)xtMeldung.getModel()).clear();
+        baumOrtsterminPanel.dispose();
     }
     
     @Override

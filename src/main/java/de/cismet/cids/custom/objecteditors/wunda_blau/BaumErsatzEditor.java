@@ -54,8 +54,6 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -72,7 +70,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.MissingResourceException;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -93,32 +90,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
-    private List<CidsBean> ersatzBeans = new ArrayList<>();
     private MetaClass schadenMetaClass;
-    private final List<CidsBean> deletedErsatzBeans = new ArrayList<>();
-    private static final Logger LOG = Logger.getLogger(BaumErsatzEditor.class);
-    private static final Comparator<Object> DATE_COMPARATOR = new Comparator<Object>() {
-
-            @Override
-           /* public int compare(final Object o1, final Object o2) {
-                return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
-            }*/
-            public int compare(final Object o1, final Object o2) {
-                    final String o1String = String.valueOf(((CidsBean)o1).getProperty("datum"));
-                    final String o2String = String.valueOf(((CidsBean)o2).getProperty("datum"));
-
-                    try {
-                        final Integer o1Int = Integer.parseInt(o1String);
-                        final Integer o2Int = Integer.parseInt(o2String);
-
-                        return o1Int.compareTo(o2Int);
-                    } catch (NumberFormatException e) {
-                        // do nothing
-                    }
-
-                    return String.valueOf(o1).compareTo(String.valueOf(o2));
-                }
-        };   
+    private static final Logger LOG = Logger.getLogger(BaumErsatzEditor.class);  
     private static final String[] SCHADEN_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Meldungsdatum", "Id", "gef. Art" };
     private static final String[] SCHADEN_PROP_NAMES = new String[] {
             "fk_meldung.fk_gebiet.aktenzeichen",
@@ -177,8 +150,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Instance fields --------------------------------------------------------
     
-    private SwingWorker worker_ersatz;
-
     private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -223,9 +194,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 TABLE__SCHADEN,
                 connectionContext);
         setReadOnly();
-        if (isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)baumErsatzPanel.cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
-        }
     }
 
     /**
@@ -377,34 +345,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
             }
         }
     }//GEN-LAST:event_btnChangeSchadenActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void refreshLabels() {
-    /*    final CidsBean bean = edMeldung.getCidsBean();
-
-        if (bean != null) {
-            lblMeldung.setText("Meldung: " + toString(bean.getProperty("schluessel")) + "  "
-                        + toString(bean.getProperty("name")));
-        } else {
-            lblMeldung.setText("Fläche");
-        }
-        lstMeldungen.repaint();
-
-        if (edMeldung.getCidsBean() != null) {
-            lstMeldungen.setSelectedValue(edMeldung.getCidsBean(), true);
-        }*/
-    }
-
-    private String toString(final Object o) {
-        if (o == null) {
-            return "";
-        } else {
-            return String.valueOf(o);
-        }
-    }
-   
+  
     
     @Override
     public boolean prepareForSave() {
@@ -461,7 +402,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 bindingGroup,
                 cb,
                 getConnectionContext());
-            //setMapWindow();
             bindingGroup.bind();
             
             if (this.cidsBean != null){
@@ -503,41 +443,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         schadenBeans.add(schadenBean);
         ((ErsatzSchadenTableModel)xtSchaden.getModel()).setCidsBeans(schadenBeans);
     }
-    /*
-    public void setMapWindow() {
-        final CidsBean cb = this.getCidsBean();
-        try {
-            final Double bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
-            if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                baumErsatzPanel.panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-            } else {
-                final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                final BoundingBox initialBoundingBox;
-                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                            .getInitialBoundingBox();
-                final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
-                final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                        CidsBeanSupport.DOMAIN_NAME,
-                        TABLE_GEOM,
-                        getConnectionContext());
-                final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                baumErsatzPanel.panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
-            }
-        } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
-            LOG.warn("Map window not set.", ex);
-        }
-    }
-    */
+    
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(baumErsatzPanel.taBemerkungE);
-            baumErsatzPanel.lblGeom.setVisible(isEditor);
         }
     }
     public static void main(final String[] args) throws Exception {
@@ -566,9 +478,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void dispose() {
         super.dispose();
-        if (this.isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)baumErsatzPanel.cbGeomErsatz).dispose();
-        }
+        baumErsatzPanel.dispose();
     }
     
     @Override

@@ -98,7 +98,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     public static final String FIELD__DATUM = "datum";                        // baum_festsetzung
     public static final String FIELD__GEOM = "fk_geom";                         // baum_festsetzung
     public static final String FIELD__BEMERKUNG = "bemerkung";                  // baum_festsetzung
-   // public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_festsetzung
     
     
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
@@ -596,24 +595,18 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
-            
-        //cbGeomFest.updateUI();
         }
         
     }
     
     public void setChangeFlag(){
         if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
-            //parentPanel.getCidsBean().setArtificialChangeFlag(true);
-            //LOG.warn(evt.getPropertyName());
             parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
             parentPanel.getCidsBean().setArtificialChangeFlag(true);
-            parentPanel.setChangedFestBeans(cidsBean);
         }
         if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
             parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
             parentPanel.getCidsBean().setArtificialChangeFlag(true);
-            parentPanel.setChangedFestBeans(cidsBean);
         }
     }
     public boolean prepareForSave(final CidsBean saveBean) {

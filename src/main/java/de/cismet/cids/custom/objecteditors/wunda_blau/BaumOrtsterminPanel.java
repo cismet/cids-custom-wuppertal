@@ -520,7 +520,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public void setChangeFlag(){
         if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)) {
             parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
-            parentPanel.setChangedOrtsterminBeans(cidsBean);
+            //parentPanel.setChangedOrtsterminBeans(cidsBean);
         }
         if ((parentEditor != null) && (parentEditor.getCidsBean() != null)) {
             parentEditor.getCidsBean().setArtificialChangeFlag(true);

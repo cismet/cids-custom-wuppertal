@@ -13,7 +13,6 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.server.localserver.attribute.ObjectAttribute;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -89,7 +88,6 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumChildLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -103,15 +101,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Locale;
-import java.util.Objects;
 import javax.swing.JList;
 import javax.swing.plaf.basic.ComboPopup;
 import lombok.Getter;
 import lombok.Setter;
-import org.jdesktop.swingbinding.JListBinding;
-import org.jdesktop.swingbinding.SwingBindings;
 /**
  * DOCUMENT ME!
  *
@@ -125,28 +119,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
-    private static final Comparator<Object> DATE_COMPARATOR = new Comparator<Object>() {
-
-            @Override
-           /* public int compare(final Object o1, final Object o2) {
-                return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
-            }*/
-            public int compare(final Object o1, final Object o2) {
-                    final String o1String = String.valueOf(((CidsBean)o1).getProperty("datum"));
-                    final String o2String = String.valueOf(((CidsBean)o2).getProperty("datum"));
-
-                    try {
-                        final Integer o1Int = Integer.parseInt(o1String);
-                        final Integer o2Int = Integer.parseInt(o2String);
-
-                        return o1Int.compareTo(o2Int);
-                    } catch (NumberFormatException e) {
-                        // do nothing
-                    }
-
-                    return String.valueOf(o1).compareTo(String.valueOf(o2));
-                }
-        };   
+    
     public static final String GEOMTYPE = "Polygon";
     public static boolean azGeneriert = false;
     Collection<CidsBean> beansMeldung = new ArrayList<>();
@@ -162,8 +135,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String CHILD_TABLE = "baum_meldung";
     public static final String CHILD_FK = "fk_meldung";
     
-    private List<CidsBean> noSaveToDeleteBeansMeldung = new ArrayList<>();
-
     private static final Logger LOG = Logger.getLogger(BaumGebietEditor.class);
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
     public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
@@ -176,7 +147,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__HAUSNUMMER = "hausnummer";                // baum_adresse
     public static final String FIELD__ID = "id";                                // baum_gebiet
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_gebiet
-    //public static final String FIELD__MELDUNGEN = "n_meldungen";                // baum_gebiet
     public static final String FIELD__DATUM = "datum";                          // baum_meldung
     public static final String FIELD__GEBIET = "fk_gebiet";                     // baum_meldung
     public static final String FIELD__SCHADEN = "fk_schaden";                     // baum_ersatz/fest
@@ -233,7 +203,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
 
     //~ Instance fields --------------------------------------------------------
-    private List<CidsBean> meldungBeans = new ArrayList<>();;
     private SwingWorker worker_name;
     
     @Getter @Setter private static Integer counterMeldung = -1;
@@ -242,12 +211,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             AdresseLightweightSearch.Subject.HNR,
             ADRESSE_TOSTRING_TEMPLATE,
             ADRESSE_TOSTRING_FIELDS);
-    
-    private final BaumChildLightweightSearch meldungSearch = new BaumChildLightweightSearch(
-            CHILD_TOSTRING_TEMPLATE,
-            CHILD_TOSTRING_FIELDS,
-            CHILD_TABLE,
-            CHILD_FK);
     
     private Boolean redundantName = false;
 
@@ -1122,23 +1085,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             beanMeldung.setProperty(FIELD__DATUM, beanDate);
             beanMeldung.setProperty(FIELD__ID, getCounterMeldung());
             setCounterMeldung(getCounterMeldung()-1);
-            //CidsBean beanMeldungPersist = beanMeldung.persist(getConnectionContext());
-            //fuellen fuer evtl Loeschen
-            noSaveToDeleteBeansMeldung.add(beanMeldung);//Persist
             //Meldungen erweitern:
-           /* if (isEditor){
+            if (isEditor){
                 BaumChildrenLoader.getInstanceEditor().addMeldung(cidsBean.getPrimaryKeyValue(), beanMeldung);
-            }*/
+            }
             //Fuegt die Meldung zu mapMeldung hinzu
-            meldungBeans.add(beanMeldung);//Persist
             ((DefaultListModel)lstMeldungen.getModel()).addElement(beanMeldung);
             
             //Refresh:
-            
-            //bindingGroup.unbind();
-            //Collections.sort((List)meldungBeans, DATE_COMPARATOR);
-            //bindingGroup.bind();
-            lstMeldungen.setSelectedValue(beanMeldung, true);//Persist
+            lstMeldungen.setSelectedValue(beanMeldung, true);
             cidsBean.setArtificialChangeFlag(true);
             
         } catch (Exception ex) {
@@ -1171,12 +1126,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         
         if (selectedObject instanceof CidsBean) {
             final Integer idMeldung = ((CidsBean) selectedObject).getPrimaryKeyValue();
-            if(BaumChildrenLoader.getInstanceEditor().getMapValueOrt(idMeldung)== null && BaumChildrenLoader.getInstanceEditor().getMapValueSchaden(idMeldung)== null){
-            //if (meldungBeans != null) {
-                //Loeschen, nur wenn die Meldung keine Unterobjekte hat
-                //if (baumMeldungPanel.getSchadenBeans().isEmpty() && baumMeldungPanel.getOrtsterminBeans().isEmpty()){
-                    //Fuer delete vorbereiten
-                    //meldungBeans.remove((CidsBean)selectedObject);
+            if(BaumChildrenLoader.getInstanceEditor().getMapValueOrt(idMeldung)== null && 
+                    BaumChildrenLoader.getInstanceEditor().getMapValueSchaden(idMeldung)== null){
                     List<CidsBean> listMeldungen = BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue());
                     if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
                         BaumChildrenLoader.getInstanceEditor().removeMeldung(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
@@ -1196,9 +1147,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     ((DefaultListModel)lstMeldungen.getModel()).removeElement(selectedObject);
                     if (getActiveBeans(listMeldungen) > 0) {
                         lstMeldungen.setSelectedIndex(0);
-                    }/*else{
-                        lstMeldungen.clearSelection();
-                    }*/
+                    }
                     cidsBean.setArtificialChangeFlag(true);
                 }else {
                     //Meldung, Meldung hat Unterobjekte
@@ -1209,7 +1158,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                             JOptionPane.WARNING_MESSAGE);
                 
             }
-     //   }
         }
     }//GEN-LAST:event_btnRemoveMeldungActionPerformed
 
@@ -1271,10 +1219,30 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         
     }//GEN-LAST:event_btnReportActionPerformed
 
+    
+    private Integer getActiveBeans(final List<CidsBean> cbList){
+        Integer anzahl = 0;
+        for(final CidsBean bean:cbList){
+            if(bean.getMetaObject().getStatus() != MetaObject.TO_DELETE){
+                anzahl += 1;
+            }
+        }        
+        return anzahl;
+    }
+    
     public void prepareMeldung(){
-        
-        if (meldungBeans != null && meldungBeans.size() > 0) {
-            lstMeldungen.setSelectedIndex(0);
+        if (isEditor){
+            if (BaumChildrenLoader.getInstanceEditor().getMapMeldung() != null && 
+                    getActiveBeans(BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(
+                            this.cidsBean.getPrimaryKeyValue())) > 0) {
+                lstMeldungen.setSelectedIndex(0);
+            }
+        }else{
+            if (BaumChildrenLoader.getInstanceRenderer().getMapMeldung() != null && 
+                    getActiveBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueMeldung(
+                            this.cidsBean.getPrimaryKeyValue())) > 0) {
+                lstMeldungen.setSelectedIndex(0);
+            }
         }
         lstMeldungen.setCellRenderer(new DefaultListCellRenderer() {
 
@@ -1317,7 +1285,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     }
                 }
             }
-            this.meldungBeans = cidsBeans;
             prepareMeldung();
         } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
@@ -1325,18 +1292,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
     
-    private Integer getActiveBeans(final List<CidsBean> cbList){
-        Integer anzahl = 0;
-        for(final CidsBean bean:cbList){
-            if(bean.getMetaObject().getStatus() != MetaObject.TO_DELETE){
-                anzahl += 1;
-            }
-        }        
-        return anzahl;
-    }
 
     private void zeigeKinderMeldung(){
-        //lstOrtstermine.setModel(new DefaultListModel());
         if (isEditor){      
             setMeldungBeans(BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(cidsBean.getPrimaryKeyValue()));
         } else {
@@ -1385,14 +1342,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-      /*   final ObjectAttribute[] objAtt = cidsBean.getMetaObject().getAttribs();
-            for (final ObjectAttribute changedAtt : objAtt) {
-                    if (changedAtt.isChanged()) {
-                        
-                    }
-            }*/
         boolean noErrorOccured = true;
-        for (final CidsBean meldungBean : meldungBeans) {
+        for (final CidsBean meldungBean : 
+                BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue())){
             try {
                 noErrorOccured = baumMeldungPanel.prepareForSave(meldungBean);
                 if(!noErrorOccured) {
@@ -1467,62 +1419,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
             return false;
         }
-        /*
-        if (noErrorOccured &&  save){
-            for (final CidsBean meldungBean : meldungBeans) {
-                try {
-                    final List<CidsBean> listOrt = BaumChildrenLoader.getInstanceEditor().getMapValueOrt(meldungBean.getPrimaryKeyValue());
-                    final List<CidsBean> listSchaden = BaumChildrenLoader.getInstanceEditor().getMapValueSchaden(meldungBean.getPrimaryKeyValue());
-                    //Ortstermine persisten
-                    if (listOrt != null && !(listOrt.isEmpty())){
-                        for (final CidsBean ortBean : listOrt) {
-                            try {
-                                ortBean.persist(getConnectionContext());
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                            }
-                        }
-                    }
-                    //Schaeden persisten
-                    if (listSchaden != null && !(listSchaden.isEmpty())){
-                        for (CidsBean schadenBean : listSchaden) {
-                            try {
-                                final List<CidsBean> listErsatz = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(schadenBean.getPrimaryKeyValue());
-                                final List<CidsBean> listFest = BaumChildrenLoader.getInstanceEditor().getMapValueFest(schadenBean.getPrimaryKeyValue());
-                                schadenBean = schadenBean.persist(getConnectionContext());
-                                //Ersatzpflanzungen persisten
-                                if (listErsatz != null && !(listErsatz.isEmpty())){
-                                    for (final CidsBean ersatzBean : listErsatz) {
-                                        try {
-                                            ersatzBean.setProperty(FIELD__SCHADEN, schadenBean);
-                                            ersatzBean.persist(getConnectionContext());
-                                        } catch (final Exception ex) {
-                                            LOG.error(ex, ex);
-                                        }
-                                    }
-                                }
-                                //Festsetzungen persisten
-                                if (listFest != null && !(listFest.isEmpty())){
-                                    for (final CidsBean festBean : listFest) {
-                                        try {
-                                            festBean.setProperty(FIELD__SCHADEN, schadenBean);
-                                            festBean.persist(getConnectionContext());
-                                        } catch (final Exception ex) {
-                                            LOG.error(ex, ex);
-                                        }
-                                    }
-                                }
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    Exceptions.printStackTrace(ex);
-                }
-            }
-        }*/
-        
         return save && noErrorOccured;
     }
 
@@ -1545,11 +1441,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             this.cidsBean.addPropertyChangeListener(this);
         }
         if (this.cidsBean != null){
-            //setMeldungBeans(cidsBean.getBeanCollectionProperty(FIELD__MELDUNGEN));
             zeigeKinderMeldung();
-        }
-        if (meldungBeans != null) {
-            Collections.sort((List)meldungBeans, DATE_COMPARATOR);
         }
         // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
         // evtl. kann dies verbessert werden.
@@ -1559,30 +1451,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 getConnectionContext());
         setMapWindow();
         bindingGroup.bind();
-        if (meldungBeans != null && meldungBeans.size() > 0) {
-            lstMeldungen.setSelectedIndex(0);
-        }
         if(this.cidsBean != null){
             loadChildren(this.cidsBean.getPrimaryKeyValue());
         }
-        /*
-        meldungSearch.setParentId(this.cidsBean.getPrimaryKeyValue());
-        meldungSearch.setFkField(FIELD__GEBIET);
-        meldungSearch.setTable(TABLE_MELDUNG);
-        final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(
-        SessionManager.getSession().getUser(),
-        meldungSearch,
-        getConnectionContext());
-        final List<CidsBean> beans = new ArrayList<>();
-        if (!mons.isEmpty()) {
-        for (final MetaObjectNode mon : mons) {
-        beans.add(SessionManager.getProxy().getMetaObject(
-        mon.getObjectId(),
-        mon.getClassId(),
-        "WUNDA_BLAU",
-        getConnectionContext()).getBean());
-        }
-        }*/
         if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
             cbHNr.setEnabled(true);
             searchStreets();
@@ -1619,9 +1490,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @return  DOCUMENT ME!
      */
-    public List<CidsBean> getMeldungBeans() {
+    /*public List<CidsBean> getMeldungBeans() {
         return meldungBeans;
-    }
+    }*/
     
     /**
      * DOCUMENT ME!
@@ -1764,7 +1635,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     if (listSchaden != null && !(listSchaden.isEmpty())){
                         for (CidsBean schadenBean : listSchaden) {
                             try {
-                                schadenBean.setProperty(FIELD__MELDUNG, meldungBeans);
+                                schadenBean.setProperty(FIELD__MELDUNG, meldungBean);
                                 final List<CidsBean> listErsatz = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(schadenBean.getPrimaryKeyValue());
                                 final List<CidsBean> listFest = BaumChildrenLoader.getInstanceEditor().getMapValueFest(schadenBean.getPrimaryKeyValue());
                                 schadenBean = schadenBean.persist(getConnectionContext());
@@ -2004,8 +1875,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 protected Boolean doInBackground() throws Exception {
                     //((DefaultListModel)baumMeldungPanel.lstOrtstermine.getModel()).addElement("lade...");
                     if(isEditor){
-                        
-                        //BaumChildrenLoader.getInstanceEditor().clearAllMaps();
                         return BaumChildrenLoader.getInstanceEditor().loadChildrenMeldung(id, getConnectionContext());
                     } else{
                         return BaumChildrenLoader.getInstanceRenderer().loadChildrenMeldung(id, getConnectionContext());

@@ -157,8 +157,6 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
 
     //~ Instance fields --------------------------------------------------------
     
-    private SwingWorker worker_fest;
-
     private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -203,9 +201,6 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
                 TABLE_NAME__SCHADEN,
                 connectionContext);
         setReadOnly();
-        if (isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)baumFestsetzungPanel.cbGeomFest).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
-        }
     }
 
     /**
@@ -354,42 +349,12 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         }
     }//GEN-LAST:event_btnChangeSchadenActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void refreshLabels() {
-    /*    final CidsBean bean = edMeldung.getCidsBean();
-
-        if (bean != null) {
-            lblMeldung.setText("Meldung: " + toString(bean.getProperty("schluessel")) + "  "
-                        + toString(bean.getProperty("name")));
-        } else {
-            lblMeldung.setText("Fläche");
-        }
-        lstMeldungen.repaint();
-
-        if (edMeldung.getCidsBean() != null) {
-            lstMeldungen.setSelectedValue(edMeldung.getCidsBean(), true);
-        }*/
-    }
-
-    private String toString(final Object o) {
-        if (o == null) {
-            return "";
-        } else {
-            return String.valueOf(o);
-        }
-    }
-   
-    
     @Override
     public boolean prepareForSave() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         
-        boolean noErrorOccured = true;
-        
-        noErrorOccured = baumFestsetzungPanel.prepareForSave(this.cidsBean);
+        boolean noErrorOccured = baumFestsetzungPanel.prepareForSave(this.cidsBean);
         // Schaden muss angegeben werden
         try {
             if (this.cidsBean.getProperty(FIELD__FK_SCHADEN)== null) {
@@ -441,7 +406,6 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
                 bindingGroup,
                 cb,
                 getConnectionContext());
-            setMapWindow();
             bindingGroup.bind();
             
             if (this.cidsBean != null){
@@ -482,33 +446,6 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         ((FestSchadenTableModel)xtSchaden.getModel()).setCidsBeans(schadenBeans);
     }
 
-    public void setMapWindow() {
-        final CidsBean cb = this.getCidsBean();
-        try {
-            final Double bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
-            if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                baumFestsetzungPanel.panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-            } else {
-                final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                final BoundingBox initialBoundingBox;
-                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                            .getInitialBoundingBox();
-                final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
-                final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                        CidsBeanSupport.DOMAIN_NAME,
-                        TABLE_GEOM,
-                        getConnectionContext());
-                final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                baumFestsetzungPanel.panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
-            }
-        } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
-            LOG.warn("Map window not set.", ex);
-        }
-    }
-    
     /**
      * DOCUMENT ME!
      */
@@ -545,9 +482,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     @Override
     public void dispose() {
         super.dispose();
-        if (this.isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)baumFestsetzungPanel.cbGeomFest).dispose();
-        }
+        baumFestsetzungPanel.dispose();
     }
     
     @Override

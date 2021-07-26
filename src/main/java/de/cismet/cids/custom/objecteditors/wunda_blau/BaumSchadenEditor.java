@@ -208,9 +208,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         super.initWithConnectionContext(connectionContext);
         initComponents();
         setReadOnly();
-        if (isEditor) {
-          // ((DefaultCismapGeometryComboBoxEditor)baumSchadenPanel.cbGeomSchaden).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
-        }
     }
 
     /**
@@ -368,33 +365,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         }
     }//GEN-LAST:event_btnChangeGebietActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void refreshLabels() {
-    /*    final CidsBean bean = edMeldung.getCidsBean();
-
-        if (bean != null) {
-            lblMeldung.setText("Meldung: " + toString(bean.getProperty("schluessel")) + "  "
-                        + toString(bean.getProperty("name")));
-        } else {
-            lblMeldung.setText("Fläche");
-        }
-        lstMeldungen.repaint();
-
-        if (edMeldung.getCidsBean() != null) {
-            lstMeldungen.setSelectedValue(edMeldung.getCidsBean(), true);
-        }*/
-    }
-
-    private String toString(final Object o) {
-        if (o == null) {
-            return "";
-        } else {
-            return String.valueOf(o);
-        }
-    }
-   
+    
     
     @Override
     public boolean prepareForSave() {
@@ -421,31 +392,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
             return false;
         }
-        /*
-        if (noErrorOccured &&  save){
-            final List<CidsBean> listErsatz = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(this.cidsBean.getPrimaryKeyValue());
-            final List<CidsBean> listFest = BaumChildrenLoader.getInstanceEditor().getMapValueFest(this.cidsBean.getPrimaryKeyValue());
-            //Ersatzpflanzungen persisten
-            if (listErsatz != null && !(listErsatz.isEmpty())){
-                for (final CidsBean ersatzBean : listErsatz) {
-                    try {
-                        ersatzBean.persist(getConnectionContext());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                }
-            }
-            //Festsetzungen persisten
-            if (listFest != null && !(listFest.isEmpty())){
-                for (final CidsBean festBean : listFest) {
-                    try {
-                        festBean.persist(getConnectionContext());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                    }
-                }
-            }
-        }*/
         return save && noErrorOccured;
     }
 
@@ -505,15 +451,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 }
             });
         }
-    /*    if(isEditor){
-            if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-                CidsBean newBean = this.cidsBean.persist(getConnectionContext());
-                bindingGroup.unbind();
-                this.cidsBean = newBean;
-                this.cidsBean.getMetaObject().setStatus(MetaObject.MODIFIED);
-                bindingGroup.bind();
-            }
-        }    */
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -559,9 +496,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     @Override
     public void dispose() {
         super.dispose();
-        if (this.isEditor) {
-//            ((DefaultCismapGeometryComboBoxEditor)baumSchadenPanel.cbGeomSchaden).dispose();
-        }
         baumSchadenPanel.dispose();
     }
     

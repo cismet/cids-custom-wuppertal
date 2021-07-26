@@ -41,7 +41,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
@@ -62,7 +61,6 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -70,8 +68,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.Collator;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1003,26 +999,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
      * Creates new form BaumErsatzPanel.
      *
      * @param parentPanel
-     * @param  editable  DOCUMENT ME!
-     */
-  /*  public BaumErsatzPanel(final BaumSchadenPanel parentPanel, final boolean editable) {
-        this.isEditor = editable;
-        this.sorteArtSearch = new BaumArtLightweightSearch(
-                "%1$2s",
-                new String[] { "NAME" });
-        //cbSorte.setMetaClassFromTableName("WUNDA_BLAU", TABLE_SORTE);
-        initComponents();
-        if (isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
-        }
-        this.connectionContext = null;
-        this.parentPanel = parentPanel;
-    }*/
- 
-    /**
-     * Creates new form BaumErsatzPanel.
-     *
-     * @param parentPanel
      * @param  editable             DOCUMENT ME!
      * @param  connectionContext    DOCUMENT ME!
      */
@@ -1033,7 +1009,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         this.sorteArtSearch = new BaumArtLightweightSearch(
                 "%1$2s",
                 new String[] { "NAME" });
-        //cbSorte.setMetaClassFromTableName("WUNDA_BLAU", TABLE_SORTE);
         initComponents();
         if (isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
@@ -1074,16 +1049,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     
     public void setChangeFlag(){
         if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
-            //parentPanel.getCidsBean().setArtificialChangeFlag(true);
-            //LOG.warn(evt.getPropertyName());
             parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
             parentPanel.getCidsBean().setArtificialChangeFlag(true);
-            parentPanel.setChangedErsatzBeans(cidsBean);
         }
         if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
             parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
             parentPanel.getCidsBean().setArtificialChangeFlag(true);
-            parentPanel.setChangedErsatzBeans(cidsBean);
         }
     }
     
@@ -1227,9 +1198,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             try{
-          //  if (bindingGroup.getBinding(TABLE__NAME).isBound()){
                 bindingGroup.unbind();
-           // }
                 this.cidsBean = cidsBean;
                 if (this.cidsBean != null){
                     setKontrolleBeans(cidsBean.getBeanCollectionProperty(FIELD__KONTROLLE)); 
@@ -1318,13 +1287,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
-         /*   if (cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
-                if (cidsBean.getProperty(FIELD__ART) != null){
-                    cbSorte.setEnabled(true);
-                }
-            } else {
-                cbSorte.setEnabled(false);
-            }*/
         }
         
         
@@ -1448,12 +1410,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
                     @Override
                     protected Collection doInBackground() throws Exception {
- /*
-                        if (cidsBean == null || cidsBean.getProperty(FIELD__STRASSE) == null) {
-                            cbStrasse.setModel(new MustSetModelCb());
-                            return null;
-                        }*/
-
                         return setStrasseCb();
                     }
 
@@ -1465,22 +1421,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                             if (check != null) {
                                 final Collection colStreets = check;
                                 cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
-                                List<CidsBean> streetBeans = new ArrayList<>();
-                                /*if (cidsBean.getProperty(FIELD__STRASSE) != null){
-                                    for (final CidsBean cb : colStreets.toArray().){
-                                        if(cb.getProperty(FIELD__STRASSE_KEY).toString().equals(cidsBean.getProperty(FIELD__STRASSE).toString())){
-                                           streetBeans.add(cb);
-                                           break;
-                                        }
-                                    }
-                                }*/
                             }
                         } catch (final InterruptedException | ExecutionException ex) {
                             LOG.fatal(ex, ex);
                         }
                     }
                     
-                };//.execute();
+                };
                 if (worker_strasse != null) {
                     worker_strasse.cancel(true);
                 }
