@@ -156,6 +156,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     public static final String FIELD__EINGANG = "eingegangen";                  // baum_schaden
     public static final String FIELD__FAELLUNG = "faellung";                    // baum_schaden
     public static final String FIELD__FK_SCHADEN = "fk_schaden";                // baum_ersatz
+    public static final String FIELD__SELBST = "selbststaendig";                // baum_ersatz
+    public static final String FIELD__DISPENS = "dispensbau";                   // baum_ersatz
     public static final String FIELD__ID = "id";                                // baum_schaden
     
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_schaden
@@ -1405,6 +1407,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                     getConnectionContext());
                 CidsBean beanSchaden = cidsBean;
                 beanSchaden.getMetaObject().setStatus(MetaObject.MODIFIED);
+                beanErsatz.setProperty(FIELD__DISPENS, false);
+                beanErsatz.setProperty(FIELD__SELBST, false);
                 beanErsatz.setProperty(FIELD__FK_SCHADEN, beanSchaden);
 
 

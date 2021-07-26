@@ -112,6 +112,18 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     public static final String FIELD__ID = "id";                                // baum_schaden
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_schaden
+    public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";            // baum_schaden
+    public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";            // baum_schaden
+    public static final String FIELD__SCHADEN_KRONE = "kronenschaden";          // baum_schaden
+    public static final String FIELD__SCHADEN_STAMM = "stammschaden";           // baum_schaden
+    public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";         // baum_schaden
+    public static final String FIELD__SCHADEN_STURM = "sturmschaden";           // baum_schaden
+    public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben";      // baum_schaden
+    public static final String FIELD__SCHADEN_BAU = "baumassnahme";             // baum_schaden
+    public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";          // baum_schaden
+    public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";        // baum_schaden
+    public static final String FIELD__SCHADEN_EINGANG = "eingegangen";          // baum_schaden
+    public static final String FIELD__SCHADEN_FAELLUNG = "faellung";            // baum_schaden
     public static final String FIELD__MELDUNG = "fk_meldung";                   // baum_ortstermin
     public static final String FIELD__SCHADEN = "fk_schaden";                   // baum_ersatz/fest
     public static final String FIELD__MELDUNG_ID = "fk_meldung.id";             // baum_meldung
@@ -423,6 +435,9 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 this.cidsBean,
                 getConnectionContext());
             bindingGroup.bind();
+            if(this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                setDefaultValues();
+            }
             if(this.cidsBean != null && this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
                 loadChildren(this.cidsBean.getPrimaryKeyValue());
             }
@@ -499,6 +514,24 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         baumSchadenPanel.dispose();
     }
     
+   public void setDefaultValues(){
+        try {
+            this.cidsBean.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_BAU, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_BERATUNG, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_EINGANG, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_FAELLUNG, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_KRONE, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_OHNE, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_PRIVAT, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_STAMM, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_STURM, false);
+            this.cidsBean.setProperty(FIELD__SCHADEN_WURZEL, false);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+   }
     
     public void clearBaumChildrenLoader(){
         if (isEditor){

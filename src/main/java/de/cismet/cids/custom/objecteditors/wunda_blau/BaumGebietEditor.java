@@ -148,6 +148,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__ID = "id";                                // baum_gebiet
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_gebiet
     public static final String FIELD__DATUM = "datum";                          // baum_meldung
+    public static final String FIELD__ABG = "abgenommen";                          // baum_meldung
     public static final String FIELD__GEBIET = "fk_gebiet";                     // baum_meldung
     public static final String FIELD__SCHADEN = "fk_schaden";                     // baum_ersatz/fest
     public static final String FIELD__MELDUNG = "fk_meldung";                     // baum_ot/schaden
@@ -1083,6 +1084,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             java.sql.Date beanDate = new java.sql.Date(cal.getTime().getTime());
             
             beanMeldung.setProperty(FIELD__DATUM, beanDate);
+            beanMeldung.setProperty(FIELD__ABG, false);
             beanMeldung.setProperty(FIELD__ID, getCounterMeldung());
             setCounterMeldung(getCounterMeldung()-1);
             //Meldungen erweitern:

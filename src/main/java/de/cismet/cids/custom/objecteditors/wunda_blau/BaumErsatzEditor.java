@@ -113,6 +113,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         
     public static final String FIELD__ID = "id";                                // baum_ersatz
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_ersatz
+    public static final String FIELD__SELBST = "selbststaendig";                // baum_ersatz
+    public static final String FIELD__DISPENS = "dispensbau";                   // baum_ersatz
     public static final String FIELD__ART = "fk_art.name";                  // baum_ersatz
     public static final String FIELD__FK_SCHADEN = "fk_schaden";                // baum_ersatz
     public static final String FIELD__SCHADEN_ID = "fk_schaden.id";             // baum_schaden
@@ -403,7 +405,10 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            
+            if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+                this.cidsBean.setProperty(FIELD__DISPENS, false);
+                this.cidsBean.setProperty(FIELD__SELBST, false);
+            }
             if (this.cidsBean != null){
              
             xtSchaden.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
