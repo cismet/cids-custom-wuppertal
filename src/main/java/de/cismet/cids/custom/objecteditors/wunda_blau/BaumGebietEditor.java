@@ -1224,11 +1224,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
     private Integer getActiveBeans(final List<CidsBean> cbList){
         Integer anzahl = 0;
-        for(final CidsBean bean:cbList){
-            if(bean.getMetaObject().getStatus() != MetaObject.TO_DELETE){
-                anzahl += 1;
-            }
-        }        
+        if (cbList != null){
+            for(final CidsBean bean:cbList){
+                if(bean.getMetaObject().getStatus() != MetaObject.TO_DELETE){
+                    anzahl += 1;
+                }
+            }     
+        }
         return anzahl;
     }
     
@@ -1458,7 +1460,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
             cbHNr.setEnabled(true);
-            searchStreets();
+            //searchStreets();
         }
         setTitle(getTitle());
         btnReport.setVisible(false);

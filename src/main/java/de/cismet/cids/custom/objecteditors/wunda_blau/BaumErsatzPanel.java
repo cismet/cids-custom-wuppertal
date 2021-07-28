@@ -637,8 +637,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         cbHNr.setName("cbHNr"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -941,7 +939,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     JButton btnRemKont;
     JComboBox<String> cbArtE;
     JComboBox cbGeomErsatz;
-    FastBindableReferenceCombo cbHNr;
+    private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbSorte;
     FastBindableReferenceCombo cbStrasse;
     JCheckBox chDispens;
@@ -1262,8 +1260,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                     if(this.cidsBean.getProperty(FIELD__ART) != null){
                         cbSorte.setEnabled(true);
                     }
-                    }
+                }
+                
+                
                 if(isEditor){
+                    if(this.cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
+                        cbHNr.setEnabled(true);
+                    }
                     StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
                     {
                         final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0))
@@ -1279,11 +1282,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                             });
                     }
                 }
-                initComboboxHnr();
-                if(this.cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
-                    cbHNr.setEnabled(true);
-                    searchStreets();
-                }
+                //initComboboxHnr();
+                refreshHnr();
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -1302,15 +1302,15 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     }
     
     private void refreshHnr() { 
-        if (cidsBean != null){
+        if (cidsBean != null && cidsBean.getProperty(FIELD__STRASSE) != null){
             String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
             if (schluessel != null){
 
                 hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));
                 
                 hnrSearch.setKeyId(Integer.parseInt(schluessel));
-
-                new SwingWorker<Void, Void>() {
+                initComboboxHnr();
+               /* new SwingWorker<Void, Void>() {
 
                         @Override
                         protected Void doInBackground() throws Exception {
@@ -1318,7 +1318,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
                             return null;
                         }
-                    }.execute();
+                    }.execute();*/
             }
         }
     }
@@ -1388,19 +1388,19 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
 
                 @Override
                 protected void done() {
-                    try {
+                    /*try {
                         get();
                     } catch (final InterruptedException | ExecutionException ex) {
                         LOG.error(ex, ex);
-                    }  finally {
-                        refreshHnr();
-                    }
+                    } // finally {
+                      //  refreshHnr();
+                   // }*/
                 }
-            };//.execute();
-            if (worker_hnr != null) {
+            }.execute();
+         /*   if (worker_hnr != null) {
                 worker_hnr.cancel(true);
             }
-            worker_hnr.execute();
+            worker_hnr.execute();*/
     }
     
     

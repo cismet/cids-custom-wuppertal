@@ -544,13 +544,11 @@
                     <Property name="name" type="java.lang.String" value="cbHNr" noResource="true"/>
                   </Properties>
                   <BindingProperties>
-                    <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_adresse}" target="cbHNr" targetPath="selectedItem" updateStrategy="0" immediately="false">
-                      <Property name="nullValue" type="java.lang.Object" value="null"/>
-                      <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
-                    </BindingProperty>
+                    <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_adresse}" target="cbHNr" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.FastBindableReferenceCombo(&#xa;    hnrSearch,&#xa;    hnrSearch.getRepresentationPattern(),&#xa;    hnrSearch.getRepresentationFields()&#xa;)"/>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="2"/>
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
