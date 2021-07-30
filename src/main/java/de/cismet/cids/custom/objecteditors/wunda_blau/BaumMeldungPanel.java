@@ -16,6 +16,7 @@ import Sirius.navigator.ui.DescriptionPaneFS;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import org.apache.log4j.Logger;
 
@@ -1314,6 +1315,17 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         return this.cidsBean;
     }
 
+    private void setReadOnly() {
+        if (!(isEditor)) {
+            RendererTools.makeReadOnly(chAbgenommen);
+            RendererTools.makeReadOnly(lstApartner);
+            RendererTools.makeReadOnly(taBemerkung);
+            panControlsNewOrtstermine.setVisible(isEditor);
+            panControlsNewSchaden.setVisible(isEditor);
+            panButtonsApartner.setVisible(isEditor);
+        }
+    }
+    
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
@@ -1343,6 +1355,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                 allowAddRemove();
             }
         }
+        setReadOnly();
     }
     
     public void editorClosed(final EditorClosedEvent ece) {

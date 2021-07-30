@@ -245,8 +245,9 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblName, gridBagConstraints);
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
@@ -255,7 +256,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtName, gridBagConstraints);
@@ -267,8 +268,9 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblNameBotanisch, gridBagConstraints);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name_botanisch}"), txtNameBotanisch, BeanProperty.create("text"));
@@ -277,7 +279,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtNameBotanisch, gridBagConstraints);
@@ -318,7 +320,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
@@ -393,6 +395,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtNameBotanisch);
         }
     }
 

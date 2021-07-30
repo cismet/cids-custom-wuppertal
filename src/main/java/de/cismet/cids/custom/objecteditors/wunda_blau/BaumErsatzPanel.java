@@ -17,6 +17,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
@@ -215,6 +216,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         panInhalt = new JPanel();
         lblSelbst = new JLabel();
         chSelbst = new JCheckBox();
+        if (!isEditor){
+            lblHNrRenderer = new JLabel();
+        }
         lblDispens = new JLabel();
         chDispens = new JCheckBox();
         lblBis = new JLabel();
@@ -245,11 +249,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         lblStrasse = new JLabel();
         cbStrasse = new FastBindableReferenceCombo();
         lblHnr = new JLabel();
-        cbHNr = new FastBindableReferenceCombo(
-            hnrSearch,
-            hnrSearch.getRepresentationPattern(),
-            hnrSearch.getRepresentationFields()
-        );
+        if (isEditor){
+            cbHNr = new FastBindableReferenceCombo(
+                hnrSearch,
+                hnrSearch.getRepresentationPattern(),
+                hnrSearch.getRepresentationFields()
+            );
+        }
         panGeometrie = new JPanel();
         panLage = new JPanel();
         rpKarte = new RoundedPanel();
@@ -315,6 +321,25 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(chSelbst, gridBagConstraints);
+
+        if (!isEditor){
+            lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
+            lblHNrRenderer.setName("lblHNrRenderer"); // NOI18N
+
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
+            bindingGroup.addBinding(binding);
+
+        }
+        if (!isEditor){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 10;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+            panInhalt.add(lblHNrRenderer, gridBagConstraints);
+        }
 
         lblDispens.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblDispens, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblDispens.text")); // NOI18N
@@ -632,19 +657,23 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panInhalt.add(lblHnr, gridBagConstraints);
 
-        cbHNr.setMaximumRowCount(20);
-        cbHNr.setEnabled(false);
-        cbHNr.setName("cbHNr"); // NOI18N
+        if (isEditor){
+            cbHNr.setMaximumRowCount(20);
+            cbHNr.setEnabled(false);
+            cbHNr.setName("cbHNr"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
+            bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panInhalt.add(cbHNr, gridBagConstraints);
+        }
+        if (isEditor){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            panInhalt.add(cbHNr, gridBagConstraints);
+        }
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -725,11 +754,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panDaten.add(panErsatz, gridBagConstraints);
 
-        panKont.setMaximumSize(new Dimension(410, 32767));
-        panKont.setMinimumSize(new Dimension(410, 25));
         panKont.setName("panKont"); // NOI18N
         panKont.setOpaque(false);
-        panKont.setPreferredSize(new Dimension(410, 25));
         panKont.setLayout(new GridBagLayout());
 
         rpKont.setName("rpKont"); // NOI18N
@@ -956,6 +982,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     JLabel lblDispens;
     JLabel lblFirma;
     JLabel lblGeom;
+    JLabel lblHNrRenderer;
     JLabel lblHnr;
     JLabel lblKarte;
     JLabel lblKont;
@@ -1042,6 +1069,26 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                         return null;
                     }
             }.execute();
+        }
+    }
+    
+    private void setReadOnly() {
+        if (!(isEditor)) {
+            RendererTools.makeReadOnly(cbStrasse);
+            RendererTools.makeReadOnly(cbHNr);
+            RendererTools.makeReadOnly(cbGeomErsatz);
+            RendererTools.makeReadOnly(dcBis);
+            RendererTools.makeReadOnly(dcDatum);
+            RendererTools.makeReadOnly(chDispens);
+            RendererTools.makeReadOnly(chSelbst);
+            RendererTools.makeReadOnly(cbArtE);
+            RendererTools.makeReadOnly(cbSorte);
+            RendererTools.makeReadOnly(txtAnzahl);
+            RendererTools.makeReadOnly(txtFirma);
+            RendererTools.makeReadOnly(taBemerkungE);
+            RendererTools.makeReadOnly(xtKont);
+            panKontAdd.setVisible(isEditor);
+            lblGeom.setVisible(isEditor);
         }
     }
     
@@ -1288,7 +1335,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 Exceptions.printStackTrace(ex);
             }
         }
-        
+        setReadOnly();
         
     }
     

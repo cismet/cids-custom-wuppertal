@@ -118,17 +118,17 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
             REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private DefaultBindableReferenceCombo cbArt;
-    private JLabel lblArt;
-    private JLabel lblName;
-    private JLabel lblNameBotanisch;
-    private JPanel panContent;
-    private JPanel panFillerUnten;
-    private JPanel panFillerUnten1;
-    private JPanel panName;
-    private JTextField txtName;
-    private JTextField txtNameBotanisch;
-    private BindingGroup bindingGroup;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbArt;
+    private javax.swing.JLabel lblArt;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblNameBotanisch;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panFillerUnten;
+    private javax.swing.JPanel panFillerUnten1;
+    private javax.swing.JPanel panName;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtNameBotanisch;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -192,162 +192,169 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        GridBagConstraints gridBagConstraints;
-        bindingGroup = new BindingGroup();
+        java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panFillerUnten = new JPanel();
+        panFillerUnten = new javax.swing.JPanel();
         panContent = new RoundedPanel();
-        panName = new JPanel();
-        lblName = new JLabel();
-        lblNameBotanisch = new JLabel();
-        txtNameBotanisch = new JTextField();
-        lblArt = new JLabel();
+        panName = new javax.swing.JPanel();
+        lblName = new javax.swing.JLabel();
+        lblNameBotanisch = new javax.swing.JLabel();
+        txtNameBotanisch = new javax.swing.JTextField();
+        lblArt = new javax.swing.JLabel();
         cbArt = new DefaultBindableReferenceCombo() ;
-        txtName = new JTextField();
-        panFillerUnten1 = new JPanel();
+        txtName = new javax.swing.JTextField();
+        panFillerUnten1 = new javax.swing.JPanel();
 
         setAutoscrolls(true);
-        setMinimumSize(new Dimension(600, 646));
-        setPreferredSize(new Dimension(600, 737));
-        setLayout(new GridBagLayout());
+        setMinimumSize(new java.awt.Dimension(600, 646));
+        setPreferredSize(new java.awt.Dimension(600, 737));
+        setLayout(new java.awt.GridBagLayout());
 
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        panFillerUntenLayout.setHorizontalGroup(
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        panFillerUntenLayout.setVerticalGroup(
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(panFillerUnten, gridBagConstraints);
 
         panContent.setAutoscrolls(true);
-        panContent.setMaximumSize(new Dimension(450, 2147483647));
-        panContent.setMinimumSize(new Dimension(450, 488));
+        panContent.setMaximumSize(new java.awt.Dimension(450, 2147483647));
+        panContent.setMinimumSize(new java.awt.Dimension(450, 488));
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
-        panContent.setPreferredSize(new Dimension(450, 961));
-        panContent.setLayout(new GridBagLayout());
+        panContent.setPreferredSize(new java.awt.Dimension(450, 961));
+        panContent.setLayout(new java.awt.GridBagLayout());
 
         panName.setOpaque(false);
-        panName.setLayout(new GridBagLayout());
+        panName.setLayout(new java.awt.GridBagLayout());
 
-        lblName.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblName.setText("Name:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panName.add(lblName, gridBagConstraints);
 
-        lblNameBotanisch.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblNameBotanisch.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblNameBotanisch.setText("Name botanisch:");
         lblNameBotanisch.setToolTipText("");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panName.add(lblNameBotanisch, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name_botanisch}"), txtNameBotanisch, BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name_botanisch}"), txtNameBotanisch, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panName.add(txtNameBotanisch, gridBagConstraints);
 
-        lblArt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblArt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblArt.setText("Art:");
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panName.add(lblArt, gridBagConstraints);
 
-        cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbArt.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         cbArt.setMaximumRowCount(20);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArt, BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"), cbArt, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panName.add(cbArt, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panName.add(txtName, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         panContent.add(panName, gridBagConstraints);
 
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        panFillerUnten1Layout.setHorizontalGroup(
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        panFillerUnten1Layout.setVerticalGroup(
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
         panContent.add(panFillerUnten1, gridBagConstraints);
 
-        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
@@ -430,6 +437,8 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtNameBotanisch);
+            RendererTools.makeReadOnly(cbArt);
         }
     }
 

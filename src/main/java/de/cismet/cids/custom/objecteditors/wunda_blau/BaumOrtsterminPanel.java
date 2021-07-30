@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
@@ -526,6 +527,15 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             parentEditor.getCidsBean().setArtificialChangeFlag(true);
         }
     }
+    
+    private void setReadOnly() {
+        if (!(isEditor)) {
+            RendererTools.makeReadOnly(taBemerkungOrt);
+            RendererTools.makeReadOnly(xtTeil);
+            RendererTools.makeReadOnly(dcDatum);
+            panTeilnehmerAdd.setVisible(isEditor);
+        }
+    }
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
@@ -569,6 +579,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 panOrtstermin.updateUI();
                 taBemerkungOrt.updateUI();
         }
+        setReadOnly();
     }
     
     public void editorClosed(final EditorClosedEvent ece) {

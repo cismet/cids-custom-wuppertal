@@ -149,7 +149,7 @@
                     <BindingProperty name="cidsBean" source="Form" sourcePath="${cidsBean}" target="baumFestsetzungPanel" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumFestsetzungPanel = new BaumFestsetzungPanel(null, true, this.getConnectionContext());"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumFestsetzungPanel = new BaumFestsetzungPanel(null, isEditor, this.getConnectionContext());"/>
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

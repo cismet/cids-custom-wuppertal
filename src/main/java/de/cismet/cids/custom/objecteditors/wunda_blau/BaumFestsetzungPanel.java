@@ -17,6 +17,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import org.apache.log4j.Logger;
@@ -162,6 +163,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
+        panContent.setPreferredSize(new Dimension(205, 400));
         panContent.setLayout(new GridBagLayout());
 
         panFest.setName("panFest"); // NOI18N
@@ -363,6 +365,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.weightx = 1.0;
         panContent.add(panFest, gridBagConstraints);
 
+        panGeometrie.setMinimumSize(new Dimension(50, 200));
         panGeometrie.setName("panGeometrie"); // NOI18N
         panGeometrie.setOpaque(false);
         panGeometrie.setLayout(new GridBagLayout());
@@ -557,6 +560,19 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             
         }
     }
+    
+    
+    private void setReadOnly() {
+        if (!(isEditor)) {
+            RendererTools.makeReadOnly(txtUmfangF);
+            RendererTools.makeReadOnly(txtHoeheF);
+            RendererTools.makeReadOnly(cbGeomFest);
+            RendererTools.makeReadOnly(cbArtF );
+            RendererTools.makeReadOnly(dcDatum);
+            RendererTools.makeReadOnly(taBemerkungF);
+            lblGeom.setVisible(isEditor);
+        }
+    }
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
@@ -596,7 +612,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 Exceptions.printStackTrace(ex);
             }
         }
-        
+        setReadOnly();
     }
     
     public void setChangeFlag(){

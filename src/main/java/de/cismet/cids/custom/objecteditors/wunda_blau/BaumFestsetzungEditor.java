@@ -222,7 +222,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panFestMain = new JPanel();
-        baumFestsetzungPanel = baumFestsetzungPanel = new BaumFestsetzungPanel(null, true, this.getConnectionContext());
+        baumFestsetzungPanel = baumFestsetzungPanel = new BaumFestsetzungPanel(null, isEditor, this.getConnectionContext());
 
         setLayout(new GridBagLayout());
 
@@ -451,8 +451,8 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
      */
     private void setReadOnly() {
         if (!(isEditor)) {
-            RendererTools.makeReadOnly(baumFestsetzungPanel.taBemerkungF);
-            baumFestsetzungPanel.lblGeom.setVisible(isEditor);
+            RendererTools.makeReadOnly(xtSchaden);
+            btnChangeSchaden.setVisible(isEditor);
         }
     }
     public static void main(final String[] args) throws Exception {

@@ -1477,6 +1477,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(txtAktenzeichen);
+            RendererTools.makeReadOnly(cbStrasse);
+            RendererTools.makeReadOnly(cbHNr);
+            RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(taBemerkung);
             lblGeom.setVisible(isEditor);
         }

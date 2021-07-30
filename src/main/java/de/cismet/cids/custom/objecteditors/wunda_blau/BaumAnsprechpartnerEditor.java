@@ -747,6 +747,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(xtTelefon);
+            panTelefonAdd.setVisible(isEditor);
         }
     }
 

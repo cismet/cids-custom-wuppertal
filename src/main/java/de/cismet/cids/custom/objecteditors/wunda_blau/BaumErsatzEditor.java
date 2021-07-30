@@ -454,7 +454,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void setReadOnly() {
         if (!(isEditor)) {
-            RendererTools.makeReadOnly(baumErsatzPanel.taBemerkungE);
+            RendererTools.makeReadOnly(xtSchaden);
+            btnChangeSchaden.setVisible(isEditor);
         }
     }
     public static void main(final String[] args) throws Exception {

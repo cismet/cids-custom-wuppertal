@@ -39,6 +39,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -58,11 +59,17 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungSearch;
+import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -71,6 +78,12 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.MissingResourceException;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXTable;
 /**
  * DOCUMENT ME!
  *
@@ -171,17 +184,17 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.objecteditors.wunda_blau.BaumOrtsterminPanel baumOrtsterminPanel;
-    private javax.swing.JButton btnChangeGebiet;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialogGebiet;
-    private javax.swing.JScrollPane jScrollPaneMeldung;
-    private javax.swing.JLabel lblGebiet_Meldung;
-    private javax.swing.JPanel panContent;
-    javax.swing.JPanel panOrtstermin;
-    javax.swing.JPanel panOrtstermineMain;
-    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
-    private org.jdesktop.swingx.JXTable xtMeldung;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    private BaumOrtsterminPanel baumOrtsterminPanel;
+    private JButton btnChangeGebiet;
+    private ComboBoxFilterDialog comboBoxFilterDialogGebiet;
+    private JScrollPane jScrollPaneMeldung;
+    private JLabel lblGebiet_Meldung;
+    private JPanel panContent;
+    JPanel panOrtstermin;
+    JPanel panOrtstermineMain;
+    private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
+    private JXTable xtMeldung;
+    private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -221,50 +234,50 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+        GridBagConstraints gridBagConstraints;
+        bindingGroup = new BindingGroup();
 
-        sqlDateToUtilDateConverter = new de.cismet.cids.editors.converters.SqlDateToUtilDateConverter();
-        comboBoxFilterDialogGebiet = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(null, new de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch(), "Gebiet-Meldung auswählen", getConnectionContext());
+        sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
+        comboBoxFilterDialogGebiet = new ComboBoxFilterDialog(null, new BaumMeldungLightweightSearch(), "Gebiet-Meldung auswählen", getConnectionContext());
         panContent = new RoundedPanel();
-        panOrtstermin = new javax.swing.JPanel();
-        lblGebiet_Meldung = new javax.swing.JLabel();
-        btnChangeGebiet = new javax.swing.JButton();
-        jScrollPaneMeldung = new javax.swing.JScrollPane();
-        xtMeldung = new org.jdesktop.swingx.JXTable();
-        panOrtstermineMain = new javax.swing.JPanel();
-        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(null, this, true, this.getConnectionContext());
+        panOrtstermin = new JPanel();
+        lblGebiet_Meldung = new JLabel();
+        btnChangeGebiet = new JButton();
+        jScrollPaneMeldung = new JScrollPane();
+        xtMeldung = new JXTable();
+        panOrtstermineMain = new JPanel();
+        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(null, this, isEditor, this.getConnectionContext());
 
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new GridBagLayout());
 
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
-        panContent.setLayout(new java.awt.GridBagLayout());
+        panContent.setLayout(new GridBagLayout());
 
         panOrtstermin.setOpaque(false);
-        panOrtstermin.setLayout(new java.awt.GridBagLayout());
+        panOrtstermin.setLayout(new GridBagLayout());
 
-        lblGebiet_Meldung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblGebiet_Meldung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblGebiet_Meldung.setText("Gebiet-Meldung:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panOrtstermin.add(lblGebiet_Meldung, gridBagConstraints);
 
-        btnChangeGebiet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
+        btnChangeGebiet.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
         btnChangeGebiet.setToolTipText("Gebiet - Meldung zuweisen");
-        btnChangeGebiet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnChangeGebiet.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 btnChangeGebietActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 2);
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new Insets(2, 5, 5, 2);
         panOrtstermin.add(btnChangeGebiet, gridBagConstraints);
         btnChangeGebiet.setVisible(isEditor);
 
@@ -272,54 +285,54 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         xtMeldung.setVisibleRowCount(1);
         jScrollPaneMeldung.setViewportView(xtMeldung);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panOrtstermin.add(jScrollPaneMeldung, gridBagConstraints);
 
         panOrtstermineMain.setOpaque(false);
-        panOrtstermineMain.setLayout(new java.awt.GridBagLayout());
+        panOrtstermineMain.setLayout(new GridBagLayout());
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"), baumOrtsterminPanel, org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean}"), baumOrtsterminPanel, BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panOrtstermineMain.add(baumOrtsterminPanel, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 0);
         panOrtstermin.add(panOrtstermineMain, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panContent.add(panOrtstermin, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(panContent, gridBagConstraints);
@@ -496,8 +509,8 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      */
     private void setReadOnly() {
         if (!(isEditor)) {
+            RendererTools.makeReadOnly(xtMeldung);
         }
-        RendererTools.makeReadOnly(xtMeldung);
     }
     
     public static void main(final String[] args) throws Exception {
