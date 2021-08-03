@@ -82,7 +82,7 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
         jPanel12.setOpaque(false);
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel42, "Stilllegung:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel42, "Ablagerungstyp:");
         jLabel42.setName("jLabel42"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -313,6 +313,9 @@ public class AlboFlaecheMainAltablagerungPanel extends AbstractAlboFlaechePanel 
     protected void initGui() {
         initComponents();
 
+        ((DefaultBindableScrollableComboBox)jComboBox20).setNullable(true);
+        ((DefaultBindableScrollableComboBox)jComboBox21).setNullable(true);
+        ((DefaultBindableScrollableComboBox)jComboBox22).setNullable(true);
         try {
             mcAltablagerungAbfallherkunft = CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",

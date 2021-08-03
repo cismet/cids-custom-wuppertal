@@ -235,12 +235,14 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        cbFlaechenart = new DefaultBindableScrollableComboBox(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_flaechenart",
-                    getConnectionContext()),
-                false,
-                false);
+        cbFlaechenart = new DefaultBindableReferenceCombo(
+                new DefaultBindableReferenceCombo.MetaClassOption(
+                    ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        "albo_flaechenart",
+                        getConnectionContext())),
+                new DefaultBindableReferenceCombo.CategorisedOption(" - ", true),
+                new DefaultBindableReferenceCombo.SortingColumnOption("order_by"));
         pnlArt = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
 
@@ -434,7 +436,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         pnlAltablagerung.add(cbStilllegung, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel19, "Stilllegung:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel19, "Ablagerungstyp:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -956,9 +958,38 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         artInfo = new AlboFlaecheSearch.OhneVerdachtInfo();
                     }
                     break;
+                    case "bodenaehnlich": {
+                        artInfo = new AlboFlaecheSearch.BodenaehnlichInfo();
+                    }
+                    break;
+                    case "abraumhalde": {
+                        artInfo = new AlboFlaecheSearch.AbraumhaldeInfo();
+                    }
+                    break;
+                    case "in_betrieb": {
+                        artInfo = new AlboFlaecheSearch.InBetriebInfo();
+                    }
+                    break;
+                    case "rcl": {
+                        artInfo = new AlboFlaecheSearch.RclInfo();
+                    }
+                    break;
+                    case "baugrund": {
+                        artInfo = new AlboFlaecheSearch.BaugrundInfo();
+                    }
+                    break;
                     default: {
                         artInfo = null;
                     }
+                    break;
+                    case "stoffliche": {
+                        artInfo = new AlboFlaecheSearch.StofflicheInfo();
+                    }
+                    break;
+                    case "sonstiges": {
+                        artInfo = new AlboFlaecheSearch.SonstigesInfo();
+                    }
+                    break;
                 }
                 return artInfo;
             } else {

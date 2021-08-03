@@ -106,40 +106,42 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
         panSpezifisch = new javax.swing.JPanel();
+        panSonstige = new javax.swing.JPanel();
+        jLabel55 = new javax.swing.JLabel();
+        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
         panStandort = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
         alboFlaecheStandortePanel1 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortePanel(isEditable());
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
         panAltablagerung = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
         alboFlaecheAltablagerungPanel1 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel(isEditable());
         filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
-        panSonstige = new javax.swing.JPanel();
-        jPanel21 = new javax.swing.JPanel();
-        jLabel55 = new javax.swing.JLabel();
-        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 32767));
         panMaterialaufbringung = new javax.swing.JPanel();
-        jPanel22 = new javax.swing.JPanel();
         alboFlaecheMaterialaufbringungPanel1 =
             new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel(
                 isEditable());
         filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
-        panOhneVerdacht = new javax.swing.JPanel();
-        jPanel20 = new javax.swing.JPanel();
-        jLabel54 = new javax.swing.JLabel();
+        panRcl = new javax.swing.JPanel();
+        alboFlaecheRclPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainRclPanel(
+                isEditable());
         filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
+        panStoffliche = new javax.swing.JPanel();
+        filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
+        alboFlaecheStofflichePanel1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStofflichePanel(isEditable());
 
         final FormListener formListener = new FormListener();
 
@@ -485,33 +487,49 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         add(panRechts, gridBagConstraints);
 
+        panSpezifisch.setBorder(javax.swing.BorderFactory.createTitledBorder("wird geladen..."));
         panSpezifisch.setName("panSpezifisch"); // NOI18N
         panSpezifisch.setOpaque(false);
         panSpezifisch.setLayout(new java.awt.CardLayout());
+
+        panSonstige.setName("panSonstige"); // NOI18N
+        panSonstige.setOpaque(false);
+        panSonstige.setLayout(new java.awt.GridBagLayout());
+
+        jLabel55.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel55,
+            "<html><b>Andere Flächen zu denen Informationen vorliegen.");
+        jLabel55.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel55.setName("jLabel55"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panSonstige.add(jLabel55, gridBagConstraints);
+
+        filler35.setName("filler35"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panSonstige.add(filler35, gridBagConstraints);
+
+        panSpezifisch.add(panSonstige, "sonstige");
 
         panStandort.setName("panStandort"); // NOI18N
         panStandort.setOpaque(false);
         panStandort.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Standort"));
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
         alboFlaecheStandortePanel1.setName("alboFlaecheStandortePanel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(alboFlaecheStandortePanel1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panStandort.add(jPanel1, gridBagConstraints);
+        panStandort.add(alboFlaecheStandortePanel1, gridBagConstraints);
 
         filler29.setName("filler29"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -528,25 +546,12 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         panAltablagerung.setOpaque(false);
         panAltablagerung.setLayout(new java.awt.GridBagLayout());
 
-        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Altablagerung"));
-        jPanel11.setName("jPanel11"); // NOI18N
-        jPanel11.setOpaque(false);
-        jPanel11.setLayout(new java.awt.GridBagLayout());
-
         alboFlaecheAltablagerungPanel1.setName("alboFlaecheAltablagerungPanel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel11.add(alboFlaecheAltablagerungPanel1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAltablagerung.add(jPanel11, gridBagConstraints);
+        panAltablagerung.add(alboFlaecheAltablagerungPanel1, gridBagConstraints);
 
         filler27.setName("filler27"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -559,71 +564,18 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         panSpezifisch.add(panAltablagerung, "altablagerung");
 
-        panSonstige.setName("panSonstige"); // NOI18N
-        panSonstige.setOpaque(false);
-        panSonstige.setLayout(new java.awt.GridBagLayout());
-
-        jPanel21.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                "<html><b>sonstige stoffliche Bodenveränderung"));
-        jPanel21.setName("jPanel21"); // NOI18N
-        jPanel21.setOpaque(false);
-        jPanel21.setLayout(new java.awt.GridBagLayout());
-
-        jLabel55.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel55, "....");
-        jLabel55.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel55.setName("jLabel55"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel21.add(jLabel55, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSonstige.add(jPanel21, gridBagConstraints);
-
-        filler35.setName("filler35"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panSonstige.add(filler35, gridBagConstraints);
-
-        panSpezifisch.add(panSonstige, "sonstige");
-
         panMaterialaufbringung.setName("panMaterialaufbringung"); // NOI18N
         panMaterialaufbringung.setOpaque(false);
         panMaterialaufbringung.setLayout(new java.awt.GridBagLayout());
-
-        jPanel22.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Unsachgemäße Materialaufbringung"));
-        jPanel22.setName("jPanel22"); // NOI18N
-        jPanel22.setOpaque(false);
-        jPanel22.setLayout(new java.awt.GridBagLayout());
 
         alboFlaecheMaterialaufbringungPanel1.setName("alboFlaecheMaterialaufbringungPanel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel22.add(alboFlaecheMaterialaufbringungPanel1, gridBagConstraints);
+        panMaterialaufbringung.add(alboFlaecheMaterialaufbringungPanel1, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMaterialaufbringung.add(jPanel22, gridBagConstraints);
-
-        filler38.setName("filler38"); // NOI18N
+        filler38.setName("filler39"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -634,47 +586,49 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         panSpezifisch.add(panMaterialaufbringung, "materialaufbringung");
 
-        panOhneVerdacht.setName("panOhneVerdacht"); // NOI18N
-        panOhneVerdacht.setOpaque(false);
-        panOhneVerdacht.setLayout(new java.awt.GridBagLayout());
+        panRcl.setName("panRcl"); // NOI18N
+        panRcl.setOpaque(false);
+        panRcl.setLayout(new java.awt.GridBagLayout());
 
-        jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("<html><b>Untersucht ohne Verdacht"));
-        jPanel20.setName("jPanel20"); // NOI18N
-        jPanel20.setOpaque(false);
-        jPanel20.setLayout(new java.awt.GridBagLayout());
-
-        jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel54,
-            "<html><b><big>Fläche wurde ohne Anfangsverdacht untersucht.");
-        jLabel54.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel54.setName("jLabel54"); // NOI18N
+        alboFlaecheRclPanel1.setName("alboFlaecheRclPanel1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel20.add(jLabel54, gridBagConstraints);
+        panRcl.add(alboFlaecheRclPanel1, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panOhneVerdacht.add(jPanel20, gridBagConstraints);
-
-        filler39.setName("filler39"); // NOI18N
+        filler39.setName("filler35"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panOhneVerdacht.add(filler39, gridBagConstraints);
+        panRcl.add(filler39, gridBagConstraints);
 
-        panSpezifisch.add(panOhneVerdacht, "ohneVerdacht");
+        panSpezifisch.add(panRcl, "rcl");
+
+        panStoffliche.setName("panStoffliche"); // NOI18N
+        panStoffliche.setOpaque(false);
+        panStoffliche.setLayout(new java.awt.GridBagLayout());
+
+        filler40.setName("filler40"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panStoffliche.add(filler40, gridBagConstraints);
+
+        alboFlaecheStofflichePanel1.setName("alboFlaecheStofflichePanel1"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panStoffliche.add(alboFlaecheStofflichePanel1, gridBagConstraints);
+
+        panSpezifisch.add(panStoffliche, "stoffliche");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -683,6 +637,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(panSpezifisch, gridBagConstraints);
 
         bindingGroup.bind();
@@ -767,8 +722,11 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel
         alboFlaecheMaterialaufbringungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel alboFlaecheOrtPanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainRclPanel alboFlaecheRclPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortePanel
         alboFlaecheStandortePanel1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStofflichePanel
+        alboFlaecheStofflichePanel1;
     private javax.swing.JComboBox<String> cbFlaechentyp;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialog1;
     private javax.swing.Box.Filler filler27;
@@ -776,6 +734,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.Box.Filler filler35;
     private javax.swing.Box.Filler filler38;
     private javax.swing.Box.Filler filler39;
+    private javax.swing.Box.Filler filler40;
     private javax.swing.Box.Filler filler58;
     private javax.swing.Box.Filler filler69;
     private javax.swing.Box.Filler filler7;
@@ -783,19 +742,13 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<CidsBean> jList2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel20;
-    private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -808,12 +761,13 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel panBeschreibung;
     private javax.swing.JPanel panLinks;
     private javax.swing.JPanel panMaterialaufbringung;
-    private javax.swing.JPanel panOhneVerdacht;
     private javax.swing.JPanel panOrt;
+    private javax.swing.JPanel panRcl;
     private javax.swing.JPanel panRechts;
     private javax.swing.JPanel panSonstige;
     private javax.swing.JPanel panSpezifisch;
     private javax.swing.JPanel panStandort;
+    private javax.swing.JPanel panStoffliche;
     private javax.swing.JPanel panTop;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -937,12 +891,24 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      */
     public void updateCidsBeanOfFkPanels() {
         final CidsBean cidsBean = getCidsBean();
-        alboFlaecheStandortePanel1.setCidsBean(cidsBean);
-
-        alboFlaecheMaterialaufbringungPanel1.setCidsBean((cidsBean != null)
-                ? (CidsBean)cidsBean.getProperty("fk_materialaufbringung") : null);
-        alboFlaecheAltablagerungPanel1.setCidsBean((cidsBean != null)
-                ? (CidsBean)cidsBean.getProperty("fk_altablagerung") : null);
+        if (cidsBean != null) {
+            final String art = (String)cidsBean.getProperty("fk_art.schluessel");
+            alboFlaecheStandortePanel1.setCidsBean(("altstandort".equals(art) || "betriebsstandort".equals(art))
+                    ? cidsBean : null);
+            alboFlaecheMaterialaufbringungPanel1.setCidsBean("materialaufbringung".equals(art)
+                    ? (CidsBean)cidsBean.getProperty("fk_materialaufbringung") : null);
+            alboFlaecheRclPanel1.setCidsBean(("rcl".equals(art)) ? (CidsBean)cidsBean.getProperty("fk_rcl") : null);
+            alboFlaecheStofflichePanel1.setCidsBean(("stoffliche".equals(art))
+                    ? (CidsBean)cidsBean.getProperty("fk_stoffliche") : null);
+            alboFlaecheAltablagerungPanel1.setCidsBean(("altablagerung".equals(art))
+                    ? (CidsBean)cidsBean.getProperty("fk_altablagerung") : null);
+        } else {
+            alboFlaecheStandortePanel1.setCidsBean(null);
+            alboFlaecheMaterialaufbringungPanel1.setCidsBean(null);
+            alboFlaecheRclPanel1.setCidsBean(null);
+            alboFlaecheStofflichePanel1.setCidsBean(null);
+            alboFlaecheAltablagerungPanel1.setCidsBean(null);
+        }
     }
 
     /**
@@ -975,6 +941,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheOrtPanel1.dispose();
         alboFlaecheStandortePanel1.dispose();
         alboFlaecheMaterialaufbringungPanel1.dispose();
+        alboFlaecheRclPanel1.dispose();
+        alboFlaecheStofflichePanel1.dispose();
         alboFlaecheAltablagerungPanel1.dispose();
 
         ((FlaecheVorgangTableModel)jXTable1.getModel()).clear();
@@ -991,6 +959,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         alboFlaecheStandortePanel1.editorClosed(event);
         alboFlaecheMaterialaufbringungPanel1.editorClosed(event);
+        alboFlaecheRclPanel1.editorClosed(event);
+        alboFlaecheStofflichePanel1.editorClosed(event);
         alboFlaecheAltablagerungPanel1.editorClosed(event);
     }
 
@@ -1001,6 +971,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     && alboFlaecheOrtPanel1.prepareForSave()
                     && alboFlaecheStandortePanel1.prepareForSave()
                     && alboFlaecheMaterialaufbringungPanel1.prepareForSave()
+                    && alboFlaecheRclPanel1.prepareForSave()
+                    && alboFlaecheStofflichePanel1.prepareForSave()
                     && alboFlaecheAltablagerungPanel1.prepareForSave();
     }
 
@@ -1011,6 +983,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheOrtPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheStandortePanel1.initWithConnectionContext(connectionContext);
         alboFlaecheMaterialaufbringungPanel1.initWithConnectionContext(connectionContext);
+        alboFlaecheRclPanel1.initWithConnectionContext(connectionContext);
+        alboFlaecheStofflichePanel1.initWithConnectionContext(connectionContext);
         alboFlaecheAltablagerungPanel1.initWithConnectionContext(connectionContext);
     }
 
