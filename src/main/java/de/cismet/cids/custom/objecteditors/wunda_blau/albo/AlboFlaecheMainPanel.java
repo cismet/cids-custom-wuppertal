@@ -575,16 +575,16 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panMaterialaufbringung.add(alboFlaecheMaterialaufbringungPanel1, gridBagConstraints);
 
-        filler39.setName("filler39"); // NOI18N
+        filler38.setName("filler39"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panRcl.add(filler39, gridBagConstraints);
+        panMaterialaufbringung.add(filler38, gridBagConstraints);
 
-        panSpezifisch.add(panRcl, "rcl");
+        panSpezifisch.add(panMaterialaufbringung, "materialaufbringung");
 
         panRcl.setName("panRcl"); // NOI18N
         panRcl.setOpaque(false);
@@ -597,7 +597,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panRcl.add(alboFlaecheRclPanel1, gridBagConstraints);
 
-        filler39.setName("filler39"); // NOI18N
+        filler39.setName("filler35"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -719,7 +719,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheAltablagerungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBeschreibungPanel
         alboFlaecheBeschreibungPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainRclPanel alboFlaecheMainRclPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel
         alboFlaecheMaterialaufbringungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel alboFlaecheOrtPanel1;
@@ -892,15 +891,24 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      */
     public void updateCidsBeanOfFkPanels() {
         final CidsBean cidsBean = getCidsBean();
-        alboFlaecheStandortePanel1.setCidsBean(cidsBean);
-
-        alboFlaecheMaterialaufbringungPanel1.setCidsBean((cidsBean != null)
-                ? (CidsBean)cidsBean.getProperty("fk_materialaufbringung") : null);
-        alboFlaecheRclPanel1.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_rcl") : null);
-        alboFlaecheStofflichePanel1.setCidsBean((cidsBean != null) ? (CidsBean)cidsBean.getProperty("fk_stoffliche")
-                                                                   : null);
-        alboFlaecheAltablagerungPanel1.setCidsBean((cidsBean != null)
-                ? (CidsBean)cidsBean.getProperty("fk_altablagerung") : null);
+        if (cidsBean != null) {
+            final String art = (String)cidsBean.getProperty("fk_art.schluessel");
+            alboFlaecheStandortePanel1.setCidsBean(("altstandort".equals(art) || "betriebsstandort".equals(art))
+                    ? cidsBean : null);
+            alboFlaecheMaterialaufbringungPanel1.setCidsBean("materialaufbringung".equals(art)
+                    ? (CidsBean)cidsBean.getProperty("fk_materialaufbringung") : null);
+            alboFlaecheRclPanel1.setCidsBean(("rcl".equals(art)) ? (CidsBean)cidsBean.getProperty("fk_rcl") : null);
+            alboFlaecheStofflichePanel1.setCidsBean(("stoffliche".equals(art))
+                    ? (CidsBean)cidsBean.getProperty("fk_stoffliche") : null);
+            alboFlaecheAltablagerungPanel1.setCidsBean(("altablagerung".equals(art))
+                    ? (CidsBean)cidsBean.getProperty("fk_altablagerung") : null);
+        } else {
+            alboFlaecheStandortePanel1.setCidsBean(null);
+            alboFlaecheMaterialaufbringungPanel1.setCidsBean(null);
+            alboFlaecheRclPanel1.setCidsBean(null);
+            alboFlaecheStofflichePanel1.setCidsBean(null);
+            alboFlaecheAltablagerungPanel1.setCidsBean(null);
+        }
     }
 
     /**

@@ -44,12 +44,15 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="de.cismet.cids.editors.CategorisedFastBindableReferenceCombo" name="cbArt">
+        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="cbArt">
           <Properties>
             <Property name="name" type="java.lang.String" value="cbArt" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_art}" target="cbArt" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="cbArt.setNullable(false);&#xa;cbArt.setSplitBy(&quot; - &quot;);"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(new DefaultBindableReferenceCombo.CategorisedOption(&quot; - &quot;, true), new DefaultBindableReferenceCombo.SortingColumnOption(&quot;order_by&quot;))"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -79,7 +82,10 @@
             <Property name="name" type="java.lang.String" value="jCheckBox1" noResource="true"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dokumentiert}" target="jCheckBox1" targetPath="selected" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.dokumentiert}" target="jCheckBox1" targetPath="selected" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="boolean" value="false"/>
+              <Property name="incompletePathValue" type="boolean" value="false"/>
+            </BindingProperty>
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

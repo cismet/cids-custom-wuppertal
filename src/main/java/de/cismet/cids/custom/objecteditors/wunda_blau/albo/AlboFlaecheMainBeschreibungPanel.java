@@ -20,9 +20,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import java.awt.CardLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -57,7 +54,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jLabel13 = new javax.swing.JLabel();
-        cbFlaechenart = new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo();
+        cbFlaechenart = new DefaultBindableReferenceCombo(new DefaultBindableReferenceCombo.CategorisedOption(" - "),
+                new DefaultBindableReferenceCombo.SortingColumnOption("order_by"));
         jLabel14 = new javax.swing.JLabel();
         cbFlaechenstatus = new DefaultBindableScrollableComboBox();
         jLabel15 = new javax.swing.JLabel();
@@ -109,8 +107,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(jLabel13, gridBagConstraints);
 
-        cbFlaechenart.setSplitBy(" - ");
-        cbFlaechenart.setNullable(false);
         cbFlaechenart.setName("cbFlaechenart"); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -123,7 +119,9 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
 
         cbFlaechenart.addActionListener(formListener);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(cbFlaechenart, gridBagConstraints);
 
@@ -478,7 +476,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private AlboFlaecheMainPanel mainPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.editors.CategorisedFastBindableReferenceCombo cbFlaechenart;
+    private javax.swing.JComboBox<String> cbFlaechenart;
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
     private javax.swing.Box.Filler filler1;
@@ -624,11 +622,10 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                         }
                         break;
                     }
-
-                    mainPanel.updateCidsBeanOfFkPanels();
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
+                mainPanel.updateCidsBeanOfFkPanels();
             }
         }
     }
