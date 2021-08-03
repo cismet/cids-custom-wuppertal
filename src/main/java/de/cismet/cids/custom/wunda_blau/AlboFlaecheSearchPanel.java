@@ -651,10 +651,10 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         artInfoPanels.add(new AlboFlaecheArtSearchPanel(this, editable));
         refreshArtInfoPanels();
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -810,8 +810,8 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                 }
             }
 
-            jCheckBox1.setEnabled(!Boolean.FALSE.equals(configuration.getUnterdrueckt()));
-            jCheckBox2.setEnabled(Boolean.TRUE.equals(configuration.getUnterdrueckt()));
+            jCheckBox1.setSelected(!Boolean.FALSE.equals(configuration.getUnterdrueckt()));
+            jCheckBox2.setSelected(Boolean.TRUE.equals(configuration.getUnterdrueckt()));
         }
 
         rebind();
