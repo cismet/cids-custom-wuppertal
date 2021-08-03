@@ -22,16 +22,14 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainStofflichePanel extends AbstractAlboFlaechePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JComboBox<String> jComboBox26;
-    private javax.swing.JComboBox<String> jComboBox27;
-    private javax.swing.JComboBox<String> jComboBox28;
     private javax.swing.JLabel jLabel59;
-    private javax.swing.JLabel jLabel60;
-    private javax.swing.JLabel jLabel61;
     private javax.swing.JPanel jPanel23;
+    private javax.swing.JPanel jPanel24;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -40,7 +38,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
     /**
      * Creates a new AlboFlaecheMainMaterialaufbringungPanel object.
      */
-    public AlboFlaecheMainMaterialaufbringungPanel() {
+    public AlboFlaecheMainStofflichePanel() {
         initComponents();
     }
 
@@ -49,7 +47,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
      *
      * @param  editable  DOCUMENT ME!
      */
-    public AlboFlaecheMainMaterialaufbringungPanel(final boolean editable) {
+    public AlboFlaecheMainStofflichePanel(final boolean editable) {
         super(editable);
     }
 
@@ -73,10 +71,10 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         jPanel23 = new javax.swing.JPanel();
         jLabel59 = new javax.swing.JLabel();
         jComboBox26 = new DefaultBindableScrollableComboBox();
-        jLabel60 = new javax.swing.JLabel();
-        jComboBox27 = new DefaultBindableScrollableComboBox();
-        jLabel61 = new javax.swing.JLabel();
-        jComboBox28 = new DefaultBindableScrollableComboBox();
+        jPanel24 = new javax.swing.JPanel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -96,7 +94,7 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
 
         jComboBox26.setName("jComboBox26"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"),
@@ -111,62 +109,28 @@ public class AlboFlaecheMainMaterialaufbringungPanel extends AbstractAlboFlaeche
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel23.add(jComboBox26, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel60, "Verfüllkategorie:");
-        jLabel60.setName("jLabel60"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel23.add(jLabel60, gridBagConstraints);
-
-        jComboBox27.setName("jComboBox27"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_verfuellkategorie}"),
-                jComboBox27,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel23.add(jComboBox27, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel61, "Erhebungsklasse:");
-        jLabel61.setName("jLabel61"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel23.add(jLabel61, gridBagConstraints);
-
-        jComboBox28.setName("jComboBox28"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_erhebungsklasse}"),
-                jComboBox28,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel23.add(jComboBox28, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel23, gridBagConstraints);
+
+        jPanel24.setName("jPanel24"); // NOI18N
+        jPanel24.setOpaque(false);
+        jPanel24.setLayout(new java.awt.GridBagLayout());
+
+        filler2.setName("filler2"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel24.add(filler2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jPanel24, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents

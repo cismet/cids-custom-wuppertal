@@ -21,6 +21,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import java.awt.CardLayout;
 
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -28,6 +29,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSe
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
@@ -51,9 +53,9 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel13 = new javax.swing.JLabel();
-        cbFlaechenart = new DefaultBindableScrollableComboBox();
+        cbFlaechenart = new DefaultBindableReferenceCombo(new DefaultBindableReferenceCombo.CategorisedOption(" - "),
+                new DefaultBindableReferenceCombo.SortingColumnOption("order_by"));
         jLabel14 = new javax.swing.JLabel();
         cbFlaechenstatus = new DefaultBindableScrollableComboBox();
         jLabel15 = new javax.swing.JLabel();
@@ -474,7 +476,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private AlboFlaecheMainPanel mainPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbFlaechenart;
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
@@ -525,6 +526,16 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
+        updateArtFk();
+        updateDetailsPanel();
+    }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
+
     @Override
     protected void initGui() {
         initComponents();
@@ -553,6 +564,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         setUnlocked((cidsBean != null) && (MetaObject.NEW == cidsBean.getMetaObject().getStatus()));
         super.setCidsBean(cidsBean);
 
+        updateArtFk();
+        updateDetailsPanel();
         refreshStrCbo();
     }
 
@@ -562,7 +575,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private void updateArtFk() {
         if (isEditable()) {
             final CidsBean cidsBean = getCidsBean();
-            if (cidsBean.getProperty("fk_art.schluessel") != null) {
+            if ((cidsBean != null) && (cidsBean.getProperty("fk_art.schluessel") != null)) {
                 try {
                     switch ((String)cidsBean.getProperty("fk_art.schluessel")) {
                         case "altablagerung": {
@@ -587,12 +600,32 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                             }
                         }
                         break;
+                        case "rcl": {
+                            if (cidsBean.getProperty("fk_rcl") == null) {
+                                cidsBean.setProperty(
+                                    "fk_rcl",
+                                    CidsBean.createNewCidsBeanFromTableName(
+                                        "WUNDA_BLAU",
+                                        "ALBO_RCL",
+                                        getConnectionContext()));
+                            }
+                        }
+                        case "stoffliche": {
+                            if (cidsBean.getProperty("fk_stoffliche") == null) {
+                                cidsBean.setProperty(
+                                    "fk_stoffliche",
+                                    CidsBean.createNewCidsBeanFromTableName(
+                                        "WUNDA_BLAU",
+                                        "ALBO_STOFFLICHE",
+                                        getConnectionContext()));
+                            }
+                        }
+                        break;
                     }
-
-                    mainPanel.updateCidsBeanOfFkPanels();
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
+                mainPanel.updateCidsBeanOfFkPanels();
             }
         }
     }
@@ -606,6 +639,12 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
             }
             if (!"materialaufbringung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_materialaufbringung", null);
+            }
+            if (!"rcl".equals(cidsBean.getProperty("fk_art.schluessel"))) {
+                cidsBean.setProperty("fk_rcl", null);
+            }
+            if (!"stoffliche".equals(cidsBean.getProperty("fk_art.schluessel"))) {
+                cidsBean.setProperty("fk_stoffliche", null);
             }
             return true;
         } catch (final Exception ex) {
@@ -657,30 +696,22 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "materialaufbringung");
                     break;
                 }
-                case "sonstige": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "sonstige");
+                case "rcl": {
+                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "rcl");
                     break;
                 }
-                case "ohne_verdacht": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "ohneVerdacht");
+                case "stoffliche": {
+                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "stoffliche");
                     break;
                 }
                 default: {
+                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "sonstige");
                     break;
                 }
             }
+            ((TitledBorder)panSpezifisch.getBorder()).setTitle((String)selected.getProperty("name"));
         }
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
-        updateArtFk();
-        updateDetailsPanel();
-    }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
 
     /**
      * DOCUMENT ME!
