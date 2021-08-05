@@ -43,6 +43,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -76,6 +77,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisLandparcelAggregationRenderer;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.GeometrySearch;
 import de.cismet.cids.custom.wunda_blau.search.server.KstGeometryMonSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.PfPotenzialflaecheNextSchluesselServerSearch;
@@ -172,6 +174,23 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     private final List<String> usedProperties = new ArrayList();
 
     private final List<CidsBean> schluesseltabellenBeans = new ArrayList<>();
+
+    private final ComponentListener dialogComponentListener = new ComponentAdapter() {
+
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                if (dlgFlaeche.equals(e.getSource())) {
+                    dlgFlaeche.doLayout();
+                    taFlaecheDialog.setSize(dlgFlaeche.getWidth() - 5, taFlaecheDialog.getHeight());
+                } else if (dlgMassnahme.equals(e.getSource())) {
+                    dlgMassnahme.doLayout();
+                    taMassnahmeDialog.setSize(
+                        dlgMassnahme.getWidth()
+                                - 5,
+                        taMassnahmeDialog.getHeight());
+                }
+            }
+        };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlaeche;
@@ -548,17 +567,19 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         initComponentToPropertiesMap();
         initSchluesseltabellenBeans();
 
-//        panDialog.getRootPane()
-//                .registerKeyboardAction(
-//                    new ActionListener() {
-//
-//                        @Override
-//                        public void actionPerformed(final ActionEvent e) {
-//                            panDialog.setVisible(false);
-//                        }
-//                    },
-//                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-//                    JComponent.WHEN_IN_FOCUSED_WINDOW);
+        final ActionListener escListener = new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    panDialog.setVisible(false);
+                }
+            };
+
+        panDialog.getRootPane()
+                .registerKeyboardAction(
+                    escListener,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         try {
             new CidsBeanDropTarget(jPanel20);
@@ -579,10 +600,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 searchLabelsFieldPanel6,
                 searchLabelsFieldPanel7));
 
-        for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
-            searchLabelFieldPanel.initWithConnectionContext(connectionContext);
-        }
-
         labelsPanels.addAll(Arrays.asList(
                 defaultBindableCheckboxField1,
                 defaultBindableCheckboxField3,
@@ -592,35 +609,22 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 defaultBindableCheckboxField8,
                 defaultBindableCheckboxField10,
                 defaultBindableCheckboxField11));
-//
-//        for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
-//            labelsPanel.initWithConnectionContext(connectionContext);
-//        }
-//
-//        monSearchResultsList1.initWithConnectionContext(connectionContext);
-//
+
+        for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
+            searchLabelFieldPanel.initWithConnectionContext(connectionContext);
+        }
+
+        for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
+            labelsPanel.initWithConnectionContext(connectionContext);
+        }
+
+        monSearchResultsList1.initWithConnectionContext(connectionContext);
+
         panTitle.init();
         panFooter.init();
 
-//        dlgFlaeche.addComponentListener(new ComponentAdapter() {
-//
-//                @Override
-//                public void componentResized(final ComponentEvent e) {
-//                    dlgFlaeche.doLayout();
-//                    taFlaecheDialog.setSize(dlgFlaeche.getWidth() - 5, taFlaecheDialog.getHeight());
-//                }
-//            });
-//        dlgMassnahme.addComponentListener(new ComponentAdapter() {
-//
-//                @Override
-//                public void componentResized(final ComponentEvent e) {
-//                    dlgMassnahme.doLayout();
-//                    taMassnahmeDialog.setSize(
-//                        dlgMassnahme.getWidth()
-//                                - 5,
-//                        taMassnahmeDialog.getHeight());
-//                }
-//            });
+        dlgFlaeche.addComponentListener(dialogComponentListener);
+        dlgMassnahme.addComponentListener(dialogComponentListener);
 
         if (!isEditable()) {
             RendererTools.makeReadOnly(bindingGroup, "cidsBean");
@@ -4006,10 +4010,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
-//        refreshMap();
-//        refreshGeomFields();
-//        refreshNummer();
-    } //GEN-LAST:event_cbGeomActionPerformed
+        refreshMap();
+        refreshGeomFields();
+        refreshNummer();
+    }                                                                          //GEN-LAST:event_cbGeomActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -4134,10 +4138,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initPropertyToMetaClassMap() {
-//        new SwingWorker<Map<String, MetaClass>, Void>() {
-//
-//                @Override
-//                protected Map<String, MetaClass> doInBackground() throws Exception {
         final Map<String, MetaClass> map = new HashMap<>();
         for (final PotenzialflaecheReportServerAction.Property property
                     : PotenzialflaecheReportServerAction.Property.values()) {
@@ -4153,22 +4153,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 }
             }
         }
-//                    return map;
-//                }
-//
-//                @Override
-//                protected void done() {
-//                    try {
         pathToMetaClassMap.clear();
-//                        final Map<String, MetaClass> map = get();
         pathToMetaClassMap.putAll(map);
 
         initDefinitions();
-//                    } catch (final Exception ex) {
-//                        LOG.error(ex, ex);
-//                    }
-//                }
-//            }.execute();
     }
 
     /**
@@ -4396,9 +4384,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 showNeu();
             } else {
                 showGrunddaten();
-//                refreshMap();
-//                refreshGeomFields();
-//                setGeometryArea();
+                refreshMap();
+                refreshGeomFields();
+                setGeometryArea();
             }
 
             refreshNummer();
@@ -4529,6 +4517,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     private void initComponentToPropertiesMap() {
+        labelComponents.clear();
         inputComponents.clear();
         componentToPropertiesMap.clear();
         for (final Field field : PfPotenzialflaecheEditor.class.getDeclaredFields()) {
@@ -4824,31 +4813,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
     @Override
     public void dispose() {
-        for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
-            if (labelsPanel != null) {
-                labelsPanel.dispose();
-            }
-        }
-
-        setCidsBean(null);
-
-        if (cbGeom instanceof DefaultCismapGeometryComboBoxEditor) {
+        if (editable) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         }
-        dlgFlaeche.dispose();
-        dlgInterneHinweise.dispose();
-        dlgMassnahme.dispose();
         mappingComponent1.dispose();
+        dlgFlaeche.dispose();
+        dlgMassnahme.dispose();
         panDialog.dispose();
-
-        componentToPropertiesMap.clear();
-        definitions.clear();
-        inputComponents.clear();
-        labelComponents.clear();
-        labelsPanels.clear();
-        pathToMetaClassMap.clear();
-        schluesseltabellenBeans.clear();
-        searchLabelFieldPanels.clear();
+        dlgInterneHinweise.dispose();
+        setCidsBean(null);
     }
 
     @Override
