@@ -73,10 +73,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.ComboPopup;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.commons.gui.ScrollablePanel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.VzkatProperties;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.orbit.OrbitControlFeature;
@@ -195,7 +195,9 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     //~ Instance fields --------------------------------------------------------
 
-    final WebDavHelper webdavHelper = new WebDavHelper(Proxy.fromPreferences(),
+    final WebDavTunnelHelper webdavHelper = new WebDavTunnelHelper(
+            "WUNDA_BLAU",
+            Proxy.fromPreferences(),
             VzkatProperties.getInstance().getWebdavUploadUsername(),
             VzkatProperties.getInstance().getWebdavUploadPassword(),
             false);

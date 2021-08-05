@@ -98,7 +98,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
-import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
+import de.cismet.cids.client.tools.WebDavTunnelHelper;
+
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
@@ -498,7 +499,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
 
     //~ Instance fields --------------------------------------------------------
 
-    private final WebDavHelper webdavHelper;
+    private final WebDavTunnelHelper webdavHelper;
     private final String webdavDirectory;
     private final String beanCollProp;
     private final String geoFieldProp;
@@ -567,7 +568,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
         this.connectionContext = connectionContext;
 
         String webdavDirectory = null;
-        WebDavHelper webdavHelper = null;
+        WebDavTunnelHelper webdavHelper = null;
         try {
             final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
             String pass = bundle.getString("password");
@@ -578,7 +579,7 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
             final String user = bundle.getString("user");
             webdavDirectory = bundle.getString(urlProp);
 
-            webdavHelper = new WebDavHelper(Proxy.fromPreferences(), user, pass, false);
+            webdavHelper = new WebDavTunnelHelper("WUNDA_BLAU", Proxy.fromPreferences(), user, pass, false);
         } catch (final Exception ex) {
             final String message = "Fehler beim Initialisieren der Bilderablage.";
             LOG.error(message, ex);
