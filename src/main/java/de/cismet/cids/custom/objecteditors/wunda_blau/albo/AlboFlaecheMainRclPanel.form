@@ -52,7 +52,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_art}" target="cbArt" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(new DefaultBindableReferenceCombo.CategorisedOption(&quot; - &quot;, true), new DefaultBindableReferenceCombo.SortingColumnOption(&quot;order_by&quot;))"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(&#xa;    new DefaultBindableReferenceCombo.CategorisedOption(&quot; - &quot;, true), &#xa;    new DefaultBindableReferenceCombo.SortingColumnOption(&quot;order_by&quot;),&#xa;    new DefaultBindableReferenceCombo.NullableOption()&#xa;)"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

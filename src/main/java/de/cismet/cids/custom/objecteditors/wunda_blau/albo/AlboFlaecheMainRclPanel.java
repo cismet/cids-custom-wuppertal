@@ -72,13 +72,13 @@ public class AlboFlaecheMainRclPanel extends AbstractAlboFlaechePanel {
         jPanel23 = new javax.swing.JPanel();
         jLabel59 = new javax.swing.JLabel();
         cbArt = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
-                new DefaultBindableReferenceCombo.CategorisedOption(" - ", true),
-                new DefaultBindableReferenceCombo.SortingColumnOption("order_by"));
+            new DefaultBindableReferenceCombo.CategorisedOption(" - ", true),
+            new DefaultBindableReferenceCombo.SortingColumnOption("order_by"),
+            new DefaultBindableReferenceCombo.NullableOption()
+        );
         jPanel24 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -98,12 +98,7 @@ public class AlboFlaecheMainRclPanel extends AbstractAlboFlaechePanel {
 
         cbArt.setName("cbArt"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"),
-                cbArt,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"), cbArt, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -128,12 +123,7 @@ public class AlboFlaecheMainRclPanel extends AbstractAlboFlaechePanel {
         jCheckBox1.setContentAreaFilled(false);
         jCheckBox1.setName("jCheckBox1"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dokumentiert}"),
-                jCheckBox1,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dokumentiert}"), jCheckBox1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -158,7 +148,7 @@ public class AlboFlaecheMainRclPanel extends AbstractAlboFlaechePanel {
         add(jPanel24, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     protected BindingGroup getBindingGroup() {
