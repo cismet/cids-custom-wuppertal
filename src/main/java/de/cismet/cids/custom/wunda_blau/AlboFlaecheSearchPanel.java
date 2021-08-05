@@ -810,8 +810,8 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
                 }
             }
 
-            jCheckBox1.setEnabled(!Boolean.FALSE.equals(configuration.getUnterdrueckt()));
-            jCheckBox2.setEnabled(Boolean.TRUE.equals(configuration.getUnterdrueckt()));
+            jCheckBox1.setSelected(!Boolean.FALSE.equals(configuration.getUnterdrueckt()));
+            jCheckBox2.setSelected(Boolean.TRUE.equals(configuration.getUnterdrueckt()));
         }
 
         rebind();

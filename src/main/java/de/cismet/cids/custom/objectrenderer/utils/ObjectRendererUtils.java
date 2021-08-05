@@ -28,7 +28,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -69,12 +68,9 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
-import de.cismet.tools.CismetThreadPool;
-
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.documents.DefaultDocument;
 
 /**
  * DOCUMENT ME!
@@ -346,94 +342,6 @@ public class ObjectRendererUtils {
     }
 
     /**
-     * Starts a background thread with loads the picture from the url, resizes it to the given maximums, adds a
-     * dropshadow of the given length and then sets the whole picture on a given JLabel.
-     *
-     * <p>Can be called from ANY thread, no matter if EDT or not!</p>
-     *
-     * @param  bildURL     DOCUMENT ME!
-     * @param  maxPixelX   DOCUMENT ME!
-     * @param  maxPixelY   DOCUMENT ME!
-     * @param  shadowSize  DOCUMENT ME!
-     * @param  toSet       DOCUMENT ME!
-     */
-    public static void loadPictureAndSet(final String bildURL,
-            final int maxPixelX,
-            final int maxPixelY,
-            final int shadowSize,
-            final JLabel toSet) {
-        if ((bildURL != null) && (toSet != null)) {
-            final Runnable loader = new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
-                            EventQueue.invokeLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        if (finBild != null) {
-                                            toSet.setIcon(finBild);
-                                        } else {
-                                            toSet.setIcon(null);
-//                                        toSet.setVisible(false);
-                                        }
-                                    }
-                                });
-                        } catch (Exception e) {
-                            log.error("Exeption when loading picture " + bildURL + " : " + e, e);
-                            toSet.setIcon(null);
-                        }
-                    }
-                };
-            CismetThreadPool.execute(loader);
-        }
-    }
-
-    /**
-     * Starts a background thread with loads the picture from the url, resizes it to the given maximums, adds a
-     * dropshadow of the given length and then sets the whole picture on a given JButton.
-     *
-     * <p>Can be called from ANY thread, no matter if EDT or not!</p>
-     *
-     * @param  bildURL     DOCUMENT ME!
-     * @param  maxPixelX   DOCUMENT ME!
-     * @param  maxPixelY   DOCUMENT ME!
-     * @param  shadowSize  DOCUMENT ME!
-     * @param  toSet       DOCUMENT ME!
-     */
-    public static void loadPictureAndSet(final String bildURL,
-            final int maxPixelX,
-            final int maxPixelY,
-            final int shadowSize,
-            final JButton toSet) {
-        if ((bildURL != null) && (toSet != null)) {
-            final Runnable loader = new Runnable() {
-
-                    @Override
-                    public void run() {
-                        final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
-                        if (finBild != null) {
-                            EventQueue.invokeLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        if (finBild != null) {
-                                            toSet.setIcon(finBild);
-                                        } else {
-                                            toSet.setVisible(false);
-                                        }
-                                    }
-                                });
-                        }
-                    }
-                };
-            CismetThreadPool.execute(loader);
-        }
-    }
-
-    /**
      * DOCUMENT ME!
      *
      * @param   tagToCheck         DOCUMENT ME!
@@ -453,39 +361,6 @@ public class ObjectRendererUtils {
             result = false;
         }
         return result;
-    }
-
-    /**
-     * Starts a background thread with loads the picture from the url, resizes it to the given maximums, adds a
-     * dropshadow of the given length.
-     *
-     * @param   bildURL     DOCUMENT ME!
-     * @param   maxPixelX   DOCUMENT ME!
-     * @param   maxPixelY   DOCUMENT ME!
-     * @param   shadowSize  DOCUMENT ME!
-     *
-     * @return  ImageIcon with the loaded picture
-     */
-    public static ImageIcon loadPicture(final String bildURL,
-            final int maxPixelX,
-            final int maxPixelY,
-            final int shadowSize) {
-        ImageIcon bild = null;
-        if ((bildURL != null) && (bildURL.length() > 0)) {
-            final String urlString = bildURL.trim();
-
-            Image buffImage = new DefaultDocument(urlString, urlString).getPreview(maxPixelX, maxPixelY);
-            if (buffImage != null) {
-                // Static2DTools.getFasterScaledInstance(buffImage, width, height,
-                // RenderingHints.VALUE_INTERPOLATION_BICUBIC, true)
-                if (shadowSize > 0) {
-                    buffImage = generateShadow(buffImage, shadowSize);
-                }
-                bild = new ImageIcon(buffImage);
-                return bild;
-            }
-        }
-        return null;
     }
 
     /**
