@@ -508,7 +508,7 @@
             <Component class="javax.swing.JLabel" name="jLabel55">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Andere Fl&#xe4;chen zu denen Informationen vorliegen."/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;h2&gt;Fl&#xe4;chen zu denen Informationen vorliegen."/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="name" type="java.lang.String" value="jLabel55" noResource="true"/>
               </Properties>
