@@ -201,6 +201,13 @@ public class PfPotenzialflaecheFooterPanel extends javax.swing.JPanel {
 
     /**
      * DOCUMENT ME!
+     */
+    public void reset() {
+        btnBackActionPerformed(null);
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */

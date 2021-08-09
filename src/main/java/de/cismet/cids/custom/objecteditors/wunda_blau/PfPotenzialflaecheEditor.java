@@ -89,7 +89,8 @@ import de.cismet.cids.editors.DefaultBindableLabelsPanel;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.EditorSaveWithoutCloseListener;
+import de.cismet.cids.editors.EditorSavedEvent;
 import de.cismet.cids.editors.SearchLabelsFieldPanel;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
@@ -134,7 +135,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     RequestsFullSizeComponent,
     RequestsFullAvailableSpaceComponent,
     BorderProvider,
-    EditorSaveListener,
+    EditorSaveWithoutCloseListener,
     FooterComponentProvider,
     TitleComponentProvider,
     ConnectionContextStore {
@@ -725,7 +726,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jLabel6 = new javax.swing.JLabel();
         jPanel27 = new javax.swing.JPanel();
         defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
-                new DefaultBindableReferenceCombo.NullableOption());
+                NULLABLE_OPTION,
+                SORTING_OPTION);
         jLabel7 = new javax.swing.JLabel();
         dateStand2 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
@@ -4539,7 +4541,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                         && (cidsBean.getProperty("erzeugt_aus") == null)) {
                 showNeu();
             } else {
-                showGrunddaten();
+                panFooter.reset();
                 refreshMap();
                 refreshGeomFields();
                 setGeometryArea();
@@ -5134,6 +5136,10 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(1, 5, 0, 6);
+    }
+
+    @Override
+    public void editorSaved(final EditorSavedEvent event) {
     }
 
     //~ Inner Classes ----------------------------------------------------------
