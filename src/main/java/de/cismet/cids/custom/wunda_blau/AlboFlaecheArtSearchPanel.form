@@ -487,7 +487,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbFlaechenartActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;    new DefaultBindableReferenceCombo.MetaClassOption(ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, &quot;albo_flaechenart&quot;, getConnectionContext())),&#xa;    new DefaultBindableReferenceCombo.CategorisedOption(&quot; - &quot;, true),&#xa;new DefaultBindableReferenceCombo.SortingColumnOption(&quot;order_by&quot;)&#xa;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;    new DefaultBindableReferenceCombo.MetaClassOption(ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, &quot;albo_flaechenart&quot;, getConnectionContext())),&#xa;    new DefaultBindableReferenceCombo.CategorisedOption(&quot; : &quot;, true),&#xa;    new DefaultBindableReferenceCombo.SortingColumnOption(&quot;order_by&quot;)&#xa;)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>

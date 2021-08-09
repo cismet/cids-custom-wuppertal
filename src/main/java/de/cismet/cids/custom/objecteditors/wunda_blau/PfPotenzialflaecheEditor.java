@@ -4034,109 +4034,109 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort4ActionPerformed
+    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort4ActionPerformed
         dlgFlaeche.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort4ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk4ActionPerformed
+    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk4ActionPerformed
         try {
             cidsBean.setProperty("beschreibung_flaeche", taFlaecheDialog.getText());
         } catch (final Exception e) {
             LOG.error("Cannot save text for beschreibung_flaeche", e);
         }
         dlgFlaeche.setVisible(false);
-    }//GEN-LAST:event_btnMenOk4ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort5ActionPerformed
+    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort5ActionPerformed
         dlgMassnahme.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort5ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk5ActionPerformed
+    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk5ActionPerformed
         try {
             cidsBean.setProperty("notwendige_massnahmen", taMassnahmeDialog.getText());
         } catch (final Exception e) {
             LOG.error("Cannot save text for notwendige_massnahmen", e);
         }
         dlgMassnahme.setVisible(false);
-    }//GEN-LAST:event_btnMenOk5ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMassnahmenActionPerformed
+    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmenActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgMassnahme, true);
-    }//GEN-LAST:event_btnMassnahmenActionPerformed
+    }                                                                                 //GEN-LAST:event_btnMassnahmenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlaecheActionPerformed
+    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlaecheActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgFlaeche, true);
-    }//GEN-LAST:event_btnFlaecheActionPerformed
+    }                                                                              //GEN-LAST:event_btnFlaecheActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbGeomFocusLost
+    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_cbGeomFocusLost
         setGeometryArea();
-    }//GEN-LAST:event_cbGeomFocusLost
+    }                                                                   //GEN-LAST:event_cbGeomFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBezeichnungFocusLost
+    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBezeichnungFocusLost
         panTitle.refresh();
-    }//GEN-LAST:event_txtBezeichnungFocusLost
+    }                                                                           //GEN-LAST:event_txtBezeichnungFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAeussereErschluessungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAeussereErschluessungActionPerformed
+    private void cbAeussereErschluessungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAeussereErschluessungActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbAeussereErschluessungActionPerformed
+    } //GEN-LAST:event_cbAeussereErschluessungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeomActionPerformed
+    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
         refreshMap();
         refreshGeomFields();
         refreshNummer();
-    }//GEN-LAST:event_cbGeomActionPerformed
+    }                                                                          //GEN-LAST:event_cbGeomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         final JDialog dialog = new JDialog((Frame)null,
                 "Flurstücke, Buchungsblätter und Eigentümerinformationen",
                 true);
@@ -4150,7 +4150,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         dialog.setContentPane(new DescriptionPaneDialogWrapperPanel(mons));
         dialog.setSize(1200, 800);
         StaticSwingTools.showDialog(this, dialog, true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -4184,9 +4184,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         copyFrom(null);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -4308,66 +4308,66 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         panDialog.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jPanel23MousePressed(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel23MousePressed
+    private void jPanel23MousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jPanel23MousePressed
         tooltipDialogPosition.setLocation(evt.getX(), evt.getY());
-    }//GEN-LAST:event_jPanel23MousePressed
+    }                                                                        //GEN-LAST:event_jPanel23MousePressed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jPanel23MouseDragged(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel23MouseDragged
+    private void jPanel23MouseDragged(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jPanel23MouseDragged
         panDialog.setLocation(panDialog.getLocation().x + evt.getX() - tooltipDialogPosition.getLocation().x,
             panDialog.getLocation().y
                     + evt.getY()
                     - tooltipDialogPosition.getLocation().y);
-    }//GEN-LAST:event_jPanel23MouseDragged
+    }                                                                        //GEN-LAST:event_jPanel23MouseDragged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMassnahmen1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMassnahmen1ActionPerformed
+    private void btnMassnahmen1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmen1ActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgInterneHinweise, true);
-    }//GEN-LAST:event_btnMassnahmen1ActionPerformed
+    }                                                                                  //GEN-LAST:event_btnMassnahmen1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort6ActionPerformed
+    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort6ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenAbort6ActionPerformed
+    } //GEN-LAST:event_btnMenAbort6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk6ActionPerformed
+    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk6ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenOk6ActionPerformed
+    } //GEN-LAST:event_btnMenOk6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbLagetyp2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbLagetyp2ActionPerformed
+    private void cbLagetyp2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbLagetyp2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbLagetyp2ActionPerformed
+    } //GEN-LAST:event_cbLagetyp2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -4393,21 +4393,21 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         showArchived(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
+    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
         if (defaultBindableReferenceCombo1.getSelectedItem() == null) {
             dateStand2.setDate(null);
             showArchived(false);
         }
-    }//GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
+    }                                                                                                  //GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
