@@ -241,7 +241,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         CidsBeanSupport.DOMAIN_NAME,
                         "albo_flaechenart",
                         getConnectionContext())),
-                new DefaultBindableReferenceCombo.CategorisedOption(" - ", true),
+                new DefaultBindableReferenceCombo.CategorisedOption(" : ", true),
                 new DefaultBindableReferenceCombo.SortingColumnOption("order_by"));
         pnlArt = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();

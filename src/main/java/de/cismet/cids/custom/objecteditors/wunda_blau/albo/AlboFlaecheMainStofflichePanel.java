@@ -12,9 +12,9 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import org.jdesktop.beansbinding.BindingGroup;
 
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 
 /**
  * DOCUMENT ME!
@@ -71,10 +71,11 @@ public class AlboFlaecheMainStofflichePanel extends AbstractAlboFlaechePanel {
         jPanel23 = new javax.swing.JPanel();
         jLabel59 = new javax.swing.JLabel();
         jComboBox26 = new DefaultBindableReferenceCombo(
-            new DefaultBindableReferenceCombo.NullableOption()
-        );
+                new DefaultBindableReferenceCombo.NullableOption());
         jPanel24 = new javax.swing.JPanel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -94,7 +95,12 @@ public class AlboFlaecheMainStofflichePanel extends AbstractAlboFlaechePanel {
 
         jComboBox26.setName("jComboBox26"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"), jComboBox26, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"),
+                jComboBox26,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -128,7 +134,7 @@ public class AlboFlaecheMainStofflichePanel extends AbstractAlboFlaechePanel {
         add(jPanel24, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     protected BindingGroup getBindingGroup() {
