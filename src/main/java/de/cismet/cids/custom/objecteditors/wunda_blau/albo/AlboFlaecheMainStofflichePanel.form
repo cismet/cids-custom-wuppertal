@@ -52,7 +52,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_art}" target="jComboBox26" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;    new DefaultBindableReferenceCombo.NullableOption()&#xa;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;    new DefaultBindableReferenceCombo.NullableOption(null, &quot;-&quot;)&#xa;)"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
           <Constraints>
