@@ -71,7 +71,7 @@ public class AlboFlaecheMainStofflichePanel extends AbstractAlboFlaechePanel {
         jPanel23 = new javax.swing.JPanel();
         jLabel59 = new javax.swing.JLabel();
         jComboBox26 = new DefaultBindableReferenceCombo(
-                new DefaultBindableReferenceCombo.NullableOption());
+                new DefaultBindableReferenceCombo.NullableOption(null, "-"));
         jPanel24 = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),

@@ -263,7 +263,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkStilllegung}" target="cbStilllegung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_stilllegung&quot;,&#xa;    getConnectionContext()), true, false)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;new DefaultBindableReferenceCombo.MetaClassOption(ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, &quot;albo_stilllegung&quot;, getConnectionContext())),&#xa;new DefaultBindableReferenceCombo.NullableOption()&#xa;)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -293,7 +293,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkVerfuellkategorie}" target="cbVerfuellkategorie" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_verfuellkategorie&quot;,&#xa;    getConnectionContext()), true, false)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;new DefaultBindableReferenceCombo.MetaClassOption(ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, &quot;albo_verfuellkategorie&quot;, getConnectionContext())),&#xa;new DefaultBindableReferenceCombo.NullableOption()&#xa;)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -323,7 +323,7 @@
             <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkErhebungsklasse}" target="cbErhebungsklasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_erhebungsklasse&quot;,&#xa;    getConnectionContext()), true, false)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;new DefaultBindableReferenceCombo.MetaClassOption(ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, &quot;albo_erhebungsklasse&quot;, getConnectionContext())),&#xa;new DefaultBindableReferenceCombo.NullableOption()&#xa;)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -380,7 +380,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbMaterialaufbringungsartActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(&#xa;    CidsBeanSupport.DOMAIN_NAME,&#xa;    &quot;albo_materialaufbringungsart&quot;,&#xa;    getConnectionContext()), true, false)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo(&#xa;new DefaultBindableReferenceCombo.MetaClassOption(ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, &quot;albo_materialaufbringungsart&quot;, getConnectionContext())),&#xa;new DefaultBindableReferenceCombo.NullableOption()&#xa;)"/>
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AlboFlaecheEditor_jComboBox1"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>

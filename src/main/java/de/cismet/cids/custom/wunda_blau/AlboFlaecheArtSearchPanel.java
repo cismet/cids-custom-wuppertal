@@ -195,37 +195,41 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         pnlAltablagerung = new javax.swing.JPanel();
-        cbStilllegung = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_stilllegung",
-                    getConnectionContext()),
-                true,
-                false);
+        cbStilllegung = new DefaultBindableReferenceCombo(
+                new DefaultBindableReferenceCombo.MetaClassOption(
+                    ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        "albo_stilllegung",
+                        getConnectionContext())),
+                new DefaultBindableReferenceCombo.NullableOption());
         jLabel19 = new javax.swing.JLabel();
-        cbVerfuellkategorie = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_verfuellkategorie",
-                    getConnectionContext()),
-                true,
-                false);
+        cbVerfuellkategorie = new DefaultBindableReferenceCombo(
+                new DefaultBindableReferenceCombo.MetaClassOption(
+                    ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        "albo_verfuellkategorie",
+                        getConnectionContext())),
+                new DefaultBindableReferenceCombo.NullableOption());
         jLabel20 = new javax.swing.JLabel();
-        cbErhebungsklasse = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_erhebungsklasse",
-                    getConnectionContext()),
-                true,
-                false);
+        cbErhebungsklasse = new DefaultBindableReferenceCombo(
+                new DefaultBindableReferenceCombo.MetaClassOption(
+                    ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        "albo_erhebungsklasse",
+                        getConnectionContext())),
+                new DefaultBindableReferenceCombo.NullableOption());
         jLabel21 = new javax.swing.JLabel();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         pnlMaterialaufbringung = new javax.swing.JPanel();
-        cbMaterialaufbringungsart = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
-                    CidsBeanSupport.DOMAIN_NAME,
-                    "albo_materialaufbringungsart",
-                    getConnectionContext()),
-                true,
-                false);
+        cbMaterialaufbringungsart = new DefaultBindableReferenceCombo(
+                new DefaultBindableReferenceCombo.MetaClassOption(
+                    ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        "albo_materialaufbringungsart",
+                        getConnectionContext())),
+                new DefaultBindableReferenceCombo.NullableOption());
         jLabel16 = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),

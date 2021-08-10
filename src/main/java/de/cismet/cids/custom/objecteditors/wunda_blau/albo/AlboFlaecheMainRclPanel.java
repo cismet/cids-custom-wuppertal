@@ -74,7 +74,7 @@ public class AlboFlaecheMainRclPanel extends AbstractAlboFlaechePanel {
         cbArt = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
                 new DefaultBindableReferenceCombo.CategorisedOption(" - ", true),
                 new DefaultBindableReferenceCombo.SortingColumnOption("order_by"),
-                new DefaultBindableReferenceCombo.NullableOption());
+                new DefaultBindableReferenceCombo.NullableOption(null, "-"));
         jPanel24 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
