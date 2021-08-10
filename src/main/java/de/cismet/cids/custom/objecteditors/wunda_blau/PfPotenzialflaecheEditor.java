@@ -684,22 +684,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         dlgArchivieren = new javax.swing.JDialog();
         jScrollPane5 = new javax.swing.JScrollPane();
         jPanel22 = new ScrollablePanel();
-        panNew = new javax.swing.JPanel();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0),
-                new java.awt.Dimension(100, 0),
-                new java.awt.Dimension(100, 32767));
-        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0),
-                new java.awt.Dimension(100, 0),
-                new java.awt.Dimension(100, 32767));
-        jPanel18 = new javax.swing.JPanel();
-        jPanel20 = new DroppedPfPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jPanel19 = new javax.swing.JPanel();
-        jPanel21 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         panMain = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -1147,6 +1131,22 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0));
+        panNew = new javax.swing.JPanel();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 32767));
+        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 32767));
+        jPanel18 = new javax.swing.JPanel();
+        jPanel20 = new DroppedPfPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel19 = new javax.swing.JPanel();
+        jPanel21 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         dlgFlaeche.setTitle("Beschreibung der Fläche");
         dlgFlaeche.setModal(true);
@@ -1453,117 +1453,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel22.setMaximumSize(new java.awt.Dimension(1200, 2147483647));
         jPanel22.setOpaque(false);
         jPanel22.setLayout(new java.awt.CardLayout());
-
-        panNew.setOpaque(false);
-        panNew.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panNew.add(filler7, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panNew.add(filler17, gridBagConstraints);
-
-        jPanel18.setOpaque(false);
-        jPanel18.setLayout(new java.awt.GridBagLayout());
-
-        jPanel20.setBorder(new org.jdesktop.swingx.border.DropShadowBorder());
-        jPanel20.setOpaque(false);
-        jPanel20.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, "<html><i>Potenzialfläche in diesen Bereich ziehen");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel20.add(jLabel4, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
-        jPanel18.add(jPanel20, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
-        panNew.add(jPanel18, gridBagConstraints);
-
-        jPanel19.setOpaque(false);
-        jPanel19.setLayout(new java.awt.GridBagLayout());
-
-        jPanel21.setOpaque(false);
-        jPanel21.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, "<html>neue Potenzialfläche händisch erfassen");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton2ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel21.add(jButton2, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
-        jPanel19.add(jPanel21, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
-        panNew.add(jPanel19, gridBagConstraints);
-
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
-        panNew.add(jSeparator1, gridBagConstraints);
-
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
-            "<html><center>Aus einer bestehenden Potenzialfläche werden alle Attribute kopiert. Diese können danach händisch angepasst werden.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
-        panNew.add(jLabel2, gridBagConstraints);
-
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel5,
-            "<html><center>Es wird eine leere Potenzialfläche erzeugt, in der alle Attribute händisch erfasst werden können.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
-        panNew.add(jLabel5, gridBagConstraints);
-
-        jPanel22.add(panNew, "neu");
 
         panMain.setOpaque(false);
         panMain.setLayout(new java.awt.GridBagLayout());
@@ -4021,6 +3910,117 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         jPanel22.add(panDetail, "details");
 
+        panNew.setOpaque(false);
+        panNew.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panNew.add(filler7, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panNew.add(filler17, gridBagConstraints);
+
+        jPanel18.setOpaque(false);
+        jPanel18.setLayout(new java.awt.GridBagLayout());
+
+        jPanel20.setBorder(new org.jdesktop.swingx.border.DropShadowBorder());
+        jPanel20.setOpaque(false);
+        jPanel20.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, "<html><i>Potenzialfläche in diesen Bereich ziehen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel20.add(jLabel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        jPanel18.add(jPanel20, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        panNew.add(jPanel18, gridBagConstraints);
+
+        jPanel19.setOpaque(false);
+        jPanel19.setLayout(new java.awt.GridBagLayout());
+
+        jPanel21.setOpaque(false);
+        jPanel21.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton2, "<html>neue Potenzialfläche händisch erfassen");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel21.add(jButton2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        jPanel19.add(jPanel21, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        panNew.add(jPanel19, gridBagConstraints);
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        panNew.add(jSeparator1, gridBagConstraints);
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            "<html><center>Aus einer bestehenden Potenzialfläche werden alle Attribute kopiert. Diese können danach händisch angepasst werden.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        panNew.add(jLabel2, gridBagConstraints);
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel5,
+            "<html><center>Es wird eine leere Potenzialfläche erzeugt, in der alle Attribute händisch erfasst werden können.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        panNew.add(jLabel5, gridBagConstraints);
+
+        jPanel22.add(panNew, "neu");
+
         jScrollPane5.setViewportView(jPanel22);
         ((ScrollablePanel)jPanel22).setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
         ((ScrollablePanel)jPanel22).setScrollableHeight(ScrollablePanel.ScrollableSizeHint.STRETCH);
@@ -4541,7 +4541,6 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                         && (cidsBean.getProperty("erzeugt_aus") == null)) {
                 showNeu();
             } else {
-                panFooter.reset();
                 refreshMap();
                 refreshGeomFields();
                 setGeometryArea();
