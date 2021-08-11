@@ -589,17 +589,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                             }
                         }
                         break;
-                        case "materialaufbringung": {
-                            if (cidsBean.getProperty("fk_materialaufbringung") == null) {
-                                cidsBean.setProperty(
-                                    "fk_materialaufbringung",
-                                    CidsBean.createNewCidsBeanFromTableName(
-                                        "WUNDA_BLAU",
-                                        "ALBO_MATERIALAUFBRINGUNG",
-                                        getConnectionContext()));
-                            }
-                        }
-                        break;
                         case "rcl": {
                             if (cidsBean.getProperty("fk_rcl") == null) {
                                 cidsBean.setProperty(
@@ -636,9 +625,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         try {
             if (!"altablagerung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_altablagerung", null);
-            }
-            if (!"materialaufbringung".equals(cidsBean.getProperty("fk_art.schluessel"))) {
-                cidsBean.setProperty("fk_materialaufbringung", null);
             }
             if (!"rcl".equals(cidsBean.getProperty("fk_art.schluessel"))) {
                 cidsBean.setProperty("fk_rcl", null);
@@ -690,10 +676,6 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                 }
                 case "betriebsstandort": {
                     ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "standort");
-                    break;
-                }
-                case "materialaufbringung": {
-                    ((CardLayout)panSpezifisch.getLayout()).show(panSpezifisch, "materialaufbringung");
                     break;
                 }
                 case "rcl": {

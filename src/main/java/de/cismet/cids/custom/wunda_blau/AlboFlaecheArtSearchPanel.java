@@ -74,13 +74,15 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbErhebungsklasse;
     private javax.swing.JComboBox<String> cbFlaechenart;
-    private javax.swing.JComboBox<String> cbMaterialaufbringungsart;
+    private javax.swing.JComboBox<String> cbRclart;
     private javax.swing.JComboBox<String> cbStilllegung;
+    private javax.swing.JComboBox<String> cbStofflicheart;
     private javax.swing.JComboBox<String> cbVerfuellkategorie;
     private javax.swing.JComboBox<CidsBean> cbWirtschaftszweig;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -91,20 +93,21 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.JFormattedTextField jFormattedTextField18;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlAltablagerung;
     private javax.swing.JPanel pnlArt;
-    private javax.swing.JPanel pnlMaterialaufbringung;
-    private javax.swing.JPanel pnlOhneVerdacht;
-    private javax.swing.JPanel pnlSonstige;
+    private javax.swing.JPanel pnlEmpty;
+    private javax.swing.JPanel pnlRcl;
     private javax.swing.JPanel pnlStandort;
+    private javax.swing.JPanel pnlStoffliche;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -143,7 +146,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         RendererTools.makeReadOnly(jComboBox2, !editable);
         RendererTools.makeReadOnly(cbErhebungsklasse, !editable);
         RendererTools.makeReadOnly(cbFlaechenart, !editable);
-        RendererTools.makeReadOnly(cbMaterialaufbringungsart, !editable);
+        RendererTools.makeReadOnly(cbStofflicheart, !editable);
+        RendererTools.makeReadOnly(cbRclart, !editable);
         RendererTools.makeReadOnly(cbStilllegung, !editable);
         RendererTools.makeReadOnly(cbVerfuellkategorie, !editable);
         RendererTools.makeReadOnly(cbWirtschaftszweig, !editable);
@@ -222,20 +226,31 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        pnlMaterialaufbringung = new javax.swing.JPanel();
-        cbMaterialaufbringungsart = new DefaultBindableReferenceCombo(
+        pnlStoffliche = new javax.swing.JPanel();
+        cbStofflicheart = new DefaultBindableReferenceCombo(
                 new DefaultBindableReferenceCombo.MetaClassOption(
                     ClassCacheMultiple.getMetaClass(
                         CidsBeanSupport.DOMAIN_NAME,
-                        "albo_materialaufbringungsart",
+                        "albo_stofflicheart",
                         getConnectionContext())),
-                new DefaultBindableReferenceCombo.NullableOption());
-        jLabel16 = new javax.swing.JLabel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new DefaultBindableReferenceCombo.NullableOption(null, "-"));
+        jLabel24 = new javax.swing.JLabel();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        pnlSonstige = new javax.swing.JPanel();
-        pnlOhneVerdacht = new javax.swing.JPanel();
+        pnlRcl = new javax.swing.JPanel();
+        cbRclart = new DefaultBindableReferenceCombo(
+                new DefaultBindableReferenceCombo.MetaClassOption(
+                    ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        "albo_rclart",
+                        getConnectionContext())),
+                new DefaultBindableReferenceCombo.NullableOption(null, "-"));
+        jLabel25 = new javax.swing.JLabel();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        pnlEmpty = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
@@ -501,52 +516,74 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         gridBagConstraints.weighty = 1.0;
         pnlAltablagerung.add(filler6, gridBagConstraints);
 
-        pnlMaterialaufbringung.setOpaque(false);
-        pnlMaterialaufbringung.setLayout(new java.awt.GridBagLayout());
+        pnlStoffliche.setOpaque(false);
+        pnlStoffliche.setLayout(new java.awt.GridBagLayout());
 
-        cbMaterialaufbringungsart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+        cbStofflicheart.setRenderer(DOTDOTDOT_CELL_RENDERER);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${bean.fkMaterialaufbringungArt}"),
-                cbMaterialaufbringungsart,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkStofflicheArt}"),
+                cbStofflicheart,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbMaterialaufbringungsart.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbMaterialaufbringungsartActionPerformed(evt);
-                }
-            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlMaterialaufbringung.add(cbMaterialaufbringungsart, gridBagConstraints);
+        pnlStoffliche.add(cbStofflicheart, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel16, "Art:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel24, "Art der Bodenveränderung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnlMaterialaufbringung.add(jLabel16, gridBagConstraints);
+        pnlStoffliche.add(jLabel24, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        pnlMaterialaufbringung.add(filler3, gridBagConstraints);
+        pnlStoffliche.add(filler7, gridBagConstraints);
 
-        pnlSonstige.setOpaque(false);
-        pnlSonstige.setLayout(new java.awt.GridBagLayout());
+        pnlRcl.setOpaque(false);
+        pnlRcl.setLayout(new java.awt.GridBagLayout());
 
-        pnlOhneVerdacht.setOpaque(false);
-        pnlOhneVerdacht.setLayout(new java.awt.GridBagLayout());
+        cbRclart.setRenderer(DOTDOTDOT_CELL_RENDERER);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fkRclArt}"),
+                cbRclart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlRcl.add(cbRclart, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel25, "RCL-Art:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlRcl.add(jLabel25, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlRcl.add(filler8, gridBagConstraints);
+
+        pnlEmpty.setOpaque(false);
+        pnlEmpty.setLayout(new java.awt.GridBagLayout());
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -660,15 +697,6 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMaterialaufbringungsartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMaterialaufbringungsartActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_cbMaterialaufbringungsartActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         jFormattedTextField17.setValue(null);
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
@@ -701,20 +729,16 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         pnl = pnlAltablagerung;
                     }
                     break;
-                    case "materialaufbringung": {
-                        pnl = pnlMaterialaufbringung;
+                    case "rcl": {
+                        pnl = pnlRcl;
                     }
                     break;
-                    case "sonstige": {
-                        pnl = pnlSonstige;
-                    }
-                    break;
-                    case "ohne_verdacht": {
-                        pnl = pnlOhneVerdacht;
+                    case "stoffliche": {
+                        pnl = pnlStoffliche;
                     }
                     break;
                     default: {
-                        pnl = null;
+                        pnl = pnlEmpty;
                     }
                 }
             }
@@ -816,15 +840,15 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                             rebind();
                         }
                     }.execute();
-            } else if (artInfo instanceof AlboFlaecheSearch.AltstandortInfo) {
-                final Boolean jahrModus = ((AlboFlaecheSearch.AltstandortInfo)artInfo).getJahrModus();
-                final Boolean dauerModus = ((AlboFlaecheSearch.AltstandortInfo)artInfo).getDauerModus();
+            } else if (artInfo instanceof AlboFlaecheSearch.StandortInfo) {
+                final Boolean jahrModus = ((AlboFlaecheSearch.StandortInfo)artInfo).getJahrModus();
+                final Boolean dauerModus = ((AlboFlaecheSearch.StandortInfo)artInfo).getDauerModus();
                 jComboBox1.setSelectedItem(Boolean.TRUE.equals(jahrModus)
                         ? "nach" : (Boolean.FALSE.equals(jahrModus) ? "vor" : "exakt"));
                 jComboBox2.setSelectedItem(Boolean.TRUE.equals(dauerModus)
                         ? "länger als" : (Boolean.FALSE.equals(dauerModus) ? "kürzer als" : "exakt"));
-                bean.setStandortDauer(((AlboFlaecheSearch.AltstandortInfo)artInfo).getDauer());
-                bean.setStandortJahr(((AlboFlaecheSearch.AltstandortInfo)artInfo).getJahr());
+                bean.setStandortDauer(((AlboFlaecheSearch.StandortInfo)artInfo).getDauer());
+                bean.setStandortJahr(((AlboFlaecheSearch.StandortInfo)artInfo).getJahr());
 
                 new SwingWorker<CidsBean, Void>() {
 
@@ -832,7 +856,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         protected CidsBean doInBackground() throws Exception {
                             return getSchluesselBean(
                                     "albo_wirtschaftszweig",
-                                    ((AlboFlaecheSearch.AltstandortInfo)artInfo).getWzSchluessel(),
+                                    ((AlboFlaecheSearch.StandortInfo)artInfo).getWzSchluessel(),
                                     getConnectionContext());
                         }
 
@@ -846,43 +870,42 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                             rebind();
                         }
                     }.execute();
-            } else if (artInfo instanceof AlboFlaecheSearch.BetriebsstandortInfo) {
+            } else if (artInfo instanceof AlboFlaecheSearch.RclInfo) {
                 new SwingWorker<CidsBean, Void>() {
 
                         @Override
                         protected CidsBean doInBackground() throws Exception {
                             return getSchluesselBean(
-                                    "albo_wirtschaftszweig",
-                                    ((AlboFlaecheSearch.BetriebsstandortInfo)artInfo).getWzSchluessel(),
+                                    "albo_rclart",
+                                    ((AlboFlaecheSearch.RclInfo)artInfo).getArtSchluessel(),
                                     getConnectionContext());
                         }
 
                         @Override
                         protected void done() {
                             try {
-                                bean.setFkWirtschaftszweig(get());
+                                bean.setFkRclArt(get());
                             } catch (final Exception ex) {
                                 LOG.error(ex, ex);
                             }
                             rebind();
                         }
                     }.execute();
-            } else if (artInfo instanceof AlboFlaecheSearch.MaterialaufbringungInfo) {
+            } else if (artInfo instanceof AlboFlaecheSearch.StofflicheInfo) {
                 new SwingWorker<CidsBean, Void>() {
 
                         @Override
                         protected CidsBean doInBackground() throws Exception {
                             return getSchluesselBean(
-                                    "albo_materialaufbringungsart",
-                                    ((AlboFlaecheSearch.MaterialaufbringungInfo)artInfo)
-                                                .getMaterialaufbringungsartSchluessel(),
+                                    "albo_stofflicheart",
+                                    ((AlboFlaecheSearch.StofflicheInfo)artInfo).getArtSchluessel(),
                                     getConnectionContext());
                         }
 
                         @Override
                         protected void done() {
                             try {
-                                bean.setFkMaterialaufbringungArt(get());
+                                bean.setFkStofflicheArt(get());
                             } catch (final Exception ex) {
                                 LOG.error(ex, ex);
                             }
@@ -910,8 +933,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                 switch (artSchluessel) {
                     case "altstandort":
                     case "betriebsstandort": {
-                        artInfo = "altstandort".equals(artSchluessel) ? new AlboFlaecheSearch.AltstandortInfo()
-                                                                      : new AlboFlaecheSearch.BetriebsstandortInfo();
+                        artInfo = new AlboFlaecheSearch.StandortInfo(artSchluessel);
                         final CidsBean wirtschaftszweig = (cbWirtschaftszweig.getSelectedItem() instanceof CidsBean)
                             ? (CidsBean)cbWirtschaftszweig.getSelectedItem() : null;
                         ((AlboFlaecheSearch.StandortInfo)artInfo).setWzSchluessel((wirtschaftszweig != null)
@@ -946,54 +968,28 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                             (erhebungsklasse != null) ? (String)erhebungsklasse.getProperty("schluessel") : null);
                     }
                     break;
-                    case "materialaufbringung": {
-                        final CidsBean materialaufbringungsart =
-                            (cbMaterialaufbringungsart.getSelectedItem() instanceof CidsBean)
-                            ? (CidsBean)cbMaterialaufbringungsart.getSelectedItem() : null;
-                        artInfo = new AlboFlaecheSearch.MaterialaufbringungInfo((materialaufbringungsart != null)
-                                    ? (String)materialaufbringungsart.getProperty("schluessel") : null);
-                    }
-                    break;
-                    case "sonstige": {
-                        artInfo = new AlboFlaecheSearch.SonstigeInfo();
-                    }
-                    break;
-                    case "ohne_verdacht": {
-                        artInfo = new AlboFlaecheSearch.OhneVerdachtInfo();
-                    }
-                    break;
-                    case "bodenaehnlich": {
-                        artInfo = new AlboFlaecheSearch.BodenaehnlichInfo();
-                    }
-                    break;
-                    case "abraumhalde": {
-                        artInfo = new AlboFlaecheSearch.AbraumhaldeInfo();
-                    }
-                    break;
-                    case "in_betrieb": {
-                        artInfo = new AlboFlaecheSearch.InBetriebInfo();
-                    }
-                    break;
                     case "rcl": {
+                        final CidsBean rclart = (cbRclart.getSelectedItem() instanceof CidsBean)
+                            ? (CidsBean)cbRclart.getSelectedItem() : null;
+
                         artInfo = new AlboFlaecheSearch.RclInfo();
-                    }
-                    break;
-                    case "baugrund": {
-                        artInfo = new AlboFlaecheSearch.BaugrundInfo();
-                    }
-                    break;
-                    default: {
-                        artInfo = null;
+                        ((AlboFlaecheSearch.RclInfo)artInfo).setArtSchluessel((rclart != null)
+                                ? (String)rclart.getProperty("schluessel") : null);
                     }
                     break;
                     case "stoffliche": {
+                        final CidsBean stofflicheart = (cbStofflicheart.getSelectedItem() instanceof CidsBean)
+                            ? (CidsBean)cbStofflicheart.getSelectedItem() : null;
+
                         artInfo = new AlboFlaecheSearch.StofflicheInfo();
+                        ((AlboFlaecheSearch.StofflicheInfo)artInfo).setArtSchluessel((stofflicheart != null)
+                                ? (String)stofflicheart.getProperty(
+                                    "schluessel") : null);
                     }
                     break;
-                    case "sonstiges": {
-                        artInfo = new AlboFlaecheSearch.SonstigesInfo();
+                    default: {
+                        artInfo = new AlboFlaecheSearch.ArtInfo(artSchluessel);
                     }
-                    break;
                 }
                 return artInfo;
             } else {
@@ -1034,7 +1030,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         private CidsBean fkStilllegung;
         private CidsBean fkVerfuellkategorie;
         private CidsBean fkErhebungsklasse;
-        private CidsBean fkMaterialaufbringungArt;
+        private CidsBean fkRclArt;
+        private CidsBean fkStofflicheArt;
         private Integer standortJahr;
         private Integer standortDauer;
     }

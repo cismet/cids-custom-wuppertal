@@ -37,7 +37,7 @@ public class AlboFlaecheMainRclPanel extends AbstractAlboFlaechePanel {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheMainMaterialaufbringungPanel object.
+     * Creates a new AlboFlaecheMainRclPanel object.
      */
     public AlboFlaecheMainRclPanel() {
         initComponents();
