@@ -123,13 +123,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 32767));
-        panMaterialaufbringung = new javax.swing.JPanel();
-        alboFlaecheMaterialaufbringungPanel1 =
-            new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel(
-                isEditable());
-        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 32767));
         panRcl = new javax.swing.JPanel();
         alboFlaecheRclPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainRclPanel(
                 isEditable());
@@ -562,28 +555,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         panSpezifisch.add(panAltablagerung, "altablagerung");
 
-        panMaterialaufbringung.setName("panMaterialaufbringung"); // NOI18N
-        panMaterialaufbringung.setOpaque(false);
-        panMaterialaufbringung.setLayout(new java.awt.GridBagLayout());
-
-        alboFlaecheMaterialaufbringungPanel1.setName("alboFlaecheMaterialaufbringungPanel1"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMaterialaufbringung.add(alboFlaecheMaterialaufbringungPanel1, gridBagConstraints);
-
-        filler38.setName("filler39"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panMaterialaufbringung.add(filler38, gridBagConstraints);
-
-        panSpezifisch.add(panMaterialaufbringung, "materialaufbringung");
-
         panRcl.setName("panRcl"); // NOI18N
         panRcl.setOpaque(false);
         panRcl.setLayout(new java.awt.GridBagLayout());
@@ -717,8 +688,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheAltablagerungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainBeschreibungPanel
         alboFlaecheBeschreibungPanel1;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainMaterialaufbringungPanel
-        alboFlaecheMaterialaufbringungPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel alboFlaecheOrtPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainRclPanel alboFlaecheRclPanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortePanel
@@ -730,7 +699,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler29;
     private javax.swing.Box.Filler filler35;
-    private javax.swing.Box.Filler filler38;
     private javax.swing.Box.Filler filler39;
     private javax.swing.Box.Filler filler40;
     private javax.swing.Box.Filler filler58;
@@ -758,7 +726,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JPanel panAltablagerung;
     private javax.swing.JPanel panBeschreibung;
     private javax.swing.JPanel panLinks;
-    private javax.swing.JPanel panMaterialaufbringung;
     private javax.swing.JPanel panOrt;
     private javax.swing.JPanel panRcl;
     private javax.swing.JPanel panRechts;
@@ -893,8 +860,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
             final String art = (String)cidsBean.getProperty("fk_art.schluessel");
             alboFlaecheStandortePanel1.setCidsBean(("altstandort".equals(art) || "betriebsstandort".equals(art))
                     ? cidsBean : null);
-            alboFlaecheMaterialaufbringungPanel1.setCidsBean("materialaufbringung".equals(art)
-                    ? (CidsBean)cidsBean.getProperty("fk_materialaufbringung") : null);
             alboFlaecheRclPanel1.setCidsBean(("rcl".equals(art)) ? (CidsBean)cidsBean.getProperty("fk_rcl") : null);
             alboFlaecheStofflichePanel1.setCidsBean(("stoffliche".equals(art))
                     ? (CidsBean)cidsBean.getProperty("fk_stoffliche") : null);
@@ -902,7 +867,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     ? (CidsBean)cidsBean.getProperty("fk_altablagerung") : null);
         } else {
             alboFlaecheStandortePanel1.setCidsBean(null);
-            alboFlaecheMaterialaufbringungPanel1.setCidsBean(null);
             alboFlaecheRclPanel1.setCidsBean(null);
             alboFlaecheStofflichePanel1.setCidsBean(null);
             alboFlaecheAltablagerungPanel1.setCidsBean(null);
@@ -938,7 +902,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheBeschreibungPanel1.dispose();
         alboFlaecheOrtPanel1.dispose();
         alboFlaecheStandortePanel1.dispose();
-        alboFlaecheMaterialaufbringungPanel1.dispose();
         alboFlaecheRclPanel1.dispose();
         alboFlaecheStofflichePanel1.dispose();
         alboFlaecheAltablagerungPanel1.dispose();
@@ -954,9 +917,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         alboFlaecheBeschreibungPanel1.editorClosed(event);
         alboFlaecheOrtPanel1.editorClosed(event);
-
         alboFlaecheStandortePanel1.editorClosed(event);
-        alboFlaecheMaterialaufbringungPanel1.editorClosed(event);
         alboFlaecheRclPanel1.editorClosed(event);
         alboFlaecheStofflichePanel1.editorClosed(event);
         alboFlaecheAltablagerungPanel1.editorClosed(event);
@@ -968,7 +929,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     && alboFlaecheBeschreibungPanel1.prepareForSave()
                     && alboFlaecheOrtPanel1.prepareForSave()
                     && alboFlaecheStandortePanel1.prepareForSave()
-                    && alboFlaecheMaterialaufbringungPanel1.prepareForSave()
                     && alboFlaecheRclPanel1.prepareForSave()
                     && alboFlaecheStofflichePanel1.prepareForSave()
                     && alboFlaecheAltablagerungPanel1.prepareForSave();
@@ -980,7 +940,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         alboFlaecheBeschreibungPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheOrtPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheStandortePanel1.initWithConnectionContext(connectionContext);
-        alboFlaecheMaterialaufbringungPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheRclPanel1.initWithConnectionContext(connectionContext);
         alboFlaecheStofflichePanel1.initWithConnectionContext(connectionContext);
         alboFlaecheAltablagerungPanel1.initWithConnectionContext(connectionContext);

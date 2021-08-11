@@ -36,7 +36,7 @@ public class AlboFlaecheMainStofflichePanel extends AbstractAlboFlaechePanel {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboFlaecheMainMaterialaufbringungPanel object.
+     * Creates a new AlboFlaecheMainStofflichePanel object.
      */
     public AlboFlaecheMainStofflichePanel() {
         initComponents();
