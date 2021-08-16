@@ -65,6 +65,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.PasswordEncrypter;
 
@@ -224,7 +225,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         if (!initError) {
             webDavHelper = new WebDavTunnelHelper(
                     "WUNDA_BLAU",
-                    Proxy.fromPreferences(),
+                    ProxyHandler.getInstance().getProxy(),
                     WEB_DAV_USER,
                     WEB_DAV_PASSWORD,
                     false);
