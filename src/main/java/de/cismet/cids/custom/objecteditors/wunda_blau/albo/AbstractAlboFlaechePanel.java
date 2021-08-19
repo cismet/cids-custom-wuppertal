@@ -132,8 +132,8 @@ public abstract class AbstractAlboFlaechePanel extends javax.swing.JPanel implem
                 }
             }
             this.cidsBean = cidsBean;
-            if (cidsBean != null) {
-                if (getBindingGroup() != null) {
+            if (getBindingGroup() != null) {
+                if (cidsBean != null) {
                     getBindingGroup().bind();
                 }
                 if (!isEditable()) {

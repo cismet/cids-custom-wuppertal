@@ -35,7 +35,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel42">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Stilllegung:"/>
+            <Property name="text" type="java.lang.String" value="Ablagerungstyp:"/>
             <Property name="name" type="java.lang.String" value="jLabel42" noResource="true"/>
           </Properties>
           <Constraints>

@@ -23,7 +23,8 @@ import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
-import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
+import de.cismet.cids.client.tools.WebDavTunnelHelper;
+
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -108,7 +109,9 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
             final String webDavPassword = pass;
             final String webDavUser = webDavBundle.getString("user");
             final String webDavDirectory = webDavBundle.getString(davUrlProp);
-            final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(),
+            final WebDavTunnelHelper webDavHelper = new WebDavTunnelHelper(
+                    "WUNDA_BLAU",
+                    Proxy.fromPreferences(),
                     webDavUser,
                     webDavPassword,
                     false);
@@ -135,7 +138,7 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
      */
     private void loadImage(final String url,
             final ImageState imgState,
-            final WebDavHelper webDavHelper,
+            final WebDavTunnelHelper webDavHelper,
             final String webDavDirectory) {
         CismetThreadPool.execute(new Runnable() {
 

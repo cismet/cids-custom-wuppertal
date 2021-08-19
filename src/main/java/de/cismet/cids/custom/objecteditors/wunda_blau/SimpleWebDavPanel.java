@@ -68,9 +68,9 @@ import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
+import de.cismet.cids.client.tools.WebDavTunnelHelper;
+
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -78,6 +78,8 @@ import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+
+import de.cismet.cids.server.actions.WebDavTunnelAction;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 
@@ -351,7 +353,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
 
     //~ Instance fields --------------------------------------------------------
 
-    private final WebDavHelper webdavHelper;
+    private final WebDavTunnelHelper webdavHelper;
     private final String beanCollProp;
     private final String nameProp;
     private final String bildClassName;
@@ -378,7 +380,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
      * Creates a new WebDavPicturePanel object.
      */
     public SimpleWebDavPanel() {
-        this(true, "dokumente", "dokumentClass", "name", WebDavTunnelAction.TASK_NAME, ConnectionContext.createDummy());
+        this(true, "dokumente", "dokumentClass", "name", "webDavTunnelAction", ConnectionContext.createDummy());
     }
 
     /**
@@ -402,9 +404,9 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         this.nameProp = nameProp;
         this.connectionContext = connectionContext;
 
-        WebDavHelper webdavHelper = null;
+        WebDavTunnelHelper webdavHelper = null;
         try {
-            webdavHelper = new WebDavHelper(tunnelAction);
+            webdavHelper = new WebDavTunnelHelper("WUNDA_BLAU", tunnelAction);
         } catch (final Exception ex) {
             final String message = "Fehler beim Initialisieren der Bilderablage.";
             LOG.error(message, ex);

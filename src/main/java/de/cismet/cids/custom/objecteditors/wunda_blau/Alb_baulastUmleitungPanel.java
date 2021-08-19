@@ -39,7 +39,8 @@ import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
+import de.cismet.cids.client.tools.WebDavTunnelHelper;
+
 import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
 import de.cismet.cids.custom.utils.alkis.BaulastenPictureFinder;
 
@@ -130,12 +131,13 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                 }
             });
     private long lastChange = 0;
-    private final WebDavHelper webDavHelper = new WebDavHelper(Proxy.fromPreferences(),
+    private final WebDavTunnelHelper webDavHelper = new WebDavTunnelHelper(
+            "WUNDA_BLAU",
+            Proxy.fromPreferences(),
             WEB_DAV_USER,
             WEB_DAV_PASSWORD,
             false);
     private boolean firstDocumentChange = true;
-    private String lastCheckedDocument;
     private String escapeText;
 
     private final ConnectionContext connectionContext;
@@ -247,7 +249,6 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                         if (document != null) {
                             picturePan.successAlert();
                             // picturePan.reloadPictureFromUrl(document);
-                            lastCheckedDocument = document;
                             final CardLayout cl = (CardLayout)pnlControls.getLayout();
                             cl.show(pnlControls, "card3");
                         } else {

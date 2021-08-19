@@ -49,6 +49,8 @@ import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.cismet.cids.client.tools.WebDavTunnelHelper;
+
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel.MODE;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
@@ -169,7 +171,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                 }
             });
     private long lastChange = 0;
-    private WebDavHelper webDavHelper;
+    private WebDavTunnelHelper webDavHelper;
     private boolean firstDocumentChange = true;
     private String lastCheckedDocument;
     private String escapeText;
@@ -220,7 +222,12 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         jXBusyLabel1.setSize(16, 16);
         tfName.getDocument().addDocumentListener(this);
         if (!initError) {
-            webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
+            webDavHelper = new WebDavTunnelHelper(
+                    "WUNDA_BLAU",
+                    Proxy.fromPreferences(),
+                    WEB_DAV_USER,
+                    WEB_DAV_PASSWORD,
+                    false);
         }
         new CidsBeanDropTarget(this);
         new CidsBeanDropTarget(tfName);

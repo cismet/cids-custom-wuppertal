@@ -87,7 +87,8 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      */
-    public void refreshTitle() {
+    public void refresh() {
+        btnReport.setEnabled(!editor.isEditable());
         txtTitle.setText(getTitle());
     }
 
