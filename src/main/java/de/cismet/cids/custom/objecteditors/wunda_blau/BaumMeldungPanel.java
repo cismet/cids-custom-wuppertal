@@ -1371,8 +1371,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         final StringBuilder errorMessage = new StringBuilder();
         boolean noErrorOrt = true;
         boolean noErrorSchaden = true;
-        final List<CidsBean> listOrt = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(saveBean.getPrimaryKeyValue());
-        final List<CidsBean> listSchaden = BaumChildrenLoader.getInstanceEditor().getMapValueFest(saveBean.getPrimaryKeyValue());
+        final List<CidsBean> listOrt = BaumChildrenLoader.getInstanceEditor().getMapValueOrt(saveBean.getPrimaryKeyValue());
+        final List<CidsBean> listSchaden = BaumChildrenLoader.getInstanceEditor().getMapValueSchaden(saveBean.getPrimaryKeyValue());
         
         if (listOrt != null && !(listOrt.isEmpty())){
             for (final CidsBean ortBean : listOrt) {
