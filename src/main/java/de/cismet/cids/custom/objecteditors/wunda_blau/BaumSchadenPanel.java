@@ -87,6 +87,8 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -1054,10 +1056,6 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         panErsatzMain.setLayout(new GridBagLayout());
 
         baumErsatzPanel.setName("baumErsatzPanel"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstErsatz, ELProperty.create("${selectedElement}"), baumErsatzPanel, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1097,6 +1095,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         lstErsatz.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstErsatz.setFixedCellWidth(75);
         lstErsatz.setName("lstErsatz"); // NOI18N
+        lstErsatz.addListSelectionListener(formListener);
         scpLaufendeErsatz.setViewportView(lstErsatz);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1379,7 +1378,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
 
     // Code for dispatching events from components to event handlers.
 
-    private class FormListener implements ActionListener {
+    private class FormListener implements ActionListener, ListSelectionListener {
         FormListener() {}
         public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == btnAddNewErsatz) {
@@ -1393,6 +1392,12 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             }
             else if (evt.getSource() == btnRemoveFest) {
                 BaumSchadenPanel.this.btnRemoveFestActionPerformed(evt);
+            }
+        }
+
+        public void valueChanged(ListSelectionEvent evt) {
+            if (evt.getSource() == lstErsatz) {
+                BaumSchadenPanel.this.lstErsatzValueChanged(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
@@ -1512,6 +1517,13 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             }
         }
     }//GEN-LAST:event_btnRemoveFestActionPerformed
+
+    private void lstErsatzValueChanged(ListSelectionEvent evt) {//GEN-FIRST:event_lstErsatzValueChanged
+        Object oErsatz = lstErsatz.getSelectedValue();
+        if (oErsatz instanceof CidsBean){
+            baumErsatzPanel.setCidsBean((CidsBean)oErsatz);
+        }
+    }//GEN-LAST:event_lstErsatzValueChanged
 
     //~ Instance fields --------------------------------------------------------
     private final boolean isEditor;

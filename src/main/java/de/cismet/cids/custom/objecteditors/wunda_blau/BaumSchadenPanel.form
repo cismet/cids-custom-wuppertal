@@ -1124,9 +1124,6 @@
                           <Properties>
                             <Property name="name" type="java.lang.String" value="baumErsatzPanel" noResource="true"/>
                           </Properties>
-                          <BindingProperties>
-                            <BindingProperty name="cidsBean" source="lstErsatz" sourcePath="${selectedElement}" target="baumErsatzPanel" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
-                          </BindingProperties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumErsatzPanel = new BaumErsatzPanel(this, isEditor, this.getConnectionContext());"/>
                           </AuxValues>
@@ -1182,6 +1179,9 @@
                             <Property name="fixedCellWidth" type="int" value="75"/>
                             <Property name="name" type="java.lang.String" value="lstErsatz" noResource="true"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstErsatzValueChanged"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                           </AuxValues>
