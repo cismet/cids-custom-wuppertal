@@ -77,6 +77,7 @@ import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.beansbinding.ObjectProperty;
 import org.jdesktop.swingx.JXTable;
 /**
  * DOCUMENT ME!
@@ -158,6 +159,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     private BaumErsatzPanel baumErsatzPanel;
     private JButton btnChangeSchaden;
     private ComboBoxFilterDialog comboBoxFilterDialogSchaden;
+    private JLabel jLabel1;
     private JScrollPane jScrollPaneMeldung;
     private JLabel lblGebiet_Meldung;
     private JPanel panContent;
@@ -218,7 +220,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panErsatzMain = new JPanel();
-        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(null, isEditor, this.getConnectionContext());
+        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(null, isEditor, this.getConnectionContext()); ;
+        jLabel1 = new JLabel();
 
         setLayout(new GridBagLayout());
 
@@ -251,7 +254,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         panErsatz.setLayout(new GridBagLayout());
 
         lblGebiet_Meldung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblGebiet_Meldung.setText("Gebiet-Meldung-Schaden:");
+        lblGebiet_Meldung.setText("Gebiet - Meldung - Schaden:");
+        lblGebiet_Meldung.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -264,8 +268,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         jScrollPaneMeldung.setViewportView(xtSchaden);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -281,7 +285,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new Insets(0, 5, 5, 0);
         panErsatz.add(btnChangeSchaden, gridBagConstraints);
@@ -289,10 +293,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
         panErsatzMain.setOpaque(false);
         panErsatzMain.setLayout(new GridBagLayout());
-
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean}"), baumErsatzPanel, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -310,6 +310,11 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 0, 0, 0);
         panErsatz.add(panErsatzMain, gridBagConstraints);
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ObjectProperty.create(), jLabel1, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        panErsatz.add(jLabel1, new GridBagConstraints());
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -405,6 +410,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
+            baumErsatzPanel.setCidsBean(this.getCidsBean());
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
                 this.cidsBean.setProperty(FIELD__DISPENS, false);
                 this.cidsBean.setProperty(FIELD__SELBST, false);
