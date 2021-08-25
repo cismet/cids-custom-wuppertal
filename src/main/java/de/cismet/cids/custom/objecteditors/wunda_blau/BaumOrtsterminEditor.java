@@ -510,6 +510,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     private void setReadOnly() {
         if (!(isEditor)) {
             RendererTools.makeReadOnly(xtMeldung);
+            btnChangeGebiet.setVisible(isEditor);
         }
     }
     
