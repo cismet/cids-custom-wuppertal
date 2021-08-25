@@ -483,6 +483,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      */
     private void setReadOnly() {
         if (!(isEditor)) {
+            btnChangeGebiet.setVisible(isEditor);
         }
     }
     public static void main(final String[] args) throws Exception {

@@ -239,10 +239,10 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         lblHoehe = new JLabel();
         lblUmfang = new JLabel();
         lblArt = new JLabel();
-        if(isEditor){
-            cbArt = new DefaultBindableScrollableComboBox(MC__ART);
+        cbArt = new DefaultBindableScrollableComboBox(MC__ART);
+        if (isEditor){
+            lblGeom = new JLabel();
         }
-        lblGeom = new JLabel();
         if (isEditor){
             cbGeomSchaden = new DefaultCismapGeometryComboBoxEditor();
         }
@@ -430,40 +430,40 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panSchaden.add(lblArt, gridBagConstraints);
 
-        if(isEditor){
-            cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
-            cbArt.setMaximumRowCount(15);
-            cbArt.setName("cbArt"); // NOI18N
-            cbArt.setPreferredSize(new Dimension(100, 24));
+        cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbArt.setMaximumRowCount(15);
+        cbArt.setName("cbArt"); // NOI18N
+        cbArt.setPreferredSize(new Dimension(100, 24));
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArt, BeanProperty.create("selectedItem"));
-            binding.setSourceNullValue(null);
-            binding.setSourceUnreadableValue(null);
-            bindingGroup.addBinding(binding);
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArt, BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        bindingGroup.addBinding(binding);
 
-        }
-        if(isEditor){
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 2;
-            gridBagConstraints.gridwidth = 4;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = GridBagConstraints.WEST;
-            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-            panSchaden.add(cbArt, gridBagConstraints);
-        }
-
-        lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblGeom, "Geometrie:");
-        lblGeom.setName("lblGeom"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panSchaden.add(lblGeom, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panSchaden.add(cbArt, gridBagConstraints);
+
+        if (isEditor){
+            lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+            Mnemonics.setLocalizedText(lblGeom, "Geometrie:");
+            lblGeom.setName("lblGeom"); // NOI18N
+        }
+        if (isEditor){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 10;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+            panSchaden.add(lblGeom, gridBagConstraints);
+        }
 
         if (isEditor){
             cbGeomSchaden.setFont(new Font("Dialog", 0, 12)); // NOI18N
@@ -2048,6 +2048,9 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                 Exceptions.printStackTrace(ex);
             }
         }
+        if (!isEditor){
+            setReadOnly();
+        }
     }
     
     public void allowAddRemove(){
@@ -2095,9 +2098,26 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                 JOptionPane.WARNING_MESSAGE);
     }
     private void setReadOnly(){
-        
-            RendererTools.makeDoubleSpinnerWithoutButtons(spHoehe, 1);
-            RendererTools.makeReadOnly(spHoehe);
+        RendererTools.makeReadOnly(txtAlter);
+        RendererTools.makeReadOnly(chPrivat);
+        RendererTools.makeDoubleSpinnerWithoutButtons(spHoehe, 1);
+        RendererTools.makeReadOnly(spHoehe);
+        RendererTools.makeDoubleSpinnerWithoutButtons(spUmfang, 1);
+        RendererTools.makeReadOnly(spUmfang);
+        RendererTools.makeReadOnly(cbArt);
+        RendererTools.makeReadOnly(chOhne);
+        RendererTools.makeReadOnly(chBau);
+        RendererTools.makeReadOnly(chAbgest);
+        RendererTools.makeReadOnly(chSturm);
+        RendererTools.makeReadOnly(chBeratung);
+        RendererTools.makeReadOnly(chGutachten);
+        RendererTools.makeReadOnly(chKrone);
+        RendererTools.makeReadOnly(chStamm);
+        RendererTools.makeReadOnly(chWurzel);
+        RendererTools.makeReadOnly(taBemerkung);
+        RendererTools.makeReadOnly(chFaellung);
+        RendererTools.makeReadOnly(txtBetrag);
+        RendererTools.makeReadOnly(chEingang);
     }
     
     public void prepareErsatz(){
