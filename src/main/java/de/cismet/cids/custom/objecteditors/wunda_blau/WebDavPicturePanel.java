@@ -125,6 +125,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.PasswordEncrypter;
@@ -579,7 +580,12 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
             final String user = bundle.getString("user");
             webdavDirectory = bundle.getString(urlProp);
 
-            webdavHelper = new WebDavTunnelHelper("WUNDA_BLAU", Proxy.fromPreferences(), user, pass, false);
+            webdavHelper = new WebDavTunnelHelper(
+                    "WUNDA_BLAU",
+                    ProxyHandler.getInstance().getProxy(),
+                    user,
+                    pass,
+                    false);
         } catch (final Exception ex) {
             final String message = "Fehler beim Initialisieren der Bilderablage.";
             LOG.error(message, ex);

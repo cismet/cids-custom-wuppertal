@@ -110,6 +110,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.security.WebAccessManager;
 
@@ -197,7 +198,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     final WebDavTunnelHelper webdavHelper = new WebDavTunnelHelper(
             "WUNDA_BLAU",
-            Proxy.fromPreferences(),
+            ProxyHandler.getInstance().getProxy(),
             VzkatProperties.getInstance().getWebdavUploadUsername(),
             VzkatProperties.getInstance().getWebdavUploadPassword(),
             false);

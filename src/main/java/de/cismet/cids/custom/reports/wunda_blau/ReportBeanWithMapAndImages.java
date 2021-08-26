@@ -33,6 +33,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.PasswordEncrypter;
@@ -111,7 +112,7 @@ public class ReportBeanWithMapAndImages extends ReportBeanWithMap implements Con
             final String webDavDirectory = webDavBundle.getString(davUrlProp);
             final WebDavTunnelHelper webDavHelper = new WebDavTunnelHelper(
                     "WUNDA_BLAU",
-                    Proxy.fromPreferences(),
+                    ProxyHandler.getInstance().getProxy(),
                     webDavUser,
                     webDavPassword,
                     false);
