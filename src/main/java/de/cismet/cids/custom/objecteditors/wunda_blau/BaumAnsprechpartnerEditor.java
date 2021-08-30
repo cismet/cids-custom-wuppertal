@@ -37,8 +37,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -46,12 +44,10 @@ import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
@@ -72,12 +68,11 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.BaumAnsprechpartnerEditor.TelefonCellEditor;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.MissingResourceException;
 import org.jdesktop.swingx.JXTable;
 
 /**
@@ -102,13 +97,17 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public static final String TABLE_NAME = "baum_ansprechpartner";
     public static final String FIELD__NAME = "name";
     public static final String FIELD__SCHLUESSEL = "schluessel";
-    public static final String FIELD__TELEFON = "telefon";
+    public static final String FIELD__BEMERKUNG = "bemerkung";
+    public static final String FIELD__TELEFON = "nummer";
     public static final String FIELD__TELEFONE = "n_telefone";
     public static final String FIELD__ID = "id";
     public static final String TABLE_NAME_TELEFON = "baum_telefon";
     
     private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen..."; 
 
+    public static final String BUNDLE_NOBEM = "BaumAnsprechpartnerEditor.prepareForSave().noBemerkung";
+    public static final String BUNDLE_NOTEL = "BaumAnsprechpartnerEditor.prepareForSave().noTelefon";
+    public static final String BUNDLE_WRONGTEL = "BaumAnsprechpartnerEditor.prepareForSave().wrongTelefon";
     public static final String BUNDLE_NONAME = "BaumAnsprechpartnerEditor.prepareForSave().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumAnsprechpartnerEditor.prepareForSave().duplicateName";
     public static final String BUNDLE_DUPLICATEKEY = "BaumAnsprechpartnerEditor.prepareForSave().duplicateSchluessel";
@@ -121,8 +120,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public static final String BUNDLE_HP_TITLE = "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.title";
     public static final String BUNDLE_HP_TEXT = "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.text";
 
-    public static final Pattern TEL_FILLING_PATTERN = Pattern.compile("(|\\+(-|[0-9])*)");
-    public static final Pattern TEL_MATCHING_PATTERN = Pattern.compile("\\+[0-9]{1,3}(-[0-9]+){1,}");
+    public static final String TEL__PATTERN = "\\+[0-9]{1,3}(-[0-9]+){1,}";
     
     private static final String[] TELEFON_COL_NAMES = new String[] { "Telefon", "Bemerkung" };
     private static final String[] TELEFON_PROP_NAMES = new String[] {"nummer", "bemerkung"};
@@ -162,10 +160,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     private final ImageIcon statusOk = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
 
-    private final RegexPatternFormatter telPatternFormatter = new RegexPatternFormatter(
-            TEL_FILLING_PATTERN,
-            TEL_MATCHING_PATTERN);
-    
+       
     private final RedundantObjectSearch apSearch = new RedundantObjectSearch(
             REDUNDANT_TOSTRING_TEMPLATE,
             REDUNDANT_TOSTRING_FIELDS,
@@ -674,6 +669,30 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             LOG.warn("Name not given.", ex);
             save = false;
         }
+        
+        //Telefon muss eine Nummer & eine Bemerkung haben
+        try{
+            Collection<CidsBean> telCollection =  this.cidsBean.getBeanCollectionProperty(FIELD__TELEFONE);
+            for (final CidsBean tBean:telCollection){
+                if (tBean.getProperty(FIELD__TELEFON)== null) {
+                    LOG.warn("No tel specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOTEL));
+                } else {
+                    if (!(tBean.getProperty(FIELD__TELEFON).toString().matches(TEL__PATTERN))) {
+                    LOG.warn("Wrong tel specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL) 
+                            + tBean.getProperty(FIELD__TELEFON).toString());
+                    }
+                }
+                if (tBean.getProperty(FIELD__BEMERKUNG)== null) {
+                    LOG.warn("No bem specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOBEM));
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Teilnehmer not correct.", ex);
+            save = false;
+        }
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -726,8 +745,6 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
                     TELEFON_PROP_NAMES,
                     TELEFON_PROP_TYPES);
             xtTelefon.setModel(telefonModel);
-        
-            xtTelefon.getColumn(0).setCellEditor(new TelefonCellEditor());
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
@@ -866,129 +883,5 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         }
     }
     public interface BaumAnsprechpartnerDescriptionPaneParent {
-    }
-    //~ Inner Classes ----------------------------------------------------------
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-
-    class RegexPatternFormatter extends DefaultFormatter {
-
-        //~ Instance fields ----------------------------------------------------
-
-        protected java.util.regex.Matcher fillingMatcher;
-        protected java.util.regex.Matcher matchingMatcher;
-        private Object lastValid = null;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new RegexPatternFormatter object.
-         *
-         * @param  fillingRegex   DOCUMENT ME!
-         * @param  matchingRegex  DOCUMENT ME!
-         */
-        public RegexPatternFormatter(final Pattern fillingRegex, final Pattern matchingRegex) {
-            setOverwriteMode(false);
-            fillingMatcher = fillingRegex.matcher("");
-            matchingMatcher = matchingRegex.matcher("");
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public Object stringToValue(final String string) throws java.text.ParseException {
-            if ((string == null) || string.isEmpty()) {
-                lastValid = null;
-                return null;
-            }
-            fillingMatcher.reset(string);
-
-            if (!fillingMatcher.matches()) {
-                throw new java.text.ParseException("does not match regex", 0);
-            }
-
-            final Object value = (String)super.stringToValue(string);
-
-            matchingMatcher.reset(string);
-            if (matchingMatcher.matches()) {
-                lastValid = value;
-            }
-            return value;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Object getLastValid() {
-            return lastValid;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  okValue  DOCUMENT ME!
-         */
-        public void setLastValid(final Object okValue) {
-            if (lastValid == null) {
-                lastValid = okValue;
-            }
-        }
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public class TelefonCellEditor extends DefaultCellEditor {
-        public TelefonCellEditor(){
-            super(new JFormattedTextField());
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            final JFormattedTextField editor = (JFormattedTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
-
-            if (value != null){
-                JFormattedTextField.AbstractFormatter RegexPatternFormatter;
-
-                editor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                                telPatternFormatter));
-                editor.setValue(value);
-            }
-            editor.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent e) {
-                        editor.setValue(telPatternFormatter.getLastValid());
-                    }
-                });
-            editor.addFocusListener(new FocusAdapter() {
-                    @Override
-                    public void focusLost(FocusEvent evt) {
-                        editor.setValue(telPatternFormatter.getLastValid());
-                    }
-                });
-            return editor;
-        }
-
-        @Override
-        public boolean stopCellEditing() {
-            try {
-                // try to get the value
-                this.getCellEditorValue();
-                return super.stopCellEditing();
-            } catch (Exception ex) {
-                return false;
-            }
-
-        }
-
-    }
-    
-    
+    }        
 }
