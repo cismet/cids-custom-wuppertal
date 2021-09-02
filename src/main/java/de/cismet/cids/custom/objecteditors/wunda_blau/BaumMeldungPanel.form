@@ -633,7 +633,7 @@
                             <BindingProperty name="cidsBean" source="lstOrtstermine" sourcePath="${selectedElement}" target="baumOrtsterminPanel" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumOrtsterminPanel = new BaumOrtsterminPanel(this,null, isEditor, this.connectionContext);"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumOrtsterminPanel = new BaumOrtsterminPanel(this.getBaumChildrenLoader());"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -925,7 +925,7 @@
                             <BindingProperty name="cidsBean" source="lstSchaeden" sourcePath="${selectedElement}" target="baumSchadenPanel" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumSchadenPanel = new BaumSchadenPanel(this, null, isEditor, this.connectionContext);"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumSchadenPanel = new BaumSchadenPanel(this.getBaumChildrenLoader());"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

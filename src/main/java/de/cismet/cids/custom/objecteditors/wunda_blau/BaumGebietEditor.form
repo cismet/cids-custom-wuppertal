@@ -338,7 +338,7 @@
                             </Component>
                             <Component class="javax.swing.JComboBox" name="cbGeom">
                               <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor" preCode="if (isEditor){" postCode="}">
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor" preCode="if (editor){" postCode="}">
                                   <Font name="Dialog" size="12" style="0"/>
                                 </Property>
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -354,12 +354,12 @@
                               </BindingProperties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor){"/>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (editor){"/>
                                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor()"/>
                                 <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor){"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (editor){"/>
                                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor){"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editor){"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -583,7 +583,7 @@
                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateAktenzeichenActionPerformed"/>
                               </Events>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="btnCreateAktenzeichen.setVisible(isEditor);"/>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="btnCreateAktenzeichen.setVisible(editor);"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -638,7 +638,7 @@
                                     <BindingProperty name="cidsBean" source="lstMeldungen" sourcePath="${selectedElement}" target="baumMeldungPanel" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
                                   </BindingProperties>
                                   <AuxValues>
-                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumMeldungPanel = new BaumMeldungPanel(this, isEditor, this.getConnectionContext());"/>
+                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumMeldungPanel = new BaumMeldungPanel(this.getBaumChildrenLoader());"/>
                                   </AuxValues>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

@@ -116,15 +116,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     EditorSaveListener,
     BindingGroupStore,
     TitleComponentProvider,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    BaumOrganizer{
 
     //~ Static fields/initializers ---------------------------------------------
     
     public static final String GEOMTYPE = "Polygon";
     public static boolean azGeneriert = false;
     Collection<CidsBean> beansMeldung = new ArrayList<>();
-    private BaumChildrenLoader.Listener loadChildrenListenerEditor;
-    private BaumChildrenLoader.Listener loadChildrenListenerRenderer;
+    private BaumChildrenLoader.Listener loadChildrenListener;
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = {
             AdresseLightweightSearch.Subject.HNR.toString()
@@ -215,8 +215,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
     private Boolean redundantName = false;
 
-    private boolean isEditor = true;
+    @Getter private boolean editor = true;
     private boolean areChildrenLoad = false;
+    @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
     
     private static final ComboBoxModel MUST_SET_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten bitte zuweisen......"});
     private static final ComboBoxModel LOAD_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten werden geladen......"});
@@ -318,7 +319,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumGebietEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -370,9 +371,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             });
         
-        if(isEditor){
-            
-            
+        if(editor){
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
             {
                 final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0))
@@ -387,20 +386,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                         }
                     });
             }
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         }
 
         dlgAddMeldung.pack();
         dlgAddMeldung.getRootPane().setDefaultButton(btnMenOkMeldung);
-        if (isEditor){
-            loadChildrenListenerEditor = new LoaderListener();
-            BaumChildrenLoader.getInstanceEditor().addListener(loadChildrenListenerEditor);
-        } else{
-            loadChildrenListenerRenderer = new LoaderListener();
-            BaumChildrenLoader.getInstanceRenderer().addListener(loadChildrenListenerRenderer);
-        }
-        if (isEditor) {
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
-        }
+        loadChildrenListener = new LoaderListener();
+        getBaumChildrenLoader().addListener(loadChildrenListener);
+        
         setReadOnly();
         initComboboxHnr();
     }
@@ -441,7 +434,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         lblAktenzeichen = new JLabel();
         txtAktenzeichen = new JTextField();
         lblGeom = new JLabel();
-        if (isEditor){
+        if (editor){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         lblStrasse = new JLabel();
@@ -465,7 +458,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelMeldungen = new JPanel();
         panMeldung = new JPanel();
         panMeldungenMain = new JPanel();
-        baumMeldungPanel = baumMeldungPanel = new BaumMeldungPanel(this, isEditor, this.getConnectionContext());
+        baumMeldungPanel = baumMeldungPanel = new BaumMeldungPanel(this.getBaumChildrenLoader());
         lblLadenMeldung = new JLabel();
         scpLaufendeMeldungen = new JScrollPane();
         lstMeldungen = new JList();
@@ -669,8 +662,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (editor){
+            if (editor){
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
@@ -679,7 +672,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             bindingGroup.addBinding(binding);
 
         }
-        if (isEditor){
+        if (editor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 5;
@@ -870,7 +863,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(btnCreateAktenzeichen, gridBagConstraints);
-        btnCreateAktenzeichen.setVisible(isEditor);
+        btnCreateAktenzeichen.setVisible(editor);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1088,8 +1081,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             beanMeldung.setProperty(FIELD__ID, getCounterMeldung());
             setCounterMeldung(getCounterMeldung()-1);
             //Meldungen erweitern:
-            if (isEditor){
-                BaumChildrenLoader.getInstanceEditor().addMeldung(cidsBean.getPrimaryKeyValue(), beanMeldung);
+            if (editor){
+                getBaumChildrenLoader().addMeldung(cidsBean.getPrimaryKeyValue(), beanMeldung);
             }
             //Fuegt die Meldung zu mapMeldung hinzu
             ((DefaultListModel)lstMeldungen.getModel()).addElement(beanMeldung);
@@ -1128,11 +1121,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         
         if (selectedObject instanceof CidsBean) {
             final Integer idMeldung = ((CidsBean) selectedObject).getPrimaryKeyValue();
-            if(BaumChildrenLoader.getInstanceEditor().getMapValueOrt(idMeldung)== null && 
-                    BaumChildrenLoader.getInstanceEditor().getMapValueSchaden(idMeldung)== null){
-                    List<CidsBean> listMeldungen = BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue());
+            if(getBaumChildrenLoader().getMapValueOrt(idMeldung)== null && 
+                    getBaumChildrenLoader().getMapValueSchaden(idMeldung)== null){
+                    List<CidsBean> listMeldungen = getBaumChildrenLoader().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue());
                     if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
-                        BaumChildrenLoader.getInstanceEditor().removeMeldung(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                        getBaumChildrenLoader().removeMeldung(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
                     } else{
                         for(final CidsBean beanMeldung:listMeldungen){
                             if(beanMeldung.equals(selectedObject)){
@@ -1144,7 +1137,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                                 break;
                             }
                         }
-                        BaumChildrenLoader.getInstanceEditor().getMapMeldung().replace(this.cidsBean.getPrimaryKeyValue(), listMeldungen);
+                        getBaumChildrenLoader().getMapMeldung().replace(this.cidsBean.getPrimaryKeyValue(), listMeldungen);
                     }
                     ((DefaultListModel)lstMeldungen.getModel()).removeElement(selectedObject);
                     if (getActiveBeans(listMeldungen) > 0) {
@@ -1235,19 +1228,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }
     
     public void prepareMeldung(){
-        if (isEditor){
-            if (BaumChildrenLoader.getInstanceEditor().getMapMeldung() != null && 
-                    getActiveBeans(BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(
-                            this.cidsBean.getPrimaryKeyValue())) > 0) {
-                lstMeldungen.setSelectedIndex(0);
-            }
-        }else{
-            if (BaumChildrenLoader.getInstanceRenderer().getMapMeldung() != null && 
-                    getActiveBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueMeldung(
-                            this.cidsBean.getPrimaryKeyValue())) > 0) {
-                lstMeldungen.setSelectedIndex(0);
-            }
+        if (getBaumChildrenLoader().getMapMeldung() != null && 
+                getActiveBeans(getBaumChildrenLoader().getMapValueMeldung(
+                        this.cidsBean.getPrimaryKeyValue())) > 0) {
+            lstMeldungen.setSelectedIndex(0);
         }
+        
         lstMeldungen.setCellRenderer(new DefaultListCellRenderer() {
 
             @Override
@@ -1298,11 +1284,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
 
     private void zeigeKinderMeldung(){
-        if (isEditor){      
-            setMeldungBeans(BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(cidsBean.getPrimaryKeyValue()));
-        } else {
-            setMeldungBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueMeldung(cidsBean.getPrimaryKeyValue()));
-        }
+        setMeldungBeans(getBaumChildrenLoader().getMapValueMeldung(cidsBean.getPrimaryKeyValue()));
     }
     /**
      * DOCUMENT ME!
@@ -1348,7 +1330,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         final StringBuilder errorMessage = new StringBuilder();
         boolean noErrorOccured = true;
         for (final CidsBean meldungBean : 
-                BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue())){
+                getBaumChildrenLoader().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue())){
             try {
                 noErrorOccured = baumMeldungPanel.prepareForSave(meldungBean);
                 if(!noErrorOccured) {
@@ -1434,13 +1416,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
-        if (isEditor && (this.cidsBean != null)) {
+        if (editor && (this.cidsBean != null)) {
             LOG.info("remove propchange baum_gebiet: " + this.cidsBean);
             this.cidsBean.removePropertyChangeListener(this);
         }
         bindingGroup.unbind();
         this.cidsBean = cb;
-        if (isEditor && (this.cidsBean != null)) {
+        if (editor && (this.cidsBean != null)) {
             LOG.info("add propchange baum_gebiet: " + this.cidsBean);
             this.cidsBean.addPropertyChangeListener(this);
         }
@@ -1465,7 +1447,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         setTitle(getTitle());
         btnReport.setVisible(false);
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-            BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(true);
+            getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
             allowAddRemove();
         }
     }
@@ -1475,13 +1457,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(editor)) {
             RendererTools.makeReadOnly(txtAktenzeichen);
             RendererTools.makeReadOnly(cbStrasse);
             RendererTools.makeReadOnly(cbHNr);
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(taBemerkung);
-            lblGeom.setVisible(isEditor);
+            lblGeom.setVisible(editor);
+            panControlsNewMeldungen.setVisible(editor);;
         }
     }
     /**
@@ -1556,35 +1539,30 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     public void clearBaumChildrenLoader(){
-        if (isEditor){
-            BaumChildrenLoader.getInstanceEditor().clearAllMaps();
-            BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(false);
-            BaumChildrenLoader.getInstanceEditor().removeListener(loadChildrenListenerEditor);
-        } else {
-            BaumChildrenLoader.getInstanceRenderer().clearAllMaps();
-            BaumChildrenLoader.getInstanceRenderer().setLoadingCompletedWithoutError(false);
-            BaumChildrenLoader.getInstanceRenderer().removeListener(loadChildrenListenerRenderer);
-        }
+        getBaumChildrenLoader().clearAllMaps();
+        getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
+        getBaumChildrenLoader().removeListener(loadChildrenListener);
     }
     
     public void allowAddRemove(){
-        if (isEditor){
-           if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
+            if (editor){   
                 btnAddNewMeldung.setEnabled(true);
                 btnRemoveMeldung.setEnabled(true);
-                lblLadenMeldung.setVisible(false);
             }
+                lblLadenMeldung.setVisible(false);
         }
-    }
+     } 
     
     @Override
     public void dispose() {
         //super.dispose();
         dlgAddMeldung.dispose();
-        if (this.isEditor) {
+        if (editor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
+        } else {
+            clearBaumChildrenLoader();
         }
-        
         baumMeldungPanel.dispose();
     }
     
@@ -1598,109 +1576,111 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
-        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
-            baumMeldungPanel.editorClosed(ece);
-        }
-        if(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS == ece.getStatus()){
-            final List<CidsBean> listMeldung = BaumChildrenLoader.getInstanceEditor().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue());
-            for (CidsBean meldungBean : listMeldung) {
-                try {
-                    meldungBean.setProperty(FIELD__GEBIET,ece.getSavedBean());
-                    final List<CidsBean> listOrt = BaumChildrenLoader.getInstanceEditor().getMapValueOrt(meldungBean.getPrimaryKeyValue());
-                    final List<CidsBean> listSchaden = BaumChildrenLoader.getInstanceEditor().getMapValueSchaden(meldungBean.getPrimaryKeyValue());
-                    try{
-                        meldungBean = meldungBean.persist(getConnectionContext());
-                    } catch (final Exception ex) {
-                        LOG.error(ex, ex);
-                        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                            NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
-                                    + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
-                                    + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
-                                    + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                            NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
-                            JOptionPane.ERROR_MESSAGE);
-                    }
-                    //Ortstermine persisten
-                    if (listOrt != null && !(listOrt.isEmpty())){
-                        for (final CidsBean ortBean : listOrt) {
-                            try {
-                                ortBean.setProperty(FIELD__MELDUNG, meldungBean);
-                                ortBean.persist(getConnectionContext());
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_ORT)
-                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
-                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
-                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
-                                    JOptionPane.ERROR_MESSAGE);
+        try{
+            if(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS == ece.getStatus()){
+                final List<CidsBean> listMeldung = getBaumChildrenLoader().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue());
+                for (CidsBean meldungBean : listMeldung) {
+                    try {
+                        meldungBean.setProperty(FIELD__GEBIET,ece.getSavedBean());
+                        final List<CidsBean> listOrt = getBaumChildrenLoader().getMapValueOrt(meldungBean.getPrimaryKeyValue());
+                        final List<CidsBean> listSchaden = getBaumChildrenLoader().getMapValueSchaden(meldungBean.getPrimaryKeyValue());
+                        try{
+                            meldungBean = meldungBean.persist(getConnectionContext());
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
+                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
+                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
+                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                JOptionPane.ERROR_MESSAGE);
+                        }
+                        //Ortstermine persisten
+                        if (listOrt != null && !(listOrt.isEmpty())){
+                            for (final CidsBean ortBean : listOrt) {
+                                try {
+                                    ortBean.setProperty(FIELD__MELDUNG, meldungBean);
+                                    ortBean.persist(getConnectionContext());
+                                } catch (final Exception ex) {
+                                    LOG.error(ex, ex);
+                                    JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_ORT)
+                                                + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
+                                                + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
+                                                + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                        JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                         }
-                    }
-                    //Schaeden persisten
-                    if (listSchaden != null && !(listSchaden.isEmpty())){
-                        for (CidsBean schadenBean : listSchaden) {
-                            try {
-                                schadenBean.setProperty(FIELD__MELDUNG, meldungBean);
-                                final List<CidsBean> listErsatz = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(schadenBean.getPrimaryKeyValue());
-                                final List<CidsBean> listFest = BaumChildrenLoader.getInstanceEditor().getMapValueFest(schadenBean.getPrimaryKeyValue());
-                                schadenBean = schadenBean.persist(getConnectionContext());
-                                //Ersatzpflanzungen persisten
-                                if (listErsatz != null && !(listErsatz.isEmpty())){
-                                    for (final CidsBean ersatzBean : listErsatz) {
-                                        try {
-                                            ersatzBean.setProperty(FIELD__SCHADEN, schadenBean);
-                                            ersatzBean.persist(getConnectionContext());
-                                        } catch (final Exception ex) {
-                                            LOG.error(ex, ex);
-                                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_ERSATZ)
-                                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
-                                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
-                                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
-                                                JOptionPane.ERROR_MESSAGE);
+                        //Schaeden persisten
+                        if (listSchaden != null && !(listSchaden.isEmpty())){
+                            for (CidsBean schadenBean : listSchaden) {
+                                try {
+                                    schadenBean.setProperty(FIELD__MELDUNG, meldungBean);
+                                    final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(schadenBean.getPrimaryKeyValue());
+                                    final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(schadenBean.getPrimaryKeyValue());
+                                    schadenBean = schadenBean.persist(getConnectionContext());
+                                    //Ersatzpflanzungen persisten
+                                    if (listErsatz != null && !(listErsatz.isEmpty())){
+                                        for (final CidsBean ersatzBean : listErsatz) {
+                                            try {
+                                                ersatzBean.setProperty(FIELD__SCHADEN, schadenBean);
+                                                ersatzBean.persist(getConnectionContext());
+                                            } catch (final Exception ex) {
+                                                LOG.error(ex, ex);
+                                                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_ERSATZ)
+                                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
+                                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
+                                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                                    JOptionPane.ERROR_MESSAGE);
+                                            }
                                         }
                                     }
-                                }
-                                //Festsetzungen persisten
-                                if (listFest != null && !(listFest.isEmpty())){
-                                    for (final CidsBean festBean : listFest) {
-                                        try {
-                                            festBean.setProperty(FIELD__SCHADEN, schadenBean);
-                                            festBean.persist(getConnectionContext());
-                                        } catch (final Exception ex) {
-                                            LOG.error(ex, ex);
-                                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_FEST)
-                                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
-                                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
-                                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
-                                                JOptionPane.ERROR_MESSAGE);
+                                    //Festsetzungen persisten
+                                    if (listFest != null && !(listFest.isEmpty())){
+                                        for (final CidsBean festBean : listFest) {
+                                            try {
+                                                festBean.setProperty(FIELD__SCHADEN, schadenBean);
+                                                festBean.persist(getConnectionContext());
+                                            } catch (final Exception ex) {
+                                                LOG.error(ex, ex);
+                                                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_FEST)
+                                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
+                                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
+                                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                                    JOptionPane.ERROR_MESSAGE);
+                                            }
                                         }
                                     }
+                                } catch (final Exception ex) {
+                                    LOG.error(ex, ex);
+                                    JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_SCHADEN)
+                                                + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
+                                                + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
+                                                + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                        JOptionPane.ERROR_MESSAGE);
                                 }
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_SCHADEN)
-                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
-                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
-                                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
-                                    JOptionPane.ERROR_MESSAGE);
                             }
                         }
+                    } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
                     }
-                } catch (Exception ex) {
-                    Exceptions.printStackTrace(ex);
                 }
             }
+        } catch (final Exception ex) {
+            Exceptions.printStackTrace(ex);
+        } finally {
+            //Gehoert eigentlich ins dispose, aber dieses wird vorher aufgerufen
+            clearBaumChildrenLoader();
         }
-        //Gehoert eigentlich ins dispose, aber dieses wird vorher aufgerufen
-        clearBaumChildrenLoader();
     }
 
     @Override
@@ -1795,6 +1775,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public JComponent getTitleComponent() {
         return panTitle;
     }
+
+   
         
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1880,27 +1862,20 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    //((DefaultListModel)baumMeldungPanel.lstOrtstermine.getModel()).addElement("lade...");
-                    if(isEditor){
-                        return BaumChildrenLoader.getInstanceEditor().loadChildrenMeldung(id, getConnectionContext());
-                    } else{
-                        return BaumChildrenLoader.getInstanceRenderer().loadChildrenMeldung(id, getConnectionContext());
-                    }
+                    return getBaumChildrenLoader().loadChildrenMeldung(id, getConnectionContext());
                 }
 
                 @Override
                 protected void done() {
                     try {
                         areChildrenLoad = get();
-                        if(isEditor){
-                            BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(areChildrenLoad);
-                        } else {
-                            BaumChildrenLoader.getInstanceRenderer().setLoadingCompletedWithoutError(areChildrenLoad);
-                        }
+                        //if(editor){
+                            getBaumChildrenLoader().setLoadingCompletedWithoutError(areChildrenLoad);
+                        //} 
                         if (!areChildrenLoad){
                             setTitle(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_LOAD_ERROR));
                         } else{
-                            if (isEditor){
+                            if (editor){
                                 btnAddNewMeldung.setEnabled(true);
                                 btnRemoveMeldung.setEnabled(true);
                             }

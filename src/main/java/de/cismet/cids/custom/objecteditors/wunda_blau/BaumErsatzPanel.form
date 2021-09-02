@@ -117,11 +117,11 @@
                   </BindingProperties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (!isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (!editor){"/>
                     <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (!isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (!editor){"/>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (!isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (!editor){"/>
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -489,12 +489,12 @@
                   </BindingProperties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (editor){"/>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor()"/>
                     <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (editor){"/>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editor){"/>
                     <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                   </AuxValues>
                   <Constraints>
@@ -572,12 +572,12 @@
                   </BindingProperties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (editor){"/>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.FastBindableReferenceCombo(&#xa;    hnrSearch,&#xa;    hnrSearch.getRepresentationPattern(),&#xa;    hnrSearch.getRepresentationFields()&#xa;)"/>
                     <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (editor){"/>
                     <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor){"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editor){"/>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="2"/>
                   </AuxValues>
                   <Constraints>
@@ -774,7 +774,6 @@
                               <Border info="null"/>
                             </Property>
                             <Property name="name" type="java.lang.String" value="btnAddKont" noResource="true"/>
-                            <Property name="opaque" type="boolean" value="false"/>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[45, 13]"/>
                             </Property>
@@ -800,7 +799,6 @@
                               <Border info="null"/>
                             </Property>
                             <Property name="name" type="java.lang.String" value="btnRemKont" noResource="true"/>
-                            <Property name="opaque" type="boolean" value="false"/>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[45, 13]"/>
                             </Property>

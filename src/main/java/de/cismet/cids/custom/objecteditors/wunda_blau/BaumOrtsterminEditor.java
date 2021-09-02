@@ -17,6 +17,7 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 
 import org.apache.log4j.Logger;
 
@@ -78,6 +79,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.MissingResourceException;
+import lombok.Getter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -93,10 +95,12 @@ import org.jdesktop.swingx.JXTable;
 public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
     BindingGroupStore,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    BaumOrganizer {
 
     //~ Static fields/initializers ---------------------------------------------
     private MetaClass meldungMetaClass;
+    @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
     private static final Comparator<Object> COMPARATOR = new Comparator<Object>() {
 
             @Override
@@ -161,6 +165,11 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         
     }
 
+    @Override
+    public boolean isEditor() {
+        return this.editor;
+    }
+
 
     //~ Enums ------------------------------------------------------------------
 
@@ -180,7 +189,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     
     //private MetaClass teilnehmerMetaClass;
 
-    private boolean isEditor = true;
+    private boolean editor = true;
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -211,7 +220,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumOrtsterminEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -246,7 +255,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         jScrollPaneMeldung = new JScrollPane();
         xtMeldung = new JXTable();
         panOrtstermineMain = new JPanel();
-        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(null, this, isEditor, this.getConnectionContext());
+        baumOrtsterminPanel = baumOrtsterminPanel = new BaumOrtsterminPanel(this.getBaumChildrenLoader());
 
         setLayout(new GridBagLayout());
 
@@ -279,7 +288,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new Insets(2, 5, 5, 2);
         panOrtstermin.add(btnChangeGebiet, gridBagConstraints);
-        btnChangeGebiet.setVisible(isEditor);
+        btnChangeGebiet.setVisible(editor);
 
         xtMeldung.setModel(new OrtsterminMeldungTableModel());
         xtMeldung.setVisibleRowCount(1);
@@ -508,9 +517,9 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(editor)) {
             RendererTools.makeReadOnly(xtMeldung);
-            btnChangeGebiet.setVisible(isEditor);
+            btnChangeGebiet.setVisible(editor);
         }
     }
     
@@ -551,9 +560,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public void editorClosed(final EditorClosedEvent ece) {
-        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
-            baumOrtsterminPanel.editorClosed(ece);
-        }
     }
 
     @Override

@@ -276,11 +276,11 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(parentEditor != null){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(this.getBaumChildrenLoader() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(parentEditor != null){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(this.getBaumChildrenLoader() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(parentEditor != null){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(this.getBaumChildrenLoader() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -301,11 +301,11 @@
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(parentEditor != null){"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(this.getBaumChildrenLoader() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(parentEditor != null){"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(this.getBaumChildrenLoader() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){"/>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(parentEditor != null){"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(this.getBaumChildrenLoader() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() != null &amp;&amp;&#xa;    this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){&#xa;"/>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
           </AuxValues>
           <Constraints>

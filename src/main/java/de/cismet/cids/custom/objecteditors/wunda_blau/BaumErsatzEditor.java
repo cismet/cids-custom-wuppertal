@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 
 import org.apache.log4j.Logger;
 
@@ -72,11 +73,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.MissingResourceException;
+import lombok.Getter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.ObjectProperty;
 import org.jdesktop.swingx.JXTable;
 /**
@@ -88,7 +89,8 @@ import org.jdesktop.swingx.JXTable;
 public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
     BindingGroupStore,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    BaumOrganizer{
 
     //~ Static fields/initializers ---------------------------------------------
     private MetaClass schadenMetaClass;
@@ -153,7 +155,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Instance fields --------------------------------------------------------
     
-    private boolean isEditor = true;
+    private boolean editor = true;
+    @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumErsatzPanel baumErsatzPanel;
@@ -185,7 +188,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumErsatzEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -220,7 +223,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panErsatzMain = new JPanel();
-        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(null, isEditor, this.getConnectionContext()); ;
+        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(this.getBaumChildrenLoader()); ;
         jLabel1 = new JLabel();
 
         setLayout(new GridBagLayout());
@@ -289,7 +292,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new Insets(0, 5, 5, 0);
         panErsatz.add(btnChangeSchaden, gridBagConstraints);
-        btnChangeSchaden.setVisible(isEditor);
+        btnChangeSchaden.setVisible(editor);
 
         panErsatzMain.setOpaque(false);
         panErsatzMain.setLayout(new GridBagLayout());
@@ -391,13 +394,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public void setCidsBean(final CidsBean cb) {
         // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                 LOG.info("remove propchange baum_ersatz: " + this.cidsBean);
                 this.cidsBean.removePropertyChangeListener(this);
             }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                 LOG.info("add propchange baum_ersatz: " + this.cidsBean);
                 this.cidsBean.addPropertyChangeListener(this);
             }
@@ -459,9 +462,9 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(editor)) {
             RendererTools.makeReadOnly(xtSchaden);
-            btnChangeSchaden.setVisible(isEditor);
+            btnChangeSchaden.setVisible(editor);
         }
     }
     public static void main(final String[] args) throws Exception {
@@ -520,6 +523,11 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      * @param  tableName     DOCUMENT ME!
      * @param  whereClause   DOCUMENT ME!
      */
+
+    @Override
+    public boolean isEditor() {
+        return this.editor;
+    }
     
     
         

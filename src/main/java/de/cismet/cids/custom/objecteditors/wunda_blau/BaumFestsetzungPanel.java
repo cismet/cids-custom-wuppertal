@@ -16,6 +16,7 @@ import Sirius.server.middleware.types.MetaClass;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -60,6 +61,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import lombok.Getter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -142,7 +144,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         cbArtF = new DefaultBindableReferenceCombo(MC__ART);
         ;
         lblGeom = new JLabel();
-        if (isEditor){
+        if (editor){
             cbGeomFest = new DefaultCismapGeometryComboBoxEditor();
         }
         lblDatum = new JLabel();
@@ -269,7 +271,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panFest.add(lblGeom, gridBagConstraints);
 
-        if (isEditor){
+        if (editor){
             cbGeomFest.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeomFest.setName("cbGeomFest"); // NOI18N
 
@@ -278,7 +280,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             bindingGroup.addBinding(binding);
 
         }
-        if (isEditor){
+        if (editor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -445,8 +447,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     }// </editor-fold>//GEN-END:initComponents
 
     //~ Instance fields --------------------------------------------------------
-    private final boolean isEditor;
-    private final BaumSchadenPanel parentPanel;
+    private final boolean editor;
+    @Getter private final BaumChildrenLoader baumChildrenLoader;
     private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
     public static final String GEOMTYPE = "Point";
@@ -495,7 +497,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
      * Creates a new BaumFestsetzungPanel object.
      */
     public BaumFestsetzungPanel() {
-        this(null,false, ConnectionContext.createDeprecated());
+        this(null);
     }
 
     
@@ -503,19 +505,21 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     /**
      * Creates new form BaumFestsetzungPanel.
      *
-     * @param parentPanel
-     * @param  editable             DOCUMENT ME!
-     * @param  connectionContext    DOCUMENT ME!
+     * @param bclInstance
      */
-    public BaumFestsetzungPanel(final BaumSchadenPanel parentPanel, final boolean editable,
-            final ConnectionContext connectionContext) {
-        this.isEditor = editable;
-        this.connectionContext = connectionContext;
+    public BaumFestsetzungPanel(final BaumChildrenLoader bclInstance) {
+        this.baumChildrenLoader = bclInstance;
+        if (bclInstance != null){
+            this.editor = bclInstance.getParentOrganizer().isEditor();
+            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
+        } else {
+            this.editor = false;
+            this.connectionContext = ConnectionContext.createDummy();
+        }
         initComponents();
-        if (isEditor) {
+        if (editor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setLocalRenderFeatureString(FIELD__GEOM);
         }
-        this.parentPanel = parentPanel;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -542,7 +546,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     public void dispose() {
         //bindingGroup.unbind();
         cidsBean = null;
-        if (this.isEditor && cbGeomFest != null) {
+        if (this.editor && cbGeomFest != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).dispose();
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(null);
             cbGeomFest = null;
@@ -554,30 +558,23 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         return this.cidsBean;
     }
     
-   
-    public void editorClosed(final EditorClosedEvent ece) {
-        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
-            
-        }
-    }
-    
     
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(editor)) {
             RendererTools.makeReadOnly(txtUmfangF);
             RendererTools.makeReadOnly(txtHoeheF);
             RendererTools.makeReadOnly(cbGeomFest);
             RendererTools.makeReadOnly(cbArtF );
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(taBemerkungF);
-            lblGeom.setVisible(isEditor);
+            lblGeom.setVisible(editor);
         }
     }
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             try{
@@ -589,12 +586,12 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                         this.cidsBean,
                         getConnectionContext());
                     //Wenn mit mehreren Geoms(Liste) gearbeitet wird
-                    if (isEditor ) {
+                    if (editor ) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(cidsBean.getMetaObject());
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).initForNewBinding();
                     }
                 } else{
-                    if (isEditor) {
+                    if (editor) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).initForNewBinding();
                         cbGeomFest.setSelectedIndex(-1);
                     }
@@ -602,10 +599,10 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 
                 setMapWindow();
                 bindingGroup.bind();
-                if (isEditor && (this.cidsBean != null)) {
+                if (editor && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
                 }
-                if (isEditor){
+                if (editor){
                     cbGeomFest.updateUI();
                 }
             } catch (final Exception ex) {
@@ -616,13 +613,10 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     }
     
     public void setChangeFlag(){
-        if ((parentPanel != null) && (parentPanel.parentPanel != null) && (parentPanel.getCidsBean() != null)) {
-            parentPanel.parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true); 
-            parentPanel.getCidsBean().setArtificialChangeFlag(true);
-        }
-        if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)){
-            parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
-            parentPanel.getCidsBean().setArtificialChangeFlag(true);
+        if ((getBaumChildrenLoader() != null) && 
+                (getBaumChildrenLoader().getParentOrganizer() != null) &&
+                (getBaumChildrenLoader().getParentOrganizer().getCidsBean() != null)) {
+            getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
     }
     public boolean prepareForSave(final CidsBean saveBean) {

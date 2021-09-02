@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -34,8 +35,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -59,6 +58,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import lombok.Getter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -90,6 +90,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public static final String FIELD__TEILNEHMER_NAME = "name";                 // baum_teilnehmer
     public static final String FIELD__TEILNEHMER_TELEFON = "telefon";           // baum_teilnehmer
     public static final String FIELD__TEILNEHMER_BEMERKUNG = "bemerkung";       // baum_teilnehmer
+    public static final String PARENT_NAME = "BaumOrtstermin"; 
     public static final String TABLE_NAME__TEILNEHMER = "baum_teilnehmer"; 
     
     public static final String BUNDLE_PANE_PREFIX =
@@ -141,10 +142,14 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         panTeilDaten = new JPanel();
         jScrollPaneTeil = new JScrollPane();
         xtTeil = new JXTable();
-        if(parentEditor != null){
+        if(this.getBaumChildrenLoader() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){
             lblDatum = new JLabel();
         }
-        if(parentEditor != null){
+        if(this.getBaumChildrenLoader() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){
             dcDatum = new DefaultBindableDateChooser();
         }
 
@@ -320,13 +325,17 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         gridBagConstraints.insets = new Insets(5, 0, 0, 2);
         panOrtstermin.add(panTeil, gridBagConstraints);
 
-        if(parentEditor != null){
+        if(this.getBaumChildrenLoader() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){
             lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
             Mnemonics.setLocalizedText(lblDatum, "Datum:");
             lblDatum.setName("lblDatum"); // NOI18N
             lblDatum.setRequestFocusEnabled(false);
         }
-        if(parentEditor != null){
+        if(this.getBaumChildrenLoader() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
@@ -336,7 +345,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             panOrtstermin.add(lblDatum, gridBagConstraints);
         }
 
-        if(parentEditor != null){
+        if(this.getBaumChildrenLoader() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){
             dcDatum.setName("dcDatum"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
@@ -344,7 +355,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             bindingGroup.addBinding(binding);
 
         }
-        if(parentEditor != null){
+        if(this.getBaumChildrenLoader() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() != null &&
+            this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -391,9 +404,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     }//GEN-LAST:event_btnRemTeilnehmerActionPerformed
 
     //~ Instance fields --------------------------------------------------------
-    private final boolean isEditor;
-    private final BaumMeldungPanel parentPanel;
-    private final BaumOrtsterminEditor parentEditor;
+    private final boolean editor;
+    @Getter private final BaumChildrenLoader baumChildrenLoader;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
@@ -432,47 +444,28 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      * Creates a new BaumMeldungPanel object.
      */
     public BaumOrtsterminPanel() {
-        this(null,null,false, ConnectionContext.createDeprecated());
+        this(null);
         teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
                 CidsBeanSupport.DOMAIN_NAME,
                 TABLE_NAME__TEILNEHMER,
                 connectionContext);
     }
 
-    
+     
     /**
      * Creates new form BaumMeldungPanel.
      *
-     * @param parentPanel
-     * @param parentEditor
-     * @param  editable  DOCUMENT ME!
+     * @param bclInstance
      */
-  /*  public BaumOrtsterminPanel(final BaumMeldungPanel parentPanel, final BaumOrtsterminEditor parentEditor, final boolean editable) {
-        this.isEditor = editable;
-        initComponents();
-        this.connectionContext = null;
-        this.parentPanel = parentPanel;
-        this.parentEditor = parentEditor;
-        teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                TABLE_NAME__TEILNEHMER,
-                connectionContext);
-    }*/
- 
-    /**
-     * Creates new form BaumMeldungPanel.
-     *
-     * @param parentPanel
-     * @param parentEditor
-     * @param  editable             DOCUMENT ME!
-     * @param  connectionContext    DOCUMENT ME!
-     */
-    public BaumOrtsterminPanel(final BaumMeldungPanel parentPanel, final BaumOrtsterminEditor parentEditor, final boolean editable,
-            final ConnectionContext connectionContext) {
-        this.isEditor = editable;
-        this.connectionContext = connectionContext;
-        this.parentEditor = parentEditor;
-        this.parentPanel = parentPanel;
+    public BaumOrtsterminPanel(final BaumChildrenLoader bclInstance) {
+        this.baumChildrenLoader = bclInstance;
+        if (bclInstance != null){
+            this.editor = bclInstance.getParentOrganizer().isEditor();
+            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
+        } else {
+            this.editor = false;
+            this.connectionContext = ConnectionContext.createDummy();
+        }
         initComponents();
         teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
                 CidsBeanSupport.DOMAIN_NAME,
@@ -519,41 +512,39 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     }
     
     public void setChangeFlag(){
-        if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)) {
-            parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
-            //parentPanel.setChangedOrtsterminBeans(cidsBean);
-        }
-        if ((parentEditor != null) && (parentEditor.getCidsBean() != null)) {
-            parentEditor.getCidsBean().setArtificialChangeFlag(true);
+        if ((getBaumChildrenLoader() != null) && 
+                (getBaumChildrenLoader().getParentOrganizer() != null) &&
+                (getBaumChildrenLoader().getParentOrganizer().getCidsBean() != null)) {
+            getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
     }
     
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(editor)) {
             RendererTools.makeReadOnly(taBemerkungOrt);
             RendererTools.makeReadOnly(xtTeil);
             RendererTools.makeReadOnly(dcDatum);
-            panTeilnehmerAdd.setVisible(isEditor);
+            panTeilnehmerAdd.setVisible(editor);
         }
     }
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
             bindingGroup.bind();
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
             }
            // if(this.cidsBean == null){
             //    taBemerkung.setText(null);
            // }
             final DivBeanTable teilnehmerModel = new DivBeanTable(
-                        isEditor,
+                        editor,
                         cidsBean,
                         FIELD__TEILNEHMER,
                         TEILNEHMER_COL_NAMES,
@@ -580,12 +571,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 taBemerkungOrt.updateUI();
         }
         setReadOnly();
-    }
-    
-    public void editorClosed(final EditorClosedEvent ece) {
-        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
-            
-        }
     }
     
     public boolean prepareForSave(final CidsBean saveBean) {

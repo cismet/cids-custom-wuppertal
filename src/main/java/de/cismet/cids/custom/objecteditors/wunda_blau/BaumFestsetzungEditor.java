@@ -14,9 +14,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
-import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 
 import org.apache.log4j.Logger;
 
@@ -55,8 +54,6 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -66,8 +63,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.event.MouseAdapter;
@@ -76,6 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.MissingResourceException;
+import lombok.Getter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -91,7 +87,8 @@ import org.jdesktop.swingx.JXTable;
 public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     EditorSaveListener,
     BindingGroupStore,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    BaumOrganizer{
 
     //~ Static fields/initializers ---------------------------------------------
     private MetaClass schadenMetaClass;
@@ -157,7 +154,8 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
 
     //~ Instance fields --------------------------------------------------------
     
-    private boolean isEditor = true;
+    private boolean editor = true;
+    @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumFestsetzungPanel baumFestsetzungPanel;
@@ -187,7 +185,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumFestsetzungEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -222,7 +220,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panFestMain = new JPanel();
-        baumFestsetzungPanel = baumFestsetzungPanel = new BaumFestsetzungPanel(null, isEditor, this.getConnectionContext());
+        baumFestsetzungPanel = baumFestsetzungPanel = new BaumFestsetzungPanel(this.getBaumChildrenLoader());
 
         setLayout(new GridBagLayout());
 
@@ -288,7 +286,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new Insets(0, 5, 5, 2);
         panFest.add(btnChangeSchaden, gridBagConstraints);
-        btnChangeSchaden.setVisible(isEditor);
+        btnChangeSchaden.setVisible(editor);
 
         panFestMain.setOpaque(false);
         panFestMain.setLayout(new GridBagLayout());
@@ -388,13 +386,13 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     public void setCidsBean(final CidsBean cb) {
         // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                 LOG.info("remove propchange baum_schaden: " + this.cidsBean);
                 this.cidsBean.removePropertyChangeListener(this);
             }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                 LOG.info("add propchange baum_schaden: " + this.cidsBean);
                 this.cidsBean.addPropertyChangeListener(this);
             }
@@ -450,9 +448,9 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(editor)) {
             RendererTools.makeReadOnly(xtSchaden);
-            btnChangeSchaden.setVisible(isEditor);
+            btnChangeSchaden.setVisible(editor);
         }
     }
     public static void main(final String[] args) throws Exception {
@@ -512,6 +510,11 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
      * @param  tableName     DOCUMENT ME!
      * @param  whereClause   DOCUMENT ME!
      */
+
+    @Override
+    public boolean isEditor() {
+        return this.editor;
+    }
     
     
         

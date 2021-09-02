@@ -236,11 +236,11 @@
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor){"/>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (editor){"/>
                         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor){"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (editor){"/>
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor){"/>
+                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editor){"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -269,12 +269,12 @@
                       </BindingProperties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor){"/>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (editor){"/>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor()"/>
                         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor){"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (editor){"/>
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor){"/>
+                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editor){"/>
                         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                       </AuxValues>
                       <Constraints>
@@ -658,7 +658,7 @@
                         </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor, &quot;Kronenschaden:&quot;, SORTING_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(editor, &quot;Kronenschaden:&quot;, SORTING_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -740,7 +740,7 @@
                         </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor, &quot;Stammschaden:&quot;, SORTING_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(editor, &quot;Stammschaden:&quot;, SORTING_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -822,7 +822,7 @@
                         </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor, &quot;Wurzelschaden:&quot;, SORTING_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(editor, &quot;Wurzelschaden:&quot;, SORTING_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -883,7 +883,7 @@
                         </BindingProperty>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor, &quot;Ma&#xdf;nahmen:&quot;, SORTING_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(editor, &quot;Ma&#xdf;nahmen:&quot;, SORTING_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1127,7 +1127,7 @@
                             <Property name="name" type="java.lang.String" value="baumErsatzPanel" noResource="true"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumErsatzPanel = new BaumErsatzPanel(this, isEditor, this.getConnectionContext());"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumErsatzPanel = new BaumErsatzPanel(this.getBaumChildrenLoader());"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1460,7 +1460,7 @@
                             <BindingProperty name="cidsBean" source="lstFest" sourcePath="${selectedElement}" target="baumFestsetzungPanel" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumFestsetzungPanel = new BaumFestsetzungPanel(this, isEditor, this.getConnectionContext());"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="baumFestsetzungPanel = new BaumFestsetzungPanel(this.getBaumChildrenLoader());"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

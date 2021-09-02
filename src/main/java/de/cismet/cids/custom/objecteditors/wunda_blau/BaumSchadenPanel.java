@@ -89,6 +89,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import lombok.Getter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -115,8 +116,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     //private List<CidsBean> festBeans = new ArrayList<>();
     //private final List<CidsBean> changedFestBeans = new ArrayList<>();
     //private final List<CidsBean> deletedFestBeans = new ArrayList<>();
-    private BaumChildrenLoader.Listener loadChildrenListenerEditor;
-    private BaumChildrenLoader.Listener loadChildrenListenerRenderer;
+    private BaumChildrenLoader.Listener loadChildrenListener;
     private static final Logger LOG = Logger.getLogger(BaumSchadenPanel.class);
     public static final String GEOMTYPE = "Point";
     
@@ -240,10 +240,10 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         lblUmfang = new JLabel();
         lblArt = new JLabel();
         cbArt = new DefaultBindableScrollableComboBox(MC__ART);
-        if (isEditor){
+        if (editor){
             lblGeom = new JLabel();
         }
-        if (isEditor){
+        if (editor){
             cbGeomSchaden = new DefaultCismapGeometryComboBoxEditor();
         }
         panGeometrie = new JPanel();
@@ -267,18 +267,18 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         lblKroneArr = new JLabel();
         chKrone = new JCheckBox();
         filler21 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpKrone = new DefaultBindableLabelsPanel(isEditor, "Kronenschaden:", SORTING_OPTION);
+        blpKrone = new DefaultBindableLabelsPanel(editor, "Kronenschaden:", SORTING_OPTION);
         lblStammArr = new JLabel();
         chStamm = new JCheckBox();
         filler22 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpStamm = new DefaultBindableLabelsPanel(isEditor, "Stammschaden:", SORTING_OPTION);
+        blpStamm = new DefaultBindableLabelsPanel(editor, "Stammschaden:", SORTING_OPTION);
         lblWurzelArr = new JLabel();
         chWurzel = new JCheckBox();
         filler23 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpWurzel = new DefaultBindableLabelsPanel(isEditor, "Wurzelschaden:", SORTING_OPTION);
+        blpWurzel = new DefaultBindableLabelsPanel(editor, "Wurzelschaden:", SORTING_OPTION);
         lblMassnahmeArr = new JLabel();
         filler24 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpMassnahme = new DefaultBindableLabelsPanel(isEditor, "Maßnahmen:", SORTING_OPTION);
+        blpMassnahme = new DefaultBindableLabelsPanel(editor, "Maßnahmen:", SORTING_OPTION);
         filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
@@ -291,7 +291,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         jPanelErsatzpflanzung = new JPanel();
         panErsatz = new JPanel();
         panErsatzMain = new JPanel();
-        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(this, isEditor, this.getConnectionContext());
+        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(this.getBaumChildrenLoader());
         lblLadenErsatz = new JLabel();
         scpLaufendeErsatz = new JScrollPane();
         lstErsatz = new JList();
@@ -309,7 +309,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         jPanelFestsetzung = new JPanel();
         panFest = new JPanel();
         panFestMain = new JPanel();
-        baumFestsetzungPanel = baumFestsetzungPanel = new BaumFestsetzungPanel(this, isEditor, this.getConnectionContext());
+        baumFestsetzungPanel = baumFestsetzungPanel = new BaumFestsetzungPanel(this.getBaumChildrenLoader());
         lblLadenFest = new JLabel();
         scpLaufendeFest = new JScrollPane();
         lstFest = new JList();
@@ -449,12 +449,12 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(cbArt, gridBagConstraints);
 
-        if (isEditor){
+        if (editor){
             lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
             Mnemonics.setLocalizedText(lblGeom, "Geometrie:");
             lblGeom.setName("lblGeom"); // NOI18N
         }
-        if (isEditor){
+        if (editor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 3;
@@ -465,7 +465,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             panSchaden.add(lblGeom, gridBagConstraints);
         }
 
-        if (isEditor){
+        if (editor){
             cbGeomSchaden.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeomSchaden.setName("cbGeomSchaden"); // NOI18N
 
@@ -476,7 +476,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
             bindingGroup.addBinding(binding);
 
         }
-        if (isEditor){
+        if (editor){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 3;
@@ -1403,7 +1403,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddNewErsatzActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewErsatzActionPerformed
-        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
             try{
             //ersatzBean erzeugen und vorbelegen:
                 final CidsBean beanErsatz = CidsBean.createNewCidsBeanFromTableName(
@@ -1418,8 +1418,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
 
 
                 //Ersatzpflanzungen erweitern:
-                if (isEditor){
-                    BaumChildrenLoader.getInstanceEditor().addErsatz(cidsBean.getPrimaryKeyValue(), beanErsatz);
+                if (editor){
+                    getBaumChildrenLoader().addErsatz(cidsBean.getPrimaryKeyValue(), beanErsatz);
                 }
                 ((DefaultListModel)lstErsatz.getModel()).addElement(beanErsatz);
 
@@ -1434,13 +1434,13 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     }//GEN-LAST:event_btnAddNewErsatzActionPerformed
 
     private void btnRemoveErsatzActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveErsatzActionPerformed
-        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
             final Object selectedObject = lstErsatz.getSelectedValue();
 
             if (selectedObject instanceof CidsBean) {
-                List<CidsBean> listErsatz = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(this.cidsBean.getPrimaryKeyValue());
+                List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(this.cidsBean.getPrimaryKeyValue());
                 if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
-                    BaumChildrenLoader.getInstanceEditor().removeErsatz(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    getBaumChildrenLoader().removeErsatz(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
                 } else{
                 for(final CidsBean beanErsatz:listErsatz){
                         if(beanErsatz.equals(selectedObject)){
@@ -1452,7 +1452,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                             break;
                         }
                     }
-                    BaumChildrenLoader.getInstanceEditor().getMapErsatz().replace(this.cidsBean.getPrimaryKeyValue(), listErsatz);
+                    getBaumChildrenLoader().getMapErsatz().replace(this.cidsBean.getPrimaryKeyValue(), listErsatz);
                 }
                 ((DefaultListModel)lstErsatz.getModel()).removeElement(selectedObject);
                 if (getActiveBeans(listErsatz) > 0) {
@@ -1464,7 +1464,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     }//GEN-LAST:event_btnRemoveErsatzActionPerformed
 
     private void btnAddNewFestActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewFestActionPerformed
-        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
             try{
             //festBean erzeugen und vorbelegen:
                 final CidsBean beanFest = CidsBean.createNewCidsBeanFromTableName(
@@ -1473,8 +1473,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                     getConnectionContext());
                 beanFest.setProperty(FIELD__FK_SCHADEN, cidsBean);
 
-                if (isEditor){
-                    BaumChildrenLoader.getInstanceEditor().addFest(cidsBean.getPrimaryKeyValue(), beanFest);
+                if (editor){
+                    getBaumChildrenLoader().addFest(cidsBean.getPrimaryKeyValue(), beanFest);
                 }
                 ((DefaultListModel)lstFest.getModel()).addElement(beanFest);
 
@@ -1489,13 +1489,13 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     }//GEN-LAST:event_btnAddNewFestActionPerformed
 
     private void btnRemoveFestActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveFestActionPerformed
-        if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
             final Object selectedObject = lstFest.getSelectedValue();
 
             if (selectedObject instanceof CidsBean) {
-                List<CidsBean> listFest = BaumChildrenLoader.getInstanceEditor().getMapValueFest(this.cidsBean.getPrimaryKeyValue());
+                List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(this.cidsBean.getPrimaryKeyValue());
                 if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
-                    BaumChildrenLoader.getInstanceEditor().removeFest(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    getBaumChildrenLoader().removeFest(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
                 } else{
                     for(final CidsBean beanFest:listFest){
                         if(beanFest.equals(selectedObject)){
@@ -1507,7 +1507,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                             break;
                         }
                     }
-                    BaumChildrenLoader.getInstanceEditor().getMapFest().replace(this.cidsBean.getPrimaryKeyValue(), listFest);
+                    getBaumChildrenLoader().getMapFest().replace(this.cidsBean.getPrimaryKeyValue(), listFest);
                 }
                 ((DefaultListModel)lstFest.getModel()).removeElement(selectedObject);
                 if (getActiveBeans(listFest) > 0) {
@@ -1526,11 +1526,10 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     }//GEN-LAST:event_lstErsatzValueChanged
 
     //~ Instance fields --------------------------------------------------------
-    private final boolean isEditor;
-    public final BaumMeldungPanel parentPanel;
-    public final BaumSchadenEditor parentEditor;
+    private final boolean editor;
     private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
+    @Getter private final BaumChildrenLoader baumChildrenLoader;
     
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
@@ -1642,7 +1641,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
      * Creates a new BaumSchadenPanel object.
      */
     public BaumSchadenPanel() {
-        this(null, null, false, ConnectionContext.createDeprecated());
+        this(null);
     }
 
     
@@ -1650,36 +1649,27 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     /**
      * Creates new form BaumSchadenPanel.
      *
-     * @param parentPanel
-     * @param parentEditor
-     * @param  editable             DOCUMENT ME!
-     * @param  connectionContext    DOCUMENT ME!
+     * @param bclInstance
      */
-    public BaumSchadenPanel(final BaumMeldungPanel parentPanel, 
-                            BaumSchadenEditor parentEditor, 
-                            final boolean editable,
-                            final ConnectionContext connectionContext) {
-        this.isEditor = editable;
-        if (connectionContext != null){
-            this.connectionContext = connectionContext;
-        } else{
-            this.connectionContext = ConnectionContext.createDeprecated();
+    public BaumSchadenPanel(final BaumChildrenLoader bclInstance) {
+        this.baumChildrenLoader = bclInstance;
+        if (bclInstance != null){
+            this.editor = bclInstance.getParentOrganizer().isEditor();
+            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
+        } else {
+            this.editor = false;
+            this.connectionContext = ConnectionContext.createDummy();
         }
         initComponents();
-        if (isEditor) {
+        if (editor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setLocalRenderFeatureString(FIELD__GEOM);
         }
         for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme)) {
             labelsPanel.initWithConnectionContext(connectionContext);
         }
-        this.parentPanel = parentPanel;
-        this.parentEditor = parentEditor;
-        if (isEditor){
-            loadChildrenListenerEditor = new BaumSchadenPanel.LoaderListener();
-            BaumChildrenLoader.getInstanceEditor().addListener(loadChildrenListenerEditor);
-        } else{
-            loadChildrenListenerRenderer = new BaumSchadenPanel.LoaderListener();
-            BaumChildrenLoader.getInstanceRenderer().addListener(loadChildrenListenerRenderer);
+        if (getBaumChildrenLoader() != null){
+            loadChildrenListener = new BaumSchadenPanel.LoaderListener();
+            getBaumChildrenLoader().addListener(loadChildrenListener);
         }
     }
     
@@ -1700,8 +1690,8 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         boolean noErrorErsatz = true;
         boolean noErrorFest = true;
         
-        final List<CidsBean> listErsatz = BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(saveBean.getPrimaryKeyValue());
-        final List<CidsBean> listFest = BaumChildrenLoader.getInstanceEditor().getMapValueFest(saveBean.getPrimaryKeyValue());
+        final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(saveBean.getPrimaryKeyValue());
+        final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(saveBean.getPrimaryKeyValue());
         //Ersatzpflanzungen ueberpruefen
         if (listErsatz != null && !(listErsatz.isEmpty())){
             for (final CidsBean ersatzBean : listErsatz) {
@@ -1770,7 +1760,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
             } else {
-                final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
+                final CidsBean geom_pos = (CidsBean)saveBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
@@ -1876,11 +1866,10 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     
     public void setChangeFlag(){
         cidsBean.setArtificialChangeFlag(true);
-        if ((parentPanel != null) && (parentPanel.parentEditor != null) && (parentPanel.getCidsBean() != null)) {
-            parentPanel.parentEditor.getCidsBean().setArtificialChangeFlag(true);
-        }
-        if ((parentEditor != null) && (parentEditor.getCidsBean() != null)) {
-            parentEditor.getCidsBean().setArtificialChangeFlag(true);
+        if ((getBaumChildrenLoader() != null) && 
+                (getBaumChildrenLoader().getParentOrganizer() != null) &&
+                (getBaumChildrenLoader().getParentOrganizer().getCidsBean() != null)) {
+            getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
     }
      
@@ -1888,7 +1877,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     public void dispose() {
         bindingGroup.unbind();
         cidsBean = null;
-        if (this.isEditor && cbGeomSchaden != null) {
+        if (this.editor && cbGeomSchaden != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).dispose();
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setCidsMetaObject(null);
             cbGeomSchaden = null;
@@ -1896,11 +1885,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         baumFestsetzungPanel.dispose();
         baumErsatzPanel.dispose();
         ((DefaultListModel)lstFest.getModel()).clear();
-        if(isEditor){
-            BaumChildrenLoader.getInstanceEditor().removeListener(loadChildrenListenerEditor);
-        } else {
-            BaumChildrenLoader.getInstanceRenderer().removeListener(loadChildrenListenerRenderer);
-        }
+        getBaumChildrenLoader().removeListener(loadChildrenListener);
     }
 
     @Override
@@ -1908,17 +1893,11 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         return this.cidsBean;
     }
     
-    public void editorClosed(final EditorClosedEvent ece) {
-        if(EditorSaveListener.EditorSaveStatus.CANCELED == ece.getStatus()){
-            baumErsatzPanel.editorClosed(ece);
-            baumFestsetzungPanel.editorClosed(ece);
-        }
-    }
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (isEditor && (this.cidsBean != null)) {
+            if (editor && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             try{
@@ -1934,7 +1913,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                     zeigeKinderFest();
                     zeigeKinderErsatz();
                     //Wenn mit mehreren Geoms(Liste) gearbeitet wird
-                    if (isEditor) {
+                    if (editor) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setCidsMetaObject(cidsBean.getMetaObject());
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).initForNewBinding();
                     }
@@ -1945,7 +1924,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                 } else {
                     setErsatzBeans(null);
                     setFestBeans(null);
-                    if (isEditor) {
+                    if (editor) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).initForNewBinding();
                         cbGeomSchaden.setSelectedIndex(-1);
                     }
@@ -1953,7 +1932,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                 
                 setMapWindow();
                 bindingGroup.bind();
-                if (isEditor && (this.cidsBean != null)) {
+                if (editor && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
                 }
                 lstErsatz.setCellRenderer(new DefaultListCellRenderer() {
@@ -2003,83 +1982,57 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
                         }
                     });
 
-                if (isEditor){
-                    if (BaumChildrenLoader.getInstanceEditor().getMapValueErsatz
-                            (this.cidsBean.getPrimaryKeyValue()) != null && 
-                        getActiveBeans(BaumChildrenLoader.getInstanceEditor().getMapValueErsatz
-                            (this.cidsBean.getPrimaryKeyValue())) > 0) {
-                        lstErsatz.setSelectedIndex(0);
-                    }
-                } else{
-                    if (BaumChildrenLoader.getInstanceRenderer().getMapValueErsatz
-                            (this.cidsBean.getPrimaryKeyValue()) != null && 
-                        getActiveBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueErsatz
-                            (this.cidsBean.getPrimaryKeyValue())) > 0) {
-                        lstErsatz.setSelectedIndex(0);
-                    }
-        }
-                if (isEditor){
-                    if (BaumChildrenLoader.getInstanceEditor().getMapValueFest
-                            (this.cidsBean.getPrimaryKeyValue()) != null && 
-                        getActiveBeans(BaumChildrenLoader.getInstanceEditor().getMapValueFest
-                            (this.cidsBean.getPrimaryKeyValue())) > 0) {
-                        lstFest.setSelectedIndex(0);
-                    }
-                } else{
-                    if (BaumChildrenLoader.getInstanceRenderer().getMapValueFest
-                            (this.cidsBean.getPrimaryKeyValue()) != null && 
-                        getActiveBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueFest
-                            (this.cidsBean.getPrimaryKeyValue())) > 0) {
-                        lstFest.setSelectedIndex(0);
-                    }
-                }
+                
 
                 if(cidsBean != null){
+                    if (getBaumChildrenLoader().getMapValueErsatz
+                            (this.cidsBean.getPrimaryKeyValue()) != null && 
+                        getActiveBeans(getBaumChildrenLoader().getMapValueErsatz
+                            (this.cidsBean.getPrimaryKeyValue())) > 0) {
+                        lstErsatz.setSelectedIndex(0);
+                    }
+                    if (getBaumChildrenLoader().getMapValueFest
+                            (this.cidsBean.getPrimaryKeyValue()) != null && 
+                        getActiveBeans(getBaumChildrenLoader().getMapValueFest
+                            (this.cidsBean.getPrimaryKeyValue())) > 0) {
+                        lstFest.setSelectedIndex(0);
+                    }
                     labelsPanels.addAll(Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme));
                     if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-                        BaumChildrenLoader.getInstanceEditor().setLoadingCompletedWithoutError(true);
+                        getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
                         allowAddRemove();
                     }
                 }
-                if(isEditor){
+                if(editor){
                     cbGeomSchaden.updateUI();
                 }
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
         }
-        if (!isEditor){
+        if (!editor){
             setReadOnly();
         }
     }
     
     public void allowAddRemove(){
-        if (isEditor){
-            if (BaumChildrenLoader.getInstanceEditor().getLoadingCompletedWithoutError()){
+        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
+            if (editor){
                 btnAddNewErsatz.setEnabled(true);
                 btnAddNewFest.setEnabled(true);
                 btnRemoveErsatz.setEnabled(true);
                 btnRemoveFest.setEnabled(true);
-                lblLadenErsatz.setVisible(false);
-                lblLadenFest.setVisible(false);
             }
-        }
+            lblLadenErsatz.setVisible(false);
+            lblLadenFest.setVisible(false);
+        } 
     }
     private void zeigeKinderFest(){
-        //lstOrtstermine.setModel(new DefaultListModel());
-        if (isEditor){      
-            setFestBeans(BaumChildrenLoader.getInstanceEditor().getMapValueFest(cidsBean.getPrimaryKeyValue()));
-        } else {
-            setFestBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueFest(cidsBean.getPrimaryKeyValue()));
-        }
+        setFestBeans(getBaumChildrenLoader().getMapValueFest(cidsBean.getPrimaryKeyValue()));
     }
     
     private void zeigeKinderErsatz(){
-        if (isEditor){      
-            setErsatzBeans(BaumChildrenLoader.getInstanceEditor().getMapValueErsatz(cidsBean.getPrimaryKeyValue()));
-        } else {
-            setErsatzBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueErsatz(cidsBean.getPrimaryKeyValue()));
-        }
+        setErsatzBeans(getBaumChildrenLoader().getMapValueErsatz(cidsBean.getPrimaryKeyValue()));
     }
     
     private void zeigeErrorFest(){
@@ -2118,20 +2071,15 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         RendererTools.makeReadOnly(chFaellung);
         RendererTools.makeReadOnly(txtBetrag);
         RendererTools.makeReadOnly(chEingang);
+        panControlsNewErsatz.setVisible(editor);
+        panControlsNewFest.setVisible(editor);
     }
     
     public void prepareErsatz(){
-        if (isEditor){
-            if (BaumChildrenLoader.getInstanceEditor().getMapValueErsatz
+        if (this.cidsBean != null){
+            if (getBaumChildrenLoader().getMapValueErsatz
                     (this.cidsBean.getPrimaryKeyValue()) != null && 
-                getActiveBeans(BaumChildrenLoader.getInstanceEditor().getMapValueErsatz
-                    (this.cidsBean.getPrimaryKeyValue())) > 0) {
-                lstErsatz.setSelectedIndex(0);
-            }
-        } else{
-            if (BaumChildrenLoader.getInstanceRenderer().getMapValueErsatz
-                    (this.cidsBean.getPrimaryKeyValue()) != null && 
-                getActiveBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueErsatz
+                getActiveBeans(getBaumChildrenLoader().getMapValueErsatz
                     (this.cidsBean.getPrimaryKeyValue())) > 0) {
                 lstErsatz.setSelectedIndex(0);
             }
@@ -2158,21 +2106,14 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         });   
     }
     public void prepareFest(){
-        if (isEditor){
-            if (BaumChildrenLoader.getInstanceEditor().getMapValueFest
+        if (this.cidsBean != null){
+            if (getBaumChildrenLoader().getMapValueFest
                     (this.cidsBean.getPrimaryKeyValue()) != null && 
-                getActiveBeans(BaumChildrenLoader.getInstanceEditor().getMapValueFest
+                getActiveBeans(getBaumChildrenLoader().getMapValueFest
                     (this.cidsBean.getPrimaryKeyValue())) > 0) {
                 lstFest.setSelectedIndex(0);
-            }
-        } else{
-            if (BaumChildrenLoader.getInstanceRenderer().getMapValueFest
-                    (this.cidsBean.getPrimaryKeyValue()) != null && 
-                getActiveBeans(BaumChildrenLoader.getInstanceRenderer().getMapValueFest
-                    (this.cidsBean.getPrimaryKeyValue())) > 0) {
-                lstFest.setSelectedIndex(0);
-            }
-        }
+            } 
+        } 
         lstFest.setCellRenderer(new DefaultListCellRenderer() {
 
             @Override

@@ -15,6 +15,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaObjectNode;
+import de.cismet.cids.custom.objecteditors.wunda_blau.BaumOrganizer;
 
 import org.apache.log4j.Logger;
 
@@ -52,6 +53,7 @@ public class BaumChildrenLoader {
     public static final String FK_MELDUNG = "fk_meldung";
     public static final String FK_GEBIET = "fk_gebiet";
     public BaumChildLightweightSearch searchChild;
+    @Getter private final BaumOrganizer parentOrganizer;
     @Getter public Map <Integer, List<CidsBean>> mapErsatz = new HashMap <>();
     @Getter public Map <Integer, List<CidsBean>> mapFest = new HashMap <>();
     @Getter public Map <Integer, List<CidsBean>> mapSchaden = new HashMap <>();
@@ -259,12 +261,13 @@ public class BaumChildrenLoader {
         }
         return true;
     }
-    public BaumChildrenLoader() {
+    public BaumChildrenLoader(BaumOrganizer baumOrganizer) {
        searchChild = new BaumChildLightweightSearch(
                 CHILD_TOSTRING_TEMPLATE,
                 CHILD_TOSTRING_FIELDS,
                 TABLE_MELDUNG,
                 FK_GEBIET);
+       this.parentOrganizer = baumOrganizer;
     }
 
     public List<CidsBean> getMapValueMeldung(Integer key){
@@ -366,14 +369,6 @@ public class BaumChildrenLoader {
     }
     
     
-    
-    public static BaumChildrenLoader getInstanceEditor(){
-        return LazyInitialiser.INSTANCE_EDITOR;
-    }
-    public static BaumChildrenLoader getInstanceRenderer(){
-        return LazyInitialiser.INSTANCE_RENDERER;
-    }
-    
     /**
      * DOCUMENT ME!
      *
@@ -395,7 +390,7 @@ public class BaumChildrenLoader {
     public boolean removeListener(final Listener listener) {
         return listeners.remove(listener);
     }
-
+    
     private void fireLoadingComplete() {
         for (Listener listener:listeners){
             listener.loadingComplete();
@@ -515,15 +510,4 @@ public class BaumChildrenLoader {
          */
     }
     
-    private static final class LazyInitialiser {
-
-        //~ Static fields/initializers -----------------------------------------
-
-        private static BaumChildrenLoader INSTANCE_EDITOR = new BaumChildrenLoader();
-        private static BaumChildrenLoader INSTANCE_RENDERER = new BaumChildrenLoader();
-
-
-        //~ Constructors -------------------------------------------------------
-
-    }
 }
