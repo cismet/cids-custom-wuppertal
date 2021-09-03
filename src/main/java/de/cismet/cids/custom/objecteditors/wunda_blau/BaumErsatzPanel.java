@@ -931,7 +931,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     }//GEN-LAST:event_cbArtEActionPerformed
 
     private void cbStrasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
-        if (cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
+        if (editor && cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
@@ -1321,9 +1321,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                                 }
                             });
                     }
+                    refreshHnr();
                 }
                 //initComboboxHnr();
-                refreshHnr();
             } catch (final Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
