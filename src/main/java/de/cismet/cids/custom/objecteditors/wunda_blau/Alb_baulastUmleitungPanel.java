@@ -48,6 +48,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.PasswordEncrypter;
 
@@ -133,7 +134,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     private long lastChange = 0;
     private final WebDavTunnelHelper webDavHelper = new WebDavTunnelHelper(
             "WUNDA_BLAU",
-            Proxy.fromPreferences(),
+            ProxyHandler.getInstance().getProxy(),
             WEB_DAV_USER,
             WEB_DAV_PASSWORD,
             false);
