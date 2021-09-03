@@ -15,7 +15,6 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaObjectNode;
-import de.cismet.cids.custom.objecteditors.wunda_blau.BaumOrganizer;
 
 import org.apache.log4j.Logger;
 
@@ -29,6 +28,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
+import de.cismet.cids.custom.objecteditors.wunda_blau.BaumParentPanel;
 
 /**
  * DOCUMENT ME!
@@ -53,7 +53,7 @@ public class BaumChildrenLoader {
     public static final String FK_MELDUNG = "fk_meldung";
     public static final String FK_GEBIET = "fk_gebiet";
     public BaumChildLightweightSearch searchChild;
-    @Getter private final BaumOrganizer parentOrganizer;
+    @Getter private final BaumParentPanel parentOrganizer;
     @Getter public Map <Integer, List<CidsBean>> mapErsatz = new HashMap <>();
     @Getter public Map <Integer, List<CidsBean>> mapFest = new HashMap <>();
     @Getter public Map <Integer, List<CidsBean>> mapSchaden = new HashMap <>();
@@ -261,7 +261,7 @@ public class BaumChildrenLoader {
         }
         return true;
     }
-    public BaumChildrenLoader(BaumOrganizer baumOrganizer) {
+    public BaumChildrenLoader(BaumParentPanel baumOrganizer) {
        searchChild = new BaumChildLightweightSearch(
                 CHILD_TOSTRING_TEMPLATE,
                 CHILD_TOSTRING_FIELDS,

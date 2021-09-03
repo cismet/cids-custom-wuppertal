@@ -90,7 +90,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     EditorSaveListener,
     BindingGroupStore,
     PropertyChangeListener,
-    BaumOrganizer{
+    BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
     private MetaClass schadenMetaClass;

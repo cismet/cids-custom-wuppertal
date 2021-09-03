@@ -88,7 +88,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     EditorSaveListener,
     BindingGroupStore,
     PropertyChangeListener,
-    BaumOrganizer{
+    BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
     private MetaClass schadenMetaClass;

@@ -117,7 +117,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     BindingGroupStore,
     TitleComponentProvider,
     PropertyChangeListener,
-    BaumOrganizer{
+    BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
     

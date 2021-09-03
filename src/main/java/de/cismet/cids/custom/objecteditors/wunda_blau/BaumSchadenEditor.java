@@ -88,7 +88,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     EditorSaveListener,
     BindingGroupStore,
     PropertyChangeListener,
-    BaumOrganizer{
+    BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
     

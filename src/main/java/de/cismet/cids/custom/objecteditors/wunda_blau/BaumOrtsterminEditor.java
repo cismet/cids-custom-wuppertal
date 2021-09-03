@@ -96,7 +96,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     EditorSaveListener,
     BindingGroupStore,
     PropertyChangeListener,
-    BaumOrganizer {
+    BaumParentPanel {
 
     //~ Static fields/initializers ---------------------------------------------
     private MetaClass meldungMetaClass;

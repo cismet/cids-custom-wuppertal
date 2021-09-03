@@ -12,7 +12,7 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
  *
  * @author Sandra
  */
-public interface BaumOrganizer extends ConnectionContextProvider,
+public interface BaumParentPanel extends ConnectionContextProvider,
         CidsBeanStore{
 
     /**
