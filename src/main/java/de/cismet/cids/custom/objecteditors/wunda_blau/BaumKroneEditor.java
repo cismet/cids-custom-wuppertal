@@ -13,10 +13,10 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -27,7 +27,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Dimension;
@@ -38,12 +37,7 @@ import java.awt.Insets;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import java.util.concurrent.ExecutionException;
-
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
@@ -52,8 +46,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -73,7 +67,8 @@ import java.util.MissingResourceException;
  * @version  $Revision$, $Date$
  */
 public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    BeforeSavingHook,
+    SaveVetoable,
     BindingGroupStore,
     PropertyChangeListener,
     RequestsFullSizeComponent {
@@ -105,16 +100,9 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
 
 
     //~ Instance fields --------------------------------------------------------
-    private SwingWorker worker_name;
-
     private Boolean redundantName = false;
 
     private boolean isEditor = true;
-    private final RedundantObjectSearch kroneSearch = new RedundantObjectSearch(
-            REDUNDANT_TOSTRING_TEMPLATE,
-            REDUNDANT_TOSTRING_FIELDS,
-            null,
-            REDUNDANT_TABLE);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
@@ -150,24 +138,6 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        txtName.getDocument().addDocumentListener(new DocumentListener() {
-
-                // Immer, wenn der Name geändert wird, wird dieser überprüft.
-                @Override
-                public void insertUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-
-                @Override
-                public void removeUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-
-                @Override
-                public void changedUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-            });
         setReadOnly();
     }
 
@@ -302,43 +272,6 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-
-    @Override
-    public boolean prepareForSave() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-
-        // name vorhanden
-        try {
-            if (txtName.getText().trim().isEmpty()) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_NONAME));
-            } else {
-                if (redundantName) {
-                    LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_DUPLICATENAME));
-                } 
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Name not given.", ex);
-            save = false;
-        }
-
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumKroneEditor.class,
-                    BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumKroneEditor.class,
-                            BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-
-            return false;
-        }
-        return save;
-    }
-
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -346,7 +279,6 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
             if (isEditor && (this.cidsBean != null)) {
                 LOG.info("remove propchange baum_krone: " + this.cidsBean);
@@ -360,7 +292,6 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
             }
             bindingGroup.bind();
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
         }
     }
@@ -397,79 +328,69 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     }
 
     @Override
-    public void editorClosed(final EditorClosedEvent ece) {
-    }
-
-    @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        // throw new UnsupportedOperationException("Not supported yet."); To change body of generated methods, choose
-        // Tools | Templates.
     }
-
     
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  field  DOCUMENT ME!
-     */
-    private void checkName(final String field) {
-        // Worker Aufruf, ob das Objekt schon existiert
+    @Override
+    public void beforeSaving() {
+        RedundantObjectSearch kroneSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
         final Collection<String> conditions = new ArrayList<>();
-        conditions.add(field + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
         conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
-        valueFromOtherTable(conditions);
+        kroneSearch.setWhere(conditions);
+        try {
+            redundantName = !(SessionManager.getProxy().customServerSearch(
+                    SessionManager.getSession().getUser(),
+                    kroneSearch,
+                    getConnectionContext())).isEmpty();
+        } catch (ConnectionException ex) {
+            LOG.warn("problem in check name: load values.", ex);
+        }
     }
 
-    /**
-     * DOCUMENT ME!
-     */
-    private void checkAttributes() {
-        checkName(FIELD__NAME);
-    }
-    
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  where        DOCUMENT ME!
-     * @param  fall         DOCUMENT ME!
-     */
-    private void valueFromOtherTable(final Collection<String> where) {
-        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
-            
-            @Override
-            protected Collection<MetaObjectNode> doInBackground() throws Exception {
-                kroneSearch.setWhere(where);
-                kroneSearch.setTable(REDUNDANT_TABLE);
-                return SessionManager.getProxy().customServerSearch(
-                        SessionManager.getSession().getUser(),
-                        kroneSearch,
-                        getConnectionContext());
+    @Override
+    public boolean isOkForSaving() {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+
+        // name vorhanden
+        try {
+            if (txtName.getText().trim().isEmpty()) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_NONAME));
+                save = false;
+            } else {
+                if (redundantName) {
+                    LOG.warn("Duplicate name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_DUPLICATENAME));
+                    save = false;
+                } 
             }
-            
-            @Override
-            protected void done() {
-                final Collection<MetaObjectNode> check;
-                try {
-                    if (!isCancelled()) {
-                        check = get();
-                        redundantName = !check.isEmpty();
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    LOG.warn("problem in Worker: load values.", e);
-                }
-            }
-        };
-        if (worker_name != null) {
-            worker_name.cancel(true);
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Name not given.", ex);
+            save = false;
         }
-        worker_name = worker;
-        worker_name.execute();
-        
+
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumKroneEditor.class,
+                    BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumKroneEditor.class,
+                            BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        }
+        return save;
     }
     
 }

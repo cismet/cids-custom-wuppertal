@@ -13,34 +13,19 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
@@ -48,8 +33,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -60,7 +43,8 @@ import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import java.awt.event.ItemEvent;
+import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.MissingResourceException;
@@ -72,7 +56,8 @@ import java.util.MissingResourceException;
  * @version  $Revision$, $Date$
  */
 public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    BeforeSavingHook,
+    SaveVetoable,
     BindingGroupStore,
     RequestsFullSizeComponent {
 
@@ -86,7 +71,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     public static final String FIELD__SCHLUESSEL = "schluessel";            // baum_art
     public static final String FIELD__NAME = "name";                        // baum_art
     public static final String FIELD__MAIN = "fk_hauptart";                 // baum_art
-    public static final String FIELD__MAIN_ID = "fk_hauptart.id";                 // baum_art
+    public static final String FIELD__MAIN_ID = "fk_hauptart.id";           // baum_art
     public static final String FIELD__NAME_BOTANISCH = "name_botanisch";    // baum_art
     public static final String FIELD__ID = "id";                            // baum_art
     public static final String TABLE_NAME = "baum_art";
@@ -100,34 +85,92 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
         "BaumArtEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumArtEditor.prepareForSave().JOptionPane.title";
 
-    //~ Enums ------------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private static enum OtherTableCases {
-
-        //~ Enum constants -----------------------------------------------------
-
-        REDUNDANT_ATT_KEY, REDUNDANT_ATT_NAME
-    }
-
-    //~ Instance fields --------------------------------------------------------
-
-    private SwingWorker worker_key;
-    private SwingWorker worker_name;
-
-    private Boolean redundantName = false;
-    private static String TITLE_NEW_ART = "eine neue Baumart anlegen..."; 
-
-    private boolean isEditor = true;
-    private final RedundantObjectSearch artSearch = new RedundantObjectSearch(
+    @Override
+    public void beforeSaving() {
+        RedundantObjectSearch artSearch = new RedundantObjectSearch(
             REDUNDANT_TOSTRING_TEMPLATE,
             REDUNDANT_TOSTRING_FIELDS,
             null,
             REDUNDANT_TABLE);
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        if (txtName.getText().equals("nicht genauer spezifiziert")){
+            Object selection = cbHauptart.getSelectedItem();
+            if (selection!= null && selection instanceof CidsBean){
+                Integer mainId = ((CidsBean)selection).getPrimaryKeyValue();
+                conditions.add(FIELD__MAIN + " = " + mainId);
+            } 
+        }
+        artSearch.setWhere(conditions);
+        try{
+            redundantName = !(SessionManager.getProxy().customServerSearch(
+                            SessionManager.getSession().getUser(),
+                            artSearch,
+                            getConnectionContext())).isEmpty();
+        
+        } catch (ConnectionException e) {
+            LOG.warn("problem in check name: load values.", e);
+        }
+    }
+
+    @Override
+    public boolean isOkForSaving() {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+
+        // name vorhanden
+        try {
+            if (txtName.getText().trim().isEmpty()) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumArtEditor.class, BUNDLE_NONAME));
+                save = false;
+            } else {
+                if (redundantName) {
+                    LOG.warn("Duplicate name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumArtEditor.class, BUNDLE_DUPLICATENAME));
+                    save = false;
+                } 
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Name not given.", ex);
+            save = false;
+        }
+        
+        // hauptart vorhanden
+        try {
+            if (cbHauptart.getSelectedItem() == null) {
+                LOG.warn("No Hauptart specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumArtEditor.class, BUNDLE_NOMAIN));
+                save = false;
+            } 
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Hauptart not given.", ex);
+            save = false;
+        }
+
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumArtEditor.class,
+                    BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumArtEditor.class,
+                            BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumArtEditor.class,
+                    BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        }
+        return save;
+    }
+
+
+    //~ Enums ------------------------------------------------------------------
+
+    //~ Instance fields --------------------------------------------------------
+    private Boolean redundantName = false;
+    private static String TITLE_NEW_ART = "eine neue Baumart anlegen..."; 
+
+    private boolean isEditor = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbHauptart;
@@ -166,34 +209,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-
-        txtName.getDocument().addDocumentListener(new DocumentListener() {
-
-                // Immer, wenn der Name geändert wird, wird dieser überprüft.
-                @Override
-                public void insertUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-
-                @Override
-                public void removeUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-
-                @Override
-                public void changedUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-            });
         
-        cbHauptart.addItemListener(new java.awt.event.ItemListener(){
-              
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                checkAttributesMain();
-            }
-            });
-
         setReadOnly();
     }
 
@@ -374,64 +390,12 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
-    public boolean prepareForSave() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-
-        // name vorhanden
-        try {
-            if (txtName.getText().trim().isEmpty()) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumArtEditor.class, BUNDLE_NONAME));
-            } else {
-                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
-                    cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
-                }
-                if (redundantName) {
-                    LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumArtEditor.class, BUNDLE_DUPLICATENAME));
-                } 
-            }
-        } catch (final Exception ex) {
-            LOG.warn("Name not given.", ex);
-            save = false;
-        }
-        
-        // hauptart vorhanden
-        try {
-            if (cbHauptart.getSelectedItem() == null) {
-                LOG.warn("No Hauptart specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumArtEditor.class, BUNDLE_NOMAIN));
-            } 
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Hauptart not given.", ex);
-            save = false;
-        }
-
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumArtEditor.class,
-                    BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumArtEditor.class,
-                            BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumArtEditor.class,
-                    BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-
-            return false;
-        }
-        return save;
-    }
-
-    @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
             bindingGroup.unbind();
             this.cidsBean = cb;
@@ -443,7 +407,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
             }
             bindingGroup.bind();
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.warn("Error setCidsBean.", ex);
         }
     }
 
@@ -458,49 +422,6 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  field  DOCUMENT ME!
-     */
-    private void checkNameMain(final String field_name, final String field_main) {
-        Object selection = cbHauptart.getSelectedItem();
-        if (selection!= null && selection instanceof CidsBean){
-            Integer mainId = ((CidsBean)selection).getPrimaryKeyValue();
-         // Worker Aufruf, ob das Objekt schon existiert
-            final Collection<String> conditions = new ArrayList<>();
-            conditions.add(field_name + " ilike '" + txtName.getText().trim() + "'");
-            conditions.add(field_main + " = " + mainId);
-            conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
-            valueFromOtherTable(conditions); 
-        }
-    }
-    
-    private void checkName(final String field_name) {
-        // Worker Aufruf, ob das Objekt schon existiert
-        final Collection<String> conditions = new ArrayList<>();
-        conditions.add(field_name + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
-        valueFromOtherTable(conditions); 
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void checkAttributes() {  
-         if (txtName.getText().equals("nicht genauer spezifiziert")){
-            checkNameMain(FIELD__NAME, FIELD__MAIN);
-        } else {
-            checkName(FIELD__NAME);
-         }
-    }
-    
-    private void checkAttributesMain() { 
-        if (txtName.getText().equals("nicht genauer spezifiziert")){
-            checkNameMain(FIELD__NAME, FIELD__MAIN);
-        }
-    }
-
     @Override
     public void dispose() {
         super.dispose();
@@ -508,7 +429,6 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
 
     @Override
     public String getTitle() {
-       // return cidsBean.toString();
        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_ART;
         } else {
@@ -521,49 +441,8 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     }
 
     @Override
-    public void editorClosed(final EditorClosedEvent ece) {
-    }
-
-    @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  where        DOCUMENT ME!
-     */
-    private void valueFromOtherTable(final Collection<String> where) {
-        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
-
-                @Override
-                protected Collection doInBackground() throws Exception {
-                    artSearch.setWhere(where);
-                    artSearch.setTable(REDUNDANT_TABLE);
-                    return SessionManager.getProxy().customServerSearch(
-                            SessionManager.getSession().getUser(),
-                            artSearch,
-                            getConnectionContext());
-                }
-
-                @Override
-                protected void done() {
-                    final Collection<MetaObjectNode> check;
-                    try {
-                        if (!isCancelled()) {
-                            check = get();
-                            redundantName = !check.isEmpty();
-                            }
-                    } catch (InterruptedException | ExecutionException e) {
-                        LOG.warn("problem in Worker: load values.", e);
-                    }
-                }
-            };
-            if (worker_name != null) {
-                worker_name.cancel(true);
-            }
-            worker_name = worker;
-            worker_name.execute();
-    }
 }

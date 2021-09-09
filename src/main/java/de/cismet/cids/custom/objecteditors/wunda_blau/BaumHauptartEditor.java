@@ -13,10 +13,10 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.log4j.Logger;
 
@@ -27,7 +27,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Dimension;
@@ -36,11 +35,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import java.util.concurrent.ExecutionException;
-
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
@@ -48,8 +43,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -59,8 +52,11 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
+import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -69,7 +65,8 @@ import java.util.Collection;
  * @version  $Revision$, $Date$
  */
 public class BaumHauptartEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    BeforeSavingHook,
+    SaveVetoable,
     BindingGroupStore,
     RequestsFullSizeComponent {
 
@@ -95,36 +92,102 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         "BaumHauptartEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumHauptartEditor.prepareForSave().JOptionPane.title";
 
-    //~ Enums ------------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private static enum OtherTableCases {
-
-        //~ Enum constants -----------------------------------------------------
-
-        REDUNDANT_ATT_KEY, REDUNDANT_ATT_NAME
+    @Override
+    public void beforeSaving() {
+        final Collection<String> conditions = new ArrayList<>();
+        RedundantObjectSearch hauptartSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
+        //name nicht redundant
+        conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        hauptartSearch.setWhere(conditions);
+        try{
+            redundantName = !(SessionManager.getProxy().customServerSearch(
+                            SessionManager.getSession().getUser(),
+                            hauptartSearch,
+                            getConnectionContext())).isEmpty();
+        } catch (ConnectionException ex) {
+            LOG.warn("problem in check name: load values.", ex);
+        } 
+        //schluessel nicht redundant
+        conditions.clear();
+        conditions.add(FIELD__SCHLUESSEL + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        hauptartSearch.setWhere(conditions);
+        try{
+            redundantKey = !(SessionManager.getProxy().customServerSearch(
+                            SessionManager.getSession().getUser(),
+                            hauptartSearch,
+                            getConnectionContext())).isEmpty();
+        } catch (ConnectionException ex) {
+            LOG.warn("problem in check key: load values.", ex);
+        }
+        //Schluessel setzen
+        if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+            try {
+                cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
+            } catch (Exception ex) {
+                LOG.warn("Key not set");
+            }
+        }
     }
 
+    @Override
+    public boolean isOkForSaving() {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+
+        // name vorhanden
+        try {
+            if (txtName.getText().trim().isEmpty()) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumHauptartEditor.class, BUNDLE_NONAME));
+                save = false;
+            } else {
+                if (redundantName) {
+                    LOG.warn("Duplicate name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumHauptartEditor.class, BUNDLE_DUPLICATENAME));
+                    save = false;
+                } else {
+                    if (redundantKey) {
+                        LOG.warn("Duplicate key specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumHauptartEditor.class, BUNDLE_DUPLICATEKEY));
+                        save = false;
+                    } 
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Name not given.", ex);
+            save = false;
+        }
+
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumHauptartEditor.class,
+                    BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumHauptartEditor.class,
+                            BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumHauptartEditor.class,
+                    BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        }
+        return save;
+    }
+
+    //~ Enums ------------------------------------------------------------------
+
+
     //~ Instance fields --------------------------------------------------------
-
-    private SwingWorker worker_key;
-    private SwingWorker worker_name;
-
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
     private static String TITLE_NEW_HAUPTART = "eine neue Hauptart anlegen..."; 
 
     private boolean isEditor = true;
-    private final RedundantObjectSearch hauptartSearch = new RedundantObjectSearch(
-            REDUNDANT_TOSTRING_TEMPLATE,
-            REDUNDANT_TOSTRING_FIELDS,
-            null,
-            REDUNDANT_TABLE);
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
     private JLabel lblNameBotanisch;
@@ -160,25 +223,6 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-
-        txtName.getDocument().addDocumentListener(new DocumentListener() {
-
-                // Immer, wenn der Name geändert wird, wird dieser überprüft.
-                @Override
-                public void insertUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-
-                @Override
-                public void removeUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-
-                @Override
-                public void changedUpdate(final DocumentEvent e) {
-                    checkAttributes();
-                }
-            });
 
         setReadOnly();
     }
@@ -327,65 +371,18 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
-    public boolean prepareForSave() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-
-        // name vorhanden
-        try {
-            if (txtName.getText().trim().isEmpty()) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumHauptartEditor.class, BUNDLE_NONAME));
-            } else {
-                if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
-                    cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
-                }
-                if (redundantName) {
-                    LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumHauptartEditor.class, BUNDLE_DUPLICATENAME));
-                } else {
-                    if (redundantKey) {
-                        LOG.warn("Duplicate key specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumHauptartEditor.class, BUNDLE_DUPLICATEKEY));
-                    } else {
-                    }
-                }
-            }
-        } catch (final Exception ex) {
-            LOG.warn("Name not given.", ex);
-            save = false;
-        }
-
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumHauptartEditor.class,
-                    BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumHauptartEditor.class,
-                            BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumHauptartEditor.class,
-                    BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-
-            return false;
-        }
-        return save;
-    }
-
-    @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
             bindingGroup.unbind();
             this.cidsBean = cb;
             bindingGroup.bind();
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.warn("Error setCidsBean", ex);
         }
     }
 
@@ -399,28 +396,6 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  field  DOCUMENT ME!
-     * @param  fall   DOCUMENT ME!
-     */
-    private void checkName(final String field, final OtherTableCases fall) {
-        // Worker Aufruf, ob das Objekt schon existiert
-        final Collection<String> conditions = new ArrayList<>();
-        conditions.add(field + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
-        valueFromOtherTable(conditions, fall);
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void checkAttributes() {        
-        checkName(FIELD__NAME, OtherTableCases.REDUNDANT_ATT_NAME);
-        checkName(FIELD__SCHLUESSEL, OtherTableCases.REDUNDANT_ATT_KEY);
-    }
-
     @Override
     public void dispose() {
         super.dispose();
@@ -428,7 +403,6 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
 
     @Override
     public String getTitle() {
-       // return cidsBean.toString();
        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_HAUPTART;
         } else {
@@ -441,67 +415,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     }
 
     @Override
-    public void editorClosed(final EditorClosedEvent ece) {
-    }
-
-    @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  where        DOCUMENT ME!
-     * @param  fall         DOCUMENT ME!
-     */
-    private void valueFromOtherTable(final Collection<String> where, final OtherTableCases fall) {
-        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
-            
-                @Override
-                protected Collection<MetaObjectNode> doInBackground() throws Exception {
-                    hauptartSearch.setWhere(where);
-                    hauptartSearch.setTable(REDUNDANT_TABLE);
-                    return SessionManager.getProxy().customServerSearch(
-                            SessionManager.getSession().getUser(),
-                            hauptartSearch,
-                            getConnectionContext());
-                } 
-
-                @Override
-                protected void done() {
-                    final Collection<MetaObjectNode> check;
-                    try {
-                        if (!isCancelled()) {
-                            check = get();
-                            switch (fall) {
-                                case REDUNDANT_ATT_KEY: {  // check redundant key
-                                    redundantKey = !check.isEmpty();
-                                    break;
-                                }
-                                case REDUNDANT_ATT_NAME: { // check redundant name
-                                    redundantName = !check.isEmpty();
-                                    break;
-                                }
-                            }
-                        }
-                    } catch (InterruptedException | ExecutionException e) {
-                        LOG.warn("problem in Worker: load values.", e);
-                    }
-                }
-            };
-        if (fall.equals(OtherTableCases.REDUNDANT_ATT_NAME)) {
-            if (worker_name != null) {
-                worker_name.cancel(true);
-            }
-            worker_name = worker;
-            worker_name.execute();
-        } else {
-            if (worker_key != null) {
-                worker_key.cancel(true);
-            }
-            worker_key = worker;
-            worker_key.execute();
-        }
     }
 }
