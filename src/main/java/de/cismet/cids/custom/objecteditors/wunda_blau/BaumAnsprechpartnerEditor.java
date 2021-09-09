@@ -793,6 +793,6 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public void propertyChange(final PropertyChangeEvent evt) {
     } 
    
-   // public interface BaumAnsprechpartnerDescriptionPaneParent {
-    //}        
+   public interface BaumAnsprechpartnerDescriptionPaneParent {
+    }        
 }
