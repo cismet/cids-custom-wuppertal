@@ -2064,7 +2064,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     public void dispose() {
         bindingGroup.unbind();
         // dispose panels here if necessary
-        rasterfariDocumentLoaderPanel1.reset();
+// rasterfariDocumentLoaderPanel1.reset();
         rasterfariDocumentLoaderPanel1.dispose();
         if (flurstueckDialog != null) {
             flurstueckDialog.dispose();
