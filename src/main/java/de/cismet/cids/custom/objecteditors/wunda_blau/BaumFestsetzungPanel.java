@@ -87,7 +87,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     static {
         final ConnectionContext connectionContext = ConnectionContext.create(
                 ConnectionContext.Category.STATIC,
-                BaumErsatzPanel.class.getSimpleName());
+                BaumFestsetzungPanel.class.getSimpleName());
         MC__ART = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
                 "BAUM_ART",
@@ -449,7 +449,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     //~ Instance fields --------------------------------------------------------
     private final boolean editor;
     @Getter private final BaumChildrenLoader baumChildrenLoader;
-    private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
     public static final String GEOMTYPE = "Point";
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
@@ -511,10 +510,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         this.baumChildrenLoader = bclInstance;
         if (bclInstance != null){
             this.editor = bclInstance.getParentOrganizer().isEditor();
-            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
         } else {
             this.editor = false;
-            this.connectionContext = ConnectionContext.createDummy();
         }
         initComponents();
         if (editor) {
@@ -539,7 +536,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     }   
     @Override
     public ConnectionContext getConnectionContext() {
-        return connectionContext;
+        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
     }
         
     @Override

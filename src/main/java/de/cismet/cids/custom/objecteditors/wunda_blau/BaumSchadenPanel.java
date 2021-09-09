@@ -106,7 +106,7 @@ import org.openide.util.NbBundle;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
+public final class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
    
@@ -126,7 +126,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
     static {
         final ConnectionContext connectionContext = ConnectionContext.create(
                 ConnectionContext.Category.STATIC,
-                BaumErsatzPanel.class.getSimpleName());
+                BaumSchadenPanel.class.getSimpleName());
         MC__ART = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
                 "BAUM_ART",
@@ -1527,7 +1527,6 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
 
     //~ Instance fields --------------------------------------------------------
     private final boolean editor;
-    private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
     @Getter private final BaumChildrenLoader baumChildrenLoader;
     
@@ -1655,17 +1654,15 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
         this.baumChildrenLoader = bclInstance;
         if (bclInstance != null){
             this.editor = bclInstance.getParentOrganizer().isEditor();
-            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
         } else {
             this.editor = false;
-            this.connectionContext = ConnectionContext.createDummy();
         }
         initComponents();
         if (editor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setLocalRenderFeatureString(FIELD__GEOM);
         }
         for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme)) {
-            labelsPanel.initWithConnectionContext(connectionContext);
+            labelsPanel.initWithConnectionContext(getConnectionContext());
         }
         if (getBaumChildrenLoader() != null){
             loadChildrenListener = new BaumSchadenPanel.LoaderListener();
@@ -1861,7 +1858,7 @@ public class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
        */
     @Override
     public ConnectionContext getConnectionContext() {
-        return connectionContext;
+        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
     }
     
     public void setChangeFlag(){

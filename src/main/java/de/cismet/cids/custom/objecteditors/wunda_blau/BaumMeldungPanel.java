@@ -1175,7 +1175,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             }
         };
     
-    private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1255,24 +1254,21 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         this.baumChildrenLoader = bclInstance;
         if (bclInstance != null){
             this.editor = bclInstance.getParentOrganizer().isEditor();
-            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
         } else {
             this.editor = false;
-            this.connectionContext = ConnectionContext.createDummy();
         }
         initComponents();
         if (getBaumChildrenLoader() != null){
             loadChildrenListener = new LoaderListener();
             getBaumChildrenLoader().addListener(loadChildrenListener);
         }
-        
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public ConnectionContext getConnectionContext() {
-        return connectionContext;
+        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
     }
     
     public void clearBeans(final List<CidsBean> toClearList){

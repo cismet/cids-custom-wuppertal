@@ -941,7 +941,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     //~ Instance fields --------------------------------------------------------
     private final boolean editor;
     @Getter private final BaumChildrenLoader baumChildrenLoader;
-    private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
     
     private SwingWorker worker_hnr;
@@ -1029,10 +1028,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
         this.baumChildrenLoader = bclInstance;
         if (bclInstance != null){
             this.editor = bclInstance.getParentOrganizer().isEditor();
-            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
         } else {
             this.editor = false;
-            this.connectionContext = ConnectionContext.createDummy();
         }
         this.sorteArtSearch = new BaumArtLightweightSearch(
                 "%1$2s",
@@ -1104,7 +1101,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     
     @Override
     public ConnectionContext getConnectionContext() {
-        return connectionContext;
+        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
     }
         
     @Override

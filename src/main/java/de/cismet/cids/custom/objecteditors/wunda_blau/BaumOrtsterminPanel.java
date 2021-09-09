@@ -413,7 +413,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 setChangeFlag();
             }
         };
-    private final ConnectionContext connectionContext;
     private CidsBean cidsBean;
     
     
@@ -445,10 +444,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      */
     public BaumOrtsterminPanel() {
         this(null);
-        teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                TABLE_NAME__TEILNEHMER,
-                connectionContext);
     }
 
      
@@ -461,23 +456,21 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         this.baumChildrenLoader = bclInstance;
         if (bclInstance != null){
             this.editor = bclInstance.getParentOrganizer().isEditor();
-            this.connectionContext = bclInstance.getParentOrganizer().getConnectionContext();
         } else {
             this.editor = false;
-            this.connectionContext = ConnectionContext.createDummy();
         }
         initComponents();
         teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
                 CidsBeanSupport.DOMAIN_NAME,
                 TABLE_NAME__TEILNEHMER,
-                connectionContext);
+                getConnectionContext());
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
+    public final ConnectionContext getConnectionContext() {
+        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
     }
 
    
