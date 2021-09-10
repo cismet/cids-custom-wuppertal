@@ -29,8 +29,6 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
@@ -69,7 +67,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.openide.awt.Mnemonics;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 /**
@@ -78,7 +75,9 @@ import org.openide.util.NbBundle;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
+public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposable, 
+        CidsBeanStore, 
+        ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
     private static final Logger LOG = Logger.getLogger(BaumFestsetzungPanel.class);
@@ -603,7 +602,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                     cbGeomFest.updateUI();
                 }
             } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
+                LOG.warn("problem in setCidsBean.", ex);
             }
         }
         setReadOnly();
@@ -616,14 +615,15 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
     }
-    public boolean prepareForSave(final CidsBean saveBean) {
+    public boolean isOkayForSaving(final CidsBean saveFestsetzungBean) {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         // Art muss angegeben werden
         try {
-            if (saveBean.getProperty(FIELD__ART) == null){
+            if (saveFestsetzungBean.getProperty(FIELD__ART) == null){
                 LOG.warn("No art specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOART));
+                save = false;
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Art not given.", ex); 
@@ -631,9 +631,10 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         //Umfang muss vorhanden sein
         try {
-            if (saveBean.getProperty(FIELD__UMFANG) == null){
+            if (saveFestsetzungBean.getProperty(FIELD__UMFANG) == null){
                 LOG.warn("No umfang specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOUMFANG));
+                save = false;
             } 
         } catch (final MissingResourceException ex) {
             LOG.warn("Umfang not given.", ex);
@@ -641,14 +642,16 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         // georeferenz muss gefüllt sein
         try {
-            if (saveBean.getProperty(FIELD__GEOM) == null){
+            if (saveFestsetzungBean.getProperty(FIELD__GEOM) == null){
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOGEOM));
+                save = false;
             } else {
-                final CidsBean geom_pos = (CidsBean)saveBean.getProperty(FIELD__GEOM);
+                final CidsBean geom_pos = (CidsBean)saveFestsetzungBean.getProperty(FIELD__GEOM);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WRONGGEOM));
+                    save = false;
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -657,9 +660,10 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         }
         // Datum muss angegeben werden
         try {
-            if (saveBean.getProperty(FIELD__DATUM) == null) {
+            if (saveFestsetzungBean.getProperty(FIELD__DATUM) == null) {
                 LOG.warn("No datum specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NODATE));
+                save = false;
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Datum not given.", ex);
@@ -674,8 +678,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                         + NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
-
-            return false;
         }
         return save;
     }
@@ -690,7 +692,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 try{
                     bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
                 } catch (final Exception ex) {
-                    Exceptions.printStackTrace(ex);
                     LOG.warn("Get no conf properties.", ex);
                 }
                 if (cb.getProperty(FIELD__GEOM) != null) {
@@ -711,7 +712,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                     panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
                 }
             } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
                 LOG.warn("Map window not set.", ex);
             }
         }

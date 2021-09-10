@@ -75,7 +75,9 @@ import org.openide.util.NbBundle;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
+public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposable, 
+        CidsBeanStore, 
+        ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
       
@@ -470,7 +472,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
     @Override
     public final ConnectionContext getConnectionContext() {
-        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
+        return baumChildrenLoader != null && baumChildrenLoader.getParentOrganizer() != null
+                ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
 
    
@@ -566,15 +569,16 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         setReadOnly();
     }
     
-    public boolean prepareForSave(final CidsBean saveBean) {
+    public boolean isOkayForSaving(final CidsBean saveOrtsterminBean) {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
         // datum vorhanden
         try {
-            if (saveBean.getProperty(FIELD__DATUM)== null) {
+            if (saveOrtsterminBean.getProperty(FIELD__DATUM)== null) {
                 LOG.warn("No name specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NODATE));
+                save = false;
             } 
         } catch (final MissingResourceException ex) {
             LOG.warn("Datum not given.", ex);
@@ -583,21 +587,21 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         
         //Ansprechpartner muss einen Namen haben
         try{
-            //if (teilBeans != null){
-                Collection<CidsBean> teilCollection =  saveBean.getBeanCollectionProperty(FIELD__TEILNEHMER);
-                for (final CidsBean tBean:teilCollection){
-                    if (tBean.getProperty(FIELD__NAME)== null) {
-                        LOG.warn("No name specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NONAME));
-                    }
-                    if (tBean.getProperty(FIELD__TEILNEHMER_TELEFON)!= null) {
-                        if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
+            Collection<CidsBean> teilCollection =  saveOrtsterminBean.getBeanCollectionProperty(FIELD__TEILNEHMER);
+            for (final CidsBean tBean:teilCollection){
+                if (tBean.getProperty(FIELD__NAME)== null) {
+                    LOG.warn("No name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NONAME));
+                    save = false;
+                }
+                if (tBean.getProperty(FIELD__TEILNEHMER_TELEFON)!= null) {
+                    if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
                         LOG.warn("No name specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL) 
                                 + tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString());
-                        }
+                        save = false;
                     }
-               // }
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Teilnehmer not correct.", ex);
@@ -611,8 +615,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                         + NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
-
-            return false;
         }
         return save;
     }

@@ -13,10 +13,10 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -32,7 +32,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
@@ -54,8 +53,6 @@ import java.util.concurrent.ExecutionException;
 
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
@@ -67,8 +64,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -91,7 +86,11 @@ import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
+import de.cismet.cids.editors.SaveVetoable;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
+import de.cismet.cids.editors.hooks.AfterClosingHook;
+import de.cismet.cids.editors.hooks.AfterSavingHook;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
@@ -113,7 +112,10 @@ import lombok.Setter;
  * @version  $Revision$, $Date$
  */
 public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    SaveVetoable,
+    AfterSavingHook,
+    AfterClosingHook,
+    BeforeSavingHook,
     BindingGroupStore,
     TitleComponentProvider,
     PropertyChangeListener,
@@ -204,8 +206,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
 
     //~ Instance fields --------------------------------------------------------
-    private SwingWorker worker_name;
-    
     @Getter @Setter private static Integer counterMeldung = -1;
     
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
@@ -232,12 +232,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             Integer.class
         };
     
-    private final RedundantObjectSearch gebietSearch = new RedundantObjectSearch(
-            REDUNDANT_TOSTRING_TEMPLATE,
-            REDUNDANT_TOSTRING_FIELDS,
-            null,
-            REDUNDANT_TABLE);
-
     private static final ListModel MODEL_ERROR = new DefaultListModel() {
             {
                 add(0, "[Fehler beim Laden]");
@@ -329,24 +323,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         super.initWithConnectionContext(connectionContext);
         initComponents();
 
-        txtAktenzeichen.getDocument().addDocumentListener(new DocumentListener() {
-
-                // Immer, wenn der Name geändert wird, wird dieser überprüft.
-                @Override
-                public void insertUpdate(final DocumentEvent e) {
-                    checkName();
-                }
-
-                @Override
-                public void removeUpdate(final DocumentEvent e) {
-                    checkName();
-                }
-
-                @Override
-                public void changedUpdate(final DocumentEvent e) {
-                    checkName();
-                }
-            });
         lstMeldungen.setCellRenderer(new DefaultListCellRenderer() {
 
                 @Override
@@ -1132,7 +1108,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                                 try {
                                     beanMeldung.delete();
                                 } catch (Exception ex) {
-                                    Exceptions.printStackTrace(ex);
+                                    LOG.warn("problem in delete meldung: not removed.", ex);
                                 }
                                 break;
                             }
@@ -1277,24 +1253,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             }
             prepareMeldung();
         } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
-                LOG.warn("ort list not cleared.", ex);
+                LOG.warn("meldung list not cleared.", ex);
         }
     }
     
 
     private void zeigeKinderMeldung(){
         setMeldungBeans(getBaumChildrenLoader().getMapValueMeldung(cidsBean.getPrimaryKeyValue()));
-    }
-    /**
-     * DOCUMENT ME!
-     */
-    private void checkName() {
-        // Worker Aufruf, ob das Objekt schon existiert
-        final Collection<String> conditions = new ArrayList<>();
-        conditions.add(FIELD__AZ + " ilike '" + txtAktenzeichen.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
-        valueFromOtherTable(conditions);
     }
 
     private void refreshHnr() { 
@@ -1318,96 +1283,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             }
         }
     }
-        
     
-    
-    @Override
-    public boolean prepareForSave() {
-        if (!areChildrenLoad){
-            return false;
-        }
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        boolean noErrorOccured = true;
-        for (final CidsBean meldungBean : 
-                getBaumChildrenLoader().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue())){
-            try {
-                noErrorOccured = baumMeldungPanel.prepareForSave(meldungBean);
-                if(!noErrorOccured) {
-                    break;
-                }
-            } catch (final Exception ex) {
-                noErrorOccured = false;
-                LOG.error(ex, ex);
-            }
-        }
-        
-        // name vorhanden
-        try {
-            if (txtName.getText().trim().isEmpty()) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
-            } 
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Name not given.", ex);
-            save = false;
-        }
-        //aktenzeichen vorhanden und nicht redundant
-        try {
-            if (txtAktenzeichen.getText().trim().isEmpty()) {
-                LOG.warn("No aktenzeichen specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOAZ));
-            } else {
-                if (redundantName) {
-                    LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATEAZ));
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Aktenzeichen not given.", ex);
-            save = false;
-        }
-        // Straße muss angegeben werden
-        try {
-            if (cbStrasse.getSelectedItem() == null) {
-                LOG.warn("No strasse specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSTREET));
-            } 
-        } catch (final MissingResourceException ex) {
-            LOG.warn("strasse not given.", ex);
-            save = false;
-        }
-       
-
-        // georeferenz muss gefüllt sein
-        try {
-            if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
-                LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
-            } else {
-                final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Geom not given.", ex);
-            save = false;
-        }
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-
-            return false;
-        }
-        return save && noErrorOccured;
-    }
-
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -1415,7 +1291,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         if (editor && (this.cidsBean != null)) {
             LOG.info("remove propchange baum_gebiet: " + this.cidsBean);
             this.cidsBean.removePropertyChangeListener(this);
@@ -1467,22 +1342,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             panControlsNewMeldungen.setVisible(editor);;
         }
     }
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  cidsBeans  DOCUMENT ME!
-     */
-    /*public void setMeldungBeans(final List<CidsBean> cidsBeans) {
-        this.meldungBeans = cidsBeans;
-    }*/
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    /*public List<CidsBean> getMeldungBeans() {
-        return meldungBeans;
-    }*/
     
     /**
      * DOCUMENT ME!
@@ -1509,7 +1368,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
             }
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
             LOG.warn("Map window not set.", ex);
         }
     }
@@ -1556,7 +1414,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
     @Override
     public void dispose() {
-        //super.dispose();
         dlgAddMeldung.dispose();
         if (editor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
@@ -1575,13 +1432,156 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     @Override
-    public void editorClosed(final EditorClosedEvent ece) {
+    public BindingGroup getBindingGroup() {
+        return bindingGroup;
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
+            setMapWindow();
+        }
+        if (evt.getPropertyName().equals(FIELD__AZ) || 
+                evt.getPropertyName().equals(FIELD__STRASSE) || 
+                evt.getPropertyName().equals(FIELD__HNR) || 
+                evt.getPropertyName().equals(FIELD__NAME)){
+            if (this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW || azGeneriert){
+                lblAktenzeichen.setForeground(colorAlarm);
+            }
+        }
+    }
+    
+    
+    private void searchStreets() {
+        if (getCidsBean() != null) {
+            new SwingWorker<Collection, Void>() {
+
+                    @Override
+                    protected Collection doInBackground() throws Exception {
+                        return setStrasseCb();
+                    }
+
+                    @Override
+                    protected void done() {
+                        final Collection check;
+                        try {
+                            check = get();
+                            if (check != null) {
+                                final Collection colStreets = check;
+                                cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
+                                List<CidsBean> streetBeans = new ArrayList<>();
+                            }
+                        } catch (final InterruptedException | ExecutionException ex) {
+                            LOG.fatal(ex, ex);
+                        }
+                    }
+                }.execute();
+        }
+    }
+
+    @Override
+    public JComponent getTitleComponent() {
+        return panTitle;
+    }
+
+    @Override
+    public boolean isOkForSaving() {
+        if (!areChildrenLoad){
+            return false;
+        }
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+        boolean noErrorOccured = true;
+        for (final CidsBean meldungBean : 
+                getBaumChildrenLoader().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue())){
+            try {
+                noErrorOccured = baumMeldungPanel.isOkayForSaving(meldungBean);
+                if(!noErrorOccured) {
+                    break;
+                }
+            } catch (final Exception ex) {
+                noErrorOccured = false;
+                LOG.error(ex, ex);
+            }
+        }
+        
+        // name vorhanden
+        try {
+            if (txtName.getText().trim().isEmpty()) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
+                save = false;
+            } 
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Name not given.", ex);
+            save = false;
+        }
+        //aktenzeichen vorhanden und nicht redundant
+        try {
+            if (txtAktenzeichen.getText().trim().isEmpty()) {
+                LOG.warn("No aktenzeichen specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOAZ));
+                save = false;
+            } else {
+                if (redundantName) {
+                    LOG.warn("Duplicate name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATEAZ));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Aktenzeichen not given.", ex);
+            save = false;
+        }
+        // Straße muss angegeben werden
+        try {
+            if (cbStrasse.getSelectedItem() == null) {
+                LOG.warn("No strasse specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSTREET));
+                save = false;
+            } 
+        } catch (final MissingResourceException ex) {
+            LOG.warn("strasse not given.", ex);
+            save = false;
+        }
+       
+
+        // georeferenz muss gefüllt sein
+        try {
+            if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
+                LOG.warn("No geom specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
+            } else {
+                final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
+                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                    LOG.warn("Wrong geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Geom not given.", ex);
+            save = false;
+        }
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        }
+        return save && noErrorOccured;
+    }
+
+    @Override
+    public void afterSaving(AfterSavingHook.Event event) {
         try{
-            if(EditorSaveListener.EditorSaveStatus.SAVE_SUCCESS == ece.getStatus()){
+            if(AfterSavingHook.Status.SAVE_SUCCESS == event.getStatus()){
                 final List<CidsBean> listMeldung = getBaumChildrenLoader().getMapValueMeldung(this.cidsBean.getPrimaryKeyValue());
                 for (CidsBean meldungBean : listMeldung) {
                     try {
-                        meldungBean.setProperty(FIELD__GEBIET,ece.getSavedBean());
+                        meldungBean.setProperty(FIELD__GEBIET, event.getPersistedBean());
                         final List<CidsBean> listOrt = getBaumChildrenLoader().getMapValueOrt(meldungBean.getPrimaryKeyValue());
                         final List<CidsBean> listSchaden = getBaumChildrenLoader().getMapValueSchaden(meldungBean.getPrimaryKeyValue());
                         try{
@@ -1671,113 +1671,40 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                             }
                         }
                     } catch (Exception ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOG.warn("problem in persist children.", ex);
                     }
                 }
             }
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
-        } finally {
-            //Gehoert eigentlich ins dispose, aber dieses wird vorher aufgerufen
-            clearBaumChildrenLoader();
+            LOG.warn("problem in afterSaving.", ex);
         }
     }
 
     @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
+    public void afterClosing(AfterClosingHook.Event event) {
+        clearBaumChildrenLoader();
     }
 
     @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // To change body of generated methods, choose Tools | Templates.
-        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
-            setMapWindow();
-        }
-        if (evt.getPropertyName().equals(FIELD__AZ) || 
-                evt.getPropertyName().equals(FIELD__STRASSE) || 
-                evt.getPropertyName().equals(FIELD__HNR) || 
-                evt.getPropertyName().equals(FIELD__NAME)){
-            if (this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW || azGeneriert){
-                lblAktenzeichen.setForeground(colorAlarm);
-            }
-        }
-    }
-    
-   
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  where         DOCUMENT ME!
-     */
-    private void valueFromOtherTable(final Collection<String> where) {
-        final SwingWorker<Collection<MetaObjectNode>, Void> worker = new SwingWorker<Collection<MetaObjectNode>, Void>() {
-            
-            @Override
-            protected Collection<MetaObjectNode> doInBackground() throws Exception {
-                gebietSearch.setWhere(where);
-                gebietSearch.setTable(REDUNDANT_TABLE);
-                return SessionManager.getProxy().customServerSearch(
-                        SessionManager.getSession().getUser(),
-                        gebietSearch,
-                        getConnectionContext());
-            }
-            
-            @Override
-            protected void done() {
-                final Collection<MetaObjectNode> check;
-                try {
-                    if (!isCancelled()) {
-                        check = get();
-                        redundantName = !check.isEmpty();
-                    }
-                    } catch (InterruptedException | ExecutionException e) {
-                        LOG.warn("problem in Worker: load values.", e);
-                    }
-                }
-            };
-        if (worker_name != null) {
-            worker_name.cancel(true);
-        }
-        worker_name = worker;
-        worker_name.execute();
-    }
-    
-    private void searchStreets() {
-        if (getCidsBean() != null) {
-            new SwingWorker<Collection, Void>() {
-
-                    @Override
-                    protected Collection doInBackground() throws Exception {
-                        return setStrasseCb();
-                    }
-
-                    @Override
-                    protected void done() {
-                        final Collection check;
-                        try {
-                            check = get();
-                            if (check != null) {
-                                final Collection colStreets = check;
-                                cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
-                                List<CidsBean> streetBeans = new ArrayList<>();
-                            }
-                        } catch (final InterruptedException | ExecutionException ex) {
-                            LOG.fatal(ex, ex);
-                        }
-                    }
-                }.execute();
+    public void beforeSaving() {
+        RedundantObjectSearch gebietSearch = new RedundantObjectSearch(
+            REDUNDANT_TOSTRING_TEMPLATE,
+            REDUNDANT_TOSTRING_FIELDS,
+            null,
+            REDUNDANT_TABLE);
+        final Collection<String> conditions = new ArrayList<>();
+        conditions.add(FIELD__AZ + " ilike '" + txtAktenzeichen.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        gebietSearch.setWhere(conditions);
+        try {
+            redundantName = !(SessionManager.getProxy().customServerSearch(
+                    SessionManager.getSession().getUser(),
+                    gebietSearch,
+                    getConnectionContext())).isEmpty();
+        } catch (ConnectionException ex) {
+            LOG.warn("problem in beforeSaving.", ex);
         }
     }
-
-    @Override
-    public JComponent getTitleComponent() {
-        return panTitle;
-    }
-
-   
-        
 
     //~ Inner Classes ----------------------------------------------------------
 
@@ -1826,6 +1753,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             return lastValid;
         }
     }
+    
     private Collection setStrasseCb(){
         final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty(FIELD__STRASSE);
         final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
@@ -1833,7 +1761,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         Collections.sort(cblStrassen, umlautCollator);
         return cblStrassen;
     }
-    
     
     private void initComboboxHnr() {
         new SwingWorker<Void, Void>() {
@@ -1869,9 +1796,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 protected void done() {
                     try {
                         areChildrenLoad = get();
-                        //if(editor){
                             getBaumChildrenLoader().setLoadingCompletedWithoutError(areChildrenLoad);
-                        //} 
                         if (!areChildrenLoad){
                             setTitle(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_LOAD_ERROR));
                         } else{

@@ -23,7 +23,6 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -47,8 +46,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -62,6 +59,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungSearch;
+import de.cismet.cids.editors.SaveVetoable;
 import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.RoundedPanel;
@@ -93,7 +91,7 @@ import org.jdesktop.swingx.JXTable;
  * @version  $Revision$, $Date$
  */
 public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    SaveVetoable,
     BindingGroupStore,
     PropertyChangeListener,
     BaumParentPanel {
@@ -168,6 +166,36 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     @Override
     public boolean isEditor() {
         return this.editor;
+    }
+
+    @Override
+    public boolean isOkForSaving() {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+        
+        boolean noErrorOccured = baumOrtsterminPanel.isOkayForSaving(this.cidsBean);
+        try {
+            if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
+                LOG.warn("No meldung specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Meldung not given.", ex);
+            save = false;
+        }
+
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+
+            return false;
+        }
+        return save && noErrorOccured;
     }
 
 
@@ -359,41 +387,10 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
             try {
                 cidsBean.setProperty(FIELD__MELDUNG, meldungBean);
             } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
+                LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
     }//GEN-LAST:event_btnChangeGebietActionPerformed
-
-    
-    @Override
-    public boolean prepareForSave() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        
-        boolean noErrorOccured = baumOrtsterminPanel.prepareForSave(this.cidsBean);
-        try {
-            if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
-                LOG.warn("No meldung specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Meldung not given.", ex);
-            save = false;
-        }
-
-        
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-
-            return false;
-        }
-        return save && noErrorOccured;
-    }
 
     @Override
     public CidsBean getCidsBean() {
@@ -441,7 +438,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 }
             });
             } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
                 LOG.error("Bean not set.", ex);
             }
     }
@@ -556,10 +552,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public void editorClosed(final EditorClosedEvent ece) {
     }
 
     @Override

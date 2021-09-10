@@ -22,7 +22,6 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -50,8 +49,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.SaveVetoable;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -87,7 +85,7 @@ import org.jdesktop.swingx.JXTable;
  * @version  $Revision$, $Date$
  */
 public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    SaveVetoable,
     BindingGroupStore,
     PropertyChangeListener,
     BaumParentPanel{
@@ -141,9 +139,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         "BaumErsatzEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumErsatzEditor.prepareForSave().JOptionPane.title";
     
-    
-
-
     //~ Enums ------------------------------------------------------------------
 
     /**
@@ -154,7 +149,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     
 
     //~ Instance fields --------------------------------------------------------
-    
     private boolean editor = true;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
 
@@ -351,21 +345,22 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
             try {
                 cidsBean.setProperty(FIELD__FK_SCHADEN, schadenBean);
             } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
+                LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
     }//GEN-LAST:event_btnChangeSchadenActionPerformed
   
     
     @Override
-    public boolean prepareForSave() {
+    public boolean isOkForSaving() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-        boolean noErrorOccured = baumErsatzPanel.prepareForSave(this.cidsBean);
+        boolean noErrorOccured = baumErsatzPanel.isOkForSaving(this.cidsBean);
         try {
             if (cidsBean.getProperty(FIELD__SCHADEN_ID) == null) {
                 LOG.warn("No schaden specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSCHADEN));
+                save = false;
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Schaden not given.", ex);
@@ -392,7 +387,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
             if (editor && (this.cidsBean != null)) {
                 LOG.info("remove propchange baum_ersatz: " + this.cidsBean);
@@ -447,7 +441,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         }
             
         } catch (final Exception ex) {
-            Exceptions.printStackTrace(ex);
             LOG.error("Bean not set.", ex);
         }
     }
@@ -498,10 +491,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public void editorClosed(final EditorClosedEvent ece) {
     }
 
     @Override

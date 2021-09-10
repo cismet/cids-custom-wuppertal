@@ -45,8 +45,6 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
@@ -101,7 +99,6 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingx.JXTable;
 import org.openide.awt.Mnemonics;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 /**
@@ -110,7 +107,9 @@ import org.openide.util.NbBundle;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
+public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, 
+        CidsBeanStore, 
+        ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
     private List<CidsBean> kontrolleBeans = new ArrayList<>();;
@@ -1119,113 +1118,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
     public CidsBean getCidsBean() {
         return this.cidsBean;
     }
-    
-    public boolean prepareForSave(final CidsBean saveBean) {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        
-        // Straße muss angegeben werden
-        try {
-            if (saveBean.getProperty(FIELD__STRASSE) == null) {
-                LOG.warn("No strasse specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
-            } 
-        } catch (final MissingResourceException ex) {
-            LOG.warn("strasse not given.", ex);
-            save = false;
-        }
-       
-
-        // georeferenz muss gefüllt sein
-        try {
-            if (saveBean.getProperty(FIELD__GEOREFERENZ) == null) {
-                LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
-            } else {
-                final CidsBean geom_pos = (CidsBean)saveBean.getProperty(FIELD__GEOREFERENZ);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOM));
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Geom not given.", ex);
-            save = false;
-        }
-        
-        // Anzahl muss, wenn angegeben, eine Ganzzahl sein; Pflichtattribut, wenn gepflanzt
-        try {
-            if (saveBean.getProperty(FIELD__ANZAHL) != null) {
-                try {
-                    Integer.parseInt(saveBean.getProperty(FIELD__ANZAHL).toString());
-                } catch (NumberFormatException e) {
-                    LOG.warn("Wrong count specified. Skip persisting.", e);
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGCOUNT));
-                }
-            } else{
-                if (saveBean.getProperty(FIELD__DATUM) != null){
-                    LOG.warn("No geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Count not given.", ex);
-            save = false;
-        }
-        
-        //Art muss angegeben werden
-        try {
-            if (saveBean.getProperty(FIELD__DATUM) != null && saveBean.getProperty(FIELD__ART) == null) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOART));
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Countl not given.", ex);
-            save = false;
-        }
-        
-        //Kontrolle
-        try{
-            Collection<CidsBean> controlCollection =  saveBean.getBeanCollectionProperty(FIELD__KONTROLLE);
-            final Date jetztDatum = new java.sql.Date(System.currentTimeMillis());
-            for (final CidsBean controlBean:controlCollection){
-                //Datum vorhanden
-                if (controlBean.getProperty(FIELD__KONTROLLE_DATUM)== null) {
-                    LOG.warn("No kontolldatum specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLDATE));
-                } else{
-                    //Datum nicht in der Zukunft
-                    final Object controllDate = controlBean.getProperty(FIELD__KONTROLLE_DATUM);
-                    if (controllDate instanceof Date){
-                        if (((Date)controllDate).after(jetztDatum)){
-                            LOG.warn("Wrong kontolldatum specified. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATE));
-                        }
-                    }
-                }
-                //Bemerkung vorhanden
-                if (controlBean.getProperty(FIELD__KONTROLLE_BEMERKUNG)== null) {
-                    LOG.warn("No bemerkung specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLTEXT));
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Teilnehmer not correct.", ex);
-            save = false;
-        }
-        
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-
-            return false;
-        }
-        return save;
-    }
+   
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
@@ -1322,7 +1215,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 }
                 //initComboboxHnr();
             } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
+                LOG.warn("problem in setCidsBean.", ex);
             }
         }
         setReadOnly();
@@ -1387,7 +1280,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 try{
                     bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
                 } catch (final Exception ex) {
-                    Exceptions.printStackTrace(ex);
                     LOG.warn("Get no conf properties.", ex);
                 }
                 if (cb.getProperty(FIELD__GEOM) != null) {
@@ -1408,7 +1300,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                     panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
                 }
             } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
                 LOG.warn("Map window not set.", ex);
             }
         }
@@ -1470,6 +1361,121 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, C
                 }
                 worker_strasse.execute();    
         }
+    }
+
+
+    public boolean isOkForSaving(CidsBean saveErsatzBean) {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+        
+        // Straße muss angegeben werden
+        try {
+            if (saveErsatzBean.getProperty(FIELD__STRASSE) == null) {
+                LOG.warn("No strasse specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
+                save = false;
+            } 
+        } catch (final MissingResourceException ex) {
+            LOG.warn("strasse not given.", ex);
+            save = false;
+        }
+       
+
+        // georeferenz muss gefüllt sein
+        try {
+            if (saveErsatzBean.getProperty(FIELD__GEOREFERENZ) == null) {
+                LOG.warn("No geom specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
+                save = false;
+            } else {
+                final CidsBean geom_pos = (CidsBean)saveErsatzBean.getProperty(FIELD__GEOREFERENZ);
+                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                    LOG.warn("Wrong geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOM));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Geom not given.", ex);
+            save = false;
+        }
+        
+        // Anzahl muss, wenn angegeben, eine Ganzzahl sein; Pflichtattribut, wenn gepflanzt
+        try {
+            if (saveErsatzBean.getProperty(FIELD__ANZAHL) != null) {
+                try {
+                    Integer.parseInt(saveErsatzBean.getProperty(FIELD__ANZAHL).toString());
+                } catch (NumberFormatException e) {
+                    LOG.warn("Wrong count specified. Skip persisting.", e);
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGCOUNT));
+                    save = false;
+                }
+            } else{
+                if (saveErsatzBean.getProperty(FIELD__DATUM) != null){
+                    LOG.warn("No geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Count not given.", ex);
+            save = false;
+        }
+        
+        //Art muss angegeben werden
+        try {
+            if (saveErsatzBean.getProperty(FIELD__DATUM) != null && saveErsatzBean.getProperty(FIELD__ART) == null) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOART));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Countl not given.", ex);
+            save = false;
+        }
+        
+        //Kontrolle
+        try{
+            Collection<CidsBean> controlCollection =  saveErsatzBean.getBeanCollectionProperty(FIELD__KONTROLLE);
+            final Date jetztDatum = new java.sql.Date(System.currentTimeMillis());
+            for (final CidsBean controlBean:controlCollection){
+                //Datum vorhanden
+                if (controlBean.getProperty(FIELD__KONTROLLE_DATUM)== null) {
+                    LOG.warn("No kontolldatum specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLDATE));
+                    save = false;
+                } else{
+                    //Datum nicht in der Zukunft
+                    final Object controllDate = controlBean.getProperty(FIELD__KONTROLLE_DATUM);
+                    if (controllDate instanceof Date){
+                        if (((Date)controllDate).after(jetztDatum)){
+                            LOG.warn("Wrong kontolldatum specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATE));
+                            save = false;
+                        }
+                    }
+                }
+                //Bemerkung vorhanden
+                if (controlBean.getProperty(FIELD__KONTROLLE_BEMERKUNG)== null) {
+                    LOG.warn("No bemerkung specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLTEXT));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Teilnehmer not correct.", ex);
+            save = false;
+        }
+        
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        }
+        return save;
     }
       
     class LoadModelCb extends DefaultComboBoxModel {

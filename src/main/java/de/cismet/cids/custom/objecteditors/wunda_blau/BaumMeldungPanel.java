@@ -88,7 +88,6 @@ import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.awt.Mnemonics;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 /**
@@ -988,7 +987,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                             try {
                                 beanOrt.delete();
                             } catch (Exception ex) {
-                                Exceptions.printStackTrace(ex);
+                                LOG.warn("problem in delete ort: not removed.", ex);
                             }
                             break;
                         }
@@ -1103,7 +1102,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                                 try {
                                     beanSchaden.delete();
                                 } catch (Exception ex) {
-                                    Exceptions.printStackTrace(ex);
+                                    LOG.warn("problem in delete schaden: not removed.", ex);
                                 }
                                 break;
                             }
@@ -1268,7 +1267,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
 
     @Override
     public ConnectionContext getConnectionContext() {
-        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
+        return baumChildrenLoader != null && baumChildrenLoader.getParentOrganizer() != null
+            ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
     
     public void clearBeans(final List<CidsBean> toClearList){
@@ -1347,18 +1347,18 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         setReadOnly();
     }
     
-    public boolean prepareForSave(final CidsBean saveBean) {
+    public boolean isOkayForSaving(final CidsBean saveMeldungBean) {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         boolean noErrorOrt = true;
         boolean noErrorSchaden = true;
-        final List<CidsBean> listOrt = getBaumChildrenLoader().getMapValueOrt(saveBean.getPrimaryKeyValue());
-        final List<CidsBean> listSchaden = getBaumChildrenLoader().getMapValueSchaden(saveBean.getPrimaryKeyValue());
+        final List<CidsBean> listOrt = getBaumChildrenLoader().getMapValueOrt(saveMeldungBean.getPrimaryKeyValue());
+        final List<CidsBean> listSchaden = getBaumChildrenLoader().getMapValueSchaden(saveMeldungBean.getPrimaryKeyValue());
         
         if (listOrt != null && !(listOrt.isEmpty())){
             for (final CidsBean ortBean : listOrt) {
                 try {
-                    noErrorOrt = baumOrtsterminPanel.prepareForSave(ortBean);
+                    noErrorOrt = baumOrtsterminPanel.isOkayForSaving(ortBean);
                     if(!noErrorOrt) {
                         break;
                     }
@@ -1371,7 +1371,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         if (listSchaden != null && !(listSchaden.isEmpty())){
             for (final CidsBean schadenBean : listSchaden) {
                 try {
-                    noErrorSchaden = baumSchadenPanel.prepareForSave(schadenBean);
+                    noErrorSchaden = baumSchadenPanel.isOkForSaving(schadenBean);
                     if(!noErrorSchaden) {
                         break;
                     }
@@ -1383,9 +1383,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         }
         // datum vorhanden
         try {
-            if (saveBean.getProperty(FIELD__DATUM)== null) {
+            if (saveMeldungBean.getProperty(FIELD__DATUM)== null) {
                 LOG.warn("No name specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NODATE));
+                save = false;
             } 
         } catch (final MissingResourceException ex) {
             LOG.warn("Datum not given.", ex);
@@ -1399,8 +1400,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
                         + NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
-
-            return false;
         }
         return save && noErrorOrt && noErrorSchaden;
     }
@@ -1507,7 +1506,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             }
             prepareOrtstermin();
         } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
                 LOG.warn("ort list not cleared.", ex);
         }
     }

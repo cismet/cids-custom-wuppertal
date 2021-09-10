@@ -44,8 +44,6 @@ import de.cismet.cids.editors.DefaultBindableLabelsPanel;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
@@ -97,7 +95,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.openide.awt.Mnemonics;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 /**
@@ -106,7 +103,9 @@ import org.openide.util.NbBundle;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public final class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
+public final class BaumSchadenPanel extends javax.swing.JPanel implements Disposable, 
+        CidsBeanStore, 
+        ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
    
@@ -1447,7 +1446,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                             try {
                                 beanErsatz.delete();
                             } catch (Exception ex) {
-                                Exceptions.printStackTrace(ex);
+                                LOG.warn("problem in delete ersatz: not removed.", ex);
                             }
                             break;
                         }
@@ -1502,7 +1501,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                             try {
                                 beanFest.delete();
                             } catch (Exception ex) {
-                                Exceptions.printStackTrace(ex);
+                                LOG.warn("problem in delete fest: not removed.", ex);
                             }
                             break;
                         }
@@ -1681,19 +1680,19 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         return anzahl;
     }
     
-    public boolean prepareForSave(final CidsBean saveBean) {
+    public boolean isOkForSaving(final CidsBean saveSchadenBean) {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         boolean noErrorErsatz = true;
         boolean noErrorFest = true;
         
-        final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(saveBean.getPrimaryKeyValue());
-        final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(saveBean.getPrimaryKeyValue());
+        final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(saveSchadenBean.getPrimaryKeyValue());
+        final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(saveSchadenBean.getPrimaryKeyValue());
         //Ersatzpflanzungen ueberpruefen
         if (listErsatz != null && !(listErsatz.isEmpty())){
             for (final CidsBean ersatzBean : listErsatz) {
                 try {
-                    noErrorErsatz = baumErsatzPanel.prepareForSave(ersatzBean);
+                    noErrorErsatz = baumErsatzPanel.isOkForSaving(ersatzBean);
                     if(!noErrorErsatz) {
                         break;
                     }
@@ -1707,7 +1706,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         if (listFest != null && !(listFest.isEmpty())){
             for (final CidsBean festBean : listFest) {
                 try {
-                    noErrorFest = baumFestsetzungPanel.prepareForSave(festBean);
+                    noErrorFest = baumFestsetzungPanel.isOkayForSaving(festBean);
                     if(!noErrorFest) {
                         break;
                     }
@@ -1719,7 +1718,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         }
         //Hoehe richtig abspreichern
         try {
-            saveBean.setProperty(FIELD__HOEHE, new DecimalFormat("00.0").format(spHoehe.getValue())); 
+            saveSchadenBean.setProperty(FIELD__HOEHE, new DecimalFormat("00.0").format(spHoehe.getValue())); 
         } catch (final Exception ex) {
             LOG.warn("Height not formatted.", ex);
             save = false;
@@ -1727,12 +1726,13 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         
         // Alter muss, wenn angegeben, eine Ganzzahl sein
         try {
-            if (saveBean.getProperty(FIELD__ALTER) != null) {
+            if (saveSchadenBean.getProperty(FIELD__ALTER) != null) {
                 try {
-                    Integer.parseInt(saveBean.getProperty(FIELD__ALTER).toString());
+                    Integer.parseInt(saveSchadenBean.getProperty(FIELD__ALTER).toString());
                 } catch (NumberFormatException e) {
                     LOG.warn("Wrong count specified. Skip persisting.", e);
                     errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGAGE));
+                    save = false;
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -1742,9 +1742,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         
         //Art muss angegeben werden
         try {
-            if (saveBean.getProperty(FIELD__ART) == null) {
+            if (saveSchadenBean.getProperty(FIELD__ART) == null) {
                 LOG.warn("No name specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOART));
+                save = false;
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Countl not given.", ex);
@@ -1753,14 +1754,16 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         //Geometrie vorhanden und Punkt
         try {
-            if (saveBean.getProperty(FIELD__GEOREFERENZ) == null) {
+            if (saveSchadenBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
+                save = false;
             } else {
-                final CidsBean geom_pos = (CidsBean)saveBean.getProperty(FIELD__GEOREFERENZ);
+                final CidsBean geom_pos = (CidsBean)saveSchadenBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
+                    save = false;
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -1770,11 +1773,12 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         
         //Haekchen Wurzel gesetzt?
         try {
-            Collection<CidsBean> collectionWurzel =  saveBean.getBeanCollectionProperty(FIELD__WURZEL_ARR);
+            Collection<CidsBean> collectionWurzel =  saveSchadenBean.getBeanCollectionProperty(FIELD__WURZEL_ARR);
             if (collectionWurzel != null && !collectionWurzel.isEmpty()) {
-                if (!(Objects.equals(saveBean.getProperty(FIELD__WURZEL), true))){
+                if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true))){
                     LOG.warn("No wurzel specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOWURZEL));
+                    save = false;
                 }
             } 
         } catch (final MissingResourceException ex) {
@@ -1784,11 +1788,12 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         
         //Haekchen Stamm gesetzt?
         try {
-            Collection<CidsBean> collectionStamm =  saveBean.getBeanCollectionProperty(FIELD__STAMM_ARR);
+            Collection<CidsBean> collectionStamm =  saveSchadenBean.getBeanCollectionProperty(FIELD__STAMM_ARR);
             if (collectionStamm != null && !collectionStamm.isEmpty()) {
-                if (!(Objects.equals(saveBean.getProperty(FIELD__STAMM), true))){
+                if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true))){
                     LOG.warn("No stamm specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSTAMM));
+                    save = false;
                 }
             } 
         } catch (final MissingResourceException ex) {
@@ -1798,11 +1803,12 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         
         //Haekchen Krone gesetzt?
         try {
-            Collection<CidsBean> collectionKrone =  saveBean.getBeanCollectionProperty(FIELD__KRONE_ARR);
+            Collection<CidsBean> collectionKrone =  saveSchadenBean.getBeanCollectionProperty(FIELD__KRONE_ARR);
             if (collectionKrone != null && !collectionKrone.isEmpty()) {
-                if (! (Objects.equals(saveBean.getProperty(FIELD__KRONE), true))){
+                if (! (Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true))){
                     LOG.warn("No krone specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOKRONE));
+                    save = false;
                 }
             } 
         } catch (final MissingResourceException ex) {
@@ -1812,26 +1818,31 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         
         //Haekchen abgestorben gesetzt?
         try {
-            if (Objects.equals(saveBean.getProperty(FIELD__OHNE), true)){
-               if (Objects.equals(saveBean.getProperty(FIELD__WURZEL), true)){
+            if (Objects.equals(saveSchadenBean.getProperty(FIELD__OHNE), true)){
+               if (Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true)){
                     LOG.warn("Wrong wurzel specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGWURZEL));
+                    save = false;
                 }
-                if (Objects.equals(saveBean.getProperty(FIELD__STAMM), true)){
+                if (Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true)){
                     LOG.warn("Wrong stamm specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGSTAMM));
+                    save = false;
                 }
-                if (Objects.equals(saveBean.getProperty(FIELD__KRONE), true)){
+                if (Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true)){
                     LOG.warn("Wrong krone specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGKRONE));
+                    save = false;
                 }
-                if (Objects.equals(saveBean.getProperty(FIELD__STURM), true)){
+                if (Objects.equals(saveSchadenBean.getProperty(FIELD__STURM), true)){
                     LOG.warn("Wrong sturm specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGSTURM));
+                    save = false;
                 }
-                if (Objects.equals(saveBean.getProperty(FIELD__ABGESTORBEN), true)){
+                if (Objects.equals(saveSchadenBean.getProperty(FIELD__ABGESTORBEN), true)){
                     LOG.warn("Wrong abgestorben specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGABG));
+                    save = false;
                 }
             } 
         } catch (final MissingResourceException ex) {
@@ -1846,19 +1857,16 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                         + NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
-
-            return false;
         }
         return save & noErrorErsatz & noErrorFest;
     }
     
     //~ Methods ----------------------------------------------------------------
-   /*
-    public boolean everythingOk (CidsBean cbOkay){
-       */
+ 
     @Override
     public ConnectionContext getConnectionContext() {
-        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
+        return baumChildrenLoader != null && baumChildrenLoader.getParentOrganizer() != null 
+                ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
     
     public void setChangeFlag(){
@@ -2004,7 +2012,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     cbGeomSchaden.updateUI();
                 }
             } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
+                LOG.warn("problem in setCidsBean.", ex);
             }
         }
         if (!editor){
@@ -2150,7 +2158,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             }
             prepareErsatz();
         } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
                 LOG.warn("ersatz list not cleared.", ex);
         }
     }
@@ -2167,7 +2174,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             }
             prepareFest();
         } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
                 LOG.warn("fest list not cleared.", ex);
         }
     }
@@ -2183,7 +2189,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 try{
                     bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
                 } catch (final Exception ex) {
-                    Exceptions.printStackTrace(ex);
                     LOG.warn("Get no conf properties.", ex);
                 }
                 if (cb.getProperty(FIELD__GEOM) != null) {
@@ -2206,7 +2211,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     lblKarte.setText("Lage nicht ausgewählt");
                 }
             } catch (final Exception ex) {
-                Exceptions.printStackTrace(ex);
                 LOG.warn("Map window not set.", ex);
             } 
         } else{
