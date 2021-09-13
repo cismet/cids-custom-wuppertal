@@ -18,6 +18,7 @@ import Sirius.server.middleware.types.MetaObjectNode;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
@@ -32,8 +33,8 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaumAnsprechpartnerRenderer;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumAnsprechpartnerLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -51,7 +52,6 @@ import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.MissingResourceException;
@@ -64,7 +64,6 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -185,17 +184,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        dlgAddApartner = new JDialog();
-        panAddApartner = new JPanel();
-        lblAuswaehlenApartner = new JLabel();
-        final MetaObject[] apartner = ObjectRendererUtils.getLightweightMetaObjectsForTable("baum_ansprechpartner", new String[]{"name", "bemerkung"}, getConnectionContext());
-        if(apartner != null) {
-            Arrays.sort(apartner);
-            cbApartner = new JComboBox(apartner);
-        }
-        panMenButtonsApartner = new JPanel();
-        btnMenAbortApartner = new JButton();
-        btnMenOkApartner = new JButton();
         dlgAddOrtstermin = new JDialog();
         panAddOrtstermin = new JPanel();
         lblAuswaehlenOrtstermin = new JLabel();
@@ -203,6 +191,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         btnMenAbortOrtstermin = new JButton();
         btnMenOkOrtstermin = new JButton();
         dcOrtstermin = new DefaultBindableDateChooser();
+        comboBoxFilterDialogApartner = new ComboBoxFilterDialog(null, new BaumAnsprechpartnerLightweightSearch(), "Ansprechpartner auswählen", getConnectionContext());
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
@@ -246,58 +235,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         btnRemoveSchaden = new JButton();
 
         FormListener formListener = new FormListener();
-
-        dlgAddApartner.setTitle("Ansprechpartner");
-        dlgAddApartner.setModal(true);
-        dlgAddApartner.setName("dlgAddApartner"); // NOI18N
-
-        panAddApartner.setName("panAddApartner"); // NOI18N
-        panAddApartner.setLayout(new GridBagLayout());
-
-        lblAuswaehlenApartner.setText("Bitte den Ansprechpartner auswählen:");
-        lblAuswaehlenApartner.setName("lblAuswaehlenApartner"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panAddApartner.add(lblAuswaehlenApartner, gridBagConstraints);
-
-        cbApartner.setName("cbApartner"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panAddApartner.add(cbApartner, gridBagConstraints);
-
-        panMenButtonsApartner.setName("panMenButtonsApartner"); // NOI18N
-        panMenButtonsApartner.setLayout(new GridBagLayout());
-
-        btnMenAbortApartner.setText("Abbrechen");
-        btnMenAbortApartner.setName("btnMenAbortApartner"); // NOI18N
-        btnMenAbortApartner.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMenButtonsApartner.add(btnMenAbortApartner, gridBagConstraints);
-
-        btnMenOkApartner.setText("Ok");
-        btnMenOkApartner.setName("btnMenOkApartner"); // NOI18N
-        btnMenOkApartner.addActionListener(formListener);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panMenButtonsApartner.add(btnMenOkApartner, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panAddApartner.add(panMenButtonsApartner, gridBagConstraints);
-
-        dlgAddApartner.getContentPane().add(panAddApartner, BorderLayout.CENTER);
 
         dlgAddOrtstermin.setTitle("Datum Ortstermin");
         dlgAddOrtstermin.setModal(true);
@@ -351,6 +288,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         panAddOrtstermin.add(dcOrtstermin, gridBagConstraints);
 
         dlgAddOrtstermin.getContentPane().add(panAddOrtstermin, BorderLayout.CENTER);
+
+        comboBoxFilterDialogApartner.setName("comboBoxFilterDialogApartner"); // NOI18N
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -889,12 +828,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             else if (evt.getSource() == btnRemoveSchaden) {
                 BaumMeldungPanel.this.btnRemoveSchadenActionPerformed(evt);
             }
-            else if (evt.getSource() == btnMenAbortApartner) {
-                BaumMeldungPanel.this.btnMenAbortApartnerActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnMenOkApartner) {
-                BaumMeldungPanel.this.btnMenOkApartnerActionPerformed(evt);
-            }
             else if (evt.getSource() == btnMenAbortOrtstermin) {
                 BaumMeldungPanel.this.btnMenAbortOrtsterminActionPerformed(evt);
             }
@@ -911,30 +844,21 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddApartnerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddApartnerActionPerformed
-        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this), dlgAddApartner, true);
-    }//GEN-LAST:event_btnAddApartnerActionPerformed
-
-    private void btnMenAbortApartnerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortApartnerActionPerformed
-        dlgAddApartner.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortApartnerActionPerformed
-
-    private void btnMenOkApartnerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkApartnerActionPerformed
+        final Object selectedItem = comboBoxFilterDialogApartner.showAndGetSelected();
         try {
-            final Object selItem = cbApartner.getSelectedItem();
-            if (selItem instanceof MetaObject) {
+            if (selectedItem instanceof CidsBean){
                 cidsBean = TableUtils.addBeanToCollectionWithMessage(StaticSwingTools.getParentFrame(this),
                     cidsBean,
                     FIELD__APARTNER,
-                    ((MetaObject)selItem).getBean());
+                    (CidsBean)selectedItem);
             }
         } catch (Exception ex) {
             LOG.error(ex, ex);
         } finally {
-            dlgAddApartner.setVisible(false);
             cidsBean.setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
-    }//GEN-LAST:event_btnMenOkApartnerActionPerformed
+    }//GEN-LAST:event_btnAddApartnerActionPerformed
 
     private void btnRemoveApartnerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveApartnerActionPerformed
         final Object selection = lstApartner.getSelectedValue();
@@ -1183,17 +1107,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JButton btnAddNewOrtstermin;
     JButton btnAddNewSchaden;
     JButton btnApartner;
-    JButton btnMenAbortApartner;
     JButton btnMenAbortOrtstermin;
-    JButton btnMenOkApartner;
     JButton btnMenOkOrtstermin;
     JButton btnRemoveApartner;
     JButton btnRemoveOrtstermin;
     JButton btnRemoveSchaden;
-    JComboBox cbApartner;
     JCheckBox chAbgenommen;
+    ComboBoxFilterDialog comboBoxFilterDialogApartner;
     DefaultBindableDateChooser dcOrtstermin;
-    JDialog dlgAddApartner;
     JDialog dlgAddOrtstermin;
     Box.Filler filler1;
     JPanel jPanelAllgemein;
@@ -1202,7 +1123,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JTabbedPane jTabbedPane;
     JLabel lblAbgenommen;
     JLabel lblApartner;
-    JLabel lblAuswaehlenApartner;
     JLabel lblAuswaehlenOrtstermin;
     JLabel lblBemerkung;
     JLabel lblLadenOrt;
@@ -1210,7 +1130,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JList lstApartner;
     JList lstOrtstermine;
     JList lstSchaeden;
-    JPanel panAddApartner;
     JPanel panAddOrtstermin;
     JPanel panApartner;
     JPanel panButtonsApartner;
@@ -1220,7 +1139,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     JPanel panFillerUnten4;
     JPanel panFillerUnten5;
     JPanel panInfo;
-    JPanel panMenButtonsApartner;
     JPanel panMenButtonsOrtstermin;
     JPanel panOrtstermin;
     JPanel panOrtstermineMain;
@@ -1292,7 +1210,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     public void dispose() {
         bindingGroup.unbind();
         cidsBean = null;
-        dlgAddApartner.dispose();
         dlgAddOrtstermin.dispose();
         baumOrtsterminPanel.dispose();
         baumSchadenPanel.dispose();
@@ -1337,8 +1254,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             isAbgenommen();
             dlgAddOrtstermin.pack();
             dlgAddOrtstermin.getRootPane().setDefaultButton(btnMenOkOrtstermin);
-            dlgAddApartner.pack();
-            dlgAddApartner.getRootPane().setDefaultButton(btnMenOkApartner);
             if (cidsBean != null && cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
                 getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
                 allowAddRemove();
