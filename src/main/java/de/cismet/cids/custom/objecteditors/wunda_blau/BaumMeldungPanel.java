@@ -1328,11 +1328,15 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     }
     
     public void prepareSchaden(){
-        if (getBaumChildrenLoader().getMapValueSchaden
-                    (this.cidsBean.getPrimaryKeyValue()) != null && 
-                getActiveBeans(getBaumChildrenLoader().getMapValueSchaden
-                    (this.cidsBean.getPrimaryKeyValue())) > 0) {
-                lstSchaeden.setSelectedIndex(0);
+        if (this.cidsBean != null){
+            if (getBaumChildrenLoader().getMapValueSchaden
+                        (this.cidsBean.getPrimaryKeyValue()) != null && 
+                    getActiveBeans(getBaumChildrenLoader().getMapValueSchaden
+                        (this.cidsBean.getPrimaryKeyValue())) > 0) {
+                    lstSchaeden.setSelectedIndex(0);
+            }
+        } else {
+            lstSchaeden.clearSelection();
         }
         lstSchaeden.setCellRenderer(new DefaultListCellRenderer() {
 
@@ -1373,12 +1377,16 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     }
     
     public void prepareOrtstermin(){
-        if (getBaumChildrenLoader().getMapValueOrt
-                (this.cidsBean.getPrimaryKeyValue()) != null && 
-            getActiveBeans(getBaumChildrenLoader().getMapValueOrt
-                (this.cidsBean.getPrimaryKeyValue())) > 0) {
-            lstOrtstermine.setSelectedIndex(0);
-        } 
+        if (this.cidsBean != null){
+            if (getBaumChildrenLoader().getMapValueOrt
+                    (this.cidsBean.getPrimaryKeyValue()) != null && 
+                getActiveBeans(getBaumChildrenLoader().getMapValueOrt
+                    (this.cidsBean.getPrimaryKeyValue())) > 0) {
+                lstOrtstermine.setSelectedIndex(0);
+            } 
+        } else {
+            lstOrtstermine.clearSelection();
+        }
         lstOrtstermine.setCellRenderer(new DefaultListCellRenderer() {
 
             @Override
