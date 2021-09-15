@@ -513,25 +513,25 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                         TEILNEHMER_COL_NAMES,
                         TEILNEHMER_PROP_NAMES,                   
                         TEILNEHMER_PROP_TYPES);
-                xtTeil.setModel(teilnehmerModel);
-                xtTeil.addMouseMotionListener(new MouseAdapter(){
-                    @Override
-                    public void mouseMoved(MouseEvent e) {
-                        int row=xtTeil.rowAtPoint(e.getPoint());
-                        int col=xtTeil.columnAtPoint(e.getPoint());
-                        if(row>-1 && col>-1){
-                            Object value=xtTeil.getValueAt(row, col);
-                            if(null!=value && !"".equals(value)){
-                                xtTeil.setToolTipText(value.toString());
-                            }else{
-                                xtTeil.setToolTipText(null);//keinTooltip anzeigen
-                            }
+            xtTeil.setModel(teilnehmerModel);
+            xtTeil.addMouseMotionListener(new MouseAdapter(){
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    int row=xtTeil.rowAtPoint(e.getPoint());
+                    int col=xtTeil.columnAtPoint(e.getPoint());
+                    if(row>-1 && col>-1){
+                        Object value=xtTeil.getValueAt(row, col);
+                        if(null!=value && !"".equals(value)){
+                            xtTeil.setToolTipText(value.toString());
+                        }else{
+                            xtTeil.setToolTipText(null);//keinTooltip anzeigen
                         }
                     }
-                });
-                panOrtstermin.repaint();
-                panOrtstermin.updateUI();
-                taBemerkungOrt.updateUI();
+                }
+            });
+            panOrtstermin.repaint();
+            panOrtstermin.updateUI();
+            taBemerkungOrt.updateUI();
         }
         setReadOnly();
     }

@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
@@ -32,13 +31,11 @@ import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -234,6 +231,23 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        xtMeldung.getColumn(2).setWidth(100);
+        xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+        xtMeldung.addMouseMotionListener(new MouseAdapter(){
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int row=xtMeldung.rowAtPoint(e.getPoint());
+                int col=xtMeldung.columnAtPoint(e.getPoint());
+                if(row>-1 && col>-1){
+                    Object value=xtMeldung.getValueAt(row, col);
+                    if(null!=value && !"".equals(value)){
+                        xtMeldung.setToolTipText(value.toString());
+                    }else{
+                        xtMeldung.setToolTipText(null);//keinTooltip anzeigen
+                    }
+                }
+            }
+        });
         setReadOnly();
     }
 
@@ -385,32 +399,15 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 getConnectionContext());
             bindingGroup.bind();
             
-            xtMeldung.getColumn(2).setWidth(100);
-            xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
             if(cidsBean.getProperty(FIELD__MELDUNG) == null){
                 xtMeldung.getTableHeader().setForeground(Color.red);
             }else{
                 xtMeldung.getTableHeader().setForeground(Color.BLACK);
                 setMeldungTable((CidsBean)cidsBean.getProperty(FIELD__MELDUNG));
             }
-            xtMeldung.addMouseMotionListener(new MouseAdapter(){
-                @Override
-		public void mouseMoved(MouseEvent e) {
-                    int row=xtMeldung.rowAtPoint(e.getPoint());
-                    int col=xtMeldung.columnAtPoint(e.getPoint());
-                    if(row>-1 && col>-1){
-                        Object value=xtMeldung.getValueAt(row, col);
-                        if(null!=value && !"".equals(value)){
-                            xtMeldung.setToolTipText(value.toString());
-                        }else{
-                            xtMeldung.setToolTipText(null);//keinTooltip anzeigen
-                        }
-                    }
-                }
-            });
-            } catch (final Exception ex) {
-                LOG.error("Bean not set.", ex);
-            }
+        } catch (final Exception ex) {
+            LOG.error("Bean not set.", ex);
+        }
     }
     
     

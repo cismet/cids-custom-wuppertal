@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
@@ -37,7 +36,6 @@ import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumSchadenLightweightSearch;
 
@@ -56,7 +54,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.event.MouseAdapter;
@@ -83,7 +80,6 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
-    private MetaClass schadenMetaClass;
     private static final Logger LOG = Logger.getLogger(BaumFestsetzungEditor.class);
  
     private static final String[] SCHADEN_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Meldungsdatum", "Id", "gef. Art" };
@@ -186,10 +182,22 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        schadenMetaClass = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                TABLE_NAME__SCHADEN,
-                connectionContext);
+        xtSchaden.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+        xtSchaden.addMouseMotionListener(new MouseAdapter(){
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int row=xtSchaden.rowAtPoint(e.getPoint());
+                int col=xtSchaden.columnAtPoint(e.getPoint());
+                if(row>-1 && col>-1){
+                    Object value=xtSchaden.getValueAt(row, col);
+                    if(null!=value && !"".equals(value)){
+                        xtSchaden.setToolTipText(value.toString());
+                    }else{
+                        xtSchaden.setToolTipText(null);//keinTooltip anzeigen
+                    }
+                }
+            }
+        });
         setReadOnly();
     }
 
@@ -389,28 +397,12 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
             
             if (this.cidsBean != null){
              
-            xtSchaden.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
             if(cidsBean.getProperty(FIELD__FK_SCHADEN) == null){
                 xtSchaden.getTableHeader().setForeground(Color.red);
             }else{
                 xtSchaden.getTableHeader().setForeground(Color.BLACK);
                 setSchadenTable((CidsBean)cidsBean.getProperty(FIELD__FK_SCHADEN));
             }
-            xtSchaden.addMouseMotionListener(new MouseAdapter(){
-                @Override
-		public void mouseMoved(MouseEvent e) {
-                    int row=xtSchaden.rowAtPoint(e.getPoint());
-                    int col=xtSchaden.columnAtPoint(e.getPoint());
-                    if(row>-1 && col>-1){
-                        Object value=xtSchaden.getValueAt(row, col);
-                        if(null!=value && !"".equals(value)){
-                            xtSchaden.setToolTipText(value.toString());
-                        }else{
-                            xtSchaden.setToolTipText(null);//keinTooltip anzeigen
-                        }
-                    }
-                }
-            });
         }
             
         } catch (final Exception ex) {

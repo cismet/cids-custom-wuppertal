@@ -178,6 +178,24 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        xtSchaden.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+        xtSchaden.getColumn(2).setMaxWidth(70);
+        xtSchaden.getColumn(1).setMaxWidth(150);
+        xtSchaden.addMouseMotionListener(new MouseAdapter(){
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int row=xtSchaden.rowAtPoint(e.getPoint());
+                int col=xtSchaden.columnAtPoint(e.getPoint());
+                if(row>-1 && col>-1){
+                    Object value=xtSchaden.getValueAt(row, col);
+                    if(null!=value && !"".equals(value)){
+                        xtSchaden.setToolTipText(value.toString());
+                    }else{
+                        xtSchaden.setToolTipText(null);//keinTooltip anzeigen
+                    }
+                }
+            }
+        });
         setReadOnly();
     }
 
@@ -387,31 +405,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 this.cidsBean.setProperty(FIELD__SELBST, false);
             }
             if (this.cidsBean != null){
-             
-            xtSchaden.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+            
             if(cidsBean.getProperty(FIELD__FK_SCHADEN) == null){
                 xtSchaden.getTableHeader().setForeground(Color.red);
             }else{
                 xtSchaden.getTableHeader().setForeground(Color.BLACK);
                 setSchadenTable((CidsBean)cidsBean.getProperty(FIELD__FK_SCHADEN));
             }
-            xtSchaden.getColumn(2).setMaxWidth(70);
-            xtSchaden.getColumn(1).setMaxWidth(150);
-            xtSchaden.addMouseMotionListener(new MouseAdapter(){
-                @Override
-		public void mouseMoved(MouseEvent e) {
-                    int row=xtSchaden.rowAtPoint(e.getPoint());
-                    int col=xtSchaden.columnAtPoint(e.getPoint());
-                    if(row>-1 && col>-1){
-                        Object value=xtSchaden.getValueAt(row, col);
-                        if(null!=value && !"".equals(value)){
-                            xtSchaden.setToolTipText(value.toString());
-                        }else{
-                            xtSchaden.setToolTipText(null);//keinTooltip anzeigen
-                        }
-                    }
-                }
-            });
         }
             
         } catch (final Exception ex) {

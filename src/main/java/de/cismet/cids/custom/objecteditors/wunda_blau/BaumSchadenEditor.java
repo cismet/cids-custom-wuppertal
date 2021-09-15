@@ -216,6 +216,23 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+        xtMeldung.getColumn(2).setMaxWidth(150);
+        xtMeldung.addMouseMotionListener(new MouseAdapter(){
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int row=xtMeldung.rowAtPoint(e.getPoint());
+                int col=xtMeldung.columnAtPoint(e.getPoint());
+                if(row>-1 && col>-1){
+                    Object value=xtMeldung.getValueAt(row, col);
+                    if(null!=value && !"".equals(value)){
+                        xtMeldung.setToolTipText(value.toString());
+                    }else{
+                        xtMeldung.setToolTipText(null);//keinTooltip anzeigen
+                    }
+                }
+            }
+        });
         setReadOnly();
     }
 
@@ -426,30 +443,13 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 loadChildren(this.cidsBean.getPrimaryKeyValue());
             }
             if (this.cidsBean != null){
-            xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
-            if(cidsBean.getProperty(FIELD__MELDUNG) == null){
-                xtMeldung.getTableHeader().setForeground(Color.red);
-            }else{
-                xtMeldung.getTableHeader().setForeground(Color.BLACK);
-                setMeldungTable((CidsBean)cidsBean.getProperty(FIELD__MELDUNG));
-            }
-            xtMeldung.getColumn(2).setMaxWidth(150);
-            xtMeldung.addMouseMotionListener(new MouseAdapter(){
-                @Override
-		public void mouseMoved(MouseEvent e) {
-                    int row=xtMeldung.rowAtPoint(e.getPoint());
-                    int col=xtMeldung.columnAtPoint(e.getPoint());
-                    if(row>-1 && col>-1){
-                        Object value=xtMeldung.getValueAt(row, col);
-                        if(null!=value && !"".equals(value)){
-                            xtMeldung.setToolTipText(value.toString());
-                        }else{
-                            xtMeldung.setToolTipText(null);//keinTooltip anzeigen
-                        }
-                    }
+                if(cidsBean.getProperty(FIELD__MELDUNG) == null){
+                    xtMeldung.getTableHeader().setForeground(Color.red);
+                }else{
+                    xtMeldung.getTableHeader().setForeground(Color.BLACK);
+                    setMeldungTable((CidsBean)cidsBean.getProperty(FIELD__MELDUNG));
                 }
-            });
-        }
+            }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
         }
