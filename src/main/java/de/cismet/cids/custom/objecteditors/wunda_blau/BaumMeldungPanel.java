@@ -1187,13 +1187,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         return baumChildrenLoader != null && baumChildrenLoader.getParentOrganizer() != null
             ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
-    
-    public void clearBeans(final List<CidsBean> toClearList){
-        if (toClearList != null && toClearList.size() > 0) {
-            toClearList.clear();
-        }
-    }
-    
+      
     
     private Integer getActiveBeans(final List<CidsBean> cbList){
         Integer anzahl = 0;
@@ -1326,7 +1320,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         }
     }
     
-    public void prepareSchaden(){
+    private void prepareSchaden(){
         if (this.cidsBean != null){
             if (getBaumChildrenLoader().getMapValueSchaden
                         (this.cidsBean.getPrimaryKeyValue()) != null && 
@@ -1362,7 +1356,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
             });
     }
     
-    public void allowAddRemove(){
+    private void allowAddRemove(){
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
             if (editor){
                 btnAddNewOrtstermin.setEnabled(true);
@@ -1375,7 +1369,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         } 
     }
     
-    public void prepareOrtstermin(){
+    private void prepareOrtstermin(){
         if (this.cidsBean != null){
             if (getBaumChildrenLoader().getMapValueOrt
                     (this.cidsBean.getPrimaryKeyValue()) != null && 
@@ -1415,7 +1409,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      *
      * @param  cidsBeans  DOCUMENT ME!
      */
-    public void setOrtsterminBeans(final List<CidsBean> cidsBeans) {
+    private void setOrtsterminBeans(final List<CidsBean> cidsBeans) {
         try {
             baumOrtsterminPanel.setCidsBean(null);
             ((DefaultListModel)lstOrtstermine.getModel()).clear();
@@ -1436,7 +1430,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      *
      * @param  cidsBeans  DOCUMENT ME!
      */
-    public void setSchadenBeans(final List<CidsBean> cidsBeans) {
+    private void setSchadenBeans(final List<CidsBean> cidsBeans) {
         baumSchadenPanel.setCidsBean(null);
         ((DefaultListModel)lstSchaeden.getModel()).clear();
         if(cidsBeans != null){

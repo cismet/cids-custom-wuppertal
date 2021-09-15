@@ -52,7 +52,7 @@ public class BaumChildrenLoader {
     public static final String FK_SCHADEN = "fk_schaden";
     public static final String FK_MELDUNG = "fk_meldung";
     public static final String FK_GEBIET = "fk_gebiet";
-    public BaumChildLightweightSearch searchChild;
+    private final BaumChildLightweightSearch searchChild;
     @Getter private final BaumParentPanel parentOrganizer;
     @Getter public Map <Integer, List<CidsBean>> mapErsatz = new HashMap <>();
     @Getter public Map <Integer, List<CidsBean>> mapFest = new HashMap <>();

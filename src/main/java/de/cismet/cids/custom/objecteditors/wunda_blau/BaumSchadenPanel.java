@@ -1858,7 +1858,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
     
-    public void setChangeFlag(){
+    private void setChangeFlag(){
         cidsBean.setArtificialChangeFlag(true);
         if ((getBaumChildrenLoader() != null) && 
                 (getBaumChildrenLoader().getParentOrganizer() != null) &&
@@ -2068,7 +2068,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panControlsNewFest.setVisible(editor);
     }
     
-    public void prepareErsatz(){
+    private void prepareErsatz(){
         if (this.cidsBean != null){
             if (getBaumChildrenLoader().getMapValueErsatz
                     (this.cidsBean.getPrimaryKeyValue()) != null && 
@@ -2098,7 +2098,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             }
         });   
     }
-    public void prepareFest(){
+    private void prepareFest(){
         if (this.cidsBean != null){
             if (getBaumChildrenLoader().getMapValueFest
                     (this.cidsBean.getPrimaryKeyValue()) != null && 
@@ -2133,7 +2133,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
      *
      * @param  cidsBeans  DOCUMENT ME!
      */
-    public void setErsatzBeans(final List<CidsBean> cidsBeans) {
+    private void setErsatzBeans(final List<CidsBean> cidsBeans) {
         try {
             baumErsatzPanel.setCidsBean(null);
             ((DefaultListModel)lstErsatz.getModel()).clear(); 
@@ -2149,7 +2149,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 LOG.warn("ersatz list not cleared.", ex);
         }
     }
-    public void setFestBeans(final List<CidsBean> cidsBeans) {
+    private void setFestBeans(final List<CidsBean> cidsBeans) {
         try {
             baumFestsetzungPanel.setCidsBean(null);
             ((DefaultListModel)lstFest.getModel()).clear();

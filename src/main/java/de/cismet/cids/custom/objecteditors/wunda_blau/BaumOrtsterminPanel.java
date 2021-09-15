@@ -12,11 +12,9 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.MetaClass;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 import org.apache.log4j.Logger;
 
@@ -26,7 +24,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,7 +32,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -106,8 +102,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     
     public static final String TEL__PATTERN = "\\+[0-9]{1,3}(-[0-9]+){1,}";
     
-    private List<CidsBean> teilBeans;
-    private MetaClass teilnehmerMetaClass;
     private static final String[] TEILNEHMER_COL_NAMES = new String[] { "Name", "Telefon", "Bemerkung"};
     private static final String[] TEILNEHMER_PROP_NAMES = new String[] {
             FIELD__TEILNEHMER_NAME,
@@ -462,10 +456,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             this.editor = false;
         }
         initComponents();
-        teilnehmerMetaClass = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                TABLE_NAME__TEILNEHMER,
-                getConnectionContext());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -475,20 +465,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         return baumChildrenLoader != null && baumChildrenLoader.getParentOrganizer() != null
                 ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  panel  DOCUMENT ME!
-     */
-    public void removeOrtsterminPanel(final BaumOrtsterminPanel panel) {
-        if (panel != null) {
-            //cidsBeans.remove(panel.getCidsBean());
-            panOrtstermin.remove(panel);
-            panOrtstermin.repaint();
-        }
-    }
-
         
     @Override
     public void dispose() {
@@ -501,7 +477,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         return this.cidsBean;
     }
     
-    public void setChangeFlag(){
+    private void setChangeFlag(){
         if ((getBaumChildrenLoader() != null) && 
                 (getBaumChildrenLoader().getParentOrganizer() != null) &&
                 (getBaumChildrenLoader().getParentOrganizer().getCidsBean() != null)) {
@@ -588,8 +564,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 if (tBean.getProperty(FIELD__TEILNEHMER_TELEFON)!= null) {
                     if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
                         LOG.warn("No name specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL) 
-                                + tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString());
+                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL)) 
+                                    .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString());
                         save = false;
                     }
                 }
@@ -608,22 +584,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 JOptionPane.WARNING_MESSAGE);
         }
         return save;
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  cidsBeans  DOCUMENT ME!
-     */
-    public void setTeilnehmerBeans(final List<CidsBean> cidsBeans) {
-        this.teilBeans = cidsBeans;
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public List<CidsBean> getTeilnehmerBeans() {
-        return teilBeans;
     }
     
 }

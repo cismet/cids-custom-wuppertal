@@ -608,7 +608,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         setReadOnly();
     }
     
-    public void setChangeFlag(){
+    private void setChangeFlag(){
         if ((getBaumChildrenLoader() != null) && 
                 (getBaumChildrenLoader().getParentOrganizer() != null) &&
                 (getBaumChildrenLoader().getParentOrganizer().getCidsBean() != null)) {

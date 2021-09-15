@@ -517,7 +517,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         }
    }
     
-    public void clearBaumChildrenLoader(){
+    private void clearBaumChildrenLoader(){
         getBaumChildrenLoader().clearAllMaps();
         getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
     }

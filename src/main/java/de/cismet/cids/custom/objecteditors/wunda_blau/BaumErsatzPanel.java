@@ -86,6 +86,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.plaf.basic.ComboPopup;
 import lombok.Getter;
+import lombok.Setter;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -105,10 +106,9 @@ import org.openide.util.NbBundle;
 public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable, 
         CidsBeanStore, 
         ConnectionContextProvider {
-
-    //~ Static fields/initializers ---------------------------------------------
-    private List<CidsBean> kontrolleBeans = new ArrayList<>();;
-    private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
+    @Getter @Setter private List<CidsBean> kontrolleBeans;;
+//~ Static fields/initializers ---------------------------------------------
+        private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
     private static final MetaClass MC__ART;
 
     public static final String GEOMTYPE = "Polygon";
@@ -995,6 +995,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      */
     public BaumErsatzPanel() {
         this(null);
+        this.kontrolleBeans = new ArrayList<>();
     }
 
     
@@ -1004,6 +1005,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      * @param bclInstance
      */
     public BaumErsatzPanel(final BaumChildrenLoader bclInstance) {
+        this.kontrolleBeans = new ArrayList<>();
         this.baumChildrenLoader = bclInstance;
         if (bclInstance != null){
             this.editor = bclInstance.getParentOrganizer().isEditor();
@@ -1070,7 +1072,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         }
     }
     
-    public void setChangeFlag(){
+    private void setChangeFlag(){
         if ((getBaumChildrenLoader() != null) && 
                 (getBaumChildrenLoader().getParentOrganizer() != null) &&
                 (getBaumChildrenLoader().getParentOrganizer().getCidsBean() != null)) {
@@ -1215,25 +1217,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         }
     }
     
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  cidsBeans  DOCUMENT ME!
-     */
-    public void setKontrolleBeans(final List<CidsBean> cidsBeans) {
-        this.kontrolleBeans = cidsBeans;
-    }
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public List<CidsBean> getKontrolleBeans() {
-        return kontrolleBeans;
-    }
-    /**
-     * DOCUMENT ME!
-     */
     public void setMapWindow() {
         final CidsBean cb = this.getCidsBean();
         if (cb != null){

@@ -1171,7 +1171,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         return anzahl;
     }
     
-    public void prepareMeldung(){
+    private void prepareMeldung(){
         if (getBaumChildrenLoader().getMapMeldung() != null && 
                 getActiveBeans(getBaumChildrenLoader().getMapValueMeldung(
                         this.cidsBean.getPrimaryKeyValue())) > 0) {
@@ -1207,7 +1207,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  cidsBeans  DOCUMENT ME!
      */
-    public void setMeldungBeans(final List<CidsBean> cidsBeans) {
+    private void setMeldungBeans(final List<CidsBean> cidsBeans) {
         try {
             baumMeldungPanel.setCidsBean(null);
             ((DefaultListModel)lstMeldungen.getModel()).clear();
@@ -1363,13 +1363,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
 
-    public void clearBaumChildrenLoader(){
+    private void clearBaumChildrenLoader(){
         getBaumChildrenLoader().clearAllMaps();
         getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
         getBaumChildrenLoader().removeListener(loadChildrenListener);
     }
     
-    public void allowAddRemove(){
+    private void allowAddRemove(){
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
             if (editor){   
                 btnAddNewMeldung.setEnabled(true);
