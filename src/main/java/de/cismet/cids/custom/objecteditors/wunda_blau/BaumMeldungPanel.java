@@ -33,7 +33,6 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.cismet.cids.custom.objectrenderer.wunda_blau.BaumAnsprechpartnerRenderer;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumAnsprechpartnerLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1487,8 +1486,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
      *
      * @version  $Revision$, $Date$
      */
-    public class DescriptionPaneDialogWrapperPanel extends JPanel
-            implements BaumAnsprechpartnerRenderer.BaumAnsprechpartnerDescriptionPaneParent {
+    public final class DescriptionPaneDialogWrapperPanel extends JPanel
+    {
 
         //~ Instance fields ----------------------------------------------------
 

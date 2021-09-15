@@ -12,10 +12,8 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 
@@ -28,13 +26,7 @@ import org.openide.util.NbBundle;
 import java.awt.Color;
 import java.awt.Font;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
-
 
 import javax.swing.*;
 
@@ -44,7 +36,6 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -58,9 +49,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungSearch;
 import de.cismet.cids.editors.SaveVetoable;
-import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
@@ -73,7 +62,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.MissingResourceException;
@@ -92,12 +80,9 @@ import org.jdesktop.swingx.JXTable;
  */
 public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     SaveVetoable,
-    BindingGroupStore,
-    PropertyChangeListener,
     BaumParentPanel {
 
     //~ Static fields/initializers ---------------------------------------------
-    private MetaClass meldungMetaClass;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
     private static final Comparator<Object> COMPARATOR = new Comparator<Object>() {
 
@@ -156,13 +141,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     public static final String BUNDLE_TEIL_ERRORTEXT = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
     public static final String BUNDLE_NOMELDUNG = "BaumOrtsterminEditor.prepareForSave().noMeldung";
     
-    
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        
-    }
-
     @Override
     public boolean isEditor() {
         return this.editor;
@@ -229,7 +207,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     private JPanel panContent;
     JPanel panOrtstermin;
     JPanel panOrtstermineMain;
-    private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JXTable xtMeldung;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -257,10 +234,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        meldungMetaClass = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                TABLE_NAME__MELDUNG,
-                connectionContext);
         setReadOnly();
     }
 
@@ -274,7 +247,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
         comboBoxFilterDialogGebiet = new ComboBoxFilterDialog(null, new BaumMeldungLightweightSearch(), "Gebiet-Meldung auswählen", getConnectionContext());
         panContent = new RoundedPanel();
         panOrtstermin = new JPanel();
@@ -399,7 +371,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
             bindingGroup.unbind();
             this.cidsBean = cb;
@@ -448,67 +419,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         meldungBeans.add(meldungBean);
         ((OrtsterminMeldungTableModel)xtMeldung.getModel()).setCidsBeans(meldungBeans);
     }
-    
-    private void searchMeldungen() {
-        xtMeldung.setModel(new LoadingTableModel());
-
-        if (getCidsBean() != null) {
-            new SwingWorker<List<CidsBean>, Void>() {
-
-                    @Override
-                    protected List<CidsBean> doInBackground() throws Exception {
-                        final BaumMeldungSearch search = new BaumMeldungSearch();
-                        search.setOrtsterminId((Integer)getCidsBean().getProperty(FIELD__ID));
-                        search.setOrtsterminFKMeldung((Integer)getCidsBean().getProperty(FIELD__MELDUNG_ID));
-
-                        final Collection<MetaObjectNode> mons = (Collection)SessionManager.getProxy()
-                                    .customServerSearch(SessionManager.getSession().getUser(),
-                                            search,
-                                            getConnectionContext());
-
-                        if (mons == null) {
-                            xtMeldung.setModel(new MustSetTableModel());
-                            return null;
-                        }
-
-                        final List<CidsBean> beans = new ArrayList<>();
-                        for (final MetaObjectNode mon : mons) {
-                            
-                            beans.add(SessionManager.getProxy().getMetaObject(
-                                    mon.getObjectId(),
-                                    mon.getClassId(),
-                                    "WUNDA_BLAU",
-                                    getConnectionContext()).getBean());
-                        }
-                        return beans;
-                    }
-
-                    @Override
-                    protected void done() {
-                        try {
-                            final List<CidsBean> beans = get();
-                            List<CidsBean> meldungBeans = new ArrayList<>();
-                            if (cidsBean.getProperty(FIELD__MELDUNG_ID) != null){
-                                for (final CidsBean cb : beans){
-                                    if(cb.getProperty(FIELD__ID).toString().equals(cidsBean.getProperty(FIELD__MELDUNG_ID).toString())){
-                                       meldungBeans.add(cb);
-                                       break;
-                                    }
-                                }
-                            }
-                            if(meldungBeans.isEmpty()){
-                                xtMeldung.setModel(new MustSetTableModel());
-                            }else{
-                                xtMeldung.setModel(new OrtsterminMeldungTableModel());
-                                ((OrtsterminMeldungTableModel)xtMeldung.getModel()).setCidsBeans(meldungBeans);
-                            }
-                        } catch (final InterruptedException | ExecutionException ex) {
-                            LOG.fatal(ex, ex);
-                        }
-                    }
-                }.execute();
-        }
-    }
+   
     /**
      * DOCUMENT ME!
      */
@@ -552,11 +463,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
     }
 
     class OrtsterminMeldungTableModel extends CidsBeansTableModel {

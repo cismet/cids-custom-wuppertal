@@ -32,9 +32,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
 
@@ -46,7 +43,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.BaumSchadenLightweightSear
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.SaveVetoable;
 
@@ -84,8 +80,6 @@ import org.jdesktop.swingx.JXTable;
  */
 public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     SaveVetoable,
-    BindingGroupStore,
-    PropertyChangeListener,
     BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
@@ -381,19 +375,9 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
-            if (editor && (this.cidsBean != null)) {
-                LOG.info("remove propchange baum_schaden: " + this.cidsBean);
-                this.cidsBean.removePropertyChangeListener(this);
-            }
             bindingGroup.unbind();
-            this.cidsBean = cb;
-            if (editor && (this.cidsBean != null)) {
-                LOG.info("add propchange baum_schaden: " + this.cidsBean);
-                this.cidsBean.addPropertyChangeListener(this);
-            }
-            
+            this.cidsBean = cb;            
 
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
@@ -482,19 +466,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     @Override
     public void setTitle(final String string) {
     }
-
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // To change body of generated methods, choose Tools | Templates.
-        
-    }
-    
+   
     
     /*
      * DOCUMENT ME!

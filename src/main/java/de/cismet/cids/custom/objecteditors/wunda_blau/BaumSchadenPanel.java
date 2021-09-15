@@ -108,13 +108,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
-   
-    //private List<CidsBean> ersatzBeans = new ArrayList<>();
-    //private final List<CidsBean> changedErsatzBeans = new ArrayList<>();
-    //private final List<CidsBean> deletedErsatzBeans = new ArrayList<>();
-    //private List<CidsBean> festBeans = new ArrayList<>();
-    //private final List<CidsBean> changedFestBeans = new ArrayList<>();
-    //private final List<CidsBean> deletedFestBeans = new ArrayList<>();
     private BaumChildrenLoader.Listener loadChildrenListener;
     private static final Logger LOG = Logger.getLogger(BaumSchadenPanel.class);
     public static final String GEOMTYPE = "Point";
@@ -1542,8 +1535,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         };
-    //private SwingWorker worker_ersatz;
-    //private SwingWorker worker_fest;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     BaumErsatzPanel baumErsatzPanel;
@@ -1642,8 +1633,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         this(null);
     }
 
-    
-    
     /**
      * Creates new form BaumSchadenPanel.
      *
@@ -1898,7 +1887,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         return this.cidsBean;
     }
     
-
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
@@ -2232,6 +2220,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             800,
             600);
     }
+    
     class LoaderListener implements BaumChildrenLoader.Listener{
 
         @Override

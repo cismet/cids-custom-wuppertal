@@ -2,8 +2,6 @@
 
 <Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
-    <Component class="de.cismet.cids.editors.converters.SqlDateToUtilDateConverter" name="sqlDateToUtilDateConverter">
-    </Component>
     <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog" name="comboBoxFilterDialogSchaden">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(null, new de.cismet.cids.custom.wunda_blau.search.server.BaumSchadenLightweightSearch(), &quot;Gebiet-Meldung-Schaden ausw&#xe4;hlen&quot;, getConnectionContext())"/>

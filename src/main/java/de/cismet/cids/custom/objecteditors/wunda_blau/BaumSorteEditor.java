@@ -30,7 +30,6 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -57,7 +56,6 @@ import java.util.MissingResourceException;
 public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     BeforeSavingHook,
     SaveVetoable,
-    BindingGroupStore,
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -87,10 +85,6 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
 
 
     //~ Instance fields --------------------------------------------------------
-
-
-    private SwingWorker worker_name;
-
     private Boolean redundantName = false;
     private static String TITLE_NEW_SORTE = "eine neue Sorte anlegen..."; 
 
@@ -346,11 +340,6 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
     public String getTitle() {
        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_SORTE;
@@ -361,11 +350,6 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
     }
 
     @Override

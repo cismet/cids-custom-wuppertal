@@ -41,7 +41,6 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -67,7 +66,6 @@ import java.util.MissingResourceException;
 public class BaumHauptartEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     BeforeSavingHook,
     SaveVetoable,
-    BindingGroupStore,
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -397,11 +395,6 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
     public String getTitle() {
        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_HAUPTART;
@@ -412,10 +405,5 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
 
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
     }
 }

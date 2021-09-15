@@ -67,17 +67,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import javax.swing.Box;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -114,7 +109,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     //~ Static fields/initializers ---------------------------------------------
     private List<CidsBean> kontrolleBeans = new ArrayList<>();;
     private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
-    private static final DefaultComboBoxModel NO_SELECTION_MODEL = new DefaultComboBoxModel(new Object[] {});
     private static final MetaClass MC__ART;
 
     public static final String GEOMTYPE = "Polygon";
@@ -127,9 +121,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 "BAUM_ART",
                 connectionContext);
     }
-    
-    private static final ComboBoxModel MUST_SET_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten bitte zuweisen......"});
-    private static final ComboBoxModel LOAD_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten werden geladen......"});
     
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
             AdresseLightweightSearch.Subject.HNR,
@@ -186,15 +177,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     private static final Class[] KONTROLLE_PROP_TYPES = new Class[] {
             Date.class,
             String.class
-        };
-     private static final String[] STRASSE_COL_NAMES = new String[] { "Name", "Strassenschluessel"};
-    private static final String[] STRASSE_PROP_NAMES = new String[] {
-            FIELD__STRASSE_NAME,
-            FIELD__STRASSE_KEY
-        };
-    private static final Class[] STRASSE_PROP_TYPES = new Class[] {
-            String.class,
-            Integer.class
         };
     
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
@@ -942,8 +924,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     @Getter private final BaumChildrenLoader baumChildrenLoader;
     private CidsBean cidsBean;
     
-    private SwingWorker worker_hnr;
-    private SwingWorker worker_strasse;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
@@ -1105,7 +1085,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         
     @Override
     public void dispose() {
-       // bindingGroup.unbind();
         cidsBean = null;
         if (this.editor && cbGeomErsatz != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).dispose();
@@ -1213,7 +1192,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                     }
                     refreshHnr();
                 }
-                //initComboboxHnr();
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
             }
@@ -1222,15 +1200,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         
     }
     
-    
-    private Collection setStrasseCb(){
-        final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty(FIELD__STRASSE);
-        final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
-        umlautCollator.setStrength(Collator.SECONDARY);
-        Collections.sort(cblStrassen, umlautCollator);
-        return cblStrassen;
-    }
-    
+       
     private void refreshHnr() { 
         if (cidsBean != null && cidsBean.getProperty(FIELD__STRASSE) != null){
             String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
@@ -1240,15 +1210,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 
                 hnrSearch.setKeyId(Integer.parseInt(schluessel));
                 initComboboxHnr();
-               /* new SwingWorker<Void, Void>() {
-
-                        @Override
-                        protected Void doInBackground() throws Exception {
-                            cbHNr.refreshModel();
-
-                            return null;
-                        }
-                    }.execute();*/
             }
         }
     }
@@ -1316,54 +1277,10 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
                 @Override
                 protected void done() {
-                    /*try {
-                        get();
-                    } catch (final InterruptedException | ExecutionException ex) {
-                        LOG.error(ex, ex);
-                    } // finally {
-                      //  refreshHnr();
-                   // }*/
                 }
             }.execute();
-         /*   if (worker_hnr != null) {
-                worker_hnr.cancel(true);
-            }
-            worker_hnr.execute();*/
     }
     
-    
-    private void searchStreets() {
-        if (getCidsBean() != null) {
-            new SwingWorker<Collection, Void>() {
-
-                    @Override
-                    protected Collection doInBackground() throws Exception {
-                        return setStrasseCb();
-                    }
-
-                    @Override
-                    protected void done() {
-                        final Collection check;
-                        try {
-                            check = get();
-                            if (check != null) {
-                                final Collection colStreets = check;
-                                cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
-                            }
-                        } catch (final InterruptedException | ExecutionException ex) {
-                            LOG.fatal(ex, ex);
-                        }
-                    }
-                    
-                };
-                if (worker_strasse != null) {
-                    worker_strasse.cancel(true);
-                }
-                worker_strasse.execute();    
-        }
-    }
-
-
     public boolean isOkForSaving(CidsBean saveErsatzBean) {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();

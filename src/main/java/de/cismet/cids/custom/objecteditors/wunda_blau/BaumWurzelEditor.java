@@ -35,16 +35,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -70,8 +66,6 @@ import java.util.MissingResourceException;
 public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     BeforeSavingHook,
     SaveVetoable,
-    BindingGroupStore,
-    PropertyChangeListener,
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -94,8 +88,6 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumWurzelEditor.prepareForSave().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumWurzelEditor.prepareForSave().JOptionPane.title";
-
-
 
     //~ Enums ------------------------------------------------------------------
 
@@ -291,16 +283,8 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
-            if (isEditor && (this.cidsBean != null)) {
-                LOG.info("remove propchange baum_wurzel: " + this.cidsBean);
-                this.cidsBean.removePropertyChangeListener(this);
-            }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (isEditor && (this.cidsBean != null)) {
-                LOG.info("add propchange baum_wurzel: " + this.cidsBean);
-                this.cidsBean.addPropertyChangeListener(this);
-            }
             bindingGroup.bind();
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
@@ -316,15 +300,6 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     */
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
@@ -336,15 +311,6 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
     }
 
     @Override

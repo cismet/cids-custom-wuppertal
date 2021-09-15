@@ -47,7 +47,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.util.Collections;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 
@@ -62,7 +61,6 @@ import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -87,7 +85,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.SaveVetoable;
-import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
 import de.cismet.cids.editors.hooks.AfterClosingHook;
 import de.cismet.cids.editors.hooks.AfterSavingHook;
 import de.cismet.cids.editors.hooks.BeforeSavingHook;
@@ -95,12 +92,10 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Component;
-import java.text.Collator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Locale;
 import javax.swing.JList;
 import javax.swing.plaf.basic.ComboPopup;
 import lombok.Getter;
@@ -116,7 +111,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     AfterSavingHook,
     AfterClosingHook,
     BeforeSavingHook,
-    BindingGroupStore,
     TitleComponentProvider,
     PropertyChangeListener,
     BaumParentPanel{
@@ -219,30 +213,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private boolean areChildrenLoad = false;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
     
-    private static final ComboBoxModel MUST_SET_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten bitte zuweisen......"});
-    private static final ComboBoxModel LOAD_MODEL_CB = new DefaultComboBoxModel(new String[] { "Die Daten werden geladen......"});
-    
-    private static final String[] STRASSE_COL_NAMES = new String[] { "Name", "Strassenschluessel"};
-    private static final String[] STRASSE_PROP_NAMES = new String[] {
-            FIELD__STRASSE_NAME,
-            FIELD__STRASSE_KEY
-        };
-    private static final Class[] STRASSE_PROP_TYPES = new Class[] {
-            String.class,
-            Integer.class
-        };
-    
-    private static final ListModel MODEL_ERROR = new DefaultListModel() {
-            {
-                add(0, "[Fehler beim Laden]");
-            }
-        };
-    private static final ListModel MODEL_LOAD = new DefaultListModel() {
-
-            {
-                add(0, "Wird geladen...");
-            }
-        };
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumMeldungPanel baumMeldungPanel;
     private JButton btnAddNewMeldung;
@@ -292,7 +262,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JScrollPane scpBemerkung;
     private JScrollPane scpLaufendeMeldungen;
     private SemiRoundedPanel semiRoundedPanel7;
-    private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JTextArea taBemerkung;
     private JTextField txtAktenzeichen;
     private JTextField txtName;
@@ -391,7 +360,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         btnMenAbortMeldung = new JButton();
         btnMenOkMeldung = new JButton();
         dcMeldung = new DefaultBindableDateChooser();
-        sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
         panTitle = new JPanel();
         lblTitle = new JLabel();
         btnReport = new JButton();
@@ -1244,7 +1212,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             baumMeldungPanel.setCidsBean(null);
             ((DefaultListModel)lstMeldungen.getModel()).clear();
             if(cidsBeans != null){
-                //cidsBeans.sort(DATE_COMPARATOR);
                 for(final Object bean:cidsBeans){
                     if (bean instanceof CidsBean && ((CidsBean)bean).getMetaObject().getStatus()!= MetaObject.TO_DELETE){
                         ((DefaultListModel)lstMeldungen.getModel()).addElement(bean);
@@ -1317,7 +1284,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if(this.cidsBean.getProperty(FIELD__STRASSE) != null){
             cbHNr.setEnabled(true);
-            //searchStreets();
         }
         setTitle(getTitle());
         btnReport.setVisible(false);
@@ -1331,6 +1297,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     /**
      * DOCUMENT ME!
      */
+    @SuppressWarnings("empty-statement")
     private void setReadOnly() {
         if (!(editor)) {
             RendererTools.makeReadOnly(txtAktenzeichen);
@@ -1432,11 +1399,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
             setMapWindow();
@@ -1448,34 +1410,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             if (this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW || azGeneriert){
                 lblAktenzeichen.setForeground(colorAlarm);
             }
-        }
-    }
-    
-    
-    private void searchStreets() {
-        if (getCidsBean() != null) {
-            new SwingWorker<Collection, Void>() {
-
-                    @Override
-                    protected Collection doInBackground() throws Exception {
-                        return setStrasseCb();
-                    }
-
-                    @Override
-                    protected void done() {
-                        final Collection check;
-                        try {
-                            check = get();
-                            if (check != null) {
-                                final Collection colStreets = check;
-                                cbStrasse.setModel(new DefaultComboBoxModel(colStreets.toArray()));
-                                List<CidsBean> streetBeans = new ArrayList<>();
-                            }
-                        } catch (final InterruptedException | ExecutionException ex) {
-                            LOG.fatal(ex, ex);
-                        }
-                    }
-                }.execute();
         }
     }
 
@@ -1752,14 +1686,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         public Object getLastValid() {
             return lastValid;
         }
-    }
-    
-    private Collection setStrasseCb(){
-        final List<CidsBean> cblStrassen = this.getCidsBean().getBeanCollectionProperty(FIELD__STRASSE);
-        final Collator umlautCollator = Collator.getInstance(Locale.GERMAN);
-        umlautCollator.setStrength(Collator.SECONDARY);
-        Collections.sort(cblStrassen, umlautCollator);
-        return cblStrassen;
     }
     
     private void initComboboxHnr() {

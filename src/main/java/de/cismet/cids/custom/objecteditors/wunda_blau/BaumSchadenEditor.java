@@ -31,9 +31,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
 
@@ -43,7 +40,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSear
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.SaveVetoable;
 import de.cismet.cids.editors.hooks.AfterClosingHook;
@@ -88,14 +84,9 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     SaveVetoable,
     AfterClosingHook,
     AfterSavingHook,
-    BindingGroupStore,
-    PropertyChangeListener,
     BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
-    
-    
-    
     private static final Logger LOG = Logger.getLogger(BaumSchadenEditor.class);
     private static final String[] MELDUNG_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Gebiet-Bemerkung", "Meldungsdatum", "Meldung-Bemerkung" };
     private static final String[] MELDUNG_PROP_NAMES = new String[] {
@@ -418,20 +409,9 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        // dispose();  Wenn Aufruf hier, dann cbGeom.getSelectedItem()wird ein neu gezeichnetes Polygon nicht erkannt.
         try {
-            if (editor && (this.cidsBean != null)) {
-                LOG.info("remove propchange baum_schaden: " + this.cidsBean);
-                this.cidsBean.removePropertyChangeListener(this);
-            }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (editor && (this.cidsBean != null)) {
-                LOG.info("add propchange baum_schaden: " + this.cidsBean);
-                this.cidsBean.addPropertyChangeListener(this);
-            }
-            
-
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -546,17 +526,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public void setTitle(final String string) {
     }
 
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // To change body of generated methods, choose Tools | Templates.
-        
-    }
     private void loadChildren(final Integer id) {
         new SwingWorker<Boolean, Void>() {
 
@@ -646,10 +615,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public void afterClosing(AfterClosingHook.Event event) {
         clearBaumChildrenLoader();
     }
-
     
-    
-        
     class SchadenMeldungTableModel extends CidsBeansTableModel {
 
         //~ Constructors -------------------------------------------------------
@@ -683,9 +649,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             super( MELDUNG_PROP_NAMES,MUSTSET_COL_NAMES, MELDUNG_PROP_TYPES);
         }
     }
-    
-        
-
     //~ Inner Classes ----------------------------------------------------------
 
     /**

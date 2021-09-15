@@ -20,8 +20,6 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
-import org.jdesktop.beansbinding.BindingGroup;
-
 import org.openide.util.NbBundle;
 
 
@@ -31,7 +29,6 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -58,7 +55,6 @@ import java.util.MissingResourceException;
 public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     BeforeSavingHook,
     SaveVetoable,
-    BindingGroupStore,
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -423,11 +419,6 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
     public String getTitle() {
        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_ART;
@@ -439,10 +430,4 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     @Override
     public void setTitle(final String string) {
     }
-
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
 }

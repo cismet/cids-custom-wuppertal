@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
@@ -32,22 +31,16 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumSchadenLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.SaveVetoable;
 
@@ -61,8 +54,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import de.cismet.cids.editors.converters.SqlDateToUtilDateConverter;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.event.MouseAdapter;
@@ -86,12 +77,9 @@ import org.jdesktop.swingx.JXTable;
  */
 public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     SaveVetoable,
-    BindingGroupStore,
-    PropertyChangeListener,
     BaumParentPanel{
 
     //~ Static fields/initializers ---------------------------------------------
-    private MetaClass schadenMetaClass;
     private static final Logger LOG = Logger.getLogger(BaumErsatzEditor.class);  
     private static final String[] SCHADEN_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Meldungsdatum", "Id", "gef. Art" };
     private static final String[] SCHADEN_PROP_NAMES = new String[] {
@@ -163,7 +151,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panErsatz;
     JPanel panErsatzMain;
     private JPanel panFillerUnten;
-    private SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
     private JXTable xtSchaden;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -191,9 +178,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        schadenMetaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME,
-                TABLE__SCHADEN,
-                connectionContext);
         setReadOnly();
     }
 
@@ -207,7 +191,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        sqlDateToUtilDateConverter = new SqlDateToUtilDateConverter();
         comboBoxFilterDialogSchaden = new ComboBoxFilterDialog(null, new BaumSchadenLightweightSearch(), "Gebiet-Meldung-Schaden auswählen", getConnectionContext());
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
@@ -388,18 +371,9 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
-            if (editor && (this.cidsBean != null)) {
-                LOG.info("remove propchange baum_ersatz: " + this.cidsBean);
-                this.cidsBean.removePropertyChangeListener(this);
-            }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (editor && (this.cidsBean != null)) {
-                LOG.info("add propchange baum_ersatz: " + this.cidsBean);
-                this.cidsBean.addPropertyChangeListener(this);
-            }
             
-
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -493,18 +467,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public void setTitle(final String string) {
     }
 
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // To change body of generated methods, choose Tools | Templates.
-        
-    }
-    
     
     /*
      * DOCUMENT ME!

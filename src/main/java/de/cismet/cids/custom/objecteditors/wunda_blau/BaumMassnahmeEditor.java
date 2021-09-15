@@ -35,16 +35,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -70,8 +66,6 @@ import java.util.MissingResourceException;
 public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     BeforeSavingHook,
     SaveVetoable,
-    BindingGroupStore,
-    PropertyChangeListener,
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -291,16 +285,8 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
-            if (isEditor && (this.cidsBean != null)) {
-                LOG.info("remove propchange baum_massnahme: " + this.cidsBean);
-                this.cidsBean.removePropertyChangeListener(this);
-            }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (isEditor && (this.cidsBean != null)) {
-                LOG.info("add propchange baum_massnahme: " + this.cidsBean);
-                this.cidsBean.addPropertyChangeListener(this);
-            }
             bindingGroup.bind();
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
@@ -316,15 +302,6 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     */
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
     @Override
     public String getTitle() {
         if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
@@ -336,15 +313,6 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
 
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
     }
    
     @Override

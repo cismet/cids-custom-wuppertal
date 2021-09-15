@@ -476,11 +476,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
 
-   
-
-   
-    
-
     /**
      * DOCUMENT ME!
      *
@@ -499,8 +494,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public void dispose() {
         bindingGroup.unbind();
         cidsBean = null;
-        //panOrtstermin.dispose();
-    }//super.dispose();
+    }
 
     @Override
     public CidsBean getCidsBean() {
@@ -536,9 +530,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             if (editor && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
             }
-           // if(this.cidsBean == null){
-            //    taBemerkung.setText(null);
-           // }
             final DivBeanTable teilnehmerModel = new DivBeanTable(
                         editor,
                         cidsBean,
