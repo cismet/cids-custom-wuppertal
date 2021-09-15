@@ -535,7 +535,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     }   
     @Override
     public ConnectionContext getConnectionContext() {
-        return baumChildrenLoader.getParentOrganizer().getConnectionContext();
+        return baumChildrenLoader != null && baumChildrenLoader.getParentOrganizer() != null 
+                ? baumChildrenLoader.getParentOrganizer().getConnectionContext() : null;
     }
         
     @Override
