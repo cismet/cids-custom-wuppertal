@@ -240,11 +240,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             );
         }
         panGeometrie = new JPanel();
-        panLage = new JPanel();
-        rpKarte = new RoundedPanel();
-        panPreviewMap = new DefaultPreviewMapPanel();
-        semiRoundedPanel7 = new SemiRoundedPanel();
-        lblKarte = new JLabel();
+        baumLagePanel = new BaumLagePanel();
         panKont = new JPanel();
         rpKont = new RoundedPanel();
         semiRoundedPanel8 = new SemiRoundedPanel();
@@ -384,12 +380,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         Mnemonics.setLocalizedText(lblAnzahl, "Anzahl:");
         lblAnzahl.setName("lblAnzahl"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblAnzahl, gridBagConstraints);
 
         lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -429,11 +425,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(txtAnzahl, gridBagConstraints);
 
         lblArt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -464,7 +460,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -494,7 +490,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -505,7 +501,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         lblFirma.setName("lblFirma"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -521,7 +517,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -533,7 +529,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -557,7 +553,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -665,63 +661,19 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         panErsatz.add(panInhalt, gridBagConstraints);
 
+        panGeometrie.setMinimumSize(new Dimension(300, 142));
         panGeometrie.setName("panGeometrie"); // NOI18N
         panGeometrie.setOpaque(false);
+        panGeometrie.setPreferredSize(new Dimension(205, 200));
         panGeometrie.setLayout(new GridBagLayout());
 
-        panLage.setMinimumSize(new Dimension(300, 142));
-        panLage.setName("panLage"); // NOI18N
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
-
-        rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
-
-        panPreviewMap.setName("panPreviewMap"); // NOI18N
+        baumLagePanel.setMinimumSize(new Dimension(52, 150));
+        baumLagePanel.setName("baumLagePanel"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        rpKarte.add(panPreviewMap, gridBagConstraints);
-
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setName("semiRoundedPanel7"); // NOI18N
-        semiRoundedPanel7.setLayout(new GridBagLayout());
-
-        lblKarte.setForeground(new Color(255, 255, 255));
-        Mnemonics.setLocalizedText(lblKarte, "Lage");
-        lblKarte.setName("lblKarte"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panLage.add(rpKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panGeometrie.add(panLage, gridBagConstraints);
+        panGeometrie.add(baumLagePanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -770,6 +722,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         btnAddKont.setBackground(new Color(0, 0, 0));
         btnAddKont.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddKont.setBorder(null);
+        btnAddKont.setBorderPainted(false);
+        btnAddKont.setContentAreaFilled(false);
         btnAddKont.setName("btnAddKont"); // NOI18N
         btnAddKont.setPreferredSize(new Dimension(45, 13));
         btnAddKont.addActionListener(formListener);
@@ -782,6 +736,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         btnRemKont.setBackground(new Color(0, 0, 0));
         btnRemKont.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemKont.setBorder(null);
+        btnRemKont.setBorderPainted(false);
+        btnRemKont.setContentAreaFilled(false);
         btnRemKont.setName("btnRemKont"); // NOI18N
         btnRemKont.setPreferredSize(new Dimension(45, 13));
         btnRemKont.addActionListener(formListener);
@@ -939,6 +895,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     private final BaumArtLightweightSearch sorteArtSearch;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    BaumLagePanel baumLagePanel;
     JButton btnAddKont;
     JButton btnRemKont;
     JComboBox<String> cbArtE;
@@ -962,7 +919,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     JLabel lblGeom;
     JLabel lblHNrRenderer;
     JLabel lblHnr;
-    JLabel lblKarte;
     JLabel lblKont;
     JLabel lblSelbst;
     JLabel lblSorte;
@@ -974,12 +930,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     JPanel panKont;
     JPanel panKontAdd;
     JPanel panKontDaten;
-    JPanel panLage;
-    DefaultPreviewMapPanel panPreviewMap;
-    RoundedPanel rpKarte;
     RoundedPanel rpKont;
     JScrollPane scpBemerkung;
-    SemiRoundedPanel semiRoundedPanel7;
     SemiRoundedPanel semiRoundedPanel8;
     JTextArea taBemerkungE;
     JTextField txtAnzahl;
@@ -1088,6 +1040,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         
     @Override
     public void dispose() {
+        baumLagePanel.dispose();
         cidsBean = null;
         if (this.editor && cbGeomErsatz != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).dispose();
@@ -1217,37 +1170,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         }
     }
     
-    public void setMapWindow() {
-        final CidsBean cb = this.getCidsBean();
-        if (cb != null){
-            try {
-                Double bufferMeter = 0.0;
-                try{
-                    bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
-                } catch (final Exception ex) {
-                    LOG.warn("Get no conf properties.", ex);
-                }
-                if (cb.getProperty(FIELD__GEOM) != null) {
-                    panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-                } else {
-                    final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                    final BoundingBox initialBoundingBox;
-                    initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                                .getInitialBoundingBox();
-                    final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
-                    final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                            CidsBeanSupport.DOMAIN_NAME,
-                            TABLE_GEOM,
-                            getConnectionContext());
-                    final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                    newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                    panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
-                }
-            } catch (final Exception ex) {
-                LOG.warn("Map window not set.", ex);
-            }
-        }
+    private void setMapWindow() {
+        baumLagePanel.setMapWindow(getCidsBean(), getConnectionContext());
     }
     
     private void initComboboxHnr() {

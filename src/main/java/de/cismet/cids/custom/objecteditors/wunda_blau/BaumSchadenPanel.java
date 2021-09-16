@@ -239,11 +239,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             cbGeomSchaden = new DefaultCismapGeometryComboBoxEditor();
         }
         panGeometrie = new JPanel();
-        panLage = new JPanel();
-        rpKarte = new RoundedPanel();
-        panPreviewMap = new DefaultPreviewMapPanel();
-        semiRoundedPanel7 = new SemiRoundedPanel();
-        lblKarte = new JLabel();
+        baumLagePanel = new BaumLagePanel();
         lblOhne = new JLabel();
         chOhne = new JCheckBox();
         lblBau = new JLabel();
@@ -481,61 +477,15 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         panGeometrie.setName("panGeometrie"); // NOI18N
         panGeometrie.setOpaque(false);
+        panGeometrie.setPreferredSize(new Dimension(205, 200));
         panGeometrie.setLayout(new GridBagLayout());
 
-        panLage.setMinimumSize(new Dimension(300, 142));
-        panLage.setName("panLage"); // NOI18N
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
-
-        rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
-
-        panPreviewMap.setName("panPreviewMap"); // NOI18N
+        baumLagePanel.setName("baumLagePanel"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        rpKarte.add(panPreviewMap, gridBagConstraints);
-
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setName("semiRoundedPanel7"); // NOI18N
-        semiRoundedPanel7.setLayout(new GridBagLayout());
-
-        lblKarte.setForeground(new Color(255, 255, 255));
-        Mnemonics.setLocalizedText(lblKarte, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblKarte.text")); // NOI18N
-        lblKarte.setName("lblKarte"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(0, 0, 2, 2);
-        panLage.add(rpKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panGeometrie.add(panLage, gridBagConstraints);
+        panGeometrie.add(baumLagePanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -544,6 +494,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridheight = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(0, 5, 5, 3);
         panSchaden.add(panGeometrie, gridBagConstraints);
 
@@ -1539,6 +1490,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     // Variables declaration - do not modify//GEN-BEGIN:variables
     BaumErsatzPanel baumErsatzPanel;
     BaumFestsetzungPanel baumFestsetzungPanel;
+    BaumLagePanel baumLagePanel;
     DefaultBindableLabelsPanel blpKrone;
     DefaultBindableLabelsPanel blpMassnahme;
     DefaultBindableLabelsPanel blpStamm;
@@ -1586,7 +1538,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     JLabel lblGeom;
     JLabel lblGutachten;
     JLabel lblHoehe;
-    JLabel lblKarte;
     JLabel lblKroneArr;
     JLabel lblLadenErsatz;
     JLabel lblLadenFest;
@@ -1606,16 +1557,12 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     JPanel panFest;
     JPanel panFestMain;
     JPanel panGeometrie;
-    JPanel panLage;
-    DefaultPreviewMapPanel panPreviewMap;
     JPanel panSchaden;
     JPanel panZahlung;
     JPanel pnlCard1;
-    RoundedPanel rpKarte;
     JScrollPane scpBemerkung;
     JScrollPane scpLaufendeErsatz;
     JScrollPane scpLaufendeFest;
-    SemiRoundedPanel semiRoundedPanel7;
     JSpinner spHoehe;
     JSpinner spUmfang;
     JTextArea taBemerkung;
@@ -1869,6 +1816,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
      
     @Override
     public void dispose() {
+        baumLagePanel.dispose();
         bindingGroup.unbind();
         cidsBean = null;
         if (this.editor && cbGeomSchaden != null) {
@@ -2169,41 +2117,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     /**
      * DOCUMENT ME!
      */
-    public void setMapWindow() {
-        final CidsBean cb = this.getCidsBean();
-        if (cb != null){
-            try {
-                Double bufferMeter = 0.0;
-                try{
-                    bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
-                } catch (final Exception ex) {
-                    LOG.warn("Get no conf properties.", ex);
-                }
-                if (cb.getProperty(FIELD__GEOM) != null) {
-                    panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-                    lblKarte.setText("Lage");
-                } else {
-                    final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                    final BoundingBox initialBoundingBox;
-                    initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                                .getInitialBoundingBox();
-                    final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
-                    final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                            CidsBeanSupport.DOMAIN_NAME,
-                            TABLE_GEOM,
-                            getConnectionContext());
-                    final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                    newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                    panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
-                    lblKarte.setText("Lage nicht ausgewählt");
-                }
-            } catch (final Exception ex) {
-                LOG.warn("Map window not set.", ex);
-            } 
-        } else{
-            lblKarte.setText("Lage nicht ausgewählt");
-        }
+    private void setMapWindow() {
+        baumLagePanel.setMapWindow(getCidsBean(), getConnectionContext());
     }
     
     public static void main(final String[] args) throws Exception {

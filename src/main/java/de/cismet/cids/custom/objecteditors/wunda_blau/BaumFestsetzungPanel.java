@@ -14,13 +14,9 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
-import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import org.apache.log4j.Logger;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -31,18 +27,13 @@ import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -152,11 +143,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         scpBemerkung = new JScrollPane();
         taBemerkungF = new JTextArea();
         panGeometrie = new JPanel();
-        panLage = new JPanel();
-        rpKarte = new RoundedPanel();
-        panPreviewMap = new DefaultPreviewMapPanel();
-        semiRoundedPanel7 = new SemiRoundedPanel();
-        lblKarte = new JLabel();
+        baumLagePanel = new BaumLagePanel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -208,7 +195,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panFest.add(lblUmfang, gridBagConstraints);
 
         txtUmfangF.setName("txtUmfangF"); // NOI18N
@@ -356,7 +343,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.2;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 4, 2, 2);
         panFest.add(scpBemerkung, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -371,58 +358,12 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         panGeometrie.setOpaque(false);
         panGeometrie.setLayout(new GridBagLayout());
 
-        panLage.setName("panLage"); // NOI18N
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
-
-        rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
-
-        panPreviewMap.setName("panPreviewMap"); // NOI18N
+        baumLagePanel.setName("baumLagePanel"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        rpKarte.add(panPreviewMap, gridBagConstraints);
-
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setName("semiRoundedPanel7"); // NOI18N
-        semiRoundedPanel7.setLayout(new GridBagLayout());
-
-        lblKarte.setForeground(new Color(255, 255, 255));
-        Mnemonics.setLocalizedText(lblKarte, NbBundle.getMessage(BaumFestsetzungPanel.class, "BaumFestsetzungPanel.lblKarte.text")); // NOI18N
-        lblKarte.setName("lblKarte"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panLage.add(rpKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panGeometrie.add(panLage, gridBagConstraints);
+        panGeometrie.add(baumLagePanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -465,6 +406,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    BaumLagePanel baumLagePanel;
     JComboBox<String> cbArtF;
     JComboBox cbGeomFest;
     DefaultBindableDateChooser dcDatum;
@@ -473,16 +415,11 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     JLabel lblDatum;
     JLabel lblGeom;
     JLabel lblHoehe;
-    JLabel lblKarte;
     JLabel lblUmfang;
     JPanel panContent;
     JPanel panFest;
     JPanel panGeometrie;
-    JPanel panLage;
-    DefaultPreviewMapPanel panPreviewMap;
-    RoundedPanel rpKarte;
     JScrollPane scpBemerkung;
-    SemiRoundedPanel semiRoundedPanel7;
     JTextArea taBemerkungF;
     JTextField txtHoeheF;
     JTextField txtUmfangF;
@@ -541,6 +478,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         
     @Override
     public void dispose() {
+        baumLagePanel.dispose();
         cidsBean = null;
         if (this.editor && cbGeomFest != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).dispose();
@@ -684,36 +622,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     /**
      * DOCUMENT ME!
      */
-    public void setMapWindow() {
-        final CidsBean cb = this.getCidsBean();
-        if (cb != null){
-            try {
-                Double bufferMeter = 0.0;
-                try{
-                    bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
-                } catch (final Exception ex) {
-                    LOG.warn("Get no conf properties.", ex);
-                }
-                if (cb.getProperty(FIELD__GEOM) != null) {
-                    panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-                } else {
-                    final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                    final BoundingBox initialBoundingBox;
-                    initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                                .getInitialBoundingBox();
-                    final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
-                    final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                            CidsBeanSupport.DOMAIN_NAME,
-                            TABLE_GEOM,
-                            getConnectionContext());
-                    final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                    newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                    panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
-                }
-            } catch (final Exception ex) {
-                LOG.warn("Map window not set.", ex);
-            }
-        }
+    private void setMapWindow() {
+        baumLagePanel.setMapWindow(getCidsBean(), getConnectionContext());
     }
 }

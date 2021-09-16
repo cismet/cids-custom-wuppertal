@@ -459,7 +459,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void dispose() {
-        super.dispose();
         baumErsatzPanel.dispose();
     }
     

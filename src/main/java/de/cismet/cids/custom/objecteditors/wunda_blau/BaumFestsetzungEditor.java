@@ -451,7 +451,6 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
 
     @Override
     public void dispose() {
-        super.dispose();
         baumFestsetzungPanel.dispose();
     }
     

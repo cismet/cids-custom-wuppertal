@@ -494,7 +494,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     @Override
     public void dispose() {
-        super.dispose();
         baumSchadenPanel.dispose();
     }
     

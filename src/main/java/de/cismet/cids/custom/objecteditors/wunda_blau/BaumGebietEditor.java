@@ -214,6 +214,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private BaumLagePanel baumLagePanel;
     private BaumMeldungPanel baumMeldungPanel;
     private JButton btnAddNewMeldung;
     private JButton btnCreateAktenzeichen;
@@ -235,7 +236,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblBemerkung;
     private JLabel lblGeom;
     private JLabel lblHnr;
-    private JLabel lblKarte;
     private JLabel lblLadenMeldung;
     private JLabel lblName;
     private JLabel lblStrasse;
@@ -250,18 +250,14 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panFillerUnten4;
     private JPanel panGebiet;
     private JPanel panGeometrie;
-    private JPanel panLage;
     private JPanel panMeldung;
     private JPanel panMeldungenMain;
     private JPanel panMenButtonsMeldung;
-    private DefaultPreviewMapPanel panPreviewMap;
     private JPanel panTitle;
     private JPanel panZusatz;
     private JPanel pnlCard1;
-    private RoundedPanel rpKarte;
     private JScrollPane scpBemerkung;
     private JScrollPane scpLaufendeMeldungen;
-    private SemiRoundedPanel semiRoundedPanel7;
     private JTextArea taBemerkung;
     private JTextField txtAktenzeichen;
     private JTextField txtName;
@@ -369,11 +365,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
         panGeometrie = new JPanel();
-        panLage = new JPanel();
-        rpKarte = new RoundedPanel();
-        panPreviewMap = new DefaultPreviewMapPanel();
-        semiRoundedPanel7 = new SemiRoundedPanel();
-        lblKarte = new JLabel();
+        baumLagePanel = new BaumLagePanel();
         panDaten = new JPanel();
         lblAktenzeichen = new JLabel();
         txtAktenzeichen = new JTextField();
@@ -510,62 +502,18 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         panGeometrie.setOpaque(false);
         panGeometrie.setLayout(new GridBagLayout());
-
-        panLage.setMinimumSize(new Dimension(300, 142));
-        panLage.setOpaque(false);
-        panLage.setLayout(new GridBagLayout());
-
-        rpKarte.setName(""); // NOI18N
-        rpKarte.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        rpKarte.add(panPreviewMap, gridBagConstraints);
-
-        semiRoundedPanel7.setBackground(Color.darkGray);
-        semiRoundedPanel7.setLayout(new GridBagLayout());
-
-        lblKarte.setForeground(new Color(255, 255, 255));
-        lblKarte.setText("Lage");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        semiRoundedPanel7.add(lblKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        rpKarte.add(semiRoundedPanel7, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panLage.add(rpKarte, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panGeometrie.add(panLage, gridBagConstraints);
+        panGeometrie.add(baumLagePanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(5, 10, 10, 10);
         jPanelAllgemein.add(panGeometrie, gridBagConstraints);
 
         panDaten.setOpaque(false);
@@ -815,7 +763,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
         jPanelAllgemein.add(panDaten, gridBagConstraints);
 
         jTabbedPane.addTab("Allgemeine Informationen", jPanelAllgemein);
@@ -1310,33 +1258,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
     
-    /**
-     * DOCUMENT ME!
-     */
-    public void setMapWindow() {
-        final CidsBean cb = this.getCidsBean();
-        try {
-            final Double bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
-            if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
-            } else {
-                final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                final BoundingBox initialBoundingBox;
-                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                            .getInitialBoundingBox();
-                final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
-                final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                        CidsBeanSupport.DOMAIN_NAME,
-                        TABLE_GEOM,
-                        getConnectionContext());
-                final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
-            }
-        } catch (final Exception ex) {
-            LOG.warn("Map window not set.", ex);
-        }
+    private void setMapWindow() {
+        baumLagePanel.setMapWindow(getCidsBean(), getConnectionContext());
     }
     
     public static void main(final String[] args) throws Exception {
@@ -1381,6 +1304,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     
     @Override
     public void dispose() {
+        baumLagePanel.dispose();
         dlgAddMeldung.dispose();
         if (editor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
