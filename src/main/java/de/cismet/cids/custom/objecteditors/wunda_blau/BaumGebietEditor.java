@@ -303,24 +303,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     return compoDatum;
                 }
             });
-        /*
-        if(editor){
-            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
-            {
-                final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0))
-                            .getList();
-                final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
-                cbHNr.addActionListener(new ActionListener() {
-
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                            final Object selectedValue = pop.getSelectedValue();
-                            txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
-                        }
-                    });
-            }
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
-        }*/
 
         dlgAddMeldung.pack();
         dlgAddMeldung.getRootPane().setDefaultButton(btnMenOkMeldung);
@@ -328,7 +310,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         getBaumChildrenLoader().addListener(loadChildrenListener);
         
         setReadOnly();
-        //initComboboxHnr();
     }
 
     /**
@@ -1197,25 +1178,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     private void refreshHnr() { 
-       /* if (cidsBean != null && cidsBean.getProperty(FIELD__STRASSE) != null){
-            String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
-            if (schluessel != null){
-
-                hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));
-                
-                hnrSearch.setKeyId(Integer.parseInt(schluessel));
-
-                new SwingWorker<Void, Void>() {
-
-                        @Override
-                        protected Void doInBackground() throws Exception {
-                            cbHNr.refreshModel();
-
-                            return null;
-                        }
-                    }.execute();
-            }
-        }*/
         if (cidsBean != null && cidsBean.getProperty(FIELD__STRASSE) != null){
             String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
             if (schluessel != null){
@@ -1669,13 +1631,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
                 @Override
                 protected void done() {
-                    /*try {
-                        get();
-                    } catch (final InterruptedException | ExecutionException ex) {
-                        LOG.error(ex, ex);
-                    }  finally {
-                        refreshHnr();
-                    }*/
                 }
             }.execute();
     }
