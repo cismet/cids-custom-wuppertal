@@ -120,13 +120,13 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     
     
     public static final String BUNDLE_NOSCHADEN = 
-            "BaumFestsetzungEditor.prepareForSave().noSchaden";
+            "BaumFestsetzungEditor.isOkForSaving().noSchaden";
     public static final String BUNDLE_PANE_PREFIX =
-            "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.prefix";
+            "BaumFestsetzungEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-            "BaumFestsetzungEditor.prepareForSave().JOptionPane.message.suffix";
+            "BaumFestsetzungEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = 
-            "BaumFestsetzungEditor.prepareForSave().JOptionPane.title";
+            "BaumFestsetzungEditor.isOkForSaving().JOptionPane.title";
     
     
 

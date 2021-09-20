@@ -81,13 +81,16 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     
     private static String TITLE_NEW_MASSNAHME = "eine neue Massnahme anlegen..."; 
 
-    public static final String BUNDLE_NONAME = "BaumMassnahmeEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumMassnahmeEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_NONAME = 
+            "BaumMassnahmeEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumMassnahmeEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumMassnahmeEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumMassnahmeEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumMassnahmeEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumMassnahmeEditor.prepareForSave().JOptionPane.title";
+        "BaumMassnahmeEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumMassnahmeEditor.isOkForSaving().JOptionPane.title";
 
 
 

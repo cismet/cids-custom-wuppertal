@@ -157,48 +157,49 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String TABLE_ERSATZ = "BAUM_ERSATZ";
     public static final String TABLE_NAME = "baum_schaden";
     
-    public static final String BUNDLE_W_QUESTION = "BaumSchadenPanel.btnRemoveWurzelActionPerformed().question";
-    public static final String BUNDLE_W_TITLE = "BaumSchadenPanel.btnRemoveWurzelActionPerformed().title";
-    public static final String BUNDLE_W_ERRORTITLE = "BaumSchadenPanel.btnRemoveWurzelActionPerformed().errortitle";
-    public static final String BUNDLE_W_ERRORTEXT = "BaumSchadenPanel.btnRemoveWurzelActionPerformed().errortext";
-    public static final String BUNDLE_S_QUESTION = "BaumSchadenPanel.btnRemoveStammActionPerformed().question";
-    public static final String BUNDLE_S_TITLE = "BaumSchadenPanel.btnRemoveStammActionPerformed().title";
-    public static final String BUNDLE_S_ERRORTITLE = "BaumSchadenPanel.btnRemoveStammActionPerformed().errortitle";
-    public static final String BUNDLE_S_ERRORTEXT = "BaumSchadenPanel.btnRemoveStammActionPerformed().errortext";
-    public static final String BUNDLE_K_QUESTION = "BaumSchadenPanel.btnRemoveKroneActionPerformed().question";
-    public static final String BUNDLE_K_TITLE = "BaumSchadenPanel.btnRemoveKroneActionPerformed().title";
-    public static final String BUNDLE_K_ERRORTITLE = "BaumSchadenPanel.btnRemoveKroneActionPerformed().errortitle";
-    public static final String BUNDLE_K_ERRORTEXT = "BaumSchadenPanel.btnRemoveKroneActionPerformed().errortext";
-    public static final String BUNDLE_M_QUESTION = "BaumSchadenPanel.btnRemoveMassnahmeActionPerformed().question";
-    public static final String BUNDLE_M_TITLE = "BaumSchadenPanel.btnRemoveMassnahmeActionPerformed().title";
-    public static final String BUNDLE_M_ERRORTITLE = "BaumSchadenPanel.btnRemoveMassnahmeActionPerformed().errortitle";
-    public static final String BUNDLE_M_ERRORTEXT = "BaumSchadenPanel.btnRemoveMassnahmeActionPerformed().errortext";
-    public static final String BUNDLE_NOART = "BaumSchadenPanel.prepareForSave().noArt";
-    public static final String BUNDLE_WRONGAGE = "BaumSchadenPanel.prepareForSave().wrongAlter";
-    public static final String BUNDLE_NOWURZEL = "BaumSchadenPanel.prepareForSave().noWurzel";
-    public static final String BUNDLE_NOSTAMM= "BaumSchadenPanel.prepareForSave().noStamm";
-    public static final String BUNDLE_NOKRONE = "BaumSchadenPanel.prepareForSave().noKrone";
-    public static final String BUNDLE_WRONGWURZEL = "BaumSchadenPanel.prepareForSave().wrongWurzel";
-    public static final String BUNDLE_WRONGSTAMM= "BaumSchadenPanel.prepareForSave().wrongStamm";
-    public static final String BUNDLE_WRONGKRONE = "BaumSchadenPanel.prepareForSave().wrongKrone";
-    public static final String BUNDLE_WRONGABG = "BaumSchadenPanel.prepareForSave().wrongAbgestorben";
-    public static final String BUNDLE_WRONGSTURM = "BaumSchadenPanel.prepareForSave().wrongSturm";
-    public static final String BUNDLE_NOGEOM = "BaumSchadenPanel.prepareForSave().noGeom";
-    public static final String BUNDLE_WRONGGEOM = "BaumSchadenPanel.prepareForSave().wrongGeom";
+    public static final String BUNDLE_NOART = 
+            "BaumSchadenPanel.isOkForSaving().noArt";
+    public static final String BUNDLE_WRONGAGE = 
+            "BaumSchadenPanel.isOkForSaving().wrongAlter";
+    public static final String BUNDLE_NOWURZEL = 
+            "BaumSchadenPanel.isOkForSaving().noWurzel";
+    public static final String BUNDLE_NOSTAMM= 
+            "BaumSchadenPanel.isOkForSaving().noStamm";
+    public static final String BUNDLE_NOKRONE = 
+            "BaumSchadenPanel.isOkForSaving().noKrone";
+    public static final String BUNDLE_WRONGWURZEL = 
+            "BaumSchadenPanel.isOkForSaving().wrongWurzel";
+    public static final String BUNDLE_WRONGSTAMM= 
+            "BaumSchadenPanel.isOkForSaving().wrongStamm";
+    public static final String BUNDLE_WRONGKRONE = 
+            "BaumSchadenPanel.isOkForSaving().wrongKrone";
+    public static final String BUNDLE_WRONGABG = 
+            "BaumSchadenPanel.isOkForSaving().wrongAbgestorben";
+    public static final String BUNDLE_WRONGSTURM = 
+            "BaumSchadenPanel.isOkForSaving().wrongSturm";
+    public static final String BUNDLE_NOGEOM = 
+            "BaumSchadenPanel.isOkForSaving().noGeom";
+    public static final String BUNDLE_WRONGGEOM = 
+            "BaumSchadenPanel.isOkForSaving().wrongGeom";
     
-    public static final String BUNDLE_PANE_TITLE_ERROR_FEST = "BaumSchadenPanel.zeigeErrorFest().JOptionPane.title";
-    public static final String BUNDLE_PANE_TITLE_ERROR_ERSATZ = "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.title";
-    public static final String BUNDLE_ERROR_FEST = "BaumSchadenPanel.zeigeErrorFest().JOptionPane.meldung";
-    public static final String BUNDLE_ERROR_ERSATZ = "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.meldung";
+    public static final String BUNDLE_PANE_TITLE_ERROR_FEST = 
+            "BaumSchadenPanel.zeigeErrorFest().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_ERROR_ERSATZ = 
+            "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.title";
+    public static final String BUNDLE_ERROR_FEST = 
+            "BaumSchadenPanel.zeigeErrorFest().JOptionPane.meldung";
+    public static final String BUNDLE_ERROR_ERSATZ = 
+            "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.meldung";
     public static final String BUNDLE_WHICH = 
-            "BaumSchadenPanel.prepareForSave().welcherSchaden";
+            "BaumSchadenPanel.isOkForSaving().welcherSchaden";
     public static final String BUNDLE_MESSAGE = 
-            "BaumSchadenPanel.prepareForSave().welcheMeldung";
+            "BaumSchadenPanel.isOkForSaving().welcheMeldung";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumSchadenPanel.prepareForSave().JOptionPane.message.prefix";
+        "BaumSchadenPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumSchadenPanel.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumSchadenPanel.prepareForSave().JOptionPane.title";
+        "BaumSchadenPanel.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumSchadenPanel.isOkForSaving().JOptionPane.title";
     
    
         //~ Enum constants -----------------------------------------------------
@@ -1678,7 +1679,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         try {
             if (saveSchadenBean.getProperty(FIELD__ART) == null) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOART));
+                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOART));
                 save = false;
             }
         } catch (final MissingResourceException ex) {
@@ -1690,13 +1691,13 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         try {
             if (saveSchadenBean.getProperty(FIELD__GEOREFERENZ) == null) {
                 LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
+                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOGEOM));
                 save = false;
             } else {
                 final CidsBean geom_pos = (CidsBean)saveSchadenBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGGEOM));
                     save = false;
                 }
             }
@@ -1711,7 +1712,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             if (collectionWurzel != null && !collectionWurzel.isEmpty()) {
                 if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true))){
                     LOG.warn("No wurzel specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOWURZEL));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOWURZEL));
                     save = false;
                 }
             } 
@@ -1726,7 +1727,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             if (collectionStamm != null && !collectionStamm.isEmpty()) {
                 if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true))){
                     LOG.warn("No stamm specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSTAMM));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSTAMM));
                     save = false;
                 }
             } 
@@ -1741,7 +1742,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             if (collectionKrone != null && !collectionKrone.isEmpty()) {
                 if (! (Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true))){
                     LOG.warn("No krone specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOKRONE));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOKRONE));
                     save = false;
                 }
             } 
@@ -1755,27 +1756,27 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             if (Objects.equals(saveSchadenBean.getProperty(FIELD__OHNE), true)){
                if (Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true)){
                     LOG.warn("Wrong wurzel specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGWURZEL));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGWURZEL));
                     save = false;
                 }
                 if (Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true)){
                     LOG.warn("Wrong stamm specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGSTAMM));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGSTAMM));
                     save = false;
                 }
                 if (Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true)){
                     LOG.warn("Wrong krone specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGKRONE));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGKRONE));
                     save = false;
                 }
                 if (Objects.equals(saveSchadenBean.getProperty(FIELD__STURM), true)){
                     LOG.warn("Wrong sturm specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGSTURM));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGSTURM));
                     save = false;
                 }
                 if (Objects.equals(saveSchadenBean.getProperty(FIELD__ABGESTORBEN), true)){
                     LOG.warn("Wrong abgestorben specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGABG));
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGABG));
                     save = false;
                 }
             } 

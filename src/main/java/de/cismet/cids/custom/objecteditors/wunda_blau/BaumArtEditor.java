@@ -72,14 +72,18 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     public static final String FIELD__ID = "id";                            // baum_art
     public static final String TABLE_NAME = "baum_art";
 
-    public static final String BUNDLE_NONAME = "BaumArtEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumArtEditor.prepareForSave().duplicateName";
-    public static final String BUNDLE_NOMAIN = "BaumArtEditor.prepareForSave().noMain";
+    public static final String BUNDLE_NONAME = 
+            "BaumArtEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumArtEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_NOMAIN = 
+            "BaumArtEditor.isOkForSaving().noMain";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumArtEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumArtEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumArtEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumArtEditor.prepareForSave().JOptionPane.title";
+        "BaumArtEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumArtEditor.isOkForSaving().JOptionPane.title";
 
     @Override
     public void beforeSaving() {

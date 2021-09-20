@@ -81,7 +81,11 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Static fields/initializers ---------------------------------------------
     private static final Logger LOG = Logger.getLogger(BaumErsatzEditor.class);  
-    private static final String[] SCHADEN_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Meldungsdatum", "Id", "gef. Art" };
+    private static final String[] SCHADEN_COL_NAMES = new String[] {  
+        "Gebiet-Aktenzeichen", 
+        "Meldungsdatum", 
+        "Id", 
+        "gef. Art" };
     private static final String[] SCHADEN_PROP_NAMES = new String[] {
             "fk_meldung.fk_gebiet.aktenzeichen",
             "fk_meldung.datum",
@@ -120,12 +124,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE__NAME = "baum_ersatz";
     
     public static final String BUNDLE_NOSCHADEN =
-        "BaumErsatzEditor.prepareForSave().noSchaden";
+        "BaumErsatzEditor.isOkForSaving().noSchaden";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumErsatzEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumErsatzEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumErsatzEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumErsatzEditor.prepareForSave().JOptionPane.title";
+        "BaumErsatzEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumErsatzEditor.isOkForSaving().JOptionPane.title";
     
     //~ Enums ------------------------------------------------------------------
 

@@ -93,7 +93,11 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     private List<CidsBean> teilBeans;
     private static final Logger LOG = Logger.getLogger(BaumOrtsterminEditor.class);
-    private static final String[] MELDUNG_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Gebiet-Bemerkung", "Meldungsdatum", "Meldung-Bemerkung" };
+    private static final String[] MELDUNG_COL_NAMES = new String[] {  
+        "Gebiet-Aktenzeichen", 
+        "Gebiet-Bemerkung", 
+        "Meldungsdatum", 
+        "Meldung-Bemerkung" };
     private static final String[] MELDUNG_PROP_NAMES = new String[] {
             "fk_gebiet.aktenzeichen",
             "fk_gebiet.bemerkung",
@@ -128,15 +132,21 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     public static final String TABLE_NAME__TEILNEHMER = "baum_teilnehmer"; 
     
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumOrtsterminEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumOrtsterminEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumOrtsterminEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumOrtsterminEditor.prepareForSave().JOptionPane.title";
-    public static final String BUNDLE_TEIL_QUESTION = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().question";
-    public static final String BUNDLE_TEIL_TITLE = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().title";
-    public static final String BUNDLE_TEIL_ERRORTITLE = "BaumOrtsterminEditor.btnRemoveTeilrActionPerformed().errortitle";
-    public static final String BUNDLE_TEIL_ERRORTEXT = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
-    public static final String BUNDLE_NOMELDUNG = "BaumOrtsterminEditor.prepareForSave().noMeldung";
+        "BaumOrtsterminEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumOrtsterminEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_TEIL_QUESTION = 
+            "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().question";
+    public static final String BUNDLE_TEIL_TITLE = 
+            "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().title";
+    public static final String BUNDLE_TEIL_ERRORTITLE = 
+            "BaumOrtsterminEditor.btnRemoveTeilrActionPerformed().errortitle";
+    public static final String BUNDLE_TEIL_ERRORTEXT = 
+            "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
+    public static final String BUNDLE_NOMELDUNG = 
+            "BaumOrtsterminEditor.isOkForSaving().noMeldung";
     
     @Override
     public boolean isEditor() {

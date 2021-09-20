@@ -81,13 +81,16 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     
     private static String TITLE_NEW_WURZEL = "einen neuen Wurzelschaden anlegen..."; 
 
-    public static final String BUNDLE_NONAME = "BaumWurzelEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumWurzelEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_NONAME = 
+            "BaumWurzelEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumWurzelEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumWurzelEditor.prepareForSave().JOptionPane.message.prefix";
+            "BaumWurzelEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumWurzelEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumWurzelEditor.prepareForSave().JOptionPane.title";
+            "BaumWurzelEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumWurzelEditor.isOkForSaving().JOptionPane.title";
 
     //~ Enums ------------------------------------------------------------------
 

@@ -81,13 +81,16 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     
     private static String TITLE_NEW_KRONE = "einen neuen Kronenschaden anlegen..."; 
 
-    public static final String BUNDLE_NONAME = "BaumKroneEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumKroneEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_NONAME = 
+            "BaumKroneEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumKroneEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumKroneEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumKroneEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumKroneEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumKroneEditor.prepareForSave().JOptionPane.title";
+        "BaumKroneEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumKroneEditor.isOkForSaving().JOptionPane.title";
 
 
 

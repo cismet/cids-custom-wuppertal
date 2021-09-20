@@ -94,7 +94,10 @@ import org.openide.util.NbBundle;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, CidsBeanStore, ConnectionContextProvider {
+public class BaumMeldungPanel extends javax.swing.JPanel implements 
+        Disposable, 
+        CidsBeanStore, 
+        ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
     
@@ -144,23 +147,30 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     public static final String BUNDLE_DEL_SCHADEN =
         "BaumMeldungPanel.btnRemoveSchadenActionPerformed().JOptionPane.message";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumMeldungPanel.prepareForSave().JOptionPane.message.prefix";
+        "BaumMeldungPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumMeldungPanel.prepareForSave().JOptionPane.message.suffix";
+        "BaumMeldungPanel.isOkForSaving().JOptionPane.message.suffix";
     
-    public static final String BUNDLE_NODATE = "BaumMeldungPanel.prepareForSave().noDatum";
-    public static final String BUNDLE_PANE_TITLE = "BaumMeldungPanel.prepareForSave().JOptionPane.title";
-    public static final String BUNDLE_PANE_TITLE_ERROR_ORT = "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.title";
-    public static final String BUNDLE_PANE_TITLE_ERROR_SCHADEN = "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.title";
-    public static final String BUNDLE_ERROR_ORT = "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.meldung";
-    public static final String BUNDLE_ERROR_SCHADEN = "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.meldung";
+    public static final String BUNDLE_NODATE = 
+            "BaumMeldungPanel.isOkForSaving().noDatum";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumMeldungPanel.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_ERROR_ORT = 
+            "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_ERROR_SCHADEN = 
+            "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.title";
+    public static final String BUNDLE_ERROR_ORT = 
+            "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.meldung";
+    public static final String BUNDLE_ERROR_SCHADEN = 
+            "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.meldung";
     public static final String BUNDLE_WHICH = 
-            "BaumMeldungPanel.prepareForSave().welcheMeldung";
+            "BaumMeldungPanel.isOkForSaving().welcheMeldung";
     public static final String BUNDLE_PANE_PREFIX_SELECTION =
         "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX_SELECTION =
         "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE_SELECTION = "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_SELECTION = 
+            "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.title";
     public static final String BUNDLE_PANE_SELECTION =
         "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message";
     

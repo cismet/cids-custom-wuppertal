@@ -94,21 +94,28 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public static final String TABLE_NAME__TEILNEHMER = "baum_teilnehmer"; 
     
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumOrtsterminPanel.prepareForSave().JOptionPane.message.prefix";
+        "BaumOrtsterminPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumOrtsterminPanel.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumOrtsterminPanel.prepareForSave().JOptionPane.title";
-    public static final String BUNDLE_NODATE = "BaumOrtsterminPanel.prepareForSave().noDatum";
-    public static final String BUNDLE_NONAME = "BaumOrtsterminPanel.prepareForSave().noName";
-    public static final String BUNDLE_WRONGTEL = "BaumOrtsterminPanel.prepareForSave().wrongTelefon";
+        "BaumOrtsterminPanel.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumOrtsterminPanel.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_NODATE = 
+            "BaumOrtsterminPanel.isOkForSaving().noDatum";
+    public static final String BUNDLE_NONAME = 
+            "BaumOrtsterminPanel.isOkForSaving().noName";
+    public static final String BUNDLE_WRONGTEL = 
+            "BaumOrtsterminPanel.isOkForSaving().wrongTelefon";
     public static final String BUNDLE_WHICH = 
-            "BaumOrtsterminPanel.prepareForSave().welcherOrt";
+            "BaumOrtsterminPanel.isOkForSaving().welcherOrt";
     public static final String BUNDLE_MESSAGE = 
-            "BaumOrtsterminPanel.prepareForSave().welcheMeldung";
+            "BaumOrtsterminPanel.isOkForSaving().welcheMeldung";
     
     public static final String TEL__PATTERN = "\\+[0-9]{1,3}(-[0-9]+){1,}";
     
-    private static final String[] TEILNEHMER_COL_NAMES = new String[] { "Name", "Telefon", "Bemerkung"};
+    private static final String[] TEILNEHMER_COL_NAMES = new String[] { 
+        "Name", 
+        "Telefon", 
+        "Bemerkung"};
     private static final String[] TEILNEHMER_PROP_NAMES = new String[] {
             FIELD__TEILNEHMER_NAME,
             FIELD__TEILNEHMER_TELEFON,
@@ -442,7 +449,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new BaumMeldungPanel object.
+     * Creates a new BaumOrtsterminPanelPanel object.
      */
     public BaumOrtsterminPanel() {
         this(null);
@@ -450,7 +457,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
      
     /**
-     * Creates new form BaumMeldungPanel.
+     * Creates new form BaumOrtsterminPanel.
      *
      * @param bclInstance
      */

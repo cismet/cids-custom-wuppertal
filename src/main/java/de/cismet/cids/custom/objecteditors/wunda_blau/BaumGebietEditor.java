@@ -148,29 +148,48 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_MELDUNG = "baum_meldung";
     public static final String TABLE_ADRESSE = "adresse";
 
-    public static final String BUNDLE_NOLOAD = "BaumGebietEditor.loadPictureWithUrl().noLoad";
-    public static final String BUNDLE_NONAME = "BaumGebietEditor.prepareForSave().noName";
-    public static final String BUNDLE_NOAZ = "BaumGebietEditor.prepareForSave().noAz";
-    public static final String BUNDLE_DUPLICATEAZ = "BaumGebietEditor.prepareForSave().duplicateAz";
-    public static final String BUNDLE_NOSTREET = "BaumGebietEditor.prepareForSave().noStrasse";
-    public static final String BUNDLE_NOGEOM = "BaumGebietEditor.prepareForSave().noGeom";
-    public static final String BUNDLE_WRONGGEOM = "BaumGebietEditor.prepareForSave().wrongGeom";
-    public static final String BUNDLE_NOAZCREATE = "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().noCreateAz";
-    public static final String BUNDLE_AZQUESTION = "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().CreateAzQuest";
-    public static final String BUNDLE_AZWRITE = "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().CreateAzWrite";
+    public static final String BUNDLE_NOLOAD = 
+            "BaumGebietEditor.loadPictureWithUrl().noLoad";
+    public static final String BUNDLE_NONAME = 
+            "BaumGebietEditor.isOkForSaving().noName";
+    public static final String BUNDLE_NOAZ = 
+            "BaumGebietEditor.isOkForSaving().noAz";
+    public static final String BUNDLE_DUPLICATEAZ = 
+            "BaumGebietEditor.isOkForSaving().duplicateAz";
+    public static final String BUNDLE_NOSTREET = 
+            "BaumGebietEditor.isOkForSaving().noStrasse";
+    public static final String BUNDLE_NOGEOM = 
+            "BaumGebietEditor.isOkForSaving().noGeom";
+    public static final String BUNDLE_WRONGGEOM = 
+            "BaumGebietEditor.isOkForSaving().wrongGeom";
+    public static final String BUNDLE_NOAZCREATE = 
+            "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().noCreateAz";
+    public static final String BUNDLE_AZQUESTION = 
+            "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().CreateAzQuest";
+    public static final String BUNDLE_AZWRITE = 
+            "BaumGebietEditor.btnCreateAktenzeichenActionPerformed().CreateAzWrite";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumGebietEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumGebietEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumGebietEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumGebietEditor.prepareForSave().JOptionPane.title";
-    public static final String BUNDLE_PANE_TITLE_PERSIST = "BaumGebietEditor.editorClose().JOptionPane.title";
-    public static final String BUNDLE_PANE_PREFIX_MELDUNG = "BaumGebietEditor.editorClose().JOptionPane.errorMeldung";
-    public static final String BUNDLE_PANE_PREFIX_ORT = "BaumGebietEditor.editorClose().JOptionPane.errorOrt";
-    public static final String BUNDLE_PANE_PREFIX_SCHADEN = "BaumGebietEditor.editorClose().JOptionPane.errorSchaden";
-    public static final String BUNDLE_PANE_PREFIX_ERSATZ = "BaumGebietEditor.editorClose().JOptionPane.errorErsatz";
-    public static final String BUNDLE_PANE_PREFIX_FEST = "BaumGebietEditor.editorClose().JOptionPane.errorFest";
-    public static final String BUNDLE_PANE_KONTROLLE = "BaumGebietEditor.editorClose().JOptionPane.kontrolle";
-    public static final String BUNDLE_PANE_ADMIN = "BaumGebietEditor.editorClose().JOptionPane.admin";
+        "BaumGebietEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumGebietEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_PERSIST = 
+            "BaumGebietEditor.editorClose().JOptionPane.title";
+    public static final String BUNDLE_PANE_PREFIX_MELDUNG = 
+            "BaumGebietEditor.editorClose().JOptionPane.errorMeldung";
+    public static final String BUNDLE_PANE_PREFIX_ORT = 
+            "BaumGebietEditor.editorClose().JOptionPane.errorOrt";
+    public static final String BUNDLE_PANE_PREFIX_SCHADEN = 
+            "BaumGebietEditor.editorClose().JOptionPane.errorSchaden";
+    public static final String BUNDLE_PANE_PREFIX_ERSATZ = 
+            "BaumGebietEditor.editorClose().JOptionPane.errorErsatz";
+    public static final String BUNDLE_PANE_PREFIX_FEST = 
+            "BaumGebietEditor.editorClose().JOptionPane.errorFest";
+    public static final String BUNDLE_PANE_KONTROLLE = 
+            "BaumGebietEditor.editorClose().JOptionPane.kontrolle";
+    public static final String BUNDLE_PANE_ADMIN = 
+            "BaumGebietEditor.editorClose().JOptionPane.admin";
     public static final String BUNDLE_PANE_TITLE_MELDUNG=
             "BaumGebietEditor.btnRemoveMeldungActionPerformed().JOptionPane.title";
     public static final String BUNDLE_DEL_MELDUNG =
@@ -1040,8 +1059,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     //Meldung, Meldung hat Unterobjekte
                     JOptionPane.showMessageDialog(
                             StaticSwingTools.getParentFrame(this),
-                            NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_DEL_MELDUNG),
-                            NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_MELDUNG),
+                            NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DEL_MELDUNG),
+                            NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_MELDUNG),
                             JOptionPane.WARNING_MESSAGE);
                 
             }

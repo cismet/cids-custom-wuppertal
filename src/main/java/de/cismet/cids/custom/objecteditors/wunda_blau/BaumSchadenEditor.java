@@ -88,7 +88,11 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     //~ Static fields/initializers ---------------------------------------------
     private static final Logger LOG = Logger.getLogger(BaumSchadenEditor.class);
-    private static final String[] MELDUNG_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Gebiet-Bemerkung", "Meldungsdatum", "Meldung-Bemerkung" };
+    private static final String[] MELDUNG_COL_NAMES = new String[] {  
+        "Gebiet-Aktenzeichen", 
+        "Gebiet-Bemerkung", 
+        "Meldungsdatum", 
+        "Meldung-Bemerkung" };
     private static final String[] MELDUNG_PROP_NAMES = new String[] {
             "fk_gebiet.aktenzeichen",
             "fk_gebiet.bemerkung",
@@ -132,35 +136,26 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String TABLE_NAME = "baum_schaden";
     
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumSchadenEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumSchadenEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumSchadenEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumSchadenEditor.prepareForSave().JOptionPane.title";
-    public static final String BUNDLE_PANE_TITLE_PERSIST = "BaumSchadenEditor.editorClose().JOptionPane.title";
-    public static final String BUNDLE_PANE_PREFIX_ERSATZ = "BaumSchadenEditor.editorClose().JOptionPane.errorErsatz";
-    public static final String BUNDLE_PANE_PREFIX_FEST = "BaumSchadenEditor.editorClose().JOptionPane.errorFest";
-    public static final String BUNDLE_PANE_KONTROLLE = "BaumSchadenEditor.editorClose().JOptionPane.kontrolle";
-    public static final String BUNDLE_PANE_ADMIN = "BaumSchadenEditor.editorClose().JOptionPane.admin";
+        "BaumSchadenEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumSchadenEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_PERSIST = 
+            "BaumSchadenEditor.editorClose().JOptionPane.title";
+    public static final String BUNDLE_PANE_PREFIX_ERSATZ = 
+            "BaumSchadenEditor.editorClose().JOptionPane.errorErsatz";
+    public static final String BUNDLE_PANE_PREFIX_FEST = 
+            "BaumSchadenEditor.editorClose().JOptionPane.errorFest";
+    public static final String BUNDLE_PANE_KONTROLLE = 
+            "BaumSchadenEditor.editorClose().JOptionPane.kontrolle";
+    public static final String BUNDLE_PANE_ADMIN = 
+            "BaumSchadenEditor.editorClose().JOptionPane.admin";
     
-    public static final String BUNDLE_W_QUESTION = "BaumSchadenEditor.btnRemoveWurzelActionPerformed().question";
-    public static final String BUNDLE_W_TITLE = "BaumSchadenEditor.btnRemoveWurzelActionPerformed().title";
-    public static final String BUNDLE_W_ERRORTITLE = "BaumSchadenEditor.btnRemoveWurzelActionPerformed().errortitle";
-    public static final String BUNDLE_W_ERRORTEXT = "BaumSchadenEditor.btnRemoveWurzelActionPerformed().errortext";
-    public static final String BUNDLE_S_QUESTION = "BaumSchadenEditor.btnRemoveStammActionPerformed().question";
-    public static final String BUNDLE_S_TITLE = "BaumSchadenEditor.btnRemoveStammActionPerformed().title";
-    public static final String BUNDLE_S_ERRORTITLE = "BaumSchadenEditor.btnRemoveStammActionPerformed().errortitle";
-    public static final String BUNDLE_S_ERRORTEXT = "BaumSchadenEditor.btnRemoveStammActionPerformed().errortext";
-    public static final String BUNDLE_K_QUESTION = "BaumSchadenEditor.btnRemoveKroneActionPerformed().question";
-    public static final String BUNDLE_K_TITLE = "BaumSchadenEditor.btnRemoveKroneActionPerformed().title";
-    public static final String BUNDLE_K_ERRORTITLE = "BaumSchadenEditor.btnRemoveKroneActionPerformed().errortitle";
-    public static final String BUNDLE_K_ERRORTEXT = "BaumSchadenEditor.btnRemoveKroneActionPerformed().errortext";
-    public static final String BUNDLE_M_QUESTION = "BaumSchadenEditor.btnRemoveMassnahmeActionPerformed().question";
-    public static final String BUNDLE_M_TITLE = "BaumSchadenEditor.btnRemoveMassnahmeActionPerformed().title";
-    public static final String BUNDLE_M_ERRORTITLE = "BaumSchadenEditorEditor.btnRemoveMassnahmeActionPerformed().errortitle";
-    public static final String BUNDLE_M_ERRORTEXT = "BaumSchadenEditor.btnRemoveMassnahmeActionPerformed().errortext";
     public static final String BUNDLE_LOAD_ERROR =
-    "BaumSchadenEditor.loadChildren().error";
-    public static final String BUNDLE_NOMELDUNG = "BaumSchadenEditor.prepareForSave().noMeldung";
+            "BaumSchadenEditor.loadChildren().error";
+    public static final String BUNDLE_NOMELDUNG = 
+            "BaumSchadenEditor.isOkForSaving().noMeldung";
 
     //~ Enums ------------------------------------------------------------------
 
@@ -400,7 +395,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         try {
             if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
                 LOG.warn("No meldung specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
+                errorMessage.append(NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOMELDUNG));
                 save = false;
             }
         } catch (final MissingResourceException ex) {
@@ -539,7 +534,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                         areChildrenLoad = get();
                         getBaumChildrenLoader().setLoadingCompletedWithoutError(areChildrenLoad);
                         if (!areChildrenLoad){
-                            setTitle(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_LOAD_ERROR));
+                            setTitle(NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_LOAD_ERROR));
                         }
                     } catch (final InterruptedException | ExecutionException ex) {
                         LOG.error(ex, ex);

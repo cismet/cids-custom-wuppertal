@@ -94,20 +94,29 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     
     private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen..."; 
 
-    public static final String BUNDLE_NOBEM = "BaumAnsprechpartnerEditor.prepareForSave().noBemerkung";
-    public static final String BUNDLE_NOTEL = "BaumAnsprechpartnerEditor.prepareForSave().noTelefon";
-    public static final String BUNDLE_WRONGTEL = "BaumAnsprechpartnerEditor.prepareForSave().wrongTelefon";
-    public static final String BUNDLE_NONAME = "BaumAnsprechpartnerEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumAnsprechpartnerEditor.prepareForSave().duplicateName";
-    public static final String BUNDLE_DUPLICATEKEY = "BaumAnsprechpartnerEditor.prepareForSave().duplicateSchluessel";
+    public static final String BUNDLE_NOBEM = 
+            "BaumAnsprechpartnerEditor.isOkForSaving().noBemerkung";
+    public static final String BUNDLE_NOTEL = 
+            "BaumAnsprechpartnerEditor.isOkForSaving().noTelefon";
+    public static final String BUNDLE_WRONGTEL = 
+            "BaumAnsprechpartnerEditor.isOkForSaving().wrongTelefon";
+    public static final String BUNDLE_NONAME = 
+            "BaumAnsprechpartnerEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumAnsprechpartnerEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_DUPLICATEKEY = 
+            "BaumAnsprechpartnerEditor.isOkForSaving().duplicateSchluessel";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumAnsprechpartnerEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumAnsprechpartnerEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumAnsprechpartnerEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumAnsprechpartnerEditor.prepareForSave().JOptionPane.title";
+        "BaumAnsprechpartnerEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumAnsprechpartnerEditor.isOkForSaving().JOptionPane.title";
 
-    public static final String BUNDLE_HP_TITLE = "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.title";
-    public static final String BUNDLE_HP_TEXT = "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.text";
+    public static final String BUNDLE_HP_TITLE = 
+            "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.title";
+    public static final String BUNDLE_HP_TEXT = 
+            "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.text";
 
     public static final String TEL__PATTERN = "\\+[0-9]{1,3}(-[0-9]+){1,}";
     
@@ -196,20 +205,20 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             for (final CidsBean tBean:telCollection){
                 if (tBean.getProperty(FIELD__TELEFON)== null) {
                     LOG.warn("No tel specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOTEL));
+                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NOTEL));
                     save = false;
                 } else {
                     if (!(tBean.getProperty(FIELD__TELEFON).toString().matches(TEL__PATTERN))) {
                         LOG.warn("Wrong tel specified. Skip persisting.");
                         errorMessage
-                                .append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL))
+                                .append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_WRONGTEL))
                                 .append(tBean.getProperty(FIELD__TELEFON).toString());
                         save = false;
                     }
                 }
                 if (tBean.getProperty(FIELD__BEMERKUNG)== null) {
                     LOG.warn("No bem specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOBEM));
+                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NOBEM));
                     save = false;
                 }
             }

@@ -20,7 +20,6 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
-import org.jdesktop.beansbinding.BindingGroup;
 
 import org.openide.util.NbBundle;
 
@@ -72,14 +71,18 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__ID = "id";                                // baum_sorte
     public static final String TABLE_NAME = "baum_sorte";
 
-    public static final String BUNDLE_NONAME = "BaumSorteEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumSorteEditor.prepareForSave().duplicateName";
-    public static final String BUNDLE_NOMAIN = "BaumSorteEditor.prepareForSave().noMain";
+    public static final String BUNDLE_NONAME = 
+            "BaumSorteEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumSorteEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_NOMAIN = 
+            "BaumSorteEditor.isOkForSaving().noMain";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumSorteEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumSorteEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumSorteEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumSorteEditor.prepareForSave().JOptionPane.title";
+        "BaumSorteEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumSorteEditor.isOkForSaving().JOptionPane.title";
 
     //~ Enums ------------------------------------------------------------------
 

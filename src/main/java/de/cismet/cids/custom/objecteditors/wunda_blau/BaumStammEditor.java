@@ -70,7 +70,8 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(BaumStammEditor.class);public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
+    private static final Logger LOG = Logger.getLogger(BaumStammEditor.class);
+    public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
     public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
     public static final String REDUNDANT_TABLE = "baum_stamm";
 
@@ -80,13 +81,16 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
     
     private static String TITLE_NEW_STAMM = "einen neuen Stammschaden anlegen..."; 
 
-    public static final String BUNDLE_NONAME = "BaumStammEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumStammEditor.prepareForSave().duplicateName";
+    public static final String BUNDLE_NONAME = 
+            "BaumStammEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumStammEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumStammEditor.prepareForSave().JOptionPane.message.prefix";
+            "BaumStammEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumStammEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumStammEditor.prepareForSave().JOptionPane.title";
+            "BaumStammEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumStammEditor.isOkForSaving().JOptionPane.title";
 
     //~ Enums ------------------------------------------------------------------
 

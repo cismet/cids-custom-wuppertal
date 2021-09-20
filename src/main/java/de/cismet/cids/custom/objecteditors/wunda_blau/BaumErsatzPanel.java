@@ -102,7 +102,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         ConnectionContextProvider {
     @Getter @Setter private List<CidsBean> kontrolleBeans;;
 //~ Static fields/initializers ---------------------------------------------
-        private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
+    private static final Logger LOG = Logger.getLogger(BaumErsatzPanel.class);
     private static final MetaClass MC__ART;
 
     public static final String GEOMTYPE = "Polygon";
@@ -151,26 +151,35 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public static final String TABLE_SORTE = "baum_sorte";
     public static final String TABLE_NAME__KONTROLLE = "baum_kontrolle";
     
-    public static final String BUNDLE_NOSTREET = "BaumErsatzPanel.prepareForSave().noStrasse";
-    public static final String BUNDLE_NOGEOM = "BaumErsatzPanel.prepareForSave().noGeom";
-    public static final String BUNDLE_WRONGGEOM = "BaumErsatzPanel.prepareForSave().wrongGeom";
-    public static final String BUNDLE_NOART = "BaumErsatzPanel.prepareForSave().noArt";
-    public static final String BUNDLE_WRONGCOUNT = "BaumErsatzPanel.prepareForSave().wrongAnzahl";
-    public static final String BUNDLE_NOCOUNT = "BaumErsatzPanel.prepareForSave().noAnzahl";
-    public static final String BUNDLE_NOCONTROLDATE = "BaumErsatzPanel.prepareForSave().noKontrolleDatum";
-    public static final String BUNDLE_FUTUREDATE = "BaumErsatzPanel.prepareForSave().zukunftsDatum";
-    public static final String BUNDLE_NOCONTROLTEXT = "BaumErsatzPanel.prepareForSave().noControlText";
+    public static final String BUNDLE_NOSTREET = 
+            "BaumErsatzPanel.isOkForSaving().noStrasse";
+    public static final String BUNDLE_NOGEOM = 
+            "BaumErsatzPanel.isOkForSaving().noGeom";
+    public static final String BUNDLE_WRONGGEOM = 
+            "BaumErsatzPanel.isOkForSaving().wrongGeom";
+    public static final String BUNDLE_NOART = 
+            "BaumErsatzPanel.isOkForSaving().noArt";
+    public static final String BUNDLE_WRONGCOUNT = 
+            "BaumErsatzPanel.isOkForSaving().wrongAnzahl";
+    public static final String BUNDLE_NOCOUNT = 
+            "BaumErsatzPanel.isOkForSaving().noAnzahl";
+    public static final String BUNDLE_NOCONTROLDATE = 
+            "BaumErsatzPanel.isOkForSaving().noKontrolleDatum";
+    public static final String BUNDLE_FUTUREDATE = 
+            "BaumErsatzPanel.isOkForSaving().zukunftsDatum";
+    public static final String BUNDLE_NOCONTROLTEXT = 
+            "BaumErsatzPanel.isOkForSaving().noControlText";
     public static final String BUNDLE_WHICH = 
-            "BaumErsatzPanel.prepareForSave().welcheErsatz";
+            "BaumErsatzPanel.isOkForSaving().welcheErsatz";
     public static final String BUNDLE_FAULT = 
-            "BaumErsatzPanel.prepareForSave().welcherSchaden";
+            "BaumErsatzPanel.isOkForSaving().welcherSchaden";
     public static final String BUNDLE_MESSAGE = 
-            "BaumErsatzPanel.prepareForSave().welcheMeldung";
+            "BaumErsatzPanel.isOkForSaving().welcheMeldung";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumErsatzPanel.prepareForSave().JOptionPane.message.prefix";
+        "BaumErsatzPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumErsatzPanel.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumErsatzPanel.prepareForSave().JOptionPane.title";
+        "BaumErsatzPanel.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "BaumErsatzPanel.isOkForSaving().JOptionPane.title";
     
     private static final String[] KONTROLLE_COL_NAMES = new String[] { "Datum", "Bemerkung"};
     private static final String[] KONTROLLE_PROP_NAMES = new String[] {
@@ -1254,7 +1263,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         try {
             if (saveErsatzBean.getProperty(FIELD__DATUM) != null && saveErsatzBean.getProperty(FIELD__ART) == null) {
                 LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOART));
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOART));
                 save = false;
             }
         } catch (final MissingResourceException ex) {

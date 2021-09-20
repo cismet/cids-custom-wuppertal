@@ -81,14 +81,18 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     public static final String FIELD__ID = "id";                            // baum_hauptart
     public static final String TABLE_NAME = "baum_hauptart";
 
-    public static final String BUNDLE_NONAME = "BaumHauptartEditor.prepareForSave().noName";
-    public static final String BUNDLE_DUPLICATENAME = "BaumHauptartEditor.prepareForSave().duplicateName";
-    public static final String BUNDLE_DUPLICATEKEY = "BaumHauptartEditor.prepareForSave().duplicateSchluessel";
+    public static final String BUNDLE_NONAME = 
+            "BaumHauptartEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = 
+            "BaumHauptartEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_DUPLICATEKEY = 
+            "BaumHauptartEditor.isOkForSaving().duplicateSchluessel";
     public static final String BUNDLE_PANE_PREFIX =
-        "BaumHauptartEditor.prepareForSave().JOptionPane.message.prefix";
+        "BaumHauptartEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
-        "BaumHauptartEditor.prepareForSave().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumHauptartEditor.prepareForSave().JOptionPane.title";
+        "BaumHauptartEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumHauptartEditor.isOkForSaving().JOptionPane.title";
 
     @Override
     public void beforeSaving() {
