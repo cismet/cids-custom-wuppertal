@@ -142,7 +142,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     
 
     //~ Instance fields --------------------------------------------------------
-    private boolean editor = true;
+    private final boolean editor;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -166,6 +166,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      * Creates new form.
      */
     public BaumErsatzEditor() {
+        this(true);
     }
 
     /**
@@ -292,7 +293,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new Insets(0, 5, 5, 0);
         panErsatz.add(btnChangeSchaden, gridBagConstraints);
-        btnChangeSchaden.setVisible(editor);
+        btnChangeSchaden.setVisible(isEditor());
 
         panErsatzMain.setOpaque(false);
         panErsatzMain.setLayout(new GridBagLayout());
@@ -434,7 +435,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(editor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(xtSchaden);
             btnChangeSchaden.setVisible(editor);
         }
@@ -470,14 +471,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setTitle(final String string) {
     }
-
-    
-    /*
-     * DOCUMENT ME!
-     *
-     * @param  tableName     DOCUMENT ME!
-     * @param  whereClause   DOCUMENT ME!
-     */
 
     @Override
     public boolean isEditor() {

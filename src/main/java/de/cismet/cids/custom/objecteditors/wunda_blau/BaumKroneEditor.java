@@ -100,7 +100,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     //~ Instance fields --------------------------------------------------------
     private Boolean redundantName = false;
 
-    private boolean isEditor = true;
+    private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
@@ -119,6 +119,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
      * Creates new form.
      */
     public BaumKroneEditor() {
+        this(true);
     }
 
     /**
@@ -127,7 +128,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumKroneEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -285,12 +286,16 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.error("Bean not set.", ex);
         }
     }
+    
+    private boolean isEditor(){
+        return this.editor;
+    }
 
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
         }
     }

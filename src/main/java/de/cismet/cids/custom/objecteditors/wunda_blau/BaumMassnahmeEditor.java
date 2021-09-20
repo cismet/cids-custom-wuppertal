@@ -100,7 +100,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     //~ Instance fields --------------------------------------------------------
     private Boolean redundantName = false;
 
-    private boolean isEditor = true;
+    private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Box.Filler filler3;
@@ -120,6 +120,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
      * Creates new form.
      */
     public BaumMassnahmeEditor() {
+        this(true);
     }
 
     /**
@@ -128,7 +129,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumMassnahmeEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -296,11 +297,15 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         }
     }
 
+    private boolean isEditor(){
+        return this.editor;
+    }
+    
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
         }
     }

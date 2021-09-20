@@ -170,7 +170,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
     private Boolean redundantName = false;
     private static String TITLE_NEW_ART = "eine neue Baumart anlegen..."; 
 
-    private boolean isEditor = true;
+    private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbHauptart;
@@ -192,6 +192,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
      * Creates new form.
      */
     public BaumArtEditor() {
+        this(true);
     }
 
     /**
@@ -200,7 +201,7 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumArtEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -410,12 +411,16 @@ public class BaumArtEditor extends DefaultCustomObjectEditor implements CidsBean
             LOG.warn("Error setCidsBean.", ex);
         }
     }
+    
+    private boolean isEditor(){
+        return this.editor;
+    }
 
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtNameBotanisch);
             RendererTools.makeReadOnly(cbHauptart);

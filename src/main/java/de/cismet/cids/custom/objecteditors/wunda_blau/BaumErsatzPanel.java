@@ -211,7 +211,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panInhalt = new JPanel();
         lblSelbst = new JLabel();
         chSelbst = new JCheckBox();
-        if (!editor){
+        if (!isEditor()){
             lblHNrRenderer = new JLabel();
         }
         lblDispens = new JLabel();
@@ -238,13 +238,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         scpBemerkung = new JScrollPane();
         taBemerkungE = new JTextArea();
         lblGeom = new JLabel();
-        if (editor){
+        if (isEditor()){
             cbGeomErsatz = new DefaultCismapGeometryComboBoxEditor();
         }
         lblStrasse = new JLabel();
         cbStrasse = new FastBindableReferenceCombo();
         lblHnr = new JLabel();
-        if (editor){
+        if (isEditor()){
             cbHNr = new FastBindableReferenceCombo(
                 hnrSearch,
                 hnrSearch.getRepresentationPattern(),
@@ -313,7 +313,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(chSelbst, gridBagConstraints);
 
-        if (!editor){
+        if (!isEditor()){
             lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
             lblHNrRenderer.setName("lblHNrRenderer"); // NOI18N
 
@@ -321,7 +321,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             bindingGroup.addBinding(binding);
 
         }
-        if (!editor){
+        if (!isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 0;
@@ -586,7 +586,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblGeom, gridBagConstraints);
 
-        if (editor){
+        if (isEditor()){
             cbGeomErsatz.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeomErsatz.setName("cbGeomErsatz"); // NOI18N
 
@@ -595,7 +595,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             bindingGroup.addBinding(binding);
 
         }
-        if (editor){
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 1;
@@ -648,7 +648,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panInhalt.add(lblHnr, gridBagConstraints);
 
-        if (editor){
+        if (isEditor()){
             cbHNr.setMaximumRowCount(20);
             cbHNr.setEnabled(false);
             cbHNr.setName("cbHNr"); // NOI18N
@@ -657,7 +657,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             bindingGroup.addBinding(binding);
 
         }
-        if (editor){
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 0;
@@ -880,7 +880,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     }//GEN-LAST:event_cbArtEActionPerformed
 
     private void cbStrasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
-        if (editor && cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
+        if (isEditor() && cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
@@ -980,7 +980,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 "%1$2s",
                 new String[] { "NAME" });
         initComponents();
-        if (editor) {
+        if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         }
     }
@@ -1001,6 +1001,10 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             600);
     }   
     
+    private boolean isEditor(){
+        return this.editor;
+    }
+    
     private void refreshSorte() {
         if (cidsBean != null){
             sorteArtSearch.setArtId((Integer)cidsBean.getProperty(FIELD__ART_ID));
@@ -1017,7 +1021,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     }
     
     private void setReadOnly() {
-        if (!(editor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(cbStrasse);
             RendererTools.makeReadOnly(cbHNr);
             RendererTools.makeReadOnly(cbGeomErsatz);
@@ -1031,8 +1035,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             RendererTools.makeReadOnly(txtFirma);
             RendererTools.makeReadOnly(taBemerkungE);
             RendererTools.makeReadOnly(xtKont);
-            panKontAdd.setVisible(editor);
-            lblGeom.setVisible(editor);
+            panKontAdd.setVisible(isEditor());
+            lblGeom.setVisible(isEditor());
         }
     }
     
@@ -1054,7 +1058,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public void dispose() {
         baumLagePanel.dispose();
         cidsBean = null;
-        if (this.editor && cbGeomErsatz != null) {
+        if (isEditor() && cbGeomErsatz != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).dispose();
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(null);
             cbGeomErsatz = null;
@@ -1069,7 +1073,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (editor && (this.cidsBean != null)) {
+            if (isEditor() && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             try{
@@ -1082,7 +1086,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                         this.cidsBean,
                         getConnectionContext());
                     //Wenn mit mehreren Geoms(Liste) gearbeitet wird
-                    if (editor) {
+                    if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(cidsBean.getMetaObject());
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).initForNewBinding();
                     }
@@ -1090,7 +1094,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 } else{
                     setKontrolleBeans(null);
                     cbSorte.setEnabled(false);
-                    if (editor) {
+                    if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).initForNewBinding();
                         cbGeomErsatz.setSelectedIndex(-1);
                     }
@@ -1098,7 +1102,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 setMapWindow();
                 bindingGroup.bind();
                 final DivBeanTable kontrolleModel = new DivBeanTable(
-                            editor,
+                            isEditor(),
                             cidsBean,
                             FIELD__KONTROLLE,
                             KONTROLLE_COL_NAMES,
@@ -1128,11 +1132,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                             }
                         }
                     });
-                if(editor){
+                if(isEditor()){
                     cbGeomErsatz.updateUI();
                 }
                 cbSorte.updateUI();
-                if (editor && (this.cidsBean != null)) {
+                if (isEditor() && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
                     if(this.cidsBean.getProperty(FIELD__ART) != null){
                         cbSorte.setEnabled(true);
@@ -1140,7 +1144,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 }
                 
                 
-                if(editor){
+                if(isEditor()){
                     if(this.cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
                         cbHNr.setEnabled(true);
                     }

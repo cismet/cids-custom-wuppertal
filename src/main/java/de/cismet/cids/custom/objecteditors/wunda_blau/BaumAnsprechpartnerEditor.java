@@ -248,7 +248,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     
     private DivBeanTable telefonModel;
 
-    private boolean isEditor = true;
+    private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnAddTelefon;
@@ -288,6 +288,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
      * Creates new form.
      */
     public BaumAnsprechpartnerEditor() {
+        this(true);
     }
 
     /**
@@ -296,7 +297,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumAnsprechpartnerEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -723,7 +724,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
                 getConnectionContext());
             bindingGroup.bind();
             telefonModel = new DivBeanTable(
-                    isEditor,
+                    isEditor(),
                     cidsBean,
                     FIELD__TELEFONE,
                     TELEFON_COL_NAMES,
@@ -734,12 +735,16 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             LOG.error("Bean not set.", ex);
         }
     }
+    
+    private boolean isEditor(){
+        return this.editor;
+    }
 
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(ftxtPlz);
             RendererTools.makeReadOnly(txtMail);
             RendererTools.makeReadOnly(txtOrt);
@@ -748,7 +753,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(xtTelefon);
-            panTelefonAdd.setVisible(isEditor);
+            panTelefonAdd.setVisible(isEditor());
         }
     }
 

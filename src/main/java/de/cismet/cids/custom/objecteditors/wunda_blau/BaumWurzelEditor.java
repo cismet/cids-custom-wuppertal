@@ -98,7 +98,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     //~ Instance fields --------------------------------------------------------
     private Boolean redundantName = false;
 
-    private boolean isEditor = true;
+    private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Box.Filler filler3;
@@ -118,6 +118,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
      * Creates new form.
      */
     public BaumWurzelEditor() {
+        this(true);
     }
 
     /**
@@ -126,7 +127,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumWurzelEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -293,12 +294,16 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.error("Bean not set.", ex);
         }
     }
+    
+   private boolean isEditor(){
+        return this.editor;
+    } 
 
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
         }
     }

@@ -168,7 +168,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     
     
     //~ Instance fields --------------------------------------------------------
-    @Getter private boolean editor = true;
+    private final boolean editor;
     
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
     private boolean areChildrenLoad = false;
@@ -194,6 +194,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      * Creates new form.
      */
     public BaumSchadenEditor() {
+        this(true);
     }
 
     /**
@@ -327,7 +328,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new Insets(2, 5, 5, 0);
         panAll.add(btnChangeGebiet, gridBagConstraints);
-        btnChangeGebiet.setVisible(editor);
+        btnChangeGebiet.setVisible(isEditor());
 
         xtMeldung.setModel(new SchadenMeldungTableModel());
         xtMeldung.setVisibleRowCount(1);
@@ -418,6 +419,11 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public CidsBean getCidsBean() {
         return cidsBean;
     }
+    
+    @Override
+    public boolean isEditor(){
+        return this.editor;
+    }
 
     @Override
     public void setCidsBean(final CidsBean cb) {
@@ -460,7 +466,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(editor)) {
+        if (!(isEditor())) {
             btnChangeGebiet.setVisible(editor);
         }
     }

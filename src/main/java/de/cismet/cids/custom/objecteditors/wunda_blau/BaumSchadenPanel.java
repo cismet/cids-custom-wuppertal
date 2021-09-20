@@ -231,10 +231,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         lblUmfang = new JLabel();
         lblArt = new JLabel();
         cbArt = new DefaultBindableScrollableComboBox(MC__ART);
-        if (editor){
+        if (isEditor()){
             lblGeom = new JLabel();
         }
-        if (editor){
+        if (isEditor()){
             cbGeomSchaden = new DefaultCismapGeometryComboBoxEditor();
         }
         panGeometrie = new JPanel();
@@ -254,18 +254,18 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         lblKroneArr = new JLabel();
         chKrone = new JCheckBox();
         filler21 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpKrone = new DefaultBindableLabelsPanel(editor, "Kronenschaden:", SORTING_OPTION);
+        blpKrone = new DefaultBindableLabelsPanel(isEditor(), "Kronenschaden:", SORTING_OPTION);
         lblStammArr = new JLabel();
         chStamm = new JCheckBox();
         filler22 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpStamm = new DefaultBindableLabelsPanel(editor, "Stammschaden:", SORTING_OPTION);
+        blpStamm = new DefaultBindableLabelsPanel(isEditor(), "Stammschaden:", SORTING_OPTION);
         lblWurzelArr = new JLabel();
         chWurzel = new JCheckBox();
         filler23 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpWurzel = new DefaultBindableLabelsPanel(editor, "Wurzelschaden:", SORTING_OPTION);
+        blpWurzel = new DefaultBindableLabelsPanel(isEditor(), "Wurzelschaden:", SORTING_OPTION);
         lblMassnahmeArr = new JLabel();
         filler24 = new Box.Filler(new Dimension(0, 28), new Dimension(0, 28), new Dimension(32767, 28));
-        blpMassnahme = new DefaultBindableLabelsPanel(editor, "Maßnahmen:", SORTING_OPTION);
+        blpMassnahme = new DefaultBindableLabelsPanel(isEditor(), "Maßnahmen:", SORTING_OPTION);
         filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
@@ -436,12 +436,12 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(cbArt, gridBagConstraints);
 
-        if (editor){
+        if (isEditor()){
             lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
             Mnemonics.setLocalizedText(lblGeom, "Geometrie:");
             lblGeom.setName("lblGeom"); // NOI18N
         }
-        if (editor){
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 3;
@@ -452,7 +452,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             panSchaden.add(lblGeom, gridBagConstraints);
         }
 
-        if (editor){
+        if (isEditor()){
             cbGeomSchaden.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeomSchaden.setName("cbGeomSchaden"); // NOI18N
 
@@ -463,7 +463,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             bindingGroup.addBinding(binding);
 
         }
-        if (editor){
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 3;
@@ -1360,7 +1360,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
 
                 //Ersatzpflanzungen erweitern:
-                if (editor){
+                if (isEditor()){
                     getBaumChildrenLoader().addErsatz(cidsBean.getPrimaryKeyValue(), beanErsatz);
                 }
                 ((DefaultListModel)lstErsatz.getModel()).addElement(beanErsatz);
@@ -1415,7 +1415,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     getConnectionContext());
                 beanFest.setProperty(FIELD__FK_SCHADEN, cidsBean);
 
-                if (editor){
+                if (isEditor()){
                     getBaumChildrenLoader().addFest(cidsBean.getPrimaryKeyValue(), beanFest);
                 }
                 ((DefaultListModel)lstFest.getModel()).addElement(beanFest);
@@ -1592,7 +1592,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             this.editor = false;
         }
         initComponents();
-        if (editor) {
+        if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setLocalRenderFeatureString(FIELD__GEOM);
         }
         for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpKrone, blpStamm, blpWurzel, blpMassnahme)) {
@@ -1819,13 +1819,17 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
     }
+    
+    private boolean isEditor(){
+        return this.editor;
+    }
      
     @Override
     public void dispose() {
         baumLagePanel.dispose();
         bindingGroup.unbind();
         cidsBean = null;
-        if (this.editor && cbGeomSchaden != null) {
+        if (isEditor() && cbGeomSchaden != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).dispose();
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setCidsMetaObject(null);
             cbGeomSchaden = null;
@@ -1844,7 +1848,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (editor && (this.cidsBean != null)) {
+            if (isEditor() && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             try{
@@ -1860,7 +1864,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     zeigeKinderFest();
                     zeigeKinderErsatz();
                     //Wenn mit mehreren Geoms(Liste) gearbeitet wird
-                    if (editor) {
+                    if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).setCidsMetaObject(cidsBean.getMetaObject());
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).initForNewBinding();
                     }
@@ -1871,7 +1875,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 } else {
                     setErsatzBeans(null);
                     setFestBeans(null);
-                    if (editor) {
+                    if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).initForNewBinding();
                         cbGeomSchaden.setSelectedIndex(-1);
                     }
@@ -1879,7 +1883,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 
                 setMapWindow();
                 bindingGroup.bind();
-                if (editor && (this.cidsBean != null)) {
+                if (isEditor() && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
                 }
                 lstErsatz.setCellRenderer(new DefaultListCellRenderer() {
@@ -1950,21 +1954,21 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                         allowAddRemove();
                     }
                 }
-                if(editor){
+                if(isEditor()){
                     cbGeomSchaden.updateUI();
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
             }
         }
-        if (!editor){
+        if (!isEditor()){
             setReadOnly();
         }
     }
     
     public void allowAddRemove(){
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            if (editor){
+            if (isEditor()){
                 btnAddNewErsatz.setEnabled(true);
                 btnAddNewFest.setEnabled(true);
                 btnRemoveErsatz.setEnabled(true);
@@ -2018,8 +2022,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         RendererTools.makeReadOnly(chFaellung);
         RendererTools.makeReadOnly(txtBetrag);
         RendererTools.makeReadOnly(chEingang);
-        panControlsNewErsatz.setVisible(editor);
-        panControlsNewFest.setVisible(editor);
+        panControlsNewErsatz.setVisible(isEditor());
+        panControlsNewFest.setVisible(isEditor());
     }
     
     private void prepareErsatz(){

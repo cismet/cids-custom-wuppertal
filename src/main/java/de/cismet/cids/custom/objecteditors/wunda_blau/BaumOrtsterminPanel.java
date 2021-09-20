@@ -498,29 +498,33 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         }
     }
     
+    private boolean isEditor(){
+        return this.editor;
+    }
+    
     private void setReadOnly() {
-        if (!(editor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(taBemerkungOrt);
             RendererTools.makeReadOnly(xtTeil);
             RendererTools.makeReadOnly(dcDatum);
-            panTeilnehmerAdd.setVisible(editor);
+            panTeilnehmerAdd.setVisible(isEditor());
         }
     }
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (editor && (this.cidsBean != null)) {
+            if (isEditor() && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
             bindingGroup.bind();
-            if (editor && (this.cidsBean != null)) {
+            if (isEditor() && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
             }
             final DivBeanTable teilnehmerModel = new DivBeanTable(
-                        editor,
+                        isEditor(),
                         cidsBean,
                         FIELD__TEILNEHMER,
                         TEILNEHMER_COL_NAMES,

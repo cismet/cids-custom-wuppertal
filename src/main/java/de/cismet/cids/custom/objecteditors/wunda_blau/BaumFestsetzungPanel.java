@@ -143,7 +143,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         cbArtF = new DefaultBindableReferenceCombo(MC__ART);
         ;
         lblGeom = new JLabel();
-        if (editor){
+        if (isEditor()){
             cbGeomFest = new DefaultCismapGeometryComboBoxEditor();
         }
         lblDatum = new JLabel();
@@ -266,7 +266,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panFest.add(lblGeom, gridBagConstraints);
 
-        if (editor){
+        if (isEditor()){
             cbGeomFest.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeomFest.setName("cbGeomFest"); // NOI18N
 
@@ -275,7 +275,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             bindingGroup.addBinding(binding);
 
         }
-        if (editor){
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
@@ -459,7 +459,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             this.editor = false;
         }
         initComponents();
-        if (editor) {
+        if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setLocalRenderFeatureString(FIELD__GEOM);
         }
     }
@@ -489,7 +489,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     public void dispose() {
         baumLagePanel.dispose();
         cidsBean = null;
-        if (this.editor && cbGeomFest != null) {
+        if (isEditor() && cbGeomFest != null) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).dispose();
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(null);
             cbGeomFest = null;
@@ -501,23 +501,26 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         return this.cidsBean;
     }
     
+    private boolean isEditor(){
+        return this.editor;
+    }
     
     private void setReadOnly() {
-        if (!(editor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(txtUmfangF);
             RendererTools.makeReadOnly(txtHoeheF);
             RendererTools.makeReadOnly(cbGeomFest);
             RendererTools.makeReadOnly(cbArtF );
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(taBemerkungF);
-            lblGeom.setVisible(editor);
+            lblGeom.setVisible(isEditor());
         }
     }
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (editor && (this.cidsBean != null)) {
+            if (isEditor() && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             try{
@@ -529,12 +532,12 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                         this.cidsBean,
                         getConnectionContext());
                     //Wenn mit mehreren Geoms(Liste) gearbeitet wird
-                    if (editor ) {
+                    if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(cidsBean.getMetaObject());
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).initForNewBinding();
                     }
                 } else{
-                    if (editor) {
+                    if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).initForNewBinding();
                         cbGeomFest.setSelectedIndex(-1);
                     }
@@ -542,10 +545,10 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 
                 setMapWindow();
                 bindingGroup.bind();
-                if (editor && (this.cidsBean != null)) {
+                if (isEditor() && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
                 }
-                if (editor){
+                if (isEditor()){
                     cbGeomFest.updateUI();
                 }
             } catch (final Exception ex) {

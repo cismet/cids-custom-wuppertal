@@ -188,7 +188,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
     private Boolean redundantKey = false;
     private static String TITLE_NEW_HAUPTART = "eine neue Hauptart anlegen..."; 
 
-    private boolean isEditor = true;
+    private final boolean editor;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
@@ -208,6 +208,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
      * Creates new form.
      */
     public BaumHauptartEditor() {
+        this(true);
     }
 
     /**
@@ -216,7 +217,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumHauptartEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -387,12 +388,16 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
             LOG.warn("Error setCidsBean", ex);
         }
     }
+    
+    private boolean isEditor(){
+        return this.editor;
+    }
 
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtNameBotanisch);
         }

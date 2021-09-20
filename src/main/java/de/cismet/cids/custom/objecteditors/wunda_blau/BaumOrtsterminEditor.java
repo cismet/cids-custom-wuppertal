@@ -202,7 +202,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     
     //private MetaClass teilnehmerMetaClass;
 
-    private boolean editor = true;
+    private final boolean editor;
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -224,6 +224,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      * Creates new form.
      */
     public BaumOrtsterminEditor() {
+        this(true);
     }
 
     /**
@@ -312,7 +313,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new Insets(2, 5, 5, 2);
         panOrtstermin.add(btnChangeGebiet, gridBagConstraints);
-        btnChangeGebiet.setVisible(editor);
+        btnChangeGebiet.setVisible(isEditor());
 
         xtMeldung.setModel(new OrtsterminMeldungTableModel());
         xtMeldung.setVisibleRowCount(1);
@@ -431,9 +432,9 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(editor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(xtMeldung);
-            btnChangeGebiet.setVisible(editor);
+            btnChangeGebiet.setVisible(isEditor());
         }
     }
     

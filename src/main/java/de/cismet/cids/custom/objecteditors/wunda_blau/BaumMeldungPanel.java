@@ -964,7 +964,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
             beanOrtstermin.setProperty(FIELD__FK_MELDUNG, cidsBean);
 
             //Meldungen erweitern:
-            if (editor){
+            if (isEditor()){
                 getBaumChildrenLoader().addOrt(cidsBean.getPrimaryKeyValue(), beanOrtstermin);
             }
             ((DefaultListModel)lstOrtstermine.getModel()).addElement(beanOrtstermin);
@@ -1005,7 +1005,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                 setCounterSchaden(getCounterSchaden()-1);
                 
                 //schaden erweitern:
-                if (editor){
+                if (isEditor()){
                     getBaumChildrenLoader().addSchaden(cidsBean.getPrimaryKeyValue(), beanSchaden);
                 }
                 ((DefaultListModel)lstSchaeden.getModel()).addElement(beanSchaden);
@@ -1227,25 +1227,29 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
     }
 
     private void setReadOnly() {
-        if (!(editor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(chAbgenommen);
             RendererTools.makeReadOnly(lstApartner);
             RendererTools.makeReadOnly(taBemerkung);
-            panControlsNewOrtstermine.setVisible(editor);
-            panControlsNewSchaden.setVisible(editor);
-            panButtonsApartner.setVisible(editor);
+            panControlsNewOrtstermine.setVisible(isEditor());
+            panControlsNewSchaden.setVisible(isEditor());
+            panButtonsApartner.setVisible(isEditor());
         }
+    }
+    
+    private boolean isEditor(){
+        return this.editor;
     }
     
     @Override
     public void setCidsBean(CidsBean cidsBean) {
         if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (editor && (this.cidsBean != null)) {
+            if (isEditor() && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
-            if (editor && (this.cidsBean != null)) {
+            if (isEditor() && (this.cidsBean != null)) {
                     cidsBean.addPropertyChangeListener(changeListener);
             }
             if (this.cidsBean != null){         
@@ -1372,7 +1376,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
     
     private void allowAddRemove(){
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            if (editor){
+            if (isEditor()){
                 btnAddNewOrtstermin.setEnabled(true);
                 btnAddNewSchaden.setEnabled(true);
                 btnRemoveOrtstermin.setEnabled(true);

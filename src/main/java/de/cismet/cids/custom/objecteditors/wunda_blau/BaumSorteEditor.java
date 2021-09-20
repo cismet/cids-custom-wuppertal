@@ -91,7 +91,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
     private Boolean redundantName = false;
     private static String TITLE_NEW_SORTE = "eine neue Sorte anlegen..."; 
 
-    private boolean isEditor = true;
+    private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbArt;
@@ -113,6 +113,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
      * Creates new form.
      */
     public BaumSorteEditor() {
+        this(true);
     }
 
     /**
@@ -121,7 +122,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
      * @param  boolEditor  DOCUMENT ME!
      */
     public BaumSorteEditor(final boolean boolEditor) {
-        this.isEditor = boolEditor;
+        this.editor = boolEditor;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -331,11 +332,15 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }
 
+    private boolean isEditor(){
+        return this.editor;
+    }
+    
     /**
      * DOCUMENT ME!
      */
     private void setReadOnly() {
-        if (!(isEditor)) {
+        if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtNameBotanisch);
             RendererTools.makeReadOnly(cbArt);
