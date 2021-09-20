@@ -14,14 +14,10 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
-import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumArtLightweightSearch;
@@ -48,8 +44,6 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.attributetable.DateCellEditor;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -145,6 +139,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_ersatz
     public static final String FIELD__STRASSE_NAME = "name";                    // strasse
     public static final String FIELD__STRASSE_KEY = "strassenschluessel";       // strasse
+    public static final String FIELD__FK_SCHADEN= "fk_schaden";                 // baum_ersatz
+    public static final String FIELD__FK_MELDUNG= "fk_meldung";                 // baum_schaden
+    public static final String FIELD__MDATUM= "datum";                          // baum_meldung
     
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // baum_ersatz_geom
@@ -163,6 +160,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public static final String BUNDLE_NOCONTROLDATE = "BaumErsatzPanel.prepareForSave().noKontrolleDatum";
     public static final String BUNDLE_FUTUREDATE = "BaumErsatzPanel.prepareForSave().zukunftsDatum";
     public static final String BUNDLE_NOCONTROLTEXT = "BaumErsatzPanel.prepareForSave().noControlText";
+    public static final String BUNDLE_WHICH = 
+            "BaumErsatzPanel.prepareForSave().welcheErsatz";
+    public static final String BUNDLE_FAULT = 
+            "BaumErsatzPanel.prepareForSave().welcherSchaden";
+    public static final String BUNDLE_MESSAGE = 
+            "BaumErsatzPanel.prepareForSave().welcheMeldung";
     public static final String BUNDLE_PANE_PREFIX =
         "BaumErsatzPanel.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
@@ -1293,6 +1296,21 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         }
         
         if (errorMessage.length() > 0) {
+            if (baumChildrenLoader.getParentOrganizer() instanceof BaumSchadenEditor){
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WHICH))
+                        .append(saveErsatzBean.getPrimaryKeyValue());
+            } else {
+                if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor){
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WHICH))
+                            .append(saveErsatzBean.getPrimaryKeyValue());
+                    CidsBean schadenBean = (CidsBean) saveErsatzBean.getProperty(FIELD__FK_SCHADEN);
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FAULT))
+                            .append(schadenBean.getPrimaryKeyValue());
+                    CidsBean meldungBean = (CidsBean) schadenBean.getProperty(FIELD__FK_MELDUNG);
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_MESSAGE))
+                            .append(meldungBean.getProperty(FIELD__MDATUM));
+                }
+            }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()

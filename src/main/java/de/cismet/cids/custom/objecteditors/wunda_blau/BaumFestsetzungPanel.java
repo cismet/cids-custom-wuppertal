@@ -85,12 +85,15 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     }
     
     
-    public static final String FIELD__ID = "id";                           // baum_festsetzung
+    public static final String FIELD__ID = "id";                                // baum_festsetzung
     public static final String FIELD__ART = "fk_art";                           // baum_festsetzung
     public static final String FIELD__UMFANG = "umfang";                        // baum_festsetzung
-    public static final String FIELD__DATUM = "datum";                        // baum_festsetzung
+    public static final String FIELD__DATUM = "datum";                          // baum_festsetzung
     public static final String FIELD__GEOM = "fk_geom";                         // baum_festsetzung
     public static final String FIELD__BEMERKUNG = "bemerkung";                  // baum_festsetzung
+    public static final String FIELD__FK_SCHADEN= "fk_schaden";                 // baum_festsetzung
+    public static final String FIELD__FK_MELDUNG= "fk_meldung";                 // baum_schaden
+    public static final String FIELD__MDATUM= "datum";                          // baum_meldung
     
     
     public static final String FIELD__GEO_FIELD = "geo_field";                  // geom
@@ -108,6 +111,12 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             "BaumFestsetzungPanel.prepareForSave().wrongGeom";
     public static final String BUNDLE_NODATE = 
             "BaumFestsetzungPanel.prepareForSave().noDatum";
+    public static final String BUNDLE_WHICH = 
+            "BaumFestsetzungPanel.prepareForSave().welcheFest";
+    public static final String BUNDLE_FAULT = 
+            "BaumFestsetzungPanel.prepareForSave().welcherSchaden";
+    public static final String BUNDLE_MESSAGE = 
+            "BaumFestsetzungPanel.prepareForSave().welcheMeldung";
     public static final String BUNDLE_PANE_PREFIX =
             "BaumFestsetzungPanel.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
@@ -610,6 +619,21 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         
         
         if (errorMessage.length() > 0) {
+            if (baumChildrenLoader.getParentOrganizer() instanceof BaumSchadenEditor){
+                errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WHICH))
+                        .append(saveFestsetzungBean.getPrimaryKeyValue());
+            } else {
+                if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor){
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WHICH))
+                            .append(saveFestsetzungBean.getPrimaryKeyValue());
+                    CidsBean schadenBean = (CidsBean) saveFestsetzungBean.getProperty(FIELD__FK_SCHADEN);
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_FAULT))
+                            .append(schadenBean.getPrimaryKeyValue());
+                    CidsBean meldungBean = (CidsBean) schadenBean.getProperty(FIELD__FK_MELDUNG);
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_MESSAGE))
+                            .append(meldungBean.getProperty(FIELD__MDATUM));
+                }
+            }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()

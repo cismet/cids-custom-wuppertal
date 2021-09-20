@@ -15,13 +15,9 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
-import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
@@ -46,15 +42,11 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.Color;
@@ -153,6 +145,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String FIELD__SELBST = "selbststaendig";                // baum_ersatz
     public static final String FIELD__DISPENS = "dispensbau";                   // baum_ersatz
     public static final String FIELD__ID = "id";                                // baum_schaden
+    public static final String FIELD__FK_MELDUNG= "fk_meldung";                 // baum_schaden
+    public static final String FIELD__MDATUM= "datum";                          // baum_meldung
     
     public static final String FIELD__GEOREFERENZ = "fk_geom";                  // baum_schaden
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
@@ -196,6 +190,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String BUNDLE_PANE_TITLE_ERROR_ERSATZ = "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.title";
     public static final String BUNDLE_ERROR_FEST = "BaumSchadenPanel.zeigeErrorFest().JOptionPane.meldung";
     public static final String BUNDLE_ERROR_ERSATZ = "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.meldung";
+    public static final String BUNDLE_WHICH = 
+            "BaumSchadenPanel.prepareForSave().welcherSchaden";
+    public static final String BUNDLE_MESSAGE = 
+            "BaumSchadenPanel.prepareForSave().welcheMeldung";
     public static final String BUNDLE_PANE_PREFIX =
         "BaumSchadenPanel.prepareForSave().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
@@ -1787,6 +1785,13 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         }
         
         if (errorMessage.length() > 0) {
+            if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor){
+                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WHICH))
+                        .append(saveSchadenBean.getPrimaryKeyValue());
+                CidsBean meldungBean = (CidsBean) saveSchadenBean.getProperty(FIELD__FK_MELDUNG);
+                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_MESSAGE))
+                        .append(meldungBean.getProperty(FIELD__MDATUM));
+            }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()

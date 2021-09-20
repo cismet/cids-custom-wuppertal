@@ -88,6 +88,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public static final String FIELD__TEILNEHMER_NAME = "name";                 // baum_teilnehmer
     public static final String FIELD__TEILNEHMER_TELEFON = "telefon";           // baum_teilnehmer
     public static final String FIELD__TEILNEHMER_BEMERKUNG = "bemerkung";       // baum_teilnehmer
+    public static final String FIELD__FK_MELDUNG= "fk_meldung";                 // baum_ortstermin
+    public static final String FIELD__MDATUM= "datum";                          // baum_meldung
     public static final String PARENT_NAME = "BaumOrtstermin"; 
     public static final String TABLE_NAME__TEILNEHMER = "baum_teilnehmer"; 
     
@@ -99,6 +101,10 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public static final String BUNDLE_NODATE = "BaumOrtsterminPanel.prepareForSave().noDatum";
     public static final String BUNDLE_NONAME = "BaumOrtsterminPanel.prepareForSave().noName";
     public static final String BUNDLE_WRONGTEL = "BaumOrtsterminPanel.prepareForSave().wrongTelefon";
+    public static final String BUNDLE_WHICH = 
+            "BaumOrtsterminPanel.prepareForSave().welcherOrt";
+    public static final String BUNDLE_MESSAGE = 
+            "BaumOrtsterminPanel.prepareForSave().welcheMeldung";
     
     public static final String TEL__PATTERN = "\\+[0-9]{1,3}(-[0-9]+){1,}";
     
@@ -565,7 +571,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
                         LOG.warn("No name specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL)) 
-                                    .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString());
+                                    .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString())
+                                    .append("<br>");
                         save = false;
                     }
                 }
@@ -576,6 +583,13 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         }
         
         if (errorMessage.length() > 0) {
+            if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor){
+                errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WHICH))
+                        .append(saveOrtsterminBean.getProperty(FIELD__DATUM));
+                CidsBean meldungBean = (CidsBean) saveOrtsterminBean.getProperty(FIELD__FK_MELDUNG);
+                errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_MESSAGE))
+                        .append(meldungBean.getProperty(FIELD__MDATUM));
+            }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()

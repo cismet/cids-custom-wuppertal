@@ -154,6 +154,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
     public static final String BUNDLE_PANE_TITLE_ERROR_SCHADEN = "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.title";
     public static final String BUNDLE_ERROR_ORT = "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.meldung";
     public static final String BUNDLE_ERROR_SCHADEN = "BaumMeldungPanel.zeigeErrorSchaden().JOptionPane.meldung";
+    public static final String BUNDLE_WHICH = 
+            "BaumMeldungPanel.prepareForSave().welcheMeldung";
     public static final String BUNDLE_PANE_PREFIX_SELECTION =
         "BaumMeldungPanel.btnApartnerActionPerformed().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX_SELECTION =
@@ -1302,6 +1304,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable, 
         }
 
         if (errorMessage.length() > 0) {
+            errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_WHICH))
+                        .append(saveMeldungBean.getPrimaryKeyValue());
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
