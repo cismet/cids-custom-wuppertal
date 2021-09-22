@@ -902,6 +902,18 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     private Date savePflanzung;
     private Date saveUmsetzung;
     
+    
+    private final ActionListener hnrActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0))
+                                    .getList();
+                        final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
+                final Object selectedValue = pop.getSelectedValue();
+                txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
+            }
+    };
+    
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
@@ -1021,6 +1033,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         initComponents();
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
+            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
+            //cbHNr.addActionListener(hnrActionListener);
         }
     }
 
@@ -1148,6 +1162,14 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             if (isEditor() && (this.cidsBean != null)) {
                 this.cidsBean.removePropertyChangeListener(changeListener);
             }
+            if (isEditor()){
+                for(final ActionListener hnrListener:cbHNr.getActionListeners()){
+                    if(hnrListener == hnrActionListener){
+                        cbHNr.removeActionListener(hnrListener);
+                        break;
+                    }
+                }
+            }
             try{
                 bindingGroup.unbind();
                 this.cidsBean = cidsBean;
@@ -1222,21 +1244,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 if(isEditor()){
                     if(this.cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
                         cbHNr.setEnabled(true);
+                    } else {
+                        cbHNr.setEnabled(false);
                     }
-                    StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
-                    {
-                        final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0))
-                                    .getList();
-                        final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
-                        cbHNr.addActionListener(new ActionListener() {
-
-                                @Override
-                                public void actionPerformed(final ActionEvent e) {
-                                    final Object selectedValue = pop.getSelectedValue();
-                                    txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
-                                }
-                            });
-                    }
+                   /*StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);*/
+                         cbHNr.addActionListener(hnrActionListener);
                     refreshHnr();
                 }
             } catch (final Exception ex) {
