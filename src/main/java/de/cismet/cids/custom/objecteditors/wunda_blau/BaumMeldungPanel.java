@@ -1049,6 +1049,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                         lstSchaeden.setSelectedIndex(0);
                     }
                     cidsBean.setArtificialChangeFlag(true);
+                    getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
                 }else {
                     //Meldung, Schaden hat Unterobjekte
                     JOptionPane.showMessageDialog(
@@ -1249,9 +1250,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
             }
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
-            if (isEditor() && (this.cidsBean != null)) {
-                    cidsBean.addPropertyChangeListener(changeListener);
-            }
             if (this.cidsBean != null){         
                 zeigeKinderOrt();
                 zeigeKinderSchaden();
@@ -1260,6 +1258,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                 setSchadenBeans(null);
             }
             bindingGroup.bind();
+            if (isEditor() && (this.cidsBean != null)) {
+                this.cidsBean.addPropertyChangeListener(changeListener);
+            }
             isAbgenommen();
             dlgAddOrtstermin.pack();
             dlgAddOrtstermin.getRootPane().setDefaultButton(btnMenOkOrtstermin);

@@ -521,7 +521,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             this.cidsBean = cidsBean;
             bindingGroup.bind();
             if (isEditor() && (this.cidsBean != null)) {
-                    cidsBean.addPropertyChangeListener(changeListener);
+                this.cidsBean.addPropertyChangeListener(changeListener);
             }
             final DivBeanTable teilnehmerModel = new DivBeanTable(
                         isEditor(),
