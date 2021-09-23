@@ -263,7 +263,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                             index,
                             isSelected,
                             cellHasFocus);
-                    if (value != null) {
+                    if (value instanceof CidsBean) {
                         final Validator.Result result = massnahmenkategorisierungValidator.validate((CidsBean)value);
                         if (result != null) {
                             if (result.getType().equals(result.ERROR)) {
@@ -274,6 +274,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                         } else {
                             l.setForeground(Color.black);
                         }
+                    } else if ((value == null) || (value instanceof DefaultBindableReferenceCombo.NullableItem)) {
+                        l.setText(" ");
                     }
                     return l;
                 }
@@ -1399,8 +1401,9 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                     getConnectionContext());
             final DefaultComboBoxModel result = DefaultBindableReferenceCombo.getModelByMetaClass(
                     massnahmenClass,
-                    true,
+                    false,
                     getConnectionContext());
+            result.addElement(null);
             cbMassnahmenkategorisierung.setModel(result);
 
 //            ((DefaultBindableReferenceCombo)cbMassnahmenkategorisierung).setMetaClass(massnahmenClass);
@@ -1565,20 +1568,24 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
          */
         @Override
         public Result validate(final CidsBean validationBean) {
-            final String kuerzel = (String)validationBean.getProperty("kuerzel");
-            final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
-            if (nutzungsart != null) {
-                String gueltigeMassnahmen = null;
-                gueltigeMassnahmen = (String)nutzungsart.getProperty("massnahmen_gueltig");
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
+            if (validationBean != null) {
+                final String kuerzel = (String)validationBean.getProperty("kuerzel");
+                final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
+                if (nutzungsart != null) {
+                    String gueltigeMassnahmen = null;
+                    gueltigeMassnahmen = (String)nutzungsart.getProperty("massnahmen_gueltig");
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
+                    }
+                    if ((kuerzel != null) && (gueltigeMassnahmen != null) && gueltigeMassnahmen.contains(kuerzel)) {
+                        return null;
+                    }
+                    return new Result(null, "keine gültige Maßnahme", Validator.Result.WARNING);
                 }
-                if ((kuerzel != null) && (gueltigeMassnahmen != null) && gueltigeMassnahmen.contains(kuerzel)) {
-                    return null;
-                }
-                return new Result(null, "keine gültige Maßnahme", Validator.Result.WARNING);
+                return new Result(null, "ohne Nutzungsart, keine Maßnahme", Validator.Result.WARNING);
+            } else {
+                return null;
             }
-            return new Result(null, "ohne Nutzungsart, keine Maßnahme", Validator.Result.WARNING);
         }
     }
 }
