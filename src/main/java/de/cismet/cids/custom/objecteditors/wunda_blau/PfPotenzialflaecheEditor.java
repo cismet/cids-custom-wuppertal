@@ -4980,6 +4980,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         dlgMassnahme.dispose();
         panDialog.dispose();
         dlgInterneHinweise.dispose();
+        labelComponents.clear();
+        searchLabelFieldPanels.clear();
+        labelsPanels.clear();
         setCidsBean(null);
     }
 
