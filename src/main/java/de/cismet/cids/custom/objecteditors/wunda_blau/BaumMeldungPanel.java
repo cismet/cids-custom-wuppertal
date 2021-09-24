@@ -859,14 +859,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         try {
             if (selectedItem instanceof CidsBean){
                 cidsBean = TableUtils.addBeanToCollectionWithMessage(StaticSwingTools.getParentFrame(this),
-                    cidsBean,
+                    getCidsBean(),
                     FIELD__APARTNER,
                     (CidsBean)selectedItem);
             }
         } catch (Exception ex) {
             LOG.error(ex, ex);
         } finally {
-            cidsBean.setArtificialChangeFlag(true);
+            getCidsBean().setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
     }//GEN-LAST:event_btnAddApartnerActionPerformed
@@ -880,8 +880,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                     JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
-                    cidsBean = TableUtils.deleteItemFromList(cidsBean, FIELD__APARTNER, selection, false);
-                    cidsBean.setArtificialChangeFlag(true);
+                    cidsBean = TableUtils.deleteItemFromList(getCidsBean(), FIELD__APARTNER, selection, false);
+                    getCidsBean().setArtificialChangeFlag(true);
                     getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
                 } catch (Exception ex) {
                     final ErrorInfo ei = new ErrorInfo(
@@ -913,9 +913,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
             final Object selectedObject = lstOrtstermine.getSelectedValue();
 
             if (selectedObject instanceof CidsBean) {
-                List<CidsBean> listOrte = getBaumChildrenLoader().getMapValueOrt(this.cidsBean.getPrimaryKeyValue());
+                List<CidsBean> listOrte = getBaumChildrenLoader().getMapValueOrt(getCidsBean().getPrimaryKeyValue());
                 if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
-                    getBaumChildrenLoader().removeOrt(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    getBaumChildrenLoader().removeOrt(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
                 } else{
                     for(final CidsBean beanOrt:listOrte){
                         if(beanOrt.equals(selectedObject)){
@@ -927,13 +927,13 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                             break;
                         }
                     }
-                    getBaumChildrenLoader().getMapOrt().replace(this.cidsBean.getPrimaryKeyValue(), listOrte);
+                    getBaumChildrenLoader().getMapOrt().replace(getCidsBean().getPrimaryKeyValue(), listOrte);
                 }
                 ((DefaultListModel)lstOrtstermine.getModel()).removeElement(selectedObject);
                 if (getActiveBeans(listOrte) > 0) {
                     lstOrtstermine.setSelectedIndex(0);
                 }
-                cidsBean.setArtificialChangeFlag(true);
+                getCidsBean().setArtificialChangeFlag(true);
                 getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
             }
         }
@@ -961,16 +961,16 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
             java.sql.Date beanDate = new java.sql.Date(cal.getTime().getTime());
 
             beanOrtstermin.setProperty(FIELD__DATUM, beanDate);
-            beanOrtstermin.setProperty(FIELD__FK_MELDUNG, cidsBean);
+            beanOrtstermin.setProperty(FIELD__FK_MELDUNG, getCidsBean());
 
             //Meldungen erweitern:
             if (isEditor()){
-                getBaumChildrenLoader().addOrt(cidsBean.getPrimaryKeyValue(), beanOrtstermin);
+                getBaumChildrenLoader().addOrt(getCidsBean().getPrimaryKeyValue(), beanOrtstermin);
             }
             ((DefaultListModel)lstOrtstermine.getModel()).addElement(beanOrtstermin);
             
             lstOrtstermine.setSelectedValue(beanOrtstermin, true);
-            cidsBean.setArtificialChangeFlag(true);
+            getCidsBean().setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         } catch (Exception ex) {
             LOG.error(ex, ex);
@@ -987,7 +987,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                     "WUNDA_BLAU",
                     TABLE__SCHADEN,
                     getConnectionContext());
-                beanSchaden.setProperty(FIELD__FK_MELDUNG, cidsBean);
+                beanSchaden.setProperty(FIELD__FK_MELDUNG, getCidsBean());
                 beanSchaden.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
                 beanSchaden.setProperty(FIELD__SCHADEN_BAU, false);
                 beanSchaden.setProperty(FIELD__SCHADEN_BERATUNG, false);
@@ -1006,13 +1006,13 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                 
                 //schaden erweitern:
                 if (isEditor()){
-                    getBaumChildrenLoader().addSchaden(cidsBean.getPrimaryKeyValue(), beanSchaden);
+                    getBaumChildrenLoader().addSchaden(getCidsBean().getPrimaryKeyValue(), beanSchaden);
                 }
                 ((DefaultListModel)lstSchaeden.getModel()).addElement(beanSchaden);
 
                 //Refresh:
                 lstSchaeden.setSelectedValue(beanSchaden, true);
-                cidsBean.setArtificialChangeFlag(true);
+                getCidsBean().setArtificialChangeFlag(true);
                 getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
             } catch (Exception e) {
                 LOG.error("Cannot add new BaumSchaden object", e);
@@ -1028,9 +1028,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                 final Integer idSchaden = ((CidsBean) selectedObject).getPrimaryKeyValue();
                 if(getBaumChildrenLoader().getMapValueFest(idSchaden)== null && getBaumChildrenLoader().getMapValueErsatz(idSchaden)== null){
                 
-                    List<CidsBean> listSchaeden = getBaumChildrenLoader().getMapValueSchaden(this.cidsBean.getPrimaryKeyValue());
+                    List<CidsBean> listSchaeden = getBaumChildrenLoader().getMapValueSchaden(getCidsBean().getPrimaryKeyValue());
                     if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
-                        getBaumChildrenLoader().removeSchaden(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                        getBaumChildrenLoader().removeSchaden(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
                     } else{
                         for(final CidsBean beanSchaden:listSchaeden){
                             if(beanSchaden.equals(selectedObject)){
@@ -1042,13 +1042,13 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
                                 break;
                             }
                         }
-                        getBaumChildrenLoader().getMapMeldung().replace(this.cidsBean.getPrimaryKeyValue(), listSchaeden);
+                        getBaumChildrenLoader().getMapMeldung().replace(getCidsBean().getPrimaryKeyValue(), listSchaeden);
                     }
                     ((DefaultListModel)lstSchaeden.getModel()).removeElement(selectedObject);
                     if (getActiveBeans(listSchaeden) > 0) {
                         lstSchaeden.setSelectedIndex(0);
                     }
-                    cidsBean.setArtificialChangeFlag(true);
+                    getCidsBean().setArtificialChangeFlag(true);
                     getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
                 }else {
                     //Meldung, Schaden hat Unterobjekte

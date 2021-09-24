@@ -302,10 +302,10 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_KRONE;
         } else {
-            return cidsBean.toString();
+            return getCidsBean().toString();
         }
     }
 
@@ -322,7 +322,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
             REDUNDANT_TABLE);
         final Collection<String> conditions = new ArrayList<>();
         conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         kroneSearch.setWhere(conditions);
         try {
             redundantName = !(SessionManager.getProxy().customServerSearch(

@@ -350,7 +350,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
             xtSchaden.getTableHeader().setForeground(Color.BLACK);
             try {
-                cidsBean.setProperty(FIELD__FK_SCHADEN, schadenBean);
+                getCidsBean().setProperty(FIELD__FK_SCHADEN, schadenBean);
             } catch (Exception ex) {
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
@@ -362,9 +362,9 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public boolean isOkForSaving() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-        boolean noErrorOccured = baumErsatzPanel.isOkForSaving(this.cidsBean);
+        boolean noErrorOccured = baumErsatzPanel.isOkForSaving(getCidsBean());
         try {
-            if (cidsBean.getProperty(FIELD__SCHADEN_ID) == null) {
+            if (getCidsBean().getProperty(FIELD__SCHADEN_ID) == null) {
                 LOG.warn("No schaden specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSCHADEN));
                 save = false;
@@ -406,17 +406,17 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 getConnectionContext());
             bindingGroup.bind();
             baumErsatzPanel.setCidsBean(this.getCidsBean());
-            if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
-                this.cidsBean.setProperty(FIELD__DISPENS, false);
-                this.cidsBean.setProperty(FIELD__SELBST, false);
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
+                getCidsBean().setProperty(FIELD__DISPENS, false);
+                getCidsBean().setProperty(FIELD__SELBST, false);
             }
-            if (this.cidsBean != null){
+            if (getCidsBean() != null){
             
-            if(cidsBean.getProperty(FIELD__FK_SCHADEN) == null){
+            if(getCidsBean().getProperty(FIELD__FK_SCHADEN) == null){
                 xtSchaden.getTableHeader().setForeground(Color.red);
             }else{
                 xtSchaden.getTableHeader().setForeground(Color.BLACK);
-                setSchadenTable((CidsBean)cidsBean.getProperty(FIELD__FK_SCHADEN));
+                setSchadenTable((CidsBean)getCidsBean().getProperty(FIELD__FK_SCHADEN));
             }
         }
             
@@ -456,10 +456,10 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_ERSATZ;
         } else {
-            return String.format("G: %s - M: %s - S: %s, %s - E:%s, %s", cidsBean.getProperty(FIELD__GEBIET_AZ), cidsBean.getProperty(FIELD__MELDUNG_DATUM), cidsBean.getProperty(FIELD__SCHADEN_ID), cidsBean.getProperty(FIELD__SCHADEN_ART), cidsBean.getProperty(FIELD__ID), cidsBean.getProperty(FIELD__ART));
+            return String.format("G: %s - M: %s - S: %s, %s - E:%s, %s", getCidsBean().getProperty(FIELD__GEBIET_AZ), getCidsBean().getProperty(FIELD__MELDUNG_DATUM), getCidsBean().getProperty(FIELD__SCHADEN_ID), getCidsBean().getProperty(FIELD__SCHADEN_ART), getCidsBean().getProperty(FIELD__ID), getCidsBean().getProperty(FIELD__ART));
         }
     }
 

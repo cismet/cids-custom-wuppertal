@@ -513,19 +513,19 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
-        if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (isEditor() && (this.cidsBean != null)) {
-                this.cidsBean.removePropertyChangeListener(changeListener);
+        if (!(Objects.equals(getCidsBean(), cidsBean))){
+            if (isEditor() && (getCidsBean() != null)) {
+                getCidsBean().removePropertyChangeListener(changeListener);
             }
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
             bindingGroup.bind();
-            if (isEditor() && (this.cidsBean != null)) {
-                this.cidsBean.addPropertyChangeListener(changeListener);
+            if (isEditor() && (getCidsBean() != null)) {
+                getCidsBean().addPropertyChangeListener(changeListener);
             }
             final DivBeanTable teilnehmerModel = new DivBeanTable(
                         isEditor(),
-                        cidsBean,
+                        getCidsBean(),
                         FIELD__TEILNEHMER,
                         TEILNEHMER_COL_NAMES,
                         TEILNEHMER_PROP_NAMES,                   

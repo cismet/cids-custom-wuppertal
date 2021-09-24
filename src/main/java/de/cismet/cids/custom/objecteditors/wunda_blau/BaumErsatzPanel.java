@@ -876,7 +876,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     }//GEN-LAST:event_btnRemKontActionPerformed
 
     private void cbArtEActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbArtEActionPerformed
-        if (cidsBean != null && this.cidsBean.getProperty(FIELD__ART) != null){
+        if (getCidsBean() != null && getCidsBean().getProperty(FIELD__ART) != null){
             cbSorte.setSelectedItem(null);
             cbSorte.setEnabled(true);
             refreshSorte();
@@ -884,7 +884,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     }//GEN-LAST:event_cbArtEActionPerformed
 
     private void cbStrasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
-        if (isEditor() && cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
+        if (isEditor() && getCidsBean()!= null && getCidsBean().getProperty(FIELD__STRASSE) != null){
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
@@ -1059,8 +1059,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     }
     
     private void refreshSorte() {
-        if (cidsBean != null){
-            sorteArtSearch.setArtId((Integer)cidsBean.getProperty(FIELD__ART_ID));
+        if (getCidsBean() != null){
+            sorteArtSearch.setArtId((Integer)getCidsBean().getProperty(FIELD__ART_ID));
 
             new SwingWorker<Void, Void>() {
 
@@ -1124,43 +1124,31 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     }
     
     private void setSaveValues(){
-        if (this.cidsBean.getProperty(FIELD__HNR) != null){
-            saveHnr = ((CidsBean) this.cidsBean.getProperty(FIELD__HNR)).getPrimaryKeyValue();
-        } else {
-            saveHnr = null;
-        }
-        if (this.cidsBean.getProperty(FIELD__ART) != null){
-            saveArt = ((CidsBean) this.cidsBean.getProperty(FIELD__ART)).getPrimaryKeyValue();
-        } else {
-            saveArt = null;
-        }
-        if (this.cidsBean.getProperty(FIELD__SORTE) != null){
-            saveSorte = ((CidsBean) this.cidsBean.getProperty(FIELD__SORTE)).getPrimaryKeyValue();
-        } else {
-            saveSorte = null;
-        }
-        if (this.cidsBean.getProperty(FIELD__GEOREFERENZ) != null){
-            saveGeom = ((CidsBean) this.cidsBean.getProperty(FIELD__GEOREFERENZ)).getPrimaryKeyValue();
-        } else {
-            saveGeom = null;
-        }
-        if (this.cidsBean.getProperty(FIELD__DATUM_U) != null){
-            saveUmsetzung =  (Date) this.cidsBean.getProperty(FIELD__DATUM_U);
-        } else {
-            saveUmsetzung = null;
-        }
-        if (this.cidsBean.getProperty(FIELD__DATUM_P) != null){
-            savePflanzung =  (Date) this.cidsBean.getProperty(FIELD__DATUM_P);
-        } else {
-            savePflanzung = null;
-        }
+        saveHnr = getCidsBean().getProperty(FIELD__HNR) != null
+                ? ((CidsBean) getCidsBean().getProperty(FIELD__HNR)).getPrimaryKeyValue()
+                : null;
+        saveArt = getCidsBean().getProperty(FIELD__ART) != null
+                ? ((CidsBean) getCidsBean().getProperty(FIELD__ART)).getPrimaryKeyValue()
+                : null;
+        saveSorte = getCidsBean().getProperty(FIELD__SORTE) != null
+                ? ((CidsBean) getCidsBean().getProperty(FIELD__SORTE)).getPrimaryKeyValue()
+                : null;
+        saveGeom = getCidsBean().getProperty(FIELD__GEOREFERENZ) != null
+                ? ((CidsBean) getCidsBean().getProperty(FIELD__GEOREFERENZ)).getPrimaryKeyValue()
+                : null;
+        saveUmsetzung = getCidsBean().getProperty(FIELD__DATUM_U) != null
+                ? (Date) getCidsBean().getProperty(FIELD__DATUM_U)
+                : null;
+        savePflanzung = getCidsBean().getProperty(FIELD__DATUM_P) != null
+                ? (Date) getCidsBean().getProperty(FIELD__DATUM_P)
+                : null;
     }
    
     @Override
     public void setCidsBean(CidsBean cidsBean) {
-        if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (isEditor() && (this.cidsBean != null)) {
-                this.cidsBean.removePropertyChangeListener(changeListener);
+        if (!(Objects.equals(getCidsBean(), cidsBean))){
+            if (isEditor() && (getCidsBean() != null)) {
+                getCidsBean().removePropertyChangeListener(changeListener);
             }
             if (isEditor()){
                 for(final ActionListener hnrListener:cbHNr.getActionListeners()){
@@ -1173,18 +1161,18 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             try{
                 bindingGroup.unbind();
                 this.cidsBean = cidsBean;
-                if (this.cidsBean != null  && isEditor()){
+                if (getCidsBean() != null  && isEditor()){
                     setSaveValues();
                 }
-                if (this.cidsBean != null){
-                    setKontrolleBeans(cidsBean.getBeanCollectionProperty(FIELD__KONTROLLE)); 
+                if (getCidsBean() != null){
+                    setKontrolleBeans(getCidsBean().getBeanCollectionProperty(FIELD__KONTROLLE)); 
                     DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                         bindingGroup,
-                        this.cidsBean,
+                        getCidsBean(),
                         getConnectionContext());
                     //Wenn mit mehreren Geoms(Liste) gearbeitet wird
                     if (isEditor()) {
-                        ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(cidsBean.getMetaObject());
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(getCidsBean().getMetaObject());
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).initForNewBinding();
                     }
                 
@@ -1200,7 +1188,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 bindingGroup.bind();
                 final DivBeanTable kontrolleModel = new DivBeanTable(
                             isEditor(),
-                            cidsBean,
+                            getCidsBean(),
                             FIELD__KONTROLLE,
                             KONTROLLE_COL_NAMES,
                             KONTROLLE_PROP_NAMES,                   
@@ -1233,16 +1221,16 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                     cbGeomErsatz.updateUI();
                 }
                 cbSorte.updateUI();
-                if (isEditor() && (this.cidsBean != null)) {
-                    this.cidsBean.addPropertyChangeListener(changeListener);
-                    if(this.cidsBean.getProperty(FIELD__ART) != null){
+                if (isEditor() && (getCidsBean() != null)) {
+                    getCidsBean().addPropertyChangeListener(changeListener);
+                    if(getCidsBean().getProperty(FIELD__ART) != null){
                         cbSorte.setEnabled(true);
                     }
                 }
                 
                 
                 if(isEditor()){
-                    if(this.cidsBean != null && this.cidsBean.getProperty(FIELD__STRASSE) != null){
+                    if(getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE) != null){
                         cbHNr.setEnabled(true);
                     } else {
                         cbHNr.setEnabled(false);
@@ -1261,8 +1249,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     
        
     private void refreshHnr() { 
-        if (cidsBean != null && cidsBean.getProperty(FIELD__STRASSE) != null){
-            String schluessel = cidsBean.getProperty(FIELD__STRASSE).toString();
+        if (getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE) != null){
+            String schluessel = getCidsBean().getProperty(FIELD__STRASSE).toString();
             if (schluessel != null){
 
                 hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));

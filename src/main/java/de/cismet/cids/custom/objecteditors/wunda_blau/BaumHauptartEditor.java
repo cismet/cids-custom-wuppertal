@@ -104,7 +104,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
             REDUNDANT_TABLE);
         //name nicht redundant
         conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         hauptartSearch.setWhere(conditions);
         try{
             redundantName = !(SessionManager.getProxy().customServerSearch(
@@ -117,7 +117,7 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
         //schluessel nicht redundant
         conditions.clear();
         conditions.add(FIELD__SCHLUESSEL + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         hauptartSearch.setWhere(conditions);
         try{
             redundantKey = !(SessionManager.getProxy().customServerSearch(
@@ -128,9 +128,9 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
             LOG.warn("problem in check key: load values.", ex);
         }
         //Schluessel setzen
-        if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             try {
-                cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
+                getCidsBean().setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
             } catch (Exception ex) {
                 LOG.warn("Key not set");
             }
@@ -405,10 +405,10 @@ public class BaumHauptartEditor extends DefaultCustomObjectEditor implements Cid
 
     @Override
     public String getTitle() {
-       if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+       if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_HAUPTART;
         } else {
-            return cidsBean.toString();
+            return getCidsBean().toString();
         }
     }
 

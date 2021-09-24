@@ -158,9 +158,9 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         
-        boolean noErrorOccured = baumOrtsterminPanel.isOkayForSaving(this.cidsBean);
+        boolean noErrorOccured = baumOrtsterminPanel.isOkayForSaving(getCidsBean());
         try {
-            if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
+            if (getCidsBean().getProperty(FIELD__MELDUNG_ID) == null) {
                 LOG.warn("No meldung specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
                 save = false;
@@ -382,7 +382,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
             xtMeldung.getTableHeader().setForeground(Color.BLACK);
             try {
-                cidsBean.setProperty(FIELD__MELDUNG, meldungBean);
+                getCidsBean().setProperty(FIELD__MELDUNG, meldungBean);
             } catch (Exception ex) {
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
@@ -410,11 +410,11 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 getConnectionContext());
             bindingGroup.bind();
             
-            if(cidsBean.getProperty(FIELD__MELDUNG) == null){
+            if(getCidsBean().getProperty(FIELD__MELDUNG) == null){
                 xtMeldung.getTableHeader().setForeground(Color.red);
             }else{
                 xtMeldung.getTableHeader().setForeground(Color.BLACK);
-                setMeldungTable((CidsBean)cidsBean.getProperty(FIELD__MELDUNG));
+                setMeldungTable((CidsBean)getCidsBean().getProperty(FIELD__MELDUNG));
             }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
@@ -455,10 +455,10 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_ORTSTERMIN;
         } else {
-            return String.format("Gebiet: %s - Meldung: %s - Ortstermin: %s", cidsBean.getProperty(FIELD__GEBIET_AZ), cidsBean.getProperty(FIELD__MELDUNG_DATUM), cidsBean.getProperty(FIELD__DATUM));
+            return String.format("Gebiet: %s - Meldung: %s - Ortstermin: %s", getCidsBean().getProperty(FIELD__GEBIET_AZ), getCidsBean().getProperty(FIELD__MELDUNG_DATUM), getCidsBean().getProperty(FIELD__DATUM));
         }
         
     }

@@ -137,7 +137,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         final Collection<String> conditions = new ArrayList<>();
         //redundanter name
         conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         apSearch.setWhere(conditions);
         try {
             redundantName = !(SessionManager.getProxy().customServerSearch(
@@ -150,7 +150,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         //redundanter Schluessel
         conditions.clear();
         conditions.add(FIELD__SCHLUESSEL + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         apSearch.setWhere(conditions);
         try {
             redundantKey = !(SessionManager.getProxy().customServerSearch(
@@ -161,9 +161,9 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             LOG.warn("problem in check key: load values.", ex);
         }     
         //Schluessel setzen 
-        if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             try {
-                cidsBean.setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
+                getCidsBean().setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
             } catch (Exception ex) {
                 LOG.warn("Error: Key not set.", ex);
             }
@@ -201,7 +201,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         
         //Telefon muss eine Nummer & eine Bemerkung haben
         try{
-            Collection<CidsBean> telCollection =  this.cidsBean.getBeanCollectionProperty(FIELD__TELEFONE);
+            Collection<CidsBean> telCollection =  getCidsBean().getBeanCollectionProperty(FIELD__TELEFONE);
             for (final CidsBean tBean:telCollection){
                 if (tBean.getProperty(FIELD__TELEFON)== null) {
                     LOG.warn("No tel specified. Skip persisting.");
@@ -720,12 +720,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cb,
+                getCidsBean(),
                 getConnectionContext());
             bindingGroup.bind();
             telefonModel = new DivBeanTable(
                     isEditor(),
-                    cidsBean,
+                    getCidsBean(),
                     FIELD__TELEFONE,
                     TELEFON_COL_NAMES,
                     TELEFON_PROP_NAMES,
@@ -759,10 +759,10 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_AP;
         } else {
-            return cidsBean.toString();
+            return getCidsBean().toString();
         }
     }
 

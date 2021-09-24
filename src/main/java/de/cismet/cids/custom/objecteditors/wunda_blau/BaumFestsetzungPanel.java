@@ -529,38 +529,34 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     }
 
     private void setSaveValues(){
-        if (this.cidsBean.getProperty(FIELD__GEOM) != null){
-            saveGeom = ((CidsBean) this.cidsBean.getProperty(FIELD__GEOM)).getPrimaryKeyValue();
-        } else {
-            saveGeom = null;
-        }
-        if (this.cidsBean.getProperty(FIELD__DATUM) != null){
-            saveDatum =  (Date) this.cidsBean.getProperty(FIELD__DATUM);
-        } else {
-            saveDatum = null;
-        }
+        saveGeom = getCidsBean().getProperty(FIELD__GEOM) != null
+                ? ((CidsBean) getCidsBean().getProperty(FIELD__GEOM)).getPrimaryKeyValue()
+                : null;
+        saveDatum = getCidsBean().getProperty(FIELD__DATUM) != null
+                ? (Date) getCidsBean().getProperty(FIELD__DATUM)
+                : null;
     }
    
     @Override
     public void setCidsBean(CidsBean cidsBean) {
-        if (!(Objects.equals(this.cidsBean, cidsBean))){
-            if (isEditor() && (this.cidsBean != null)) {
-                this.cidsBean.removePropertyChangeListener(changeListener);
+        if (!(Objects.equals(getCidsBean(), cidsBean))){
+            if (isEditor() && (getCidsBean() != null)) {
+                getCidsBean().removePropertyChangeListener(changeListener);
             }
             try{
                 bindingGroup.unbind();
                 this.cidsBean = cidsBean;
-                if (this.cidsBean != null  && isEditor()){
+                if (getCidsBean() != null  && isEditor()){
                     setSaveValues();
                 }
-                if (this.cidsBean != null){
+                if (getCidsBean() != null){
                     DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                         bindingGroup,
-                        this.cidsBean,
+                        getCidsBean(),
                         getConnectionContext());
                     //Wenn mit mehreren Geoms(Liste) gearbeitet wird
                     if (isEditor()) {
-                        ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(cidsBean.getMetaObject());
+                        ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).setCidsMetaObject(getCidsBean().getMetaObject());
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).initForNewBinding();
                     }
                 } else{
@@ -572,8 +568,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 
                 setMapWindow();
                 bindingGroup.bind();
-                if (isEditor() && (this.cidsBean != null)) {
-                    this.cidsBean.addPropertyChangeListener(changeListener);
+                if (isEditor() && (getCidsBean() != null)) {
+                    getCidsBean().addPropertyChangeListener(changeListener);
                 }
                 if (isEditor()){
                     cbGeomFest.updateUI();

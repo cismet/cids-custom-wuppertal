@@ -380,7 +380,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
             xtMeldung.getTableHeader().setForeground(Color.BLACK);
             try {
-                cidsBean.setProperty(FIELD__MELDUNG, meldungBean);
+                getCidsBean().setProperty(FIELD__MELDUNG, meldungBean);
             } catch (Exception ex) {
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
@@ -392,9 +392,9 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public boolean isOkForSaving()  {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
-        boolean noErrorOccured = baumSchadenPanel.isOkForSaving(this.cidsBean);
+        boolean noErrorOccured = baumSchadenPanel.isOkForSaving(getCidsBean());
         try {
-            if (cidsBean.getProperty(FIELD__MELDUNG_ID) == null) {
+            if (getCidsBean().getProperty(FIELD__MELDUNG_ID) == null) {
                 LOG.warn("No meldung specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOMELDUNG));
                 save = false;
@@ -434,21 +434,21 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                this.cidsBean,
+                getCidsBean(),
                 getConnectionContext());
             bindingGroup.bind();
-            if(this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+            if(getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
                 setDefaultValues();
             }
-            if(this.cidsBean != null && this.cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
-                loadChildren(this.cidsBean.getPrimaryKeyValue());
+            if(getCidsBean() != null && getCidsBean().getMetaObject().getStatus() != MetaObject.NEW){
+                loadChildren(getCidsBean().getPrimaryKeyValue());
             }
-            if (this.cidsBean != null){
-                if(cidsBean.getProperty(FIELD__MELDUNG) == null){
+            if (getCidsBean() != null){
+                if(getCidsBean().getProperty(FIELD__MELDUNG) == null){
                     xtMeldung.getTableHeader().setForeground(Color.red);
                 }else{
                     xtMeldung.getTableHeader().setForeground(Color.BLACK);
-                    setMeldungTable((CidsBean)cidsBean.getProperty(FIELD__MELDUNG));
+                    setMeldungTable((CidsBean)getCidsBean().getProperty(FIELD__MELDUNG));
                 }
             }
         } catch (final Exception ex) {
@@ -486,10 +486,10 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     @Override
     public String getTitle() {
-        if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_SCHADEN;
         } else {
-            return String.format("Gebiet: %s - Meldung: %s - Schaden: %s", cidsBean.getProperty(FIELD__GEBIET_AZ), cidsBean.getProperty(FIELD__MELDUNG_DATUM), cidsBean.getProperty(FIELD__ID));
+            return String.format("Gebiet: %s - Meldung: %s - Schaden: %s", getCidsBean().getProperty(FIELD__GEBIET_AZ), getCidsBean().getProperty(FIELD__MELDUNG_DATUM), getCidsBean().getProperty(FIELD__ID));
         }
     }
 
@@ -500,18 +500,18 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     
    public void setDefaultValues(){
         try {
-            this.cidsBean.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_BAU, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_BERATUNG, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_EINGANG, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_FAELLUNG, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_KRONE, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_OHNE, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_PRIVAT, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_STAMM, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_STURM, false);
-            this.cidsBean.setProperty(FIELD__SCHADEN_WURZEL, false);
+            this.getCidsBean().setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_BAU, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_BERATUNG, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_EINGANG, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_FAELLUNG, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_GUTACHTEN, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_KRONE, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_OHNE, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_PRIVAT, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_STAMM, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_STURM, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_WURZEL, false);
         } catch (Exception ex) {
             LOG.warn("problem in set default values.", ex);
         }

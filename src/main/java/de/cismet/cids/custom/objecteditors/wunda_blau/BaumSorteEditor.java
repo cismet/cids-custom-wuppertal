@@ -349,10 +349,10 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public String getTitle() {
-       if (cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
+       if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_SORTE;
         } else {
-            return cidsBean.toString();
+            return getCidsBean().toString();
         }
     }
 
@@ -373,7 +373,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
             Integer mainId = ((CidsBean)selection).getPrimaryKeyValue();
             conditions.add(FIELD__NAME+ " ilike '" + txtName.getText().trim() + "'");
             conditions.add(FIELD__MAIN + " = " + mainId);
-            conditions.add(FIELD__ID + " <> " + cidsBean.getProperty(FIELD__ID));
+            conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         }
         sorteSearch.setWhere(conditions);
         try {
