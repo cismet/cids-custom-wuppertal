@@ -130,7 +130,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public static final String FIELD__DATUM_P = "pflanzdatum";                  // baum_ersatz
     public static final String FIELD__DATUM_U = "umsetzung_bis";                // baum_ersatz
     public static final String FIELD__ART = "fk_art";                           // baum_ersatz 
-    public static final String FIELD__SORTE = "fk_sorte";                           // baum_ersatz 
+    public static final String FIELD__SORTE = "fk_sorte";                       // baum_ersatz 
     public static final String FIELD__ART_ID = "fk_art.id";                     // baum_ersatz --> art
     public static final String FIELD__GEOM = "fk_geom";                         // baum_ersatz
     public static final String FIELD__SELBST = "selbststaendig";                // baum_ersatz
@@ -183,9 +183,12 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         "BaumErsatzPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumErsatzPanel.isOkForSaving().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "BaumErsatzPanel.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE = 
+            "BaumErsatzPanel.isOkForSaving().JOptionPane.title";
     
-    private static final String[] KONTROLLE_COL_NAMES = new String[] { "Datum", "Bemerkung"};
+    private static final String[] KONTROLLE_COL_NAMES = new String[] { 
+            "Datum", 
+            "Bemerkung"};
     private static final String[] KONTROLLE_PROP_NAMES = new String[] {
             FIELD__KONTROLLE_DATUM,
             FIELD__KONTROLLE_BEMERKUNG
@@ -1034,7 +1037,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
-            //cbHNr.addActionListener(hnrActionListener);
         }
     }
 
@@ -1151,12 +1153,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 getCidsBean().removePropertyChangeListener(changeListener);
             }
             if (isEditor()){
-                for(final ActionListener hnrListener:cbHNr.getActionListeners()){
-                    if(hnrListener == hnrActionListener){
-                        cbHNr.removeActionListener(hnrListener);
-                        break;
-                    }
-                }
+                cbHNr.removeActionListener(hnrActionListener);
             }
             try{
                 bindingGroup.unbind();
@@ -1235,8 +1232,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                     } else {
                         cbHNr.setEnabled(false);
                     }
-                   /*StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);*/
-                         cbHNr.addActionListener(hnrActionListener);
+                    cbHNr.addActionListener(hnrActionListener);
                     refreshHnr();
                 }
             } catch (final Exception ex) {
