@@ -54,7 +54,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -159,8 +158,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     
     public static final String BUNDLE_NOART = 
             "BaumSchadenPanel.isOkForSaving().noArt";
-    public static final String BUNDLE_WRONGAGE = 
-            "BaumSchadenPanel.isOkForSaving().wrongAlter";
     public static final String BUNDLE_NOWURZEL = 
             "BaumSchadenPanel.isOkForSaving().noWurzel";
     public static final String BUNDLE_NOSTAMM= 
@@ -925,6 +922,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         spHoehe.setPreferredSize(new Dimension(75, 20));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), spHoehe, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -956,6 +955,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         spAlter.setPreferredSize(new Dimension(75, 20));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.alter}"), spAlter, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1658,25 +1659,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     LOG.error(ex, ex);
                 }
             }
-        }
-        //Hoehe richtig abspreichern
-        try {
-            saveSchadenBean.setProperty(FIELD__HOEHE, new DecimalFormat("00.0").format(spHoehe.getValue())); 
-        } catch (final Exception ex) {
-            LOG.warn("Height not formatted.", ex);
-            save = false;
-        }
-        
-        // Alter muss, wenn angegeben, eine Ganzzahl sein
-        try {
-            if ((Integer)saveSchadenBean.getProperty(FIELD__ALTER) != 0) {
-                LOG.warn("Wrong count specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGAGE));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("age not given.", ex);
-            save = false;
         }
         
         //Art muss angegeben werden

@@ -664,6 +664,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         spAnzahl.setPreferredSize(new Dimension(75, 20));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl}"), spAnzahl, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();

@@ -187,6 +187,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         spHoeheF.setPreferredSize(new Dimension(75, 20));
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), spHoeheF, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -214,6 +216,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         spUmfangF.setName("spUmfangF"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umfang}"), spUmfangF, BeanProperty.create("value"));
+        binding.setSourceNullValue(0d);
+        binding.setSourceUnreadableValue(0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
