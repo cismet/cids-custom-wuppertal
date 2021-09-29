@@ -691,159 +691,307 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panBeschreibungTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBeschreibungTitle = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        filler74 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler74 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblNummer = new javax.swing.JLabel();
         jPanel28 = new javax.swing.JPanel();
         txtNummer = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
         jButton4 = new javax.swing.JButton();
-        filler48 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler48 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblBezeichnung = new javax.swing.JLabel();
         txtBezeichnung = new javax.swing.JTextField();
-        filler75 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler75 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         jLabel6 = new javax.swing.JLabel();
         jPanel27 = new javax.swing.JPanel();
         defaultBindableReferenceCombo1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
-            NULLABLE_OPTION, SORTING_OPTION
-        );
+                NULLABLE_OPTION,
+                SORTING_OPTION);
         jLabel7 = new javax.swing.JLabel();
         dateStand2 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         mappingComponent1 = new de.cismet.cismap.commons.gui.MappingComponent();
         jPanel7 = new javax.swing.JPanel();
-        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblGeometrie5 = new javax.swing.JLabel();
-        cbGeom = !editable ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
-        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        cbGeom = (!editable) ? new JComboBox() : new DefaultCismapGeometryComboBoxEditor();
+        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechengroesse = new javax.swing.JLabel();
         lblFlaechengroesseWert = new javax.swing.JLabel();
-        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk = new javax.swing.JLabel();
-        filler58 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel2 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(KstGeometryMonSearch.SearchFor.BEZIRK));
-        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler58 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        searchLabelsFieldPanel2 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(
+                    KstGeometryMonSearch.SearchFor.BEZIRK));
+        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblQuartiere = new javax.swing.JLabel();
-        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel1 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(KstGeometryMonSearch.SearchFor.QUARTIER));
-        filler53 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        searchLabelsFieldPanel1 = new de.cismet.cids.editors.SearchLabelsFieldPanel(new KstGeometryMonSearch(
+                    KstGeometryMonSearch.SearchFor.QUARTIER));
+        filler53 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblQuartiere1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        monSearchResultsList1 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(((PotenzialflaecheReportServerAction.MonSearchReportProperty)PotenzialflaecheReportServerAction.Property.FLURSTUECKE.getValue()).createMonServerSearch());
-        filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        monSearchResultsList1 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.FLURSTUECKE.getValue()).createMonServerSearch());
+        filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk5 = new javax.swing.JLabel();
-        filler59 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        defaultBindableCheckboxField3 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Eigentümer:", SORTING_OPTION);
-        filler55 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler59 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        defaultBindableCheckboxField3 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Eigentümer:",
+                SORTING_OPTION);
+        filler55 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel10 = new javax.swing.JPanel();
         panStandortdaten = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle2 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle2 = new javax.swing.JLabel();
         panLageBody2 = new javax.swing.JPanel();
-        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblLagetyp = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         cbLagetyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30), new java.awt.Dimension(0, 30), new java.awt.Dimension(32767, 30));
+        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(32767, 30));
         lblOepnv = new javax.swing.JLabel();
         cbOepnv = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblLagetyp1 = new javax.swing.JLabel();
-        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        defaultBindableCheckboxField11 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Nähe zu:", SORTING_OPTION);
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        defaultBindableCheckboxField11 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Nähe zu:",
+                SORTING_OPTION);
+        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblLagetyp2 = new javax.swing.JLabel();
         cbLagetyp2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblTopografie = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         cbTopografie = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
         lblTopografie1 = new javax.swing.JLabel();
         cbTopografie1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0));
         panPlanungsrecht = new de.cismet.tools.gui.RoundedPanel();
         panMessstellenausbauTitle = new de.cismet.tools.gui.SemiRoundedPanel();
         lblMessstellenausbauTitle = new javax.swing.JLabel();
         panMessstellenausbauBody = new javax.swing.JPanel();
-        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung1 = new javax.swing.JLabel();
-        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(((PotenzialflaecheReportServerAction.MonSearchReportProperty)PotenzialflaecheReportServerAction.Property.REGIONALPLAN.getValue()).createMonServerSearch());
-        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        searchLabelsFieldPanel7 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.REGIONALPLAN.getValue()).createMonServerSearch());
+        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung = new javax.swing.JLabel();
-        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(((PotenzialflaecheReportServerAction.MonSearchReportProperty)PotenzialflaecheReportServerAction.Property.FLAECHENNUTZUNGSPLAN.getValue()).createMonServerSearch());
-        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        searchLabelsFieldPanel6 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.FLAECHENNUTZUNGSPLAN.getValue())
+                            .createMonServerSearch());
+        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung2 = new javax.swing.JLabel();
-        filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jScrollPane11 = new javax.swing.JScrollPane();
-        monSearchResultsList3 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(((PotenzialflaecheReportServerAction.MonSearchReportProperty)PotenzialflaecheReportServerAction.Property.BEBAUUNGSPLAN.getValue()).createMonServerSearch());
-        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        monSearchResultsList3 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.BEBAUUNGSPLAN.getValue()).createMonServerSearch());
+        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblFlaechennutzung3 = new javax.swing.JLabel();
-        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel12 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVorhandeneBebauung1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        cbVorhandeneBebauung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        cbVorhandeneBebauung2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
+        cbVorhandeneBebauung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
+        cbVorhandeneBebauung2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
         jLabel1 = new javax.swing.JLabel();
         dateStand1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0));
         panErweitert = new de.cismet.tools.gui.RoundedPanel();
         panLageTitle3 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle3 = new javax.swing.JLabel();
         panLageBody3 = new javax.swing.JPanel();
-        filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk4 = new javax.swing.JLabel();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        defaultBindableCheckboxField6 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Umgebungsnutzung:", SORTING_OPTION);
-        filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        defaultBindableCheckboxField6 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Umgebungsnutzung:",
+                SORTING_OPTION);
+        filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk6 = new javax.swing.JLabel();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jPanel9 = new javax.swing.JPanel();
-        defaultBindableCheckboxField1 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Brachflächenkategorie:", SORTING_OPTION);
-        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        defaultBindableCheckboxField1 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Brachflächenkategorie:",
+                SORTING_OPTION);
+        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblNutzungsaufgabe = new javax.swing.JLabel();
         txtJahrNutzungsaufgabe = new javax.swing.JTextField();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(150, 0), new java.awt.Dimension(150, 0), new java.awt.Dimension(150, 0));
-        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(150, 0),
+                new java.awt.Dimension(150, 0),
+                new java.awt.Dimension(150, 0));
+        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk3 = new javax.swing.JLabel();
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        defaultBindableCheckboxField5 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Bisherige Nutzung:", SORTING_OPTION);
-        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        defaultBindableCheckboxField5 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Bisherige Nutzung:",
+                SORTING_OPTION);
+        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVorhandeneBebauung = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVorhandeneBebauung2 = new javax.swing.JLabel();
-        cbVorhandeneBebauung3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
+        cbVorhandeneBebauung3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
         jPanel16 = new javax.swing.JPanel();
-        filler44 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler44 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAessereErschl = new javax.swing.JLabel();
-        cbAeussereErschluessung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
+        cbAeussereErschluessung = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
         jPanel17 = new javax.swing.JPanel();
         lblVorhandeneBebauung3 = new javax.swing.JLabel();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         jScrollPane4 = new javax.swing.JScrollPane();
-        monSearchResultsList2 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(((PotenzialflaecheReportServerAction.MonSearchReportProperty)PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.getValue()).createMonServerSearch());
-        filler77 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
-        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        monSearchResultsList2 = new de.cismet.cids.custom.objecteditors.utils.CidsSearchResultsList<>(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.getValue()).createMonServerSearch());
+        filler77 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
+        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk2 = new javax.swing.JLabel();
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(((PotenzialflaecheReportServerAction.MonSearchReportProperty)PotenzialflaecheReportServerAction.Property.WOHNLAGEN.getValue()).createMonServerSearch());
-        filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        searchLabelsFieldPanel3 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.WOHNLAGEN.getValue()).createMonServerSearch());
+        filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblStadtbezirk1 = new javax.swing.JLabel();
-        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(((PotenzialflaecheReportServerAction.MonSearchReportProperty)PotenzialflaecheReportServerAction.Property.STADTRAUMTYPEN.getValue()).createMonServerSearch());
-        filler47 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        searchLabelsFieldPanel5 = new de.cismet.cids.editors.SearchLabelsFieldPanel(
+                ((PotenzialflaecheReportServerAction.MonSearchReportProperty)
+                    PotenzialflaecheReportServerAction.Property.STADTRAUMTYPEN.getValue()).createMonServerSearch());
+        filler47 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAessereErschl1 = new javax.swing.JLabel();
-        cbAeussereErschluessung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0));
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(450, 0), new java.awt.Dimension(450, 0), new java.awt.Dimension(450, 0));
-        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        cbAeussereErschluessung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(450, 0),
+                new java.awt.Dimension(450, 0),
+                new java.awt.Dimension(450, 0));
+        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         panDetail = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
@@ -856,7 +1004,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panArtControls3 = new javax.swing.JPanel();
         btnFlaeche = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        filler73 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler73 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblQuelle = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         lblStand = new javax.swing.JLabel();
@@ -874,51 +1024,102 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageTitle5 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLageTitle6 = new javax.swing.JLabel();
         panLageBody5 = new javax.swing.JPanel();
-        filler76 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler76 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten6 = new javax.swing.JLabel();
-        cbEntwicklungsaussichten3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        cbEntwicklungsaussichten3 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
+        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten1 = new javax.swing.JLabel();
-        cbEntwicklungsaussichten1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler60 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        cbEntwicklungsaussichten1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
+        filler60 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten2 = new javax.swing.JLabel();
-        cbEntwicklungsaussichten2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        cbEntwicklungsaussichten2 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
+        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten3 = new javax.swing.JLabel();
-        filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        defaultBindableCheckboxField4 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Restriktionen/Hemmnisse:", SORTING_OPTION);
-        filler62 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        defaultBindableCheckboxField4 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Restriktionen/Hemmnisse:",
+                SORTING_OPTION);
+        filler62 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten5 = new javax.swing.JLabel();
-        filler71 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        defaultBindableCheckboxField10 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Empfohlene Art der Wohnnutzung:", SORTING_OPTION);
-        filler63 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler71 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        defaultBindableCheckboxField10 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Empfohlene Art der Wohnnutzung:",
+                SORTING_OPTION);
+        filler63 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAktivierbarkeit1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         cbAktivierbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten = new javax.swing.JLabel();
-        cbEntwicklungsaussichten = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler65 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        cbEntwicklungsaussichten = new de.cismet.cids.editors.DefaultBindableReferenceCombo(
+                NULLABLE_OPTION,
+                SORTING_OPTION);
+        filler65 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblVerfuegbarkeit1 = new javax.swing.JLabel();
         cbVerfuegbarkeit1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblAktivierbarkeit = new javax.swing.JLabel();
         cbAktivierbarkeit = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblHandlungsdruck1 = new javax.swing.JLabel();
         cbHandlungsdruck1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblEntwicklungsausssichten4 = new javax.swing.JLabel();
-        filler72 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        defaultBindableCheckboxField8 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditable(), "Empfohlene Nutzung:", SORTING_OPTION);
-        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler72 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        defaultBindableCheckboxField8 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(
+                isEditable(),
+                "Empfohlene Nutzung:",
+                SORTING_OPTION);
+        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblRevitalisierung1 = new javax.swing.JLabel();
         cbRevitalisierung1 = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler70 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28), new java.awt.Dimension(0, 28), new java.awt.Dimension(32767, 28));
+        filler70 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(0, 28),
+                new java.awt.Dimension(32767, 28));
         lblHandlungsdruck = new javax.swing.JLabel();
         cbHandlungsdruck = new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, SORTING_OPTION);
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0), new java.awt.Dimension(200, 0));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0),
+                new java.awt.Dimension(200, 0));
         panAllgemein7 = new de.cismet.tools.gui.RoundedPanel();
         panBeschreibungTitle7 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblBeschreibungTitle6 = new javax.swing.JLabel();
@@ -927,10 +1128,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMassnahmen = new javax.swing.JButton();
         jScrollPane7 = new javax.swing.JScrollPane();
         taNotwendigeMassnahme = new javax.swing.JTextArea();
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
         panNew = new javax.swing.JPanel();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 32767));
-        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(100, 32767));
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 32767));
+        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 0),
+                new java.awt.Dimension(100, 32767));
         jPanel18 = new javax.swing.JPanel();
         jPanel20 = new DroppedPfPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -954,10 +1161,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(btnMenAbort4, "Abbrechen");
         btnMenAbort4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenAbort4ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbort4ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -970,10 +1179,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMenOk4.setMinimumSize(new java.awt.Dimension(85, 23));
         btnMenOk4.setPreferredSize(new java.awt.Dimension(85, 23));
         btnMenOk4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenOk4ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOk4ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -994,7 +1205,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taFlaecheDialog.setRows(5);
         taFlaecheDialog.setWrapStyleWord(true);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung_flaeche}"), taFlaecheDialog, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung_flaeche}"),
+                taFlaecheDialog,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane8.setViewportView(taFlaecheDialog);
@@ -1021,10 +1237,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(btnMenAbort5, "Abbrechen");
         btnMenAbort5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenAbort5ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbort5ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1037,10 +1255,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMenOk5.setMinimumSize(new java.awt.Dimension(85, 23));
         btnMenOk5.setPreferredSize(new java.awt.Dimension(85, 23));
         btnMenOk5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenOk5ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOk5ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1061,7 +1281,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taMassnahmeDialog.setRows(5);
         taMassnahmeDialog.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.notwendige_massnahmen}"), taMassnahmeDialog, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.notwendige_massnahmen}"),
+                taMassnahmeDialog,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane2.setViewportView(taMassnahmeDialog);
@@ -1085,15 +1310,19 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         jPanel23.setBackground(java.awt.Color.darkGray);
         jPanel23.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jPanel23MouseDragged(evt);
-            }
-        });
+
+                @Override
+                public void mouseDragged(final java.awt.event.MouseEvent evt) {
+                    jPanel23MouseDragged(evt);
+                }
+            });
         jPanel23.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel23MousePressed(evt);
-            }
-        });
+
+                @Override
+                public void mousePressed(final java.awt.event.MouseEvent evt) {
+                    jPanel23MousePressed(evt);
+                }
+            });
         jPanel23.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -1111,10 +1340,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jButton3.setContentAreaFilled(false);
         jButton3.setFocusPainted(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel23.add(jButton3, gridBagConstraints);
@@ -1146,10 +1377,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(btnMenAbort6, "Abbrechen");
         btnMenAbort6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenAbort6ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbort6ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1162,10 +1395,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMenOk6.setMinimumSize(new java.awt.Dimension(85, 23));
         btnMenOk6.setPreferredSize(new java.awt.Dimension(85, 23));
         btnMenOk6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenOk6ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOk6ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1186,7 +1421,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taMassnahmeDialog1.setRows(5);
         taMassnahmeDialog1.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interne_hinweise}"), taMassnahmeDialog1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interne_hinweise}"),
+                taMassnahmeDialog1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane6.setViewportView(taMassnahmeDialog1);
@@ -1264,7 +1504,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         txtNummer.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NUMMER.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"), txtNummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
+                txtNummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1277,7 +1522,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "veröffentlicht");
         jCheckBox1.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.veroeffentlicht}"), jCheckBox1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.veroeffentlicht}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1290,10 +1540,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton4, "Archivieren");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
@@ -1320,14 +1572,21 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         txtBezeichnung.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BEZEICHNUNG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezeichnung}"), txtBezeichnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezeichnung}"),
+                txtBezeichnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txtBezeichnung.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtBezeichnungFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtBezeichnungFocusLost(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -1341,7 +1600,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel3.add(filler75, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(PfPotenzialflaecheEditor.class, "PfPotenzialflaecheFooterPanel.jLabel6.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel6,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheFooterPanel.jLabel6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1351,14 +1614,21 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel27.setOpaque(false);
         jPanel27.setLayout(new java.awt.GridBagLayout());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_archivierungsgrund}"), defaultBindableReferenceCombo1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_archivierungsgrund}"),
+                defaultBindableReferenceCombo1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         defaultBindableReferenceCombo1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                defaultBindableReferenceCombo1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    defaultBindableReferenceCombo1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -1367,7 +1637,11 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         jPanel27.add(defaultBindableReferenceCombo1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(PfPotenzialflaecheEditor.class, "PfPotenzialflaecheFooterPanel.jLabel7.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel7,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheEditor.class,
+                "PfPotenzialflaecheFooterPanel.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1375,7 +1649,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         jPanel27.add(jLabel7, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.archivierungsdatum}"), dateStand2, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.archivierungsdatum}"),
+                dateStand2,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -1428,21 +1707,29 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblGeometrie5.setVisible(isEditable());
 
         if (editable) {
-
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"), cbGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
 
             cbGeom.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    cbGeomFocusLost(evt);
-                }
-            });
+
+                    @Override
+                    public void focusLost(final java.awt.event.FocusEvent evt) {
+                        cbGeomFocusLost(evt);
+                    }
+                });
             cbGeom.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    cbGeomActionPerformed(evt);
-                }
-            });
+
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        cbGeomActionPerformed(evt);
+                    }
+                });
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1545,15 +1832,18 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel7.add(lblQuartiere1, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/icon-explorerwindow.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/icon-explorerwindow.png"))); // NOI18N
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setFocusPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
@@ -1592,10 +1882,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel7.add(filler59, gridBagConstraints);
 
-        defaultBindableCheckboxField3.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.EIGENTUEMER.name());
+        defaultBindableCheckboxField3.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.EIGENTUEMER.name());
         defaultBindableCheckboxField3.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_eigentuemer}"), defaultBindableCheckboxField3, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_eigentuemer}"),
+                defaultBindableCheckboxField3,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1681,7 +1977,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbLagetyp.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.LAGEBEWERTUNG_VERKEHR.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_lagebewertung_verkehr}"), cbLagetyp, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_lagebewertung_verkehr}"),
+                cbLagetyp,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1705,7 +2006,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbOepnv.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.OEPNV_ANBINDUNG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_oepnv}"), cbOepnv, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_oepnv}"),
+                cbOepnv,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1739,10 +2045,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridwidth = 2;
         panLageBody2.add(filler26, gridBagConstraints);
 
-        defaultBindableCheckboxField11.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NAEHE_ZU.name());
+        defaultBindableCheckboxField11.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.NAEHE_ZU.name());
         defaultBindableCheckboxField11.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_naehen_zu}"), defaultBindableCheckboxField11, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_naehen_zu}"),
+                defaultBindableCheckboxField11,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1769,14 +2081,21 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbLagetyp2.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.SIEDLUNGSRAEUMLICHE_LAGE.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_siedlungsraeumliche_lage}"), cbLagetyp2, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_siedlungsraeumliche_lage}"),
+                cbLagetyp2,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbLagetyp2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbLagetyp2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbLagetyp2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1803,7 +2122,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbTopografie.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.TOPOGRAFIE.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.topografie}"), cbTopografie, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.topografie}"),
+                cbTopografie,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1825,7 +2149,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbTopografie1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.HANG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ausrichtung}"), cbTopografie1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_ausrichtung}"),
+                cbTopografie1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1921,7 +2250,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panMessstellenausbauBody.add(filler28, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblFlaechennutzung, "Flächennutzungplan:");
-        lblFlaechennutzung.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.FLAECHENNUTZUNGSPLAN.name());
+        lblFlaechennutzung.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.FLAECHENNUTZUNGSPLAN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1986,7 +2316,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panMessstellenausbauBody.add(filler30, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblFlaechennutzung3, "B-Plan-Informationen:");
-        lblFlaechennutzung3.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.FESTSETZUNGEN_BPLAN.name());
+        lblFlaechennutzung3.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.FESTSETZUNGEN_BPLAN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2009,7 +2340,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jTextArea1.setWrapStyleWord(true);
         jTextArea1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.FESTSETZUNGEN_BPLAN.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.festsetzungen_bplan}"), jTextArea1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.festsetzungen_bplan}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane3.setViewportView(jTextArea1);
@@ -2048,7 +2384,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panMessstellenausbauBody.add(filler31, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblVorhandeneBebauung1, "Bauordnungsrecht:");
-        lblVorhandeneBebauung1.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_GENEHMIGUNG.toString() + ";" +PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_BAULAST.name());
+        lblVorhandeneBebauung1.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_GENEHMIGUNG.toString() + ";"
+                    + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_BAULAST.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2059,9 +2397,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        cbVorhandeneBebauung1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_GENEHMIGUNG.name());
+        cbVorhandeneBebauung1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_GENEHMIGUNG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnungsrecht_genehmigung}"), cbVorhandeneBebauung1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnungsrecht_genehmigung}"),
+                cbVorhandeneBebauung1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2072,9 +2416,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel5.add(cbVorhandeneBebauung1, gridBagConstraints);
 
-        cbVorhandeneBebauung2.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_BAULAST.name());
+        cbVorhandeneBebauung2.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_BAULAST.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnungsrecht_baulast}"), cbVorhandeneBebauung2, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_bauordnungsrecht_baulast}"),
+                cbVorhandeneBebauung2,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2094,7 +2444,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         dateStand1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BAUORDNUNGSRECHT_STAND.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stand_bauordnungsrecht}"), dateStand1, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stand_bauordnungsrecht}"),
+                dateStand1,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -2178,10 +2533,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         panLageBody3.add(filler10, gridBagConstraints);
 
-        defaultBindableCheckboxField6.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.UMGEBUNGSNUTZUNG.name());
+        defaultBindableCheckboxField6.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.UMGEBUNGSNUTZUNG.name());
         defaultBindableCheckboxField6.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.umgebungsnutzung}"), defaultBindableCheckboxField6, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.umgebungsnutzung}"),
+                defaultBindableCheckboxField6,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2199,7 +2560,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody3.add(filler40, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblStadtbezirk6, "Brachfläche:");
-        lblStadtbezirk6.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.BRACHFLAECHENKATEGORIE.name());
+        lblStadtbezirk6.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.BRACHFLAECHENKATEGORIE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2216,10 +2578,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel9.setOpaque(false);
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
-        defaultBindableCheckboxField1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BRACHFLAECHENKATEGORIE.name());
+        defaultBindableCheckboxField1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.BRACHFLAECHENKATEGORIE.name());
         defaultBindableCheckboxField1.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_brachflaechen}"), defaultBindableCheckboxField1, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_brachflaechen}"),
+                defaultBindableCheckboxField1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2236,7 +2604,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel9.add(filler38, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblNutzungsaufgabe, "Nutzungsaufgabe:");
-        lblNutzungsaufgabe.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.JAHR_NUTZUNGSAUFGABE.name());
+        lblNutzungsaufgabe.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.JAHR_NUTZUNGSAUFGABE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2244,9 +2613,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         jPanel9.add(lblNutzungsaufgabe, gridBagConstraints);
 
-        txtJahrNutzungsaufgabe.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.JAHR_NUTZUNGSAUFGABE.name());
+        txtJahrNutzungsaufgabe.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.JAHR_NUTZUNGSAUFGABE.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_brachflaeche}"), txtJahrNutzungsaufgabe, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr_brachflaeche}"),
+                txtJahrNutzungsaufgabe,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2290,10 +2665,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         panLageBody3.add(filler13, gridBagConstraints);
 
-        defaultBindableCheckboxField5.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BISHERIGE_NUTZUNG.name());
+        defaultBindableCheckboxField5.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.BISHERIGE_NUTZUNG.name());
         defaultBindableCheckboxField5.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bisherige_nutzung}"), defaultBindableCheckboxField5, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bisherige_nutzung}"),
+                defaultBindableCheckboxField5,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2311,7 +2692,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody3.add(filler42, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblVorhandeneBebauung, "Bestand Bebauung:");
-        lblVorhandeneBebauung.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.VORHANDENE_BEBAUUNG.name());
+        lblVorhandeneBebauung.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.VORHANDENE_BEBAUUNG.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2321,7 +2703,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         jTextField2.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.VORHANDENE_BEBAUUNG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bestand_bebauung}"), jTextField2, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bestand_bebauung}"),
+                jTextField2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2349,7 +2736,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbVorhandeneBebauung3.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.VERSIEGELUNG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_versiegelung}"), cbVorhandeneBebauung3, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_versiegelung}"),
+                cbVorhandeneBebauung3,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2375,7 +2767,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody3.add(filler44, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblAessereErschl, "Äußere Erschließung:");
-        lblAessereErschl.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.AEUSSERE_ERSCHLIESSUNG.name());
+        lblAessereErschl.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.AEUSSERE_ERSCHLIESSUNG.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2383,9 +2776,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 6);
         panLageBody3.add(lblAessereErschl, gridBagConstraints);
 
-        cbAeussereErschluessung.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.AEUSSERE_ERSCHLIESSUNG.name());
+        cbAeussereErschluessung.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.AEUSSERE_ERSCHLIESSUNG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_aeussere_erschliessung}"), cbAeussereErschluessung, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_aeussere_erschliessung}"),
+                cbAeussereErschluessung,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2398,7 +2797,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel17.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(lblVorhandeneBebauung3, "Bodenrichtwert(e):");
-        lblVorhandeneBebauung3.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.name());
+        lblVorhandeneBebauung3.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -2416,7 +2816,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel17.add(filler9, gridBagConstraints);
 
         monSearchResultsList2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        monSearchResultsList2.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.name());
+        monSearchResultsList2.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.BODENRICHTWERTE.name());
         monSearchResultsList2.setVisibleRowCount(3);
         jScrollPane4.setViewportView(monSearchResultsList2);
 
@@ -2517,9 +2918,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 6);
         panLageBody3.add(lblAessereErschl1, gridBagConstraints);
 
-        cbAeussereErschluessung1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.KLIMAINFORMATIONEN.name());
+        cbAeussereErschluessung1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.KLIMAINFORMATIONEN.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_klimainformationen}"), cbAeussereErschluessung1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_klimainformationen}"),
+                cbAeussereErschluessung1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2592,7 +2999,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblBeschreibungTitle3.setFont(lblBeschreibungTitle3.getFont());
         lblBeschreibungTitle3.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibungTitle3, "Beschreibung der Fläche / Sachstand");
-        lblBeschreibungTitle3.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.BESCHREIBUNG_FLAECHE.name());
+        lblBeschreibungTitle3.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.BESCHREIBUNG_FLAECHE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -2616,7 +3024,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taFlaeche.setWrapStyleWord(true);
         taFlaeche.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BESCHREIBUNG_FLAECHE.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung_flaeche}"), taFlaeche, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung_flaeche}"),
+                taFlaeche,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane15.setViewportView(taFlaeche);
@@ -2633,7 +3046,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panArtControls3.setOpaque(false);
         panArtControls3.setLayout(new java.awt.GridBagLayout());
 
-        btnFlaeche.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
+        btnFlaeche.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
         btnFlaeche.setBorderPainted(false);
         btnFlaeche.setContentAreaFilled(false);
         btnFlaeche.setMaximumSize(new java.awt.Dimension(32, 32));
@@ -2641,10 +3055,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnFlaeche.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.BESCHREIBUNG_FLAECHE.name());
         btnFlaeche.setPreferredSize(new java.awt.Dimension(32, 32));
         btnFlaeche.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFlaecheActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnFlaecheActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -2679,7 +3095,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         jTextField1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.QUELLE.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.quelle}"), jTextField1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.quelle}"),
+                jTextField1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2700,7 +3121,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         dateStand.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.STAND.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stand}"), dateStand, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stand}"),
+                dateStand,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -2746,7 +3172,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblBeschreibungTitle7.setFont(lblBeschreibungTitle7.getFont());
         lblBeschreibungTitle7.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibungTitle7, "Interne Hinweise");
-        lblBeschreibungTitle7.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.INTERNE_HINWEISE.name());
+        lblBeschreibungTitle7.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.INTERNE_HINWEISE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -2764,7 +3191,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panArtControls4.setOpaque(false);
         panArtControls4.setLayout(new java.awt.GridBagLayout());
 
-        btnMassnahmen1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
+        btnMassnahmen1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
         btnMassnahmen1.setBorderPainted(false);
         btnMassnahmen1.setContentAreaFilled(false);
         btnMassnahmen1.setMaximumSize(new java.awt.Dimension(32, 32));
@@ -2772,10 +3200,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMassnahmen1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
         btnMassnahmen1.setPreferredSize(new java.awt.Dimension(32, 32));
         btnMassnahmen1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMassnahmen1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMassnahmen1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -2798,9 +3228,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taNotwendigeMassnahme1.setLineWrap(true);
         taNotwendigeMassnahme1.setRows(3);
         taNotwendigeMassnahme1.setWrapStyleWord(true);
-        taNotwendigeMassnahme1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
+        taNotwendigeMassnahme1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interne_hinweise}"), taNotwendigeMassnahme1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interne_hinweise}"),
+                taNotwendigeMassnahme1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane10.setViewportView(taNotwendigeMassnahme1);
@@ -2871,7 +3307,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler76, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten6, "Kategorie:");
-        lblEntwicklungsausssichten6.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.KATEGORIE.name());
+        lblEntwicklungsausssichten6.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.KATEGORIE.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2879,9 +3316,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten6, gridBagConstraints);
 
-        cbEntwicklungsaussichten3.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.POTENZIALART.name());
+        cbEntwicklungsaussichten3.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.POTENZIALART.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kategorie}"), cbEntwicklungsaussichten3, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kategorie}"),
+                cbEntwicklungsaussichten3,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2896,7 +3339,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler57, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten1, "Potenzialart:");
-        lblEntwicklungsausssichten1.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.POTENZIALART.name());
+        lblEntwicklungsausssichten1.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.POTENZIALART.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2904,9 +3348,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten1, gridBagConstraints);
 
-        cbEntwicklungsaussichten1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.POTENZIALART.name());
+        cbEntwicklungsaussichten1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.POTENZIALART.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_potenzialart}"), cbEntwicklungsaussichten1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_potenzialart}"),
+                cbEntwicklungsaussichten1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2921,7 +3371,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler60, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten2, "Entwicklungsstand:");
-        lblEntwicklungsausssichten2.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSSTAND.name());
+        lblEntwicklungsausssichten2.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSSTAND.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2929,9 +3380,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten2, gridBagConstraints);
 
-        cbEntwicklungsaussichten2.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSSTAND.name());
+        cbEntwicklungsaussichten2.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSSTAND.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_entwicklungsstand}"), cbEntwicklungsaussichten2, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_entwicklungsstand}"),
+                cbEntwicklungsaussichten2,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2946,7 +3403,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler61, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten3, "Restriktionen/Hemmnisse:");
-        lblEntwicklungsausssichten3.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.RESTRIKTIONEN.name());
+        lblEntwicklungsausssichten3.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.RESTRIKTIONEN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2959,10 +3417,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         panLageBody5.add(filler37, gridBagConstraints);
 
-        defaultBindableCheckboxField4.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.RESTRIKTIONEN.name());
+        defaultBindableCheckboxField4.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.RESTRIKTIONEN.name());
         defaultBindableCheckboxField4.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_restriktionen}"), defaultBindableCheckboxField4, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_restriktionen}"),
+                defaultBindableCheckboxField4,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2978,7 +3442,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler62, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten5, "Empfohlene Art der Wohnnutzung:");
-        lblEntwicklungsausssichten5.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN_WOHNEN.name());
+        lblEntwicklungsausssichten5.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN_WOHNEN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2991,10 +3456,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         panLageBody5.add(filler71, gridBagConstraints);
 
-        defaultBindableCheckboxField10.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN_WOHNEN.name());
+        defaultBindableCheckboxField10.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN_WOHNEN.name());
         defaultBindableCheckboxField10.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_empfohlene_nutzungen_wohnen}"), defaultBindableCheckboxField10, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_empfohlene_nutzungen_wohnen}"),
+                defaultBindableCheckboxField10,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3023,7 +3494,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbAktivierbarkeit1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.WOHNEINHEITEN.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_wohneinheiten}"), cbAktivierbarkeit1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_wohneinheiten}"),
+                cbAktivierbarkeit1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3035,10 +3511,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jPanel2.add(cbAktivierbarkeit1, gridBagConstraints);
 
         jFormattedTextField1.setColumns(5);
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         jFormattedTextField1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.WOHNEINHEITEN.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_wohneinheiten}"), jFormattedTextField1, org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_wohneinheiten}"),
+                jFormattedTextField1,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
         binding.setConverter(new IntegerToLongConverter());
         bindingGroup.addBinding(binding);
 
@@ -3059,7 +3541,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler64, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten, "Entwicklungsaussichten:");
-        lblEntwicklungsausssichten.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSAUSSSICHTEN.name());
+        lblEntwicklungsausssichten.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSAUSSSICHTEN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3067,9 +3550,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblEntwicklungsausssichten, gridBagConstraints);
 
-        cbEntwicklungsaussichten.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSAUSSSICHTEN.name());
+        cbEntwicklungsaussichten.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.ENTWICKLUNGSAUSSSICHTEN.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_entwicklungsaussichten}"), cbEntwicklungsaussichten, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_entwicklungsaussichten}"),
+                cbEntwicklungsaussichten,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3094,7 +3583,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbVerfuegbarkeit1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.VERFUEGBBARKEIT.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verfuegbarkeit}"), cbVerfuegbarkeit1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verfuegbarkeit}"),
+                cbVerfuegbarkeit1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3119,7 +3613,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbAktivierbarkeit.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.VERWERTBARKEIT.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_verwertbarkeit}"), cbAktivierbarkeit, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_verwertbarkeit}"),
+                cbAktivierbarkeit,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3134,7 +3633,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler67, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblHandlungsdruck1, "Handlungspriorität (Verwaltung):");
-        lblHandlungsdruck1.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.HANDLUNGSPRIORITAET.name());
+        lblHandlungsdruck1.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.HANDLUNGSPRIORITAET.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3142,9 +3642,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panLageBody5.add(lblHandlungsdruck1, gridBagConstraints);
 
-        cbHandlungsdruck1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.HANDLUNGSPRIORITAET.name());
+        cbHandlungsdruck1.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.HANDLUNGSPRIORITAET.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_handlungsprioritaet}"), cbHandlungsdruck1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_handlungsprioritaet}"),
+                cbHandlungsdruck1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3159,7 +3665,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panLageBody5.add(filler68, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblEntwicklungsausssichten4, "Empfohlene Nutzung:");
-        lblEntwicklungsausssichten4.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN.name());
+        lblEntwicklungsausssichten4.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -3172,10 +3679,16 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         panLageBody5.add(filler72, gridBagConstraints);
 
-        defaultBindableCheckboxField8.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN.name());
+        defaultBindableCheckboxField8.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.EMPFOHLENE_NUTZUNGEN.name());
         defaultBindableCheckboxField8.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_empfohlene_nutzungen}"), defaultBindableCheckboxField8, org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.arr_empfohlene_nutzungen}"),
+                defaultBindableCheckboxField8,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3201,7 +3714,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbRevitalisierung1.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.REVITALISIERUNG.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_revitalisierung}"), cbRevitalisierung1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_revitalisierung}"),
+                cbRevitalisierung1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3226,7 +3744,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         cbHandlungsdruck.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.HANDLUNGSDRUCK.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.handlungsdruck}"), cbHandlungsdruck, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.handlungsdruck}"),
+                cbHandlungsdruck,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3267,7 +3790,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         lblBeschreibungTitle6.setFont(lblBeschreibungTitle6.getFont());
         lblBeschreibungTitle6.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(lblBeschreibungTitle6, "Notwendige Maßnahmen / Nächste Schritte");
-        lblBeschreibungTitle6.setName(PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
+        lblBeschreibungTitle6.setName(PREFIX_LABEL
+                    + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -3285,7 +3809,8 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panArtControls5.setOpaque(false);
         panArtControls5.setLayout(new java.awt.GridBagLayout());
 
-        btnMassnahmen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
+        btnMassnahmen.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/commons/gui/icon-edit.png"))); // NOI18N
         btnMassnahmen.setBorderPainted(false);
         btnMassnahmen.setContentAreaFilled(false);
         btnMassnahmen.setMaximumSize(new java.awt.Dimension(32, 32));
@@ -3293,10 +3818,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         btnMassnahmen.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
         btnMassnahmen.setPreferredSize(new java.awt.Dimension(32, 32));
         btnMassnahmen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMassnahmenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMassnahmenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -3319,9 +3846,15 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         taNotwendigeMassnahme.setLineWrap(true);
         taNotwendigeMassnahme.setRows(3);
         taNotwendigeMassnahme.setWrapStyleWord(true);
-        taNotwendigeMassnahme.setName(PREFIX_INPUT + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
+        taNotwendigeMassnahme.setName(PREFIX_INPUT
+                    + PotenzialflaecheReportServerAction.Property.NOTWENDIGE_MASSNAHMEN.name());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.notwendige_massnahmen}"), taNotwendigeMassnahme, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.notwendige_massnahmen}"),
+                taNotwendigeMassnahme,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane7.setViewportView(taNotwendigeMassnahme);
@@ -3426,10 +3959,12 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton2, "<html>neue Potenzialfläche händisch erfassen");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel21.add(jButton2, gridBagConstraints);
@@ -3459,7 +3994,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panNew.add(jSeparator1, gridBagConstraints);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><center>Aus einer bestehenden Potenzialfläche werden alle Attribute kopiert. Diese können danach händisch angepasst werden.");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            "<html><center>Aus einer bestehenden Potenzialfläche werden alle Attribute kopiert. Diese können danach händisch angepasst werden.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -3469,7 +4006,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         panNew.add(jLabel2, gridBagConstraints);
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, "<html><center>Es wird eine leere Potenzialfläche erzeugt, in der alle Attribute händisch erfasst werden können.");
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel5,
+            "<html><center>Es wird eine leere Potenzialfläche erzeugt, in der alle Attribute händisch erfasst werden können.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -3488,116 +4027,116 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         jScrollPane5.getViewport().setOpaque(false);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort4ActionPerformed
+    private void btnMenAbort4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort4ActionPerformed
         dlgFlaeche.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort4ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk4ActionPerformed
+    private void btnMenOk4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk4ActionPerformed
         try {
             cidsBean.setProperty("beschreibung_flaeche", taFlaecheDialog.getText());
         } catch (final Exception e) {
             LOG.error("Cannot save text for beschreibung_flaeche", e);
         }
         dlgFlaeche.setVisible(false);
-    }//GEN-LAST:event_btnMenOk4ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort5ActionPerformed
+    private void btnMenAbort5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort5ActionPerformed
         dlgMassnahme.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort5ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk5ActionPerformed
+    private void btnMenOk5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk5ActionPerformed
         try {
             cidsBean.setProperty("notwendige_massnahmen", taMassnahmeDialog.getText());
         } catch (final Exception e) {
             LOG.error("Cannot save text for notwendige_massnahmen", e);
         }
         dlgMassnahme.setVisible(false);
-    }//GEN-LAST:event_btnMenOk5ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMassnahmenActionPerformed
+    private void btnMassnahmenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmenActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgMassnahme, true);
-    }//GEN-LAST:event_btnMassnahmenActionPerformed
+    }                                                                                 //GEN-LAST:event_btnMassnahmenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlaecheActionPerformed
+    private void btnFlaecheActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlaecheActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgFlaeche, true);
-    }//GEN-LAST:event_btnFlaecheActionPerformed
+    }                                                                              //GEN-LAST:event_btnFlaecheActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbGeomFocusLost
+    private void cbGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_cbGeomFocusLost
         setGeometryArea();
-    }//GEN-LAST:event_cbGeomFocusLost
+    }                                                                   //GEN-LAST:event_cbGeomFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBezeichnungFocusLost
+    private void txtBezeichnungFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBezeichnungFocusLost
         panTitle.refresh();
-    }//GEN-LAST:event_txtBezeichnungFocusLost
+    }                                                                           //GEN-LAST:event_txtBezeichnungFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAeussereErschluessungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAeussereErschluessungActionPerformed
+    private void cbAeussereErschluessungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAeussereErschluessungActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbAeussereErschluessungActionPerformed
+    } //GEN-LAST:event_cbAeussereErschluessungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGeomActionPerformed
+    private void cbGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomActionPerformed
         refreshMap();
         refreshGeomFields();
         refreshNummer();
-    }//GEN-LAST:event_cbGeomActionPerformed
+    }                                                                          //GEN-LAST:event_cbGeomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         final JDialog dialog = new JDialog((Frame)null,
                 "Flurstücke, Buchungsblätter und Eigentümerinformationen",
                 true);
@@ -3611,7 +4150,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         dialog.setContentPane(new DescriptionPaneDialogWrapperPanel(mons));
         dialog.setSize(1200, 800);
         StaticSwingTools.showDialog(this, dialog, true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3645,9 +4184,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         copyFrom(null);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3769,66 +4308,66 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         panDialog.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jPanel23MousePressed(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel23MousePressed
+    private void jPanel23MousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jPanel23MousePressed
         tooltipDialogPosition.setLocation(evt.getX(), evt.getY());
-    }//GEN-LAST:event_jPanel23MousePressed
+    }                                                                        //GEN-LAST:event_jPanel23MousePressed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jPanel23MouseDragged(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel23MouseDragged
+    private void jPanel23MouseDragged(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jPanel23MouseDragged
         panDialog.setLocation(panDialog.getLocation().x + evt.getX() - tooltipDialogPosition.getLocation().x,
             panDialog.getLocation().y
                     + evt.getY()
                     - tooltipDialogPosition.getLocation().y);
-    }//GEN-LAST:event_jPanel23MouseDragged
+    }                                                                        //GEN-LAST:event_jPanel23MouseDragged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMassnahmen1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMassnahmen1ActionPerformed
+    private void btnMassnahmen1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMassnahmen1ActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgInterneHinweise, true);
-    }//GEN-LAST:event_btnMassnahmen1ActionPerformed
+    }                                                                                  //GEN-LAST:event_btnMassnahmen1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort6ActionPerformed
+    private void btnMenAbort6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort6ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenAbort6ActionPerformed
+    } //GEN-LAST:event_btnMenAbort6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk6ActionPerformed
+    private void btnMenOk6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk6ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenOk6ActionPerformed
+    } //GEN-LAST:event_btnMenOk6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbLagetyp2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbLagetyp2ActionPerformed
+    private void cbLagetyp2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbLagetyp2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbLagetyp2ActionPerformed
+    } //GEN-LAST:event_cbLagetyp2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3854,21 +4393,21 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         showArchived(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
+    private void defaultBindableReferenceCombo1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_defaultBindableReferenceCombo1ActionPerformed
         if (defaultBindableReferenceCombo1.getSelectedItem() == null) {
             dateStand2.setDate(null);
             showArchived(false);
         }
-    }//GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
+    }                                                                                                  //GEN-LAST:event_defaultBindableReferenceCombo1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
