@@ -2034,7 +2034,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 getConnectionContext());
 
             lblTitle.setText(generateTitle());
-            btnCombineGeometries.setEnabled(lstLandparcels.getModel().getSize() > 0);
+            btnCombineGeometries.setEnabled(!cidsBean.getBeanCollectionProperty("flurstuecksvermessung").isEmpty());
             if ((cidsBean.getProperty("geometrie_status") instanceof CidsBean)
                         && (cidsBean.getProperty("geometrie_status.id") instanceof Integer)) {
                 cmbGeometrieStatus.setBackground(COLORS_GEOMETRIE_STATUS.get(
