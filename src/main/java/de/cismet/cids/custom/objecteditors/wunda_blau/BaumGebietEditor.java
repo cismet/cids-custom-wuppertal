@@ -129,7 +129,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     public static final String FIELD__NAME = "name";                            // baum_gebiet
     public static final String FIELD__AZ = "aktenzeichen";                      // baum_gebiet
-    public static final String FIELD__STRASSE = "fk_strasse.strassenschluessel";// baum_gebiet
+    public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel";// baum_gebiet
+    public static final String FIELD__STRASSE = "fk_strasse";                   // baum_gebiet
     public static final String FIELD__HNR = "fk_adresse";                       // baum_gebiet
     public static final String FIELD__HAUSNUMMER = "hausnummer";                // baum_adresse
     public static final String FIELD__ID = "id";                                // baum_gebiet
@@ -218,6 +219,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             ADRESSE_TOSTRING_FIELDS);
     
     private Boolean redundantName = false;
+    private CidsBean beanHNr;
 
     private final boolean editor;
     private boolean areChildrenLoad = false;
@@ -1069,7 +1071,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnRemoveMeldungActionPerformed
 
     private void cbStrasseActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
-        if (isEditor() && getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE) != null){
+        if (isEditor() && getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null){
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
@@ -1085,8 +1087,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 hnr = hnr.trim();
                 hnr = hnr.replace(" ", "-");
             }
-            if (getCidsBean().getProperty(FIELD__STRASSE) != null && !getCidsBean().getProperty(FIELD__NAME).toString().isEmpty()){
-                aktenzeichen = getCidsBean().getProperty(FIELD__STRASSE).toString()
+            if (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null && !getCidsBean().getProperty(FIELD__NAME).toString().isEmpty()){
+                aktenzeichen = getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL).toString()
                         + "_" + hnr
                         + "_" + getCidsBean().getProperty(FIELD__NAME).toString();
                 if (getCidsBean().getProperty(FIELD__AZ) != null) {
@@ -1202,8 +1204,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     private void refreshHnr() { 
-        if (getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE) != null){
-            String schluessel = getCidsBean().getProperty(FIELD__STRASSE).toString();
+        if (getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null){
+            String schluessel = getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL).toString();
             if (schluessel != null){
 
                 hnrSearch.setKeyId(Integer.parseInt(schluessel.replaceFirst("0*","")));
@@ -1246,7 +1248,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             loadChildren(getCidsBean().getPrimaryKeyValue());
         }
         if(isEditor()){
-            if(getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE) != null){
+            if(getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null){
                 cbHNr.setEnabled(true);
             }
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
@@ -1271,6 +1273,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
             allowAddRemove();
         }
+        beanHNr = ((CidsBean) getCidsBean().getProperty(FIELD__HNR));
     }
        
     
@@ -1361,9 +1364,16 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if (evt.getPropertyName().equals(FIELD__AZ) || 
                 evt.getPropertyName().equals(FIELD__STRASSE) || 
-                evt.getPropertyName().equals(FIELD__HNR) || 
                 evt.getPropertyName().equals(FIELD__NAME)){
-            if (getCidsBean().getMetaObject().getStatus() != MetaObject.NEW || azGeneriert){
+            if (getCidsBean().getMetaObject().getStatus() != MetaObject.NEW 
+                    || azGeneriert){
+                lblAktenzeichen.setForeground(colorAlarm);
+            }
+        }
+        if (evt.getPropertyName().equals(FIELD__HNR) ){
+            if ((getCidsBean().getMetaObject().getStatus() != MetaObject.NEW 
+                        && evt.getNewValue() != beanHNr)
+                    || azGeneriert){
                 lblAktenzeichen.setForeground(colorAlarm);
             }
         }
