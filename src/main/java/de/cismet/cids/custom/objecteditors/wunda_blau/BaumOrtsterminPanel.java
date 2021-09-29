@@ -190,6 +190,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         taBemerkungOrt.setLineWrap(true);
         taBemerkungOrt.setRows(2);
         taBemerkungOrt.setWrapStyleWord(true);
+        taBemerkungOrt.setEnabled(false);
         taBemerkungOrt.setName("taBemerkungOrt"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungOrt, BeanProperty.create("text"));
@@ -403,13 +404,17 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddTeilnehmerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddTeilnehmerActionPerformed
-        TableUtils.addObjectToTable(xtTeil, TABLE_NAME__TEILNEHMER, getConnectionContext());
-        setChangeFlag();
+        if (getCidsBean() != null){
+            TableUtils.addObjectToTable(xtTeil, TABLE_NAME__TEILNEHMER, getConnectionContext());
+            setChangeFlag();
+        }
     }//GEN-LAST:event_btnAddTeilnehmerActionPerformed
 
     private void btnRemTeilnehmerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemTeilnehmerActionPerformed
-        TableUtils.removeObjectsFromTable(xtTeil);
-        setChangeFlag();
+        if (getCidsBean() != null){
+            TableUtils.removeObjectsFromTable(xtTeil);
+            setChangeFlag();
+        }
     }//GEN-LAST:event_btnRemTeilnehmerActionPerformed
 
     //~ Instance fields --------------------------------------------------------
@@ -551,6 +556,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             taBemerkungOrt.updateUI();
         }
         setReadOnly();
+        if(getCidsBean() != null && isEditor()){
+            taBemerkungOrt.setEnabled(true);
+        }
     }
     
     public boolean isOkayForSaving(final CidsBean saveOrtsterminBean) {

@@ -305,6 +305,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panInhalt.add(lblSelbst, gridBagConstraints);
 
         chSelbst.setContentAreaFilled(false);
+        chSelbst.setEnabled(false);
         chSelbst.setName("chSelbst"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.selbststaendig}"), chSelbst, BeanProperty.create("selected"));
@@ -322,6 +323,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         if (!isEditor()){
             lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
+            lblHNrRenderer.setEnabled(false);
             lblHNrRenderer.setName("lblHNrRenderer"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
@@ -352,6 +354,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panInhalt.add(lblDispens, gridBagConstraints);
 
         chDispens.setContentAreaFilled(false);
+        chDispens.setEnabled(false);
         chDispens.setName("chDispens"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.dispensbau}"), chDispens, BeanProperty.create("selected"));
@@ -379,6 +382,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblBis, gridBagConstraints);
 
+        dcBis.setEnabled(false);
         dcBis.setName("dcBis"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umsetzung_bis}"), dcBis, BeanProperty.create("date"));
@@ -419,6 +423,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panInhalt.add(lblDatum, gridBagConstraints);
 
+        dcDatum.setEnabled(false);
         dcDatum.setName("dcDatum"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.pflanzdatum}"), dcDatum, BeanProperty.create("date"));
@@ -451,6 +456,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         cbArtE.setMaximumRowCount(15);
         cbArtE.setToolTipText(toString());
         cbArtE.setAutoscrolls(true);
+        cbArtE.setEnabled(false);
         cbArtE.setName("cbArtE"); // NOI18N
         cbArtE.setPreferredSize(new Dimension(100, 24));
 
@@ -511,6 +517,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblFirma, gridBagConstraints);
 
+        txtFirma.setEnabled(false);
         txtFirma.setName("txtFirma"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.firma}"), txtFirma, BeanProperty.create("text"));
@@ -545,6 +552,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         taBemerkungE.setLineWrap(true);
         taBemerkungE.setRows(2);
         taBemerkungE.setWrapStyleWord(true);
+        taBemerkungE.setEnabled(false);
         taBemerkungE.setName("taBemerkungE"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungE, BeanProperty.create("text"));
@@ -579,6 +587,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         if (isEditor()){
             cbGeomErsatz.setFont(new Font("Dialog", 0, 12)); // NOI18N
+            cbGeomErsatz.setEnabled(false);
             cbGeomErsatz.setName("cbGeomErsatz"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomErsatz, BeanProperty.create("selectedItem"));
@@ -611,6 +620,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         cbStrasse.setMaximumRowCount(20);
         cbStrasse.setModel(new LoadModelCb());
+        cbStrasse.setEnabled(false);
         cbStrasse.setName("cbStrasse"); // NOI18N
         cbStrasse.setNullable(false);
 
@@ -660,12 +670,15 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         spAnzahl.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spAnzahl.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+        spAnzahl.setEnabled(false);
         spAnzahl.setName("spAnzahl"); // NOI18N
+        spAnzahl.setOpaque(false);
         spAnzahl.setPreferredSize(new Dimension(75, 20));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl}"), spAnzahl, BeanProperty.create("value"));
-        binding.setSourceNullValue(0d);
-        binding.setSourceUnreadableValue(0d);
+        binding.setSourceNullValue(0);
+        binding.setSourceUnreadableValue(0
+        );
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -871,13 +884,17 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddKontActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddKontActionPerformed
-        TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
-        setChangeFlag();
+        if (getCidsBean() != null){
+            TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
+            setChangeFlag();
+        }
     }//GEN-LAST:event_btnAddKontActionPerformed
 
     private void btnRemKontActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
-        TableUtils.removeObjectsFromTable(xtKont);
-        setChangeFlag();
+        if (getCidsBean() != null){
+            TableUtils.removeObjectsFromTable(xtKont);
+            setChangeFlag();
+        }
     }//GEN-LAST:event_btnRemKontActionPerformed
 
     private void cbArtEActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbArtEActionPerformed
@@ -1242,7 +1259,20 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             }
         }
         setReadOnly();
-        
+        if(isEditor()){
+            if(getCidsBean() != null){
+                cbGeomErsatz.setEnabled(true);
+                cbArtE.setEnabled(true);
+                cbStrasse.setEnabled(true);
+                dcBis.setEnabled(true);
+                dcDatum.setEnabled(true);
+                chDispens.setEnabled(true);
+                chSelbst.setEnabled(true);
+                spAnzahl.setEnabled(true);
+                txtFirma.setEnabled(true);
+                taBemerkungE.setEnabled(true);
+            }
+        }
     }
     
        

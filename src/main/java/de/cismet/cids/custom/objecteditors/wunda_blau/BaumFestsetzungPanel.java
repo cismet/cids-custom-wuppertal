@@ -183,6 +183,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
         spHoeheF.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spHoeheF.setModel(new SpinnerNumberModel(0.0d, 0.0d, 100.0d, 0.1d));
+        spHoeheF.setEnabled(false);
         spHoeheF.setName("spHoeheF"); // NOI18N
         spHoeheF.setPreferredSize(new Dimension(75, 20));
 
@@ -213,11 +214,12 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
         spUmfangF.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spUmfangF.setModel(new SpinnerNumberModel(0, 0, 1000, 1));
+        spUmfangF.setEnabled(false);
         spUmfangF.setName("spUmfangF"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umfang}"), spUmfangF, BeanProperty.create("value"));
-        binding.setSourceNullValue(0d);
-        binding.setSourceUnreadableValue(0d);
+        binding.setSourceNullValue(0);
+        binding.setSourceUnreadableValue(0);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -242,6 +244,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
         cbArtF.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbArtF.setMaximumRowCount(15);
+        cbArtF.setEnabled(false);
         cbArtF.setName("cbArtF"); // NOI18N
         cbArtF.setPreferredSize(new Dimension(100, 24));
 
@@ -273,6 +276,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
 
         if (isEditor()){
             cbGeomFest.setFont(new Font("Dialog", 0, 12)); // NOI18N
+            cbGeomFest.setEnabled(false);
             cbGeomFest.setName("cbGeomFest"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomFest, BeanProperty.create("selectedItem"));
@@ -304,6 +308,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new Insets(2, 0, 4, 5);
         panFest.add(lblDatum, gridBagConstraints);
 
+        dcDatum.setEnabled(false);
         dcDatum.setName("dcDatum"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
@@ -339,6 +344,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         taBemerkungF.setLineWrap(true);
         taBemerkungF.setRows(2);
         taBemerkungF.setWrapStyleWord(true);
+        taBemerkungF.setEnabled(false);
         taBemerkungF.setName("taBemerkungF"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungF, BeanProperty.create("text"));
@@ -577,6 +583,14 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 }
                 if (isEditor()){
                     cbGeomFest.updateUI();
+                    if(getCidsBean() != null){
+                        cbGeomFest.setEnabled(true);
+                        dcDatum.setEnabled(true);
+                        spHoeheF.setEnabled(true);
+                        spUmfangF.setEnabled(true);
+                        cbArtF.setEnabled(true);
+                        taBemerkungF.setEnabled(true);
+                    }
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);

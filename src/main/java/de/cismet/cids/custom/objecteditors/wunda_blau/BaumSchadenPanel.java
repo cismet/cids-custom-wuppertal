@@ -347,6 +347,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblPrivat, gridBagConstraints);
 
         chPrivat.setContentAreaFilled(false);
+        chPrivat.setEnabled(false);
         chPrivat.setName("chPrivat"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.privatbaum}"), chPrivat, BeanProperty.create("selected"));
@@ -400,6 +401,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbArt.setMaximumRowCount(15);
+        cbArt.setEnabled(false);
         cbArt.setName("cbArt"); // NOI18N
         cbArt.setPreferredSize(new Dimension(100, 24));
 
@@ -435,6 +437,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         if (isEditor()){
             cbGeomSchaden.setFont(new Font("Dialog", 0, 12)); // NOI18N
+            cbGeomSchaden.setEnabled(false);
             cbGeomSchaden.setName("cbGeomSchaden"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomSchaden, BeanProperty.create("selectedItem"));
@@ -491,6 +494,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblOhne, gridBagConstraints);
 
         chOhne.setContentAreaFilled(false);
+        chOhne.setEnabled(false);
         chOhne.setName("chOhne"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ohne_schaden}"), chOhne, BeanProperty.create("selected"));
@@ -519,6 +523,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblBau, gridBagConstraints);
 
         chBau.setContentAreaFilled(false);
+        chBau.setEnabled(false);
         chBau.setName("chBau"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.baumassnahme}"), chBau, BeanProperty.create("selected"));
@@ -547,6 +552,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblAbgest, gridBagConstraints);
 
         chAbgest.setContentAreaFilled(false);
+        chAbgest.setEnabled(false);
         chAbgest.setName("chAbgest"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.abgestorben}"), chAbgest, BeanProperty.create("selected"));
@@ -575,6 +581,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblSturm, gridBagConstraints);
 
         chSturm.setContentAreaFilled(false);
+        chSturm.setEnabled(false);
         chSturm.setName("chSturm"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.sturmschaden}"), chSturm, BeanProperty.create("selected"));
@@ -603,6 +610,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblBeratung, gridBagConstraints);
 
         chBeratung.setContentAreaFilled(false);
+        chBeratung.setEnabled(false);
         chBeratung.setName("chBeratung"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.baumberatung}"), chBeratung, BeanProperty.create("selected"));
@@ -631,6 +639,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblGutachten, gridBagConstraints);
 
         chGutachten.setContentAreaFilled(false);
+        chGutachten.setEnabled(false);
         chGutachten.setName("chGutachten"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gutachten}"), chGutachten, BeanProperty.create("selected"));
@@ -659,6 +668,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblKroneArr, gridBagConstraints);
 
         chKrone.setContentAreaFilled(false);
+        chKrone.setEnabled(false);
         chKrone.setName("chKrone"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.kronenschaden}"), chKrone, BeanProperty.create("selected"));
@@ -677,6 +687,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         filler21.setName("filler21"); // NOI18N
         panSchaden.add(filler21, new GridBagConstraints());
 
+        blpKrone.setEnabled(false);
         blpKrone.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpKrone.manageableButtonText")); // NOI18N
         blpKrone.setOpaque(false);
 
@@ -708,6 +719,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblStammArr, gridBagConstraints);
 
         chStamm.setContentAreaFilled(false);
+        chStamm.setEnabled(false);
         chStamm.setName("chStamm"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.stammschaden}"), chStamm, BeanProperty.create("selected"));
@@ -731,6 +743,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
         panSchaden.add(filler22, gridBagConstraints);
 
+        blpStamm.setEnabled(false);
         blpStamm.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpStamm.manageableButtonText")); // NOI18N
         blpStamm.setName("blpStamm"); // NOI18N
         blpStamm.setOpaque(false);
@@ -764,6 +777,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblWurzelArr, gridBagConstraints);
 
         chWurzel.setContentAreaFilled(false);
+        chWurzel.setEnabled(false);
         chWurzel.setName("chWurzel"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.wurzelschaden}"), chWurzel, BeanProperty.create("selected"));
@@ -785,6 +799,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridy = 13;
         panSchaden.add(filler23, gridBagConstraints);
 
+        blpWurzel.setEnabled(false);
         blpWurzel.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpWurzel.manageableButtonText")); // NOI18N
         blpWurzel.setName("blpWurzel"); // NOI18N
         blpWurzel.setOpaque(false);
@@ -822,6 +837,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.gridy = 16;
         panSchaden.add(filler24, gridBagConstraints);
 
+        blpMassnahme.setEnabled(false);
         blpMassnahme.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpMassnahme.manageableButtonText")); // NOI18N
         blpMassnahme.setName("blpMassnahme"); // NOI18N
         blpMassnahme.setOpaque(false);
@@ -901,6 +917,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(lblFaellung, gridBagConstraints);
 
         chFaellung.setContentAreaFilled(false);
+        chFaellung.setEnabled(false);
         chFaellung.setName("chFaellung"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.faellung}"), chFaellung, BeanProperty.create("selected"));
@@ -918,12 +935,13 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         spHoehe.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spHoehe.setModel(new SpinnerNumberModel(0.0d, 0.0d, 100.0d, 0.1d));
+        spHoehe.setEnabled(false);
         spHoehe.setName("spHoehe"); // NOI18N
         spHoehe.setPreferredSize(new Dimension(75, 20));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), spHoehe, BeanProperty.create("value"));
-        binding.setSourceNullValue(0d);
-        binding.setSourceUnreadableValue(0d);
+        binding.setSourceNullValue(0.0d);
+        binding.setSourceUnreadableValue(0.0d);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -934,12 +952,13 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(spHoehe, gridBagConstraints);
 
         spUmfang.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spUmfang.setModel(new SpinnerNumberModel(0.0d, 0.0d, 1000.0d, 1.0d));
+        spUmfang.setModel(new SpinnerNumberModel(0, 0, 1000, 1));
+        spUmfang.setEnabled(false);
         spUmfang.setName("spUmfang"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umfang}"), spUmfang, BeanProperty.create("value"));
-        binding.setSourceNullValue(0d);
-        binding.setSourceUnreadableValue(0d);
+        binding.setSourceNullValue(0);
+        binding.setSourceUnreadableValue(0);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -951,12 +970,13 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         spAlter.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spAlter.setModel(new SpinnerNumberModel(0, 0, 500, 1));
+        spAlter.setEnabled(false);
         spAlter.setName("spAlter"); // NOI18N
         spAlter.setPreferredSize(new Dimension(75, 20));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.alter}"), spAlter, BeanProperty.create("value"));
-        binding.setSourceNullValue(0d);
-        binding.setSourceUnreadableValue(0d);
+        binding.setSourceNullValue(0);
+        binding.setSourceUnreadableValue(0);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1344,116 +1364,124 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
     private void btnAddNewErsatzActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewErsatzActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            try{
-            //ersatzBean erzeugen und vorbelegen:
-                final CidsBean beanErsatz = CidsBean.createNewCidsBeanFromTableName(
-                    "WUNDA_BLAU",
-                    TABLE_ERSATZ,
-                    getConnectionContext());
-                CidsBean beanSchaden = getCidsBean();
-                beanSchaden.getMetaObject().setStatus(MetaObject.MODIFIED);
-                beanErsatz.setProperty(FIELD__DISPENS, false);
-                beanErsatz.setProperty(FIELD__SELBST, false);
-                beanErsatz.setProperty(FIELD__FK_SCHADEN, beanSchaden);
+            if (getCidsBean() != null){
+                try{
+                //ersatzBean erzeugen und vorbelegen:
+                    final CidsBean beanErsatz = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        TABLE_ERSATZ,
+                        getConnectionContext());
+                    CidsBean beanSchaden = getCidsBean();
+                    beanSchaden.getMetaObject().setStatus(MetaObject.MODIFIED);
+                    beanErsatz.setProperty(FIELD__DISPENS, false);
+                    beanErsatz.setProperty(FIELD__SELBST, false);
+                    beanErsatz.setProperty(FIELD__FK_SCHADEN, beanSchaden);
 
 
-                //Ersatzpflanzungen erweitern:
-                if (isEditor()){
-                    getBaumChildrenLoader().addErsatz(getCidsBean().getPrimaryKeyValue(), beanErsatz);
+                    //Ersatzpflanzungen erweitern:
+                    if (isEditor()){
+                        getBaumChildrenLoader().addErsatz(getCidsBean().getPrimaryKeyValue(), beanErsatz);
+                    }
+                    ((DefaultListModel)lstErsatz.getModel()).addElement(beanErsatz);
+
+                    //Refresh:
+                    lstErsatz.setSelectedValue(beanErsatz, true);
+                    setChangeFlag();
+
+                } catch (Exception e) {
+                    LOG.error("Cannot add new BaumErsatz object", e);
                 }
-                ((DefaultListModel)lstErsatz.getModel()).addElement(beanErsatz);
-
-                //Refresh:
-                lstErsatz.setSelectedValue(beanErsatz, true);
-                setChangeFlag();
-
-            } catch (Exception e) {
-                LOG.error("Cannot add new BaumErsatz object", e);
             }
         }
     }//GEN-LAST:event_btnAddNewErsatzActionPerformed
 
     private void btnRemoveErsatzActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveErsatzActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            final Object selectedObject = lstErsatz.getSelectedValue();
+            if (getCidsBean() != null){
+                final Object selectedObject = lstErsatz.getSelectedValue();
 
-            if (selectedObject instanceof CidsBean) {
-                List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(getCidsBean().getPrimaryKeyValue());
-                if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
-                    getBaumChildrenLoader().removeErsatz(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
-                } else{
-                for(final CidsBean beanErsatz:listErsatz){
-                        if(beanErsatz.equals(selectedObject)){
-                            try {
-                                beanErsatz.delete();
-                            } catch (Exception ex) {
-                                LOG.warn("problem in delete ersatz: not removed.", ex);
+                if (selectedObject instanceof CidsBean) {
+                    List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(getCidsBean().getPrimaryKeyValue());
+                    if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
+                        getBaumChildrenLoader().removeErsatz(cidsBean.getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    } else{
+                    for(final CidsBean beanErsatz:listErsatz){
+                            if(beanErsatz.equals(selectedObject)){
+                                try {
+                                    beanErsatz.delete();
+                                } catch (Exception ex) {
+                                    LOG.warn("problem in delete ersatz: not removed.", ex);
+                                }
+                                break;
                             }
-                            break;
                         }
+                        getBaumChildrenLoader().getMapErsatz().replace(getCidsBean().getPrimaryKeyValue(), listErsatz);
                     }
-                    getBaumChildrenLoader().getMapErsatz().replace(getCidsBean().getPrimaryKeyValue(), listErsatz);
+                    ((DefaultListModel)lstErsatz.getModel()).removeElement(selectedObject);
+                    if (getActiveBeans(listErsatz) > 0) {
+                        lstErsatz.setSelectedIndex(0);
+                    }
+                    setChangeFlag();
                 }
-                ((DefaultListModel)lstErsatz.getModel()).removeElement(selectedObject);
-                if (getActiveBeans(listErsatz) > 0) {
-                    lstErsatz.setSelectedIndex(0);
-                }
-                setChangeFlag();
             }
         }
     }//GEN-LAST:event_btnRemoveErsatzActionPerformed
 
     private void btnAddNewFestActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewFestActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            try{
-            //festBean erzeugen und vorbelegen:
-                final CidsBean beanFest = CidsBean.createNewCidsBeanFromTableName(
-                    "WUNDA_BLAU",
-                    TABLE_FEST,
-                    getConnectionContext());
-                beanFest.setProperty(FIELD__FK_SCHADEN, getCidsBean());
+            if (getCidsBean() != null){
+                try{
+                //festBean erzeugen und vorbelegen:
+                    final CidsBean beanFest = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        TABLE_FEST,
+                        getConnectionContext());
+                    beanFest.setProperty(FIELD__FK_SCHADEN, getCidsBean());
 
-                if (isEditor()){
-                    getBaumChildrenLoader().addFest(getCidsBean().getPrimaryKeyValue(), beanFest);
+                    if (isEditor()){
+                        getBaumChildrenLoader().addFest(getCidsBean().getPrimaryKeyValue(), beanFest);
+                    }
+                    ((DefaultListModel)lstFest.getModel()).addElement(beanFest);
+
+                    //Refresh:
+                    lstFest.setSelectedValue(beanFest, true);
+                    setChangeFlag();
+
+                } catch (Exception e) {
+                    LOG.error("Cannot add new BaumFest object", e);
                 }
-                ((DefaultListModel)lstFest.getModel()).addElement(beanFest);
-
-                //Refresh:
-                lstFest.setSelectedValue(beanFest, true);
-                setChangeFlag();
-                    
-            } catch (Exception e) {
-                LOG.error("Cannot add new BaumFest object", e);
             }
         }
     }//GEN-LAST:event_btnAddNewFestActionPerformed
 
     private void btnRemoveFestActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveFestActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            final Object selectedObject = lstFest.getSelectedValue();
+            if (getCidsBean() != null){
+                final Object selectedObject = lstFest.getSelectedValue();
 
-            if (selectedObject instanceof CidsBean) {
-                List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(getCidsBean().getPrimaryKeyValue());
-                if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
-                    getBaumChildrenLoader().removeFest(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
-                } else{
-                    for(final CidsBean beanFest:listFest){
-                        if(beanFest.equals(selectedObject)){
-                            try {
-                                beanFest.delete();
-                            } catch (Exception ex) {
-                                LOG.warn("problem in delete fest: not removed.", ex);
+                if (selectedObject instanceof CidsBean) {
+                    List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(getCidsBean().getPrimaryKeyValue());
+                    if(((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW){
+                        getBaumChildrenLoader().removeFest(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    } else{
+                        for(final CidsBean beanFest:listFest){
+                            if(beanFest.equals(selectedObject)){
+                                try {
+                                    beanFest.delete();
+                                } catch (Exception ex) {
+                                    LOG.warn("problem in delete fest: not removed.", ex);
+                                }
+                                break;
                             }
-                            break;
                         }
+                        getBaumChildrenLoader().getMapFest().replace(getCidsBean().getPrimaryKeyValue(), listFest);
                     }
-                    getBaumChildrenLoader().getMapFest().replace(getCidsBean().getPrimaryKeyValue(), listFest);
+                    ((DefaultListModel)lstFest.getModel()).removeElement(selectedObject);
+                    if (getActiveBeans(listFest) > 0) {
+                        lstFest.setSelectedIndex(0);
+                    }
+                    setChangeFlag();
                 }
-                ((DefaultListModel)lstFest.getModel()).removeElement(selectedObject);
-                if (getActiveBeans(listFest) > 0) {
-                    lstFest.setSelectedIndex(0);
-                }
-                setChangeFlag();
             }
         }
     }//GEN-LAST:event_btnRemoveFestActionPerformed
@@ -1959,7 +1987,31 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 LOG.warn("problem in setCidsBean.", ex);
             }
         }
-        if (!isEditor()){
+        if (isEditor()){
+            if(getCidsBean() != null){
+                spAlter.setEnabled(true);
+                chPrivat.setEnabled(true);
+                spHoehe.setEnabled(true);
+                spUmfang.setEnabled(true);
+                cbArt.setEnabled(true);
+                cbGeomSchaden.setEnabled(true);
+                chOhne.setEnabled(true);
+                chBau.setEnabled(true);
+                chAbgest.setEnabled(true);
+                chSturm.setEnabled(true);
+                chBeratung.setEnabled(true);
+                chGutachten.setEnabled(true);
+                chKrone.setEnabled(true);
+                chStamm.setEnabled(true);
+                chWurzel.setEnabled(true);
+                blpKrone.setEnabled(true);
+                blpStamm.setEnabled(true);
+                blpWurzel.setEnabled(true);
+                blpMassnahme.setEnabled(true);
+                taBemerkung.setEnabled(true);
+                chFaellung.setEnabled(true);
+            }
+        } else{ 
             setReadOnly();
         }
     }
@@ -2004,7 +2056,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         RendererTools.makeReadOnly(chPrivat);
         RendererTools.makeDoubleSpinnerWithoutButtons(spHoehe, 1);
         RendererTools.makeReadOnly(spHoehe);
-        RendererTools.makeDoubleSpinnerWithoutButtons(spUmfang, 1);
+        RendererTools.makeDoubleSpinnerWithoutButtons(spUmfang, 0);
         RendererTools.makeReadOnly(spUmfang);
         RendererTools.makeReadOnly(cbArt);
         RendererTools.makeReadOnly(chOhne);

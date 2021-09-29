@@ -74,6 +74,7 @@
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                   <SpinnerModel initial="0.0" maximum="100.0" minimum="0.0" numberType="java.lang.Double" stepSize="0.1" type="number"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="spHoeheF" noResource="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[75, 20]"/>
@@ -120,15 +121,16 @@
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                   <SpinnerModel initial="0" maximum="1000" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="spUmfangF" noResource="true"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="value" source="Form" sourcePath="${cidsBean.umfang}" target="spUmfangF" targetPath="value" updateStrategy="0" immediately="false">
                   <Property name="nullValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="0d" type="code"/>
+                    <Connection code="0" type="code"/>
                   </Property>
                   <Property name="incompletePathValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="0d" type="code"/>
+                    <Connection code="0" type="code"/>
                   </Property>
                 </BindingProperty>
               </BindingProperties>
@@ -164,6 +166,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="cbArtF" noResource="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[100, 24]"/>
@@ -208,6 +211,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="cbGeomFest" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -255,6 +259,7 @@
             </Component>
             <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="dcDatum">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="dcDatum" noResource="true"/>
               </Properties>
               <BindingProperties>
@@ -310,6 +315,7 @@
                     <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="2"/>
                     <Property name="wrapStyleWord" type="boolean" value="true"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="taBemerkungF" noResource="true"/>
                   </Properties>
                   <BindingProperties>

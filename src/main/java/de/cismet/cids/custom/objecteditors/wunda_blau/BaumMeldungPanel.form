@@ -226,6 +226,7 @@
                     <Component class="javax.swing.JCheckBox" name="chAbgenommen">
                       <Properties>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="chAbgenommen" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -263,6 +264,7 @@
                     </Component>
                     <Container class="javax.swing.JPanel" name="panApartner">
                       <Properties>
+                        <Property name="enabled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="panApartner" noResource="true"/>
                         <Property name="opaque" type="boolean" value="false"/>
                       </Properties>
@@ -309,6 +311,7 @@
                             <Property name="lineWrap" type="boolean" value="true"/>
                             <Property name="rows" type="int" value="2"/>
                             <Property name="wrapStyleWord" type="boolean" value="true"/>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="taBemerkung" noResource="true"/>
                           </Properties>
                           <BindingProperties>
@@ -348,6 +351,7 @@
                         </Property>
                         <Property name="borderPainted" type="boolean" value="false"/>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                         <Property name="focusPainted" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="btnApartner" noResource="true"/>
                       </Properties>
@@ -413,6 +417,7 @@
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="btnAddApartner" noResource="true"/>
                           </Properties>
                           <Events>
@@ -433,6 +438,7 @@
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"/>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="btnRemoveApartner" noResource="true"/>
                           </Properties>
                           <Events>

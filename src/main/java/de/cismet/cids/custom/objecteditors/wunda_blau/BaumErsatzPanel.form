@@ -87,6 +87,7 @@
                 <Component class="javax.swing.JCheckBox" name="chSelbst">
                   <Properties>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="chSelbst" noResource="true"/>
                   </Properties>
                   <BindingProperties>
@@ -110,6 +111,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="12" style="0"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="lblHNrRenderer" noResource="true"/>
                   </Properties>
                   <BindingProperties>
@@ -148,6 +150,7 @@
                 <Component class="javax.swing.JCheckBox" name="chDispens">
                   <Properties>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="chDispens" noResource="true"/>
                   </Properties>
                   <BindingProperties>
@@ -185,6 +188,7 @@
                 </Component>
                 <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="dcBis">
                   <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="dcBis" noResource="true"/>
                   </Properties>
                   <BindingProperties>
@@ -238,6 +242,7 @@
                 </Component>
                 <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="dcDatum">
                   <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="dcDatum" noResource="true"/>
                   </Properties>
                   <BindingProperties>
@@ -285,6 +290,7 @@
                       <Connection component="Form" name="toString" type="method"/>
                     </Property>
                     <Property name="autoscrolls" type="boolean" value="true"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="cbArtE" noResource="true"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[100, 24]"/>
@@ -365,6 +371,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFirma">
                   <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="txtFirma" noResource="true"/>
                   </Properties>
                   <BindingProperties>
@@ -418,6 +425,7 @@
                         <Property name="lineWrap" type="boolean" value="true"/>
                         <Property name="rows" type="int" value="2"/>
                         <Property name="wrapStyleWord" type="boolean" value="true"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="taBemerkungE" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -455,6 +463,7 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="cbGeomErsatz" noResource="true"/>
                   </Properties>
                   <BindingProperties>
@@ -502,6 +511,7 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new LoadModelCb()" type="code"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="cbStrasse" noResource="true"/>
                     <Property name="nullable" type="boolean" value="false"/>
                   </Properties>
@@ -572,7 +582,9 @@
                     <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                       <SpinnerModel initial="0" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="spAnzahl" noResource="true"/>
+                    <Property name="opaque" type="boolean" value="false"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[75, 20]"/>
                     </Property>
@@ -580,10 +592,10 @@
                   <BindingProperties>
                     <BindingProperty name="value" source="Form" sourcePath="${cidsBean.anzahl}" target="spAnzahl" targetPath="value" updateStrategy="0" immediately="false">
                       <Property name="nullValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                        <Connection code="0d" type="code"/>
+                        <Connection code="0" type="code"/>
                       </Property>
                       <Property name="incompletePathValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                        <Connection code="0d" type="code"/>
+                        <Connection code="0&#xa;" type="code"/>
                       </Property>
                     </BindingProperty>
                   </BindingProperties>

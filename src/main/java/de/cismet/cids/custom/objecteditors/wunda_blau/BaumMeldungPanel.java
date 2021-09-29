@@ -336,6 +336,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         panInfo.add(lblAbgenommen, gridBagConstraints);
 
         chAbgenommen.setContentAreaFilled(false);
+        chAbgenommen.setEnabled(false);
         chAbgenommen.setName("chAbgenommen"); // NOI18N
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.abgenommen}"), chAbgenommen, BeanProperty.create("selected"));
@@ -365,6 +366,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInfo.add(lblApartner, gridBagConstraints);
 
+        panApartner.setEnabled(false);
         panApartner.setName("panApartner"); // NOI18N
         panApartner.setOpaque(false);
         panApartner.setLayout(new GridBagLayout());
@@ -396,6 +398,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         taBemerkung.setLineWrap(true);
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
+        taBemerkung.setEnabled(false);
         taBemerkung.setName("taBemerkung"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
@@ -438,6 +441,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         btnApartner.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/icon-explorerwindow.png"))); // NOI18N
         btnApartner.setBorderPainted(false);
         btnApartner.setContentAreaFilled(false);
+        btnApartner.setEnabled(false);
         btnApartner.setFocusPainted(false);
         btnApartner.setName("btnApartner"); // NOI18N
         btnApartner.addActionListener(formListener);
@@ -477,6 +481,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         panButtonsApartner.setLayout(new GridBagLayout());
 
         btnAddApartner.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddApartner.setEnabled(false);
         btnAddApartner.setName("btnAddApartner"); // NOI18N
         btnAddApartner.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -484,6 +489,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         panButtonsApartner.add(btnAddApartner, gridBagConstraints);
 
         btnRemoveApartner.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveApartner.setEnabled(false);
         btnRemoveApartner.setName("btnRemoveApartner"); // NOI18N
         btnRemoveApartner.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -900,10 +906,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
 
     private void btnAddNewOrtsterminActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewOrtsterminActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            try {
-                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this), dlgAddOrtstermin, true);
-            } catch (Exception e) {
-                LOG.error("Cannot add new BaumOrtstermin object", e);
+            if (getCidsBean() != null){
+                try {
+                    StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this), dlgAddOrtstermin, true);
+                } catch (Exception e) {
+                    LOG.error("Cannot add new BaumOrtstermin object", e);
+                }
             }
         }
     }//GEN-LAST:event_btnAddNewOrtsterminActionPerformed
@@ -981,41 +989,43 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
 
     private void btnAddNewSchadenActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewSchadenActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()){
-            try{
-            //schadenBean erzeugen und vorbelegen:
-                final CidsBean beanSchaden = CidsBean.createNewCidsBeanFromTableName(
-                    "WUNDA_BLAU",
-                    TABLE__SCHADEN,
-                    getConnectionContext());
-                beanSchaden.setProperty(FIELD__FK_MELDUNG, getCidsBean());
-                beanSchaden.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_BAU, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_BERATUNG, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_EINGANG, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_FAELLUNG, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_KRONE, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_OHNE, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_PRIVAT, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_STAMM, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_STURM, false);
-                beanSchaden.setProperty(FIELD__SCHADEN_WURZEL, false);
-                
-                beanSchaden.setProperty(FIELD__ID, getCounterSchaden());
-                setCounterSchaden(getCounterSchaden()-1);
-                
-                //schaden erweitern:
-                if (isEditor()){
-                    getBaumChildrenLoader().addSchaden(getCidsBean().getPrimaryKeyValue(), beanSchaden);
-                }
-                ((DefaultListModel)lstSchaeden.getModel()).addElement(beanSchaden);
+            if (getCidsBean() != null){
+                try{
+                //schadenBean erzeugen und vorbelegen:
+                    final CidsBean beanSchaden = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        TABLE__SCHADEN,
+                        getConnectionContext());
+                    beanSchaden.setProperty(FIELD__FK_MELDUNG, getCidsBean());
+                    beanSchaden.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_BAU, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_BERATUNG, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_EINGANG, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_FAELLUNG, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_KRONE, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_OHNE, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_PRIVAT, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_STAMM, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_STURM, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_WURZEL, false);
 
-                //Refresh:
-                lstSchaeden.setSelectedValue(beanSchaden, true);
-                getCidsBean().setArtificialChangeFlag(true);
-                getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
-            } catch (Exception e) {
-                LOG.error("Cannot add new BaumSchaden object", e);
+                    beanSchaden.setProperty(FIELD__ID, getCounterSchaden());
+                    setCounterSchaden(getCounterSchaden()-1);
+
+                    //schaden erweitern:
+                    if (isEditor()){
+                        getBaumChildrenLoader().addSchaden(getCidsBean().getPrimaryKeyValue(), beanSchaden);
+                    }
+                    ((DefaultListModel)lstSchaeden.getModel()).addElement(beanSchaden);
+
+                    //Refresh:
+                    lstSchaeden.setSelectedValue(beanSchaden, true);
+                    getCidsBean().setArtificialChangeFlag(true);
+                    getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
+                } catch (Exception e) {
+                    LOG.error("Cannot add new BaumSchaden object", e);
+                }
             }
         }
     }//GEN-LAST:event_btnAddNewSchadenActionPerformed
@@ -1220,6 +1230,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         baumOrtsterminPanel.dispose();
         baumSchadenPanel.dispose();
         getBaumChildrenLoader().removeListener(loadChildrenListener);
+        setCounterSchaden(null);
     }
 
     @Override
@@ -1270,6 +1281,16 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
             }
         }
         setReadOnly();
+        if (getCidsBean() != null){
+            btnApartner.setEnabled(true);
+            if(isEditor()){ 
+                chAbgenommen.setEnabled(true);
+                panApartner.setEnabled(true);
+                taBemerkung.setEnabled(true);
+                btnAddApartner.setEnabled(true);
+                btnRemoveApartner.setEnabled(true);
+            }
+        }
     }
     
     public boolean isOkayForSaving(final CidsBean saveMeldungBean) {
