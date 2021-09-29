@@ -1260,21 +1260,22 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         }
         setReadOnly();
         if(isEditor()){
-            if(getCidsBean() != null){
-                cbGeomErsatz.setEnabled(true);
-                cbArtE.setEnabled(true);
-                cbStrasse.setEnabled(true);
-                dcBis.setEnabled(true);
-                dcDatum.setEnabled(true);
-                chDispens.setEnabled(true);
-                chSelbst.setEnabled(true);
-                spAnzahl.setEnabled(true);
-                txtFirma.setEnabled(true);
-                taBemerkungE.setEnabled(true);
-            }
+            nullNoEdit(getCidsBean() != null);
         }
     }
-    
+  
+    private void nullNoEdit(boolean edit){
+        cbGeomErsatz.setEnabled(edit);
+        cbArtE.setEnabled(edit);
+        cbStrasse.setEnabled(edit);
+        dcBis.setEnabled(edit);
+        dcDatum.setEnabled(edit);
+        chDispens.setEnabled(edit);
+        chSelbst.setEnabled(edit);
+        spAnzahl.setEnabled(edit);
+        txtFirma.setEnabled(edit);
+        taBemerkungE.setEnabled(edit);
+    }
        
     private void refreshHnr() { 
         if (getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE) != null){

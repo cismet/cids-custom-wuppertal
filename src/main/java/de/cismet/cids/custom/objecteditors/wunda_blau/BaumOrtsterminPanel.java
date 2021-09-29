@@ -556,9 +556,13 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             taBemerkungOrt.updateUI();
         }
         setReadOnly();
-        if(getCidsBean() != null && isEditor()){
-            taBemerkungOrt.setEnabled(true);
+        if(isEditor()){
+            nullNoEdit(getCidsBean() != null);
         }
+    }
+    
+    private void nullNoEdit(boolean edit){
+        taBemerkungOrt.setEnabled(edit);
     }
     
     public boolean isOkayForSaving(final CidsBean saveOrtsterminBean) {

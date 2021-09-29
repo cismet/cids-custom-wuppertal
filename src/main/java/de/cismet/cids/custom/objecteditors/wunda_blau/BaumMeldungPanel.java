@@ -1281,16 +1281,18 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
             }
         }
         setReadOnly();
-        if (getCidsBean() != null){
-            btnApartner.setEnabled(true);
-            if(isEditor()){ 
-                chAbgenommen.setEnabled(true);
-                panApartner.setEnabled(true);
-                taBemerkung.setEnabled(true);
-                btnAddApartner.setEnabled(true);
-                btnRemoveApartner.setEnabled(true);
-            }
-        }
+        if(isEditor()){
+            nullNoEdit(getCidsBean() != null);
+        } 
+        btnApartner.setEnabled(getCidsBean() != null);
+    }
+    
+    private void nullNoEdit(boolean edit){
+        chAbgenommen.setEnabled(edit);
+        panApartner.setEnabled(edit);
+        taBemerkung.setEnabled(edit);
+        btnAddApartner.setEnabled(edit);
+        btnRemoveApartner.setEnabled(edit);
     }
     
     public boolean isOkayForSaving(final CidsBean saveMeldungBean) {

@@ -583,20 +583,24 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 }
                 if (isEditor()){
                     cbGeomFest.updateUI();
-                    if(getCidsBean() != null){
-                        cbGeomFest.setEnabled(true);
-                        dcDatum.setEnabled(true);
-                        spHoeheF.setEnabled(true);
-                        spUmfangF.setEnabled(true);
-                        cbArtF.setEnabled(true);
-                        taBemerkungF.setEnabled(true);
-                    }
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
             }
         }
         setReadOnly();
+        if (isEditor()){
+            nullNoEdit(getCidsBean() != null);
+        }
+    }
+    
+    private void nullNoEdit(boolean edit){
+        cbGeomFest.setEnabled(edit);
+        dcDatum.setEnabled(edit);
+        spHoeheF.setEnabled(edit);
+        spUmfangF.setEnabled(edit);
+        cbArtF.setEnabled(edit);
+        taBemerkungF.setEnabled(edit);
     }
     
     private void setChangeFlag(){

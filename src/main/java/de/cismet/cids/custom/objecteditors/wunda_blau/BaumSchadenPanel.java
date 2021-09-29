@@ -1988,32 +1988,34 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             }
         }
         if (isEditor()){
-            if(getCidsBean() != null){
-                spAlter.setEnabled(true);
-                chPrivat.setEnabled(true);
-                spHoehe.setEnabled(true);
-                spUmfang.setEnabled(true);
-                cbArt.setEnabled(true);
-                cbGeomSchaden.setEnabled(true);
-                chOhne.setEnabled(true);
-                chBau.setEnabled(true);
-                chAbgest.setEnabled(true);
-                chSturm.setEnabled(true);
-                chBeratung.setEnabled(true);
-                chGutachten.setEnabled(true);
-                chKrone.setEnabled(true);
-                chStamm.setEnabled(true);
-                chWurzel.setEnabled(true);
-                blpKrone.setEnabled(true);
-                blpStamm.setEnabled(true);
-                blpWurzel.setEnabled(true);
-                blpMassnahme.setEnabled(true);
-                taBemerkung.setEnabled(true);
-                chFaellung.setEnabled(true);
-            }
+            nullNoEdit(getCidsBean() != null);
         } else{ 
             setReadOnly();
         }
+    }
+    
+    private void nullNoEdit(boolean edit){
+        spAlter.setEnabled(edit);
+        chPrivat.setEnabled(edit);
+        spHoehe.setEnabled(edit);
+        spUmfang.setEnabled(edit);
+        cbArt.setEnabled(edit);
+        cbGeomSchaden.setEnabled(edit);
+        chOhne.setEnabled(edit);
+        chBau.setEnabled(edit);
+        chAbgest.setEnabled(edit);
+        chSturm.setEnabled(edit);
+        chBeratung.setEnabled(edit);
+        chGutachten.setEnabled(edit);
+        chKrone.setEnabled(edit);
+        chStamm.setEnabled(edit);
+        chWurzel.setEnabled(edit);
+        blpKrone.setEnabled(edit);
+        blpStamm.setEnabled(edit);
+        blpWurzel.setEnabled(edit);
+        blpMassnahme.setEnabled(edit);
+        taBemerkung.setEnabled(edit);
+        chFaellung.setEnabled(edit);
     }
     
     public void allowAddRemove(){
