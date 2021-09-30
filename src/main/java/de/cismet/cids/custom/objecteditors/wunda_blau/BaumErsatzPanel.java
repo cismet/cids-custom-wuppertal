@@ -1345,9 +1345,10 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             save = false;
         }
         
-        // Anzahl muss, wenn angegeben, eine Ganzzahl sein; Pflichtattribut, wenn gepflanzt
+        // Anzahl Pflichtattribut, wenn gepflanzt oder Art angegeben
         try {
-            if (saveErsatzBean.getProperty(FIELD__DATUM_P) != null){
+            if (saveErsatzBean.getProperty(FIELD__DATUM_P) != null ||
+                    saveErsatzBean.getProperty(FIELD__ART) != null){
                 if (saveErsatzBean.getProperty(FIELD__ANZAHL) == null || (Integer)saveErsatzBean.getProperty(FIELD__ANZAHL) == 0) {
                     LOG.warn("No count specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
