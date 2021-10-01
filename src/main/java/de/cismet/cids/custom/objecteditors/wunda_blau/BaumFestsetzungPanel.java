@@ -528,10 +528,12 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     
     private void setReadOnly() {
         if (!(isEditor())) {
+            RendererTools.makeDoubleSpinnerWithoutButtons(spUmfangF, 0);
             RendererTools.makeReadOnly(spUmfangF);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spHoeheF, 1);
             RendererTools.makeReadOnly(spHoeheF);
             RendererTools.makeReadOnly(cbGeomFest);
-            RendererTools.makeReadOnly(cbArtF );
+            cbArtF.setEnabled(false);
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(taBemerkungF);
             lblGeom.setVisible(isEditor());

@@ -184,6 +184,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         super.initWithConnectionContext(connectionContext);
         initComponents();
         xtSchaden.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+        xtSchaden.setSortable(false);
         xtSchaden.addMouseMotionListener(new MouseAdapter(){
             @Override
             public void mouseMoved(MouseEvent e) {

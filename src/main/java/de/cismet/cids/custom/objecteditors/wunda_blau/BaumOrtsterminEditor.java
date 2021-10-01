@@ -243,6 +243,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         super.initWithConnectionContext(connectionContext);
         initComponents();
         xtMeldung.getColumn(2).setWidth(100);
+        xtMeldung.setSortable(false);
         xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
         xtMeldung.addMouseMotionListener(new MouseAdapter(){
             @Override

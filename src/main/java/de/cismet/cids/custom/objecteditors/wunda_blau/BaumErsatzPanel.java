@@ -327,6 +327,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             lblHNrRenderer.setName("lblHNrRenderer"); // NOI18N
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
+            binding.setSourceNullValue(null);
+            binding.setSourceUnreadableValue(null);
             bindingGroup.addBinding(binding);
 
         }
@@ -900,15 +902,19 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     private void cbArtEActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbArtEActionPerformed
         if (getCidsBean() != null && getCidsBean().getProperty(FIELD__ART) != null){
             cbSorte.setSelectedItem(null);
-            cbSorte.setEnabled(true);
+            if (isEditor()){
+                cbSorte.setEnabled(true);
+            }
             refreshSorte();
         }
     }//GEN-LAST:event_cbArtEActionPerformed
 
     private void cbStrasseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
-        if (isEditor() && getCidsBean()!= null && getCidsBean().getProperty(FIELD__STRASSE) != null){
+        if (getCidsBean()!= null && getCidsBean().getProperty(FIELD__STRASSE) != null){
             cbHNr.setSelectedItem(null);
-            cbHNr.setEnabled(true);
+            if (isEditor() ){
+                cbHNr.setEnabled(true);
+            }
             refreshHnr();
         }
     }//GEN-LAST:event_cbStrasseActionPerformed
@@ -1096,21 +1102,21 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     
     private void setReadOnly() {
         if (!(isEditor())) {
-            RendererTools.makeReadOnly(cbStrasse);
-            RendererTools.makeReadOnly(cbHNr);
-            RendererTools.makeReadOnly(cbGeomErsatz);
+            cbStrasse.setEnabled(false);
             RendererTools.makeReadOnly(dcBis);
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(chDispens);
-            RendererTools.makeReadOnly(chSelbst);
-            RendererTools.makeReadOnly(cbArtE);
-            RendererTools.makeReadOnly(cbSorte);
+            RendererTools.makeReadOnly(chSelbst);;
+            cbArtE.setEnabled(false);
+            cbSorte.setEnabled(false);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spAnzahl, 0);
             RendererTools.makeReadOnly(spAnzahl);
             RendererTools.makeReadOnly(txtFirma);
             RendererTools.makeReadOnly(taBemerkungE);
             RendererTools.makeReadOnly(xtKont);
             panKontAdd.setVisible(isEditor());
             lblGeom.setVisible(isEditor());
+            xtKont.setEnabled(false);
         }
     }
     
@@ -1277,7 +1283,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         taBemerkungE.setEnabled(edit);
     }
        
-    private void refreshHnr() { 
+    private void refreshHnr() {
         if (getCidsBean() != null && getCidsBean().getProperty(FIELD__STRASSE) != null){
             String schluessel = getCidsBean().getProperty(FIELD__STRASSE).toString();
             if (schluessel != null){

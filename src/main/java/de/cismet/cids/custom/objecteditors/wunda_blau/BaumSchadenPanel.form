@@ -1295,6 +1295,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtBetrag">
                       <Properties>
+                        <Property name="enabled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="txtBetrag" noResource="true"/>
                       </Properties>
                       <BindingProperties>
@@ -1330,6 +1331,7 @@
                     <Component class="javax.swing.JCheckBox" name="chEingang">
                       <Properties>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                         <Property name="name" type="java.lang.String" value="chEingang" noResource="true"/>
                       </Properties>
                       <BindingProperties>

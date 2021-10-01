@@ -1142,6 +1142,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panZahlung.add(lblBetrag, gridBagConstraints);
 
+        txtBetrag.setEnabled(false);
         txtBetrag.setName("txtBetrag"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.betrag}"), txtBetrag, BeanProperty.create("text"));
@@ -1171,6 +1172,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panZahlung.add(lblEingang, gridBagConstraints);
 
         chEingang.setContentAreaFilled(false);
+        chEingang.setEnabled(false);
         chEingang.setName("chEingang"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.eingegangen}"), chEingang, BeanProperty.create("selected"));
@@ -2016,6 +2018,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         blpMassnahme.setEnabled(edit);
         taBemerkung.setEnabled(edit);
         chFaellung.setEnabled(edit);
+        txtBetrag.setEnabled(edit);
+        chEingang.setEnabled(edit);
     }
     
     public void allowAddRemove(){
@@ -2054,13 +2058,15 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 JOptionPane.WARNING_MESSAGE);
     }
     private void setReadOnly(){
+        RendererTools.makeDoubleSpinnerWithoutButtons(spAlter, 0);
         RendererTools.makeReadOnly(spAlter);
         RendererTools.makeReadOnly(chPrivat);
         RendererTools.makeDoubleSpinnerWithoutButtons(spHoehe, 1);
         RendererTools.makeReadOnly(spHoehe);
+        spHoehe.setEnabled(false);
         RendererTools.makeDoubleSpinnerWithoutButtons(spUmfang, 0);
         RendererTools.makeReadOnly(spUmfang);
-        RendererTools.makeReadOnly(cbArt);
+        cbArt.setEnabled(false);
         RendererTools.makeReadOnly(chOhne);
         RendererTools.makeReadOnly(chBau);
         RendererTools.makeReadOnly(chAbgest);
@@ -2070,12 +2076,17 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         RendererTools.makeReadOnly(chKrone);
         RendererTools.makeReadOnly(chStamm);
         RendererTools.makeReadOnly(chWurzel);
-        RendererTools.makeReadOnly(taBemerkung);
+        //RendererTools.makeReadOnly(taBemerkung);
+        taBemerkung.setEnabled(false);
         RendererTools.makeReadOnly(chFaellung);
         RendererTools.makeReadOnly(txtBetrag);
         RendererTools.makeReadOnly(chEingang);
         panControlsNewErsatz.setVisible(isEditor());
         panControlsNewFest.setVisible(isEditor());
+        blpKrone.setEnabled(false);
+        blpStamm.setEnabled(false);
+        blpWurzel.setEnabled(false);
+        blpMassnahme.setEnabled(false);
     }
     
     private void prepareErsatz(){

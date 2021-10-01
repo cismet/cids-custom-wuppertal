@@ -510,8 +510,10 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(taBemerkungOrt);
-            RendererTools.makeReadOnly(xtTeil);
+            //RendererTools.makeReadOnly(xtTeil);
+            xtTeil.setEnabled(false);
             RendererTools.makeReadOnly(dcDatum);
+            //dcDatum.setEnabled(false);
             panTeilnehmerAdd.setVisible(isEditor());
         }
     }

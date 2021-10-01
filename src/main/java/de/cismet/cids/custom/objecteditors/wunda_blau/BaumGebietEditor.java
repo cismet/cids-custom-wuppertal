@@ -1280,16 +1280,20 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     /**
      * DOCUMENT ME!
      */
-    @SuppressWarnings("empty-statement")
     private void setReadOnly() {
         if (!(isEditor())) {
-            RendererTools.makeReadOnly(txtAktenzeichen);
-            RendererTools.makeReadOnly(cbStrasse);
+            //RendererTools.makeReadOnly(txtAktenzeichen);
+            txtAktenzeichen.setEnabled(false);
+            //RendererTools.makeReadOnly(cbStrasse);
+            cbStrasse.setEnabled(false);
             RendererTools.makeReadOnly(cbHNr);
-            RendererTools.makeReadOnly(txtName);
-            RendererTools.makeReadOnly(taBemerkung);
+            //cbHNr.setEnabled(false);
+            //RendererTools.makeReadOnly(txtName);
+            txtName.setEnabled(false);
+            //RendererTools.makeReadOnly(taBemerkung);
+            taBemerkung.setEnabled(false);
             lblGeom.setVisible(isEditor());
-            panControlsNewMeldungen.setVisible(isEditor());;
+            panControlsNewMeldungen.setVisible(isEditor());
         }
     }
     

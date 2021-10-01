@@ -187,6 +187,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         xtSchaden.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
         xtSchaden.getColumn(2).setMaxWidth(70);
         xtSchaden.getColumn(1).setMaxWidth(150);
+        xtSchaden.setSortable(false);
         xtSchaden.addMouseMotionListener(new MouseAdapter(){
             @Override
             public void mouseMoved(MouseEvent e) {

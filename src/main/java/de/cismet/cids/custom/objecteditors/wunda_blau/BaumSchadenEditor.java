@@ -213,6 +213,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         super.initWithConnectionContext(connectionContext);
         initComponents();
         xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
+        xtMeldung.setSortable(false);
         xtMeldung.getColumn(2).setMaxWidth(150);
         xtMeldung.addMouseMotionListener(new MouseAdapter(){
             @Override

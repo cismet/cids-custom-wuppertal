@@ -1242,6 +1242,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements
         if (!(isEditor())) {
             RendererTools.makeReadOnly(chAbgenommen);
             RendererTools.makeReadOnly(lstApartner);
+            panApartner.setEnabled(false);
             RendererTools.makeReadOnly(taBemerkung);
             panControlsNewOrtstermine.setVisible(isEditor());
             panControlsNewSchaden.setVisible(isEditor());
