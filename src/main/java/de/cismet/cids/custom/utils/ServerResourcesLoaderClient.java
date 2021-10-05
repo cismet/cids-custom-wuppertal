@@ -108,21 +108,21 @@ public class ServerResourcesLoaderClient extends AbstractServerResourcesLoader {
     @Override
     @Deprecated
     public <T> T loadJson(final ServerResource serverResource, final Class<T> clazz) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods, choose
-                                                                          // Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
+                                                                       // Tools | Templates.
     }
 
     @Override
     public <T> T loadJson(final JsonServerResource serverResource, final Class<T> clazz) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods, choose
-                                                                          // Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
+                                                                       // Tools | Templates.
     }
 
     @Override
     public <T> T loadJson(final JsonServerResource serverResource, final JsonFactory jsonFactory, final Class<T> clazz)
             throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods, choose
-                                                                          // Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
+                                                                       // Tools | Templates.
     }
 
     //~ Inner Classes ----------------------------------------------------------
