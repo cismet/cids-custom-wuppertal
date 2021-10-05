@@ -127,12 +127,14 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private String title;
     private CidsBean cidsBean;
     private MetaObjectNode flurstueckMon;
+    private MetaObjectNode buchungsblattMon;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdAttachBilling;
     private javax.swing.JButton cmdReload;
     private org.jdesktop.swingx.JXHyperlink hlBerechtigungspruefung;
+    private org.jdesktop.swingx.JXHyperlink hlBuchungsblattValue;
     private org.jdesktop.swingx.JXHyperlink hlEMailValue;
     private org.jdesktop.swingx.JXHyperlink hlFlurstueckeValue;
     private org.jdesktop.swingx.JXHyperlink hlProduktValue;
@@ -157,6 +159,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblAdresse;
     private javax.swing.JLabel lblBezugsweg;
     private javax.swing.JLabel lblBezugswegValue;
+    private javax.swing.JLabel lblBuchungsblatt;
     private javax.swing.JLabel lblEMail;
     private javax.swing.JLabel lblEingegangenAm;
     private javax.swing.JLabel lblEingegangenAmValue;
@@ -327,6 +330,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jPanel6 = new javax.swing.JPanel();
         lblFlurstuecke = new javax.swing.JLabel();
         hlFlurstueckeValue = new org.jdesktop.swingx.JXHyperlink();
+        lblBuchungsblatt = new javax.swing.JLabel();
+        hlBuchungsblattValue = new org.jdesktop.swingx.JXHyperlink();
         lblProdukt = new javax.swing.JLabel();
         panProduktValue = new javax.swing.JPanel();
         hlProduktValue = new org.jdesktop.swingx.JXHyperlink();
@@ -659,10 +664,37 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         jPanel1.add(hlFlurstueckeValue, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
+            lblBuchungsblatt,
+            org.openide.util.NbBundle.getMessage(
+                Fs_bestellungRenderer.class,
+                "Fs_bestellungRenderer.lblBuchungsblatt.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblBuchungsblatt, gridBagConstraints);
+
+        hlBuchungsblattValue.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlBuchungsblattValueActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(hlBuchungsblattValue, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
             lblProdukt,
             org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblProdukt.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblProdukt, gridBagConstraints);
@@ -766,6 +798,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -776,7 +809,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             org.openide.util.NbBundle.getMessage(Fs_bestellungRenderer.class, "Fs_bestellungRenderer.lblGebuehr.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblGebuehr, gridBagConstraints);
@@ -835,6 +868,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -862,7 +896,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 "Fs_bestellungRenderer.lblGebuehrDownload.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblGebuehrDownload, gridBagConstraints);
@@ -874,7 +908,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 "Fs_bestellungRenderer.lblGebuehrPostweg.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblGebuehrPostweg, gridBagConstraints);
@@ -892,7 +926,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblGebuehrDownloadValue, gridBagConstraints);
@@ -910,7 +944,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblGebuehrPostwegValue, gridBagConstraints);
@@ -1669,6 +1703,17 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlBuchungsblattValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBuchungsblattValueActionPerformed
+        if (buchungsblattMon != null) {
+            ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObjectNode(buchungsblattMon, false);
+        }
+    }                                                                                        //GEN-LAST:event_hlBuchungsblattValueActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public boolean isProduktTooOld() {
@@ -1694,8 +1739,11 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
         lblStatusValue.setText("-");
         hlFlurstueckeValue.setText("-");
+        hlBuchungsblattValue.setText("-");
         hlProduktValue.setText("-");
         hlStatusErrorDetails.setVisible(false);
+        lblBuchungsblatt.setVisible(false);
+        hlBuchungsblattValue.setVisible(false);
 
         if (cidsBean != null) {
             final String statusText;
@@ -1737,12 +1785,25 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 landparcelcode = null;
             }
 
+            final String buchngsblattString = (String)cidsBean.getProperty("buchungsblattcode");
+            final String buchungsblatt;
+
+            if ((buchngsblattString != null) && !buchngsblattString.isEmpty()) {
+                final String[] buchungsblaetter = buchngsblattString.split(",");
+                buchungsblatt = buchungsblaetter[0];
+                hlBuchungsblattValue.setText(buchungsblatt + ((buchungsblaetter.length > 1) ? " u.a." : ""));
+            } else {
+                buchungsblatt = null;
+            }
+
             if ((type != null) && type.startsWith("LK.")) {
                 hlProduktValue.setText(cidsBean.getProperty("fk_produkt.fk_typ.name") + ", "
                             + cidsBean.getProperty("fk_produkt.fk_format.format") + ", 1:"
                             + cidsBean.getProperty("massstab"));
             } else if ("BAB".equals(type)) {
                 hlProduktValue.setText("Baulastbescheinigung");
+            } else if ("bekom".equals(type) || "fsuekom".equals(type)) {
+                hlProduktValue.setText("Liegenschaftsbuchauszug");
             } else {
                 hlProduktValue.setText("-");
             }
@@ -1782,6 +1843,41 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                     }
                 }.execute();
 
+            if ((type != null) && (type.startsWith("bekom") || type.startsWith("fsuekom"))) {
+                lblBuchungsblatt.setVisible(true);
+                hlBuchungsblattValue.setVisible(true);
+
+                new SwingWorker<MetaObjectNode, Void>() {
+
+                        @Override
+                        protected MetaObjectNode doInBackground() throws Exception {
+                            final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
+                                    CidsAlkisSearchStatement.Resulttyp.BUCHUNGSBLATT,
+                                    CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER,
+                                    buchungsblatt,
+                                    null);
+                            final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                        .customServerSearch(SessionManager.getSession().getUser(),
+                                            search,
+                                            getConnectionContext());
+                            if (!mons.isEmpty()) {
+                                return mons.iterator().next();
+                            } else {
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                setBuchungsblattMon(get());
+                            } catch (final Exception ex) {
+                                LOG.warn(ex, ex);
+                            }
+                        }
+                    }.execute();
+            }
+
             final boolean lieferAlternativ = cidsBean.getProperty("fk_adresse_versand.alternativ") != null;
             lblLaAdresse.setVisible(lieferAlternativ);
             jScrollPane1.setVisible(lieferAlternativ);
@@ -1816,6 +1912,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         this.flurstueckMon = flurstueckMon;
         cmdReload.setEnabled(flurstueckMon != null);
         hlFlurstueckeValue.setEnabled(flurstueckMon != null);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  buchungsblattMon  flurstueckMon DOCUMENT ME!
+     */
+    private void setBuchungsblattMon(final MetaObjectNode buchungsblattMon) {
+        this.buchungsblattMon = buchungsblattMon;
+        hlBuchungsblattValue.setEnabled(buchungsblattMon != null);
     }
 
     @Override
