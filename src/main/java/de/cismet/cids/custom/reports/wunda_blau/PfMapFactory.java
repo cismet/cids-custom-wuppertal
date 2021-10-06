@@ -43,7 +43,7 @@ import java.util.Collection;
 
 import javax.imageio.ImageIO;
 
-import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportCreator;
+import de.cismet.cids.custom.utils.PotenzialflaecheReportCreator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
