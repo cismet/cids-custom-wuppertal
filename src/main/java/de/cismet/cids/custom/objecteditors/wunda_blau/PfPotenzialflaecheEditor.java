@@ -4564,7 +4564,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     public void startDownload() {
-        PfPotenzialflaecheReportGenerator.startDownload(getCidsBean(), getConnectionContext());
+        PfPotenzialflaecheReportGenerator.startDownloadForFlaeche(getCidsBean(), getConnectionContext());
     }
 
     /**

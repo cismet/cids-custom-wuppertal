@@ -63,7 +63,7 @@ public class ServerResourcesLoaderClient extends AbstractServerResourcesLoader {
                         serverResource,
                         ConnectionContext.create(
                             AbstractConnectionContext.Category.STATIC,
-                            PotenzialflaechenProperties.class.getSimpleName()));
+                            ServerResourcesLoaderClient.class.getSimpleName()));
         if (ret instanceof Exception) {
             throw (Exception)ret;
         }
