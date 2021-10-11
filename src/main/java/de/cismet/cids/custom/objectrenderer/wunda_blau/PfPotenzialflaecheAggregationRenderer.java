@@ -35,6 +35,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
@@ -42,6 +43,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.PfPotenzialflaecheReportGenerator;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 
@@ -58,6 +60,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -69,6 +72,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  */
 public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
     ConnectionContextStore,
+    TitleComponentProvider,
     RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -166,7 +170,9 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     private ConnectionContext connectionContext;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReport;
     private de.cismet.cids.search.CidsBeansTableActionPanel cidsBeansTableActionPanel1;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
@@ -174,6 +180,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXTable jXTable1;
+    private javax.swing.JPanel panTitle;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -201,6 +208,11 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                 true);
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        panTitle = new javax.swing.JPanel();
+        btnReport = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jXTable1 = new org.jdesktop.swingx.JXTable();
@@ -231,6 +243,40 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         jPanel2.add(jLabel1, new java.awt.GridBagConstraints());
 
         jDialog1.getContentPane().add(jPanel2, "loader");
+
+        panTitle.setOpaque(false);
+        panTitle.setLayout(new java.awt.GridBagLayout());
+
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/einzelReport.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheAggregationRenderer.class,
+                "PfPotenzialflaecheAggregationRenderer.btnReport.text"));                  // NOI18N
+        btnReport.setToolTipText("Steckbriefe zu den ausgewählten Potenzialflächen erzeugen.");
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panTitle.add(btnReport, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panTitle.add(filler1, gridBagConstraints);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -269,19 +315,33 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<CidsBean> getSelectedBeans() {
+        final Collection<CidsBean> selectedBeans = new ArrayList<>();
+        for (final Integer rowIndex : ((CidsBeansTableModel)jXTable1.getModel()).getSelectedRowIndices()) {
+            final CidsBean cidsBean = ((CidsBeansTableModel)jXTable1.getModel()).getCidsBean(rowIndex);
+            if (cidsBean != null) {
+                selectedBeans.add(cidsBean);
+            }
+        }
+        return selectedBeans;
+    }
+    /**
+     * DOCUMENT ME!
+     *
      * @param  evt  DOCUMENT ME!
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         if (cidsBeans != null) {
             ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(), "loader");
+            final Collection<CidsBean> selectedBeans = getSelectedBeans();
             new SwingWorker<List<CidsBean>, Void>() {
 
                     @Override
                     protected List<CidsBean> doInBackground() throws Exception {
                         final List<CidsBean> viewBeans = new ArrayList<>();
-                        for (final Integer rowIndex
-                                    : ((CidsBeansTableModel)jXTable1.getModel()).getSelectedRowIndices()) {
-                            final CidsBean cidsBean = ((CidsBeansTableModel)jXTable1.getModel()).getCidsBean(rowIndex);
+                        for (final CidsBean cidsBean : selectedBeans) {
                             if (cidsBean != null) {
                                 final MetaObject mo = cidsBean.getMetaObject();
                                 final MetaObject viewMo = SessionManager.getConnection()
@@ -313,6 +373,15 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         }
     } //GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        PfPotenzialflaecheReportGenerator.startDownloadForFlaechen(getSelectedBeans(), getConnectionContext());
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
@@ -335,6 +404,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
 
     @Override
     public String getTitle() {
+        final Collection<CidsBean> cidsBeans = getCidsBeans();
         return String.format("%d Potenzialflächen", (cidsBeans != null) ? cidsBeans.size() : 0);
     }
 
@@ -386,6 +456,11 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
+    }
+
+    @Override
+    public JComponent getTitleComponent() {
+        return panTitle;
     }
 
     //~ Inner Classes ----------------------------------------------------------
