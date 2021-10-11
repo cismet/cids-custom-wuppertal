@@ -15,22 +15,19 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
-import Sirius.server.middleware.types.MetaObjectNode;
+import org.apache.commons.collections.map.MultiValueMap;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
+import de.cismet.cids.custom.utils.PotenzialflaecheReportDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -57,49 +54,257 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  flaecheBean           DOCUMENT ME!
+     * @param  kampagneBean          DOCUMENT ME!
      * @param  selectedTemplateBean  DOCUMENT ME!
      * @param  connectionContext     DOCUMENT ME!
      */
-    private static void startDownload(final CidsBean flaecheBean,
+    private static void startZipDownload(final CidsBean kampagneBean,
             final CidsBean selectedTemplateBean,
             final ConnectionContext connectionContext) {
         if (selectedTemplateBean != null) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();
-            final String filename = String.format("Potenzialflaeche_%s", (String)flaecheBean.getProperty("nummer"));
-            final String downloadTitle = String.format(
-                    "%s - %s",
-                    (String)selectedTemplateBean.getProperty("bezeichnung"),
-                    (String)flaecheBean.getProperty("bezeichnung"));
 
-            new SwingWorker<Download, Void>() {
+            try {
+                final Download download = new PotenzialflaecheReportDownload(
+                        selectedTemplateBean,
+                        null,
+                        Arrays.asList(kampagneBean),
+                        jobname,
+                        connectionContext);
+                DownloadManager.instance().add(download);
+            } catch (final Exception ex) {
+                LOG.error("Cannot create report", ex);
+                ObjectRendererUtils.showExceptionWindowToUser(
+                    "Fehler Erstellen des Reports",
+                    ex,
+                    StaticSwingTools.getFirstParentFrame(
+                        ComponentRegistry.getRegistry().getDescriptionPane()));
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flaecheBeans          DOCUMENT ME!
+     * @param  selectedTemplateBean  DOCUMENT ME!
+     * @param  connectionContext     DOCUMENT ME!
+     */
+    private static void startZipDownload(final Collection<CidsBean> flaecheBeans,
+            final CidsBean selectedTemplateBean,
+            final ConnectionContext connectionContext) {
+        if (selectedTemplateBean != null) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+
+            try {
+                final Download download = new PotenzialflaecheReportDownload(
+                        selectedTemplateBean,
+                        flaecheBeans,
+                        null,
+                        jobname,
+                        connectionContext);
+                DownloadManager.instance().add(download);
+            } catch (final Exception ex) {
+                LOG.error("Cannot create report", ex);
+                ObjectRendererUtils.showExceptionWindowToUser(
+                    "Fehler Erstellen des Reports",
+                    ex,
+                    StaticSwingTools.getFirstParentFrame(
+                        ComponentRegistry.getRegistry().getDescriptionPane()));
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flaecheBean           DOCUMENT ME!
+     * @param  selectedTemplateBean  DOCUMENT ME!
+     * @param  connectionContext     DOCUMENT ME!
+     */
+    private static void startPdfDownload(final CidsBean flaecheBean,
+            final CidsBean selectedTemplateBean,
+            final ConnectionContext connectionContext) {
+        if (selectedTemplateBean != null) {
+            final String jobname = DownloadManagerDialog.getInstance().getJobName();
+            try {
+                final Download download = new PotenzialflaecheReportDownload(
+                        selectedTemplateBean,
+                        Arrays.asList(flaecheBean),
+                        null,
+                        jobname,
+                        connectionContext);
+                DownloadManager.instance().add(download);
+            } catch (final Exception ex) {
+                LOG.error("Cannot create report", ex);
+                ObjectRendererUtils.showExceptionWindowToUser(
+                    "Fehler Erstellen des Reports",
+                    ex,
+                    StaticSwingTools.getFirstParentFrame(
+                        ComponentRegistry.getRegistry().getDescriptionPane()));
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   kampagneBean       DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private static Collection<CidsBean> identifyActiveTemplateBeans(final CidsBean kampagneBean,
+            final ConnectionContext connectionContext) throws Exception {
+        return (kampagneBean != null)
+            ? (Collection<CidsBean>)identifyActiveTemplateBeansMap(Arrays.asList(kampagneBean), connectionContext)
+                    .get(kampagneBean) : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   kampagneBeans      DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private static MultiValueMap identifyActiveTemplateBeansMap(
+            final Collection<CidsBean> kampagneBeans,
+            final ConnectionContext connectionContext) throws Exception {
+        final MultiValueMap activeTemplateBeansMap = new MultiValueMap();
+
+        if (kampagneBeans != null) {
+            for (final CidsBean kampagneBean : kampagneBeans) {
+                if (kampagneBean != null) {
+                    for (final CidsBean templateBean : kampagneBean.getBeanCollectionProperty("n_steckbrieftemplates")) {
+                        if (templateBean != null) {
+                            final String confAttr = (String)templateBean.getProperty("conf_attr");
+                            if ((confAttr != null) && !confAttr.trim().isEmpty()) {
+                                if (
+                                    SessionManager.getConnection().getConfigAttr(
+                                                SessionManager.getSession().getUser(),
+                                                confAttr,
+                                                connectionContext)
+                                            != null) {
+                                    activeTemplateBeansMap.put(kampagneBean, templateBean);
+                                }
+                            } else {
+                                activeTemplateBeansMap.put(kampagneBean, templateBean);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return activeTemplateBeansMap;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   mainTemplateId       DOCUMENT ME!
+     * @param   activeTemplateBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static CidsBean askForSelection(final Integer mainTemplateId,
+            final Collection<CidsBean> activeTemplateBeans) {
+        CidsBean mainTemplateBean = (!activeTemplateBeans.isEmpty()) ? activeTemplateBeans.iterator().next() : null;
+        for (final CidsBean templateBean : activeTemplateBeans) {
+            if (templateBean.getMetaObject().getId() == mainTemplateId) {
+                mainTemplateBean = templateBean;
+            }
+        }
+
+        final CidsBean selectedTemplateBean;
+        if (activeTemplateBeans.size() > 1) {
+            final Object selection = JOptionPane.showInputDialog(ComponentRegistry.getRegistry().getDescriptionPane(),
+                    "Wählen Sie die Art des Steckbriefs, der erzeugt werden soll:",
+                    "Steckbriefart auswählen",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    activeTemplateBeans.toArray(new CidsBean[0]),
+                    mainTemplateBean);
+            selectedTemplateBean = (selection instanceof CidsBean) ? (CidsBean)selection : null;
+        } else {
+            selectedTemplateBean = mainTemplateBean;
+        }
+        return selectedTemplateBean;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  kampagneBean       flaecheBean DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void startDownloadForKampagne(final CidsBean kampagneBean,
+            final ConnectionContext connectionContext) {
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            new SwingWorker<Collection<CidsBean>, Void>() {
 
                     @Override
-                    protected Download doInBackground() throws Exception {
-                        final Collection<ServerActionParameter> params = new ArrayList<>();
-                        params.add(new ServerActionParameter<>(
-                                PotenzialflaecheReportServerAction.Parameter.TEMPLATE.toString(),
-                                new MetaObjectNode(selectedTemplateBean)));
-
-                        final Download download = new ByteArrayActionDownload(
-                                PotenzialflaecheReportServerAction.TASK_NAME,
-                                new MetaObjectNode(flaecheBean),
-                                params.toArray(new ServerActionParameter[0]),
-                                downloadTitle,
-                                jobname,
-                                filename,
-                                ".pdf",
-                                connectionContext);
-                        return download;
+                    protected Collection<CidsBean> doInBackground() throws Exception {
+                        return identifyActiveTemplateBeans(kampagneBean, connectionContext);
                     }
 
                     @Override
                     protected void done() {
                         try {
-                            final Download download = (Download)get();
-                            DownloadManager.instance().add(download);
+                            final Collection<CidsBean> activeTemplateBeans = get();
+                            final Integer mainTemplateId = (Integer)kampagneBean.getProperty(
+                                    "haupt_steckbrieftemplate_id");
+                            startZipDownload(
+                                kampagneBean,
+                                askForSelection(mainTemplateId, activeTemplateBeans),
+                                connectionContext);
                         } catch (final Exception ex) {
-                            LOG.error("Cannot create report", ex);
+                            LOG.error(ex, ex);
+                            ObjectRendererUtils.showExceptionWindowToUser(
+                                "Fehler Erstellen des Reports",
+                                ex,
+                                StaticSwingTools.getFirstParentFrame(
+                                    ComponentRegistry.getRegistry().getDescriptionPane()));
+                        }
+                    }
+                }.execute();
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flaecheBean        DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void startDownloadForFlaeche(final CidsBean flaecheBean, final ConnectionContext connectionContext) {
+        final CidsBean kampagneBean = (flaecheBean != null) ? (CidsBean)flaecheBean.getProperty("kampagne") : null;
+        if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
+                        ComponentRegistry.getRegistry().getMainWindow())) {
+            new SwingWorker<Collection<CidsBean>, Void>() {
+
+                    @Override
+                    protected Collection<CidsBean> doInBackground() throws Exception {
+                        return identifyActiveTemplateBeans(kampagneBean, connectionContext);
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final Collection<CidsBean> activeTemplateBeans = get();
+                            final Integer mainTemplateId = (Integer)kampagneBean.getProperty(
+                                    "haupt_steckbrieftemplate_id");
+                            startPdfDownload(
+                                flaecheBean,
+                                askForSelection(mainTemplateId, activeTemplateBeans),
+                                connectionContext);
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
                             ObjectRendererUtils.showExceptionWindowToUser(
                                 "Fehler Erstellen des Reports",
                                 ex,
@@ -114,70 +319,40 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  flaecheBean        DOCUMENT ME!
+     * @param  flaecheBeans       DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public static void startDownload(final CidsBean flaecheBean, final ConnectionContext connectionContext) {
+    public static void startDownloadForFlaechen(final Collection<CidsBean> flaecheBeans,
+            final ConnectionContext connectionContext) {
+        final MultiValueMap flaecheToKampagneMaps = new MultiValueMap();
+        for (final CidsBean flaecheBean : flaecheBeans) {
+            flaecheToKampagneMaps.put((CidsBean)flaecheBean.getProperty("kampagne"), flaecheBean);
+        }
+
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getMainWindow())) {
-            new SwingWorker<Collection<CidsBean>, Void>() {
+            new SwingWorker<MultiValueMap, Void>() {
 
                     @Override
-                    protected Collection<CidsBean> doInBackground() throws Exception {
-                        final List<CidsBean> activeTemplateBeans = new ArrayList<>();
-                        final Collection<CidsBean> templateBeans = flaecheBean.getBeanCollectionProperty(
-                                "kampagne.n_steckbrieftemplates");
-                        for (final CidsBean templateBean : templateBeans) {
-                            if (templateBean != null) {
-                                final String confAttr = (String)templateBean.getProperty("conf_attr");
-                                if ((confAttr != null) && !confAttr.trim().isEmpty()) {
-                                    if (
-                                        SessionManager.getConnection().getConfigAttr(
-                                                    SessionManager.getSession().getUser(),
-                                                    confAttr,
-                                                    connectionContext)
-                                                != null) {
-                                        activeTemplateBeans.add(templateBean);
-                                    }
-                                } else {
-                                    activeTemplateBeans.add(templateBean);
-                                }
-                            }
-                        }
-                        return activeTemplateBeans;
+                    protected MultiValueMap doInBackground() throws Exception {
+                        return identifyActiveTemplateBeansMap(flaecheToKampagneMaps.keySet(), connectionContext);
                     }
 
                     @Override
                     protected void done() {
                         try {
-                            final Collection<CidsBean> activeTemplateBeans = get();
-
-                            final Integer mainTemplateId = (Integer)flaecheBean.getProperty(
-                                    "kampagne.haupt_steckbrieftemplate_id");
-                            CidsBean mainTemplateBean = (!activeTemplateBeans.isEmpty())
-                                ? activeTemplateBeans.iterator().next() : null;
-                            for (final CidsBean templateBean : activeTemplateBeans) {
-                                if (templateBean.getMetaObject().getId() == mainTemplateId) {
-                                    mainTemplateBean = templateBean;
-                                }
+                            final MultiValueMap activeTemplateBeansMap = get();
+                            for (final CidsBean kampagneBean : (Set<CidsBean>)activeTemplateBeansMap.keySet()) {
+                                final Collection<CidsBean> activeTemplateBeans = activeTemplateBeansMap.getCollection(
+                                        kampagneBean);
+                                final Integer mainTemplateId = (Integer)kampagneBean.getProperty(
+                                        "haupt_steckbrieftemplate_id");
+                                final CidsBean templateBean = askForSelection(mainTemplateId, activeTemplateBeans);
+                                startZipDownload(
+                                    flaecheToKampagneMaps.getCollection(kampagneBean),
+                                    templateBean,
+                                    connectionContext);
                             }
-
-                            final CidsBean selectedTemplateBean;
-                            if (activeTemplateBeans.size() > 1) {
-                                final Object selection = JOptionPane.showInputDialog(ComponentRegistry.getRegistry()
-                                                .getDescriptionPane(),
-                                        "Wählen Sie die Art des Steckbriefs, der erzeugt werden soll:",
-                                        "Steckbriefart auswählen",
-                                        JOptionPane.QUESTION_MESSAGE,
-                                        null,
-                                        activeTemplateBeans.toArray(new CidsBean[0]),
-                                        mainTemplateBean);
-                                selectedTemplateBean = (selection instanceof CidsBean) ? (CidsBean)selection : null;
-                            } else {
-                                selectedTemplateBean = mainTemplateBean;
-                            }
-
-                            startDownload(flaecheBean, selectedTemplateBean, connectionContext);
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
                             ObjectRendererUtils.showExceptionWindowToUser(
