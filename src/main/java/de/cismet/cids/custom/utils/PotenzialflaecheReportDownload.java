@@ -11,11 +11,7 @@ import Sirius.navigator.connection.SessionManager;
 
 import Sirius.server.middleware.types.MetaObjectNode;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.FileOutputStream;
-
-import java.net.URL;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,141 +25,182 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.utils.serverresources.PropertiesServerResource;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
 
-import de.cismet.security.WebAccessManager;
-
-import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
  *
  * @version  $Revision$, $Date$
  */
-public class PotenzialflaecheReportDownload extends AbstractCancellableDownload implements ConnectionContextProvider {
+@Getter
+public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
 
-    //~ Static fields/initializers ---------------------------------------------
+    //~ Enums ------------------------------------------------------------------
 
-    private static final String SECRES_FORMAT = "%s/secres/%s/%s/%s";
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public enum Type {
+
+        //~ Enum constants -----------------------------------------------------
+
+        FLAECHE, KAMPAGNE
+    }
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ConnectionContext connectionContext;
-    private final Collection<CidsBean> flaecheBeans;
-    private final Collection<CidsBean> kampagneBeans;
+    private final Type type;
+    private final Collection<CidsBean> beans;
     private final CidsBean templateBean;
+    private final PotenzialflaechenProperties potenzialflaecheProperties = new PotenzialflaechenProperties();
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new PotenzialflaecheReportDownload object.
      *
+     * @param   type               DOCUMENT ME!
      * @param   templateBean       DOCUMENT ME!
-     * @param   flaecheBeans       DOCUMENT ME!
-     * @param   kampagneBeans      DOCUMENT ME!
-     * @param   directory          DOCUMENT ME!
+     * @param   beans              DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public PotenzialflaecheReportDownload(
+            final Type type,
             final CidsBean templateBean,
-            final Collection<CidsBean> flaecheBeans,
-            final Collection<CidsBean> kampagneBeans,
-            final String directory,
+            final Collection<CidsBean> beans,
             final ConnectionContext connectionContext) throws Exception {
-        super.directory = directory;
-        this.flaecheBeans = flaecheBeans;
-        this.kampagneBeans = kampagneBeans;
-        this.templateBean = templateBean;
-        this.connectionContext = connectionContext;
+        super(
+            getTitle(type, beans, templateBean),
+            DownloadManagerDialog.getInstance().getJobName(),
+            getTargetFileBasename(type, beans, templateBean),
+            getTargetFileExtension(type, beans),
+            connectionContext);
 
-        if (templateBean == null) {
+        getPotenzialflaecheProperties().setProperties(ServerResourcesLoaderClient.getInstance().loadProperties(
+                (PropertiesServerResource)WundaBlauServerResources.POTENZIALFLAECHEN_PROPERTIES.getValue()));
+
+        this.type = type;
+        this.beans = beans;
+        this.templateBean = templateBean;
+
+        if (this.templateBean == null) {
             throw new Exception("templateBean has to be given");
         }
-        if (((flaecheBeans != null) && (kampagneBeans != null))
-                    || ((flaecheBeans == null) && (kampagneBeans == null))) {
+        if ((this.beans == null) || this.beans.isEmpty()) {
             throw new Exception("flaecheBeans xor kampagneBeans has to be given");
         }
-
-        status = State.WAITING;
-
-        final boolean singleFlaeche = (flaecheBeans != null) && (flaecheBeans.size() == 1);
-        final boolean singleKampagne = (kampagneBeans != null) && (kampagneBeans.size() == 1);
-
-        final CidsBean flaecheBean = singleFlaeche ? flaecheBeans.iterator().next() : null;
-        final CidsBean kampagneBean = singleKampagne ? kampagneBeans.iterator().next() : null;
-
-        super.title = String.format(
-                "%s - %s",
-                singleFlaeche ? (String)flaecheBean.getProperty("bezeichnung")
-                              : (singleKampagne ? (String)kampagneBean.getProperty("bezeichnung") : "Potenzialflächen"),
-                (String)templateBean.getProperty("bezeichnung"));
-
-        final String fileName = String.format(
-                "%s_%s",
-                (String)kampagneBean.getProperty("bezeichnung"),
-                singleFlaeche
-                    ? (String)flaecheBean.getProperty("nummer")
-                    : (singleKampagne ? (String)kampagneBean.getProperty("bezeichnung") : "diverse_flaechen"));
-        final String extension = singleFlaeche ? ".pdf" : ".zip";
-        determineDestinationFile(fileName, extension);
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
-    public void run() {
-        if (status != State.WAITING) {
-            return;
-        }
-        status = State.RUNNING;
-        stateChanged();
-
-        try(final FileOutputStream outputStream = new FileOutputStream(fileToSaveTo)) {
-            final PotenzialflaechenProperties pfProperties = new PotenzialflaechenProperties();
-            pfProperties.setProperties(ServerResourcesLoaderClient.getInstance().loadProperties(
-                    (PropertiesServerResource)WundaBlauServerResources.POTENZIALFLAECHEN_PROPERTIES.getValue()));
-
-            final String api = pfProperties.getSecresApi();
-            final String jwt = SessionManager.getSession().getUser().getJwsToken();
-            final String secresKey = pfProperties.getSecresKey();
-            final String path = execAction();
-            final URL url = new URL(String.format(SECRES_FORMAT, api, jwt, secresKey, path));
-            IOUtils.copyLarge(WebAccessManager.getInstance().doRequest(url), outputStream);
-        } catch (final Exception ex) {
-            log.warn(String.format("Couldn't write downloaded content to file '%s'.", fileToSaveTo), ex);
-            error(ex);
-            return;
-        }
-
-        if (status == State.RUNNING) {
-            status = State.COMPLETED;
-            stateChanged();
-        }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   type          DOCUMENT ME!
+     * @param   beans         DOCUMENT ME!
+     * @param   templateBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getTargetFileBasename(final Type type,
+            final Collection<CidsBean> beans,
+            final CidsBean templateBean) {
+        final CidsBean singleFlaecheBean = getSingleFlaeche(type, beans);
+        final CidsBean singleKampagneBean = getSingleKampagne(type, beans);
+        final String baseName = String.format(
+                "%s_%s",
+                (String)templateBean.getProperty("bezeichnung"),
+                (singleFlaecheBean != null)
+                    ? (String)singleFlaecheBean.getProperty("nummer")
+                    : ((singleKampagneBean != null) ? (String)singleKampagneBean.getProperty("bezeichnung")
+                                                    : "diverse_flaechen"));
+        return baseName;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @param   type   DOCUMENT ME!
+     * @param   beans  DOCUMENT ME!
      *
-     * @throws  Exception  DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
-    private String execAction() throws Exception {
+    public static String getTargetFileExtension(final Type type, final Collection<CidsBean> beans) {
+        return (getSingleFlaeche(type, beans) != null) ? ".pdf" : ".zip";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   type   DOCUMENT ME!
+     * @param   beans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static CidsBean getSingleFlaeche(final Type type, final Collection<CidsBean> beans) {
+        return (Type.FLAECHE.equals(type)) ? getSingleBean(beans) : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   type   DOCUMENT ME!
+     * @param   beans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static CidsBean getSingleKampagne(final Type type, final Collection<CidsBean> beans) {
+        return (Type.KAMPAGNE.equals(type)) ? getSingleBean(beans) : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   beans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static CidsBean getSingleBean(final Collection<CidsBean> beans) {
+        return ((beans != null) && (beans.size() == 1)) ? beans.iterator().next() : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   type          DOCUMENT ME!
+     * @param   beans         DOCUMENT ME!
+     * @param   templateBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getTitle(final Type type, final Collection<CidsBean> beans, final CidsBean templateBean) {
+        final CidsBean singleFlaecheBean = getSingleFlaeche(type, beans);
+        final CidsBean singleKampagneBean = getSingleKampagne(type, beans);
+        return String.format(
+                "%s - %s",
+                (String)templateBean.getProperty("bezeichnung"),
+                (singleFlaecheBean != null)
+                    ? (String)singleFlaecheBean.getProperty("bezeichnung")
+                    : ((singleKampagneBean != null) ? (String)singleKampagneBean.getProperty("bezeichnung")
+                                                    : "Potenzialflächen"));
+    }
+
+    @Override
+    public String getSecresPath() throws Exception {
         final Collection<ServerActionParameter> params = new ArrayList<>();
-        if (flaecheBeans != null) {
-            for (final CidsBean flaecheBean : flaecheBeans) {
+        final Collection<CidsBean> beans = getBeans();
+        final Type type = getType();
+        if ((beans != null) && (type != null)) {
+            for (final CidsBean flaecheBean : beans) {
                 params.add(new ServerActionParameter(
-                        PotenzialflaecheReportServerAction.Parameter.POTENZIALFLAECHE.toString(),
+                        (Type.FLAECHE.equals(type) ? PotenzialflaecheReportServerAction.Parameter.POTENZIALFLAECHE
+                                                   : PotenzialflaecheReportServerAction.Parameter.KAMPAGNE).toString(),
                         new MetaObjectNode(flaecheBean)));
-            }
-        }
-        if (kampagneBeans != null) {
-            for (final CidsBean kampagneBean : kampagneBeans) {
-                params.add(new ServerActionParameter(
-                        PotenzialflaecheReportServerAction.Parameter.KAMPAGNE.toString(),
-                        new MetaObjectNode(kampagneBean)));
             }
         }
         params.add(new ServerActionParameter(
@@ -185,7 +222,12 @@ public class PotenzialflaecheReportDownload extends AbstractCancellableDownload 
     }
 
     @Override
-    public final ConnectionContext getConnectionContext() {
-        return connectionContext;
+    public String getSecresApiBasePath() throws Exception {
+        return getPotenzialflaecheProperties().getSecresApi();
+    }
+
+    @Override
+    public String getSecresKey() throws Exception {
+        return getPotenzialflaecheProperties().getSecresKey();
     }
 }

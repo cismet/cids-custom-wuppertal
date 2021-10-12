@@ -62,14 +62,11 @@ public class PfPotenzialflaecheReportGenerator {
             final CidsBean selectedTemplateBean,
             final ConnectionContext connectionContext) {
         if (selectedTemplateBean != null) {
-            final String jobname = DownloadManagerDialog.getInstance().getJobName();
-
             try {
                 final Download download = new PotenzialflaecheReportDownload(
+                        PotenzialflaecheReportDownload.Type.KAMPAGNE,
                         selectedTemplateBean,
-                        null,
                         Arrays.asList(kampagneBean),
-                        jobname,
                         connectionContext);
                 DownloadManager.instance().add(download);
             } catch (final Exception ex) {
@@ -94,14 +91,11 @@ public class PfPotenzialflaecheReportGenerator {
             final CidsBean selectedTemplateBean,
             final ConnectionContext connectionContext) {
         if (selectedTemplateBean != null) {
-            final String jobname = DownloadManagerDialog.getInstance().getJobName();
-
             try {
                 final Download download = new PotenzialflaecheReportDownload(
+                        PotenzialflaecheReportDownload.Type.FLAECHE,
                         selectedTemplateBean,
                         flaecheBeans,
-                        null,
-                        jobname,
                         connectionContext);
                 DownloadManager.instance().add(download);
             } catch (final Exception ex) {
@@ -126,13 +120,11 @@ public class PfPotenzialflaecheReportGenerator {
             final CidsBean selectedTemplateBean,
             final ConnectionContext connectionContext) {
         if (selectedTemplateBean != null) {
-            final String jobname = DownloadManagerDialog.getInstance().getJobName();
             try {
                 final Download download = new PotenzialflaecheReportDownload(
+                        PotenzialflaecheReportDownload.Type.FLAECHE,
                         selectedTemplateBean,
                         Arrays.asList(flaecheBean),
-                        null,
-                        jobname,
                         connectionContext);
                 DownloadManager.instance().add(download);
             } catch (final Exception ex) {
