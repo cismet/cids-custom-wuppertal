@@ -27,6 +27,7 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -189,34 +190,46 @@ public class BaumLagePanel extends javax.swing.JPanel implements Disposable {
      * @param connectionContext
      */
     public void setMapWindow(CidsBean cidsBean, ConnectionContext connectionContext) {
+        Double bufferMeter = 0.0;
+        try{
+            bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
+        } catch (final Exception ex) {
+            LOG.warn("Get no conf properties.", ex);
+        }
         if (cidsBean != null){
             try {
-                Double bufferMeter = 0.0;
-                try{
-                    bufferMeter = BaumConfProperties.getInstance().getBufferMeter();
-                } catch (final Exception ex) {
-                    LOG.warn("Get no conf properties.", ex);
-                }
                 if (cidsBean.getProperty(FIELD__GEOM) != null) {
                     panPreviewMap.initMap(cidsBean, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
                 } else {
-                    final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                    final BoundingBox initialBoundingBox;
-                    initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
-                                .getInitialBoundingBox();
-                    final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
-                    final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
-                            CidsBeanSupport.DOMAIN_NAME,
-                            TABLE_GEOM,
-                            connectionContext);
-                    final CidsBean newGeom = geomMetaClass.getEmptyInstance(connectionContext).getBean();
-                    newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
+                    CidsBean newGeom = createDefaultGeom(connectionContext);
                     panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
                 }
             } catch (final Exception ex) {
                 LOG.warn("Map window not set.", ex);
             }
+        }else{
+            CidsBean newGeom = createDefaultGeom(connectionContext);
+            panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
         }
+    } 
+    
+    public CidsBean createDefaultGeom (ConnectionContext connectionContext){
+        final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
+        final BoundingBox initialBoundingBox;
+        initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
+                    .getInitialBoundingBox();
+        final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
+
+        final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                TABLE_GEOM,
+                connectionContext);
+        final CidsBean newGeom = geomMetaClass.getEmptyInstance(connectionContext).getBean();
+        try {
+            newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return newGeom;
     }
 }
