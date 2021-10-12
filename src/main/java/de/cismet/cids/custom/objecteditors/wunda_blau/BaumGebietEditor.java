@@ -607,6 +607,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         if (isEditor()){
             cbHNr.setMaximumRowCount(20);
             cbHNr.setEnabled(false);
+            cbHNr.setMinimumSize(new Dimension(100, 19));
+            cbHNr.setPreferredSize(new Dimension(100, 19));
 
             binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
