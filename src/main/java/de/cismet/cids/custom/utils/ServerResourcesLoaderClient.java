@@ -22,19 +22,20 @@ package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
 
+import com.fasterxml.jackson.core.JsonFactory;
+
 import net.sf.jasperreports.engine.JasperReport;
 
 import java.io.StringReader;
 
 import java.util.Properties;
 
-import de.cismet.cids.custom.utils.properties.PotenzialflaechenProperties;
-
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
 import de.cismet.cids.utils.serverresources.AbstractServerResourcesLoader;
 import de.cismet.cids.utils.serverresources.BinaryServerResource;
 import de.cismet.cids.utils.serverresources.JasperReportServerResource;
+import de.cismet.cids.utils.serverresources.JsonServerResource;
 import de.cismet.cids.utils.serverresources.PropertiesServerResource;
 import de.cismet.cids.utils.serverresources.ServerResource;
 import de.cismet.cids.utils.serverresources.TextServerResource;
@@ -62,7 +63,7 @@ public class ServerResourcesLoaderClient extends AbstractServerResourcesLoader {
                         serverResource,
                         ConnectionContext.create(
                             AbstractConnectionContext.Category.STATIC,
-                            PotenzialflaechenProperties.class.getSimpleName()));
+                            ServerResourcesLoaderClient.class.getSimpleName()));
         if (ret instanceof Exception) {
             throw (Exception)ret;
         }
@@ -100,6 +101,26 @@ public class ServerResourcesLoaderClient extends AbstractServerResourcesLoader {
 
     @Override
     public Object load(final ServerResource serverResource) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
+                                                                       // Tools | Templates.
+    }
+
+    @Override
+    @Deprecated
+    public <T> T loadJson(final ServerResource serverResource, final Class<T> clazz) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
+                                                                       // Tools | Templates.
+    }
+
+    @Override
+    public <T> T loadJson(final JsonServerResource serverResource, final Class<T> clazz) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
+                                                                       // Tools | Templates.
+    }
+
+    @Override
+    public <T> T loadJson(final JsonServerResource serverResource, final JsonFactory jsonFactory, final Class<T> clazz)
+            throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
                                                                        // Tools | Templates.
     }

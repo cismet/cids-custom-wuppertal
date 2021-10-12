@@ -112,6 +112,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt2;
     private javax.swing.JButton btnRemoveArt2;
+    private javax.swing.JButton btnReport;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbGeom;
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbVeroeffentlicht;
@@ -271,6 +272,7 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         panTitle = new javax.swing.JPanel();
         txtTitle = new javax.swing.JLabel();
         txtTitle1 = new javax.swing.JLabel();
+        btnReport = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -330,6 +332,30 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panTitle.add(txtTitle1, gridBagConstraints);
+
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/einzelReport.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport,
+            org.openide.util.NbBundle.getMessage(
+                PfKampagneEditor.class,
+                "PfPotenzialflaecheTitlePanel.btnReport.text"));                           // NOI18N
+        btnReport.setToolTipText("Steckbriefe der Kampagne erzeugen.");
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panTitle.add(btnReport, gridBagConstraints);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -880,6 +906,15 @@ public class PfKampagneEditor extends javax.swing.JPanel implements CidsBeanRend
     private void txtBezeichnung1FocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBezeichnung1FocusLost
         // TODO add your handling code here:
     } //GEN-LAST:event_txtBezeichnung1FocusLost
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        PfPotenzialflaecheReportGenerator.startDownloadForKampagne(getCidsBean(), getConnectionContext());
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -2199,9 +2199,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
 
         lblMessstellenausbauTitle.setFont(lblMessstellenausbauTitle.getFont());
         lblMessstellenausbauTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblMessstellenausbauTitle,
-            "Planungsrecht/Bauplanungrecht/Bauordnungsrecht");
+        org.openide.awt.Mnemonics.setLocalizedText(lblMessstellenausbauTitle, "Planungsrecht/Bauordnungsrecht");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -4566,7 +4564,7 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
      * DOCUMENT ME!
      */
     public void startDownload() {
-        PfPotenzialflaecheReportGenerator.startDownload(getCidsBean(), getConnectionContext());
+        PfPotenzialflaecheReportGenerator.startDownloadForFlaeche(getCidsBean(), getConnectionContext());
     }
 
     /**

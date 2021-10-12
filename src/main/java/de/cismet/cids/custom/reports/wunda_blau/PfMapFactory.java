@@ -43,7 +43,7 @@ import java.util.Collection;
 
 import javax.imageio.ImageIO;
 
-import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportCreator;
+import de.cismet.cids.custom.utils.PotenzialflaecheReportCreator;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -112,13 +112,10 @@ public class PfMapFactory extends MapImageFactory {
             }
         }
 
-        final MetaClass mc;
-        if ((config.getType() == PotenzialflaecheReportCreator.Type.PF_ORTHO)
-                    || (config.getType() == PotenzialflaecheReportCreator.Type.PF_DGK)) {
-            mc = CidsBean.getMetaClassFromTableName("WUNDA_BLAU", "PF_POTENZIALFLAECHE", getConnectionContext());
-        } else {
-            return null;
-        }
+        final MetaClass mc = CidsBean.getMetaClassFromTableName(
+                "WUNDA_BLAU",
+                "PF_POTENZIALFLAECHE",
+                getConnectionContext());
 
         final Collection<Feature> features = new ArrayList();
         for (final Integer id : config.getIds()) {
@@ -153,18 +150,20 @@ public class PfMapFactory extends MapImageFactory {
         mapProvider.setCrs(new Crs(config.getSrs(), "", "", true, true));
         mapProvider.addLayer(simpleWms);
 
-        for (final Feature feature : features) {
-            mapProvider.addFeature(feature);
-            if (mapProvider.getMappingComponent().getPFeatureHM().get(feature) != null) {
-                final PNode annotationNode = mapProvider.getMappingComponent()
-                            .getPFeatureHM()
-                            .get(feature)
-                            .getPrimaryAnnotationNode();
-                if (annotationNode != null) {
-                    final PBounds bounds = annotationNode.getBounds();
-                    bounds.x = -bounds.width / 2;
-                    bounds.y = -bounds.height / 2;
-                    annotationNode.setBounds(bounds);
+        if (Boolean.TRUE.equals(config.getShowGeom())) {
+            for (final Feature feature : features) {
+                mapProvider.addFeature(feature);
+                if (mapProvider.getMappingComponent().getPFeatureHM().get(feature) != null) {
+                    final PNode annotationNode = mapProvider.getMappingComponent()
+                                .getPFeatureHM()
+                                .get(feature)
+                                .getPrimaryAnnotationNode();
+                    if (annotationNode != null) {
+                        final PBounds bounds = annotationNode.getBounds();
+                        bounds.x = -bounds.width / 2;
+                        bounds.y = -bounds.height / 2;
+                        annotationNode.setBounds(bounds);
+                    }
                 }
             }
         }
