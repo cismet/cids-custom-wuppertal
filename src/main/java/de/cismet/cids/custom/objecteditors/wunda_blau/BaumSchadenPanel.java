@@ -2076,7 +2076,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         RendererTools.makeReadOnly(chKrone);
         RendererTools.makeReadOnly(chStamm);
         RendererTools.makeReadOnly(chWurzel);
-        //RendererTools.makeReadOnly(taBemerkung);
         taBemerkung.setEnabled(false);
         RendererTools.makeReadOnly(chFaellung);
         RendererTools.makeReadOnly(txtBetrag);

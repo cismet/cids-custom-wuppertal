@@ -1284,15 +1284,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void setReadOnly() {
         if (!(isEditor())) {
-            //RendererTools.makeReadOnly(txtAktenzeichen);
             txtAktenzeichen.setEnabled(false);
-            //RendererTools.makeReadOnly(cbStrasse);
             cbStrasse.setEnabled(false);
             RendererTools.makeReadOnly(cbHNr);
-            //cbHNr.setEnabled(false);
-            //RendererTools.makeReadOnly(txtName);
             txtName.setEnabled(false);
-            //RendererTools.makeReadOnly(taBemerkung);
             taBemerkung.setEnabled(false);
             lblGeom.setVisible(isEditor());
             panControlsNewMeldungen.setVisible(isEditor());
@@ -1485,12 +1480,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public void afterSaving(AfterSavingHook.Event event) {
         try{
             if(AfterSavingHook.Status.SAVE_SUCCESS == event.getStatus()){
-                final List<CidsBean> listMeldung = getBaumChildrenLoader().getMapValueMeldung(getCidsBean().getPrimaryKeyValue());
+                final List<CidsBean> listMeldung = 
+                        getBaumChildrenLoader().getMapValueMeldung(getCidsBean().getPrimaryKeyValue());
                 for (CidsBean meldungBean : listMeldung) {
                     try {
                         meldungBean.setProperty(FIELD__GEBIET, event.getPersistedBean());
-                        final List<CidsBean> listOrt = getBaumChildrenLoader().getMapValueOrt(meldungBean.getPrimaryKeyValue());
-                        final List<CidsBean> listSchaden = getBaumChildrenLoader().getMapValueSchaden(meldungBean.getPrimaryKeyValue());
+                        final List<CidsBean> listOrt = 
+                                getBaumChildrenLoader().getMapValueOrt(meldungBean.getPrimaryKeyValue());
+                        final List<CidsBean> listSchaden = 
+                                getBaumChildrenLoader().getMapValueSchaden(meldungBean.getPrimaryKeyValue());
                         try{
                             meldungBean = meldungBean.persist(getConnectionContext());
                         } catch (final Exception ex) {
@@ -1526,8 +1524,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                             for (CidsBean schadenBean : listSchaden) {
                                 try {
                                     schadenBean.setProperty(FIELD__MELDUNG, meldungBean);
-                                    final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(schadenBean.getPrimaryKeyValue());
-                                    final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(schadenBean.getPrimaryKeyValue());
+                                    final List<CidsBean> listErsatz = 
+                                            getBaumChildrenLoader().getMapValueErsatz(schadenBean.getPrimaryKeyValue());
+                                    final List<CidsBean> listFest = 
+                                            getBaumChildrenLoader().getMapValueFest(schadenBean.getPrimaryKeyValue());
                                     schadenBean = schadenBean.persist(getConnectionContext());
                                     //Ersatzpflanzungen persisten
                                     if (listErsatz != null && !(listErsatz.isEmpty())){

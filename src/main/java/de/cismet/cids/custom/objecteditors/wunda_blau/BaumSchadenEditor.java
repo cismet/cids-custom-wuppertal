@@ -490,7 +490,10 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_SCHADEN;
         } else {
-            return String.format("Gebiet: %s - Meldung: %s - Schaden: %s", getCidsBean().getProperty(FIELD__GEBIET_AZ), getCidsBean().getProperty(FIELD__MELDUNG_DATUM), getCidsBean().getProperty(FIELD__ID));
+            return String.format("Gebiet: %s - Meldung: %s - Schaden: %s", 
+                    getCidsBean().getProperty(FIELD__GEBIET_AZ), 
+                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM), 
+                    getCidsBean().getProperty(FIELD__ID));
         }
     }
 

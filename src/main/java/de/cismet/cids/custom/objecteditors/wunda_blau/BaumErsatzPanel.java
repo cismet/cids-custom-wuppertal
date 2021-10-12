@@ -1106,7 +1106,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             RendererTools.makeReadOnly(dcBis);
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(chDispens);
-            RendererTools.makeReadOnly(chSelbst);;
+            RendererTools.makeReadOnly(chSelbst);
             cbArtE.setEnabled(false);
             cbSorte.setEnabled(false);
             RendererTools.makeDoubleSpinnerWithoutButtons(spAnzahl, 0);

@@ -459,7 +459,10 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_ORTSTERMIN;
         } else {
-            return String.format("Gebiet: %s - Meldung: %s - Ortstermin: %s", getCidsBean().getProperty(FIELD__GEBIET_AZ), getCidsBean().getProperty(FIELD__MELDUNG_DATUM), getCidsBean().getProperty(FIELD__DATUM));
+            return String.format("Gebiet: %s - Meldung: %s - Ortstermin: %s", 
+                    getCidsBean().getProperty(FIELD__GEBIET_AZ), 
+                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM), 
+                    getCidsBean().getProperty(FIELD__DATUM));
         }
         
     }

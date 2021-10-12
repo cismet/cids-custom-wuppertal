@@ -82,7 +82,11 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     //~ Static fields/initializers ---------------------------------------------
     private static final Logger LOG = Logger.getLogger(BaumFestsetzungEditor.class);
  
-    private static final String[] SCHADEN_COL_NAMES = new String[] {  "Gebiet-Aktenzeichen", "Meldungsdatum", "Id", "gef. Art" };
+    private static final String[] SCHADEN_COL_NAMES = new String[] {  
+        "Gebiet-Aktenzeichen", 
+        "Meldungsdatum", 
+        "Id", 
+        "gef. Art" };
     private static final String[] SCHADEN_PROP_NAMES = new String[] {
             "fk_meldung.fk_gebiet.aktenzeichen",
             "fk_meldung.datum",
@@ -447,7 +451,13 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
             return TITLE_NEW_FEST;
         } else {
-            return String.format("G: %s - M: %s - S: %s, %s - E:%s, %s", getCidsBean().getProperty(FIELD__GEBIET_AZ), getCidsBean().getProperty(FIELD__MELDUNG_DATUM), getCidsBean().getProperty(FIELD__SCHADEN_ID), getCidsBean().getProperty(FIELD__SCHADEN_ART), getCidsBean().getProperty(FIELD__ID), getCidsBean().getProperty(FIELD__ART));
+            return String.format("G: %s - M: %s - S: %s, %s - E:%s, %s", 
+                    getCidsBean().getProperty(FIELD__GEBIET_AZ), 
+                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM), 
+                    getCidsBean().getProperty(FIELD__SCHADEN_ID), 
+                    getCidsBean().getProperty(FIELD__SCHADEN_ART), 
+                    getCidsBean().getProperty(FIELD__ID), 
+                    getCidsBean().getProperty(FIELD__ART));
         }
     }
 
