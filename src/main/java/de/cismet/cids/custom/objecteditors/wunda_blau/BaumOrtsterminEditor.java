@@ -13,43 +13,23 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.client.tools.DevelopmentTools;
-import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
+
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXTable;
 
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
 import java.awt.Font;
-
-import java.util.Collections;
-
-import javax.swing.*;
-
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
-
-import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
-
-
-import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import de.cismet.cismap.commons.interaction.CismapBroker;
-
-import de.cismet.connectioncontext.ConnectionContext;
-
-import de.cismet.tools.gui.StaticSwingTools;
-
-import de.cismet.cids.custom.utils.CidsBeansTableModel;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
-import de.cismet.cids.editors.SaveVetoable;
-import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -57,18 +37,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.MissingResourceException;
-import lombok.Getter;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.JXTable;
+
+import javax.swing.*;
+
+import de.cismet.cids.client.tools.DevelopmentTools;
+
+import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
+import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumMeldungLightweightSearch;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.SaveVetoable;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.connectioncontext.ConnectionContext;
+
+import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 /**
  * DOCUMENT ME!
  *
@@ -80,24 +81,24 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     BaumParentPanel {
 
     //~ Static fields/initializers ---------------------------------------------
-    @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
+
     private static final Comparator<Object> COMPARATOR = new Comparator<Object>() {
 
             @Override
             public int compare(final Object o1, final Object o2) {
-                    return String.valueOf(o1).compareTo(String.valueOf(o2));
-                }
-        };   
+                return String.valueOf(o1).compareTo(String.valueOf(o2));
+            }
+        };
+
     public static final String GEOMTYPE = "Point";
     public static final int FOTO_WIDTH = 150;
-
-    private List<CidsBean> teilBeans;
     private static final Logger LOG = Logger.getLogger(BaumOrtsterminEditor.class);
-    private static final String[] MELDUNG_COL_NAMES = new String[] {  
-        "Gebiet-Aktenzeichen", 
-        "Gebiet-Bemerkung", 
-        "Meldungsdatum", 
-        "Meldung-Bemerkung" };
+    private static final String[] MELDUNG_COL_NAMES = new String[] {
+            "Gebiet-Aktenzeichen",
+            "Gebiet-Bemerkung",
+            "Meldungsdatum",
+            "Meldung-Bemerkung"
+        };
     private static final String[] MELDUNG_PROP_NAMES = new String[] {
             "fk_gebiet.aktenzeichen",
             "fk_gebiet.bemerkung",
@@ -106,83 +107,40 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         };
     private static final Class[] MELDUNG_PROP_TYPES = new Class[] {
             CidsBean.class,
-            CidsBean.class, 
+            CidsBean.class,
             Date.class,
             String.class
         };
-    private static final String[] LOADING_COL_NAMES = new String[] { "Die Daten werden geladen......"};
-    private static final String[] MUSTSET_COL_NAMES = new String[] { "Die Daten bitte zuweisen......"};
-    
+    private static final String[] LOADING_COL_NAMES = new String[] { "Die Daten werden geladen......" };
+    private static final String[] MUSTSET_COL_NAMES = new String[] { "Die Daten bitte zuweisen......" };
+
     private static final String TITLE_NEW_ORTSTERMIN = "einen neuen Ortstermin anlegen ....";
-    
-    public static final String FIELD__TEILNEHMER = "n_teilnehmer";              // baum_ortstermin
-    public static final String FIELD__DATUM = "datum";                          // baum_ortstermin
-    public static final String FIELD__ID = "id";                                // baum_ortstermin
-    public static final String FIELD__MELDUNG = "fk_meldung";                   // baum_ortstermin
-    public static final String FIELD__MELDUNG_ID = "fk_meldung.id";             // baum_meldung
-    public static final String FIELD__MELDUNG_DATUM = "fk_meldung.datum";       // baum_meldung
-    public static final String FIELD__GEBIET_AZ = "fk_meldung.fk_gebiet.aktenzeichen";       // baum_gebiet
-    public static final String FIELD__NAME = "name";                            // baum_teilnehmer
-    public static final String FIELD__MELDUNGEN = "n_ortstermine";              // baum_meldung
-    public static final String FIELD__TEILNEHMER_OTSTERMIN = "fk_ortstermin";   // baum_teilnehmer
-    public static final String FIELD__TEILNEHMER_NAME = "name";                 // baum_teilnehmer
-    public static final String FIELD__TEILNEHMER_TELEFON = "telefon";           // baum_teilnehmer
-    public static final String FIELD__TEILNEHMER_BEMERKUNG = "bemerkung";       // baum_teilnehmer
+
+    public static final String FIELD__TEILNEHMER = "n_teilnehmer";                     // baum_ortstermin
+    public static final String FIELD__DATUM = "datum";                                 // baum_ortstermin
+    public static final String FIELD__ID = "id";                                       // baum_ortstermin
+    public static final String FIELD__MELDUNG = "fk_meldung";                          // baum_ortstermin
+    public static final String FIELD__MELDUNG_ID = "fk_meldung.id";                    // baum_meldung
+    public static final String FIELD__MELDUNG_DATUM = "fk_meldung.datum";              // baum_meldung
+    public static final String FIELD__GEBIET_AZ = "fk_meldung.fk_gebiet.aktenzeichen"; // baum_gebiet
+    public static final String FIELD__NAME = "name";                                   // baum_teilnehmer
+    public static final String FIELD__MELDUNGEN = "n_ortstermine";                     // baum_meldung
+    public static final String FIELD__TEILNEHMER_OTSTERMIN = "fk_ortstermin";          // baum_teilnehmer
+    public static final String FIELD__TEILNEHMER_NAME = "name";                        // baum_teilnehmer
+    public static final String FIELD__TEILNEHMER_TELEFON = "telefon";                  // baum_teilnehmer
+    public static final String FIELD__TEILNEHMER_BEMERKUNG = "bemerkung";              // baum_teilnehmer
     public static final String TABLE_NAME__MELDUNG = "baum_meldung";
-    public static final String TABLE_NAME__TEILNEHMER = "baum_teilnehmer"; 
-    
-    public static final String BUNDLE_PANE_PREFIX =
-        "BaumOrtsterminEditor.isOkForSaving().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX =
-        "BaumOrtsterminEditor.isOkForSaving().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = 
-            "BaumOrtsterminEditor.isOkForSaving().JOptionPane.title";
-    public static final String BUNDLE_TEIL_QUESTION = 
-            "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().question";
-    public static final String BUNDLE_TEIL_TITLE = 
-            "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().title";
-    public static final String BUNDLE_TEIL_ERRORTITLE = 
-            "BaumOrtsterminEditor.btnRemoveTeilrActionPerformed().errortitle";
-    public static final String BUNDLE_TEIL_ERRORTEXT = 
-            "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
-    public static final String BUNDLE_NOMELDUNG = 
-            "BaumOrtsterminEditor.isOkForSaving().noMeldung";
-    
-    @Override
-    public boolean isEditor() {
-        return this.editor;
-    }
+    public static final String TABLE_NAME__TEILNEHMER = "baum_teilnehmer";
 
-    @Override
-    public boolean isOkForSaving() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        
-        boolean noErrorOccured = baumOrtsterminPanel.isOkayForSaving(getCidsBean());
-        try {
-            if (getCidsBean().getProperty(FIELD__MELDUNG_ID) == null) {
-                LOG.warn("No meldung specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Meldung not given.", ex);
-            save = false;
-        }
-
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-
-            return false;
-        }
-        return save && noErrorOccured;
-    }
-
+    public static final String BUNDLE_PANE_PREFIX = "BaumOrtsterminEditor.isOkForSaving().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "BaumOrtsterminEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "BaumOrtsterminEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_TEIL_QUESTION = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().question";
+    public static final String BUNDLE_TEIL_TITLE = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().title";
+    public static final String BUNDLE_TEIL_ERRORTITLE =
+        "BaumOrtsterminEditor.btnRemoveTeilrActionPerformed().errortitle";
+    public static final String BUNDLE_TEIL_ERRORTEXT = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
+    public static final String BUNDLE_NOMELDUNG = "BaumOrtsterminEditor.isOkForSaving().noMeldung";
 
     //~ Enums ------------------------------------------------------------------
 
@@ -199,11 +157,14 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     }
 
     //~ Instance fields --------------------------------------------------------
-    
-    //private MetaClass teilnehmerMetaClass;
+
+    @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
+
+    private List<CidsBean> teilBeans;
+
+    // private MetaClass teilnehmerMetaClass;
 
     private final boolean editor;
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumOrtsterminPanel baumOrtsterminPanel;
@@ -239,27 +200,63 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public boolean isEditor() {
+        return this.editor;
+    }
+
+    @Override
+    public boolean isOkForSaving() {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+
+        final boolean noErrorOccured = baumOrtsterminPanel.isOkayForSaving(getCidsBean());
+        try {
+            if (getCidsBean().getProperty(FIELD__MELDUNG_ID) == null) {
+                LOG.warn("No meldung specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOMELDUNG));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Meldung not given.", ex);
+            save = false;
+        }
+
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+
+            return false;
+        }
+        return save && noErrorOccured;
+    }
+
+    @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
         xtMeldung.getColumn(2).setWidth(100);
         xtMeldung.setSortable(false);
         xtMeldung.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 12));
-        xtMeldung.addMouseMotionListener(new MouseAdapter(){
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int row=xtMeldung.rowAtPoint(e.getPoint());
-                int col=xtMeldung.columnAtPoint(e.getPoint());
-                if(row>-1 && col>-1){
-                    Object value=xtMeldung.getValueAt(row, col);
-                    if(null!=value && !"".equals(value)){
-                        xtMeldung.setToolTipText(value.toString());
-                    }else{
-                        xtMeldung.setToolTipText(null);//keinTooltip anzeigen
+        xtMeldung.addMouseMotionListener(new MouseAdapter() {
+
+                @Override
+                public void mouseMoved(final MouseEvent e) {
+                    final int row = xtMeldung.rowAtPoint(e.getPoint());
+                    final int col = xtMeldung.columnAtPoint(e.getPoint());
+                    if ((row > -1) && (col > -1)) {
+                        final Object value = xtMeldung.getValueAt(row, col);
+                        if ((null != value) && !"".equals(value)) {
+                            xtMeldung.setToolTipText(value.toString());
+                        } else {
+                            xtMeldung.setToolTipText(null); // keinTooltip anzeigen
+                        }
                     }
                 }
-            }
-        });
+            });
         setReadOnly();
     }
 
@@ -273,7 +270,11 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        comboBoxFilterDialogGebiet = new ComboBoxFilterDialog(null, new BaumMeldungLightweightSearch(), "Gebiet-Meldung auswählen", getConnectionContext());
+        comboBoxFilterDialogGebiet = new ComboBoxFilterDialog(
+                null,
+                new BaumMeldungLightweightSearch(),
+                "Gebiet-Meldung auswählen",
+                getConnectionContext());
         panContent = new RoundedPanel();
         panOrtstermin = new JPanel();
         lblGebiet_Meldung = new JLabel();
@@ -301,13 +302,16 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panOrtstermin.add(lblGebiet_Meldung, gridBagConstraints);
 
-        btnChangeGebiet.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
+        btnChangeGebiet.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
         btnChangeGebiet.setToolTipText("Gebiet - Meldung zuweisen");
         btnChangeGebiet.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnChangeGebietActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnChangeGebietActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -331,7 +335,12 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         panOrtstermineMain.setOpaque(false);
         panOrtstermineMain.setLayout(new GridBagLayout());
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean}"), baumOrtsterminPanel, BeanProperty.create("cidsBean"));
+        final Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean}"),
+                baumOrtsterminPanel,
+                BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -373,9 +382,14 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnChangeGebietActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -388,7 +402,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeGebietActionPerformed
+    } //GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -403,17 +417,17 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
             if (teilBeans != null) {
                 Collections.sort((List)teilBeans, COMPARATOR);
             }
-        // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
+            // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 cb,
                 getConnectionContext());
             bindingGroup.bind();
-            
-            if(getCidsBean().getProperty(FIELD__MELDUNG) == null){
+
+            if (getCidsBean().getProperty(FIELD__MELDUNG) == null) {
                 xtMeldung.getTableHeader().setForeground(Color.red);
-            }else{
+            } else {
                 xtMeldung.getTableHeader().setForeground(Color.BLACK);
                 setMeldungTable((CidsBean)getCidsBean().getProperty(FIELD__MELDUNG));
             }
@@ -421,14 +435,18 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
             LOG.error("Bean not set.", ex);
         }
     }
-    
-    
-    private void setMeldungTable(CidsBean meldungBean){
-        List<CidsBean> meldungBeans = new ArrayList<>();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  meldungBean  DOCUMENT ME!
+     */
+    private void setMeldungTable(final CidsBean meldungBean) {
+        final List<CidsBean> meldungBeans = new ArrayList<>();
         meldungBeans.add(meldungBean);
         ((OrtsterminMeldungTableModel)xtMeldung.getModel()).setCidsBeans(meldungBeans);
     }
-   
+
     /**
      * DOCUMENT ME!
      */
@@ -438,7 +456,14 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
             btnChangeGebiet.setVisible(isEditor());
         }
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
     public static void main(final String[] args) throws Exception {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         final MappingComponent mc = new MappingComponent();
@@ -456,15 +481,15 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public String getTitle() {
-        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_ORTSTERMIN;
         } else {
-            return String.format("Gebiet: %s - Meldung: %s - Ortstermin: %s", 
-                    getCidsBean().getProperty(FIELD__GEBIET_AZ), 
-                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM), 
+            return String.format(
+                    "Gebiet: %s - Meldung: %s - Ortstermin: %s",
+                    getCidsBean().getProperty(FIELD__GEBIET_AZ),
+                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM),
                     getCidsBean().getProperty(FIELD__DATUM));
         }
-        
     }
 
     @Override
@@ -472,11 +497,18 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         super.dispose();
         baumOrtsterminPanel.dispose();
     }
-    
+
     @Override
     public void setTitle(final String string) {
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class OrtsterminMeldungTableModel extends CidsBeansTableModel {
 
         //~ Constructors -------------------------------------------------------
@@ -487,7 +519,12 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         public OrtsterminMeldungTableModel() {
             super(MELDUNG_PROP_NAMES, MELDUNG_COL_NAMES, MELDUNG_PROP_TYPES);
         }
-    }  
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class LoadingTableModel extends CidsBeansTableModel {
 
         //~ Constructors -------------------------------------------------------
@@ -496,9 +533,14 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
          * Creates a new LoadingTableModel object.
          */
         public LoadingTableModel() {
-            super( MELDUNG_PROP_NAMES,LOADING_COL_NAMES, MELDUNG_PROP_TYPES);
+            super(MELDUNG_PROP_NAMES, LOADING_COL_NAMES, MELDUNG_PROP_TYPES);
         }
-    } 
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class MustSetTableModel extends CidsBeansTableModel {
 
         //~ Constructors -------------------------------------------------------
@@ -507,9 +549,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
          * Creates a new LoadingTableModel object.
          */
         public MustSetTableModel() {
-            super( MELDUNG_PROP_NAMES,MUSTSET_COL_NAMES, MELDUNG_PROP_TYPES);
+            super(MELDUNG_PROP_NAMES, MUSTSET_COL_NAMES, MELDUNG_PROP_TYPES);
         }
     }
 }
-    
-

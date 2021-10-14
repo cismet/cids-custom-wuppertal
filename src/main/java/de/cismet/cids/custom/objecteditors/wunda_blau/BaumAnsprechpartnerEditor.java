@@ -26,6 +26,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXTable;
 
 import org.openide.util.NbBundle;
 
@@ -38,16 +39,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.text.DecimalFormat;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.MissingResourceException;
+
 import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -55,15 +65,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-
-import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
-import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
-import de.cismet.cids.editors.SaveVetoable;
-import de.cismet.cids.editors.hooks.BeforeSavingHook;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.MissingResourceException;
-import org.jdesktop.swingx.JXTable;
 
 /**
  * DOCUMENT ME!
@@ -80,7 +81,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
     private static final Logger LOG = Logger.getLogger(BaumAnsprechpartnerEditor.class);
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
-    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
     public static final String REDUNDANT_TABLE = "baum_ansprechpartner";
 
     public static final String TABLE_NAME = "baum_ansprechpartner";
@@ -91,161 +92,38 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public static final String FIELD__TELEFONE = "n_telefone";
     public static final String FIELD__ID = "id";
     public static final String TABLE_NAME_TELEFON = "baum_telefon";
-    
-    private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen..."; 
 
-    public static final String BUNDLE_NOBEM = 
-            "BaumAnsprechpartnerEditor.isOkForSaving().noBemerkung";
-    public static final String BUNDLE_NOTEL = 
-            "BaumAnsprechpartnerEditor.isOkForSaving().noTelefon";
-    public static final String BUNDLE_WRONGTEL = 
-            "BaumAnsprechpartnerEditor.isOkForSaving().wrongTelefon";
-    public static final String BUNDLE_NONAME = 
-            "BaumAnsprechpartnerEditor.isOkForSaving().noName";
-    public static final String BUNDLE_DUPLICATENAME = 
-            "BaumAnsprechpartnerEditor.isOkForSaving().duplicateName";
-    public static final String BUNDLE_DUPLICATEKEY = 
-            "BaumAnsprechpartnerEditor.isOkForSaving().duplicateSchluessel";
+    private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen...";
+
+    public static final String BUNDLE_NOBEM = "BaumAnsprechpartnerEditor.isOkForSaving().noBemerkung";
+    public static final String BUNDLE_NOTEL = "BaumAnsprechpartnerEditor.isOkForSaving().noTelefon";
+    public static final String BUNDLE_WRONGTEL = "BaumAnsprechpartnerEditor.isOkForSaving().wrongTelefon";
+    public static final String BUNDLE_NONAME = "BaumAnsprechpartnerEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = "BaumAnsprechpartnerEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_DUPLICATEKEY = "BaumAnsprechpartnerEditor.isOkForSaving().duplicateSchluessel";
     public static final String BUNDLE_PANE_PREFIX =
         "BaumAnsprechpartnerEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX =
         "BaumAnsprechpartnerEditor.isOkForSaving().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = 
-            "BaumAnsprechpartnerEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE = "BaumAnsprechpartnerEditor.isOkForSaving().JOptionPane.title";
 
-    public static final String BUNDLE_HP_TITLE = 
-            "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.title";
-    public static final String BUNDLE_HP_TEXT = 
-            "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.text";
+    public static final String BUNDLE_HP_TITLE = "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.title";
+    public static final String BUNDLE_HP_TEXT = "BaumAnsprechpartnerEditor.xhHomepageActionPerformed.text";
 
     public static final String TEL__PATTERN = "\\+[0-9]{1,3}(-[0-9]+){1,}";
-    
+
     private static final String[] TELEFON_COL_NAMES = new String[] { "Telefon", "Bemerkung" };
-    private static final String[] TELEFON_PROP_NAMES = new String[] {"nummer", "bemerkung"};
+    private static final String[] TELEFON_PROP_NAMES = new String[] { "nummer", "bemerkung" };
     private static final Class[] TELEFON_PROP_TYPES = new Class[] {
             String.class,
             String.class
         };
 
-    @Override
-    public void beforeSaving() {
-        RedundantObjectSearch apSearch = new RedundantObjectSearch(
-            REDUNDANT_TOSTRING_TEMPLATE,
-            REDUNDANT_TOSTRING_FIELDS,
-            null,
-            REDUNDANT_TABLE);
-        final Collection<String> conditions = new ArrayList<>();
-        //redundanter name
-        conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
-        apSearch.setWhere(conditions);
-        try {
-            redundantName = !(SessionManager.getProxy().customServerSearch(
-                    SessionManager.getSession().getUser(),
-                    apSearch,
-                    getConnectionContext())).isEmpty();
-        } catch (ConnectionException ex) {
-            LOG.warn("problem in check name: load values.", ex);
-        }
-        //redundanter Schluessel
-        conditions.clear();
-        conditions.add(FIELD__SCHLUESSEL + " ilike '" + txtName.getText().trim() + "'");
-        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
-        apSearch.setWhere(conditions);
-        try {
-            redundantKey = !(SessionManager.getProxy().customServerSearch(
-                    SessionManager.getSession().getUser(),
-                    apSearch,
-                    getConnectionContext())).isEmpty();
-        } catch (ConnectionException ex) {
-            LOG.warn("problem in check key: load values.", ex);
-        }     
-        //Schluessel setzen 
-        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
-            try {
-                getCidsBean().setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
-            } catch (Exception ex) {
-                LOG.warn("Error: Key not set.", ex);
-            }
-        }
-    }
-
-    @Override
-    public boolean isOkForSaving() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-
-        // name vorhanden
-        try {
-            if (txtName.getText().trim().isEmpty()) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NONAME));
-                save = false;
-            } else {
-                if (redundantName) {
-                    LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_DUPLICATENAME));
-                    save = false;
-                } else {
-                    if (redundantKey) {
-                        LOG.warn("Duplicate key specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_DUPLICATEKEY));
-                        save = false;
-                    } 
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Name not given.", ex);
-            save = false;
-        }
-        
-        //Telefon muss eine Nummer & eine Bemerkung haben
-        try{
-            Collection<CidsBean> telCollection =  getCidsBean().getBeanCollectionProperty(FIELD__TELEFONE);
-            for (final CidsBean tBean:telCollection){
-                if (tBean.getProperty(FIELD__TELEFON)== null) {
-                    LOG.warn("No tel specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NOTEL));
-                    save = false;
-                } else {
-                    if (!(tBean.getProperty(FIELD__TELEFON).toString().matches(TEL__PATTERN))) {
-                        LOG.warn("Wrong tel specified. Skip persisting.");
-                        errorMessage
-                                .append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_WRONGTEL))
-                                .append(tBean.getProperty(FIELD__TELEFON).toString());
-                        save = false;
-                    }
-                }
-                if (tBean.getProperty(FIELD__BEMERKUNG)== null) {
-                    LOG.warn("No bem specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NOBEM));
-                    save = false;
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Teilnehmer not correct.", ex);
-            save = false;
-        }
-
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumAnsprechpartnerEditor.class,
-                    BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumAnsprechpartnerEditor.class,
-                            BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-        }
-        return save;
-    }
-
-    //~ Enums ------------------------------------------------------------------
-
     //~ Instance fields --------------------------------------------------------
+
     private Boolean redundantName = false;
     private Boolean redundantKey = false;
-    
+
     private DivBeanTable telefonModel;
 
     private final boolean editor;
@@ -301,6 +179,120 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void beforeSaving() {
+        final RedundantObjectSearch apSearch = new RedundantObjectSearch(
+                REDUNDANT_TOSTRING_TEMPLATE,
+                REDUNDANT_TOSTRING_FIELDS,
+                null,
+                REDUNDANT_TABLE);
+        final Collection<String> conditions = new ArrayList<>();
+        // redundanter name
+        conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
+        apSearch.setWhere(conditions);
+        try {
+            redundantName =
+                !(SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        apSearch,
+                        getConnectionContext())).isEmpty();
+        } catch (ConnectionException ex) {
+            LOG.warn("problem in check name: load values.", ex);
+        }
+        // redundanter Schluessel
+        conditions.clear();
+        conditions.add(FIELD__SCHLUESSEL + " ilike '" + txtName.getText().trim() + "'");
+        conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
+        apSearch.setWhere(conditions);
+        try {
+            redundantKey =
+                !(SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        apSearch,
+                        getConnectionContext())).isEmpty();
+        } catch (ConnectionException ex) {
+            LOG.warn("problem in check key: load values.", ex);
+        }
+        // Schluessel setzen
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+            try {
+                getCidsBean().setProperty(FIELD__SCHLUESSEL, txtName.getText().trim());
+            } catch (Exception ex) {
+                LOG.warn("Error: Key not set.", ex);
+            }
+        }
+    }
+
+    @Override
+    public boolean isOkForSaving() {
+        boolean save = true;
+        final StringBuilder errorMessage = new StringBuilder();
+
+        // name vorhanden
+        try {
+            if (txtName.getText().trim().isEmpty()) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NONAME));
+                save = false;
+            } else {
+                if (redundantName) {
+                    LOG.warn("Duplicate name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_DUPLICATENAME));
+                    save = false;
+                } else {
+                    if (redundantKey) {
+                        LOG.warn("Duplicate key specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_DUPLICATEKEY));
+                        save = false;
+                    }
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Name not given.", ex);
+            save = false;
+        }
+
+        // Telefon muss eine Nummer & eine Bemerkung haben
+        try {
+            final Collection<CidsBean> telCollection = getCidsBean().getBeanCollectionProperty(FIELD__TELEFONE);
+            for (final CidsBean tBean : telCollection) {
+                if (tBean.getProperty(FIELD__TELEFON) == null) {
+                    LOG.warn("No tel specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NOTEL));
+                    save = false;
+                } else {
+                    if (!(tBean.getProperty(FIELD__TELEFON).toString().matches(TEL__PATTERN))) {
+                        LOG.warn("Wrong tel specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_WRONGTEL))
+                                .append(tBean.getProperty(FIELD__TELEFON).toString());
+                        save = false;
+                    }
+                }
+                if (tBean.getProperty(FIELD__BEMERKUNG) == null) {
+                    LOG.warn("No bem specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_NOBEM));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Teilnehmer not correct.", ex);
+            save = false;
+        }
+
+        if (errorMessage.length() > 0) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(BaumAnsprechpartnerEditor.class,
+                    BUNDLE_PANE_PREFIX)
+                        + errorMessage.toString()
+                        + NbBundle.getMessage(BaumAnsprechpartnerEditor.class,
+                            BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(BaumAnsprechpartnerEditor.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        }
+        return save;
+    }
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
@@ -374,7 +366,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -396,7 +393,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblStrasse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.strasse}"), txtStrasse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -426,7 +428,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHnr, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hausnummer}"), txtHnr, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hausnummer}"),
+                txtHnr,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -451,7 +458,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
         ftxtPlz.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), ftxtPlz, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plz}"),
+                ftxtPlz,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -475,7 +487,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblOrt, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ort}"), txtOrt, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ort}"),
+                txtOrt,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -525,12 +542,15 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         panTelefonAdd.setOpaque(false);
         panTelefonAdd.setLayout(new GridBagLayout());
 
-        btnAddTelefon.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddTelefon.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddTelefon.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddTelefonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddTelefonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -538,12 +558,15 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(0, 0, 2, 0);
         panTelefonAdd.add(btnAddTelefon, gridBagConstraints);
 
-        btnRemTelefon.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemTelefon.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemTelefon.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemTelefonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemTelefonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -587,7 +610,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblMail, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.mail}"), txtMail, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.mail}"),
+                txtMail,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -616,7 +644,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -644,14 +677,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -675,14 +706,12 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -695,15 +724,25 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnAddTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddTelefonActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddTelefonActionPerformed
         TableUtils.addObjectToTable(xtTelefon, TABLE_NAME_TELEFON, getConnectionContext());
-    }//GEN-LAST:event_btnAddTelefonActionPerformed
+    }                                                                  //GEN-LAST:event_btnAddTelefonActionPerformed
 
-    private void btnRemTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemTelefonActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemTelefonActionPerformed
         TableUtils.removeObjectsFromTable(xtTelefon);
-    }//GEN-LAST:event_btnRemTelefonActionPerformed
+    }                                                                  //GEN-LAST:event_btnRemTelefonActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -735,8 +774,13 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
             LOG.error("Bean not set.", ex);
         }
     }
-    
-    private boolean isEditor(){
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isEditor() {
         return this.editor;
     }
 
@@ -759,7 +803,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
     @Override
     public String getTitle() {
-        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_AP;
         } else {
             return getCidsBean().toString();
@@ -768,5 +812,5 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
 
     @Override
     public void setTitle(final String string) {
-    }        
+    }
 }
