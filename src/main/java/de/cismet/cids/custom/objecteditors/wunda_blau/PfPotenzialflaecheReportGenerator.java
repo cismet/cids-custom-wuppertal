@@ -65,6 +65,7 @@ public class PfPotenzialflaecheReportGenerator {
             try {
                 final Download download = new PotenzialflaecheReportDownload(
                         PotenzialflaecheReportDownload.Type.KAMPAGNE,
+                        false,
                         selectedTemplateBean,
                         Arrays.asList(kampagneBean),
                         connectionContext);
@@ -94,6 +95,7 @@ public class PfPotenzialflaecheReportGenerator {
             try {
                 final Download download = new PotenzialflaecheReportDownload(
                         PotenzialflaecheReportDownload.Type.FLAECHE,
+                        false,
                         selectedTemplateBean,
                         flaecheBeans,
                         connectionContext);
@@ -123,6 +125,7 @@ public class PfPotenzialflaecheReportGenerator {
             try {
                 final Download download = new PotenzialflaecheReportDownload(
                         PotenzialflaecheReportDownload.Type.FLAECHE,
+                        false,
                         selectedTemplateBean,
                         Arrays.asList(flaecheBean),
                         connectionContext);
