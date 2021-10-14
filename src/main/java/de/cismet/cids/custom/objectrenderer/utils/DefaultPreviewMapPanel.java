@@ -34,6 +34,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$ Sandra Simmert 12.2.2018: Parameter GEO_BUFFER und MAP_CALL_STRING von außen steuerbar.
+ * @version  $Revision$, $Date$ Sandra Simmert 15.9.2021: dispose-Methode ergaenzt
  */
 public class DefaultPreviewMapPanel extends javax.swing.JPanel {
 
@@ -163,6 +164,12 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
         showMap(showMap);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    public void dispose() {
+        previewMap.dispose();
+    }
     /**
      * DOCUMENT ME!
      *
