@@ -10,8 +10,10 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.BaumGebietEditor;
+
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
@@ -33,7 +35,7 @@ public class BaumGebietRenderer extends BaumGebietEditor {
 
     //~ Methods ----------------------------------------------------------------
 
-     /**
+    /**
      * DOCUMENT ME!
      *
      * @param   args  DOCUMENT ME!

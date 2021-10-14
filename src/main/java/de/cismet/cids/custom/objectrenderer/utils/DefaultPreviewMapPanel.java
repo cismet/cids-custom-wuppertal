@@ -164,7 +164,10 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
         showMap(showMap);
     }
 
-    public void dispose(){
+    /**
+     * DOCUMENT ME!
+     */
+    public void dispose() {
         previewMap.dispose();
     }
     /**

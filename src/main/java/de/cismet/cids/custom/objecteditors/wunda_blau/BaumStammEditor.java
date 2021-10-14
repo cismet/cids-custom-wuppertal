@@ -35,13 +35,20 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.MissingResourceException;
+
 import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -49,13 +56,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-
-import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
-import de.cismet.cids.editors.SaveVetoable;
-import de.cismet.cids.editors.hooks.BeforeSavingHook;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -72,30 +72,23 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
 
     private static final Logger LOG = Logger.getLogger(BaumStammEditor.class);
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
-    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
     public static final String REDUNDANT_TABLE = "baum_stamm";
 
     public static final String TABLE_NAME = "baum_stamm";
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
-    
-    private static String TITLE_NEW_STAMM = "einen neuen Stammschaden anlegen..."; 
 
-    public static final String BUNDLE_NONAME = 
-            "BaumStammEditor.isOkForSaving().noName";
-    public static final String BUNDLE_DUPLICATENAME = 
-            "BaumStammEditor.isOkForSaving().duplicateName";
-    public static final String BUNDLE_PANE_PREFIX =
-            "BaumStammEditor.isOkForSaving().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX =
-            "BaumStammEditor.isOkForSaving().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = 
-            "BaumStammEditor.isOkForSaving().JOptionPane.title";
+    private static String TITLE_NEW_STAMM = "einen neuen Stammschaden anlegen...";
 
-    //~ Enums ------------------------------------------------------------------
-
+    public static final String BUNDLE_NONAME = "BaumStammEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = "BaumStammEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_PANE_PREFIX = "BaumStammEditor.isOkForSaving().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "BaumStammEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "BaumStammEditor.isOkForSaving().JOptionPane.title";
 
     //~ Instance fields --------------------------------------------------------
+
     private Boolean redundantName = false;
 
     private final boolean editor;
@@ -161,14 +154,12 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         setAutoscrolls(true);
         setMinimumSize(new Dimension(600, 646));
@@ -196,7 +187,12 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        final Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -226,14 +222,12 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten2.setName(""); // NOI18N
         panFillerUnten2.setOpaque(false);
 
-        GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
+        final GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
         panFillerUnten2.setLayout(panFillerUnten2Layout);
-        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -257,14 +251,12 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -277,7 +269,7 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -294,8 +286,13 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.error("Bean not set.", ex);
         }
     }
-    
-    private boolean isEditor(){
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isEditor() {
         return this.editor;
     }
 
@@ -310,7 +307,7 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public String getTitle() {
-        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_STAMM;
         } else {
             return getCidsBean().toString();
@@ -323,20 +320,21 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void beforeSaving() {
-        RedundantObjectSearch stammSearch = new RedundantObjectSearch(
-            REDUNDANT_TOSTRING_TEMPLATE,
-            REDUNDANT_TOSTRING_FIELDS,
-            null,
-            REDUNDANT_TABLE);
+        final RedundantObjectSearch stammSearch = new RedundantObjectSearch(
+                REDUNDANT_TOSTRING_TEMPLATE,
+                REDUNDANT_TOSTRING_FIELDS,
+                null,
+                REDUNDANT_TABLE);
         final Collection<String> conditions = new ArrayList<>();
         conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
         conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         stammSearch.setWhere(conditions);
         try {
-            redundantName = !(SessionManager.getProxy().customServerSearch(
-                    SessionManager.getSession().getUser(),
-                    stammSearch,
-                    getConnectionContext())).isEmpty();
+            redundantName =
+                !(SessionManager.getProxy().customServerSearch(
+                        SessionManager.getSession().getUser(),
+                        stammSearch,
+                        getConnectionContext())).isEmpty();
         } catch (ConnectionException ex) {
             LOG.warn("problem in check name: load values.", ex);
         }
@@ -358,7 +356,7 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
                     LOG.warn("Duplicate name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumStammEditor.class, BUNDLE_DUPLICATENAME));
                     save = false;
-                } 
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
@@ -377,5 +375,4 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
         }
         return save;
     }
-    
 }

@@ -20,16 +20,23 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
-
 import org.openide.util.NbBundle;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.MissingResourceException;
 
 import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -37,14 +44,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-
-import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import de.cismet.cids.editors.SaveVetoable;
-import de.cismet.cids.editors.hooks.BeforeSavingHook;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -61,35 +60,27 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
 
     private static final Logger LOG = Logger.getLogger(BaumSorteEditor.class);
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
-    public static final String[] REDUNDANT_TOSTRING_FIELDS = {"name", "id"};
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
     public static final String REDUNDANT_TABLE = "baum_sorte";
- 
-    public static final String FIELD__NAME = "name";                            // baum_sorte
-    public static final String FIELD__MAIN = "fk_art";                          // baum_sorte
-    public static final String FIELD__MAIN_ID = "fk_art.id";                    // baum_art
-    public static final String FIELD__NAME_BOTANISCH = "name_botanisch";        // baum_sorte
-    public static final String FIELD__ID = "id";                                // baum_sorte
+
+    public static final String FIELD__NAME = "name";                     // baum_sorte
+    public static final String FIELD__MAIN = "fk_art";                   // baum_sorte
+    public static final String FIELD__MAIN_ID = "fk_art.id";             // baum_art
+    public static final String FIELD__NAME_BOTANISCH = "name_botanisch"; // baum_sorte
+    public static final String FIELD__ID = "id";                         // baum_sorte
     public static final String TABLE_NAME = "baum_sorte";
 
-    public static final String BUNDLE_NONAME = 
-            "BaumSorteEditor.isOkForSaving().noName";
-    public static final String BUNDLE_DUPLICATENAME = 
-            "BaumSorteEditor.isOkForSaving().duplicateName";
-    public static final String BUNDLE_NOMAIN = 
-            "BaumSorteEditor.isOkForSaving().noMain";
-    public static final String BUNDLE_PANE_PREFIX =
-        "BaumSorteEditor.isOkForSaving().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX =
-        "BaumSorteEditor.isOkForSaving().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = 
-            "BaumSorteEditor.isOkForSaving().JOptionPane.title";
-
-    //~ Enums ------------------------------------------------------------------
-
+    public static final String BUNDLE_NONAME = "BaumSorteEditor.isOkForSaving().noName";
+    public static final String BUNDLE_DUPLICATENAME = "BaumSorteEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_NOMAIN = "BaumSorteEditor.isOkForSaving().noMain";
+    public static final String BUNDLE_PANE_PREFIX = "BaumSorteEditor.isOkForSaving().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "BaumSorteEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "BaumSorteEditor.isOkForSaving().JOptionPane.title";
+    private static String TITLE_NEW_SORTE = "eine neue Sorte anlegen...";
 
     //~ Instance fields --------------------------------------------------------
+
     private Boolean redundantName = false;
-    private static String TITLE_NEW_SORTE = "eine neue Sorte anlegen..."; 
 
     private final boolean editor;
 
@@ -152,7 +143,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         lblNameBotanisch = new javax.swing.JLabel();
         txtNameBotanisch = new javax.swing.JTextField();
         lblArt = new javax.swing.JLabel();
-        cbArt = new DefaultBindableReferenceCombo() ;
+        cbArt = new DefaultBindableReferenceCombo();
         txtName = new javax.swing.JTextField();
         panFillerUnten1 = new javax.swing.JPanel();
 
@@ -164,16 +155,18 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
+        final javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
         panFillerUntenLayout.setHorizontalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -218,7 +211,12 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panName.add(lblNameBotanisch, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name_botanisch}"), txtNameBotanisch, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name_botanisch}"),
+                txtNameBotanisch,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -243,7 +241,12 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         cbArt.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         cbArt.setMaximumRowCount(20);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"), cbArt, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_art}"),
+                cbArt,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -255,7 +258,12 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panName.add(cbArt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -277,16 +285,18 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
+        final javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
         panFillerUnten1Layout.setHorizontalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUnten1Layout.setVerticalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -308,7 +318,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -322,9 +332,9 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
             this.cidsBean = cb;
             if (cb != null) {
                 DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cb,
-                getConnectionContext());
+                    bindingGroup,
+                    cb,
+                    getConnectionContext());
             }
             bindingGroup.bind();
         } catch (final Exception ex) {
@@ -332,10 +342,15 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }
 
-    private boolean isEditor(){
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isEditor() {
         return this.editor;
     }
-    
+
     /**
      * DOCUMENT ME!
      */
@@ -349,7 +364,7 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public String getTitle() {
-       if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW){
+        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_SORTE;
         } else {
             return getCidsBean().toString();
@@ -362,22 +377,23 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void beforeSaving() {
-        RedundantObjectSearch sorteSearch = new RedundantObjectSearch(
-            REDUNDANT_TOSTRING_TEMPLATE,
-            REDUNDANT_TOSTRING_FIELDS,
-            null,
-            REDUNDANT_TABLE);
-        Object selection = cbArt.getSelectedItem();
+        final RedundantObjectSearch sorteSearch = new RedundantObjectSearch(
+                REDUNDANT_TOSTRING_TEMPLATE,
+                REDUNDANT_TOSTRING_FIELDS,
+                null,
+                REDUNDANT_TABLE);
+        final Object selection = cbArt.getSelectedItem();
         final Collection<String> conditions = new ArrayList<>();
-        if (selection!= null && selection instanceof CidsBean){
-            Integer mainId = ((CidsBean)selection).getPrimaryKeyValue();
-            conditions.add(FIELD__NAME+ " ilike '" + txtName.getText().trim() + "'");
+        if ((selection != null) && (selection instanceof CidsBean)) {
+            final Integer mainId = ((CidsBean)selection).getPrimaryKeyValue();
+            conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
             conditions.add(FIELD__MAIN + " = " + mainId);
             conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
         }
         sorteSearch.setWhere(conditions);
         try {
-                redundantName = !(SessionManager.getProxy().customServerSearch(
+            redundantName =
+                !(SessionManager.getProxy().customServerSearch(
                         SessionManager.getSession().getUser(),
                         sorteSearch,
                         getConnectionContext())).isEmpty();
@@ -402,20 +418,20 @@ public class BaumSorteEditor extends DefaultCustomObjectEditor implements CidsBe
                     LOG.warn("Duplicate name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumSorteEditor.class, BUNDLE_DUPLICATENAME));
                     save = false;
-                } 
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
             save = false;
         }
-        
+
         // art vorhanden
         try {
             if (cbArt.getSelectedItem() == null) {
                 LOG.warn("No Hauptart specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumSorteEditor.class, BUNDLE_NOMAIN));
                 save = false;
-            } 
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("Art not given.", ex);
             save = false;

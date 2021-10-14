@@ -41,11 +41,11 @@ public class BaumConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BaumConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            BaumConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    
     private final Double bufferMeter;
 
     //~ Constructors -----------------------------------------------------------
@@ -112,7 +112,8 @@ public class BaumConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.BAUM_CONF_PROPERTIES.getValue(),
