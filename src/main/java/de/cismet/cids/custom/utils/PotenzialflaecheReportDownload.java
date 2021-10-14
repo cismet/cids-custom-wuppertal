@@ -53,6 +53,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
     //~ Instance fields --------------------------------------------------------
 
     private final Type type;
+    private final boolean zip;
     private final Collection<CidsBean> beans;
     private final CidsBean templateBean;
     private final PotenzialflaechenProperties potenzialflaecheProperties = new PotenzialflaechenProperties();
@@ -63,6 +64,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
      * Creates a new PotenzialflaecheReportDownload object.
      *
      * @param   type               DOCUMENT ME!
+     * @param   zip                DOCUMENT ME!
      * @param   templateBean       DOCUMENT ME!
      * @param   beans              DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
@@ -71,6 +73,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
      */
     public PotenzialflaecheReportDownload(
             final Type type,
+            final boolean zip,
             final CidsBean templateBean,
             final Collection<CidsBean> beans,
             final ConnectionContext connectionContext) throws Exception {
@@ -78,13 +81,14 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
             getTitle(type, beans, templateBean),
             DownloadManagerDialog.getInstance().getJobName(),
             getTargetFileBasename(type, beans, templateBean),
-            getTargetFileExtension(type, beans),
+            zip ? ".zip" : ".pdf",
             connectionContext);
 
         getPotenzialflaecheProperties().setProperties(ServerResourcesLoaderClient.getInstance().loadProperties(
                 (PropertiesServerResource)WundaBlauServerResources.POTENZIALFLAECHEN_PROPERTIES.getValue()));
 
         this.type = type;
+        this.zip = zip;
         this.beans = beans;
         this.templateBean = templateBean;
 
@@ -120,18 +124,6 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
                     : ((singleKampagneBean != null) ? (String)singleKampagneBean.getProperty("bezeichnung")
                                                     : "diverse_flaechen"));
         return baseName;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   type   DOCUMENT ME!
-     * @param   beans  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String getTargetFileExtension(final Type type, final Collection<CidsBean> beans) {
-        return (getSingleFlaeche(type, beans) != null) ? ".pdf" : ".zip";
     }
 
     /**
@@ -206,6 +198,10 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
         params.add(new ServerActionParameter(
                 PotenzialflaecheReportServerAction.Parameter.TEMPLATE.toString(),
                 new MetaObjectNode(templateBean)));
+        params.add(new ServerActionParameter(
+                PotenzialflaecheReportServerAction.Parameter.RESULT_TYPE.toString(),
+                isZip() ? PotenzialflaecheReportServerAction.ResultType.ZIP
+                        : PotenzialflaecheReportServerAction.ResultType.PDF));
 
         final Object ret = SessionManager.getProxy()
                     .executeTask(

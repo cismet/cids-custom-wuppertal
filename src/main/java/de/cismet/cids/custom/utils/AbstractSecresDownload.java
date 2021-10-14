@@ -72,7 +72,7 @@ public abstract class AbstractSecresDownload extends AbstractCancellableDownload
         setDirectory(directory);
         determineDestinationFile(targetFileBasename, targetFileExtension);
 
-        setStatus(State.WAITING);
+        this.status = State.WAITING;
     }
 
     //~ Methods ----------------------------------------------------------------
