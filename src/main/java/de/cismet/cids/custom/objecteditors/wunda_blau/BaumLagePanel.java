@@ -52,10 +52,6 @@ public class BaumLagePanel extends javax.swing.JPanel implements Disposable {
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";
     public static final String TABLE_GEOM = "geom";
 
-    //~ Instance fields --------------------------------------------------------
-
-    // </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JLabel lblKarte;
     javax.swing.JPanel panContent;
@@ -182,8 +178,6 @@ public class BaumLagePanel extends javax.swing.JPanel implements Disposable {
         gridBagConstraints.weighty = 1.0;
         add(panContent, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
 
     @Override
     public void dispose() {
