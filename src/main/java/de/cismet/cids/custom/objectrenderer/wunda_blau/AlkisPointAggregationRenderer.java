@@ -682,11 +682,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
 
             final ArrayList<String> comboBoxContent = new ArrayList<String>();
+            comboBoxContent.add(TEXT);
             comboBoxContent.add(PDF);
             if (AlkisProductDownloadHelper.validateUserHasAlkisHTMLProductAccess(getConnectionContext())) {
                 comboBoxContent.add(HTML);
             }
-            comboBoxContent.add(TEXT);
             if (allowAPMapReport) {
                 comboBoxContent.add(APMAP);
             }
