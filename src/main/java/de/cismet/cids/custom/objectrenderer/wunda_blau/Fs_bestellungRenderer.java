@@ -1896,7 +1896,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         }
 
         bindingGroup.bind();
-        if ((cidsBean != null) && (cidsBean.getProperty("fk_billing") != null)) {
+        if (((cidsBean != null) && (cidsBean.getProperty("fk_billing") != null))
+                    || ((cidsBean != null) && (cidsBean.getProperty("fk_produkt.fk_typ.billing") != null)
+                        && !(Boolean)cidsBean.getProperty("fk_produkt.fk_typ.billing"))) {
             cmdAttachBilling.setVisible(false);
         } else {
             cmdAttachBilling.setVisible(true);
