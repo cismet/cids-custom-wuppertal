@@ -83,6 +83,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     public static final String BUNDLE_NONAME = "BaumKroneEditor.isOkForSaving().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumKroneEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_NONUMBER = "BaumKroneEditor.isOkForSaving().noNumber";
     public static final String BUNDLE_PANE_PREFIX = "BaumKroneEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumKroneEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumKroneEditor.isOkForSaving().JOptionPane.title";
@@ -95,12 +96,14 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
+    private JLabel lblNummer;
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerUnten;
     private JPanel panFillerUnten1;
     private JPanel panFillerUnten2;
     private JTextField txtName;
+    private JTextField txtNummer;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -146,18 +149,22 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten = new JPanel();
         lblName = new JLabel();
         txtName = new JTextField();
+        lblNummer = new JLabel();
+        txtNummer = new JTextField();
         panFillerUnten2 = new JPanel();
         panFillerUnten = new JPanel();
 
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         setAutoscrolls(true);
         setMinimumSize(new Dimension(600, 646));
@@ -185,12 +192,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        final Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.name}"),
-                txtName,
-                BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -201,6 +203,28 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtName, gridBagConstraints);
+
+        lblNummer.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblNummer.setText("Nummer:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblNummer, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.nummer}"), txtNummer, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(txtNummer, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -213,12 +237,14 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten2.setName(""); // NOI18N
         panFillerUnten2.setOpaque(false);
 
-        final GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
+        GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
         panFillerUnten2.setLayout(panFillerUnten2Layout);
-        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -241,12 +267,14 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGap(0, 0, Short.MAX_VALUE));
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -259,7 +287,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -350,6 +378,18 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
+            save = false;
+        }
+        
+        // nummer vorhanden
+        try {
+            if (txtNummer.getText().trim().isEmpty()) {
+                LOG.warn("No nummer specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_NONUMBER));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Number not given.", ex);
             save = false;
         }
 
