@@ -93,7 +93,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public static final String FIELD__ID = "id";
     public static final String TABLE_NAME_TELEFON = "baum_telefon";
 
-    private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen...";
+    private static String TITLE_NEW_AP = "einen neuen Ansprechpartner/Melder anlegen...";
 
     public static final String BUNDLE_NOBEM = "BaumAnsprechpartnerEditor.isOkForSaving().noBemerkung";
     public static final String BUNDLE_NOTEL = "BaumAnsprechpartnerEditor.isOkForSaving().noTelefon";
@@ -731,18 +731,18 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddTelefonActionPerformed
+    private void btnAddTelefonActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddTelefonActionPerformed
         TableUtils.addObjectToTable(xtTelefon, TABLE_NAME_TELEFON, getConnectionContext());
-    }                                                                  //GEN-LAST:event_btnAddTelefonActionPerformed
+    }//GEN-LAST:event_btnAddTelefonActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemTelefonActionPerformed
+    private void btnRemTelefonActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemTelefonActionPerformed
         TableUtils.removeObjectsFromTable(xtTelefon);
-    }                                                                  //GEN-LAST:event_btnRemTelefonActionPerformed
+    }//GEN-LAST:event_btnRemTelefonActionPerformed
 
     @Override
     public CidsBean getCidsBean() {

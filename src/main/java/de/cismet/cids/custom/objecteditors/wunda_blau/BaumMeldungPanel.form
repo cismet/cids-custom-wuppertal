@@ -119,7 +119,7 @@
         <Property name="name" type="java.lang.String" value="comboBoxFilterDialogApartner" noResource="true"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(null, new de.cismet.cids.custom.wunda_blau.search.server.BaumAnsprechpartnerLightweightSearch(), &quot;Ansprechpartner ausw&#xe4;hlen&quot;, getConnectionContext())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog(null, new de.cismet.cids.custom.wunda_blau.search.server.BaumAnsprechpartnerLightweightSearch(), &quot;Ansprechpartner/Melder ausw&#xe4;hlen&quot;, getConnectionContext())"/>
       </AuxValues>
     </Component>
   </NonVisualComponents>
@@ -253,7 +253,9 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="11" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Ansprechpartner:"/>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumMeldungPanel.lblApartner.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                        </Property>
                         <Property name="name" type="java.lang.String" value="lblApartner" noResource="true"/>
                       </Properties>
                       <Constraints>
