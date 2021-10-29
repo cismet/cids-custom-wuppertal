@@ -509,7 +509,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(chOhne, gridBagConstraints);
 
         lblBau.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblBau, "Bau:");
+        Mnemonics.setLocalizedText(lblBau, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblBau.text")); // NOI18N
         lblBau.setName("lblBau"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
