@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>7.4.8</version>
+                <version>7.5-SNAPSHOT</version>
                 <type>jar</type>
             </dependency>
             
