@@ -187,7 +187,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         comboBoxFilterDialogApartner = new ComboBoxFilterDialog(
                 null,
                 new BaumAnsprechpartnerLightweightSearch(),
-                "Ansprechpartner auswählen",
+                "Ansprechpartner/Melder auswählen",
                 getConnectionContext());
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
@@ -346,9 +346,11 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInfo.add(chAbgenommen, gridBagConstraints);
 
-        lblApartner.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblApartner, "Ansprechpartner:");
-        lblApartner.setName("lblApartner");             // NOI18N
+        lblApartner.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
+        Mnemonics.setLocalizedText(
+            lblApartner,
+            NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblApartner.text")); // NOI18N
+        lblApartner.setName("lblApartner");                                                    // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1249,7 +1251,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
      */
     private void btnApartnerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnApartnerActionPerformed
         final JDialog dialog = new JDialog((Frame)null,
-                "Ansprechpartnerinformationen",
+                "Ansprechpartner/Melderinformationen",
                 true);
         final Collection<MetaObjectNode> mons = new ArrayList<>();
 

@@ -83,6 +83,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
 
     public static final String BUNDLE_NONAME = "BaumMassnahmeEditor.isOkForSaving().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumMassnahmeEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_NONUMBER = "BaumMassnahmeEditor.isOkForSaving().noNumber";
     public static final String BUNDLE_PANE_PREFIX = "BaumMassnahmeEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumMassnahmeEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumMassnahmeEditor.isOkForSaving().JOptionPane.title";
@@ -96,12 +97,14 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Box.Filler filler3;
     private JLabel lblName;
+    private JLabel lblNummer;
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerUnten;
     private JPanel panFillerUnten1;
     private JPanel panFillerUnten2;
     private JTextField txtName;
+    private JTextField txtNummer;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -148,6 +151,8 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         lblName = new JLabel();
         txtName = new JTextField();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        lblNummer = new JLabel();
+        txtNummer = new JTextField();
         panFillerUnten2 = new JPanel();
         panFillerUnten = new JPanel();
 
@@ -187,7 +192,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        final Binding binding = Bindings.createAutoBinding(
+        Binding binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 ELProperty.create("${cidsBean.name}"),
@@ -210,6 +215,33 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDaten.add(filler3, gridBagConstraints);
+
+        lblNummer.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblNummer.setText("Nummer:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblNummer, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.nummer}"),
+                txtNummer,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(txtNummer, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -360,6 +392,18 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
+            save = false;
+        }
+
+        // nummer vorhanden
+        try {
+            if (txtNummer.getText().trim().isEmpty()) {
+                LOG.warn("No nummer specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumMassnahmeEditor.class, BUNDLE_NONUMBER));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Number not given.", ex);
             save = false;
         }
 

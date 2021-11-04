@@ -93,7 +93,7 @@ public class BaumAnsprechpartnerEditor extends DefaultCustomObjectEditor impleme
     public static final String FIELD__ID = "id";
     public static final String TABLE_NAME_TELEFON = "baum_telefon";
 
-    private static String TITLE_NEW_AP = "einen neuen Ansprechpartner anlegen...";
+    private static String TITLE_NEW_AP = "einen neuen Ansprechpartner/Melder anlegen...";
 
     public static final String BUNDLE_NOBEM = "BaumAnsprechpartnerEditor.isOkForSaving().noBemerkung";
     public static final String BUNDLE_NOTEL = "BaumAnsprechpartnerEditor.isOkForSaving().noTelefon";

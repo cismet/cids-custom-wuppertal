@@ -83,6 +83,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     public static final String BUNDLE_NONAME = "BaumKroneEditor.isOkForSaving().noName";
     public static final String BUNDLE_DUPLICATENAME = "BaumKroneEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_NONUMBER = "BaumKroneEditor.isOkForSaving().noNumber";
     public static final String BUNDLE_PANE_PREFIX = "BaumKroneEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumKroneEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumKroneEditor.isOkForSaving().JOptionPane.title";
@@ -95,12 +96,14 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel lblName;
+    private JLabel lblNummer;
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerUnten;
     private JPanel panFillerUnten1;
     private JPanel panFillerUnten2;
     private JTextField txtName;
+    private JTextField txtNummer;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -146,6 +149,8 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten = new JPanel();
         lblName = new JLabel();
         txtName = new JTextField();
+        lblNummer = new JLabel();
+        txtNummer = new JTextField();
         panFillerUnten2 = new JPanel();
         panFillerUnten = new JPanel();
 
@@ -185,7 +190,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        final Binding binding = Bindings.createAutoBinding(
+        Binding binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 ELProperty.create("${cidsBean.name}"),
@@ -201,6 +206,33 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtName, gridBagConstraints);
+
+        lblNummer.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblNummer.setText("Nummer:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblNummer, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.nummer}"),
+                txtNummer,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(txtNummer, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -350,6 +382,18 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
+            save = false;
+        }
+
+        // nummer vorhanden
+        try {
+            if (txtNummer.getText().trim().isEmpty()) {
+                LOG.warn("No nummer specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumKroneEditor.class, BUNDLE_NONUMBER));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Number not given.", ex);
             save = false;
         }
 
