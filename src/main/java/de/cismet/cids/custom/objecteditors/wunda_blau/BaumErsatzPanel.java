@@ -165,6 +165,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public static final String TABLE_NAME__KONTROLLE = "baum_kontrolle";
 
     public static final String BUNDLE_NOSTREET = "BaumErsatzPanel.isOkForSaving().noStrasse";
+    public static final String BUNDLE_NOBIS = "BaumErsatzPanel.isOkForSaving().noBis";
+    public static final String BUNDLE_NODATE = "BaumErsatzPanel.isOkForSaving().noPflanzung";
     public static final String BUNDLE_NOGEOM = "BaumErsatzPanel.isOkForSaving().noGeom";
     public static final String BUNDLE_WRONGGEOM = "BaumErsatzPanel.isOkForSaving().wrongGeom";
     public static final String BUNDLE_NOART = "BaumErsatzPanel.isOkForSaving().noArt";
@@ -1459,63 +1461,89 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
-        // Straße muss angegeben werden
-        try {
-            if (saveErsatzBean.getProperty(FIELD__STRASSE) == null) {
-                LOG.warn("No strasse specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("strasse not given.", ex);
-            save = false;
-        }
+        final boolean isSetArt = saveErsatzBean.getProperty(FIELD__ART) != null;
+        final boolean isSetPlanzung = saveErsatzBean.getProperty(FIELD__DATUM_P) != null;
+        final boolean isSetAnzahl = (saveErsatzBean.getProperty(FIELD__ANZAHL) != null)
+                    && ((Integer)saveErsatzBean.getProperty(FIELD__ANZAHL) > 0);
 
-        // georeferenz muss gefüllt sein
-        try {
-            if (saveErsatzBean.getProperty(FIELD__GEOREFERENZ) == null) {
-                LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
-                save = false;
-            } else {
-                final CidsBean geom_pos = (CidsBean)saveErsatzBean.getProperty(FIELD__GEOREFERENZ);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOM));
+        if (isSetArt || isSetAnzahl || isSetPlanzung) {
+            // Straße muss angegeben werden
+            try {
+                if (saveErsatzBean.getProperty(FIELD__STRASSE) == null) {
+                    LOG.warn("No strasse specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
                     save = false;
                 }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("strasse not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Geom not given.", ex);
-            save = false;
+
+            // georeferenz muss gefüllt sein
+            try {
+                if (saveErsatzBean.getProperty(FIELD__GEOREFERENZ) == null) {
+                    LOG.warn("No geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
+                    save = false;
+                } else {
+                    final CidsBean geom_pos = (CidsBean)saveErsatzBean.getProperty(FIELD__GEOREFERENZ);
+                    if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                        LOG.warn("Wrong geom specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOM));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Geom not given.", ex);
+                save = false;
+            }
+        } else {
+            // Bis muss angegeben werden
+            try {
+                if (saveErsatzBean.getProperty(FIELD__BIS) == null) {
+                    LOG.warn("No bis specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOBIS));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("bis not given.", ex);
+                save = false;
+            }
         }
 
         // Anzahl Pflichtattribut, wenn gepflanzt oder Art angegeben
         try {
-            if ((saveErsatzBean.getProperty(FIELD__DATUM_P) != null)
-                        || (saveErsatzBean.getProperty(FIELD__ART) != null)) {
-                if ((saveErsatzBean.getProperty(FIELD__ANZAHL) == null)
-                            || ((Integer)saveErsatzBean.getProperty(FIELD__ANZAHL) == 0)) {
-                    LOG.warn("No count specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
-                    save = false;
-                }
+            if ((isSetArt || isSetPlanzung) && !(isSetAnzahl)) {
+                LOG.warn("No count specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
+                save = false;
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Count not given.", ex);
             save = false;
         }
 
-        // Art muss angegeben werden
+        // Art muss angegeben werden, wenn gepflanzt oder Anzahl
         try {
-            if ((saveErsatzBean.getProperty(FIELD__DATUM_P) != null)
-                        && (saveErsatzBean.getProperty(FIELD__ART) == null)) {
-                LOG.warn("No name specified. Skip persisting.");
+            if ((isSetAnzahl || isSetPlanzung) && !(isSetArt)) {
+                LOG.warn("No art specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOART));
                 save = false;
             }
         } catch (final MissingResourceException ex) {
-            LOG.warn("Countl not given.", ex);
+            LOG.warn("Art not given.", ex);
+            save = false;
+        }
+
+        // Datum muss angegeben werden, wenn Art oder Anzahl
+        try {
+            if ((isSetAnzahl || isSetArt) && !(isSetPlanzung)) {
+                LOG.warn("No date specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NODATE));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Datum not given.", ex);
             save = false;
         }
 

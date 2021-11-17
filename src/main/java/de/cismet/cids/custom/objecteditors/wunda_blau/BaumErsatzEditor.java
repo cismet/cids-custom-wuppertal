@@ -18,12 +18,6 @@ import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ObjectProperty;
 import org.jdesktop.swingx.JXTable;
 
 import org.openide.util.NbBundle;
@@ -142,7 +136,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     private BaumErsatzPanel baumErsatzPanel;
     private JButton btnChangeSchaden;
     private ComboBoxFilterDialog comboBoxFilterDialogSchaden;
-    private JLabel jLabel1;
     private JScrollPane jScrollPaneMeldung;
     private JLabel lblGebiet_Meldung;
     private JPanel panContent;
@@ -150,7 +143,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     JPanel panErsatzMain;
     private JPanel panFillerUnten;
     private JXTable xtSchaden;
-    private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -208,7 +200,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
-        bindingGroup = new BindingGroup();
 
         comboBoxFilterDialogSchaden = new ComboBoxFilterDialog(
                 null,
@@ -223,9 +214,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panErsatzMain = new JPanel();
-        baumErsatzPanel = baumErsatzPanel = new BaumErsatzPanel(this.getBaumChildrenLoader());
+        baumErsatzPanel = new BaumErsatzPanel(this.getBaumChildrenLoader());
         ;
-        jLabel1 = new JLabel();
 
         setLayout(new GridBagLayout());
 
@@ -316,16 +306,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(10, 0, 0, 0);
         panErsatz.add(panErsatzMain, gridBagConstraints);
 
-        final Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ObjectProperty.create(),
-                jLabel1,
-                BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        panErsatz.add(jLabel1, new GridBagConstraints());
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -344,8 +324,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
-
-        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -405,16 +383,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
-            bindingGroup.unbind();
             this.cidsBean = cb;
-
-            // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
-            // evtl. kann dies verbessert werden.
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cb,
-                getConnectionContext());
-            bindingGroup.bind();
             baumErsatzPanel.setCidsBean(this.getCidsBean());
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
                 getCidsBean().setProperty(FIELD__DISPENS, false);
