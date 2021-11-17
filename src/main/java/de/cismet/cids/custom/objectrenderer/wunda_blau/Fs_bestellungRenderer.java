@@ -1792,6 +1792,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                 final String[] buchungsblaetter = buchngsblattString.split(",");
                 buchungsblatt = buchungsblaetter[0];
                 hlBuchungsblattValue.setText(buchungsblatt + ((buchungsblaetter.length > 1) ? " u.a." : ""));
+                lblBuchungsblatt.setVisible(true);
+                hlBuchungsblattValue.setVisible(true);
             } else {
                 buchungsblatt = null;
             }
@@ -1802,7 +1804,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                             + cidsBean.getProperty("massstab"));
             } else if ("BAB".equals(type)) {
                 hlProduktValue.setText("Baulastbescheinigung");
-            } else if ("bekom".equals(type) || "fsuekom".equals(type)) {
+            } else if ("bekom".equals(type.toLowerCase()) || "fsuekom".equals(type.toLowerCase())) {
                 hlProduktValue.setText("Liegenschaftsbuchauszug");
             } else {
                 hlProduktValue.setText("-");
@@ -1843,7 +1845,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                     }
                 }.execute();
 
-            if ((type != null) && (type.startsWith("bekom") || type.startsWith("fsuekom"))) {
+            if ((type != null)
+                        && (type.toLowerCase().startsWith("bekom") || type.toLowerCase().startsWith("fsuekom"))) {
                 lblBuchungsblatt.setVisible(true);
                 hlBuchungsblattValue.setVisible(true);
 
