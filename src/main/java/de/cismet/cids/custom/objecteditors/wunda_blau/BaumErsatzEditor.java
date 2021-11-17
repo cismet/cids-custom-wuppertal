@@ -201,7 +201,11 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
 
-        comboBoxFilterDialogSchaden = new ComboBoxFilterDialog(null, new BaumSchadenLightweightSearch(), "Gebiet-Meldung-Schaden auswählen", getConnectionContext());
+        comboBoxFilterDialogSchaden = new ComboBoxFilterDialog(
+                null,
+                new BaumSchadenLightweightSearch(),
+                "Gebiet-Meldung-Schaden auswählen",
+                getConnectionContext());
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
         panErsatz = new JPanel();
@@ -210,21 +214,20 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         xtSchaden = new JXTable();
         btnChangeSchaden = new JButton();
         panErsatzMain = new JPanel();
-        baumErsatzPanel = new BaumErsatzPanel(this.getBaumChildrenLoader()); ;
+        baumErsatzPanel = new BaumErsatzPanel(this.getBaumChildrenLoader());
+        ;
 
         setLayout(new GridBagLayout());
 
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -265,13 +268,16 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(0, 2, 2, 2);
         panErsatz.add(jScrollPaneMeldung, gridBagConstraints);
 
-        btnChangeSchaden.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
+        btnChangeSchaden.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
         btnChangeSchaden.setToolTipText("Gebiet - Meldung - Schaden zuweisen");
         btnChangeSchaden.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnChangeSchadenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnChangeSchadenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -318,14 +324,14 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         add(panContent, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeSchadenActionPerformed
+    private void btnChangeSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeSchadenActionPerformed
         final Object selectedItem = comboBoxFilterDialogSchaden.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean schadenBean = (CidsBean)selectedItem;
@@ -338,7 +344,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeSchadenActionPerformed
+    } //GEN-LAST:event_btnChangeSchadenActionPerformed
 
     @Override
     public boolean isOkForSaving() {
