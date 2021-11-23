@@ -68,6 +68,7 @@ import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -548,24 +549,24 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddTeilnehmerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddTeilnehmerActionPerformed
+    private void btnAddTeilnehmerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddTeilnehmerActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtTeil, TABLE_NAME__TEILNEHMER, getConnectionContext());
             setChangeFlag();
         }
-    }                                                                     //GEN-LAST:event_btnAddTeilnehmerActionPerformed
+    }//GEN-LAST:event_btnAddTeilnehmerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemTeilnehmerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemTeilnehmerActionPerformed
+    private void btnRemTeilnehmerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemTeilnehmerActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtTeil);
             setChangeFlag();
         }
-    }                                                                     //GEN-LAST:event_btnRemTeilnehmerActionPerformed
+    }//GEN-LAST:event_btnRemTeilnehmerActionPerformed
 
     @Override
     public final ConnectionContext getConnectionContext() {
@@ -626,8 +627,17 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
             bindingGroup.bind();
-            if (isEditor() && (getCidsBean() != null)) {
-                getCidsBean().addPropertyChangeListener(changeListener);
+            if (getCidsBean() != null) {
+                if (isEditor()){
+                    getCidsBean().addPropertyChangeListener(changeListener);
+                }
+                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                        bindingGroup,
+                        getCidsBean(),
+                        getConnectionContext());
+            } else {
+                cbVorort.setSelectedIndex(-1);
+                taBemerkungOrt.setText("");
             }
             final DivBeanTable teilnehmerModel = new DivBeanTable(
                     isEditor(),
