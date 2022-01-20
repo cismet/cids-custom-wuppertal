@@ -1806,7 +1806,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             } else if ("BAB".equals(type)) {
                 hlProduktValue.setText("Baulastbescheinigung");
             } else if ("bekom".equals(type.toLowerCase()) || "fsuekom".equals(type.toLowerCase())) {
-                hlProduktValue.setText("Liegenschaftsbuchauszug");
+                hlProduktValue.setText((String)cidsBean.getProperty("fk_produkt.billing_desc"));
             } else {
                 hlProduktValue.setText("-");
             }
