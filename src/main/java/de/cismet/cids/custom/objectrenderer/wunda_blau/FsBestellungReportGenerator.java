@@ -209,14 +209,15 @@ public class FsBestellungReportGenerator {
 
         final boolean isBaulasten = ((String)bestellungbean.getProperty("transid")).startsWith("KFAS_KF600202-")
                     || ((String)bestellungbean.getProperty("transid")).startsWith("KFAS_KF600203-");
-        
+
         final boolean isLiegenschaftsbuch = ((String)bestellungbean.getProperty("transid")).startsWith("KFAS_KF600204-")
-                    || ((String)bestellungbean.getProperty("transid")).startsWith("KFAS_KF600205-");        
+                    || ((String)bestellungbean.getProperty("transid")).startsWith("KFAS_KF600205-");
 
         final JasperReportDownload download = new JasperReportDownload(
-                isBaulasten ? "/de/cismet/cids/custom/wunda_blau/res/bestellung_baulasten.jasper"
-                        : isLiegenschaftsbuch ? "/de/cismet/cids/custom/wunda_blau/res/bestellung_liegenschaftsbuch.jasper"
-                            : "/de/cismet/cids/custom/wunda_blau/res/bestellung_produkt.jasper",
+                isBaulasten
+                    ? "/de/cismet/cids/custom/wunda_blau/res/bestellung_baulasten.jasper"
+                    : (isLiegenschaftsbuch ? "/de/cismet/cids/custom/wunda_blau/res/bestellung_liegenschaftsbuch.jasper"
+                                           : "/de/cismet/cids/custom/wunda_blau/res/bestellung_produkt.jasper"),
                 parametersGenerator,
                 dataSourceGenerator,
                 jobname,
