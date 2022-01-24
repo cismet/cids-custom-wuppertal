@@ -94,6 +94,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -544,38 +545,47 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
     private void lstFotosMouseClicked(final MouseEvent evt) { //GEN-FIRST:event_lstFotosMouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean dokumentBean = (CidsBean)lstFotos.getSelectedValue();
-            final Download download = new AbstractDownload() {
+            if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(getParent())) {
+                final String jobname = DownloadManagerDialog.getInstance().getJobName();
 
-                    {
-                        status = State.WAITING;
-                        fileToSaveTo = new File((String)dokumentBean.getProperty("dateiname"));
-                    }
+                final Download download = new AbstractDownload() {
 
-                    @Override
-                    public void run() {
-                        try {
-                            status = State.RUNNING;
-                            stateChanged();
+                        {
+                            status = State.WAITING;
+                            this.directory = jobname;
+                            final String dateiname = (String)dokumentBean.getProperty("dateiname");
+                            final int extIndex = dateiname.lastIndexOf(".");
+                            final String extension = (extIndex >= 0) ? dateiname.substring(extIndex) : "";
+                            final String filename = (extIndex >= 0) ? dateiname.substring(0, extIndex) : dateiname;
+                            determineDestinationFile(filename, extension);
+                        }
 
-                            final InputStream is = webdavHelper.getFileFromWebDAV((String)dokumentBean.getProperty(
-                                        nameProp),
-                                    getConnectionContext());
-                            try(final OutputStream os = new FileOutputStream(fileToSaveTo)) {
-                                IOUtils.copy(is, os);
-                            }
+                        @Override
+                        public void run() {
+                            try {
+                                status = State.RUNNING;
+                                stateChanged();
 
-                            if (status == State.RUNNING) {
-                                status = State.COMPLETED;
+                                final InputStream is = webdavHelper.getFileFromWebDAV((String)dokumentBean.getProperty(
+                                            nameProp),
+                                        getConnectionContext());
+                                try(final OutputStream os = new FileOutputStream(fileToSaveTo)) {
+                                    IOUtils.copy(is, os);
+                                }
+
+                                if (status == State.RUNNING) {
+                                    status = State.COMPLETED;
+                                    stateChanged();
+                                }
+                            } catch (final Exception ex) {
+                                LOG.error(ex, ex);
+                                status = State.ABORTED;
                                 stateChanged();
                             }
-                        } catch (final Exception ex) {
-                            LOG.error(ex, ex);
-                            status = State.ABORTED;
-                            stateChanged();
                         }
-                    }
-                };
-            DownloadManager.instance().add(download);
+                    };
+                DownloadManager.instance().add(download);
+            }
         }
     } //GEN-LAST:event_lstFotosMouseClicked
 
