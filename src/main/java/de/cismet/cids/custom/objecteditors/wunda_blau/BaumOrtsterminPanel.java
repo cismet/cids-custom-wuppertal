@@ -783,12 +783,14 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     save = false;
                 }
                 if (tBean.getProperty(FIELD__TEILNEHMER_TELEFON) != null) {
-                    if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
-                        LOG.warn("No name specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL))
-                                .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString())
-                                .append("<br>");
-                        save = false;
+                    if (!tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().isEmpty()){
+                        if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
+                            LOG.warn("No name specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL))
+                                    .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString())
+                                    .append("<br>");
+                            save = false;
+                        }
                     }
                 }
             }
