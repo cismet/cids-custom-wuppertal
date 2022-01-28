@@ -335,10 +335,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
     private void configureFreigebenTab() throws ConnectionException {
         // if user does not have the right to do freigaben, remove the tab
         hasFreigabeAccess = SessionManager.getConnection()
-                    .getConfigAttr(SessionManager.getSession().getUser(),
+                    .hasConfigAttr(SessionManager.getSession().getUser(),
                             "custom.nas.punktNummernFreigabe",
-                            getConnectionContext())
-                    != null;
+                            getConnectionContext());
         if (!hasFreigabeAccess) {
             tbpModus.remove(pnlFreigeben);
         }
@@ -352,10 +351,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
     private void configureVerlaengernTab() throws ConnectionException {
         // if user does not have the right to do freigaben, remove the tab
         hasVerlaengernAccess = SessionManager.getConnection()
-                    .getConfigAttr(SessionManager.getSession().getUser(),
+                    .hasConfigAttr(SessionManager.getSession().getUser(),
                             "custom.nas.punktNummernVerlaengern",
-                            getConnectionContext())
-                    != null;
+                            getConnectionContext());
         if (!hasVerlaengernAccess) {
             tbpModus.remove(pnlVerlaengern);
         }

@@ -99,10 +99,9 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
     private boolean validateUserHasAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "csa://pointNumberReservation",
-                                getConnectionContext())
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "csa://pointNumberReservation",
+                            getConnectionContext());
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag for PunktnummernReservierung!", ex);
         }

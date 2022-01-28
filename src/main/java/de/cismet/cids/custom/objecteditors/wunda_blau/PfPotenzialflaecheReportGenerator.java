@@ -180,12 +180,10 @@ public class PfPotenzialflaecheReportGenerator {
                         if (templateBean != null) {
                             final String confAttr = (String)templateBean.getProperty("conf_attr");
                             if ((confAttr != null) && !confAttr.trim().isEmpty()) {
-                                if (
-                                    SessionManager.getConnection().getConfigAttr(
+                                if (SessionManager.getConnection().hasConfigAttr(
                                                 SessionManager.getSession().getUser(),
                                                 confAttr,
-                                                connectionContext)
-                                            != null) {
+                                                connectionContext)) {
                                     activeTemplateBeansMap.put(kampagneBean, templateBean);
                                 }
                             } else {

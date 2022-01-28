@@ -114,10 +114,9 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     public static boolean validateUserHasButler1Access(final ConnectionContext connectionCon1text) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "csa://butler1Query",
-                                connectionCon1text)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "csa://butler1Query",
+                            connectionCon1text);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Butler!", ex);
         }
@@ -125,9 +124,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     }
 
     /**
-     * public static boolean validateUserHasButler2Acces(){ try { return SessionManager.getConnection()
-     * .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query") != null; } catch (ConnectionException
-     * ex) { log.error("Could not validate action tag for Butler!", ex); } return false; }.
+     * DOCUMENT ME!
      *
      * @param   connectionContext  DOCUMENT ME!
      *
@@ -136,10 +133,9 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     public static boolean validateUserHasNasAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "csa://nasDataQuery",
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "csa://nasDataQuery",
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Butler!", ex);
         }

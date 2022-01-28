@@ -351,14 +351,12 @@ public class ObjectRendererUtils {
      */
     public static boolean checkActionTag(final String tagToCheck,
             final ConnectionContext connectionContext) {
-        boolean result;
+        boolean result = false;
         try {
             result = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), tagToCheck, connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(), tagToCheck, connectionContext);
         } catch (ConnectionException ex) {
             log.error("Can not check ActionTag!", ex);
-            result = false;
         }
         return result;
     }
