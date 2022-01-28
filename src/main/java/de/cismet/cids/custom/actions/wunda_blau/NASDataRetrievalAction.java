@@ -70,10 +70,9 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
         this.connectionContext = connectionContext;
         try {
             hasNasAccess = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://nasDataQuery",
-                                getConnectionContext())
-                        != null;
+                                getConnectionContext());
         } catch (Exception ex) {
             log.error("Could not validate nas action tag (csa://nasDataQuery)!", ex);
             hasNasAccess = false;

@@ -390,10 +390,9 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisPrintAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "navigator.alkis.print@WUNDA_BLAU",
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "navigator.alkis.print@WUNDA_BLAU",
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Print Dialog!", ex);
         }
@@ -410,10 +409,9 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "csa://alkisProduct@WUNDA_BLAU",
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "csa://alkisProduct@WUNDA_BLAU",
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Products!", ex);
         }
@@ -430,10 +428,9 @@ public class AlkisUtils {
     public static boolean validateUserHasEigentuemerAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                ALKIS_EIGENTUEMER,
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            ALKIS_EIGENTUEMER,
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
         }
@@ -450,10 +447,9 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisHTMLProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                ALKIS_HTML_PRODUCTS_ENABLED,
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            ALKIS_HTML_PRODUCTS_ENABLED,
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis HTML Products!", ex);
         }
@@ -524,7 +520,7 @@ public class AlkisUtils {
      *
      * @throws  Exception  ConnectionException DOCUMENT ME!
      */
-    public static String createFertigungsVermerk(final User user, final ConnectionContext connectionContext)
+    public static String createBaulastenFertigungsVermerk(final User user, final ConnectionContext connectionContext)
             throws Exception {
         final String fertigungsVermerk = SessionManager.getConnection()
                     .getConfigAttr(user, "custom.baulasten.fertigungsVermerk@WUNDA_BLAU", connectionContext);

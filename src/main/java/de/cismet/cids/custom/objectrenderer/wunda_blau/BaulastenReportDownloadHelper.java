@@ -284,7 +284,7 @@ public class BaulastenReportDownloadHelper {
                     mons),
                 new ServerActionParameter<>(
                     BaulastenReportServerAction.Parameter.FERTIGUNGS_VERMERK.toString(),
-                    AlkisUtils.getInstance().createFertigungsVermerk(
+                    AlkisUtils.createBaulastenFertigungsVermerk(
                         SessionManager.getSession().getUser(),
                         connectionContext)),
                 new ServerActionParameter<>(

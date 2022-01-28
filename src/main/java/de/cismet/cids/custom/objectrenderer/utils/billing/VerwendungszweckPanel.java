@@ -12,9 +12,6 @@
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
-
-import Sirius.server.newuser.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,7 +33,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -50,8 +46,6 @@ import de.cismet.cids.custom.utils.billing.BillingUsage;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import static de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup.ALLOWED_USAGE_CONFIG_ATTR;
 
 /**
  * DOCUMENT ME!
@@ -118,50 +112,6 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     /**
      * DOCUMENT ME!
      *
-     * @param   user     DOCUMENT ME!
-     * @param   product  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  ConnectionException  DOCUMENT ME!
-     */
-    private String[] getAllowedUsages(final User user, final String product) throws ConnectionException {
-        final Set<String> allowedUsages = new LinkedHashSet<String>();
-
-        final String rawAllowedUsageLines = SessionManager.getConnection()
-                    .getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR, getConnectionContext());
-        if (rawAllowedUsageLines != null) {
-            for (final String rawAllowedUsageLine : rawAllowedUsageLines.split("\n")) {
-                final int indexOfAllowed = rawAllowedUsageLine.indexOf(":");
-                final String allowedProduct = (indexOfAllowed > -1) ? rawAllowedUsageLine.substring(0, indexOfAllowed)
-                                                                    : null;
-                if ((allowedProduct == null) || (product == null) || allowedProduct.equals(product)) {
-                    allowedUsages.addAll(Arrays.asList(rawAllowedUsageLine.substring(indexOfAllowed + 1).split(",")));
-                }
-            }
-        }
-//        if (!allowedUsages.isEmpty()) {
-//            final String rawRestrcitedUsageLines = SessionManager.getConnection()
-//                        .getConfigAttr(user, RESTRICTED_USAGE_CONFIG_ATTR);
-//            if (rawRestrcitedUsageLines != null) {
-//                for (final String rawRestrcitedUsageLine : rawRestrcitedUsageLines.split("\n")) {
-//                    final int indexOfRestricted = rawRestrcitedUsageLine.indexOf(":");
-//                    final String restrictedProduct = (indexOfRestricted > -1)
-//                        ? rawRestrcitedUsageLine.substring(0, indexOfRestricted) : null;
-//                    if ((restrictedProduct == null) || (product == null) || restrictedProduct.equals(product)) {
-//                        allowedUsages.removeAll(Arrays.asList(
-//                                rawRestrcitedUsageLine.substring(indexOfRestricted + 1).split(",")));
-//                    }
-//                }
-//            }
-//        }
-
-        return allowedUsages.toArray(new String[0]);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  filterUsages  DOCUMENT ME!
      */
     public void initVerwendungszweckCheckBoxes(final boolean filterUsages) {
@@ -171,10 +121,13 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
         Set<String> allowedUsages = null;
         if (filterUsages) {
             try {
-                allowedUsages = new HashSet<String>(Arrays.asList(
-                            getAllowedUsages(SessionManager.getSession().getUser(), null)));
+                allowedUsages = new HashSet<>(Arrays.asList(
+                            BillingPopup.getAllowedUsages(
+                                SessionManager.getSession().getUser(),
+                                null,
+                                getConnectionContext())));
             } catch (final Exception ex) {
-                allowedUsages = new HashSet<String>();
+                allowedUsages = new HashSet<>();
             }
         }
 

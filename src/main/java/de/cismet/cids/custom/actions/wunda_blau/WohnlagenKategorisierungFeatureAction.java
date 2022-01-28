@@ -121,11 +121,10 @@ public class WohnlagenKategorisierungFeatureAction extends AbstractAction implem
         boolean isActive = false;
         try {
             isActive = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://"
                                 + WohnlagenKategorisierungServerAction.TASK_NAME,
-                                getConnectionContext())
-                        != null;
+                                getConnectionContext());
         } catch (final Exception ex) {
             LOG.error("Could not validate action tag (custom.wohnlage.kategorisierung_featureaction)!", ex);
         }

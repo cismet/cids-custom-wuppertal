@@ -67,6 +67,7 @@ import de.cismet.cids.custom.nas.NasFeeCalculator;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
@@ -1589,7 +1590,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                                 info.getProduct(),
                                 info.getLandparcelCode(),
                                 info.getAuftragsnummer(),
-                                AlkisProductDownloadHelper.getFertigungsVermerk(
+                                AlkisUtils.getFertigungsVermerk(
                                     null,
                                     getConnectionContext()),
                                 info.getZusatz(),

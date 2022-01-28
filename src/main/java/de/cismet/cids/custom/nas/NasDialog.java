@@ -333,10 +333,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     public boolean validateUserHasActionAttribute(final String actionAttributeString) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                actionAttributeString,
-                                getConnectionContext())
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            actionAttributeString,
+                            getConnectionContext());
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
         }

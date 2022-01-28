@@ -51,6 +51,7 @@ import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConver
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
@@ -1805,7 +1806,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             } else if ("BAB".equals(type)) {
                 hlProduktValue.setText("Baulastbescheinigung");
             } else if ("bekom".equals(type.toLowerCase()) || "fsuekom".equals(type.toLowerCase())) {
-                hlProduktValue.setText("Liegenschaftsbuchauszug");
+                hlProduktValue.setText((String)cidsBean.getProperty("fk_produkt.billing_desc"));
             } else {
                 hlProduktValue.setText("-");
             }
@@ -1857,7 +1858,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                             final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
                                     CidsAlkisSearchStatement.Resulttyp.BUCHUNGSBLATT,
                                     CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER,
-                                    buchungsblatt,
+                                    AlkisProducts.fixBuchungslattCode(buchungsblatt),
                                     null);
                             final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                         .customServerSearch(SessionManager.getSession().getUser(),

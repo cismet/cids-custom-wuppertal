@@ -65,10 +65,10 @@ public class NasStartupHook implements StartupHook, ConnectionContextStore {
                     boolean hasNasAccess = false;
                     try {
                         hasNasAccess = SessionManager.getConnection()
-                                    .getConfigAttr(
+                                    .hasConfigAttr(
                                             SessionManager.getSession().getUser(),
                                             "csa://nasDataQuery",
-                                            getConnectionContext()) != null;
+                                            getConnectionContext());
                     } catch (ConnectionException ex) {
                         log.error("Could not validate action tag for NAS!", ex);
                     }

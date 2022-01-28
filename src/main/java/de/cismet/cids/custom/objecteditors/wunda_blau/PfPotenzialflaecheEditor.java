@@ -4378,9 +4378,9 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
         boolean archiveEnbled = false;
         try {
             archiveEnbled = SessionManager.getProxy()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
                                 "potenzialflaeche.archive.enabled",
-                                getConnectionContext()) != null;
+                                getConnectionContext());
         } catch (final Exception ex) {
         }
         jLabel6.setVisible(archiveEnbled && archived);
