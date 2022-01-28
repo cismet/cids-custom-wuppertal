@@ -29,7 +29,8 @@ import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * DOCUMENT ME!
@@ -47,7 +48,7 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
     //~ Instance fields --------------------------------------------------------
 
     private final Collection<BerechtigungspruefungMessageNotifierListener> listeners = new ArrayList<>();
-    private final Collection<String> produkttypeList = new ArrayList<>();
+    private final Set<String> produkttypeList = new HashSet<>();
 
     //~ Constructors -----------------------------------------------------------
 
