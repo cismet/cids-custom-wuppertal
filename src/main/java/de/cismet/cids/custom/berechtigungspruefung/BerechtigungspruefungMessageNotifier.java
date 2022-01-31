@@ -20,7 +20,9 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.wunda_blau.search.server.BerechtigungspruefungOffeneAnfragenStatement;
@@ -29,7 +31,6 @@ import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
 
 /**
  * DOCUMENT ME!
@@ -47,7 +48,7 @@ public class BerechtigungspruefungMessageNotifier implements CidsServerMessageNo
     //~ Instance fields --------------------------------------------------------
 
     private final Collection<BerechtigungspruefungMessageNotifierListener> listeners = new ArrayList<>();
-    private final Collection<String> produkttypeList = new ArrayList<>();
+    private final Set<String> produkttypeList = new HashSet<>();
 
     //~ Constructors -----------------------------------------------------------
 
