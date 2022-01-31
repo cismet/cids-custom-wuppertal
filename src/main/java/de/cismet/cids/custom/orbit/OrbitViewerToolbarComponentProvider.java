@@ -100,10 +100,10 @@ public class OrbitViewerToolbarComponentProvider implements ToolbarComponentsPro
     public static boolean validateUserConfigAttr(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(
-                                SessionManager.getSession().getUser(),
-                                CONFIG_ATTR,
-                                connectionContext) != null;
+                        .hasConfigAttr(
+                            SessionManager.getSession().getUser(),
+                            CONFIG_ATTR,
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.info("Could not validate action tag:" + CONFIG_ATTR, ex);
         }

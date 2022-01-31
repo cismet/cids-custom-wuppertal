@@ -8,7 +8,6 @@
 package de.cismet.cids.custom.optionspanels.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 
 import org.apache.log4j.Logger;
 
@@ -470,11 +469,11 @@ public class DmsUrlMappingOptionsPanel extends AbstractOptionsPanel {
     public boolean isEnabled() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                CONF_ATTR_ENABLED,
-                                ConnectionContext.create(
-                                    AbstractConnectionContext.Category.OPTIONS,
-                                    getClass().getSimpleName())) != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            CONF_ATTR_ENABLED,
+                            ConnectionContext.create(
+                                AbstractConnectionContext.Category.OPTIONS,
+                                getClass().getSimpleName()));
         } catch (final Exception ex) {
             LOG.error("could not check conf attr " + CONF_ATTR_ENABLED, ex);
             return false;

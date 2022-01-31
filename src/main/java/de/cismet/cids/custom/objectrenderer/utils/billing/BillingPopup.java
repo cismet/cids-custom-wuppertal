@@ -314,8 +314,7 @@ public class BillingPopup extends javax.swing.JDialog {
             final BillingProductGroupAmount... amounts) throws Exception {
         final BillingPopup instance = getInstance();
         final User user = SessionManager.getSession().getUser();
-        final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR, connectionContext);
-        if (modus != null) {
+        if (SessionManager.getConnection().hasConfigAttr(user, MODE_CONFIG_ATTR, connectionContext)) {
             instance.initialize(product, defaultRequest, requestPerUsage, geom, downloadInfo, amounts);
             return instance.shouldGoOn;
         } else {
@@ -516,10 +515,9 @@ public class BillingPopup extends javax.swing.JDialog {
      */
     public static boolean hasUserBillingMode(final ConnectionContext connectionContext) throws Exception {
         return SessionManager.getConnection()
-                    .getConfigAttr(SessionManager.getSession().getUser(),
-                            MODE_CONFIG_ATTR,
-                            connectionContext)
-                    != null;
+                    .hasConfigAttr(SessionManager.getSession().getUser(),
+                        MODE_CONFIG_ATTR,
+                        connectionContext);
     }
 
     /**
@@ -1120,12 +1118,11 @@ public class BillingPopup extends javax.swing.JDialog {
     public static boolean isBillingAllowed(final String product, final ConnectionContext connectionContext) {
         try {
             final User user = SessionManager.getSession().getUser();
-            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR, connectionContext)
-                            == null)
-                        || ((SessionManager.getConnection().getConfigAttr(
-                                    user,
-                                    MODE_CONFIG_ATTR,
-                                    connectionContext) != null)
+            return !SessionManager.getConnection().hasConfigAttr(user, MODE_CONFIG_ATTR, connectionContext)
+                        || (SessionManager.getConnection().hasConfigAttr(
+                                user,
+                                MODE_CONFIG_ATTR,
+                                connectionContext)
                             && (getAllowedUsages(user, product, connectionContext).length > 0));
         } catch (ConnectionException ex) {
             LOG.error("error while checking configAttr", ex);
@@ -1144,7 +1141,7 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @throws  ConnectionException  DOCUMENT ME!
      */
-    private static String[] getAllowedUsages(final User user,
+    public static String[] getAllowedUsages(final User user,
             final String product,
             final ConnectionContext connectionContext) throws ConnectionException {
         final Set<String> allowedUsages = new LinkedHashSet<>();

@@ -439,10 +439,10 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             }
 
                             if ((productGroupExts.size() > 1)
-                                        && (SessionManager.getConnection().getConfigAttr(
-                                                SessionManager.getSession().getUser(),
-                                                BillingPopup.MODE_CONFIG_ATTR,
-                                                getConnectionContext()) != null)) {
+                                        && SessionManager.getConnection().hasConfigAttr(
+                                            SessionManager.getSession().getUser(),
+                                            BillingPopup.MODE_CONFIG_ATTR,
+                                            getConnectionContext())) {
                                 JOptionPane.showMessageDialog(
                                     VermessungRissAggregationRenderer.this,
                                     "<html>Es wurden Produkte zum Download ausgewählt,"

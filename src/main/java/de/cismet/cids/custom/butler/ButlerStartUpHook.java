@@ -77,9 +77,9 @@ public class ButlerStartUpHook implements StartupHook, ConnectionContextStore {
         boolean hasButlerAccess = false;
         try {
             hasButlerAccess = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
                                 "csa://butler1Query",
-                                getConnectionContext()) != null;
+                                getConnectionContext());
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Butler!", ex);
         }

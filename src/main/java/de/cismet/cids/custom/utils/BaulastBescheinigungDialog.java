@@ -425,15 +425,15 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
      * @param  flurstuecke  DOCUMENT ME!
      */
     public void prepareDownload(final List<CidsBean> flurstuecke) {
-        String checkProtokollPane = null;
+        boolean checkProtokollPane = false;
         try {
             checkProtokollPane = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
                                 "baulast.bescheinigung.protokollpane_enabled",
                                 getConnectionContext());
         } catch (ConnectionException ex) {
         }
-        jPanel8.setVisible(checkProtokollPane != null);
+        jPanel8.setVisible(checkProtokollPane);
 
         try {
             if ((worker != null) && !worker.isDone()) {
@@ -460,7 +460,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             new ClientBaulastBescheinigungHelper(getConnectionContext()).calculateDownloadInfo(
                                 hasBilling ? null : jTextField2.getText(),
                                 hasBilling ? null : jTextField1.getText(),
-                                AlkisUtils.getInstance().createFertigungsVermerk(
+                                AlkisUtils.getInstance().createBaulastenFertigungsVermerk(
                                     SessionManager.getSession().getUser(),
                                     getConnectionContext()),
                                 flurstuecke,

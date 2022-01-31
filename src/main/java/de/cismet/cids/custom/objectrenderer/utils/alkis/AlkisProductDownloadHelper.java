@@ -24,8 +24,6 @@ import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Cancellable;
-
 import java.awt.Component;
 
 import java.util.Date;
@@ -109,34 +107,6 @@ public class AlkisProductDownloadHelper {
             DownloadManager.instance().add(downloads.get(0));
         }
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   usageKey           DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  ConnectionException  DOCUMENT ME!
-     */
-    public static String getFertigungsVermerk(final String usageKey, final ConnectionContext connectionContext)
-            throws ConnectionException {
-        final String fertigungsVermerk;
-        final String currentUsageKey = (BillingPopup.getInstance().getCurrentUsage() != null)
-            ? BillingPopup.getInstance().getCurrentUsage().getKey() : null;
-        if ((usageKey == null) || (usageKey.equals(currentUsageKey))) {
-            fertigungsVermerk = SessionManager.getConnection()
-                        .getConfigAttr(
-                                SessionManager.getSession().getUser(),
-                                "custom.alkis.fertigungsVermerk@WUNDA_BLAU",
-                                connectionContext);
-        } else {
-            fertigungsVermerk = null;
-        }
-        return fertigungsVermerk;
-    }
-
     /**
      * DOCUMENT ME!
      *
@@ -184,7 +154,7 @@ public class AlkisProductDownloadHelper {
             final String queryID = AlkisSoapUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
-                final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
+                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
                 final String filename = product + "."
                             + buchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_");    // replace all whitespaces;
                 final Download download = new ByteArrayActionDownload(
@@ -253,7 +223,7 @@ public class AlkisProductDownloadHelper {
             if (completeBuchungsblattCode.length() > 0) {
                 final String alkisCode = AlkisSoapUtils.escapeHtmlSpaces(completeBuchungsblattCode);
 
-                final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
+                final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
                 final String directory = DownloadManagerDialog.getInstance().getJobName();
                 final String filename = product + "."
                             + completeBuchungsblattCode.replace("/", "--").trim().replaceAll(" +", "_"); // replace all whitespaces
@@ -334,7 +304,7 @@ public class AlkisProductDownloadHelper {
         for (final String alkisCode : downloadInfo.getAlkisCodes()) {
             if ((alkisCode != null) && (alkisCode.length() > 0)) {
                 try {
-                    final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
+                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
                     final String filename = product + "." + alkisCode.replace("/", "--");
                     final Download download = new ByteArrayActionDownload(
                             AlkisProductServerAction.TASK_NAME,
@@ -401,7 +371,7 @@ public class AlkisProductDownloadHelper {
                 try {
                     final String filename = "LK.GDBNRW.A.F." + alkisCode.replace("/", "--");
                     final String extension = ".pdf";
-                    final String fertigungsVermerk = getFertigungsVermerk("WV ein", connectionContext);
+                    final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
 
                     final Download download = new ByteArrayActionDownload(
                             AlkisProductServerAction.TASK_NAME,
@@ -604,10 +574,9 @@ public class AlkisProductDownloadHelper {
     public static boolean validateUserHasAlkisPrintAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "navigator.alkis.print@WUNDA_BLAU",
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "navigator.alkis.print@WUNDA_BLAU",
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Print Dialog!", ex);
         }
@@ -624,10 +593,9 @@ public class AlkisProductDownloadHelper {
     public static boolean validateUserHasAlkisProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "csa://alkisProduct@WUNDA_BLAU",
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "csa://alkisProduct@WUNDA_BLAU",
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Products!", ex);
         }
@@ -644,10 +612,9 @@ public class AlkisProductDownloadHelper {
     public static boolean validateUserHasEigentuemerAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                AlkisProducts.ALKIS_EIGENTUEMER,
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            AlkisProducts.ALKIS_EIGENTUEMER,
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
         }
@@ -664,10 +631,9 @@ public class AlkisProductDownloadHelper {
     public static boolean validateUserHasAlkisHTMLProductAccess(final ConnectionContext connectionContext) {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                AlkisProducts.ALKIS_HTML_PRODUCTS_ENABLED,
-                                connectionContext)
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            AlkisProducts.ALKIS_HTML_PRODUCTS_ENABLED,
+                            connectionContext);
         } catch (ConnectionException ex) {
             LOG.error("Could not validate action tag for Alkis HTML Products!", ex);
         }

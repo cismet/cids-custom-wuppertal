@@ -68,7 +68,6 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -670,10 +669,9 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public boolean checkActionTag() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(),
-                                "navigator.baulasten.search@WUNDA_BLAU",
-                                getConnectionContext())
-                        != null;
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "navigator.baulasten.search@WUNDA_BLAU",
+                            getConnectionContext());
         } catch (ConnectionException ex) {
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
             return false;
