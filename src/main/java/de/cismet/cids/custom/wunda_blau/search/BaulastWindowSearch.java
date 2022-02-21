@@ -484,26 +484,26 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFSActionPerformed
+    private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFSActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         fsSelectionDialoge.setCurrentListToAdd(result);
 
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
             fsSelectionDialoge,
             true);
-    }//GEN-LAST:event_btnAddFSActionPerformed
+    } //GEN-LAST:event_btnAddFSActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFSActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFSActionPerformed
+    private void btnRemoveFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFSActionPerformed
         final Object[] selection = lstFlurstueck.getSelectedValues();
         for (final Object o : selection) {
             flurstuecksFilterModel.removeElement(o);
         }
-    }//GEN-LAST:event_btnRemoveFSActionPerformed
+    }                                                                               //GEN-LAST:event_btnRemoveFSActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -515,7 +515,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFromMapFSActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFromMapFSActionPerformed
+    private void btnFromMapFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFromMapFSActionPerformed
         final Collection<Feature> selFeatures = CismapBroker.getInstance()
                     .getMappingComponent()
                     .getFeatureCollection()
@@ -531,7 +531,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 }
             }
         }
-    }//GEN-LAST:event_btnFromMapFSActionPerformed
+    }                                                                                //GEN-LAST:event_btnFromMapFSActionPerformed
 
     /**
      * DOCUMENT ME!

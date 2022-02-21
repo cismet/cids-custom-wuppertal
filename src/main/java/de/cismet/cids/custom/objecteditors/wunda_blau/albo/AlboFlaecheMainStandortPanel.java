@@ -824,7 +824,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      * @param  evt  DOCUMENT ME!
      */
     private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
-        jFormattedTextField17.setValue(null);
+        jFormattedTextField18.setValue(null);
     }                                                                            //GEN-LAST:event_jButton6ActionPerformed
 
     @Override

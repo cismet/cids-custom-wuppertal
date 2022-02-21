@@ -331,16 +331,16 @@ public class DmsUrlMappingOptionsPanel extends AbstractOptionsPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jFileChooser1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
+    private void jFileChooser1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jFileChooser1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFileChooser1ActionPerformed
+    } //GEN-LAST:event_jFileChooser1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jTable1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+    private void jTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() == 2) {
             final int row = jTable1.rowAtPoint(new Point(evt.getX(), evt.getY()));
             final int col = jTable1.columnAtPoint(new Point(evt.getX(), evt.getY()));
@@ -366,7 +366,7 @@ public class DmsUrlMappingOptionsPanel extends AbstractOptionsPanel {
                 jTable1.setValueAt(newValue, row, col);
             }
         }
-    }//GEN-LAST:event_jTable1MouseClicked
+    } //GEN-LAST:event_jTable1MouseClicked
 
     /**
      * DOCUMENT ME!
@@ -415,27 +415,27 @@ public class DmsUrlMappingOptionsPanel extends AbstractOptionsPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
         networkPathCanceled = false;
         jDialog2.setVisible(false);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         networkPathCanceled = true;
         jDialog2.setVisible(false);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddVerwaltungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVerwaltungActionPerformed
+    private void btnAddVerwaltungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddVerwaltungActionPerformed
         final String networkPath = showNetworkPathChooser(null);
         if (networkPath != null) {
             final File localPath = showLocalPathChooser(getFileSystemRootDir());
@@ -449,21 +449,21 @@ public class DmsUrlMappingOptionsPanel extends AbstractOptionsPanel {
                 }
             }
         }
-    }//GEN-LAST:event_btnAddVerwaltungActionPerformed
+    }                                                                                    //GEN-LAST:event_btnAddVerwaltungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveVerwaltungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveVerwaltungActionPerformed
+    private void btnRemoveVerwaltungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveVerwaltungActionPerformed
         final int selRow = jTable1.getSelectedRow();
         if (selRow >= 0) {
             final MyTableModel model = (MyTableModel)jTable1.getModel();
             model.removeRow(selRow);
             model.fireTableDataChanged();
         }
-    }//GEN-LAST:event_btnRemoveVerwaltungActionPerformed
+    }                                                                                       //GEN-LAST:event_btnRemoveVerwaltungActionPerformed
 
     @Override
     public boolean isEnabled() {
