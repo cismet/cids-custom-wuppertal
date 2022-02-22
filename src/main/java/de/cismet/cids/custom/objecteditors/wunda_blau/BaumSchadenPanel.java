@@ -99,6 +99,7 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.text.SimpleDateFormat;
 
 /**
  * DOCUMENT ME!
@@ -152,6 +153,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String FIELD__STURM = "sturmschaden";      // baum_schaden
     public static final String FIELD__ABGESTORBEN = "abgestorben"; // baum_schaden
     public static final String FIELD__BAU = "fk_bau";              // baum_schaden
+    public static final String FIELD__BAU_TEXT = "bau";            // baum_schaden
     public static final String FIELD__GUTACHTEN = "gutachten";     // baum_schaden
     public static final String FIELD__BERATUNG = "baumberatung";   // baum_schaden
     public static final String FIELD__BEMERKUNG = "bemerkung";     // baum_schaden
@@ -1695,7 +1697,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewErsatzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewErsatzActionPerformed
+    private void btnAddNewErsatzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewErsatzActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -1724,14 +1726,14 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    } //GEN-LAST:event_btnAddNewErsatzActionPerformed
+    }//GEN-LAST:event_btnAddNewErsatzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveErsatzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveErsatzActionPerformed
+    private void btnRemoveErsatzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveErsatzActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstErsatz.getSelectedValue();
@@ -1762,14 +1764,14 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveErsatzActionPerformed
+    }//GEN-LAST:event_btnRemoveErsatzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewFestActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewFestActionPerformed
+    private void btnAddNewFestActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewFestActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -1793,14 +1795,14 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    } //GEN-LAST:event_btnAddNewFestActionPerformed
+    }//GEN-LAST:event_btnAddNewFestActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFestActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveFestActionPerformed
+    private void btnRemoveFestActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveFestActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstFest.getSelectedValue();
@@ -1832,19 +1834,19 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveFestActionPerformed
+    }//GEN-LAST:event_btnRemoveFestActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstErsatzValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstErsatzValueChanged
+    private void lstErsatzValueChanged(final ListSelectionEvent evt) {//GEN-FIRST:event_lstErsatzValueChanged
         final Object oErsatz = lstErsatz.getSelectedValue();
         if (oErsatz instanceof CidsBean) {
             baumErsatzPanel.setCidsBean((CidsBean)oErsatz);
         }
-    }                                                                  //GEN-LAST:event_lstErsatzValueChanged
+    }//GEN-LAST:event_lstErsatzValueChanged
 
     /**
      * DOCUMENT ME!
@@ -1954,11 +1956,14 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         // Text zur Baugehnemigung, wenn mit
         try {
             if ((saveSchadenBean.getProperty(FIELD__BAU) != null)
-                        && (((CidsBean)saveSchadenBean.getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)
-                        && txtBau.getText().trim().isEmpty()) {
-                LOG.warn("No text bau specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOBAU));
-                save = false;
+                    && (((CidsBean)saveSchadenBean.getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)){
+                if (saveSchadenBean.getProperty(FIELD__BAU_TEXT)== null 
+                        || (saveSchadenBean.getProperty(FIELD__BAU_TEXT).toString()).trim().isEmpty()) {
+                    LOG.warn("No text bau specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOBAU));
+                    save = false;
+                } else {
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Text Bau not given.", ex);
@@ -2046,11 +2051,12 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         if (errorMessage.length() > 0) {
             if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
                 errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WHICH))
                         .append(saveSchadenBean.getPrimaryKeyValue());
                 final CidsBean meldungBean = (CidsBean)saveSchadenBean.getProperty(FIELD__FK_MELDUNG);
                 errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_MESSAGE))
-                        .append(meldungBean.getProperty(FIELD__MDATUM));
+                        .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
             }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_PREFIX)
@@ -2154,6 +2160,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 } else {
                     setErsatzBeans(null);
                     setFestBeans(null);
+                    cbArt.setSelectedIndex(-1);
+                    cbBau.setSelectedIndex(-1);
+                    cbInst.setSelectedIndex(-1);
+                    txtBau.setText("");
                     if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).initForNewBinding();
                         cbGeomSchaden.setSelectedIndex(-1);

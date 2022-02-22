@@ -69,6 +69,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.text.SimpleDateFormat;
 /**
  * DOCUMENT ME!
  *
@@ -343,7 +344,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeSchadenActionPerformed
+    private void btnChangeSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeSchadenActionPerformed
         final Object selectedItem = comboBoxFilterDialogSchaden.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean schadenBean = (CidsBean)selectedItem;
@@ -356,7 +357,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeSchadenActionPerformed
+    }//GEN-LAST:event_btnChangeSchadenActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -466,10 +467,12 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_FEST;
         } else {
+            SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
                     "G: %s - M: %s - S: %s, %s - E:%s, %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
-                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM),
+                    formatTag.format(
+                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
                     getCidsBean().getProperty(FIELD__SCHADEN_ID),
                     getCidsBean().getProperty(FIELD__SCHADEN_ART),
                     getCidsBean().getProperty(FIELD__ID),

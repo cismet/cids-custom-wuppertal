@@ -69,7 +69,9 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;import java.text.SimpleDateFormat;
+import java.util.Calendar;
+;
 /**
  * DOCUMENT ME!
  *
@@ -117,7 +119,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     private static final String TITLE_NEW_ORTSTERMIN = "einen neuen Ortstermin anlegen ....";
 
     public static final String FIELD__TEILNEHMER = "n_teilnehmer";                     // baum_ortstermin
-    public static final String FIELD__DATUM = "datum";                                 // baum_ortstermin
+    public static final String FIELD__ZEIT = "zeit";                                   // baum_ortstermin
     public static final String FIELD__ID = "id";                                       // baum_ortstermin
     public static final String FIELD__MELDUNG = "fk_meldung";                          // baum_ortstermin
     public static final String FIELD__MELDUNG_ID = "fk_meldung.id";                    // baum_meldung
@@ -141,6 +143,8 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         "BaumOrtsterminEditor.btnRemoveTeilrActionPerformed().errortitle";
     public static final String BUNDLE_TEIL_ERRORTEXT = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
     public static final String BUNDLE_NOMELDUNG = "BaumOrtsterminEditor.isOkForSaving().noMeldung";
+
+    
 
     //~ Enums ------------------------------------------------------------------
 
@@ -389,7 +393,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -402,7 +406,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeGebietActionPerformed
+    }//GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -484,11 +488,15 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_ORTSTERMIN;
         } else {
+            final Calendar calDatumZeit = Calendar.getInstance();
+            calDatumZeit.setTime((Date) getCidsBean().getProperty(FIELD__ZEIT));
+            final java.util.Date datum = calDatumZeit.getTime();
+            SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
-                    "Gebiet: %s - Meldung: %s - Ortstermin: %s",
+                    "G: %s - M: %s - Ortstermin: %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
-                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM),
-                    getCidsBean().getProperty(FIELD__DATUM));
+                    formatTag.format(getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
+                    formatTag.format(datum));
         }
     }
 
