@@ -46,6 +46,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -104,7 +106,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.text.SimpleDateFormat;
 
 /**
  * DOCUMENT ME!
@@ -1123,31 +1124,31 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddKontActionPerformed
+    private void btnAddKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
             setChangeFlag();
         }
-    }//GEN-LAST:event_btnAddKontActionPerformed
+    }                                                               //GEN-LAST:event_btnAddKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
+    private void btnRemKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtKont);
             setChangeFlag();
         }
-    }//GEN-LAST:event_btnRemKontActionPerformed
+    }                                                               //GEN-LAST:event_btnRemKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbArtEActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_cbArtEActionPerformed
+    private void cbArtEActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_cbArtEActionPerformed
         if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__ART) != null)) {
             cbSorte.setSelectedItem(null);
             if (isEditor()) {
@@ -1155,14 +1156,14 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             }
             refreshSorte();
         }
-    }//GEN-LAST:event_cbArtEActionPerformed
+    }                                                           //GEN-LAST:event_cbArtEActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
         if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE) != null)) {
             cbHNr.setSelectedItem(null);
             if (isEditor()) {
@@ -1170,7 +1171,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             }
             refreshHnr();
         }
-    }//GEN-LAST:event_cbStrasseActionPerformed
+    }                                                                             //GEN-LAST:event_cbStrasseActionPerformed
     /**
      * DOCUMENT ME!
      *
@@ -1588,7 +1589,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                         .append(saveErsatzBean.getPrimaryKeyValue());
             } else {
                 if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
-                    SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
                     errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WHICH))
                             .append(saveErsatzBean.getPrimaryKeyValue());
                     final CidsBean schadenBean = (CidsBean)saveErsatzBean.getProperty(FIELD__FK_SCHADEN);

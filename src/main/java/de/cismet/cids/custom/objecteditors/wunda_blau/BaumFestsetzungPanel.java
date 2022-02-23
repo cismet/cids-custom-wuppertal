@@ -39,6 +39,8 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.MissingResourceException;
 import java.util.Objects;
@@ -77,7 +79,6 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.text.SimpleDateFormat;
 
 /**
  * DOCUMENT ME!
@@ -743,7 +744,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                         .append(saveFestsetzungBean.getPrimaryKeyValue());
             } else {
                 if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
-                    SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
                     errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WHICH))
                             .append(saveFestsetzungBean.getPrimaryKeyValue());
                     final CidsBean schadenBean = (CidsBean)saveFestsetzungBean.getProperty(FIELD__FK_SCHADEN);
