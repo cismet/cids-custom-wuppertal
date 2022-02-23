@@ -39,6 +39,8 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.MissingResourceException;
 import java.util.Objects;
@@ -742,6 +744,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                         .append(saveFestsetzungBean.getPrimaryKeyValue());
             } else {
                 if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
                     errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WHICH))
                             .append(saveFestsetzungBean.getPrimaryKeyValue());
                     final CidsBean schadenBean = (CidsBean)saveFestsetzungBean.getProperty(FIELD__FK_SCHADEN);
@@ -749,7 +752,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                             .append(schadenBean.getPrimaryKeyValue());
                     final CidsBean meldungBean = (CidsBean)schadenBean.getProperty(FIELD__FK_MELDUNG);
                     errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_MESSAGE))
-                            .append(meldungBean.getProperty(FIELD__MDATUM));
+                            .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
                 }
             }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),

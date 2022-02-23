@@ -40,6 +40,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -506,10 +508,12 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_SCHADEN;
         } else {
+            final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
-                    "Gebiet: %s - Meldung: %s - Schaden: %s",
+                    "G: %s - M: %s - Schaden: %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
-                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM),
+                    formatTag.format(
+                        getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
                     getCidsBean().getProperty(FIELD__ID));
         }
     }

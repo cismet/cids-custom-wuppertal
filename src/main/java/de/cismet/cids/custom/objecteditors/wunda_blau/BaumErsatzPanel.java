@@ -46,6 +46,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -1323,6 +1325,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 } else {
                     setKontrolleBeans(null);
                     cbSorte.setEnabled(false);
+                    cbHNr.setSelectedIndex(-1);
                     if (isEditor()) {
                         ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).initForNewBinding();
                         cbGeomErsatz.setSelectedIndex(-1);
@@ -1586,6 +1589,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                         .append(saveErsatzBean.getPrimaryKeyValue());
             } else {
                 if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
                     errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WHICH))
                             .append(saveErsatzBean.getPrimaryKeyValue());
                     final CidsBean schadenBean = (CidsBean)saveErsatzBean.getProperty(FIELD__FK_SCHADEN);
@@ -1593,7 +1597,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                             .append(schadenBean.getPrimaryKeyValue());
                     final CidsBean meldungBean = (CidsBean)schadenBean.getProperty(FIELD__FK_MELDUNG);
                     errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_MESSAGE))
-                            .append(meldungBean.getProperty(FIELD__MDATUM));
+                            .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
                 }
             }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),

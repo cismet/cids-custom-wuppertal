@@ -32,6 +32,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -449,10 +451,12 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_ERSATZ;
         } else {
+            final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
                     "G: %s - M: %s - S: %s, %s - E:%s, %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
-                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM),
+                    formatTag.format(
+                        getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
                     getCidsBean().getProperty(FIELD__SCHADEN_ID),
                     getCidsBean().getProperty(FIELD__SCHADEN_ART),
                     getCidsBean().getProperty(FIELD__ID),

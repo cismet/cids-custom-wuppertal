@@ -47,6 +47,8 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -863,6 +865,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panMeldung.add(lblLadenMeldung, gridBagConstraints);
 
+        scpLaufendeMeldungen.setPreferredSize(new Dimension(80, 130));
+
         lstMeldungen.setModel(new DefaultListModel<>());
         lstMeldungen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstMeldungen.setFixedCellWidth(75);
@@ -883,7 +887,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         btnAddNewMeldung.setEnabled(false);
         btnAddNewMeldung.setMaximumSize(new Dimension(39, 20));
         btnAddNewMeldung.setMinimumSize(new Dimension(39, 20));
-        btnAddNewMeldung.setPreferredSize(new Dimension(39, 25));
+        btnAddNewMeldung.setPreferredSize(new Dimension(25, 20));
         btnAddNewMeldung.addActionListener(new ActionListener() {
 
                 @Override
@@ -902,7 +906,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         btnRemoveMeldung.setEnabled(false);
         btnRemoveMeldung.setMaximumSize(new Dimension(39, 20));
         btnRemoveMeldung.setMinimumSize(new Dimension(39, 20));
-        btnRemoveMeldung.setPreferredSize(new Dimension(39, 25));
+        btnRemoveMeldung.setPreferredSize(new Dimension(25, 20));
         btnRemoveMeldung.addActionListener(new ActionListener() {
 
                 @Override
@@ -1234,7 +1238,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
                     if (value instanceof CidsBean) {
                         final CidsBean bean = (CidsBean)value;
-                        newValue = bean.getProperty(FIELD__DATUM);
+                        final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                        newValue = formatTag.format(bean.getProperty(FIELD__DATUM));
 
                         if (newValue == null) {
                             newValue = "unbenannt";
@@ -1246,7 +1251,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                             index,
                             isSelected,
                             cellHasFocus);
-                    compoDatum.setForeground(new Color(9, 68, 9));
+                    compoDatum.setForeground(Color.BLACK);
                     return compoDatum;
                 }
             });

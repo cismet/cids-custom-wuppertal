@@ -51,9 +51,12 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Objects;
@@ -111,7 +114,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     private static final Logger LOG = Logger.getLogger(BaumMeldungPanel.class);
 
     public static final String FIELD__APARTNER = "arr_ansprechpartner";    // baum_meldung
-    public static final String FIELD__DATUM = "datum";                     // baum_ortstermin
+    public static final String FIELD__DATUM = "datum";                     // baum_meldung
+    public static final String FIELD__ZEIT = "zeit";                       // baum_ortstermin
     public static final String FIELD__FK_MELDUNG = "fk_meldung";           // baum_ortstermin bzw. schaden
     public static final String FIELD__ID = "id";                           // baum_schaden
     public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";       // baum_schaden
@@ -591,6 +595,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         panOrtstermin.add(lblLadenOrt, gridBagConstraints);
 
         scpLaufendeOrtstermine.setName("scpLaufendeOrtstermine"); // NOI18N
+        scpLaufendeOrtstermine.setPreferredSize(new Dimension(80, 170));
 
         lstOrtstermine.setModel(new DefaultListModel<>());
         lstOrtstermine.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -605,6 +610,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.weighty = 1.0;
         panOrtstermin.add(scpLaufendeOrtstermine, gridBagConstraints);
 
+        panControlsNewOrtstermine.setMinimumSize(new Dimension(70, 30));
         panControlsNewOrtstermine.setName("panControlsNewOrtstermine"); // NOI18N
         panControlsNewOrtstermine.setOpaque(false);
         panControlsNewOrtstermine.setLayout(new GridBagLayout());
@@ -613,9 +619,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewOrtstermin.setEnabled(false);
         btnAddNewOrtstermin.setMaximumSize(new Dimension(39, 20));
-        btnAddNewOrtstermin.setMinimumSize(new Dimension(39, 20));
+        btnAddNewOrtstermin.setMinimumSize(new Dimension(25, 20));
         btnAddNewOrtstermin.setName("btnAddNewOrtstermin");                                                    // NOI18N
-        btnAddNewOrtstermin.setPreferredSize(new Dimension(39, 25));
+        btnAddNewOrtstermin.setPreferredSize(new Dimension(25, 20));
         btnAddNewOrtstermin.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -629,7 +635,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         btnRemoveOrtstermin.setMaximumSize(new Dimension(39, 20));
         btnRemoveOrtstermin.setMinimumSize(new Dimension(39, 20));
         btnRemoveOrtstermin.setName("btnRemoveOrtstermin");                                                       // NOI18N
-        btnRemoveOrtstermin.setPreferredSize(new Dimension(39, 25));
+        btnRemoveOrtstermin.setPreferredSize(new Dimension(25, 20));
         btnRemoveOrtstermin.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1125,9 +1131,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
-            final java.sql.Date beanDate = new java.sql.Date(cal.getTime().getTime());
 
-            beanOrtstermin.setProperty(FIELD__DATUM, beanDate);
+            beanOrtstermin.setProperty(FIELD__ZEIT, new java.sql.Timestamp(cal.getTime().getTime()));
             beanOrtstermin.setProperty(FIELD__FK_MELDUNG, getCidsBean());
 
             // Meldungen erweitern:
@@ -1439,7 +1444,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         // datum vorhanden
         try {
             if (saveMeldungBean.getProperty(FIELD__DATUM) == null) {
-                LOG.warn("No name specified. Skip persisting.");
+                LOG.warn("No datum specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NODATE));
                 save = false;
             }
@@ -1556,7 +1561,11 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
 
                     if (value instanceof CidsBean) {
                         final CidsBean bean = (CidsBean)value;
-                        newValue = bean.getProperty(FIELD__DATUM);
+                        final Calendar calDatumZeit = Calendar.getInstance();
+                        calDatumZeit.setTime((Date)bean.getProperty(FIELD__ZEIT));
+                        final java.util.Date datum = calDatumZeit.getTime();
+                        final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                        newValue = formatTag.format(datum);
 
                         if (newValue == null) {
                             newValue = "unbenannt";

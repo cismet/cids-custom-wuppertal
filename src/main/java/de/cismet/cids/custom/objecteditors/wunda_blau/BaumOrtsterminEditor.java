@@ -38,7 +38,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -117,7 +120,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     private static final String TITLE_NEW_ORTSTERMIN = "einen neuen Ortstermin anlegen ....";
 
     public static final String FIELD__TEILNEHMER = "n_teilnehmer";                     // baum_ortstermin
-    public static final String FIELD__DATUM = "datum";                                 // baum_ortstermin
+    public static final String FIELD__ZEIT = "zeit";                                   // baum_ortstermin
     public static final String FIELD__ID = "id";                                       // baum_ortstermin
     public static final String FIELD__MELDUNG = "fk_meldung";                          // baum_ortstermin
     public static final String FIELD__MELDUNG_ID = "fk_meldung.id";                    // baum_meldung
@@ -484,11 +487,15 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_ORTSTERMIN;
         } else {
+            final Calendar calDatumZeit = Calendar.getInstance();
+            calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ZEIT));
+            final java.util.Date datum = calDatumZeit.getTime();
+            final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
-                    "Gebiet: %s - Meldung: %s - Ortstermin: %s",
+                    "G: %s - M: %s - Ortstermin: %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
-                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM),
-                    getCidsBean().getProperty(FIELD__DATUM));
+                    formatTag.format(getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
+                    formatTag.format(datum));
         }
     }
 

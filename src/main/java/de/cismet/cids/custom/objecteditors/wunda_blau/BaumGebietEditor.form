@@ -634,6 +634,11 @@
                               </Constraints>
                             </Component>
                             <Container class="javax.swing.JScrollPane" name="scpLaufendeMeldungen">
+                              <Properties>
+                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[80, 130]"/>
+                                </Property>
+                              </Properties>
                               <AuxValues>
                                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                               </AuxValues>
@@ -681,7 +686,7 @@
                                       <Dimension value="[39, 20]"/>
                                     </Property>
                                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                      <Dimension value="[39, 25]"/>
+                                      <Dimension value="[25, 20]"/>
                                     </Property>
                                   </Properties>
                                   <Events>
@@ -706,7 +711,7 @@
                                       <Dimension value="[39, 20]"/>
                                     </Property>
                                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                      <Dimension value="[39, 25]"/>
+                                      <Dimension value="[25, 20]"/>
                                     </Property>
                                   </Properties>
                                   <Events>

@@ -43,7 +43,13 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.MissingResourceException;
 import java.util.Objects;
 
@@ -51,11 +57,14 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.DefaultFormatterFactory;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -68,6 +77,7 @@ import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -94,7 +104,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     private static final MetaClass MC__VORORT;
 
     public static final String FIELD__TEILNEHMER = "n_teilnehmer";            // baum_ortstermin
-    public static final String FIELD__DATUM = "datum";                        // baum_ortstermin
+    public static final String FIELD__ZEIT = "zeit";                          // baum_ortstermin
     public static final String FIELD__VORORT = "fk_vorort";                   // baum_ortstermin
     public static final String FIELD__NAME = "name";                          // baum_teilnehmer
     public static final String FIELD__TEILNEHMER_OTSTERMIN = "fk_ortstermin"; // baum_teilnehmer
@@ -110,6 +120,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     public static final String BUNDLE_PANE_SUFFIX = "BaumOrtsterminPanel.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumOrtsterminPanel.isOkForSaving().JOptionPane.title";
     public static final String BUNDLE_NODATE = "BaumOrtsterminPanel.isOkForSaving().noDatum";
+    public static final String BUNDLE_NOTIME = "BaumOrtsterminPanel.isOkForSaving().noZeit";
+    public static final String BUNDLE_WRONGTIME = "BaumOrtsterminPanel.isOkForSaving().wrongZeit";
     public static final String BUNDLE_NONAME = "BaumOrtsterminPanel.isOkForSaving().noName";
     public static final String BUNDLE_NOVORORT = "BaumOrtsterminPanel.isOkForSaving().noVorort";
     public static final String BUNDLE_WRONGTEL = "BaumOrtsterminPanel.isOkForSaving().wrongTelefon";
@@ -157,7 +169,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         panOrtstermin = new JPanel();
         lblVorort = new JLabel();
         cbVorort = new DefaultBindableScrollableComboBox(MC__VORORT);
-        ;
+        lblZeit = new JLabel();
+        ftZeit = new JFormattedTextField();
         lblBemerkung = new JLabel();
         scpBemerkung = new JScrollPane();
         taBemerkungOrt = new JTextArea();
@@ -200,7 +213,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         lblVorort.setName("lblVorort");                                                            // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -224,19 +237,44 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panOrtstermin.add(cbVorort, gridBagConstraints);
+
+        lblZeit.setFont(new Font("Tahoma", 1, 11));                                              // NOI18N
+        Mnemonics.setLocalizedText(
+            lblZeit,
+            NbBundle.getMessage(BaumOrtsterminPanel.class, "BaumOrtsterminPanel.lblZeit.text")); // NOI18N
+        lblZeit.setName("lblZeit");                                                              // NOI18N
+        lblZeit.setRequestFocusEnabled(false);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 4, 5);
+        panOrtstermin.add(lblZeit, gridBagConstraints);
+
+        ftZeit.setFormatterFactory(new DefaultFormatterFactory(
+                new DateFormatter(DateFormat.getTimeInstance(DateFormat.SHORT))));
+        ftZeit.setMinimumSize(new Dimension(80, 28));
+        ftZeit.setName("ftZeit"); // NOI18N
+        ftZeit.setPreferredSize(new Dimension(80, 28));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panOrtstermin.add(ftZeit, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
         lblBemerkung.setName("lblBemerkung");            // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -264,7 +302,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -392,10 +430,11 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(5, 0, 0, 2);
         panOrtstermin.add(panTeil, gridBagConstraints);
 
@@ -423,15 +462,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     && (this.getBaumChildrenLoader().getParentOrganizer() != null)
                     && (this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor)) {
             dcDatum.setName("dcDatum"); // NOI18N
-
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.datum}"),
-                    dcDatum,
-                    BeanProperty.create("date"));
-            binding.setConverter(dcDatum.getConverter());
-            bindingGroup.addBinding(binding);
         }
         if ((this.getBaumChildrenLoader() != null)
                     && (this.getBaumChildrenLoader().getParentOrganizer() != null)
@@ -483,7 +513,10 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     //~ Instance fields --------------------------------------------------------
 
     private final boolean editor;
+    private String uhrzeit;
+    private java.util.Date datum;
     @Getter private final BaumChildrenLoader baumChildrenLoader;
+    // private final PropertyChangeListener dateTimeListener = null;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
@@ -500,11 +533,13 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     JComboBox<String> cbVorort;
     DefaultBindableDateChooser dcDatum;
     Box.Filler filler2;
+    JFormattedTextField ftZeit;
     JScrollPane jScrollPaneTeil;
     JLabel lblBemerkung;
     JLabel lblDatum;
     JLabel lblTeil1;
     JLabel lblVorort;
+    JLabel lblZeit;
     JPanel panOrtstermin;
     JPanel panTeil;
     JPanel panTeilDaten;
@@ -614,6 +649,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             xtTeil.setEnabled(false);
             RendererTools.makeReadOnly(dcDatum);
             panTeilnehmerAdd.setVisible(isEditor());
+            RendererTools.makeReadOnly(ftZeit);
         }
     }
 
@@ -626,9 +662,27 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             bindingGroup.unbind();
             this.cidsBean = cidsBean;
             bindingGroup.bind();
-            if (isEditor() && (getCidsBean() != null)) {
-                getCidsBean().addPropertyChangeListener(changeListener);
+            if (getCidsBean() != null) {
+                if (isEditor()) {
+                    getCidsBean().addPropertyChangeListener(changeListener);
+                }
+                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                    bindingGroup,
+                    getCidsBean(),
+                    getConnectionContext());
+            } else {
+                cbVorort.setSelectedIndex(-1);
+                taBemerkungOrt.setText("");
             }
+
+            final DateTimeFormListener dateTimeFormListener = new DateTimeFormListener();
+            if ((this.getBaumChildrenLoader() != null)
+                        && (this.getBaumChildrenLoader().getParentOrganizer() != null)
+                        && (this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor)) {
+                dcDatum.addPropertyChangeListener(dateTimeFormListener);
+            }
+            ftZeit.addPropertyChangeListener(dateTimeFormListener);
+
             final DivBeanTable teilnehmerModel = new DivBeanTable(
                     isEditor(),
                     getCidsBean(),
@@ -658,11 +712,30 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             taBemerkungOrt.updateUI();
         }
         setReadOnly();
+        loadDateTime();
         if (isEditor()) {
             nullNoEdit(getCidsBean() != null);
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    public void loadDateTime() {
+        if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__ZEIT) != null)) {
+            final Calendar calDatumZeit = Calendar.getInstance();
+            calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ZEIT));
+            datum = calDatumZeit.getTime();
+            if ((this.getBaumChildrenLoader() != null)
+                        && (this.getBaumChildrenLoader().getParentOrganizer() != null)
+                        && (this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor)) {
+                dcDatum.setDate(datum);
+            }
+            final SimpleDateFormat sdfZeit = new SimpleDateFormat("HH:mm");
+            uhrzeit = sdfZeit.format(calDatumZeit.getTime());
+            ftZeit.setText("" + uhrzeit);
+        }
+    }
     /**
      * DOCUMENT ME!
      *
@@ -684,12 +757,34 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
-        // datum vorhanden
+        // dateTime vorhanden
         try {
-            if (saveOrtsterminBean.getProperty(FIELD__DATUM) == null) {
-                LOG.warn("No name specified. Skip persisting.");
+            if (saveOrtsterminBean.getProperty(FIELD__ZEIT) == null) {
+                LOG.warn("No datum specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NODATE));
                 save = false;
+            } else {
+                final Calendar calDatumZeit = Calendar.getInstance();
+                calDatumZeit.setTime((Date)saveOrtsterminBean.getProperty(FIELD__ZEIT));
+                datum = calDatumZeit.getTime();
+                if (datum == null) {
+                    LOG.warn("No datum specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NODATE));
+                    save = false;
+                }
+                final SimpleDateFormat sdfZeit = new SimpleDateFormat("HH:mm");
+                uhrzeit = sdfZeit.format(calDatumZeit.getTime().getTime());
+                if (uhrzeit == null) {
+                    LOG.warn("No time specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOTIME));
+                    save = false;
+                } else {
+                    if ((calDatumZeit.get(Calendar.HOUR_OF_DAY) < 7) || (calDatumZeit.get(Calendar.HOUR_OF_DAY) > 19)) {
+                        LOG.warn("Wrong time specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTIME));
+                        save = false;
+                    }
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Datum not given.", ex);
@@ -718,12 +813,14 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     save = false;
                 }
                 if (tBean.getProperty(FIELD__TEILNEHMER_TELEFON) != null) {
-                    if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
-                        LOG.warn("No name specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL))
-                                .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString())
-                                .append("<br>");
-                        save = false;
+                    if (!tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().isEmpty()) {
+                        if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
+                            LOG.warn("No name specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL))
+                                    .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString())
+                                    .append("<br>");
+                            save = false;
+                        }
                     }
                 }
             }
@@ -734,11 +831,12 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
         if (errorMessage.length() > 0) {
             if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
                 errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WHICH))
-                        .append(saveOrtsterminBean.getProperty(FIELD__DATUM));
+                        .append(formatTag.format(saveOrtsterminBean.getProperty(FIELD__ZEIT)));
                 final CidsBean meldungBean = (CidsBean)saveOrtsterminBean.getProperty(FIELD__FK_MELDUNG);
                 errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_MESSAGE))
-                        .append(meldungBean.getProperty(FIELD__MDATUM));
+                        .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
             }
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_PREFIX)
@@ -748,5 +846,98 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 JOptionPane.WARNING_MESSAGE);
         }
         return save;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void writeDateTime() {
+        java.util.Date givenDate = null;
+        if ((baumChildrenLoader.getParentOrganizer() instanceof BaumOrtsterminEditor)
+                    && (dcDatum.getDate() != null)) {
+            givenDate = dcDatum.getDate();
+        } else {
+            if (getCidsBean().getProperty(FIELD__ZEIT) != null) {
+                final Calendar calDatumZeit = Calendar.getInstance();
+                calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ZEIT));
+                givenDate = calDatumZeit.getTime();
+            }
+        }
+        if (givenDate != null) {
+            final Calendar dateTime = Calendar.getInstance();
+            dateTime.setTime(givenDate);
+            if (ftZeit.getValue() != null) {
+                final Calendar zeit = GregorianCalendar.getInstance();
+                final java.util.Date givenTime = (java.util.Date)ftZeit.getValue();
+                zeit.setTime(givenTime);
+
+                dateTime.set(Calendar.HOUR_OF_DAY, zeit.get(Calendar.HOUR_OF_DAY));
+                dateTime.set(Calendar.MINUTE, zeit.get(Calendar.MINUTE));
+                dateTime.set(Calendar.SECOND, 0);
+                dateTime.set(Calendar.MILLISECOND, 0);
+
+                try {
+                    getCidsBean().setProperty(FIELD__ZEIT, new java.sql.Timestamp(dateTime.getTime().getTime()));
+                } catch (Exception ex) {
+                    LOG.warn("No date saved. Skip persisting.", ex);
+                }
+            }
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DateTimeFormListener implements ActionListener, PropertyChangeListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DateTimeFormListener object.
+         */
+        DateTimeFormListener() {
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void propertyChange(final PropertyChangeEvent evt) {
+            if (evt.getSource() == ftZeit) {
+                if (uhrzeit != null) {
+                    if (!uhrzeit.equals(ftZeit.getText())) {
+                        setChangeFlag();
+                        writeDateTime();
+                    }
+                } else {
+                    if (ftZeit.getValue() != null) {
+                        setChangeFlag();
+                        writeDateTime();
+                    }
+                }
+            } else if (evt.getSource() == dcDatum) {
+                final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                if (datum != null) {
+                    if (!(formatTag.format(datum).equals(formatTag.format(dcDatum.getDate())))) {
+                        setChangeFlag();
+                        ftZeit.setValue(null);
+                        writeDateTime();
+                    }
+                } else {
+                    if (dcDatum.getDate() != null) {
+                        setChangeFlag();
+                        ftZeit.setValue(null);
+                        writeDateTime();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+        }
     }
 }
