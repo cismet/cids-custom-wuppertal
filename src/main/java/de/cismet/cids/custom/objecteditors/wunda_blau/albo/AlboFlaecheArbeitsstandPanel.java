@@ -26,72 +26,7 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
  */
 public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler10;
-    private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler12;
-    private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler53;
-    private javax.swing.JComboBox<String> jComboBox10;
-    private javax.swing.JComboBox<String> jComboBox11;
-    private javax.swing.JComboBox<String> jComboBox12;
-    private javax.swing.JComboBox<String> jComboBox15;
-    private javax.swing.JComboBox<String> jComboBox19;
-    private javax.swing.JComboBox<String> jComboBox32;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JComboBox<String> jComboBox7;
-    private javax.swing.JComboBox<String> jComboBox8;
-    private javax.swing.JComboBox<String> jComboBox9;
-    private javax.swing.JFormattedTextField jFormattedTextField11;
-    private javax.swing.JFormattedTextField jFormattedTextField15;
-    private javax.swing.JFormattedTextField jFormattedTextField16;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JFormattedTextField jFormattedTextField3;
-    private javax.swing.JFormattedTextField jFormattedTextField4;
-    private javax.swing.JFormattedTextField jFormattedTextField5;
-    private javax.swing.JFormattedTextField jFormattedTextField6;
-    private javax.swing.JFormattedTextField jFormattedTextField7;
-    private javax.swing.JFormattedTextField jFormattedTextField8;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel45;
-    private javax.swing.JPanel panArbeitsstand;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
-
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new AlboFlaecheArbeitsstandPanel object.
-     */
-    public AlboFlaecheArbeitsstandPanel() {
-        initComponents();
-    }
-
-    /**
-     * Creates a new AlboFlaecheXXXPanel object.
-     *
-     * @param  editable  DOCUMENT ME!
-     */
-    public AlboFlaecheArbeitsstandPanel(final boolean editable) {
-        super(editable);
-    }
-
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    protected void initGui() {
-        initComponents();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -112,6 +47,7 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         jLabel19 = new javax.swing.JLabel();
         jComboBox6 = new DefaultBindableScrollableComboBox();
         jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        jButton5 = new javax.swing.JButton();
         jLabel45 = new javax.swing.JLabel();
         jComboBox32 = new DefaultBindableScrollableComboBox();
         jFormattedTextField16 = new javax.swing.JFormattedTextField();
@@ -148,9 +84,20 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        jButton14 = new javax.swing.JButton();
         filler53 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+
+        final FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -231,6 +178,23 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panArbeitsstand.add(jFormattedTextField2, gridBagConstraints);
+
+        jButton5.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton5.setBorderPainted(false);
+        jButton5.setContentAreaFilled(false);
+        jButton5.setFocusPainted(false);
+        jButton5.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton5.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton5.setName("jButton5");                                                                       // NOI18N
+        jButton5.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton5.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton5, gridBagConstraints);
+        jButton5.setVisible(isEditable());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel45, "Historische Nutzungsrecherche:");
         jLabel45.setName("jLabel45"); // NOI18N
@@ -676,6 +640,159 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.ipadx = 60;
         panArbeitsstand.add(filler12, gridBagConstraints);
 
+        jButton6.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton6.setBorderPainted(false);
+        jButton6.setContentAreaFilled(false);
+        jButton6.setFocusPainted(false);
+        jButton6.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton6.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton6.setName("jButton6");                                                                       // NOI18N
+        jButton6.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton6.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton6, gridBagConstraints);
+        jButton6.setVisible(isEditable());
+
+        jButton7.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton7.setBorderPainted(false);
+        jButton7.setContentAreaFilled(false);
+        jButton7.setFocusPainted(false);
+        jButton7.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton7.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton7.setName("jButton7");                                                                       // NOI18N
+        jButton7.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton7.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton7, gridBagConstraints);
+        jButton7.setVisible(isEditable());
+
+        jButton8.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton8.setBorderPainted(false);
+        jButton8.setContentAreaFilled(false);
+        jButton8.setFocusPainted(false);
+        jButton8.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton8.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton8.setName("jButton8");                                                                       // NOI18N
+        jButton8.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton8.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton8, gridBagConstraints);
+        jButton8.setVisible(isEditable());
+
+        jButton9.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton9.setBorderPainted(false);
+        jButton9.setContentAreaFilled(false);
+        jButton9.setFocusPainted(false);
+        jButton9.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton9.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton9.setName("jButton9");                                                                       // NOI18N
+        jButton9.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton9.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton9, gridBagConstraints);
+        jButton9.setVisible(isEditable());
+
+        jButton10.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton10.setBorderPainted(false);
+        jButton10.setContentAreaFilled(false);
+        jButton10.setFocusPainted(false);
+        jButton10.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton10.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton10.setName("jButton10");                                                                     // NOI18N
+        jButton10.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton10.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton10, gridBagConstraints);
+        jButton10.setVisible(isEditable());
+
+        jButton11.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton11.setBorderPainted(false);
+        jButton11.setContentAreaFilled(false);
+        jButton11.setFocusPainted(false);
+        jButton11.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton11.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton11.setName("jButton11");                                                                     // NOI18N
+        jButton11.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton11.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton11, gridBagConstraints);
+        jButton11.setVisible(isEditable());
+
+        jButton12.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton12.setBorderPainted(false);
+        jButton12.setContentAreaFilled(false);
+        jButton12.setFocusPainted(false);
+        jButton12.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton12.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton12.setName("jButton12");                                                                     // NOI18N
+        jButton12.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton12.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton12, gridBagConstraints);
+        jButton12.setVisible(isEditable());
+
+        jButton13.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton13.setBorderPainted(false);
+        jButton13.setContentAreaFilled(false);
+        jButton13.setFocusPainted(false);
+        jButton13.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton13.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton13.setName("jButton13");                                                                     // NOI18N
+        jButton13.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton13.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton13, gridBagConstraints);
+        jButton13.setVisible(isEditable());
+
+        jButton14.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton14.setBorderPainted(false);
+        jButton14.setContentAreaFilled(false);
+        jButton14.setFocusPainted(false);
+        jButton14.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton14.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton14.setName("jButton14");                                                                     // NOI18N
+        jButton14.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton14.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panArbeitsstand.add(jButton14, gridBagConstraints);
+        jButton14.setVisible(isEditable());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -694,7 +811,213 @@ public class AlboFlaecheArbeitsstandPanel extends AbstractAlboFlaechePanel {
         add(filler53, gridBagConstraints);
 
         bindingGroup.bind();
+    }
+
+    /**
+     * Code for dispatching events from components to event handlers.
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class FormListener implements java.awt.event.ActionListener {
+
+        /**
+         * Creates a new FormListener object.
+         */
+        FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final java.awt.event.ActionEvent evt) {
+            if (evt.getSource() == jButton5) {
+                AlboFlaecheArbeitsstandPanel.this.jButton5ActionPerformed(evt);
+            } else if (evt.getSource() == jButton6) {
+                AlboFlaecheArbeitsstandPanel.this.jButton6ActionPerformed(evt);
+            } else if (evt.getSource() == jButton7) {
+                AlboFlaecheArbeitsstandPanel.this.jButton7ActionPerformed(evt);
+            } else if (evt.getSource() == jButton8) {
+                AlboFlaecheArbeitsstandPanel.this.jButton8ActionPerformed(evt);
+            } else if (evt.getSource() == jButton9) {
+                AlboFlaecheArbeitsstandPanel.this.jButton9ActionPerformed(evt);
+            } else if (evt.getSource() == jButton10) {
+                AlboFlaecheArbeitsstandPanel.this.jButton10ActionPerformed(evt);
+            } else if (evt.getSource() == jButton11) {
+                AlboFlaecheArbeitsstandPanel.this.jButton11ActionPerformed(evt);
+            } else if (evt.getSource() == jButton12) {
+                AlboFlaecheArbeitsstandPanel.this.jButton12ActionPerformed(evt);
+            } else if (evt.getSource() == jButton13) {
+                AlboFlaecheArbeitsstandPanel.this.jButton13ActionPerformed(evt);
+            } else if (evt.getSource() == jButton14) {
+                AlboFlaecheArbeitsstandPanel.this.jButton14ActionPerformed(evt);
+            }
+        }
     } // </editor-fold>//GEN-END:initComponents
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
+    private javax.swing.Box.Filler filler12;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler53;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JComboBox<String> jComboBox10;
+    private javax.swing.JComboBox<String> jComboBox11;
+    private javax.swing.JComboBox<String> jComboBox12;
+    private javax.swing.JComboBox<String> jComboBox15;
+    private javax.swing.JComboBox<String> jComboBox19;
+    private javax.swing.JComboBox<String> jComboBox32;
+    private javax.swing.JComboBox<String> jComboBox6;
+    private javax.swing.JComboBox<String> jComboBox7;
+    private javax.swing.JComboBox<String> jComboBox8;
+    private javax.swing.JComboBox<String> jComboBox9;
+    private javax.swing.JFormattedTextField jFormattedTextField11;
+    private javax.swing.JFormattedTextField jFormattedTextField15;
+    private javax.swing.JFormattedTextField jFormattedTextField16;
+    private javax.swing.JFormattedTextField jFormattedTextField2;
+    private javax.swing.JFormattedTextField jFormattedTextField3;
+    private javax.swing.JFormattedTextField jFormattedTextField4;
+    private javax.swing.JFormattedTextField jFormattedTextField5;
+    private javax.swing.JFormattedTextField jFormattedTextField6;
+    private javax.swing.JFormattedTextField jFormattedTextField7;
+    private javax.swing.JFormattedTextField jFormattedTextField8;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JPanel panArbeitsstand;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new AlboFlaecheArbeitsstandPanel object.
+     */
+    public AlboFlaecheArbeitsstandPanel() {
+        initComponents();
+    }
+
+    /**
+     * Creates a new AlboFlaecheXXXPanel object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public AlboFlaecheArbeitsstandPanel(final boolean editable) {
+        super(editable);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected void initGui() {
+        initComponents();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+        jFormattedTextField2.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
+        jFormattedTextField16.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton7ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton7ActionPerformed
+        jFormattedTextField3.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton7ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton8ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton8ActionPerformed
+        jFormattedTextField4.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton8ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton9ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton9ActionPerformed
+        jFormattedTextField5.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton9ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton10ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton10ActionPerformed
+        jFormattedTextField6.setValue(null);
+    }                                                                             //GEN-LAST:event_jButton10ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton11ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton11ActionPerformed
+        jFormattedTextField7.setValue(null);
+    }                                                                             //GEN-LAST:event_jButton11ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton12ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton12ActionPerformed
+        jFormattedTextField8.setValue(null);
+    }                                                                             //GEN-LAST:event_jButton12ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton13ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton13ActionPerformed
+        jFormattedTextField11.setValue(null);
+    }                                                                             //GEN-LAST:event_jButton13ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton14ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton14ActionPerformed
+        jFormattedTextField15.setValue(null);
+    }                                                                             //GEN-LAST:event_jButton14ActionPerformed
 
     @Override
     protected BindingGroup getBindingGroup() {
