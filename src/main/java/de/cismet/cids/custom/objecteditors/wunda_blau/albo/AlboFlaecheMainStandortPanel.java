@@ -865,7 +865,9 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
 
     @Override
     public void dispose() {
-        ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).clear();
+        if (jXTable2.getModel() instanceof StandortWirtschaftszweigTableModel) {
+            ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).clear();
+        }
         super.dispose();
     }
 

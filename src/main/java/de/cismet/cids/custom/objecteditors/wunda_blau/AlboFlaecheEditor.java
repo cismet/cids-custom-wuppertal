@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import org.apache.log4j.Logger;
@@ -40,12 +41,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
@@ -60,6 +67,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
 import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -95,7 +103,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     BorderProvider,
     RequestsFullSizeComponent,
     EditorSaveListener,
-    ConnectionContextStore {
+    ConnectionContextStore,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -114,6 +123,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panTitle = new JPanel();
         lblTitle = new JLabel();
         jToggleButton1 = new JToggleButton();
+        btnLandRegNr = new JButton();
         btnReport1 = new JButton();
         panFooter = new JPanel();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
@@ -176,6 +186,22 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panTitle.add(jToggleButton1, gridBagConstraints);
         jToggleButton1.setVisible(isEditable());
+
+        btnLandRegNr.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
+        btnLandRegNr.setToolTipText(NbBundle.getMessage(
+                AlboFlaecheEditor.class,
+                "AlboFlaecheEditor.btnLandRegNr.toolTipText"));                                           // NOI18N
+        btnLandRegNr.setBorderPainted(false);
+        btnLandRegNr.setContentAreaFilled(false);
+        btnLandRegNr.setFocusPainted(false);
+        btnLandRegNr.setName("btnLandRegNr");                                                             // NOI18N
+        btnLandRegNr.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        panTitle.add(btnLandRegNr, gridBagConstraints);
+        btnLandRegNr.setVisible(isEditable());
 
         btnReport1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/table_export.png")));    // NOI18N
         btnReport1.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
@@ -346,6 +372,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == jToggleButton1) {
                 AlboFlaecheEditor.this.jToggleButton1ActionPerformed(evt);
+            } else if (evt.getSource() == btnLandRegNr) {
+                AlboFlaecheEditor.this.btnLandRegNrActionPerformed(evt);
             } else if (evt.getSource() == btnReport1) {
                 AlboFlaecheEditor.this.btnReport1ActionPerformed(evt);
             } else if (evt.getSource() == btnBack) {
@@ -394,6 +422,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnBack;
     private JButton btnForward;
+    JButton btnLandRegNr;
     JButton btnReport1;
     private Box.Filler filler1;
     private Box.Filler filler2;
@@ -476,6 +505,10 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         } catch (final Exception ex) {
         }
 
+        if (editable && (this.cidsBean != null)) {
+            this.cidsBean.removePropertyChangeListener(this);
+        }
+
         if (cidsBean != null) {
             if (isEditable()) {
                 if (cidsBean.getProperty("fk_massnahmen") == null) {
@@ -504,7 +537,32 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panBemerkungen.setCidsBean(cidsBean);
         panMassnahmen.setCidsBean((CidsBean)cidsBean.getProperty("fk_massnahmen"));
 
+        if (editable && (this.cidsBean != null)) {
+            this.cidsBean.addPropertyChangeListener(this);
+        }
+
+        updateTitleControls();
         updateFooterControls();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateTitleControls() {
+        btnLandRegNr.setVisible(jToggleButton1.isSelected());
+        if ((cidsBean.getProperty("geodaten_id") == null) || cidsBean.getProperty("geodaten_id").equals("")) {
+            btnLandRegNr.setIcon(new ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png")));    // NOI18N
+            btnLandRegNr.setToolTipText(NbBundle.getMessage(
+                    AlboFlaecheEditor.class,
+                    "AlboFlaecheEditor.btnLandRegNr.toolTipText"));                                              // NOI18N
+        } else {
+            btnLandRegNr.setIcon(new ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
+            btnLandRegNr.setToolTipText(NbBundle.getMessage(
+                    AlboFlaecheEditor.class,
+                    "AlboFlaecheEditor.btnLandRegNr.toolTipText.remove"));                                       // NOI18N
+        }
     }
 
     /**
@@ -574,6 +632,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private void jToggleButton1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
         if (isEditable()) {
             panMain.setUnlocked(jToggleButton1.isSelected());
+            updateTitleControls();
         }
     }                                                                   //GEN-LAST:event_jToggleButton1ActionPerformed
 
@@ -601,6 +660,50 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                             getConnectionContext()));
         }
     } //GEN-LAST:event_btnReport1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnLandRegNrActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnLandRegNrActionPerformed
+        if ((cidsBean.getProperty("geodaten_id") == null) || cidsBean.getProperty("geodaten_id").equals("")) {
+            createLandesregistriernummer();
+        } else {
+            try {
+                cidsBean.setProperty("landesregistriernummer", null);
+                cidsBean.setProperty("laufende_nummer", null);
+                cidsBean.setProperty("geodaten_id", null);
+            } catch (Exception e) {
+                LOG.error("Cannot remove landesregistriernummer", e);
+            }
+        }
+        updateTitleControls();
+    }                                                                 //GEN-LAST:event_btnLandRegNrActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void createLandesregistriernummer() {
+        final AlboFlaecheLandesRegNrSearch search = new AlboFlaecheLandesRegNrSearch(String.valueOf(
+                    cidsBean.getProperty("fk_geom")));
+
+        try {
+            final ArrayList<ArrayList<String>> number = (ArrayList<ArrayList<String>>)SessionManager
+                        .getProxy().customServerSearch(search, connectionContext);
+
+            if ((number != null) && (number.size() > 0) && (number.get(0) != null) && (number.get(0).size() > 1)) {
+                cidsBean.setProperty("landesregistriernummer", number.get(0).get(0));
+                cidsBean.setProperty("laufende_nummer", number.get(0).get(1));
+                cidsBean.setProperty(
+                    "geodaten_id",
+                    number.get(0).get(0).substring(1)
+                            + number.get(0).get(1).substring(1));
+            }
+        } catch (Exception e) {
+            LOG.error("Cannot set landesregistriernummer", e);
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -677,6 +780,9 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panMassnahmen.dispose();
         panBemerkungen.dispose();
         bindingGroup.unbind();
+        if (editable && (cidsBean != null)) {
+            cidsBean.removePropertyChangeListener(this);
+        }
         cidsBean = null;
     }
 
@@ -708,6 +814,24 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 return false;
             }
         }
+
+        if (cidsBean.getProperty("geodaten_id") == null) {
+            final int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    NbBundle.getMessage(
+                        AlboFlaecheEditor.class,
+                        "AlboFlaecheEditor.prepareForSave().geodaten_id.message"),
+                    NbBundle.getMessage(
+                        AlboFlaecheEditor.class,
+                        "AlboFlaecheEditor.prepareForSave().geodaten_id.title"),
+                    JOptionPane.YES_NO_CANCEL_OPTION);
+
+            if (answer == JOptionPane.CANCEL_OPTION) {
+                return false;
+            } else if (answer == JOptionPane.YES_OPTION) {
+            }
+        }
+
         return panMain.prepareForSave()
                     && panArbeitsstand.prepareForSave()
                     && panMassnahmen.prepareForSave()
@@ -743,5 +867,12 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
     @Override
     public void setTitle(final String title) {
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("geodaten_id")) {
+            updateTitleControls();
+        }
     }
 }
