@@ -685,8 +685,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      * DOCUMENT ME!
      */
     private void createLandesregistriernummer() {
-        final AlboFlaecheLandesRegNrSearch search = new AlboFlaecheLandesRegNrSearch(String.valueOf(
-                    cidsBean.getProperty("fk_geom")));
+        final String geom = String.valueOf(cidsBean.getProperty("fk_geom.geo_field"));
+        String landesRegNr = (String)cidsBean.getProperty("landesregistriernummer");
+
+        if (landesRegNr.equals("")) {
+            landesRegNr = null;
+        }
+
+        final AlboFlaecheLandesRegNrSearch search = new AlboFlaecheLandesRegNrSearch(geom, landesRegNr);
 
         try {
             final ArrayList<ArrayList<String>> number = (ArrayList<ArrayList<String>>)SessionManager
@@ -815,20 +821,26 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
             }
         }
 
-        if (cidsBean.getProperty("geodaten_id") == null) {
-            final int answer = JOptionPane.showConfirmDialog(
-                    this,
-                    NbBundle.getMessage(
-                        AlboFlaecheEditor.class,
-                        "AlboFlaecheEditor.prepareForSave().geodaten_id.message"),
-                    NbBundle.getMessage(
-                        AlboFlaecheEditor.class,
-                        "AlboFlaecheEditor.prepareForSave().geodaten_id.title"),
-                    JOptionPane.YES_NO_CANCEL_OPTION);
+        if ((cidsBean.getProperty("fk_zuordnung.schluessel") != null)
+                    && (cidsBean.getProperty("fk_zuordnung.schluessel").equals("altlastverdaechtig")
+                        || cidsBean.getProperty("fk_zuordnung.schluessel").equals(
+                            "erfassung_schaedliche_bodenveraenderungen"))) {
+            if ((cidsBean.getProperty("geodaten_id") == null) || cidsBean.getProperty("geodaten_id").equals("")) {
+                final int answer = JOptionPane.showConfirmDialog(
+                        this,
+                        NbBundle.getMessage(
+                            AlboFlaecheEditor.class,
+                            "AlboFlaecheEditor.prepareForSave().geodaten_id.message"),
+                        NbBundle.getMessage(
+                            AlboFlaecheEditor.class,
+                            "AlboFlaecheEditor.prepareForSave().geodaten_id.title"),
+                        JOptionPane.YES_NO_CANCEL_OPTION);
 
-            if (answer == JOptionPane.CANCEL_OPTION) {
-                return false;
-            } else if (answer == JOptionPane.YES_OPTION) {
+                if (answer == JOptionPane.CANCEL_OPTION) {
+                    return false;
+                } else if (answer == JOptionPane.YES_OPTION) {
+                    createLandesregistriernummer();
+                }
             }
         }
 
