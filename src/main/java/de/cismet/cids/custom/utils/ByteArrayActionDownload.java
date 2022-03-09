@@ -12,6 +12,8 @@ import Sirius.navigator.connection.SessionManager;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.util.concurrent.Future;
+
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -33,6 +35,7 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
     protected String taskname;
     protected Object body;
     protected ServerActionParameter[] params;
+    protected Future<ServerActionParameter[]> paramsFuture;
 
     private final String domain;
 
@@ -64,6 +67,29 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
     }
 
     /**
+     * Creates a new ByteArrayActionDownload object.
+     *
+     * @param  taskname           DOCUMENT ME!
+     * @param  body               DOCUMENT ME!
+     * @param  title              DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  filename           DOCUMENT ME!
+     * @param  extension          DOCUMENT ME!
+     * @param  params             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public ByteArrayActionDownload(final String taskname,
+            final Object body,
+            final String title,
+            final String directory,
+            final String filename,
+            final String extension,
+            final Future<ServerActionParameter[]> params,
+            final ConnectionContext connectionContext) {
+        this("WUNDA_BLAU", taskname, body, title, directory, filename, extension, params, connectionContext);
+    }
+
+    /**
      * Creates a new ByteArrayDownload object.
      *
      * @param  domain             DOCUMENT ME!
@@ -89,6 +115,41 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
         this.taskname = taskname;
         this.body = body;
         this.params = params;
+        this.title = title;
+        this.directory = directory;
+        this.connectionContext = connectionContext;
+
+        status = State.WAITING;
+
+        determineDestinationFile(filename, extension);
+    }
+
+    /**
+     * Creates a new ByteArrayDownload object.
+     *
+     * @param  domain             DOCUMENT ME!
+     * @param  taskname           DOCUMENT ME!
+     * @param  body               DOCUMENT ME!
+     * @param  title              The title of the download.
+     * @param  directory          The directory of the download.
+     * @param  filename           The name of the file to be created.
+     * @param  extension          The extension of the file to be created.
+     * @param  params             DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public ByteArrayActionDownload(final String domain,
+            final String taskname,
+            final Object body,
+            final String title,
+            final String directory,
+            final String filename,
+            final String extension,
+            final Future<ServerActionParameter[]> params,
+            final ConnectionContext connectionContext) {
+        this.domain = domain;
+        this.taskname = taskname;
+        this.body = body;
+        this.paramsFuture = params;
         this.title = title;
         this.directory = directory;
         this.connectionContext = connectionContext;
@@ -181,6 +242,10 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
      * @throws  Exception  DOCUMENT ME!
      */
     protected byte[] execAction() throws Exception {
+        if ((paramsFuture != null) && (params == null)) {
+            params = paramsFuture.get();
+        }
+
         final Object ret = SessionManager.getProxy()
                     .executeTask(
                         taskname,
