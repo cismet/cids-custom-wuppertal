@@ -23,6 +23,12 @@ import java.io.ByteArrayOutputStream;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.imageio.ImageIO;
 
@@ -129,56 +135,156 @@ public class AlboReportGenerator {
      *
      * @param  vorgangBean        DOCUMENT ME!
      * @param  parent             DOCUMENT ME!
+     * @param  taskName           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     public static void startVorgangReportDownload(final CidsBean vorgangBean,
             final Component parent,
+            final String taskName,
             final ConnectionContext connectionContext) {
         try {
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(parent)) {
                 final String jobname = DownloadManagerDialog.getInstance().getJobName();
                 final String vorgang = (String)vorgangBean.getProperty("schluessel");
 
-                new SwingWorker<byte[], Void>() {
+                final Future<ServerActionParameter[]> paramsFuture = new FutureParams(vorgangBean);
 
-                        @Override
-                        protected byte[] doInBackground() throws Exception {
-                            try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-                                final BufferedImage image = generateOverviewMap(vorgangBean, true);
-                                ImageIO.write(image, "png", bos);
-                                return bos.toByteArray();
-                            }
-                        }
-
-                        @Override
-                        protected void done() {
-                            final byte[] byteArray;
-                            try {
-                                byteArray = get();
-
-                                DownloadManager.instance()
-                                        .add(new ByteArrayActionDownload(
-                                                AlboVorgangReportServerAction.TASK_NAME,
-                                                new MetaObjectNode(vorgangBean),
-                                                new ServerActionParameter[] {
-                                                    new ServerActionParameter(
-                                                        AlboVorgangReportServerAction.Parameter.MAP_IMAGE_BYTES
-                                                            .toString(),
-                                                        byteArray)
-                                                },
-                                                String.format("Altlastenkataster - Vorgang %s", vorgang),
-                                                jobname,
-                                                String.format("albo_vorgang_%s", vorgang),
-                                                ".pdf",
-                                                connectionContext));
-                            } catch (final Exception ex) {
-                                LOG.error(ex, ex);
-                            }
-                        }
-                    }.execute();
+                DownloadManager.instance()
+                        .add(new ByteArrayActionDownload(
+                                taskName,
+                                new MetaObjectNode(vorgangBean),
+                                String.format("Altlastenkataster - Vorgang %s", vorgang),
+                                jobname,
+                                String.format("albo_vorgang_%s", vorgang),
+                                ".pdf",
+                                paramsFuture,
+                                connectionContext));
             }
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class FutureParams implements Future<ServerActionParameter[]> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private ServerActionParameter[] parameters = null;
+        private volatile boolean done = false;
+        private volatile boolean cancel = false;
+        private final ReentrantLock lock = new ReentrantLock();
+        private Condition condition = lock.newCondition();
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new FutureParams object.
+         *
+         * @param  vorgangBean  DOCUMENT ME!
+         */
+        public FutureParams(final CidsBean vorgangBean) {
+            final Thread backgroundTask = new Thread() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            final byte[] byteArray;
+
+                            try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                                final BufferedImage image = generateOverviewMap(vorgangBean, true);
+                                ImageIO.write(image, "png", bos);
+                                byteArray = bos.toByteArray();
+                            }
+
+                            parameters = new ServerActionParameter[] {
+                                    new ServerActionParameter(
+                                        AlboVorgangReportServerAction.Parameter.MAP_IMAGE_BYTES.toString(),
+                                        byteArray)
+                                };
+                        } catch (Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+
+                        unlock();
+                    }
+                };
+
+            backgroundTask.start();
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         */
+        private void unlock() {
+            lock.lock();
+
+            try {
+                done = true;
+                condition.signalAll();
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        @Override
+        public boolean cancel(final boolean mayInterruptIfRunning) {
+            if (done || cancel) {
+                return false;
+            } else {
+                cancel = true;
+                return true;
+            }
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return cancel;
+        }
+
+        @Override
+        public boolean isDone() {
+            return done || cancel;
+        }
+
+        @Override
+        public ServerActionParameter[] get() throws InterruptedException, ExecutionException {
+            lock.lock();
+            try {
+                if (!isDone()) {
+                    condition.await();
+                }
+
+                return parameters;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        @Override
+        public ServerActionParameter[] get(final long timeout, final TimeUnit unit) throws InterruptedException,
+            ExecutionException,
+            TimeoutException {
+            lock.lock();
+            try {
+                if (!isDone()) {
+                    if (!condition.await(timeout, unit)) {
+                        throw new TimeoutException();
+                    }
+                }
+
+                return parameters;
+            } finally {
+                lock.unlock();
+            }
         }
     }
 }

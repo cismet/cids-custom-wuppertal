@@ -203,12 +203,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panTitle.add(btnLandRegNr, gridBagConstraints);
         btnLandRegNr.setVisible(isEditable());
 
-        btnReport1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/table_export.png")));    // NOI18N
-        btnReport1.setToolTipText(NbBundle.getMessage(AlboFlaecheEditor.class, "TreppeEditor.btnReport.toolTipText")); // NOI18N
+        btnReport1.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/table_export.png"))); // NOI18N
+        btnReport1.setToolTipText(NbBundle.getMessage(
+                AlboFlaecheEditor.class,
+                "AlboFlaecheEditorEditor.btnReport.toolTipText"));                                                  // NOI18N
         btnReport1.setBorderPainted(false);
         btnReport1.setContentAreaFilled(false);
         btnReport1.setFocusPainted(false);
-        btnReport1.setName("btnReport1");                                                                              // NOI18N
+        btnReport1.setName("btnReport1");                                                                           // NOI18N
         btnReport1.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
@@ -688,7 +690,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         final String geom = String.valueOf(cidsBean.getProperty("fk_geom.geo_field"));
         String landesRegNr = (String)cidsBean.getProperty("landesregistriernummer");
 
-        if (landesRegNr.equals("")) {
+        if ((landesRegNr == null) || landesRegNr.equals("")) {
             landesRegNr = null;
         }
 
