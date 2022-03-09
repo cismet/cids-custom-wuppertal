@@ -53,6 +53,8 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlboVorgangExtReportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.AlboVorgangReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangNextSchluesselServerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
@@ -167,6 +169,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton btnReport;
+    javax.swing.JButton btnReport1;
     private javax.swing.ButtonGroup buttonGroup1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialog1;
     private javax.swing.Box.Filler filler2;
@@ -261,6 +264,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         btnReport = new javax.swing.JButton();
+        btnReport1 = new javax.swing.JButton();
         panFooter = new javax.swing.JPanel();
         comboBoxFilterDialog1 = AlboVorgangFlaecheFilterDialog.getInstance();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -358,11 +362,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         panTitle.add(lblTitle, gridBagConstraints);
 
         btnReport.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/printer.png")));                                    // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/icons/printer1.png")));                                   // NOI18N
         btnReport.setText(org.openide.util.NbBundle.getMessage(AlboVorgangEditor.class, "TreppeEditor.btnReport.text")); // NOI18N
         btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
                 AlboVorgangEditor.class,
-                "TreppeEditor.btnReport.toolTipText"));                                                                  // NOI18N
+                "AlboVorgangEditor.btnReport.toolTipText"));                                                             // NOI18N
         btnReport.setBorderPainted(false);
         btnReport.setContentAreaFilled(false);
         btnReport.setFocusPainted(false);
@@ -375,10 +379,35 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         panTitle.add(btnReport, gridBagConstraints);
+
+        btnReport1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/printer2.png"))); // NOI18N
+        btnReport1.setText(org.openide.util.NbBundle.getMessage(
+                AlboVorgangEditor.class,
+                "TreppeEditor.btnReport.text"));                                       // NOI18N
+        btnReport1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                AlboVorgangEditor.class,
+                "AlboVorgangEditor.btnReport2.toolTipText"));                          // NOI18N
+        btnReport1.setBorderPainted(false);
+        btnReport1.setContentAreaFilled(false);
+        btnReport1.setFocusPainted(false);
+        btnReport1.setName("btnReport1");                                              // NOI18N
+        btnReport1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReport1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panTitle.add(btnReport1, gridBagConstraints);
 
         panFooter.setName("panFooter"); // NOI18N
         panFooter.setOpaque(false);
@@ -1083,7 +1112,11 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
      * @param  evt  DOCUMENT ME!
      */
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        AlboReportGenerator.startVorgangReportDownload(getCidsBean(), this, getConnectionContext());
+        AlboReportGenerator.startVorgangReportDownload(
+            getCidsBean(),
+            this,
+            AlboVorgangReportServerAction.TASK_NAME,
+            getConnectionContext());
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     /**
@@ -1155,6 +1188,19 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private void jRadioButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton3ActionPerformed
         lageSelectionChanged();
     }                                                                                 //GEN-LAST:event_jRadioButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReport1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReport1ActionPerformed
+        AlboReportGenerator.startVorgangReportDownload(
+            getCidsBean(),
+            this,
+            AlboVorgangExtReportServerAction.TASK_NAME,
+            getConnectionContext());
+    }                                                                              //GEN-LAST:event_btnReport1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
