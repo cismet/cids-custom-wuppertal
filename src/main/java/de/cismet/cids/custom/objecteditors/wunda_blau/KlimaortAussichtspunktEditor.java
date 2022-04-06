@@ -38,6 +38,8 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
+
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
@@ -533,12 +535,20 @@ public class KlimaortAussichtspunktEditor extends javax.swing.JPanel implements 
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
+
         if (!editable) {
             RendererTools.makeReadOnly(bindingGroup, "cidsBean");
         }
-        bindingGroup.bind();
 
-        jlStandort.setModel(new CustomListModel(cidsBean));
+        if (cidsBean != null) {
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                cidsBean,
+                connectionContext);
+            bindingGroup.bind();
+
+            jlStandort.setModel(new CustomListModel(cidsBean));
+        }
     }
 
     @Override
