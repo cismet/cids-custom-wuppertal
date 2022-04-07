@@ -465,7 +465,7 @@ public class AlboWirtschaftszweigEditor extends javax.swing.JPanel implements Ci
                     cellHasFocus);
 
             if (value != null) {
-                final String text = label.getText();
+                final String text = (label.getText() != null) ? label.getText() : "";
                 final int maxLength = 100;
                 if (text.length() > maxLength) {
                     label.setText(String.format(
