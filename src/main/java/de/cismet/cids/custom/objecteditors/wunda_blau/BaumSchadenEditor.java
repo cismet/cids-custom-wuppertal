@@ -40,6 +40,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +76,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.text.SimpleDateFormat;
 /**
  * DOCUMENT ME!
  *
@@ -378,7 +379,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -391,7 +392,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeGebietActionPerformed
+    } //GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -507,12 +508,12 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_SCHADEN;
         } else {
-            SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+            final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
                     "G: %s - M: %s - Schaden: %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
                     formatTag.format(
-                    getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
+                        getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
                     getCidsBean().getProperty(FIELD__ID));
         }
     }

@@ -64,8 +64,10 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         jPanel54 = new javax.swing.JPanel();
         jLabel75 = new javax.swing.JLabel();
         txtJahrVon = new javax.swing.JFormattedTextField();
+        jButton5 = new javax.swing.JButton();
         jLabel74 = new javax.swing.JLabel();
         txtJahrBis = new javax.swing.JFormattedTextField();
+        jButton6 = new javax.swing.JButton();
         filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -217,6 +219,23 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel54.add(txtJahrVon, gridBagConstraints);
 
+        jButton5.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton5.setBorderPainted(false);
+        jButton5.setContentAreaFilled(false);
+        jButton5.setFocusPainted(false);
+        jButton5.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton5.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton5.setName("jButton5");                                                                       // NOI18N
+        jButton5.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton5.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel54.add(jButton5, gridBagConstraints);
+        jButton6.setVisible(isEditable());
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel74, "bis:");
         jLabel74.setName("jLabel74"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -244,6 +263,23 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel54.add(txtJahrBis, gridBagConstraints);
+
+        jButton6.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton6.setBorderPainted(false);
+        jButton6.setContentAreaFilled(false);
+        jButton6.setFocusPainted(false);
+        jButton6.setMaximumSize(new java.awt.Dimension(16, 16));
+        jButton6.setMinimumSize(new java.awt.Dimension(16, 16));
+        jButton6.setName("jButton6");                                                                       // NOI18N
+        jButton6.setPreferredSize(new java.awt.Dimension(16, 16));
+        jButton6.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel54.add(jButton6, gridBagConstraints);
+        jButton5.setVisible(isEditable());
 
         filler68.setName("filler68"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -449,6 +485,10 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == cbFlaechenart) {
                 AlboFlaecheMainBeschreibungPanel.this.cbFlaechenartActionPerformed(evt);
+            } else if (evt.getSource() == jButton5) {
+                AlboFlaecheMainBeschreibungPanel.this.jButton5ActionPerformed(evt);
+            } else if (evt.getSource() == jButton6) {
+                AlboFlaecheMainBeschreibungPanel.this.jButton6ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -483,6 +523,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private javax.swing.Box.Filler filler42;
     private javax.swing.Box.Filler filler46;
     private javax.swing.Box.Filler filler68;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel12;
@@ -535,6 +577,24 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         updateArtFk();
         updateDetailsPanel();
     }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+        txtJahrVon.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
+        txtJahrBis.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
 
     @Override
     protected void initGui() {

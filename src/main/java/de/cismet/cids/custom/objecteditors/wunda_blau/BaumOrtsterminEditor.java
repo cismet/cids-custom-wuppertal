@@ -38,7 +38,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -69,9 +72,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;import java.text.SimpleDateFormat;
-import java.util.Calendar;
-;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 /**
  * DOCUMENT ME!
  *
@@ -143,8 +144,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         "BaumOrtsterminEditor.btnRemoveTeilrActionPerformed().errortitle";
     public static final String BUNDLE_TEIL_ERRORTEXT = "BaumOrtsterminEditor.btnRemoveTeilActionPerformed().errortext";
     public static final String BUNDLE_NOMELDUNG = "BaumOrtsterminEditor.isOkForSaving().noMeldung";
-
-    
 
     //~ Enums ------------------------------------------------------------------
 
@@ -393,7 +392,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -406,7 +405,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeGebietActionPerformed
+    } //GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -489,9 +488,9 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
             return TITLE_NEW_ORTSTERMIN;
         } else {
             final Calendar calDatumZeit = Calendar.getInstance();
-            calDatumZeit.setTime((Date) getCidsBean().getProperty(FIELD__ZEIT));
+            calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ZEIT));
             final java.util.Date datum = calDatumZeit.getTime();
-            SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+            final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
                     "G: %s - M: %s - Ortstermin: %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
