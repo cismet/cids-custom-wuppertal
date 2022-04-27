@@ -71,7 +71,7 @@ public class AlboFlaecheWindowSearch extends AbstractAbfrageWindowSearch<AlboFla
      * @param  editable  DOCUMENT ME!
      */
     public AlboFlaecheWindowSearch(final boolean editable) {
-        this.searchPanel = new AlboFlaecheSearchPanel(editable);
+        this.searchPanel = new AlboFlaecheSearchPanel(editable, true);
     }
 
     //~ Methods ----------------------------------------------------------------
