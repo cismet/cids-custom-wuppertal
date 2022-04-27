@@ -66,6 +66,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
     //~ Instance fields --------------------------------------------------------
 
     final boolean editable;
+    boolean showVorgaenge = false;
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
     private final Collection<AlboFlaecheArtSearchPanel> artInfoPanels = new ArrayList<>();
@@ -78,7 +79,10 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechentyp;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
+    private javax.swing.JCheckBox cbOnlyVorgang;
+    private javax.swing.JCheckBox cbVorgang;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -104,6 +108,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton5;
@@ -132,6 +137,17 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         this.editable = editable;
     }
 
+    /**
+     * Creates a new AlboFlaecheSearchPanel object.
+     *
+     * @param  editable       DOCUMENT ME!
+     * @param  showVorgaenge  DOCUMENT ME!
+     */
+    public AlboFlaecheSearchPanel(final boolean editable, final boolean showVorgaenge) {
+        this.editable = editable;
+        this.showVorgaenge = showVorgaenge;
+    }
+
     //~ Methods ----------------------------------------------------------------
 
     @Override
@@ -141,6 +157,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
 
         initComponents();
 
+        jPanel7.setVisible(showVorgaenge);
         RendererTools.makeReadOnly(jRadioButton1, !editable);
         RendererTools.makeReadOnly(jRadioButton2, !editable);
         RendererTools.makeReadOnly(jRadioButton5, !editable);
@@ -226,6 +243,12 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        jPanel7 = new javax.swing.JPanel();
+        cbVorgang = new javax.swing.JCheckBox();
+        cbOnlyVorgang = new javax.swing.JCheckBox();
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         jPanel5 = new javax.swing.JPanel();
@@ -526,6 +549,55 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         add(jPanel4, gridBagConstraints);
 
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Vorgänge"));
+        jPanel7.setName("jPanel7"); // NOI18N
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        cbVorgang.setText("Vorgänge mit einbeziehen");
+        cbVorgang.setMinimumSize(new java.awt.Dimension(291, 23));
+        cbVorgang.setName("cbVorgang"); // NOI18N
+        cbVorgang.setPreferredSize(new java.awt.Dimension(291, 23));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel7.add(cbVorgang, gridBagConstraints);
+
+        cbOnlyVorgang.setText("ausschließlich diese");
+        cbOnlyVorgang.setName("cbOnlyVorgang"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                cbVorgang,
+                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
+                cbOnlyVorgang,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+        jPanel7.add(cbOnlyVorgang, gridBagConstraints);
+
+        filler10.setName("filler10"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel7.add(filler10, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        add(jPanel7, gridBagConstraints);
+
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Flächenartspezifische Suche:"));
         jPanel5.setName("jPanel5"); // NOI18N
         jPanel5.setOpaque(false);
@@ -613,7 +685,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         add(jPanel5, gridBagConstraints);
@@ -637,7 +709,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         filler6.setName("filler6"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
@@ -678,6 +750,8 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         configuration.setArtInfos(createArtInfos());
         configuration.setUnterdrueckt(jCheckBox2.isSelected() ? Boolean.TRUE
                                                               : ((!jCheckBox1.isSelected()) ? Boolean.FALSE : null));
+        configuration.setVorgaenge(cbOnlyVorgang.isSelected() ? Boolean.TRUE
+                                                              : ((cbVorgang.isSelected()) ? Boolean.FALSE : null));
         return configuration;
     }
 

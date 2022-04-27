@@ -43,19 +43,28 @@ public class AlboFlaecheFeatureRenderer extends CustomCidsFeatureRenderer {
             final String color = ClientAlboProperties.getInstance().getColorOfArt(art);
             switch (art) {
                 case "altablagerung": {
-                    return Color.getColor(color, Color.BLUE);
+                    return Color.getColor(color, new Color(163, 77, 179));
                 }
                 case "altstandort": {
-                    return Color.getColor(color, Color.CYAN);
+                    return Color.getColor(color, new Color(96, 159, 255));
                 }
                 case "betriebsstandort": {
-                    return Color.getColor(color, Color.PINK);
+                    return Color.getColor(color, new Color(23, 254, 00));
                 }
-                case "sonstige": {
-                    return Color.getColor(color, Color.MAGENTA);
+                case "rcl": {
+                    return Color.getColor(color, new Color(196, 128, 28));
                 }
+                case "stoffliche": {
+                    return Color.getColor(color, Color.RED);
+                }
+                case "bodenaehnlich":
+                case "abraumhalde":
+                case "baugrund":
+                case "in_betrieb":
+                case "sonstiges":
+                case "industrieanlagen":
                 case "ohne_verdacht": {
-                    return Color.getColor(color, Color.GREEN);
+                    return Color.getColor(color, new Color(218, 111, 0));
                 }
             }
         }
