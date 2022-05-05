@@ -48,6 +48,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     private List<CidsBean> cidsBeans;
     private final List<Integer> editableRowIndices = new ArrayList<>();
+    private boolean loading = false;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -182,6 +183,24 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     /**
      * DOCUMENT ME!
+     *
+     * @return  the loading
+     */
+    public boolean isLoading() {
+        return loading;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  loading  the loading to set
+     */
+    public void setLoading(final boolean loading) {
+        this.loading = loading;
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     public void clear() {
         setCidsBeans(null);
@@ -229,6 +248,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
      * @param  cidsBeans  DOCUMENT ME!
      */
     public void setCidsBeans(final List<CidsBean> cidsBeans) {
+        loading = false;
         this.cidsBeans = cidsBeans;
         fireTableDataChanged();
 
@@ -344,7 +364,11 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return (cidsBeans != null) ? cidsBeans.size() : 0;
+        if (loading) {
+            return 1;
+        } else {
+            return (cidsBeans != null) ? cidsBeans.size() : 0;
+        }
     }
 
     @Override
@@ -368,17 +392,25 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(final int rowIndex, final int columnIndex) {
-        if (!isRowWithinBounds(rowIndex) || !isColumnWithinBounds(columnIndex)) {
-            return null;
-        }
-        if ((columnIndex == 0) && isRowsSelectable()) {
-            return selectedRowIndices.contains(rowIndex);
-        }
+        if (loading) {
+            if (getColumnClass(columnIndex).equals(String.class)) {
+                return "Wird geladen";
+            } else {
+                return null;
+            }
+        } else {
+            if (!isRowWithinBounds(rowIndex) || !isColumnWithinBounds(columnIndex)) {
+                return null;
+            }
+            if ((columnIndex == 0) && isRowsSelectable()) {
+                return selectedRowIndices.contains(rowIndex);
+            }
 
-        final CidsBean cidsBean = getCidsBean(rowIndex);
-        final String columnProperty = getColumnProperty(columnIndex);
+            final CidsBean cidsBean = getCidsBean(rowIndex);
+            final String columnProperty = getColumnProperty(columnIndex);
 
-        return ((cidsBean != null) && (columnProperty != null)) ? cidsBean.getProperty(columnProperty) : null;
+            return ((cidsBean != null) && (columnProperty != null)) ? cidsBean.getProperty(columnProperty) : null;
+        }
     }
 
     /**
@@ -392,36 +424,38 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(final Object value, final int rowIndex, final int columnIndex) {
-        final CidsBean cidsBean = getCidsBean(rowIndex);
-        if (cidsBean == null) {
-            return;
-        }
-        try {
-            if (isColumnWithinBounds(columnIndex)) {
-                if ((columnIndex == 0) && isRowsSelectable()) {
-                    final Boolean selected = (Boolean)value;
-                    if (selected) {
-                        selectedRowIndices.add(rowIndex);
-                    } else if (selectedRowIndices.contains(rowIndex)) {
-                        selectedRowIndices.remove(rowIndex);
-                    }
-                } else {
-                    final Object convertedValue;
-                    final String columnProperty = getColumnProperty(columnIndex);
-                    if (columnProperty != null) {
-                        final Class columnClass = getColumnClass(columnIndex);
-                        if ((value instanceof java.util.Date) && (columnClass != null)
-                                    && java.sql.Date.class.equals(columnClass)) {
-                            convertedValue = new java.sql.Date(((java.util.Date)value).getTime());
-                        } else {
-                            convertedValue = value;
+        if (!loading) {
+            final CidsBean cidsBean = getCidsBean(rowIndex);
+            if (cidsBean == null) {
+                return;
+            }
+            try {
+                if (isColumnWithinBounds(columnIndex)) {
+                    if ((columnIndex == 0) && isRowsSelectable()) {
+                        final Boolean selected = (Boolean)value;
+                        if (selected) {
+                            selectedRowIndices.add(rowIndex);
+                        } else if (selectedRowIndices.contains(rowIndex)) {
+                            selectedRowIndices.remove(rowIndex);
                         }
-                        cidsBean.setProperty(columnProperty, convertedValue);
+                    } else {
+                        final Object convertedValue;
+                        final String columnProperty = getColumnProperty(columnIndex);
+                        if (columnProperty != null) {
+                            final Class columnClass = getColumnClass(columnIndex);
+                            if ((value instanceof java.util.Date) && (columnClass != null)
+                                        && java.sql.Date.class.equals(columnClass)) {
+                                convertedValue = new java.sql.Date(((java.util.Date)value).getTime());
+                            } else {
+                                convertedValue = value;
+                            }
+                            cidsBean.setProperty(columnProperty, convertedValue);
+                        }
                     }
                 }
+            } catch (final Exception ex) {
+                LOG.error(ex, ex);
             }
-        } catch (final Exception ex) {
-            LOG.error(ex, ex);
         }
     }
 
