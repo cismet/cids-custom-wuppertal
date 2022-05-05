@@ -24,6 +24,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangSearch;
@@ -682,6 +684,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     //~ Instance fields --------------------------------------------------------
 
     private boolean unlocked = false;
+    private List<CidsBean> originVorgangObjects = new ArrayList<CidsBean>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainAltablagerungPanel
@@ -786,7 +789,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jXTable1MouseClicked
+    private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jXTable1MouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean vorgangBean = ((FlaecheVorgangTableModel)jXTable1.getModel()).getCidsBean(
                     jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
@@ -794,45 +797,47 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(vorgangBean), false);
         }
-    }                                                                        //GEN-LAST:event_jXTable1MouseClicked
+    }//GEN-LAST:event_jXTable1MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList2MouseClicked
+    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean bplanBean = jList2.getSelectedValue();
             ComponentRegistry.getRegistry()
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(bplanBean), false);
         }
-    }                                                                      //GEN-LAST:event_jList2MouseClicked
+    }//GEN-LAST:event_jList2MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         final Object selectedItem = comboBoxFilterDialog1.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean vorgangBean = (CidsBean)selectedItem;
             ((FlaecheVorgangTableModel)jXTable1.getModel()).add(vorgangBean);
+            getCidsBean().setArtificialChangeFlag(true);
         }
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         final CidsBean flaecheBean = ((FlaecheVorgangTableModel)jXTable1.getModel()).getCidsBean(
                 jXTable1.getSelectedRow());
         ((FlaecheVorgangTableModel)jXTable1.getModel()).remove(flaecheBean);
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+        getCidsBean().setArtificialChangeFlag(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
@@ -925,13 +930,59 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
     @Override
     public boolean prepareForSave() {
-        return super.prepareForSave()
+        final boolean prepForSave = super.prepareForSave()
                     && alboFlaecheBeschreibungPanel1.prepareForSave()
                     && alboFlaecheOrtPanel1.prepareForSave()
                     && alboFlaecheStandortePanel1.prepareForSave()
                     && alboFlaecheRclPanel1.prepareForSave()
                     && alboFlaecheStofflichePanel1.prepareForSave()
                     && alboFlaecheAltablagerungPanel1.prepareForSave();
+
+        if (prepForSave) {
+            final CidsBeansTableModel model = (CidsBeansTableModel)jXTable1.getModel();
+
+            if (model != null) {
+                final List<CidsBean> vorgangList = model.getCidsBeans();
+
+                for (final CidsBean vorgangBean : vorgangList) {
+                    final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                            vorgangBean,
+                            "arr_flaechen");
+
+                    if (flaechen != null) {
+                        if (!flaechen.contains(super.getCidsBean())) {
+                            flaechen.add(super.getCidsBean());
+
+                            try {
+                                vorgangBean.persist(getConnectionContext());
+                            } catch (Exception e) {
+                                LOG.error("Cannot persist dependent vorgang object", e);
+                            }
+                        }
+                    }
+                }
+
+                for (final CidsBean vorgangBean : originVorgangObjects) {
+                    if (!vorgangList.contains(vorgangBean)) {
+                        final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                                vorgangBean,
+                                "arr_flaechen");
+
+                        flaechen.remove(super.getCidsBean());
+
+                        try {
+                            vorgangBean.persist(getConnectionContext());
+                        } catch (Exception e) {
+                            LOG.error("Cannot persist dependent vorgang object", e);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -954,7 +1005,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      * DOCUMENT ME!
      */
     private void searchVorgaenge() {
-        jXTable1.setModel(new FlaecheVorgangTableModel());
+        final FlaecheVorgangTableModel model = new FlaecheVorgangTableModel();
+        model.setLoading(true);
+        jXTable1.setModel(model);
 
         if (getCidsBean() != null) {
             new SwingWorker<List<CidsBean>, Void>() {
@@ -981,6 +1034,9 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                                     "WUNDA_BLAU",
                                     getConnectionContext()).getBean());
                         }
+
+                        originVorgangObjects.clear();
+                        originVorgangObjects.addAll(beans);
                         return beans;
                     }
 
@@ -1059,6 +1115,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                 if (vorgangBean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("albo_vorgang")
                             && !flaecheBeans.contains(vorgangBean)) {
                     ((FlaecheVorgangTableModel)jXTable1.getModel()).add(vorgangBean);
+                    getCidsBean().setArtificialChangeFlag(true);
                 }
             }
         }
