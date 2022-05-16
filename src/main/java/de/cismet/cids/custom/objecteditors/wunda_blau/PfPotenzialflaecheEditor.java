@@ -5079,18 +5079,14 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
                 if (search instanceof GeometrySearch) {
                     final GeometrySearch geometrySearch = (GeometrySearch)search;
                     geometrySearch.setGeometry(geometry);
-                    geometrySearch.setBuffer(-2d);
                     searchLabelFieldPanel.refresh();
                 }
             }
             ((GeometrySearch)monSearchResultsList1.getSearch()).setGeometry(geometry);
-            ((GeometrySearch)monSearchResultsList1.getSearch()).setBuffer(-2d);
             monSearchResultsList1.refresh();
             ((GeometrySearch)monSearchResultsList2.getSearch()).setGeometry(geometry);
-            ((GeometrySearch)monSearchResultsList2.getSearch()).setBuffer(-2d);
             monSearchResultsList2.refresh();
             ((GeometrySearch)monSearchResultsList3.getSearch()).setGeometry(geometry);
-            ((GeometrySearch)monSearchResultsList3.getSearch()).setBuffer(-3d); // per mail so gewünscht
             monSearchResultsList3.refresh();
         } else {
             for (final SearchLabelsFieldPanel searchLabelFieldPanel : searchLabelFieldPanels) {
