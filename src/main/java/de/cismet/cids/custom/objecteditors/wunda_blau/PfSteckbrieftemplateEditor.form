@@ -61,7 +61,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Kampagne:"/>
+            <Property name="text" type="java.lang.String" value="Kategorie:"/>
             <Property name="name" type="java.lang.String" value="jLabel11" noResource="true"/>
           </Properties>
           <Constraints>
@@ -74,7 +74,7 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="fastBindableReferenceCombo1" noResource="true"/>
             <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new KampagneListCellRenderer()" type="code"/>
+              <Connection code="new KategorieListCellRenderer()" type="code"/>
             </Property>
           </Properties>
           <BindingProperties>

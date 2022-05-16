@@ -47,7 +47,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
 
         //~ Enum constants -----------------------------------------------------
 
-        FLAECHE, KAMPAGNE
+        FLAECHE, KATEGORIE
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -96,7 +96,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
             throw new Exception("templateBean has to be given");
         }
         if ((this.beans == null) || this.beans.isEmpty()) {
-            throw new Exception("flaecheBeans xor kampagneBeans has to be given");
+            throw new Exception("flaecheBeans xor kategorieBeans has to be given");
         }
     }
 
@@ -115,13 +115,13 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
             final Collection<CidsBean> beans,
             final CidsBean templateBean) {
         final CidsBean singleFlaecheBean = getSingleFlaeche(type, beans);
-        final CidsBean singleKampagneBean = getSingleKampagne(type, beans);
+        final CidsBean singleKategorieBean = getSingleKategorie(type, beans);
         final String baseName = String.format(
                 "%s_%s",
                 (String)templateBean.getProperty("bezeichnung"),
                 (singleFlaecheBean != null)
                     ? (String)singleFlaecheBean.getProperty("nummer")
-                    : ((singleKampagneBean != null) ? (String)singleKampagneBean.getProperty("bezeichnung")
+                    : ((singleKategorieBean != null) ? (String)singleKategorieBean.getProperty("bezeichnung")
                                                     : "diverse_flaechen"));
         return baseName;
     }
@@ -146,8 +146,8 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
      *
      * @return  DOCUMENT ME!
      */
-    private static CidsBean getSingleKampagne(final Type type, final Collection<CidsBean> beans) {
-        return (Type.KAMPAGNE.equals(type)) ? getSingleBean(beans) : null;
+    private static CidsBean getSingleKategorie(final Type type, final Collection<CidsBean> beans) {
+        return (Type.KATEGORIE.equals(type)) ? getSingleBean(beans) : null;
     }
 
     /**
@@ -172,13 +172,13 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
      */
     public static String getTitle(final Type type, final Collection<CidsBean> beans, final CidsBean templateBean) {
         final CidsBean singleFlaecheBean = getSingleFlaeche(type, beans);
-        final CidsBean singleKampagneBean = getSingleKampagne(type, beans);
+        final CidsBean singleKategorieBean = getSingleKategorie(type, beans);
         return String.format(
                 "%s - %s",
                 (String)templateBean.getProperty("bezeichnung"),
                 (singleFlaecheBean != null)
                     ? (String)singleFlaecheBean.getProperty("bezeichnung")
-                    : ((singleKampagneBean != null) ? (String)singleKampagneBean.getProperty("bezeichnung")
+                    : ((singleKategorieBean != null) ? (String)singleKategorieBean.getProperty("bezeichnung")
                                                     : "Potenzialflächen"));
     }
 
@@ -191,7 +191,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
             for (final CidsBean flaecheBean : beans) {
                 params.add(new ServerActionParameter(
                         (Type.FLAECHE.equals(type) ? PotenzialflaecheReportServerAction.Parameter.POTENZIALFLAECHE
-                                                   : PotenzialflaecheReportServerAction.Parameter.KAMPAGNE).toString(),
+                                                   : PotenzialflaecheReportServerAction.Parameter.KATEGORIE).toString(),
                         new MetaObjectNode(flaecheBean)));
             }
         }
