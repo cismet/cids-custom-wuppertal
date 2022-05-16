@@ -54,20 +54,20 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  kampagneBean          DOCUMENT ME!
+     * @param  kategorieBean          DOCUMENT ME!
      * @param  selectedTemplateBean  DOCUMENT ME!
      * @param  connectionContext     DOCUMENT ME!
      */
-    private static void startZipDownload(final CidsBean kampagneBean,
+    private static void startZipDownload(final CidsBean kategorieBean,
             final CidsBean selectedTemplateBean,
             final ConnectionContext connectionContext) {
         if (selectedTemplateBean != null) {
             try {
                 final Download download = new PotenzialflaecheReportDownload(
-                        PotenzialflaecheReportDownload.Type.KAMPAGNE,
+                        PotenzialflaecheReportDownload.Type.KATEGORIE,
                         false,
                         selectedTemplateBean,
-                        Arrays.asList(kampagneBean),
+                        Arrays.asList(kategorieBean),
                         connectionContext);
                 DownloadManager.instance().add(download);
             } catch (final Exception ex) {
@@ -144,24 +144,24 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param   kampagneBean       DOCUMENT ME!
+     * @param   kategorieBean       DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    private static Collection<CidsBean> identifyActiveTemplateBeans(final CidsBean kampagneBean,
+    private static Collection<CidsBean> identifyActiveTemplateBeans(final CidsBean kategorieBean,
             final ConnectionContext connectionContext) throws Exception {
-        return (kampagneBean != null)
-            ? (Collection<CidsBean>)identifyActiveTemplateBeansMap(Arrays.asList(kampagneBean), connectionContext)
-                    .get(kampagneBean) : null;
+        return (kategorieBean != null)
+            ? (Collection<CidsBean>)identifyActiveTemplateBeansMap(Arrays.asList(kategorieBean), connectionContext)
+                    .get(kategorieBean) : null;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   kampagneBeans      DOCUMENT ME!
+     * @param   kategorieBeans      DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -169,14 +169,14 @@ public class PfPotenzialflaecheReportGenerator {
      * @throws  Exception  DOCUMENT ME!
      */
     private static MultiValueMap identifyActiveTemplateBeansMap(
-            final Collection<CidsBean> kampagneBeans,
+            final Collection<CidsBean> kategorieBeans,
             final ConnectionContext connectionContext) throws Exception {
         final MultiValueMap activeTemplateBeansMap = new MultiValueMap();
 
-        if (kampagneBeans != null) {
-            for (final CidsBean kampagneBean : kampagneBeans) {
-                if (kampagneBean != null) {
-                    for (final CidsBean templateBean : kampagneBean.getBeanCollectionProperty("n_steckbrieftemplates")) {
+        if (kategorieBeans != null) {
+            for (final CidsBean kategorieBean : kategorieBeans) {
+                if (kategorieBean != null) {
+                    for (final CidsBean templateBean : kategorieBean.getBeanCollectionProperty("n_steckbrieftemplates")) {
                         if (templateBean != null) {
                             final String confAttr = (String)templateBean.getProperty("conf_attr");
                             if ((confAttr != null) && !confAttr.trim().isEmpty()) {
@@ -184,10 +184,10 @@ public class PfPotenzialflaecheReportGenerator {
                                                 SessionManager.getSession().getUser(),
                                                 confAttr,
                                                 connectionContext)) {
-                                    activeTemplateBeansMap.put(kampagneBean, templateBean);
+                                    activeTemplateBeansMap.put(kategorieBean, templateBean);
                                 }
                             } else {
-                                activeTemplateBeansMap.put(kampagneBean, templateBean);
+                                activeTemplateBeansMap.put(kategorieBean, templateBean);
                             }
                         }
                     }
@@ -233,10 +233,10 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  kampagneBean       flaecheBean DOCUMENT ME!
+     * @param  kategorieBean       flaecheBean DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public static void startDownloadForKampagne(final CidsBean kampagneBean,
+    public static void startDownloadForKategorie(final CidsBean kategorieBean,
             final ConnectionContext connectionContext) {
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getMainWindow())) {
@@ -244,17 +244,17 @@ public class PfPotenzialflaecheReportGenerator {
 
                     @Override
                     protected Collection<CidsBean> doInBackground() throws Exception {
-                        return identifyActiveTemplateBeans(kampagneBean, connectionContext);
+                        return identifyActiveTemplateBeans(kategorieBean, connectionContext);
                     }
 
                     @Override
                     protected void done() {
                         try {
                             final Collection<CidsBean> activeTemplateBeans = get();
-                            final Integer mainTemplateId = (Integer)kampagneBean.getProperty(
+                            final Integer mainTemplateId = (Integer)kategorieBean.getProperty(
                                     "haupt_steckbrieftemplate_id");
                             startZipDownload(
-                                kampagneBean,
+                                kategorieBean,
                                 askForSelection(mainTemplateId, activeTemplateBeans),
                                 connectionContext);
                         } catch (final Exception ex) {
@@ -276,21 +276,21 @@ public class PfPotenzialflaecheReportGenerator {
      * @param  connectionContext  DOCUMENT ME!
      */
     public static void startDownloadForFlaeche(final CidsBean flaecheBean, final ConnectionContext connectionContext) {
-        final CidsBean kampagneBean = (flaecheBean != null) ? (CidsBean)flaecheBean.getProperty("kampagne") : null;
+        final CidsBean kategorieBean = (flaecheBean != null) ? (CidsBean)flaecheBean.getProperty("kampagne") : null;
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         ComponentRegistry.getRegistry().getMainWindow())) {
             new SwingWorker<Collection<CidsBean>, Void>() {
 
                     @Override
                     protected Collection<CidsBean> doInBackground() throws Exception {
-                        return identifyActiveTemplateBeans(kampagneBean, connectionContext);
+                        return identifyActiveTemplateBeans(kategorieBean, connectionContext);
                     }
 
                     @Override
                     protected void done() {
                         try {
                             final Collection<CidsBean> activeTemplateBeans = get();
-                            final Integer mainTemplateId = (Integer)kampagneBean.getProperty(
+                            final Integer mainTemplateId = (Integer)kategorieBean.getProperty(
                                     "haupt_steckbrieftemplate_id");
                             startPdfDownload(
                                 flaecheBean,
@@ -317,9 +317,9 @@ public class PfPotenzialflaecheReportGenerator {
      */
     public static void startDownloadForFlaechen(final Collection<CidsBean> flaecheBeans,
             final ConnectionContext connectionContext) {
-        final MultiValueMap flaecheToKampagneMaps = new MultiValueMap();
+        final MultiValueMap flaecheToKategorieMaps = new MultiValueMap();
         for (final CidsBean flaecheBean : flaecheBeans) {
-            flaecheToKampagneMaps.put((CidsBean)flaecheBean.getProperty("kampagne"), flaecheBean);
+            flaecheToKategorieMaps.put((CidsBean)flaecheBean.getProperty("kampagne"), flaecheBean);
         }
 
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
@@ -328,21 +328,21 @@ public class PfPotenzialflaecheReportGenerator {
 
                     @Override
                     protected MultiValueMap doInBackground() throws Exception {
-                        return identifyActiveTemplateBeansMap(flaecheToKampagneMaps.keySet(), connectionContext);
+                        return identifyActiveTemplateBeansMap(flaecheToKategorieMaps.keySet(), connectionContext);
                     }
 
                     @Override
                     protected void done() {
                         try {
                             final MultiValueMap activeTemplateBeansMap = get();
-                            for (final CidsBean kampagneBean : (Set<CidsBean>)activeTemplateBeansMap.keySet()) {
+                            for (final CidsBean kategorieBean : (Set<CidsBean>)activeTemplateBeansMap.keySet()) {
                                 final Collection<CidsBean> activeTemplateBeans = activeTemplateBeansMap.getCollection(
-                                        kampagneBean);
-                                final Integer mainTemplateId = (Integer)kampagneBean.getProperty(
+                                        kategorieBean);
+                                final Integer mainTemplateId = (Integer)kategorieBean.getProperty(
                                         "haupt_steckbrieftemplate_id");
                                 final CidsBean templateBean = askForSelection(mainTemplateId, activeTemplateBeans);
                                 startZipDownload(
-                                    flaecheToKampagneMaps.getCollection(kampagneBean),
+                                    flaecheToKategorieMaps.getCollection(kategorieBean),
                                     templateBean,
                                     connectionContext);
                             }

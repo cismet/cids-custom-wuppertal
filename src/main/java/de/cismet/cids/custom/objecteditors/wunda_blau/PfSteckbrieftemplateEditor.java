@@ -123,17 +123,13 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        fastBindableReferenceCombo1 = new de.cismet.cids.editors.FastBindableReferenceCombo(
-                "%1$2s",
-                new String[] { "bezeichnung" });
+        fastBindableReferenceCombo1 = new de.cismet.cids.editors.FastBindableReferenceCombo("%1$2s",new String[] {"bezeichnung"});
         jLabel9 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
 
@@ -155,12 +151,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
 
         jTextField4.setName("jTextField4"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezeichnung}"),
-                jTextField4,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezeichnung}"), jTextField4, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -170,7 +161,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jTextField4, gridBagConstraints);
 
-        jLabel11.setText("Kampagne:");
+        jLabel11.setText("Kategorie:");
         jLabel11.setName("jLabel11"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -179,14 +170,9 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         jPanel1.add(jLabel11, gridBagConstraints);
 
         fastBindableReferenceCombo1.setName("fastBindableReferenceCombo1"); // NOI18N
-        fastBindableReferenceCombo1.setRenderer(new KampagneListCellRenderer());
+        fastBindableReferenceCombo1.setRenderer(new KategorieListCellRenderer());
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kampagne}"),
-                fastBindableReferenceCombo1,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kampagne}"), fastBindableReferenceCombo1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -206,12 +192,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
 
         jTextField6.setName("jTextField6"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.link}"),
-                jTextField6,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.link}"), jTextField6, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -231,12 +212,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
 
         jTextField7.setName("jTextField7"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.conf_attr}"),
-                jTextField7,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.conf_attr}"), jTextField7, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -286,7 +262,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         add(jPanel1, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -432,7 +408,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
      *
      * @version  $Revision$, $Date$
      */
-    private static class KampagneListCellRenderer extends DefaultListCellRenderer {
+    private static class KategorieListCellRenderer extends DefaultListCellRenderer {
 
         //~ Methods ------------------------------------------------------------
 

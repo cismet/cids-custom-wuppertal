@@ -61,7 +61,7 @@ public class NewPotenzialflaecheAction extends AbstractCidsBeanAction implements
         putValue(
             NAME,
             String.format(
-                "Neue Potenzialfläche der Kampagne \"%s\"",
+                "Neue Potenzialfläche der Kategorie \"%s\"",
                 (String)cidsBean.getProperty("bezeichnung")));
         final ImageIcon icon = new ImageIcon(cidsBean.getMetaObject().getMetaClass().getIcon().getImageData());
         putValue(SMALL_ICON, icon);
