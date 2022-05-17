@@ -333,7 +333,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeSchadenActionPerformed
+    private void btnChangeSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeSchadenActionPerformed
         final Object selectedItem = comboBoxFilterDialogSchaden.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean schadenBean = (CidsBean)selectedItem;
@@ -346,7 +346,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeSchadenActionPerformed
+    }//GEN-LAST:event_btnChangeSchadenActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -453,14 +453,13 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         } else {
             final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
-                    "G: %s - M: %s - S: %s, %s - E:%s, %s",
+                    "G: %s - M: %s - S: %s, %s - E:%s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
                     formatTag.format(
                         getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
                     getCidsBean().getProperty(FIELD__SCHADEN_ID),
                     getCidsBean().getProperty(FIELD__SCHADEN_ART),
-                    getCidsBean().getProperty(FIELD__ID),
-                    getCidsBean().getProperty(FIELD__ART));
+                    getCidsBean().getProperty(FIELD__ID));
         }
     }
 
