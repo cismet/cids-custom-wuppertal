@@ -334,6 +334,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtNummer);
         }
     }
 

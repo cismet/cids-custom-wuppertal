@@ -204,8 +204,12 @@ public class BaumLagePanel extends javax.swing.JPanel implements Disposable {
                 if (cidsBean.getProperty(FIELD__GEOM) != null) {
                     panPreviewMap.initMap(cidsBean, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
                 } else {
-                    final CidsBean newGeom = createDefaultGeom(connectionContext);
-                    panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
+                    if (cidsBean.getProperty(FIELD__GEO_FIELD) != null){
+                        panPreviewMap.initMap(cidsBean, FIELD__GEO_FIELD, bufferMeter);
+                    } else{
+                        final CidsBean newGeom = createDefaultGeom(connectionContext);
+                        panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter);
+                    }
                 }
             } catch (final Exception ex) {
                 LOG.warn("Map window not set.", ex);

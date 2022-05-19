@@ -334,6 +334,7 @@ public class BaumWurzelEditor extends DefaultCustomObjectEditor implements CidsB
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtNummer);
         }
     }
 
