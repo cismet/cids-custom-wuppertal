@@ -324,6 +324,7 @@ public class BaumKroneEditor extends DefaultCustomObjectEditor implements CidsBe
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtNummer);
         }
     }
 

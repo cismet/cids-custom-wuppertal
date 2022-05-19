@@ -334,6 +334,7 @@ public class BaumStammEditor extends DefaultCustomObjectEditor implements CidsBe
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtNummer);
         }
     }
 
