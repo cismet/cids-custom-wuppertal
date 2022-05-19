@@ -515,7 +515,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         tfN.setText("");
         tfRahmenkartenNr.setText("");
         cbGeoms.setSelectedItem(null);
-        setAlwaysOnTop(true);
         Collection<CidsBean> beansToPrint = getObjectBeansInMap();
         if (beansToPrint.isEmpty()) {
             beansToPrint = getBeansFromTreeSelection();
