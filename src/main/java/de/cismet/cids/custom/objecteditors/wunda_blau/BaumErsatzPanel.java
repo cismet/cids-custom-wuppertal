@@ -1603,6 +1603,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                         }//switch
                     }
                 };
+                
+                TableCellListener tcl = new TableCellListener(xtBaum, action);
 
                 //Wenn sich die Selektion einer Zeile aendert
                 xtBaum.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
