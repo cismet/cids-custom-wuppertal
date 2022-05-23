@@ -64,6 +64,7 @@ import javax.swing.text.DefaultFormatter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
+import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
@@ -147,7 +148,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     public static final String BUNDLE_NOLOAD = "BaumGebietEditor.loadPictureWithUrl().noLoad";
     public static final String BUNDLE_NONAME = "BaumGebietEditor.isOkForSaving().noName";
+    public static final String BUNDLE_NAMEFALSE = "BaumGebietEditor.isOkForSaving().NameFalse";
     public static final String BUNDLE_NOAZ = "BaumGebietEditor.isOkForSaving().noAz";
+    public static final String BUNDLE_AZFALSE = "BaumGebietEditor.isOkForSaving().AzFalse";
     public static final String BUNDLE_DUPLICATEAZ = "BaumGebietEditor.isOkForSaving().duplicateAz";
     public static final String BUNDLE_NOSTREET = "BaumGebietEditor.isOkForSaving().noStrasse";
     public static final String BUNDLE_NOGEOM = "BaumGebietEditor.isOkForSaving().noGeom";
@@ -181,7 +184,20 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @version  $Revision$, $Date$
      */
+    private static enum patternCases {
+
+        //~ Enum constants -----------------------------------------------------
+
+        withae, withoutae
+    }
+    
     @Getter @Setter private static Integer counterMeldung = -1;
+
+    /**
+     *
+     */
+    public static String beschrPattern = ""; // [0-9a-zA-Z\\s\\-\\_\\ä\\ö\\ü\\ß]{1,}";
+    public static String azPattern = ""; //[0-9a-zA-Z\\-\\_]{1,}";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -194,8 +210,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             ADRESSE_TOSTRING_FIELDS);
 
     private Boolean redundantName = false;
+    public Boolean boolNameOk = false;
+    public Boolean boolAzOk = false;
     private CidsBean beanHNr;
 
+    private SwingWorker worker_beschr;
+    private SwingWorker worker_az;
+    
     private final boolean editor;
     private boolean areChildrenLoad = false;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
@@ -276,6 +297,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        beschrPattern = BaumConfProperties.getInstance().getBeschrPattern();
+        azPattern = BaumConfProperties.getInstance().getAzPattern();
 
         lstMeldungen.setCellRenderer(new DefaultListCellRenderer() {
 
@@ -1093,13 +1116,29 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             if (getCidsBean().getProperty(FIELD__HNR) != null) {
                 hnr = getCidsBean().getProperty(FIELD__HNR).toString();
                 hnr = hnr.trim();
-                hnr = hnr.replace(" ", "-");
+                hnr = hnr.replace("  ", "--");
+                hnr = hnr.replace(" ", "--");
             }
             if ((getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)
-                        && !getCidsBean().getProperty(FIELD__NAME).toString().isEmpty()) {
-                aktenzeichen = getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL).toString()
+                        && !getCidsBean().getProperty(FIELD__NAME).toString().isEmpty()
+                        && boolNameOk){
+                String str = getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL).toString();
+                str = str.trim();
+                str = str.replace(" ", "--");
+                str = str.replace(".", "");
+                String name = getCidsBean().getProperty(FIELD__NAME).toString();
+                name = name.trim();
+                name = name.replace(" ", "--");
+                name = name.replace("Ä", "Ae");
+                name = name.replace("ä", "ae");
+                name = name.replace("Ö", "Oe");
+                name = name.replace("ö", "oe");
+                name = name.replace("Ü", "Ue");
+                name = name.replace("ü", "ue");
+                name = name.replace("ß", "ss");
+                aktenzeichen = str
                             + "_" + hnr
-                            + "_" + getCidsBean().getProperty(FIELD__NAME).toString();
+                            + "_" + name;
                 if (getCidsBean().getProperty(FIELD__AZ) != null) {
                     final Object[] options = { "Ja, AZ überschreiben", "Abbrechen" };
                     final int result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
@@ -1415,6 +1454,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 lblAktenzeichen.setForeground(colorAlarm);
             }
         }
+        if (evt.getPropertyName().equals(FIELD__NAME)){
+            checkSigns(patternCases.withae);
+        }
+        if (evt.getPropertyName().equals(FIELD__AZ)){
+            checkSigns(patternCases.withoutae);
+        }
         if (evt.getPropertyName().equals(FIELD__HNR)) {
             if (((getCidsBean().getMetaObject().getStatus() != MetaObject.NEW)
                             && (evt.getNewValue() != beanHNr))
@@ -1456,6 +1501,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("No name specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
                 save = false;
+            } else {
+                if (!boolNameOk){
+                    LOG.warn("False name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NAMEFALSE));
+                    save = false;
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
@@ -1472,6 +1523,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     LOG.warn("Duplicate name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATEAZ));
                     save = false;
+                }else {
+                    if (!boolAzOk){
+                        LOG.warn("False name specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_AZFALSE));
+                        save = false;
+                    }
                 }
             }
         } catch (final MissingResourceException ex) {
@@ -1692,7 +1749,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }.execute();
     }
-
+    
     /**
      * DOCUMENT ME!
      *
@@ -1724,6 +1781,55 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     }
                 }
             }.execute();
+    }
+    
+    private void checkSigns(final patternCases fall) {
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+            String pattern = null;
+            JTextField field = null;
+            
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    if (fall.equals(patternCases.withae)){
+                        pattern = beschrPattern;
+                        field = txtName;
+                    } else{
+                        pattern = azPattern;
+                        field = txtAktenzeichen;
+                    }
+                    return field.getText().matches(pattern);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        if (!isCancelled()) {
+                            boolean result = get();
+                            if (fall.equals(patternCases.withae)){
+                                boolNameOk = result;
+                            } else {
+                                boolAzOk = result;
+                            }
+                        }
+                    } catch (final InterruptedException | ExecutionException ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            };
+        if (fall.equals(patternCases.withae)){
+            if (worker_beschr != null) {
+                worker_beschr.cancel(true);
+            } 
+                worker_beschr = worker;
+                worker_beschr.execute();
+        } else{
+            if (worker_az != null) {
+                worker_az.cancel(true);
+            } 
+                worker_az = worker;
+                worker_az.execute();
+        }
+        
     }
 
     //~ Inner Classes ----------------------------------------------------------

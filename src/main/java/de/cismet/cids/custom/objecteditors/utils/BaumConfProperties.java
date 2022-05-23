@@ -33,7 +33,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 /**
  * DOCUMENT ME!
  *
- * @author   jruiz
+ * @author   sandra
  * @version  $Revision$, $Date$
  */
 @Getter
@@ -47,6 +47,8 @@ public class BaumConfProperties {
     //~ Instance fields --------------------------------------------------------
 
     private final Double bufferMeter;
+    private final String beschrPattern;
+    private final String azPattern;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -57,6 +59,8 @@ public class BaumConfProperties {
      */
     private BaumConfProperties(final Properties properties) {
         bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
+        beschrPattern = String.valueOf(readProperty(properties, "BESCHR__PATTERN", null));
+        azPattern = String.valueOf(readProperty(properties, "AZ__PATTERN", null));
     }
 
     //~ Methods ----------------------------------------------------------------
