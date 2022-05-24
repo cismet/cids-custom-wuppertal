@@ -1118,6 +1118,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 hnr = hnr.trim();
                 hnr = hnr.replace("  ", "--");
                 hnr = hnr.replace(" ", "--");
+                hnr = replaceUmlaute(hnr);
+                hnr = hnr.replace(".", "");
             }
             if ((getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)
                         && !getCidsBean().getProperty(FIELD__NAME).toString().isEmpty()
@@ -1125,17 +1127,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 String str = getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL).toString();
                 str = str.trim();
                 str = str.replace(" ", "--");
-                str = str.replace(".", "");
                 String name = getCidsBean().getProperty(FIELD__NAME).toString();
                 name = name.trim();
                 name = name.replace(" ", "--");
-                name = name.replace("Ä", "Ae");
-                name = name.replace("ä", "ae");
-                name = name.replace("Ö", "Oe");
-                name = name.replace("ö", "oe");
-                name = name.replace("Ü", "Ue");
-                name = name.replace("ü", "ue");
-                name = name.replace("ß", "ss");
+                name = replaceUmlaute(name);
                 aktenzeichen = str
                             + "_" + hnr
                             + "_" + name;
@@ -1241,6 +1236,17 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     return compoDatum;
                 }
             });
+    }
+    
+    private String replaceUmlaute(String toReplace){
+        toReplace = toReplace.replace("Ä", "Ae");
+        toReplace = toReplace.replace("ä", "ae");
+        toReplace = toReplace.replace("Ö", "Oe");
+        toReplace = toReplace.replace("ö", "oe");
+        toReplace = toReplace.replace("Ü", "Ue");
+        toReplace = toReplace.replace("ü", "ue");
+        toReplace = toReplace.replace("ß", "ss");
+        return toReplace;
     }
     /**
      * DOCUMENT ME!
