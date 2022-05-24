@@ -1476,7 +1476,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                         cbGeomErsatz.setSelectedIndex(-1);
                     }
                 }
-                if (getCidsBean().getProperty(FIELD__ANZAHL) == null){
+                if (getCidsBean()!= null &&
+                        getCidsBean().getProperty(FIELD__ANZAHL) == null){
                     getCidsBean().setProperty(FIELD__ANZAHL, 0);
                 }
                 setMapWindow();
@@ -1683,7 +1684,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         if (isEditor()) {
             nullNoEdit(getCidsBean() != null);
         }
-        if(baumBeans.size() > 0){
+        if(baumBeans != null && baumBeans.size() > 0){
             xtBaum.setRowSelectionInterval(0, 0);
             if(isEditor()){
                 getSorteCellEditor().getComboBox().setEnabled(true);
