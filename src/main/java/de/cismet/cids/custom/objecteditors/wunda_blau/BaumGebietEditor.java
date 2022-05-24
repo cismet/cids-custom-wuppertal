@@ -1350,6 +1350,10 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             allowAddRemove();
         }
         beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
+        if (isEditor()){
+            checkSigns(patternCases.withae);
+            checkSigns(patternCases.withoutae);
+        }
     }
 
     /**
