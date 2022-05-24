@@ -120,6 +120,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     public static final String FIELD__ID = "id";                           // baum_schaden
     public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";       // baum_schaden
     public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";       // baum_schaden
+    public static final String FIELD__SCHADEN_EFEU = "efeu";               // baum_schaden
     public static final String FIELD__SCHADEN_KRONE = "kronenschaden";     // baum_schaden
     public static final String FIELD__SCHADEN_STAMM = "stammschaden";      // baum_schaden
     public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";    // baum_schaden
@@ -1175,6 +1176,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                     beanSchaden.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_KRONE, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_OHNE, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_EFEU, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_PRIVAT, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_STAMM, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_STURM, false);
