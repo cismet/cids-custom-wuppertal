@@ -1365,7 +1365,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      * DOCUMENT ME!
      */
     private void setMapWindow() {
-        baumLagePanel.setMapWindow(getCidsBean(), getConnectionContext());
+        String mapUrl = null;
+        try {
+            mapUrl = BaumConfProperties.getInstance().getUrlDefault();
+        } catch (final Exception ex) {
+            LOG.warn("Get no conf properties.", ex);
+        }
+        baumLagePanel.setMapWindow(getCidsBean(), 
+                getConnectionContext(),
+                mapUrl);
     }
 
     /**

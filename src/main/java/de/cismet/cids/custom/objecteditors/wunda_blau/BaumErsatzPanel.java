@@ -77,6 +77,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
+import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.FastBindableReferenceComboCellEditor;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
@@ -1572,10 +1573,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                     @Override
                     public void actionPerformed(ActionEvent e){
                         TableCellListener tcl = (TableCellListener)e.getSource();
-                        System.out.println("Row   : " + tcl.getRow());
-                        System.out.println("Column: " + tcl.getColumn());
-                        System.out.println("Old   : " + tcl.getOldValue());
-                        System.out.println("New   : " + tcl.getNewValue());
                         switch (tcl.getColumn()) {
                                 case 0:
                                     Object oGeom = tcl.getNewValue(); 
@@ -1800,14 +1797,30 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      * DOCUMENT ME!
      */
     private void setMapWindow() {
-        baumLagePanel.setMapWindow(getCidsBean(), getConnectionContext());
+        String mapUrl = null;
+        try {
+            mapUrl = BaumConfProperties.getInstance().getUrlDefault();
+        } catch (final Exception ex) {
+            LOG.warn("Get no conf properties.", ex);
+        }
+        baumLagePanel.setMapWindow(getCidsBean(), 
+                getConnectionContext(),
+                mapUrl);
     }
     
     /**
      * DOCUMENT ME!
      */
     private void setErsatzMapWindow(CidsBean ersatzBean) {
-        baumErsatzLagePanel.setMapWindow(ersatzBean, getConnectionContext());
+        String mapUrl = null;
+        try {
+            mapUrl = BaumConfProperties.getInstance().getUrlErsatzbaum();
+        } catch (final Exception ex) {
+            LOG.warn("Get no conf properties.", ex);
+        }
+        baumErsatzLagePanel.setMapWindow(ersatzBean, 
+                getConnectionContext(),
+                mapUrl);
     }
     /**
      * DOCUMENT ME!

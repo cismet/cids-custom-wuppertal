@@ -49,6 +49,10 @@ public class BaumConfProperties {
     private final Double bufferMeter;
     private final String beschrPattern;
     private final String azPattern;
+    private final String urlErsatzbaum;
+    private final String urlFestsetzung;
+    private final String urlSchaden;
+    private final String urlDefault;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,6 +65,10 @@ public class BaumConfProperties {
         bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
         beschrPattern = String.valueOf(readProperty(properties, "BESCHR__PATTERN", null));
         azPattern = String.valueOf(readProperty(properties, "AZ__PATTERN", null));
+        urlErsatzbaum = String.valueOf(readProperty(properties, "MAP_CALL_STRING_ERSATZBAUM", null));
+        urlFestsetzung = String.valueOf(readProperty(properties, "MAP_CALL_STRING_FESTSETZUNG", null));
+        urlSchaden = String.valueOf(readProperty(properties, "MAP_CALL_STRING_SCHADEN", null));
+        urlDefault = String.valueOf(readProperty(properties, "MAP_CALL_STRING_DEFAULT", null));
     }
 
     //~ Methods ----------------------------------------------------------------
