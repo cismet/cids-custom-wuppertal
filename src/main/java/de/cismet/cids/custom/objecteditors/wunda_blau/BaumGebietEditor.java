@@ -233,6 +233,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbStrasse;
+    private DefaultBindableDateChooser dcErneut;
     private DefaultBindableDateChooser dcMeldung;
     private JDialog dlgAddMeldung;
     private Box.Filler filler3;
@@ -242,6 +243,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblAktenzeichen;
     private JLabel lblAuswaehlenMeldung;
     private JLabel lblBemerkung;
+    private JLabel lblErneut;
     private JLabel lblGeom;
     private JLabel lblHNrRenderer;
     private JLabel lblHnr;
@@ -394,6 +396,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         if (!isEditor()){
             lblHNrRenderer = new JLabel();
         }
+        dcErneut = new DefaultBindableDateChooser();
+        lblErneut = new JLabel();
         jPanelMeldungen = new JPanel();
         panMeldung = new JPanel();
         panMeldungenMain = new JPanel();
@@ -550,7 +554,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -570,7 +574,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 5;
+            gridBagConstraints.gridy = 6;
             gridBagConstraints.gridwidth = 4;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -654,7 +658,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         panZusatz.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -783,6 +787,31 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             gridBagConstraints.insets = new Insets(2, 5, 2, 5);
             panDaten.add(lblHNrRenderer, gridBagConstraints);
         }
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.erneut}"), dcErneut, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(dcErneut.getConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(dcErneut, gridBagConstraints);
+
+        lblErneut.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblErneut.setText("Wiedervorlage:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblErneut, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1152,6 +1181,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     getCidsBean().setProperty(FIELD__AZ, aktenzeichen);
                     lblAktenzeichen.setForeground(colorNormal);
                     azGeneriert = true;
+                    checkSigns(patternCases.withoutae);
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
@@ -1368,6 +1398,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             taBemerkung.setEnabled(false);
             lblGeom.setVisible(isEditor());
             panControlsNewMeldungen.setVisible(isEditor());
+            RendererTools.makeReadOnly(dcErneut);
         }
     }
 
