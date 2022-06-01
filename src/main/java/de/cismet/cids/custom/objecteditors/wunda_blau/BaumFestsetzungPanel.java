@@ -57,6 +57,7 @@ import javax.swing.SpinnerNumberModel;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
+import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -768,6 +769,14 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
      * DOCUMENT ME!
      */
     private void setMapWindow() {
-        baumLagePanel.setMapWindow(getCidsBean(), getConnectionContext());
+        String mapUrl = null;
+        try {
+            mapUrl = BaumConfProperties.getInstance().getUrlFestsetzung();
+        } catch (final Exception ex) {
+            LOG.warn("Get no conf properties.", ex);
+        }
+        baumLagePanel.setMapWindow(getCidsBean(), 
+                getConnectionContext(),
+                mapUrl);
     }
 }

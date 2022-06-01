@@ -33,7 +33,7 @@ import de.cismet.connectioncontext.ConnectionContext;
 /**
  * DOCUMENT ME!
  *
- * @author   jruiz
+ * @author   sandra
  * @version  $Revision$, $Date$
  */
 @Getter
@@ -47,6 +47,12 @@ public class BaumConfProperties {
     //~ Instance fields --------------------------------------------------------
 
     private final Double bufferMeter;
+    private final String beschrPattern;
+    private final String azPattern;
+    private final String urlErsatzbaum;
+    private final String urlFestsetzung;
+    private final String urlSchaden;
+    private final String urlDefault;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -57,6 +63,12 @@ public class BaumConfProperties {
      */
     private BaumConfProperties(final Properties properties) {
         bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
+        beschrPattern = String.valueOf(readProperty(properties, "BESCHR__PATTERN", null));
+        azPattern = String.valueOf(readProperty(properties, "AZ__PATTERN", null));
+        urlErsatzbaum = String.valueOf(readProperty(properties, "MAP_CALL_STRING_ERSATZBAUM", null));
+        urlFestsetzung = String.valueOf(readProperty(properties, "MAP_CALL_STRING_FESTSETZUNG", null));
+        urlSchaden = String.valueOf(readProperty(properties, "MAP_CALL_STRING_SCHADEN", null));
+        urlDefault = String.valueOf(readProperty(properties, "MAP_CALL_STRING_DEFAULT", null));
     }
 
     //~ Methods ----------------------------------------------------------------
