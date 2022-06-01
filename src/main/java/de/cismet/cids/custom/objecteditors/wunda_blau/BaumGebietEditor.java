@@ -1050,21 +1050,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     /**
      * DOCUMENT ME!
      *
-     * @param   o  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private String toString(final Object o) {
-        if (o == null) {
-            return "";
-        } else {
-            return String.valueOf(o);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddNewMeldungActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewMeldungActionPerformed
