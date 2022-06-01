@@ -118,6 +118,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__GEOREFERENZ = "fk_geom";                         // baum_schaden
     public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";                   // baum_schaden
     public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";                   // baum_schaden
+    public static final String FIELD__SCHADEN_EFEU = "efeu";                           // baum_schaden
     public static final String FIELD__SCHADEN_KRONE = "kronenschaden";                 // baum_schaden
     public static final String FIELD__SCHADEN_STAMM = "stammschaden";                  // baum_schaden
     public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";                // baum_schaden
@@ -128,6 +129,8 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";               // baum_schaden
     public static final String FIELD__SCHADEN_EINGANG = "eingegangen";                 // baum_schaden
     public static final String FIELD__SCHADEN_FAELLUNG = "faellung";                   // baum_schaden
+    public static final String FIELD__SCHADEN_GEFAHR = "gefahrensbaum";                // baum_schaden
+    public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung";            // baum_schaden
     public static final String FIELD__MELDUNG = "fk_meldung";                          // baum_ortstermin
     public static final String FIELD__SCHADEN = "fk_schaden";                          // baum_ersatz/fest
     public static final String FIELD__MELDUNG_ID = "fk_meldung.id";                    // baum_meldung
@@ -379,7 +382,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -392,7 +395,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeGebietActionPerformed
+    }//GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -536,10 +539,13 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             getCidsBean().setProperty(FIELD__SCHADEN_GUTACHTEN, false);
             getCidsBean().setProperty(FIELD__SCHADEN_KRONE, false);
             getCidsBean().setProperty(FIELD__SCHADEN_OHNE, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_EFEU, false);
             getCidsBean().setProperty(FIELD__SCHADEN_PRIVAT, false);
             getCidsBean().setProperty(FIELD__SCHADEN_STAMM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_STURM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_WURZEL, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_GEFAHR, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_KLEISTUNG, false);
         } catch (Exception ex) {
             LOG.warn("problem in set default values.", ex);
         }
@@ -744,7 +750,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
          * @return  DOCUMENT ME!
          */
         public Object getLastValid() {
-            return lastValid;
+            return lastValid; 
         }
     }
 }
