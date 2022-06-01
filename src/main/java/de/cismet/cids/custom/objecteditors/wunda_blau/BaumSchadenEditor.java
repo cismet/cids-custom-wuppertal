@@ -129,6 +129,8 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";               // baum_schaden
     public static final String FIELD__SCHADEN_EINGANG = "eingegangen";                 // baum_schaden
     public static final String FIELD__SCHADEN_FAELLUNG = "faellung";                   // baum_schaden
+    public static final String FIELD__SCHADEN_GEFAHR = "gefahrensbaum";                // baum_schaden
+    public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung";            // baum_schaden
     public static final String FIELD__MELDUNG = "fk_meldung";                          // baum_ortstermin
     public static final String FIELD__SCHADEN = "fk_schaden";                          // baum_ersatz/fest
     public static final String FIELD__MELDUNG_ID = "fk_meldung.id";                    // baum_meldung
@@ -542,6 +544,8 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             getCidsBean().setProperty(FIELD__SCHADEN_STAMM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_STURM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_WURZEL, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_GEFAHR, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_KLEISTUNG, false);
         } catch (Exception ex) {
             LOG.warn("problem in set default values.", ex);
         }
@@ -746,7 +750,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
          * @return  DOCUMENT ME!
          */
         public Object getLastValid() {
-            return lastValid;
+            return lastValid; 
         }
     }
 }
