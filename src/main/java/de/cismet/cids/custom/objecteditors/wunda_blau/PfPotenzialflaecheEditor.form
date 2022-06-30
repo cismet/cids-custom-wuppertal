@@ -3585,7 +3585,7 @@
                                 </Component>
                                 <Component class="javax.swing.JLabel" name="lblEntwicklungsausssichten6">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="Kategorie:"/>
+                                    <Property name="text" type="java.lang.String" value="Entwicklungsart:"/>
                                     <Property name="name" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="PREFIX_LABEL + PotenzialflaecheReportServerAction.Property.KATEGORIE.name()" type="code"/>
                                     </Property>
