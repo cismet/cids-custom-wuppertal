@@ -2005,7 +2005,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         
         // Wenn keine Leistung angegeben 
         try {
-            if ((saveSchadenBean.getProperty(FIELD__KLEISTUNG) != null)) {
+            if (Objects.equals(saveSchadenBean.getProperty(FIELD__KLEISTUNG), true)) {
                 //Nicht ersichtlich warum
                 if (Objects.equals(saveSchadenBean.getProperty(FIELD__GEFAHR), false)
                         && Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), false)
