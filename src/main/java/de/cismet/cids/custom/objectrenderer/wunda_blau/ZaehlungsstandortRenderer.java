@@ -1185,7 +1185,7 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
 
                                 // Daten aus HashMaps in DefaultCategoryDataset eintragen
                                 for (final String key : jahresDurchschnitt.keySet()) {
-                                    datasetJahr.addValue(Math.round(jahresDurchschnitt.get(key)[0] / jahresDurchschnitt.get(key)[1]),
+                                    datasetJahr.addValue((int)(Math.round(jahresDurchschnitt.get(key)[0] / jahresDurchschnitt.get(key)[1])),
                                         "Daten",
                                         key);
                                     
@@ -1201,7 +1201,7 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
                                         i + 1,
                                         0);
                                     modelJahr.setValueAt(
-                                        datasetJahr.getValue(0, i),
+                                        datasetJahr.getValue(0, i).intValue(),
                                         i + 1,
                                         1);
                                 }
