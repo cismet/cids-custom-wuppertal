@@ -79,46 +79,6 @@ public class TreppenReportTester implements ConnectionContextProvider {
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  callServerURL       DOCUMENT ME!
-     * @param  domain              DOCUMENT ME!
-     * @param  compressionEnabled  DOCUMENT ME!
-     */
-    private void login(final String callServerURL, final String domain, final boolean compressionEnabled) {
-        final CidsAuthentification cidsAuth = new CidsAuthentification(
-                callServerURL,
-                domain,
-                compressionEnabled,
-                getConnectionContext());
-        final JXLoginPane login = new JXLoginPane(cidsAuth);
-
-        final JXLoginPane.JXLoginDialog loginDialog = new JXLoginPane.JXLoginDialog((Frame)null, login);
-
-        login.setPassword("".toCharArray());
-
-        try {
-            ((JXPanel)((JXPanel)login.getComponent(1)).getComponent(1)).getComponent(3).requestFocus();
-        } catch (final Exception ex) {
-            LOG.info("could nor request focus", ex);
-        }
-        StaticSwingTools.showDialog(loginDialog);
-
-        if (loginDialog.getStatus() != JXLoginPane.Status.SUCCEEDED) {
-            System.exit(0);
-        } else {
-            try {
-                LOG.fatal("init map");
-                initMap();
-                LOG.fatal("go test");
-                go();
-            } catch (Exception ex) {
-                LOG.fatal(ex, ex);
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
      */
     protected void initMap() {
         if (LOG.isDebugEnabled()) {
