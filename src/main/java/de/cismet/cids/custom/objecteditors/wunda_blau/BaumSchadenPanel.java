@@ -157,6 +157,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String FIELD__ABGESTORBEN = "abgestorben"; // baum_schaden
     public static final String FIELD__BAU = "fk_bau";              // baum_schaden
     public static final String FIELD__BAU_TEXT = "bau";            // baum_schaden
+    public static final String FIELD__BAU_SCHLUESSEL = "fk_bau.schluessel";// baum_schaden --> baum_bau
     public static final String FIELD__GUTACHTEN = "gutachten";     // baum_schaden
     public static final String FIELD__BERATUNG = "baumberatung";   // baum_schaden
     public static final String FIELD__BEMERKUNG = "bemerkung";     // baum_schaden
@@ -1572,7 +1573,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     case FIELD__BAU: {
                         setChangeFlag();
                         if ((getCidsBean().getProperty(FIELD__BAU) != null)
-                                    && (((CidsBean)getCidsBean().getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)) {
+                                    && ((getCidsBean().getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
                             txtBau.setEnabled(true);
                         } else {
                             txtBau.setEnabled(false);
@@ -2027,7 +2028,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         // Text zur Baugehnemigung, wenn mit
         try {
             if ((saveSchadenBean.getProperty(FIELD__BAU) != null)
-                        && (((CidsBean)saveSchadenBean.getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)) {
+                        && ((getCidsBean().getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
                 if ((saveSchadenBean.getProperty(FIELD__BAU_TEXT) == null)
                             || (saveSchadenBean.getProperty(FIELD__BAU_TEXT).toString()).trim().isEmpty()) {
                     LOG.warn("No text bau specified. Skip persisting.");
@@ -2356,7 +2357,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         cbOrdnung.setEnabled(edit);
         if (isEditor() && (getCidsBean() != null)
                     && (getCidsBean().getProperty(FIELD__BAU) != null)
-                    && (((CidsBean)getCidsBean().getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)) {
+                    && ((getCidsBean().getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
             txtBau.setEnabled(true);
         } else {
             txtBau.setEnabled(false);
