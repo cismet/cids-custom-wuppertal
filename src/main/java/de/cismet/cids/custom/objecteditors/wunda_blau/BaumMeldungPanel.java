@@ -118,7 +118,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     public static final String FIELD__ZEIT = "zeit";                       // baum_ortstermin
     public static final String FIELD__FK_MELDUNG = "fk_meldung";           // baum_ortstermin bzw. schaden
     public static final String FIELD__ID = "id";                           // baum_schaden
-    public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";       // baum_schaden
     public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";       // baum_schaden
     public static final String FIELD__SCHADEN_EFEU = "efeu";               // baum_schaden
     public static final String FIELD__SCHADEN_KRONE = "kronenschaden";     // baum_schaden
@@ -128,7 +127,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung";// baum_schaden
     public static final String FIELD__SCHADEN_STURM = "sturmschaden";      // baum_schaden
     public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben"; // baum_schaden
-    public static final String FIELD__SCHADEN_BAU = "baumassnahme";        // baum_schaden
     public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";     // baum_schaden
     public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";   // baum_schaden
     public static final String FIELD__SCHADEN_EINGANG = "eingegangen";     // baum_schaden
@@ -1171,7 +1169,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                             getConnectionContext());
                     beanSchaden.setProperty(FIELD__FK_MELDUNG, getCidsBean());
                     beanSchaden.setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
-                    beanSchaden.setProperty(FIELD__SCHADEN_BAU, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_BERATUNG, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_EINGANG, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_FAELLUNG, false);
@@ -1179,7 +1176,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                     beanSchaden.setProperty(FIELD__SCHADEN_KRONE, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_OHNE, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_EFEU, false);
-                    beanSchaden.setProperty(FIELD__SCHADEN_PRIVAT, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_STAMM, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_STURM, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_WURZEL, false);
