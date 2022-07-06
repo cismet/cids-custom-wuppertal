@@ -116,7 +116,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     public static final String FIELD__ID = "id";                                       // baum_schaden
     public static final String FIELD__GEOREFERENZ = "fk_geom";                         // baum_schaden
-    public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";                   // baum_schaden
     public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";                   // baum_schaden
     public static final String FIELD__SCHADEN_EFEU = "efeu";                           // baum_schaden
     public static final String FIELD__SCHADEN_KRONE = "kronenschaden";                 // baum_schaden
@@ -124,7 +123,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";                // baum_schaden
     public static final String FIELD__SCHADEN_STURM = "sturmschaden";                  // baum_schaden
     public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben";             // baum_schaden
-    public static final String FIELD__SCHADEN_BAU = "baumassnahme";                    // baum_schaden
     public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";                 // baum_schaden
     public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";               // baum_schaden
     public static final String FIELD__SCHADEN_EINGANG = "eingegangen";                 // baum_schaden
@@ -532,7 +530,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public void setDefaultValues() {
         try {
             this.getCidsBean().setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
-            getCidsBean().setProperty(FIELD__SCHADEN_BAU, false);
             getCidsBean().setProperty(FIELD__SCHADEN_BERATUNG, false);
             getCidsBean().setProperty(FIELD__SCHADEN_EINGANG, false);
             getCidsBean().setProperty(FIELD__SCHADEN_FAELLUNG, false);
@@ -540,7 +537,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             getCidsBean().setProperty(FIELD__SCHADEN_KRONE, false);
             getCidsBean().setProperty(FIELD__SCHADEN_OHNE, false);
             getCidsBean().setProperty(FIELD__SCHADEN_EFEU, false);
-            getCidsBean().setProperty(FIELD__SCHADEN_PRIVAT, false);
             getCidsBean().setProperty(FIELD__SCHADEN_STAMM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_STURM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_WURZEL, false);
