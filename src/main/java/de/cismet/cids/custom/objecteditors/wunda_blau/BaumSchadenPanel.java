@@ -754,6 +754,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chStamm.setName("chStamm"); // NOI18N
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.stammschaden}"), chStamm, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
