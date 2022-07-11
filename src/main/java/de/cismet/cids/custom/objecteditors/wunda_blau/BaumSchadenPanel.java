@@ -1906,6 +1906,9 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         if (oErsatz instanceof CidsBean) {
             baumErsatzPanel.setCidsBean((CidsBean)oErsatz);
         }
+        if (oErsatz == null){
+            baumErsatzPanel.setCidsBean(null);
+        }
     }//GEN-LAST:event_lstErsatzValueChanged
 
     /**
