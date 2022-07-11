@@ -1009,6 +1009,10 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     private void nullNoEdit(final boolean edit) {
         taBemerkungOrt.setEnabled(edit);
         cbVorort.setEnabled(edit);
+        ftZeit.setEnabled(edit);
+        if (!edit){
+            ftZeit.setText("");
+        }
     }
 
     /**

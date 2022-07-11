@@ -1423,6 +1423,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         taBemerkung.setEnabled(edit);
         btnAddApartner.setEnabled(edit);
         btnRemoveApartner.setEnabled(edit);
+        if (!edit){
+            taBemerkung.setText("");
+        }
     }
 
     /**
