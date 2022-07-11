@@ -65,6 +65,10 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.util.logging.Level;
+import lombok.Setter;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 /**
  * DOCUMENT ME!
  *
@@ -123,6 +127,8 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_PREFIX = "BaumErsatzEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumErsatzEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumErsatzEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumErsatzEditor.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumErsatzEditor.noSave().title";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -133,6 +139,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private final boolean editor;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
+    @Getter @Setter private static Exception errorNoSave = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumErsatzPanel baumErsatzPanel;
@@ -350,31 +357,36 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public boolean isOkForSaving() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        final boolean noErrorOccured = baumErsatzPanel.isOkForSaving(getCidsBean());
-        try {
-            if (getCidsBean().getProperty(FIELD__SCHADEN_ID) == null) {
-                LOG.warn("No schaden specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSCHADEN));
+        if (getErrorNoSave()!= null){
+            noSave();
+            return false;
+        } else {
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
+            final boolean noErrorOccured = baumErsatzPanel.isOkForSaving(getCidsBean());
+            try {
+                if (getCidsBean().getProperty(FIELD__SCHADEN_ID) == null) {
+                    LOG.warn("No schaden specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSCHADEN));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Schaden not given.", ex);
                 save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Schaden not given.", ex);
-            save = false;
-        }
 
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
+            if (errorMessage.length() > 0) {
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
 
-            return false;
+                return false;
+            }
+            return save && noErrorOccured;
         }
-        return save && noErrorOccured;
     }
 
     @Override
@@ -401,7 +413,23 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
             }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
+                if (isEditor()){
+                    setErrorNoSave(ex);
+                    noSave();
+                }
         }
+    }
+    
+    public void noSave(){
+        final ErrorInfo info = new ErrorInfo(
+                    NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
+        JXErrorPane.showDialog(BaumErsatzEditor.this, info);
     }
 
     /**

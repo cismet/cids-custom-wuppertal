@@ -71,6 +71,10 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.util.logging.Level;
+import lombok.Setter;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 /**
  * DOCUMENT ME!
  *
@@ -128,6 +132,8 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
     public static final String BUNDLE_PANE_PREFIX = "BaumFestsetzungEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumFestsetzungEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumFestsetzungEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumFestsetzungEditor.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumFestsetzungEditor.noSave().title";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -139,6 +145,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
 
     private final boolean editor;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
+    @Getter @Setter private static Exception errorNoSave = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumFestsetzungPanel baumFestsetzungPanel;
@@ -345,7 +352,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeSchadenActionPerformed
+    private void btnChangeSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeSchadenActionPerformed
         final Object selectedItem = comboBoxFilterDialogSchaden.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean schadenBean = (CidsBean)selectedItem;
@@ -358,35 +365,40 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeSchadenActionPerformed
+    }//GEN-LAST:event_btnChangeSchadenActionPerformed
 
     @Override
     public boolean isOkForSaving() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
+        if (getErrorNoSave()!= null){
+            noSave();
+            return false;
+        } else {
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
 
-        final boolean noErrorOccured = baumFestsetzungPanel.isOkayForSaving(getCidsBean());
-        // Schaden muss angegeben werden
-        try {
-            if (getCidsBean().getProperty(FIELD__FK_SCHADEN) == null) {
-                LOG.warn("No schaden specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NOSCHADEN));
+            final boolean noErrorOccured = baumFestsetzungPanel.isOkayForSaving(getCidsBean());
+            // Schaden muss angegeben werden
+            try {
+                if (getCidsBean().getProperty(FIELD__FK_SCHADEN) == null) {
+                    LOG.warn("No schaden specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NOSCHADEN));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Schaden not given.", ex);
                 save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Schaden not given.", ex);
-            save = false;
-        }
 
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
+            if (errorMessage.length() > 0) {
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
+            }
+            return save & noErrorOccured;
         }
-        return save & noErrorOccured;
     }
 
     @Override
@@ -418,7 +430,23 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
             }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
+                if (isEditor()){
+                    setErrorNoSave(ex);
+                    noSave();
+                }
         }
+    }
+    
+    public void noSave(){
+        final ErrorInfo info = new ErrorInfo(
+                    NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
+        JXErrorPane.showDialog(BaumFestsetzungEditor.this, info);
     }
 
     /**
