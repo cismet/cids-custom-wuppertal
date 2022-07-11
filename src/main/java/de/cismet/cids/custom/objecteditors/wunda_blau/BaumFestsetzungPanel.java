@@ -80,6 +80,10 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.util.logging.Level;
+import lombok.Setter;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -133,6 +137,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     public static final String BUNDLE_PANE_PREFIX = "BaumFestsetzungPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumFestsetzungPanel.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumFestsetzungPanel.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumFestsetzungPanel.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumFestsetzungPanel.noSave().title";
     public static final String GEOMTYPE = "Point";
 
     //~ Instance fields --------------------------------------------------------
@@ -142,6 +148,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     private CidsBean cidsBean;
     private Integer saveGeom;
     private Date saveDatum;
+    @Getter @Setter private static Exception errorNoSave = null;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
@@ -644,12 +651,28 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
+                if (isEditor()){
+                    setErrorNoSave(ex);
+                    noSave();
+                }
             }
         }
         setReadOnly();
         if (isEditor()) {
             nullNoEdit(getCidsBean() != null);
         }
+    }
+    
+    public void noSave(){
+        final ErrorInfo info = new ErrorInfo(
+                    NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
+        JXErrorPane.showDialog(BaumFestsetzungPanel.this, info);
     }
 
     /**
@@ -684,86 +707,91 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
      * @return  DOCUMENT ME!
      */
     public boolean isOkayForSaving(final CidsBean saveFestsetzungBean) {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        // Art muss angegeben werden
-        try {
-            if (saveFestsetzungBean.getProperty(FIELD__ART) == null) {
-                LOG.warn("No art specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOART));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Art not given.", ex);
-            save = false;
-        }
-        // Umfang muss vorhanden sein
-        try {
-            if ((saveFestsetzungBean.getProperty(FIELD__UMFANG) == null)
-                        || ((Integer)saveFestsetzungBean.getProperty(FIELD__UMFANG) == 0)) {
-                LOG.warn("No umfang specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOUMFANG));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Umfang not given.", ex);
-            save = false;
-        }
-        // georeferenz muss gefüllt sein
-        try {
-            if (saveFestsetzungBean.getProperty(FIELD__GEOM) == null) {
-                LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOGEOM));
-                save = false;
-            } else {
-                final CidsBean geom_pos = (CidsBean)saveFestsetzungBean.getProperty(FIELD__GEOM);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WRONGGEOM));
+        if (getErrorNoSave()!= null){
+            noSave();
+            return false;
+        } else {
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
+            // Art muss angegeben werden
+            try {
+                if (saveFestsetzungBean.getProperty(FIELD__ART) == null) {
+                    LOG.warn("No art specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOART));
                     save = false;
                 }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Geom not given.", ex);
-            save = false;
-        }
-        // Datum muss angegeben werden
-        try {
-            if (saveFestsetzungBean.getProperty(FIELD__DATUM) == null) {
-                LOG.warn("No datum specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NODATE));
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Art not given.", ex);
                 save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Datum not given.", ex);
-            save = false;
-        }
+            // Umfang muss vorhanden sein
+            try {
+                if ((saveFestsetzungBean.getProperty(FIELD__UMFANG) == null)
+                            || ((Integer)saveFestsetzungBean.getProperty(FIELD__UMFANG) == 0)) {
+                    LOG.warn("No umfang specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOUMFANG));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Umfang not given.", ex);
+                save = false;
+            }
+            // georeferenz muss gefüllt sein
+            try {
+                if (saveFestsetzungBean.getProperty(FIELD__GEOM) == null) {
+                    LOG.warn("No geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOGEOM));
+                    save = false;
+                } else {
+                    final CidsBean geom_pos = (CidsBean)saveFestsetzungBean.getProperty(FIELD__GEOM);
+                    if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                        LOG.warn("Wrong geom specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WRONGGEOM));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Geom not given.", ex);
+                save = false;
+            }
+            // Datum muss angegeben werden
+            try {
+                if (saveFestsetzungBean.getProperty(FIELD__DATUM) == null) {
+                    LOG.warn("No datum specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungEditor.class, BUNDLE_NODATE));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Datum not given.", ex);
+                save = false;
+            }
 
-        if (errorMessage.length() > 0) {
-            if (baumChildrenLoader.getParentOrganizer() instanceof BaumSchadenEditor) {
-                errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WHICH))
-                        .append(saveFestsetzungBean.getPrimaryKeyValue());
-            } else {
-                if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
-                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+            if (errorMessage.length() > 0) {
+                if (baumChildrenLoader.getParentOrganizer() instanceof BaumSchadenEditor) {
                     errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WHICH))
                             .append(saveFestsetzungBean.getPrimaryKeyValue());
-                    final CidsBean schadenBean = (CidsBean)saveFestsetzungBean.getProperty(FIELD__FK_SCHADEN);
-                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_FAULT))
-                            .append(schadenBean.getPrimaryKeyValue());
-                    final CidsBean meldungBean = (CidsBean)schadenBean.getProperty(FIELD__FK_MELDUNG);
-                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_MESSAGE))
-                            .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+                } else {
+                    if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                        final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                        errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_WHICH))
+                                .append(saveFestsetzungBean.getPrimaryKeyValue());
+                        final CidsBean schadenBean = (CidsBean)saveFestsetzungBean.getProperty(FIELD__FK_SCHADEN);
+                        errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_FAULT))
+                                .append(schadenBean.getPrimaryKeyValue());
+                        final CidsBean meldungBean = (CidsBean)schadenBean.getProperty(FIELD__FK_MELDUNG);
+                        errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_MESSAGE))
+                                .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+                    }
                 }
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
             }
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
+            return save;
         }
-        return save;
     }
     /**
      * DOCUMENT ME!

@@ -115,6 +115,7 @@ import java.awt.Component;
 import java.text.NumberFormat;
 import java.util.EventObject;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractCellEditor;
 import javax.swing.Action;
@@ -125,6 +126,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -218,6 +221,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public static final String BUNDLE_PANE_PREFIX = "BaumErsatzPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumErsatzPanel.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumErsatzPanel.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumErsatzPanel.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumErsatzPanel.noSave().title";
     
     private static final String[] KONTROLLE_COL_NAMES = new String[] {
             "Datum",
@@ -1105,6 +1110,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     private Date savePflanzung;
     private Date saveUmsetzung;
     @Getter FastBindableReferenceComboCellEditor sorteCellEditor;
+    @Getter @Setter private static Exception errorNoSave = null;
 
     private final ActionListener hnrActionListener = new ActionListener() {
 
@@ -1678,6 +1684,10 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
+                if (isEditor()){
+                    setErrorNoSave(ex);
+                    noSave();
+                }
             }
         }
         setReadOnly();
@@ -1691,6 +1701,18 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 checkInsideArea();
             }
         }
+    }
+    
+    public void noSave(){
+        final ErrorInfo info = new ErrorInfo(
+                    NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
+        JXErrorPane.showDialog(BaumErsatzPanel.this, info);
     }
 
     /**
@@ -1849,209 +1871,214 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      * @return  DOCUMENT ME!
      */
     public boolean isOkForSaving(final CidsBean saveErsatzBean) {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-
-        final Collection<CidsBean> baumCollection = saveErsatzBean.getBeanCollectionProperty(FIELD__BAUM);               
-        final Date jetztDatum = new java.sql.Date(System.currentTimeMillis());
-        final boolean isSetStrasse = saveErsatzBean.getProperty(FIELD__STRASSE) != null;
-        final boolean isSetHNr = saveErsatzBean.getProperty(FIELD__HNR) != null;
-        final boolean isSetGeom = saveErsatzBean.getProperty(FIELD__GEOM) != null;
-        final boolean isSetBis = saveErsatzBean.getProperty(FIELD__DATUM_U) != null;
-        final boolean isSetFirma = saveErsatzBean.getProperty(FIELD__FIRMA) != null 
-                && ! saveErsatzBean.getProperty(FIELD__FIRMA).toString().isEmpty();
-        final boolean isSetSelbst = Objects.equals(saveErsatzBean.getProperty(FIELD__SELBST), true);
-        final boolean isSetPflanzung = saveErsatzBean.getProperty(FIELD__DATUM_P) != null;
-        final boolean isSetAnzahl = (saveErsatzBean.getProperty(FIELD__ANZAHL) != null)
-                    && ((Integer)saveErsatzBean.getProperty(FIELD__ANZAHL) > 0);
-        final boolean isSetBaum = baumCollection.size() > 0;
-        final Integer iAnz = (Integer)saveErsatzBean.getProperty(FIELD__ANZAHL);
-
-        if (isSetStrasse || isSetHNr || isSetGeom || isSetFirma || isSetSelbst || isSetPflanzung || isSetBaum) {
-            // Straße muss angegeben werden
-            try {
-                if (! isSetStrasse) {
-                    LOG.warn("No strasse specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
-                    save = false;
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("strasse not given.", ex);
-                save = false;
-            }
-
-            // georeferenz muss gefüllt sein
-            try {
-                if (! isSetGeom) {
-                    LOG.warn("No geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
-                    save = false;
-                } else {
-                    final CidsBean geom_pos = (CidsBean)saveErsatzBean.getProperty(FIELD__GEOM);
-                    if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                        LOG.warn("Wrong geom specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOM));
-                        save = false;
-                    }
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("Geom not given.", ex);
-                save = false;
-            }
-            // Pflanzung muss angegeben werden
-            try {
-                if (! isSetPflanzung) {
-                    LOG.warn("No pflanzung specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NODATE));
-                    save = false;
-                } else {
-                    final Object plantDate = saveErsatzBean.getProperty(FIELD__DATUM_P);
-                    if (plantDate instanceof Date) {
-                        if (((Date)plantDate).after(jetztDatum)) {
-                            LOG.warn("Wrong plandatum specified. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATEPLANT));
-                            save = false;
-                        }
-                    }
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("bis not given.", ex);
-                save = false;
-            }
-            //Ersatzbaeume muessen angegeben werden
-            try {
-                if (! isSetBaum) {
-                    LOG.warn("No ersatzbaum specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOBAUM));
-                    save = false;
-                } else {
-                    if (iAnz > 0 && baumCollection.size() != iAnz ){
-                        LOG.warn("Wrong Anzahl ersatzbaum specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGANZAHLBAUM));
-                        save = false;
-                    }
-                    // Ersatzbaeume
-                    try {
-                        for (final CidsBean baumBean : baumCollection) {
-                            // Geom
-                            try {
-                                if (baumBean.getProperty(FIELD__GEOM) == null) {
-                                    LOG.warn("No geom baum specified. Skip persisting.");
-                                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOMBAUM));
-                                    save = false;
-                                } else {
-                                    final CidsBean geom_pos = (CidsBean)baumBean.getProperty(FIELD__GEOM);
-                                    if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOM_POINT)) {
-                                        LOG.warn("Wrong geom baum specified. Skip persisting.");
-                                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOMBAUM));
-                                        save = false;
-                                    }
-                                }
-                            } catch (final MissingResourceException ex) {
-                                LOG.warn("Geom  baum not given.", ex);
-                                save = false;
-                            }
-                            // Art vorhanden
-                            if (baumBean.getProperty(FIELD__ART) == null) {
-                                LOG.warn("No art specified. Skip persisting.");
-                                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOART));
-                                save = false;
-                            }
-                        }
-                    } catch (final MissingResourceException ex) {
-                        LOG.warn("ersatzbaum not correct.", ex);
-                        save = false;
-                    }
-                    if (!(insideBox)) {
-                        LOG.warn("Wrong Geometry Location. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(StrAdrStrasseEditor.class, 
-                                BUNDLE_LOCATION_GEOMETRY))
-                                .append(outsidePoint);
-                        save = false;
-                    }
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("ersatz not given.", ex);
-                save = false;
-            }
+        if (getErrorNoSave()!= null){
+            noSave();
+            return false;
         } else {
-            // Wenn keine Pflanzung, bis wann?
-             if (! isSetBis) {
-                LOG.warn("No bis specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOBIS));
-                save = false;
-            }
-        }
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
 
-        // Anzahl 
-        try {
-            if (! isSetAnzahl) {
-                LOG.warn("No count specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Count not given.", ex);
-            save = false;
-        }
+            final Collection<CidsBean> baumCollection = saveErsatzBean.getBeanCollectionProperty(FIELD__BAUM);               
+            final Date jetztDatum = new java.sql.Date(System.currentTimeMillis());
+            final boolean isSetStrasse = saveErsatzBean.getProperty(FIELD__STRASSE) != null;
+            final boolean isSetHNr = saveErsatzBean.getProperty(FIELD__HNR) != null;
+            final boolean isSetGeom = saveErsatzBean.getProperty(FIELD__GEOM) != null;
+            final boolean isSetBis = saveErsatzBean.getProperty(FIELD__DATUM_U) != null;
+            final boolean isSetFirma = saveErsatzBean.getProperty(FIELD__FIRMA) != null 
+                    && ! saveErsatzBean.getProperty(FIELD__FIRMA).toString().isEmpty();
+            final boolean isSetSelbst = Objects.equals(saveErsatzBean.getProperty(FIELD__SELBST), true);
+            final boolean isSetPflanzung = saveErsatzBean.getProperty(FIELD__DATUM_P) != null;
+            final boolean isSetAnzahl = (saveErsatzBean.getProperty(FIELD__ANZAHL) != null)
+                        && ((Integer)saveErsatzBean.getProperty(FIELD__ANZAHL) > 0);
+            final boolean isSetBaum = baumCollection.size() > 0;
+            final Integer iAnz = (Integer)saveErsatzBean.getProperty(FIELD__ANZAHL);
 
-        // Kontrolle
-        try {
-            final Collection<CidsBean> controlCollection = saveErsatzBean.getBeanCollectionProperty(FIELD__KONTROLLE);
-            for (final CidsBean controlBean : controlCollection) {
-                // Datum vorhanden
-                if (controlBean.getProperty(FIELD__KONTROLLE_DATUM) == null) {
-                    LOG.warn("No kontolldatum specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLDATE));
+            if (isSetStrasse || isSetHNr || isSetGeom || isSetFirma || isSetSelbst || isSetPflanzung || isSetBaum) {
+                // Straße muss angegeben werden
+                try {
+                    if (! isSetStrasse) {
+                        LOG.warn("No strasse specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
+                        save = false;
+                    }
+                } catch (final MissingResourceException ex) {
+                    LOG.warn("strasse not given.", ex);
                     save = false;
-                } else {
-                    // Datum nicht in der Zukunft
-                    final Object controllDate = controlBean.getProperty(FIELD__KONTROLLE_DATUM);
-                    if (controllDate instanceof Date) {
-                        if (((Date)controllDate).after(jetztDatum)) {
-                            LOG.warn("Wrong kontolldatum specified. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATE));
+                }
+
+                // georeferenz muss gefüllt sein
+                try {
+                    if (! isSetGeom) {
+                        LOG.warn("No geom specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
+                        save = false;
+                    } else {
+                        final CidsBean geom_pos = (CidsBean)saveErsatzBean.getProperty(FIELD__GEOM);
+                        if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                            LOG.warn("Wrong geom specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOM));
                             save = false;
                         }
                     }
+                } catch (final MissingResourceException ex) {
+                    LOG.warn("Geom not given.", ex);
+                    save = false;
                 }
-                // Bemerkung vorhanden
-                if (controlBean.getProperty(FIELD__KONTROLLE_BEMERKUNG) == null) {
-                    LOG.warn("No bemerkung specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLTEXT));
+                // Pflanzung muss angegeben werden
+                try {
+                    if (! isSetPflanzung) {
+                        LOG.warn("No pflanzung specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NODATE));
+                        save = false;
+                    } else {
+                        final Object plantDate = saveErsatzBean.getProperty(FIELD__DATUM_P);
+                        if (plantDate instanceof Date) {
+                            if (((Date)plantDate).after(jetztDatum)) {
+                                LOG.warn("Wrong plandatum specified. Skip persisting.");
+                                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATEPLANT));
+                                save = false;
+                            }
+                        }
+                    }
+                } catch (final MissingResourceException ex) {
+                    LOG.warn("bis not given.", ex);
+                    save = false;
+                }
+                //Ersatzbaeume muessen angegeben werden
+                try {
+                    if (! isSetBaum) {
+                        LOG.warn("No ersatzbaum specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOBAUM));
+                        save = false;
+                    } else {
+                        if (iAnz > 0 && baumCollection.size() != iAnz ){
+                            LOG.warn("Wrong Anzahl ersatzbaum specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGANZAHLBAUM));
+                            save = false;
+                        }
+                        // Ersatzbaeume
+                        try {
+                            for (final CidsBean baumBean : baumCollection) {
+                                // Geom
+                                try {
+                                    if (baumBean.getProperty(FIELD__GEOM) == null) {
+                                        LOG.warn("No geom baum specified. Skip persisting.");
+                                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOMBAUM));
+                                        save = false;
+                                    } else {
+                                        final CidsBean geom_pos = (CidsBean)baumBean.getProperty(FIELD__GEOM);
+                                        if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOM_POINT)) {
+                                            LOG.warn("Wrong geom baum specified. Skip persisting.");
+                                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOMBAUM));
+                                            save = false;
+                                        }
+                                    }
+                                } catch (final MissingResourceException ex) {
+                                    LOG.warn("Geom  baum not given.", ex);
+                                    save = false;
+                                }
+                                // Art vorhanden
+                                if (baumBean.getProperty(FIELD__ART) == null) {
+                                    LOG.warn("No art specified. Skip persisting.");
+                                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOART));
+                                    save = false;
+                                }
+                            }
+                        } catch (final MissingResourceException ex) {
+                            LOG.warn("ersatzbaum not correct.", ex);
+                            save = false;
+                        }
+                        if (!(insideBox)) {
+                            LOG.warn("Wrong Geometry Location. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(StrAdrStrasseEditor.class, 
+                                    BUNDLE_LOCATION_GEOMETRY))
+                                    .append(outsidePoint);
+                            save = false;
+                        }
+                    }
+                } catch (final MissingResourceException ex) {
+                    LOG.warn("ersatz not given.", ex);
+                    save = false;
+                }
+            } else {
+                // Wenn keine Pflanzung, bis wann?
+                 if (! isSetBis) {
+                    LOG.warn("No bis specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOBIS));
                     save = false;
                 }
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Kontrolle not correct.", ex);
-            save = false;
-        }
 
-        if (errorMessage.length() > 0) {
-            if (baumChildrenLoader.getParentOrganizer() instanceof BaumSchadenEditor) {
-                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WHICH))
-                        .append(saveErsatzBean.getPrimaryKeyValue());
-            } else {
-                if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
-                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+            // Anzahl 
+            try {
+                if (! isSetAnzahl) {
+                    LOG.warn("No count specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Count not given.", ex);
+                save = false;
+            }
+
+            // Kontrolle
+            try {
+                final Collection<CidsBean> controlCollection = saveErsatzBean.getBeanCollectionProperty(FIELD__KONTROLLE);
+                for (final CidsBean controlBean : controlCollection) {
+                    // Datum vorhanden
+                    if (controlBean.getProperty(FIELD__KONTROLLE_DATUM) == null) {
+                        LOG.warn("No kontolldatum specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLDATE));
+                        save = false;
+                    } else {
+                        // Datum nicht in der Zukunft
+                        final Object controllDate = controlBean.getProperty(FIELD__KONTROLLE_DATUM);
+                        if (controllDate instanceof Date) {
+                            if (((Date)controllDate).after(jetztDatum)) {
+                                LOG.warn("Wrong kontolldatum specified. Skip persisting.");
+                                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATE));
+                                save = false;
+                            }
+                        }
+                    }
+                    // Bemerkung vorhanden
+                    if (controlBean.getProperty(FIELD__KONTROLLE_BEMERKUNG) == null) {
+                        LOG.warn("No bemerkung specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLTEXT));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Kontrolle not correct.", ex);
+                save = false;
+            }
+
+            if (errorMessage.length() > 0) {
+                if (baumChildrenLoader.getParentOrganizer() instanceof BaumSchadenEditor) {
                     errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WHICH))
                             .append(saveErsatzBean.getPrimaryKeyValue());
-                    final CidsBean schadenBean = (CidsBean)saveErsatzBean.getProperty(FIELD__FK_SCHADEN);
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FAULT))
-                            .append(schadenBean.getPrimaryKeyValue());
-                    final CidsBean meldungBean = (CidsBean)schadenBean.getProperty(FIELD__FK_MELDUNG);
-                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_MESSAGE))
-                            .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+                } else {
+                    if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                        final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WHICH))
+                                .append(saveErsatzBean.getPrimaryKeyValue());
+                        final CidsBean schadenBean = (CidsBean)saveErsatzBean.getProperty(FIELD__FK_SCHADEN);
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FAULT))
+                                .append(schadenBean.getPrimaryKeyValue());
+                        final CidsBean meldungBean = (CidsBean)schadenBean.getProperty(FIELD__FK_MELDUNG);
+                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_MESSAGE))
+                                .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+                    }
                 }
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
             }
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
+            return save;
         }
-        return save;
     }
 
     //~ Inner Classes ----------------------------------------------------------
