@@ -1499,8 +1499,15 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             }
 
             if (errorMessage.length() > 0) {
+                String meldung;
+                if (saveMeldungBean.getProperty(FIELD__DATUM) != null){
+                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                    meldung = formatTag.format(saveMeldungBean.getProperty(FIELD__DATUM));
+                } else {
+                    meldung = saveMeldungBean.getPrimaryKeyValue().toString();
+                }
                 errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_WHICH))
-                        .append(saveMeldungBean.getPrimaryKeyValue());
+                        .append(meldung);
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_PREFIX)
                             + errorMessage.toString()
