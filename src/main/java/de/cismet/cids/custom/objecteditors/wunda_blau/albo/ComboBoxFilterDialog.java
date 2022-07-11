@@ -475,6 +475,14 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
         }
     }                                                                     //GEN-LAST:event_tableMouseClicked
 
+    @Override
+    public void setVisible(final boolean b) {
+        if (getComboBox() != null) {
+            getComboBox().setSelectedIndex(-1);
+        }
+        super.setVisible(b);
+    }
+
     /**
      * DOCUMENT ME!
      *
