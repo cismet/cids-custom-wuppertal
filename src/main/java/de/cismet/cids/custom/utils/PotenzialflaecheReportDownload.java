@@ -122,7 +122,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
                 (singleFlaecheBean != null)
                     ? (String)singleFlaecheBean.getProperty("nummer")
                     : ((singleKategorieBean != null) ? (String)singleKategorieBean.getProperty("bezeichnung")
-                                                    : "diverse_flaechen"));
+                                                     : "diverse_flaechen"));
         return baseName;
     }
 
@@ -179,7 +179,7 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
                 (singleFlaecheBean != null)
                     ? (String)singleFlaecheBean.getProperty("bezeichnung")
                     : ((singleKategorieBean != null) ? (String)singleKategorieBean.getProperty("bezeichnung")
-                                                    : "Potenzialflächen"));
+                                                     : "Potenzialflächen"));
     }
 
     @Override

@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaObject;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +25,9 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -47,6 +50,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.logging.Level;
 
 import javax.swing.*;
 
@@ -73,10 +77,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.util.logging.Level;
-import lombok.Setter;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 /**
  * DOCUMENT ME!
  *
@@ -150,6 +150,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     public static final String BUNDLE_NOMELDUNG = "BaumOrtsterminEditor.isOkForSaving().noMeldung";
     public static final String BUNDLE_NOSAVE_MESSAGE = "BaumOrtsterminEditor.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "BaumOrtsterminEditor.noSave().title";
+    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Enums ------------------------------------------------------------------
 
@@ -174,7 +175,6 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
     // private MetaClass teilnehmerMetaClass;
 
     private final boolean editor;
-    @Getter @Setter private static Exception errorNoSave = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumOrtsterminPanel baumOrtsterminPanel;
@@ -216,7 +216,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
 
     @Override
     public boolean isOkForSaving() {
-        if (getErrorNoSave()!= null){
+        if (getErrorNoSave() != null) {
             noSave();
             return false;
         } else {
@@ -404,7 +404,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -417,7 +417,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeGebietActionPerformed
+    } //GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -448,22 +448,25 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
             }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
-            if (isEditor()){
+            if (isEditor()) {
                 setErrorNoSave(ex);
                 noSave();
             }
         }
     }
-    
-    public void noSave(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                    NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOSAVE_TITLE),
-                    NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOSAVE_MESSAGE),
-                    null,
-                    null,
-                    getErrorNoSave(),
-                    Level.SEVERE,
-                    null);
+                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumOrtsterminEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
         JXErrorPane.showDialog(BaumOrtsterminEditor.this, info);
     }
 
