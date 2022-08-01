@@ -332,7 +332,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         if (cidsBeans != null) {
             ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(), "loader");
             final Collection<CidsBean> selectedBeans = getSelectedBeans();
@@ -371,16 +371,16 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
                 }.execute();
             StaticSwingTools.showDialog(this, jDialog1, true);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    } //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         PfPotenzialflaecheReportGenerator.startDownloadForFlaechen(getSelectedBeans(), getConnectionContext());
-    }//GEN-LAST:event_btnReportActionPerformed
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {

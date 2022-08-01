@@ -17,6 +17,7 @@ import Sirius.server.middleware.types.MetaClass;
 import com.vividsolutions.jts.geom.Geometry;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
@@ -26,6 +27,8 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
@@ -44,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.logging.Level;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -80,10 +84,6 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.util.logging.Level;
-import lombok.Setter;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -140,6 +140,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     public static final String BUNDLE_NOSAVE_MESSAGE = "BaumFestsetzungPanel.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "BaumFestsetzungPanel.noSave().title";
     public static final String GEOMTYPE = "Point";
+    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -148,7 +149,6 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     private CidsBean cidsBean;
     private Integer saveGeom;
     private Date saveDatum;
-    @Getter @Setter private static Exception errorNoSave = null;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
             @Override
@@ -651,7 +651,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
-                if (isEditor()){
+                if (isEditor()) {
                     setErrorNoSave(ex);
                     noSave();
                 }
@@ -662,16 +662,19 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
             nullNoEdit(getCidsBean() != null);
         }
     }
-    
-    public void noSave(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                    NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOSAVE_TITLE),
-                    NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOSAVE_MESSAGE),
-                    null,
-                    null,
-                    getErrorNoSave(),
-                    Level.SEVERE,
-                    null);
+                NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
         JXErrorPane.showDialog(BaumFestsetzungPanel.this, info);
     }
 
@@ -707,7 +710,7 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
      * @return  DOCUMENT ME!
      */
     public boolean isOkayForSaving(final CidsBean saveFestsetzungBean) {
-        if (getErrorNoSave()!= null){
+        if (getErrorNoSave() != null) {
             noSave();
             return false;
         } else {
@@ -803,8 +806,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
-        baumLagePanel.setMapWindow(getCidsBean(), 
-                getConnectionContext(),
-                mapUrl);
+        baumLagePanel.setMapWindow(getCidsBean(),
+            getConnectionContext(),
+            mapUrl);
     }
 }

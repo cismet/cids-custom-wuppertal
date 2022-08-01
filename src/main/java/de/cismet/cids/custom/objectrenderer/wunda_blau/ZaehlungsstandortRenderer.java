@@ -9,6 +9,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,8 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.Layer;
 
+import org.openide.util.Exceptions;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -37,8 +40,11 @@ import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -53,39 +59,38 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import de.cismet.cids.client.tools.ReportLookupButton;
+
 import de.cismet.cids.custom.wunda_blau.search.server.ZaehlungLastYearsSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
 import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.TitleComponentProvider;
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Collection;
-import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
  *
- * @author   nh  update 06/22 Sandra
+ * @author   nh update 06/22 Sandra
  * @version  $Revision$, $Date$
  */
 public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
-    public static final String FIELD__WETTER = "Wetter";                                       
-    public static final String FIELD__DATUM = "datum";                                       
-    public static final String FIELD__ANZAHL = "anzahl";                                       
-    public static final String FIELD__WETTER_WETTER = "wetter.wetter";                                       
-    public static final String FIELD__BEZIRK = "bezirk";                                       
-    public static final String FIELD__ZAEHLUNGEN = "zaehlungen";                                       
-    public static final String FIELD__GEO_FIELD = "georeferenz.geo_field";                                       
-    public static final String FIELD__STADTTEIL = "stadtteil.stadtteil";                                 
-    public static final String FIELD__STANDORT = "standort";                                      
-    public static final String AVG_TEXT = "Durchschnitt \u00D8";    
-    
+
+    public static final String FIELD__WETTER = "Wetter";
+    public static final String FIELD__DATUM = "datum";
+    public static final String FIELD__ANZAHL = "anzahl";
+    public static final String FIELD__WETTER_WETTER = "wetter.wetter";
+    public static final String FIELD__BEZIRK = "bezirk";
+    public static final String FIELD__ZAEHLUNGEN = "zaehlungen";
+    public static final String FIELD__GEO_FIELD = "georeferenz.geo_field";
+    public static final String FIELD__STADTTEIL = "stadtteil.stadtteil";
+    public static final String FIELD__STANDORT = "standort";
+    public static final String AVG_TEXT = "Durchschnitt \u00D8";
+
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             "de.cismet.cids.objectrenderer.CoolPassantenfrequenzRenderer");
     private static final String SONNE = "sonne";
@@ -125,9 +130,9 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
 
     private final TreeMap<String, int[]> jahresDurchschnitt = new TreeMap();
     private final ConnectionContext connectionContext = ConnectionContext.create(
-                ConnectionContext.Category.STATIC,
-                ZaehlungsstandortRenderer.class.getSimpleName());
-    
+            ConnectionContext.Category.STATIC,
+            ZaehlungsstandortRenderer.class.getSimpleName());
+
     private CidsBean cidsBean;
     private final ZaehlungLastYearsSearch yearsSearch = new ZaehlungLastYearsSearch();
 
@@ -236,8 +241,10 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         buttonGroup1 = new javax.swing.ButtonGroup();
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
-        cmdPrint = new  ReportLookupButton("PFZReport");
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        cmdPrint = new ReportLookupButton("PFZReport");
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         pnlCard1 = new javax.swing.JPanel();
         jTabbedPane = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -245,10 +252,12 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanelDaten = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabFrequenzenAlle = new JTable() {
-            public boolean isCellEditable(int x, int y) {
-                return false;
-            }
-        };
+
+                @Override
+                public boolean isCellEditable(final int x, final int y) {
+                    return false;
+                }
+            };
         panLegend = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -271,10 +280,12 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanelDaten1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabFrequenzenLetzte = new JTable() {
-            public boolean isCellEditable(int x, int y) {
-                return false;
-            }
-        };
+
+                @Override
+                public boolean isCellEditable(final int x, final int y) {
+                    return false;
+                }
+            };
         jScrollPane4 = new javax.swing.JScrollPane();
         lblChartLetzte = new javax.swing.JLabel();
         panLegend2 = new javax.swing.JPanel();
@@ -297,10 +308,12 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanelDaten2 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tabFrequenzenJahre = new JTable() {
-            public boolean isCellEditable(int x, int y) {
-                return false;
-            }
-        };
+
+                @Override
+                public boolean isCellEditable(final int x, final int y) {
+                    return false;
+                }
+            };
         jScrollPane6 = new javax.swing.JScrollPane();
         lblChartJahre = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -353,28 +366,24 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jScrollPane1.setPreferredSize(new java.awt.Dimension(230, 200));
 
         tabFrequenzenAlle.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null}
-            },
-            new String [] {
-                "Datum", "Anzahl"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
+                new Object[][] {
+                    { null, null }
+                },
+                new String[] { "Datum", "Anzahl" }) {
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                Class[] types = new Class[] { java.lang.String.class, java.lang.Integer.class };
+                boolean[] canEdit = new boolean[] { false, false };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+                @Override
+                public Class getColumnClass(final int columnIndex) {
+                    return types[columnIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(final int rowIndex, final int columnIndex) {
+                    return canEdit[columnIndex];
+                }
+            });
         tabFrequenzenAlle.setGridColor(new java.awt.Color(153, 153, 153));
         tabFrequenzenAlle.setSelectionBackground(new java.awt.Color(153, 204, 255));
         tabFrequenzenAlle.getTableHeader().setReorderingAllowed(false);
@@ -446,16 +455,12 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel8.setMinimumSize(new java.awt.Dimension(10, 10));
         jPanel8.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        final javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -469,16 +474,12 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel9.setMinimumSize(new java.awt.Dimension(10, 10));
         jPanel9.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        final javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -492,16 +493,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel10.setMinimumSize(new java.awt.Dimension(10, 10));
         jPanel10.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        final javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -515,16 +518,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel11.setMinimumSize(new java.awt.Dimension(10, 10));
         jPanel11.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        final javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -538,16 +543,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel12.setMinimumSize(new java.awt.Dimension(10, 10));
         jPanel12.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        final javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -561,16 +568,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel13.setMinimumSize(new java.awt.Dimension(10, 10));
         jPanel13.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        final javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -584,16 +593,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel14.setMinimumSize(new java.awt.Dimension(10, 10));
         jPanel14.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        final javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -653,28 +664,24 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jScrollPane3.setPreferredSize(new java.awt.Dimension(230, 200));
 
         tabFrequenzenLetzte.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null}
-            },
-            new String [] {
-                "Datum", "Anzahl"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
+                new Object[][] {
+                    { null, null }
+                },
+                new String[] { "Datum", "Anzahl" }) {
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                Class[] types = new Class[] { java.lang.String.class, java.lang.Integer.class };
+                boolean[] canEdit = new boolean[] { false, false };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+                @Override
+                public Class getColumnClass(final int columnIndex) {
+                    return types[columnIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(final int rowIndex, final int columnIndex) {
+                    return canEdit[columnIndex];
+                }
+            });
         tabFrequenzenLetzte.setGridColor(new java.awt.Color(153, 153, 153));
         tabFrequenzenLetzte.setSelectionBackground(new java.awt.Color(153, 204, 255));
         tabFrequenzenLetzte.getTableHeader().setReorderingAllowed(false);
@@ -757,16 +764,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel22.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel22.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
+        final javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
         jPanel22Layout.setHorizontalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel22Layout.setVerticalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -778,16 +787,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel23.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel23.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
+        final javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
         jPanel23Layout.setHorizontalGroup(
-            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel23Layout.setVerticalGroup(
-            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -799,16 +810,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel24.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel24.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
+        final javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
         jPanel24Layout.setHorizontalGroup(
-            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel24Layout.setVerticalGroup(
-            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -820,16 +833,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel25.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel25.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
+        final javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
         jPanel25.setLayout(jPanel25Layout);
         jPanel25Layout.setHorizontalGroup(
-            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel25Layout.setVerticalGroup(
-            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -841,16 +856,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel26.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel26.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
+        final javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
-            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel26Layout.setVerticalGroup(
-            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -862,16 +879,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel27.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel27.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
+        final javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
         jPanel27.setLayout(jPanel27Layout);
         jPanel27Layout.setHorizontalGroup(
-            jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel27Layout.setVerticalGroup(
-            jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -883,16 +902,18 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jPanel28.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel28.setPreferredSize(new java.awt.Dimension(10, 10));
 
-        javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
+        final javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
         jPanel28.setLayout(jPanel28Layout);
         jPanel28Layout.setHorizontalGroup(
-            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         jPanel28Layout.setVerticalGroup(
-            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -939,28 +960,24 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         jScrollPane5.setPreferredSize(new java.awt.Dimension(230, 200));
 
         tabFrequenzenJahre.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null}
-            },
-            new String [] {
-                "Datum", "Anzahl"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
+                new Object[][] {
+                    { null, null }
+                },
+                new String[] { "Datum", "Anzahl" }) {
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                Class[] types = new Class[] { java.lang.String.class, java.lang.Integer.class };
+                boolean[] canEdit = new boolean[] { false, false };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+                @Override
+                public Class getColumnClass(final int columnIndex) {
+                    return types[columnIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(final int rowIndex, final int columnIndex) {
+                    return canEdit[columnIndex];
+                }
+            });
         tabFrequenzenJahre.setGridColor(new java.awt.Color(153, 153, 153));
         tabFrequenzenJahre.setSelectionBackground(new java.awt.Color(153, 204, 255));
         tabFrequenzenJahre.getTableHeader().setReorderingAllowed(false);
@@ -1036,13 +1053,14 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(pnlCard1, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
-     * @param werte
-     * @param chartLabel
-     * @param tabelle
+     *
+     * @param  werte       DOCUMENT ME!
+     * @param  chartLabel  DOCUMENT ME!
+     * @param  tabelle     DOCUMENT ME!
      */
     public void fillTableAndCreateChart(final List<CidsBean> werte,
             final JLabel chartLabel,
@@ -1074,7 +1092,7 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
 
                                     final Integer anzahl = (Integer)zaehlung.getProperty(FIELD__ANZAHL);
                                     tmAnzahl.put(key, anzahl);
-                                    
+
                                     final String wetter = (String)zaehlung.getProperty(FIELD__WETTER_WETTER);
                                     if (wetter != null) {
                                         tmWetter.put(key, wetter);
@@ -1090,7 +1108,7 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
                                     if (LOG.isDebugEnabled()) {
                                         LOG.debug("WETTER=" + tmWetter.get(s));
                                     }
-                                   
+
                                     final int wert = tmAnzahl.get(s) * 12;
                                     avg += wert;
                                     model.setValueAt(
@@ -1102,7 +1120,7 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
                                                 + 1,
                                         0);
                                     model.setValueAt(wert, i + 1, 1);
-                                   
+
                                     if (tmWetter.get(s) != null) {
                                         model.setValueAt(
                                             tmWetter.get(s),
@@ -1144,6 +1162,11 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  werte  DOCUMENT ME!
+     */
     public void fillTableAndCreateYearChart(final List<CidsBean> werte) {
         if (!werte.isEmpty()) {
             final ArrayList<Timestamp> datum = new ArrayList<>(werte.size());
@@ -1156,74 +1179,77 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
             final Thread t = new Thread(new Runnable() {
 
                         @Override
-                            public void run() {
-                                datasetJahr = new DefaultCategoryDataset();
-                                ///String max = "1000";
-                                Integer summe = 0;
-                                
-                                // Daten in HashMaps eintragen
-                                for (int i = 0; i < datum.size(); i++) {
-                                    try {
-                                        String jahr = DateFormat.getDateInstance(DateFormat.YEAR_FIELD, Locale.GERMANY)
-                                                    .format(datum.get(i));
-                                        jahr = jahr.substring(jahr.length() - 4);
-                                        final int wert = anzahl.get(i) * 12;
-                                        if (jahresDurchschnitt.get(jahr) != null) {
-                                            final int[] tmp = jahresDurchschnitt.get(jahr);
-                                            tmp[0] += wert;
-                                            tmp[1] += 1;
-                                            jahresDurchschnitt.put(jahr, tmp);
-                                        } else {
-                                            final int[] newArr = { wert, 1 };
-                                            jahresDurchschnitt.put(jahr, newArr);
-                                        }
-                                        summe = summe + wert;
-                                    } catch (Exception ex) {
-                                        LOG.error("Error beim Erstellen des FeatureRenderers", ex);
+                        public void run() {
+                            datasetJahr = new DefaultCategoryDataset();
+                            ///String max = "1000";
+                            Integer summe = 0;
+
+                            // Daten in HashMaps eintragen
+                            for (int i = 0; i < datum.size(); i++) {
+                                try {
+                                    String jahr = DateFormat.getDateInstance(DateFormat.YEAR_FIELD, Locale.GERMANY)
+                                                .format(datum.get(i));
+                                    jahr = jahr.substring(jahr.length() - 4);
+                                    final int wert = anzahl.get(i) * 12;
+                                    if (jahresDurchschnitt.get(jahr) != null) {
+                                        final int[] tmp = jahresDurchschnitt.get(jahr);
+                                        tmp[0] += wert;
+                                        tmp[1] += 1;
+                                        jahresDurchschnitt.put(jahr, tmp);
+                                    } else {
+                                        final int[] newArr = { wert, 1 };
+                                        jahresDurchschnitt.put(jahr, newArr);
                                     }
+                                    summe = summe + wert;
+                                } catch (Exception ex) {
+                                    LOG.error("Error beim Erstellen des FeatureRenderers", ex);
                                 }
-
-                                // Daten aus HashMaps in DefaultCategoryDataset eintragen
-                                for (final String key : jahresDurchschnitt.keySet()) {
-                                    datasetJahr.addValue((int)(Math.round(jahresDurchschnitt.get(key)[0] / jahresDurchschnitt.get(key)[1])),
-                                        "Daten",
-                                        key);
-                                    
-                                }
-                                
-                                final DefaultTableModel modelJahr = new DefaultTableModel(
-                                        colNamesJahr.toArray(),
-                                        datasetJahr.getColumnCount()+1);
-                                tabFrequenzenJahre.setModel(modelJahr);
-                                for (int i=0; i<datasetJahr.getColumnCount(); i++){
-                                    modelJahr.setValueAt(
-                                        datasetJahr.getColumnKey(i),
-                                        i + 1,
-                                        0);
-                                    modelJahr.setValueAt(
-                                        datasetJahr.getValue(0, i).intValue(),
-                                        i + 1,
-                                        1);
-                                }
-                                modelJahr.setValueAt(AVG_TEXT , 0, 0);
-                                Integer durchschnitt = Math.round(summe / werte.size());
-                                modelJahr.setValueAt(durchschnitt , 0, 1);
-                                final JFreeChart chart = createChart(datasetJahr, durchschnitt);
-                                chart.setBackgroundPaint(new Color(210, 210, 210));
-                                final BufferedImage icon = chart.createBufferedImage(1000, 400);
-                                EventQueue.invokeLater(new Runnable() {
-
-                                        @Override
-                                        public void run() {
-                                            lblChartJahre.setIcon(new ImageIcon(icon));
-                                        }
-                                    });
                             }
+
+                            // Daten aus HashMaps in DefaultCategoryDataset eintragen
+                            for (final String key : jahresDurchschnitt.keySet()) {
+                                datasetJahr.addValue(
+                                    (int)(Math.round(jahresDurchschnitt.get(key)[0] / jahresDurchschnitt.get(key)[1])),
+                                    "Daten",
+                                    key);
+                            }
+
+                            final DefaultTableModel modelJahr = new DefaultTableModel(
+                                    colNamesJahr.toArray(),
+                                    datasetJahr.getColumnCount()
+                                            + 1);
+                            tabFrequenzenJahre.setModel(modelJahr);
+                            for (int i = 0; i < datasetJahr.getColumnCount(); i++) {
+                                modelJahr.setValueAt(
+                                    datasetJahr.getColumnKey(i),
+                                    i
+                                            + 1,
+                                    0);
+                                modelJahr.setValueAt(
+                                    datasetJahr.getValue(0, i).intValue(),
+                                    i
+                                            + 1,
+                                    1);
+                            }
+                            modelJahr.setValueAt(AVG_TEXT, 0, 0);
+                            final Integer durchschnitt = Math.round(summe / werte.size());
+                            modelJahr.setValueAt(durchschnitt, 0, 1);
+                            final JFreeChart chart = createChart(datasetJahr, durchschnitt);
+                            chart.setBackgroundPaint(new Color(210, 210, 210));
+                            final BufferedImage icon = chart.createBufferedImage(1000, 400);
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        lblChartJahre.setIcon(new ImageIcon(icon));
+                                    }
+                                });
+                        }
                     });
             t.start();
         }
     }
-    
+
     /**
      * Erzeugt ein Diagramm fuer Passantenfrequenzen.
      *
@@ -1279,19 +1305,20 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
             panMapPreview.initMap(cidsBean, FIELD__GEO_FIELD);
             yearsSearch.setStandortId(cidsBean.getPrimaryKeyValue());
             try {
-                Collection<MetaObjectNode> colMONZaehlung = SessionManager.getProxy().customServerSearch(
-                        SessionManager.getSession().getUser(),
-                        yearsSearch,
-                        getConnectionContext());
+                final Collection<MetaObjectNode> colMONZaehlung = SessionManager.getProxy()
+                            .customServerSearch(
+                                SessionManager.getSession().getUser(),
+                                yearsSearch,
+                                getConnectionContext());
                 final List<CidsBean> yearBeans = new ArrayList<>();
-                    for (final MetaObjectNode mon : colMONZaehlung) {
-                        yearBeans.add(SessionManager.getProxy().getMetaObject(
-                                mon.getObjectId(),
-                                mon.getClassId(),
-                                "WUNDA_BLAU",
-                                getConnectionContext()).getBean());
-                    }
-                    fillTableAndCreateChart(yearBeans, lblChartLetzte, tabFrequenzenLetzte);
+                for (final MetaObjectNode mon : colMONZaehlung) {
+                    yearBeans.add(SessionManager.getProxy().getMetaObject(
+                            mon.getObjectId(),
+                            mon.getClassId(),
+                            "WUNDA_BLAU",
+                            getConnectionContext()).getBean());
+                }
+                fillTableAndCreateChart(yearBeans, lblChartLetzte, tabFrequenzenLetzte);
             } catch (ConnectionException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -1335,7 +1362,6 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
         return panTitle;
     }
 
-    
     /**
      * DOCUMENT ME!
      *
@@ -1344,6 +1370,7 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
     public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1378,28 +1405,39 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
                 if (value != null) {
                     final String wetter = value.toString().toLowerCase();
                     switch (wetter) {
-                        case SONNE:
+                        case SONNE: {
                             return new JLabel(ICON_SONNE);
-                        case LEICHTER_BEW:
+                        }
+                        case LEICHTER_BEW: {
                             return new JLabel(ICON_LEICHTER_BEW);
-                        case LEICHT_BEW:
+                        }
+                        case LEICHT_BEW: {
                             return new JLabel(ICON_LEICHT_BEW);
-                        case WECHSELHAFT:
+                        }
+                        case WECHSELHAFT: {
                             return new JLabel(ICON_WECHSELHAFT);
-                        case BEWOELKT:
+                        }
+                        case BEWOELKT: {
                             return new JLabel(ICON_BEWOELKT);
-                        case STARK_BEW:
+                        }
+                        case STARK_BEW: {
                             return new JLabel(ICON_STARK_BEW);
-                        case REGEN:
+                        }
+                        case REGEN: {
                             return new JLabel(ICON_REGEN);
-                        case GEWITTER:
+                        }
+                        case GEWITTER: {
                             return new JLabel(ICON_GEWITTER);
-                        case SCHNEE:
+                        }
+                        case SCHNEE: {
                             return new JLabel(ICON_SCHNEE);
-                        case SCHNEE_WECHSEL:
+                        }
+                        case SCHNEE_WECHSEL: {
                             return new JLabel(ICON_SCHNEE_WECHSEL);
-                        default:
+                        }
+                        default: {
                             return new JLabel("");
+                        }
                     }
                 }
             } catch (Exception exception) {
@@ -1446,7 +1484,7 @@ public class ZaehlungsstandortRenderer extends JPanel implements CidsBeanRendere
                 final Date date = DateFormat.getInstance().parse(key);
                 final Calendar mittag = Calendar.getInstance();
                 mittag.setTime(date);
-                mittag.set(Calendar.HOUR_OF_DAY,12);
+                mittag.set(Calendar.HOUR_OF_DAY, 12);
                 mittag.set(Calendar.MINUTE, 0);
                 mittag.set(Calendar.SECOND, 0);
                 paintLight = date.before(mittag.getTime());

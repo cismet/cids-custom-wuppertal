@@ -15,10 +15,13 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaObject;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
@@ -65,10 +69,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.util.logging.Level;
-import lombok.Setter;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 /**
  * DOCUMENT ME!
  *
@@ -129,6 +129,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_TITLE = "BaumErsatzEditor.isOkForSaving().JOptionPane.title";
     public static final String BUNDLE_NOSAVE_MESSAGE = "BaumErsatzEditor.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "BaumErsatzEditor.noSave().title";
+    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -139,7 +140,6 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private final boolean editor;
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
-    @Getter @Setter private static Exception errorNoSave = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumErsatzPanel baumErsatzPanel;
@@ -340,7 +340,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeSchadenActionPerformed
+    private void btnChangeSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeSchadenActionPerformed
         final Object selectedItem = comboBoxFilterDialogSchaden.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean schadenBean = (CidsBean)selectedItem;
@@ -353,11 +353,11 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeSchadenActionPerformed
+    } //GEN-LAST:event_btnChangeSchadenActionPerformed
 
     @Override
     public boolean isOkForSaving() {
-        if (getErrorNoSave()!= null){
+        if (getErrorNoSave() != null) {
             noSave();
             return false;
         } else {
@@ -413,22 +413,25 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
             }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
-                if (isEditor()){
-                    setErrorNoSave(ex);
-                    noSave();
-                }
+            if (isEditor()) {
+                setErrorNoSave(ex);
+                noSave();
+            }
         }
     }
-    
-    public void noSave(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                    NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSAVE_TITLE),
-                    NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSAVE_MESSAGE),
-                    null,
-                    null,
-                    getErrorNoSave(),
-                    Level.SEVERE,
-                    null);
+                NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumErsatzEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
         JXErrorPane.showDialog(BaumErsatzEditor.this, info);
     }
 

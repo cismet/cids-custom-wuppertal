@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaObject;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +25,9 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -48,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
@@ -76,10 +80,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.util.logging.Level;
-import lombok.Setter;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 /**
  * DOCUMENT ME!
  *
@@ -157,6 +157,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String BUNDLE_NOMELDUNG = "BaumSchadenEditor.isOkForSaving().noMeldung";
     public static final String BUNDLE_NOSAVE_MESSAGE = "BaumSchadenEditor.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "BaumSchadenEditor.noSave().title";
+    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -169,7 +170,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     @Getter private final BaumChildrenLoader baumChildrenLoader = new BaumChildrenLoader(this);
     private boolean areChildrenLoad = false;
-    @Getter @Setter private static Exception errorNoSave = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BaumSchadenPanel baumSchadenPanel;
@@ -387,7 +387,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -400,11 +400,11 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeGebietActionPerformed
+    } //GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public boolean isOkForSaving() {
-        if (getErrorNoSave()!= null){
+        if (getErrorNoSave() != null) {
             noSave();
             return false;
         } else {
@@ -472,22 +472,25 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
-                if (isEditor()){
-                    setErrorNoSave(ex);
-                    noSave();
-                }
+            if (isEditor()) {
+                setErrorNoSave(ex);
+                noSave();
+            }
         }
     }
-    
-    public void noSave(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                    NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOSAVE_TITLE),
-                    NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOSAVE_MESSAGE),
-                    null,
-                    null,
-                    getErrorNoSave(),
-                    Level.SEVERE,
-                    null);
+                NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
         JXErrorPane.showDialog(BaumSchadenEditor.this, info);
     }
 
@@ -774,7 +777,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
          * @return  DOCUMENT ME!
          */
         public Object getLastValid() {
-            return lastValid; 
+            return lastValid;
         }
     }
 }
