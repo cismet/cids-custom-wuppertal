@@ -191,9 +191,9 @@ public class BaumLagePanel extends javax.swing.JPanel implements Disposable {
      *
      * @param  cidsBean           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
-     * @param mapCallString
+     * @param  mapCallString      DOCUMENT ME!
      */
-    public void setMapWindow(final CidsBean cidsBean, 
+    public void setMapWindow(final CidsBean cidsBean,
             final ConnectionContext connectionContext,
             final String mapCallString) {
         Double bufferMeter = 0.0;
@@ -207,9 +207,9 @@ public class BaumLagePanel extends javax.swing.JPanel implements Disposable {
                 if (cidsBean.getProperty(FIELD__GEOM) != null) {
                     panPreviewMap.initMap(cidsBean, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter, mapCallString);
                 } else {
-                    if (cidsBean.getProperty(FIELD__GEO_FIELD) != null){
+                    if (cidsBean.getProperty(FIELD__GEO_FIELD) != null) {
                         panPreviewMap.initMap(cidsBean, FIELD__GEO_FIELD, bufferMeter, mapCallString);
-                    } else{
+                    } else {
                         final CidsBean newGeom = createDefaultGeom(connectionContext);
                         panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, bufferMeter, mapCallString);
                     }

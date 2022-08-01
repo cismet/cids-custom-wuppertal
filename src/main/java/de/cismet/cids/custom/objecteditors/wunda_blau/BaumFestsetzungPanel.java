@@ -775,8 +775,8 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
-        baumLagePanel.setMapWindow(getCidsBean(), 
-                getConnectionContext(),
-                mapUrl);
+        baumLagePanel.setMapWindow(getCidsBean(),
+            getConnectionContext(),
+            mapUrl);
     }
 }

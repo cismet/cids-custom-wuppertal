@@ -54,7 +54,7 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  kategorieBean          DOCUMENT ME!
+     * @param  kategorieBean         DOCUMENT ME!
      * @param  selectedTemplateBean  DOCUMENT ME!
      * @param  connectionContext     DOCUMENT ME!
      */
@@ -144,7 +144,7 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param   kategorieBean       DOCUMENT ME!
+     * @param   kategorieBean      DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -161,7 +161,7 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param   kategorieBeans      DOCUMENT ME!
+     * @param   kategorieBeans     DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -233,7 +233,7 @@ public class PfPotenzialflaecheReportGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param  kategorieBean       flaecheBean DOCUMENT ME!
+     * @param  kategorieBean      flaecheBean DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     public static void startDownloadForKategorie(final CidsBean kategorieBean,
