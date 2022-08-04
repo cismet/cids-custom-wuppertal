@@ -16,19 +16,11 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.JXLoginPane;
-import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.error.ErrorInfo;
-
 import java.awt.Dimension;
-import java.awt.Frame;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.logging.Level;
 
-import de.cismet.cids.client.tools.CidsAuthentification;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -40,9 +32,6 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
  * DOCUMENT ME!
@@ -76,46 +65,6 @@ public class TreppenReportTester implements ConnectionContextProvider {
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  callServerURL       DOCUMENT ME!
-     * @param  domain              DOCUMENT ME!
-     * @param  compressionEnabled  DOCUMENT ME!
-     */
-    private void login(final String callServerURL, final String domain, final boolean compressionEnabled) {
-        final CidsAuthentification cidsAuth = new CidsAuthentification(
-                callServerURL,
-                domain,
-                compressionEnabled,
-                getConnectionContext());
-        final JXLoginPane login = new JXLoginPane(cidsAuth);
-
-        final JXLoginPane.JXLoginDialog loginDialog = new JXLoginPane.JXLoginDialog((Frame)null, login);
-
-        login.setPassword("".toCharArray());
-
-        try {
-            ((JXPanel)((JXPanel)login.getComponent(1)).getComponent(1)).getComponent(3).requestFocus();
-        } catch (final Exception ex) {
-            LOG.info("could nor request focus", ex);
-        }
-        StaticSwingTools.showDialog(loginDialog);
-
-        if (loginDialog.getStatus() != JXLoginPane.Status.SUCCEEDED) {
-            System.exit(0);
-        } else {
-            try {
-                LOG.fatal("init map");
-                initMap();
-                LOG.fatal("go test");
-                go();
-            } catch (Exception ex) {
-                LOG.fatal(ex, ex);
-            }
-        }
-    }
 
     /**
      * DOCUMENT ME!

@@ -7,10 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.utils;
 
-
-import de.cismet.cids.editors.FastBindableReferenceCombo;
-import de.cismet.cidsx.server.search.builtin.legacy.LightweightMetaObjectsSearch;
-
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
@@ -19,6 +15,10 @@ import java.util.EventObject;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
+
+import de.cismet.cids.editors.FastBindableReferenceCombo;
+
+import de.cismet.cidsx.server.search.builtin.legacy.LightweightMetaObjectsSearch;
 
 /**
  * A table cell editor that shows a bindable combobox.
@@ -35,18 +35,26 @@ public class FastBindableReferenceComboCellEditor extends AbstractCellEditor imp
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new DefaultBindableComboboxCellEditor object.
+     * Creates a new FastBindableReferenceComboCellEditor object.
      *
-     * @param lwsSearch
-     * @param pattern
-     * @param fields
+     * @throws  UnsupportedOperationException  DOCUMENT ME!
      */
-    public FastBindableReferenceComboCellEditor(final LightweightMetaObjectsSearch lwsSearch, String pattern, String [] fields) {
-        comboBox = new FastBindableReferenceCombo(lwsSearch, pattern, fields);
+    public FastBindableReferenceComboCellEditor() {
+        throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods, choose
+                                                                          // Tools | Templates.
     }
 
-    public FastBindableReferenceComboCellEditor() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Creates a new DefaultBindableComboboxCellEditor object.
+     *
+     * @param  lwsSearch  DOCUMENT ME!
+     * @param  pattern    DOCUMENT ME!
+     * @param  fields     DOCUMENT ME!
+     */
+    public FastBindableReferenceComboCellEditor(final LightweightMetaObjectsSearch lwsSearch,
+            final String pattern,
+            final String[] fields) {
+        comboBox = new FastBindableReferenceCombo(lwsSearch, pattern, fields);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -75,9 +83,12 @@ public class FastBindableReferenceComboCellEditor extends AbstractCellEditor imp
         return comboBox;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public FastBindableReferenceCombo getComboBox() {
         return comboBox;
     }
-    
-    
 }

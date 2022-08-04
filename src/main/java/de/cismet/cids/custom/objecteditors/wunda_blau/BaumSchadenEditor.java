@@ -382,7 +382,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -395,7 +395,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    }//GEN-LAST:event_btnChangeGebietActionPerformed
+    } //GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -750,7 +750,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
          * @return  DOCUMENT ME!
          */
         public Object getLastValid() {
-            return lastValid; 
+            return lastValid;
         }
     }
 }

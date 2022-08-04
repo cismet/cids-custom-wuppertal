@@ -157,6 +157,7 @@
           <BindingProperties>
             <BindingProperty name="cidsBean" source="jList1" sourcePath="${selectedElement}" target="alboFlaecheMainStandortPanel1" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
             <BindingProperty name="enabled" source="alboFlaecheMainStandortPanel1" sourcePath="${cidsBean != null}" target="alboFlaecheMainStandortPanel1" targetPath="enabled" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="parentBean" source="Form" sourcePath="${cidsBean}" target="alboFlaecheMainStandortPanel1" targetPath="parentBean" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel(isEditable())"/>

@@ -151,6 +151,13 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
                 alboFlaecheMainStandortPanel1,
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
+                alboFlaecheMainStandortPanel1,
+                org.jdesktop.beansbinding.BeanProperty.create("parentBean"));
+        bindingGroup.addBinding(binding);
 
         jPanel10.add(alboFlaecheMainStandortPanel1, "standort");
 

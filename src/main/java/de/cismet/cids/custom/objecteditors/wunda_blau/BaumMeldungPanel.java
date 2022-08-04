@@ -113,26 +113,26 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
 
     private static final Logger LOG = Logger.getLogger(BaumMeldungPanel.class);
 
-    public static final String FIELD__APARTNER = "arr_ansprechpartner";    // baum_meldung
-    public static final String FIELD__DATUM = "datum";                     // baum_meldung
-    public static final String FIELD__ZEIT = "zeit";                       // baum_ortstermin
-    public static final String FIELD__FK_MELDUNG = "fk_meldung";           // baum_ortstermin bzw. schaden
-    public static final String FIELD__ID = "id";                           // baum_schaden
-    public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";       // baum_schaden
-    public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";       // baum_schaden
-    public static final String FIELD__SCHADEN_EFEU = "efeu";               // baum_schaden
-    public static final String FIELD__SCHADEN_KRONE = "kronenschaden";     // baum_schaden
-    public static final String FIELD__SCHADEN_STAMM = "stammschaden";      // baum_schaden
-    public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";    // baum_schaden
-    public static final String FIELD__SCHADEN_GEFAHR = "gefahrensbaum";    // baum_schaden
-    public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung";// baum_schaden
-    public static final String FIELD__SCHADEN_STURM = "sturmschaden";      // baum_schaden
-    public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben"; // baum_schaden
-    public static final String FIELD__SCHADEN_BAU = "baumassnahme";        // baum_schaden
-    public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";     // baum_schaden
-    public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";   // baum_schaden
-    public static final String FIELD__SCHADEN_EINGANG = "eingegangen";     // baum_schaden
-    public static final String FIELD__SCHADEN_FAELLUNG = "faellung";       // baum_schaden
+    public static final String FIELD__APARTNER = "arr_ansprechpartner";     // baum_meldung
+    public static final String FIELD__DATUM = "datum";                      // baum_meldung
+    public static final String FIELD__ZEIT = "zeit";                        // baum_ortstermin
+    public static final String FIELD__FK_MELDUNG = "fk_meldung";            // baum_ortstermin bzw. schaden
+    public static final String FIELD__ID = "id";                            // baum_schaden
+    public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";        // baum_schaden
+    public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";        // baum_schaden
+    public static final String FIELD__SCHADEN_EFEU = "efeu";                // baum_schaden
+    public static final String FIELD__SCHADEN_KRONE = "kronenschaden";      // baum_schaden
+    public static final String FIELD__SCHADEN_STAMM = "stammschaden";       // baum_schaden
+    public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";     // baum_schaden
+    public static final String FIELD__SCHADEN_GEFAHR = "gefahrensbaum";     // baum_schaden
+    public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung"; // baum_schaden
+    public static final String FIELD__SCHADEN_STURM = "sturmschaden";       // baum_schaden
+    public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben";  // baum_schaden
+    public static final String FIELD__SCHADEN_BAU = "baumassnahme";         // baum_schaden
+    public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";      // baum_schaden
+    public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";    // baum_schaden
+    public static final String FIELD__SCHADEN_EINGANG = "eingegangen";      // baum_schaden
+    public static final String FIELD__SCHADEN_FAELLUNG = "faellung";        // baum_schaden
     public static final String TABLE__ORT = "baum_ortstermin";
     public static final String TABLE__SCHADEN = "baum_schaden";
 
@@ -1001,7 +1001,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddApartnerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddApartnerActionPerformed
+    private void btnAddApartnerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddApartnerActionPerformed
         final Object selectedItem = comboBoxFilterDialogApartner.showAndGetSelected();
         try {
             if (selectedItem instanceof CidsBean) {
@@ -1016,14 +1016,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             getCidsBean().setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         }
-    }//GEN-LAST:event_btnAddApartnerActionPerformed
+    }                                                                   //GEN-LAST:event_btnAddApartnerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveApartnerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveApartnerActionPerformed
+    private void btnRemoveApartnerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveApartnerActionPerformed
         final Object selection = lstApartner.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
@@ -1048,14 +1048,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveApartnerActionPerformed
+    }                                                                      //GEN-LAST:event_btnRemoveApartnerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewOrtsterminActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewOrtsterminActionPerformed
+    private void btnAddNewOrtsterminActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewOrtsterminActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -1067,14 +1067,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewOrtsterminActionPerformed
+    }                                                                        //GEN-LAST:event_btnAddNewOrtsterminActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveOrtsterminActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrtsterminActionPerformed
+    private void btnRemoveOrtsterminActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveOrtsterminActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             final Object selectedObject = lstOrtstermine.getSelectedValue();
 
@@ -1104,23 +1104,23 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
             }
         }
-    }//GEN-LAST:event_btnRemoveOrtsterminActionPerformed
+    } //GEN-LAST:event_btnRemoveOrtsterminActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortOrtsterminActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenAbortOrtsterminActionPerformed
+    private void btnMenAbortOrtsterminActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortOrtsterminActionPerformed
         dlgAddOrtstermin.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortOrtsterminActionPerformed
+    }                                                                          //GEN-LAST:event_btnMenAbortOrtsterminActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkOrtsterminActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkOrtsterminActionPerformed
+    private void btnMenOkOrtsterminActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkOrtsterminActionPerformed
         try {
             // meldungsBean erzeugen und vorbelegen:
             final CidsBean beanOrtstermin = CidsBean.createNewCidsBeanFromTableName(
@@ -1153,14 +1153,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         } finally {
             dlgAddOrtstermin.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkOrtsterminActionPerformed
+    } //GEN-LAST:event_btnMenOkOrtsterminActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewSchadenActionPerformed
+    private void btnAddNewSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewSchadenActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -1204,14 +1204,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewSchadenActionPerformed
+    } //GEN-LAST:event_btnAddNewSchadenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveSchadenActionPerformed
+    private void btnRemoveSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveSchadenActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             final Object selectedObject = lstSchaeden.getSelectedValue();
 
@@ -1254,14 +1254,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveSchadenActionPerformed
+    } //GEN-LAST:event_btnRemoveSchadenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnApartnerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApartnerActionPerformed
+    private void btnApartnerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnApartnerActionPerformed
         final JDialog dialog = new JDialog((Frame)null,
                 "Ansprechpartner/Melderinformationen",
                 true);
@@ -1285,16 +1285,16 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_TITLE_SELECTION),
                 JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_btnApartnerActionPerformed
+    } //GEN-LAST:event_btnApartnerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chAbgenommenStateChanged(final ChangeEvent evt) {//GEN-FIRST:event_chAbgenommenStateChanged
+    private void chAbgenommenStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chAbgenommenStateChanged
         isAbgenommen();
-    }//GEN-LAST:event_chAbgenommenStateChanged
+    }                                                              //GEN-LAST:event_chAbgenommenStateChanged
 
     @Override
     public ConnectionContext getConnectionContext() {
@@ -1459,10 +1459,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             LOG.warn("Datum not given.", ex);
             save = false;
         }
-        //Ap vorhanden
+        // Ap vorhanden
         try {
             final Collection<CidsBean> collectionAp = saveMeldungBean.getBeanCollectionProperty(FIELD__APARTNER);
-            if (collectionAp == null || collectionAp.isEmpty()) {
+            if ((collectionAp == null) || collectionAp.isEmpty()) {
                 LOG.warn("No ap specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOAP));
                 save = false;

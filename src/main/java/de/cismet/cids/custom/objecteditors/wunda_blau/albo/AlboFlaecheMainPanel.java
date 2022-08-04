@@ -789,7 +789,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jXTable1MouseClicked
+    private void jXTable1MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jXTable1MouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean vorgangBean = ((FlaecheVorgangTableModel)jXTable1.getModel()).getCidsBean(
                     jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
@@ -797,47 +797,47 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(vorgangBean), false);
         }
-    }//GEN-LAST:event_jXTable1MouseClicked
+    }                                                                        //GEN-LAST:event_jXTable1MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList2MouseClicked
+    private void jList2MouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_jList2MouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean bplanBean = jList2.getSelectedValue();
             ComponentRegistry.getRegistry()
                     .getDescriptionPane()
                     .gotoMetaObjectNode(new MetaObjectNode(bplanBean), false);
         }
-    }//GEN-LAST:event_jList2MouseClicked
+    }                                                                      //GEN-LAST:event_jList2MouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final Object selectedItem = comboBoxFilterDialog1.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean vorgangBean = (CidsBean)selectedItem;
             ((FlaecheVorgangTableModel)jXTable1.getModel()).add(vorgangBean);
             getCidsBean().setArtificialChangeFlag(true);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         final CidsBean flaecheBean = ((FlaecheVorgangTableModel)jXTable1.getModel()).getCidsBean(
                 jXTable1.getSelectedRow());
         ((FlaecheVorgangTableModel)jXTable1.getModel()).remove(flaecheBean);
         getCidsBean().setArtificialChangeFlag(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
