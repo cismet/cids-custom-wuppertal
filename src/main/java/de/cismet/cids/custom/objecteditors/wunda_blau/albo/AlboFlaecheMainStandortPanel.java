@@ -648,6 +648,7 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
     //~ Instance fields --------------------------------------------------------
 
     private MetaClass mcWirtschaftszweig;
+    private CidsBean parentBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
@@ -718,6 +719,24 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the parentBean
+     */
+    public CidsBean getParentBean() {
+        return parentBean;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parentBean  the parentBean to set
+     */
+    public void setParentBean(final CidsBean parentBean) {
+        this.parentBean = parentBean;
+    }
 
     @Override
     protected void initGui() {
@@ -887,6 +906,67 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
          */
         public StandortWirtschaftszweigTableModel() {
             super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Object getValueAt(final int rowIndex, final int columnIndex) {
+            if ((columnIndex == 2) && !loading) {
+                if (!isRowWithinBounds(rowIndex)) {
+                    return null;
+                } else {
+                    final CidsBean cidsBean = getCidsBean(rowIndex);
+                    final CidsBean massWz = (CidsBean)parentBean.getProperty("massgeblicher_wirtschaftszweig");
+
+                    return (massWz != null) && (cidsBean != null) && massWz.equals(cidsBean);
+                }
+            }
+
+            return super.getValueAt(rowIndex, columnIndex);
+        }
+
+        @Override
+        public void setValueAt(final Object value, final int rowIndex, final int columnIndex) {
+            if ((columnIndex == 2) && !loading) {
+                if (!isRowWithinBounds(rowIndex)) {
+                    return;
+                } else {
+                    final CidsBean cidsBean = getCidsBean(rowIndex);
+                    if (cidsBean != null) {
+                        if (value instanceof Boolean) {
+                            if ((Boolean)value) {
+                                try {
+                                    parentBean.setProperty("massgeblicher_wirtschaftszweig", cidsBean);
+                                } catch (final Exception ex) {
+                                    LOG.error(ex, ex);
+                                }
+                            } else if ((parentBean.getProperty("massgeblicher_wirtschaftszweig") != null)
+                                        && parentBean.getProperty("massgeblicher_wirtschaftszweig").equals(cidsBean)) {
+                                try {
+                                    parentBean.setProperty("massgeblicher_wirtschaftszweig", null);
+                                } catch (final Exception ex) {
+                                    LOG.error(ex, ex);
+                                }
+                            }
+                        }
+                        final int minSelectioNIndex = jXTable2.getSelectionModel().getMinSelectionIndex();
+                        final int maxSelectioNIndex = jXTable2.getSelectionModel().getMaxSelectionIndex();
+
+                        fireTableDataChanged();
+                        jXTable2.getSelectionModel().setSelectionInterval(minSelectioNIndex, maxSelectioNIndex);
+                    }
+
+                    return;
+                }
+            }
+
+            super.setValueAt(value, rowIndex, columnIndex);
+        }
+
+        @Override
+        public boolean isCellEditable(final int rowIndex, final int columnIndex) {
+            return isEditable() && isRowWithinBounds(rowIndex) && (columnIndex == 2);
         }
     }
 
