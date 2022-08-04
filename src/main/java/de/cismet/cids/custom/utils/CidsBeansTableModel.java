@@ -37,18 +37,19 @@ public class CidsBeansTableModel extends AbstractTableModel {
 
     //~ Instance fields --------------------------------------------------------
 
+    protected final Set<Integer> selectedRowIndices;
+    protected boolean loading = false;
+
     private final Class[] columnClasses;
     private final String[] columnNames;
     private final String[] columnProperties;
     private final Boolean[] columnEditables;
-    private final Set<Integer> selectedRowIndices;
 
     private final Boolean allColumnsEditable;
     private final Boolean allRowsEditable;
 
     private List<CidsBean> cidsBeans;
     private final List<Integer> editableRowIndices = new ArrayList<>();
-    private boolean loading = false;
 
     //~ Constructors -----------------------------------------------------------
 
