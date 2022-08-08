@@ -21,10 +21,10 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.utils.CidsBeansTableModel;
 
 import de.cismet.cids.dynamics.CidsBean;
 

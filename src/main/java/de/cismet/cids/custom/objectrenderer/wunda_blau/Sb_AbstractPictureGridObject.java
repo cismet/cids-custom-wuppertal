@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.utils.StadtbilderUtils;
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 

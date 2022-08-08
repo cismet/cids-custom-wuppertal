@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.utils;
+package de.cismet.cids.custom.clientutils;
 
 import Sirius.navigator.connection.SessionManager;
 

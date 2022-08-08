@@ -34,8 +34,8 @@ import javax.imageio.ImageIO;
 
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
-import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboVorgangReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;

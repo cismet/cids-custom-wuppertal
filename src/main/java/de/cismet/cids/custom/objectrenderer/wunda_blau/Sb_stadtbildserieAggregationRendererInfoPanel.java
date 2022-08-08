@@ -37,10 +37,10 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.cismet.cids.custom.clientutils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.clientutils.Sb_RestrictionLevelUtils.RestrictionLevel;
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
-import de.cismet.cids.custom.utils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 

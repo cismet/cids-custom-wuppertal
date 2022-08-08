@@ -38,7 +38,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.AbstractTableModel;
 
-import de.cismet.cids.custom.utils.DmsUrlPathMapper;
+import de.cismet.cids.custom.clientutils.DmsUrlPathMapper;
 
 import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;

@@ -5,7 +5,7 @@
 *              ... and it just works.
 *
 ****************************************************/
-package de.cismet.cids.custom.utils;
+package de.cismet.cids.custom.clientutils;
 
 /***************************************************
 *

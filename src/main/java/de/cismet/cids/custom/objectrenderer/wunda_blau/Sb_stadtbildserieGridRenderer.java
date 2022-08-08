@@ -28,8 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.StadtbilderUtils;
+import de.cismet.cids.custom.clientutils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
 
 /**
  * A JGrid renderer for a Stadtbildserie. It is used in the Vorschau and Bin panel of the

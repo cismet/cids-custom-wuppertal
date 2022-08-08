@@ -23,9 +23,9 @@ import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungMessageNotifier;
 import de.cismet.cids.custom.berechtigungspruefung.BerechtigungspruefungProperties;
+import de.cismet.cids.custom.clientutils.BerechtigungspruefungFreigabeDialog;
+import de.cismet.cids.custom.clientutils.BerechtigungspruefungStornoDialog;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.utils.BerechtigungspruefungFreigabeDialog;
-import de.cismet.cids.custom.utils.BerechtigungspruefungStornoDialog;
 import de.cismet.cids.custom.wunda_blau.search.actions.BerechtigungspruefungAnfrageServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;

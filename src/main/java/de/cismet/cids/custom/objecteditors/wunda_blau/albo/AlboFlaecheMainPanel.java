@@ -31,9 +31,9 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;

@@ -5,7 +5,7 @@
 *              ... and it just works.
 *
 ****************************************************/
-package de.cismet.cids.custom.utils;
+package de.cismet.cids.custom.clientutils;
 
 import Sirius.navigator.connection.SessionManager;
 
@@ -16,6 +16,8 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import de.cismet.cids.custom.utils.PotenzialflaechenProperties;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;

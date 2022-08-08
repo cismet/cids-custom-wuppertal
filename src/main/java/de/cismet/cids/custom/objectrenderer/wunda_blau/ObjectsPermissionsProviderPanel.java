@@ -40,7 +40,7 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.cismet.cids.custom.utils.CidsBeansTableModel;
+import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.server.ObjectsPermissionsSearch;
 
 import de.cismet.cids.dynamics.CidsBean;

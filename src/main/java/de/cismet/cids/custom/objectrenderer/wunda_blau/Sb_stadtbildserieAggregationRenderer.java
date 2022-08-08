@@ -59,10 +59,10 @@ import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.clientutils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
+import de.cismet.cids.custom.clientutils.TifferDownload;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.StadtbilderUtils;
-import de.cismet.cids.custom.utils.TifferDownload;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;

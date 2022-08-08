@@ -43,9 +43,9 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
+import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.PfPotenzialflaecheReportGenerator;
-import de.cismet.cids.custom.utils.ByteArrayActionDownload;
-import de.cismet.cids.custom.utils.CidsBeansTableModel;
 
 import de.cismet.cids.dynamics.CidsBean;
 

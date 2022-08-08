@@ -49,10 +49,10 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 
+import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.reports.wunda_blau.AlboReportGenerator;
-import de.cismet.cids.custom.utils.CidsBeansTableModel;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboVorgangExtReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboVorgangReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLightweightSearch;

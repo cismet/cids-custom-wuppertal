@@ -10,7 +10,7 @@
  *
  * Created on 16. Dezember 2004, 15:39
  */
-package de.cismet.cids.custom.utils;
+package de.cismet.cids.custom.clientutils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -220,7 +220,7 @@ public class DmsUrlPanel extends javax.swing.JPanel {
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/filetypes/dms_default.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/filetypes/dms_default.png"))); // NOI18N
         lblIcon.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override

@@ -69,6 +69,7 @@ import javax.swing.event.ChangeListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.clientutils.DmsUrlsPanel;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeBeschreibungPanel;
@@ -79,7 +80,6 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeLeitelementeP
 import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppePodestePanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.treppe.TreppeStuetzmauernPanel;
 import de.cismet.cids.custom.reports.wunda_blau.TreppenReportGenerator;
-import de.cismet.cids.custom.utils.DmsUrlsPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
 

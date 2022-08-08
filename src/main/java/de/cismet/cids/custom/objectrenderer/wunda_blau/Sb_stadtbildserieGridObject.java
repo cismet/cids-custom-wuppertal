@@ -17,8 +17,8 @@ import java.util.concurrent.ExecutorService;
 import javax.swing.DefaultListModel;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.StadtbilderUtils;
+import de.cismet.cids.custom.clientutils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;

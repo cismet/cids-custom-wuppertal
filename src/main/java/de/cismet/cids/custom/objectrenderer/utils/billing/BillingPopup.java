@@ -47,8 +47,8 @@ import javax.swing.text.StyleConstants;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.clientutils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BillingKundeRenderer;
-import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungBillingDownloadInfo;
 import de.cismet.cids.custom.utils.berechtigungspruefung.BerechtigungspruefungDownloadInfo;
