@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.MetaObject;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +25,9 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -48,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.text.DefaultFormatter;
@@ -116,7 +120,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     public static final String FIELD__ID = "id";                                       // baum_schaden
     public static final String FIELD__GEOREFERENZ = "fk_geom";                         // baum_schaden
-    public static final String FIELD__SCHADEN_PRIVAT = "privatbaum";                   // baum_schaden
     public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";                   // baum_schaden
     public static final String FIELD__SCHADEN_EFEU = "efeu";                           // baum_schaden
     public static final String FIELD__SCHADEN_KRONE = "kronenschaden";                 // baum_schaden
@@ -124,7 +127,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";                // baum_schaden
     public static final String FIELD__SCHADEN_STURM = "sturmschaden";                  // baum_schaden
     public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben";             // baum_schaden
-    public static final String FIELD__SCHADEN_BAU = "baumassnahme";                    // baum_schaden
     public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";                 // baum_schaden
     public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";               // baum_schaden
     public static final String FIELD__SCHADEN_EINGANG = "eingegangen";                 // baum_schaden
@@ -153,6 +155,9 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     public static final String BUNDLE_LOAD_ERROR = "BaumSchadenEditor.loadChildren().error";
     public static final String BUNDLE_NOMELDUNG = "BaumSchadenEditor.isOkForSaving().noMeldung";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumSchadenEditor.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumSchadenEditor.noSave().title";
+    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -399,29 +404,34 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
 
     @Override
     public boolean isOkForSaving() {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        final boolean noErrorOccured = baumSchadenPanel.isOkForSaving(getCidsBean());
-        try {
-            if (getCidsBean().getProperty(FIELD__MELDUNG_ID) == null) {
-                LOG.warn("No meldung specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOMELDUNG));
+        if (getErrorNoSave() != null) {
+            noSave();
+            return false;
+        } else {
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
+            final boolean noErrorOccured = baumSchadenPanel.isOkForSaving(getCidsBean());
+            try {
+                if (getCidsBean().getProperty(FIELD__MELDUNG_ID) == null) {
+                    LOG.warn("No meldung specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOMELDUNG));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Meldung not given.", ex);
                 save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Meldung not given.", ex);
-            save = false;
-        }
 
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
+            if (errorMessage.length() > 0) {
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
+            }
+            return save && noErrorOccured;
         }
-        return save && noErrorOccured;
     }
 
     @Override
@@ -462,7 +472,26 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
+            if (isEditor()) {
+                setErrorNoSave(ex);
+                noSave();
+            }
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
+        final ErrorInfo info = new ErrorInfo(
+                NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
+        JXErrorPane.showDialog(BaumSchadenEditor.this, info);
     }
 
     /**
@@ -532,7 +561,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public void setDefaultValues() {
         try {
             this.getCidsBean().setProperty(FIELD__SCHADEN_ABGESTORBEN, false);
-            getCidsBean().setProperty(FIELD__SCHADEN_BAU, false);
             getCidsBean().setProperty(FIELD__SCHADEN_BERATUNG, false);
             getCidsBean().setProperty(FIELD__SCHADEN_EINGANG, false);
             getCidsBean().setProperty(FIELD__SCHADEN_FAELLUNG, false);
@@ -540,7 +568,6 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             getCidsBean().setProperty(FIELD__SCHADEN_KRONE, false);
             getCidsBean().setProperty(FIELD__SCHADEN_OHNE, false);
             getCidsBean().setProperty(FIELD__SCHADEN_EFEU, false);
-            getCidsBean().setProperty(FIELD__SCHADEN_PRIVAT, false);
             getCidsBean().setProperty(FIELD__SCHADEN_STAMM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_STURM, false);
             getCidsBean().setProperty(FIELD__SCHADEN_WURZEL, false);

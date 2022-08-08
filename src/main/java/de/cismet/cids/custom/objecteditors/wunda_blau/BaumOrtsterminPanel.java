@@ -104,6 +104,19 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.BorderLayout;
+import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import lombok.Setter;
+import org.jdesktop.swingbinding.JListBinding;
+import org.jdesktop.swingbinding.SwingBindings;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -160,6 +173,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         "BaumOrtsterminPanel.btnRemoveAnsprechpartnerActionPerformed().errortitle";
     public static final String BUNDLE_AP_ERRORTEXT =
         "BaumOrtsterminPanel.btnRemoveAnsprechpartnerActionPerformed().errortext";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumOrtsterminPanel.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumOrtsterminPanel.noSave().title";
 
     public static final String TEL__PATTERN = "\\+[0-9]{1,3}(-[0-9]+){1,}";
 
@@ -277,12 +292,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         cbVorort.setName("cbVorort");                // NOI18N
         cbVorort.setPreferredSize(new Dimension(100, 24));
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_vorort}"),
-                cbVorort,
-                BeanProperty.create("selectedItem"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_vorort}"), cbVorort, BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -673,25 +685,22 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      * @version  $Revision$, $Date$
      */
     private class FormListener implements ActionListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
-            if (evt.getSource() == btnAddTeilnehmer) {
-                BaumOrtsterminPanel.this.btnAddTeilnehmerActionPerformed(evt);
-            } else if (evt.getSource() == btnRemTeilnehmer) {
-                BaumOrtsterminPanel.this.btnRemTeilnehmerActionPerformed(evt);
-            } else if (evt.getSource() == btnApartner) {
-                BaumOrtsterminPanel.this.btnApartnerActionPerformed(evt);
-            } else if (evt.getSource() == btnAddAp) {
+        FormListener() {}
+        public void actionPerformed(ActionEvent evt) {
+            if (evt.getSource() == btnAddAp) {
                 BaumOrtsterminPanel.this.btnAddApActionPerformed(evt);
-            } else if (evt.getSource() == btnRemAp) {
+            }
+            else if (evt.getSource() == btnRemAp) {
                 BaumOrtsterminPanel.this.btnRemApActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnApartner) {
+                BaumOrtsterminPanel.this.btnApartnerActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnAddTeilnehmer) {
+                BaumOrtsterminPanel.this.btnAddTeilnehmerActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnRemTeilnehmer) {
+                BaumOrtsterminPanel.this.btnRemTeilnehmerActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -702,6 +711,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     private String uhrzeit;
     private java.util.Date datum;
     @Getter private final BaumChildrenLoader baumChildrenLoader;
+    @Getter @Setter private static Exception errorNoSave = null;
     // private final PropertyChangeListener dateTimeListener = null;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
@@ -944,61 +954,69 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        if (!(Objects.equals(getCidsBean(), cidsBean))) {
-            if (isEditor() && (getCidsBean() != null)) {
-                getCidsBean().removePropertyChangeListener(changeListener);
-            }
-            bindingGroup.unbind();
-            this.cidsBean = cidsBean;
-            bindingGroup.bind();
-            if (getCidsBean() != null) {
-                if (isEditor()) {
-                    getCidsBean().addPropertyChangeListener(changeListener);
+        try {
+            if (!(Objects.equals(getCidsBean(), cidsBean))) {
+                if (isEditor() && (getCidsBean() != null)) {
+                    getCidsBean().removePropertyChangeListener(changeListener);
                 }
-                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                    bindingGroup,
-                    getCidsBean(),
-                    getConnectionContext());
-            } else {
-                cbVorort.setSelectedIndex(-1);
-                taBemerkungOrt.setText("");
-            }
+                bindingGroup.unbind();
+                this.cidsBean = cidsBean;
+                bindingGroup.bind();
+                if (getCidsBean() != null) {
+                    if (isEditor()) {
+                        getCidsBean().addPropertyChangeListener(changeListener);
+                    }
+                    DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                        bindingGroup,
+                        getCidsBean(),
+                        getConnectionContext());
+                } else {
+                    cbVorort.setSelectedIndex(-1);
+                    taBemerkungOrt.setText("");
+                }
 
-            final DateTimeFormListener dateTimeFormListener = new DateTimeFormListener();
-            if ((this.getBaumChildrenLoader() != null)
-                        && (this.getBaumChildrenLoader().getParentOrganizer() != null)
-                        && (this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor)) {
-                dcDatum.addPropertyChangeListener(dateTimeFormListener);
-            }
-            ftZeit.addPropertyChangeListener(dateTimeFormListener);
+                final DateTimeFormListener dateTimeFormListener = new DateTimeFormListener();
+                if ((this.getBaumChildrenLoader() != null)
+                            && (this.getBaumChildrenLoader().getParentOrganizer() != null)
+                            && (this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor)) {
+                    dcDatum.addPropertyChangeListener(dateTimeFormListener);
+                }
+                ftZeit.addPropertyChangeListener(dateTimeFormListener);
 
-            final DivBeanTable teilnehmerModel = new DivBeanTable(
-                    isEditor(),
-                    getCidsBean(),
-                    FIELD__TEILNEHMER,
-                    TEILNEHMER_COL_NAMES,
-                    TEILNEHMER_PROP_NAMES,
-                    TEILNEHMER_PROP_TYPES);
-            xtTeil.setModel(teilnehmerModel);
-            xtTeil.addMouseMotionListener(new MouseAdapter() {
+                final DivBeanTable teilnehmerModel = new DivBeanTable(
+                        isEditor(),
+                        getCidsBean(),
+                        FIELD__TEILNEHMER,
+                        TEILNEHMER_COL_NAMES,
+                        TEILNEHMER_PROP_NAMES,
+                        TEILNEHMER_PROP_TYPES);
+                xtTeil.setModel(teilnehmerModel);
+                xtTeil.addMouseMotionListener(new MouseAdapter() {
 
-                    @Override
-                    public void mouseMoved(final MouseEvent e) {
-                        final int row = xtTeil.rowAtPoint(e.getPoint());
-                        final int col = xtTeil.columnAtPoint(e.getPoint());
-                        if ((row > -1) && (col > -1)) {
-                            final Object value = xtTeil.getValueAt(row, col);
-                            if ((null != value) && !"".equals(value)) {
-                                xtTeil.setToolTipText(value.toString());
-                            } else {
-                                xtTeil.setToolTipText(null); // keinTooltip anzeigen
+                        @Override
+                        public void mouseMoved(final MouseEvent e) {
+                            final int row = xtTeil.rowAtPoint(e.getPoint());
+                            final int col = xtTeil.columnAtPoint(e.getPoint());
+                            if ((row > -1) && (col > -1)) {
+                                final Object value = xtTeil.getValueAt(row, col);
+                                if ((null != value) && !"".equals(value)) {
+                                    xtTeil.setToolTipText(value.toString());
+                                } else {
+                                    xtTeil.setToolTipText(null); // keinTooltip anzeigen
+                                }
                             }
                         }
-                    }
-                });
-            panOrtstermin.repaint();
-            panOrtstermin.updateUI();
-            taBemerkungOrt.updateUI();
+                    });
+                panOrtstermin.repaint();
+                panOrtstermin.updateUI();
+                taBemerkungOrt.updateUI();
+            }
+        } catch (Exception ex ){
+            LOG.error("Bean not set", ex);
+            if (isEditor()){
+                setErrorNoSave(ex);
+                noSave();
+            }
         }
         setReadOnly();
         loadDateTime();
@@ -1006,6 +1024,18 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
             nullNoEdit(getCidsBean() != null);
         }
         btnApartner.setEnabled(getCidsBean() != null);
+    }
+    
+    public void noSave(){
+        final ErrorInfo info = new ErrorInfo(
+                    NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
+        JXErrorPane.showDialog(BaumOrtsterminPanel.this, info);
     }
 
     /**
@@ -1044,98 +1074,103 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      * @return  DOCUMENT ME!
      */
     public boolean isOkayForSaving(final CidsBean saveOrtsterminBean) {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
+        if (getErrorNoSave()!= null){
+            noSave();
+            return false;
+        } else {
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
 
-        // dateTime vorhanden
-        try {
-            if (saveOrtsterminBean.getProperty(FIELD__ZEIT) == null) {
-                LOG.warn("No datum specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NODATE));
-                save = false;
-            } else {
-                final Calendar calDatumZeit = Calendar.getInstance();
-                calDatumZeit.setTime((Date)saveOrtsterminBean.getProperty(FIELD__ZEIT));
-                datum = calDatumZeit.getTime();
-                if (datum == null) {
+            // dateTime vorhanden
+            try {
+                if (saveOrtsterminBean.getProperty(FIELD__ZEIT) == null) {
                     LOG.warn("No datum specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NODATE));
                     save = false;
-                }
-                final SimpleDateFormat sdfZeit = new SimpleDateFormat("HH:mm");
-                uhrzeit = sdfZeit.format(calDatumZeit.getTime().getTime());
-                if (uhrzeit == null) {
-                    LOG.warn("No time specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOTIME));
-                    save = false;
                 } else {
-                    if ((calDatumZeit.get(Calendar.HOUR_OF_DAY) < 7) || (calDatumZeit.get(Calendar.HOUR_OF_DAY) > 19)) {
-                        LOG.warn("Wrong time specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTIME));
+                    final Calendar calDatumZeit = Calendar.getInstance();
+                    calDatumZeit.setTime((Date)saveOrtsterminBean.getProperty(FIELD__ZEIT));
+                    datum = calDatumZeit.getTime();
+                    if (datum == null) {
+                        LOG.warn("No datum specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NODATE));
                         save = false;
                     }
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Datum not given.", ex);
-            save = false;
-        }
-
-        // verantwortlicher vorort vorhanden
-        try {
-            if (saveOrtsterminBean.getProperty(FIELD__VORORT) == null) {
-                LOG.warn("No vorort specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOVORORT));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Vorort not given.", ex);
-            save = false;
-        }
-
-        // Ansprechpartner muss einen Namen haben
-        try {
-            final Collection<CidsBean> teilCollection = saveOrtsterminBean.getBeanCollectionProperty(FIELD__TEILNEHMER);
-            for (final CidsBean tBean : teilCollection) {
-                if (tBean.getProperty(FIELD__NAME) == null) {
-                    LOG.warn("No name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NONAME));
-                    save = false;
-                }
-                if (tBean.getProperty(FIELD__TEILNEHMER_TELEFON) != null) {
-                    if (!tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().isEmpty()) {
-                        if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
-                            LOG.warn("No name specified. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL))
-                                    .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString())
-                                    .append("<br>");
+                    final SimpleDateFormat sdfZeit = new SimpleDateFormat("HH:mm");
+                    uhrzeit = sdfZeit.format(calDatumZeit.getTime().getTime());
+                    if (uhrzeit == null) {
+                        LOG.warn("No time specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOTIME));
+                        save = false;
+                    } else {
+                        if ((calDatumZeit.get(Calendar.HOUR_OF_DAY) < 7) || (calDatumZeit.get(Calendar.HOUR_OF_DAY) > 19)) {
+                            LOG.warn("Wrong time specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTIME));
                             save = false;
                         }
                     }
                 }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Datum not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Teilnehmer not correct.", ex);
-            save = false;
-        }
 
-        if (errorMessage.length() > 0) {
-            if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
-                final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
-                errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WHICH))
-                        .append(formatTag.format(saveOrtsterminBean.getProperty(FIELD__ZEIT)));
-                final CidsBean meldungBean = (CidsBean)saveOrtsterminBean.getProperty(FIELD__FK_MELDUNG);
-                errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_MESSAGE))
-                        .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+            // verantwortlicher vorort vorhanden
+            try {
+                if (saveOrtsterminBean.getProperty(FIELD__VORORT) == null) {
+                    LOG.warn("No vorort specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOVORORT));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Vorort not given.", ex);
+                save = false;
             }
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
+
+            // Ansprechpartner muss einen Namen haben
+            try {
+                final Collection<CidsBean> teilCollection = saveOrtsterminBean.getBeanCollectionProperty(FIELD__TEILNEHMER);
+                for (final CidsBean tBean : teilCollection) {
+                    if (tBean.getProperty(FIELD__NAME) == null) {
+                        LOG.warn("No name specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NONAME));
+                        save = false;
+                    }
+                    if (tBean.getProperty(FIELD__TEILNEHMER_TELEFON) != null) {
+                        if (!tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().isEmpty()) {
+                            if (!(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString().matches(TEL__PATTERN))) {
+                                LOG.warn("No name specified. Skip persisting.");
+                                errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTEL))
+                                        .append(tBean.getProperty(FIELD__TEILNEHMER_TELEFON).toString())
+                                        .append("<br>");
+                                save = false;
+                            }
+                        }
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Teilnehmer not correct.", ex);
+                save = false;
+            }
+
+            if (errorMessage.length() > 0) {
+                if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WHICH))
+                            .append(formatTag.format(saveOrtsterminBean.getProperty(FIELD__ZEIT)));
+                    final CidsBean meldungBean = (CidsBean)saveOrtsterminBean.getProperty(FIELD__FK_MELDUNG);
+                    errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_MESSAGE))
+                            .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+                }
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
+            }
+            return save;
         }
-        return save;
     }
 
     /**
@@ -1147,7 +1182,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     && (dcDatum.getDate() != null)) {
             givenDate = dcDatum.getDate();
         } else {
-            if (getCidsBean().getProperty(FIELD__ZEIT) != null) {
+            if (getCidsBean() != null &&
+                    getCidsBean().getProperty(FIELD__ZEIT) != null) {
                 final Calendar calDatumZeit = Calendar.getInstance();
                 calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ZEIT));
                 givenDate = calDatumZeit.getTime();

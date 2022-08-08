@@ -102,6 +102,10 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.util.logging.Level;
+import lombok.Setter;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -137,42 +141,43 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 connectionContext);
     }
 
-    public static final String FIELD__ALTER = "alter";                                         // baum_schaden
-    public static final String FIELD__HOEHE = "hoehe";                                         // baum_schaden
-    public static final String FIELD__UMFANG = "umfang";                                       // baum_schaden
-    public static final String FIELD__ART = "fk_art";                                          // baum_schaden
-    public static final String FIELD__INST = "fk_institution";                                 // baum_schaden
-    public static final String FIELD__GEOM = "fk_geom";                                        // baum_schaden
-    public static final String FIELD__PRIVAT = "privatbaum";                                   // baum_schaden
-    public static final String FIELD__OHNE = "ohne_schaden";                                   // baum_schaden
-    public static final String FIELD__KRONE = "kronenschaden";                                 // baum_schaden
-    public static final String FIELD__GEFAHR = "gefahrensbaum";                                // baum_schaden
-    public static final String FIELD__STAMM = "stammschaden";                                  // baum_schaden
-    public static final String FIELD__WURZEL = "wurzelschaden";                                // baum_schaden
-    public static final String FIELD__KRONE_ARR = "arr_krone";                                 // baum_schaden
-    public static final String FIELD__STAMM_ARR = "arr_stamm";                                 // baum_schaden
-    public static final String FIELD__WURZEL_ARR = "arr_wurzel";                               // baum_schaden
-    public static final String FIELD__MASSNAHME = "arr_massnahme";                             // baum_schaden
-    public static final String FIELD__STURM = "sturmschaden";                                  // baum_schaden
-    public static final String FIELD__ABGESTORBEN = "abgestorben";                             // baum_schaden
-    public static final String FIELD__BAU = "fk_bau";                                          // baum_schaden
-    public static final String FIELD__BAU_TEXT = "bau";                                        // baum_schaden
-    public static final String FIELD__GUTACHTEN = "gutachten";                                 // baum_schaden
-    public static final String FIELD__BERATUNG = "baumberatung";                               // baum_schaden
-    public static final String FIELD__BEMERKUNG = "bemerkung";                                 // baum_schaden
-    public static final String FIELD__BETRAG = "betrag";                                       // baum_schaden
-    public static final String FIELD__EINGANG = "eingegangen";                                 // baum_schaden
-    public static final String FIELD__FAELLUNG = "faellung";                                   // baum_schaden
-    public static final String FIELD__KLEISTUNG = "keine_leistung";                            // baum_schaden
-    public static final String FIELD__BEGRUENDUNG = "begruendung";                             // baum_schaden
-    public static final String FIELD__FK_ORDNUNG = "fk_ordnungswidrigkeit";                    // baum_schaden
-    public static final String FIELD__ORDNUNG_SCHLUESSEL = "fk_ordnungswidrigkeit.schluessel"; // baum_ordnungwidrigkeit
-    public static final String FIELD__FK_SCHADEN = "fk_schaden";                               // baum_ersatz
-    public static final String FIELD__SELBST = "selbststaendig";                               // baum_ersatz
-    public static final String FIELD__DISPENS = "dispensbau";                                  // baum_ersatz
-    public static final String FIELD__ID = "id";                                               // baum_schaden
-    public static final String FIELD__FK_MELDUNG = "fk_meldung";                               // baum_schaden
-    public static final String FIELD__MDATUM = "datum";                                        // baum_meldung
+    public static final String FIELD__ALTER = "alter";             // baum_schaden
+    public static final String FIELD__HOEHE = "hoehe";             // baum_schaden
+    public static final String FIELD__UMFANG = "umfang";           // baum_schaden
+    public static final String FIELD__ART = "fk_art";              // baum_schaden
+    public static final String FIELD__INST = "fk_institution";     // baum_schaden
+    public static final String FIELD__GEOM = "fk_geom";            // baum_schaden
+    public static final String FIELD__PRIVAT = "privatbaum";       // baum_schaden
+    public static final String FIELD__OHNE = "ohne_schaden";       // baum_schaden
+    public static final String FIELD__KRONE = "kronenschaden";     // baum_schaden
+    public static final String FIELD__GEFAHR = "gefahrensbaum";    // baum_schaden
+    public static final String FIELD__STAMM = "stammschaden";      // baum_schaden
+    public static final String FIELD__WURZEL = "wurzelschaden";    // baum_schaden
+    public static final String FIELD__KRONE_ARR = "arr_krone";     // baum_schaden
+    public static final String FIELD__STAMM_ARR = "arr_stamm";     // baum_schaden
+    public static final String FIELD__WURZEL_ARR = "arr_wurzel";   // baum_schaden
+    public static final String FIELD__MASSNAHME = "arr_massnahme"; // baum_schaden
+    public static final String FIELD__STURM = "sturmschaden";      // baum_schaden
+    public static final String FIELD__ABGESTORBEN = "abgestorben"; // baum_schaden
+    public static final String FIELD__BAU = "fk_bau";              // baum_schaden
+    public static final String FIELD__BAU_TEXT = "bau";            // baum_schaden
+    public static final String FIELD__BAU_SCHLUESSEL = "fk_bau.schluessel";// baum_schaden --> baum_bau
+    public static final String FIELD__GUTACHTEN = "gutachten";     // baum_schaden
+    public static final String FIELD__BERATUNG = "baumberatung";   // baum_schaden
+    public static final String FIELD__BEMERKUNG = "bemerkung";     // baum_schaden
+    public static final String FIELD__BETRAG = "betrag";           // baum_schaden
+    public static final String FIELD__EINGANG = "eingegangen";     // baum_schaden
+    public static final String FIELD__FAELLUNG = "faellung";       // baum_schaden
+    public static final String FIELD__KLEISTUNG = "keine_leistung";// baum_schaden
+    public static final String FIELD__BEGRUENDUNG = "begruendung"; // baum_schaden
+    public static final String FIELD__FK_ORDNUNG = "fk_ordnungswidrigkeit"; // baum_schaden
+    public static final String FIELD__ORDNUNG_SCHLUESSEL = "fk_ordnungswidrigkeit.schluessel";    // baum_ordnungwidrigkeit
+    public static final String FIELD__FK_SCHADEN = "fk_schaden";   // baum_ersatz
+    public static final String FIELD__SELBST = "selbststaendig";   // baum_ersatz
+    public static final String FIELD__DISPENS = "dispensbau";      // baum_ersatz
+    public static final String FIELD__ID = "id";                   // baum_schaden
+    public static final String FIELD__FK_MELDUNG = "fk_meldung";   // baum_schaden
+    public static final String FIELD__MDATUM = "datum";            // baum_meldung
 
     public static final String FIELD__GEOREFERENZ = "fk_geom";                      // baum_schaden
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
@@ -207,6 +212,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String BUNDLE_PANE_PREFIX = "BaumSchadenPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BaumSchadenPanel.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BaumSchadenPanel.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumSchadenPanel.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumSchadenPanel.noSave().title";
 
     private static final ListModel MODEL_ERROR = new DefaultListModel() {
 
@@ -1733,6 +1740,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     @Getter private final BaumChildrenLoader baumChildrenLoader;
     private Integer saveGeom;
     private Integer saveArt;
+    @Getter @Setter private static Exception errorNoSave = null;
 
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
@@ -1756,7 +1764,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     case FIELD__BAU: {
                         setChangeFlag();
                         if ((getCidsBean().getProperty(FIELD__BAU) != null)
-                                    && (((CidsBean)getCidsBean().getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)) {
+                                    && ((getCidsBean().getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
                             txtBau.setEnabled(true);
                         } else {
                             txtBau.setEnabled(false);
@@ -2107,219 +2115,224 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
      * @return  DOCUMENT ME!
      */
     public boolean isOkForSaving(final CidsBean saveSchadenBean) {
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        boolean noErrorErsatz = true;
-        boolean noErrorFest = true;
+        if (getErrorNoSave()!= null){
+            noSave();
+            return false;
+        } else {    
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
+            boolean noErrorErsatz = true;
+            boolean noErrorFest = true;
 
-        final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(
-                saveSchadenBean.getPrimaryKeyValue());
-        final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(saveSchadenBean.getPrimaryKeyValue());
-        // Ersatzpflanzungen ueberpruefen
-        if ((listErsatz != null) && !(listErsatz.isEmpty())) {
-            for (final CidsBean ersatzBean : listErsatz) {
-                try {
-                    noErrorErsatz = baumErsatzPanel.isOkForSaving(ersatzBean);
-                    if (!noErrorErsatz) {
-                        break;
+            final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(
+                    saveSchadenBean.getPrimaryKeyValue());
+            final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(saveSchadenBean.getPrimaryKeyValue());
+            // Ersatzpflanzungen ueberpruefen
+            if ((listErsatz != null) && !(listErsatz.isEmpty())) {
+                for (final CidsBean ersatzBean : listErsatz) {
+                    try {
+                        noErrorErsatz = baumErsatzPanel.isOkForSaving(ersatzBean);
+                        if (!noErrorErsatz) {
+                            break;
+                        }
+                    } catch (final Exception ex) {
+                        noErrorErsatz = false;
+                        LOG.error(ex, ex);
                     }
-                } catch (final Exception ex) {
-                    noErrorErsatz = false;
-                    LOG.error(ex, ex);
                 }
             }
-        }
-        // Festsetzungen ueberpruefen
-        if ((listFest != null) && !(listFest.isEmpty())) {
-            for (final CidsBean festBean : listFest) {
-                try {
-                    noErrorFest = baumFestsetzungPanel.isOkayForSaving(festBean);
-                    if (!noErrorFest) {
-                        break;
+            // Festsetzungen ueberpruefen
+            if ((listFest != null) && !(listFest.isEmpty())) {
+                for (final CidsBean festBean : listFest) {
+                    try {
+                        noErrorFest = baumFestsetzungPanel.isOkayForSaving(festBean);
+                        if (!noErrorFest) {
+                            break;
+                        }
+                    } catch (final Exception ex) {
+                        noErrorFest = false;
+                        LOG.error(ex, ex);
                     }
-                } catch (final Exception ex) {
-                    noErrorFest = false;
-                    LOG.error(ex, ex);
                 }
             }
-        }
 
-        // Art muss angegeben werden
-        try {
-            if (saveSchadenBean.getProperty(FIELD__ART) == null) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOART));
-                save = false;
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Countl not given.", ex);
-            save = false;
-        }
-
-        // Geometrie vorhanden und Punkt
-        try {
-            if (saveSchadenBean.getProperty(FIELD__GEOREFERENZ) == null) {
-                LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOGEOM));
-                save = false;
-            } else {
-                final CidsBean geom_pos = (CidsBean)saveSchadenBean.getProperty(FIELD__GEOREFERENZ);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGGEOM));
+            // Art muss angegeben werden
+            try {
+                if (saveSchadenBean.getProperty(FIELD__ART) == null) {
+                    LOG.warn("No name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOART));
                     save = false;
                 }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Geom not given.", ex);
-            save = false;
-        }
-
-        // Institution muss angegeben werden
-        try {
-            if (saveSchadenBean.getProperty(FIELD__INST) == null) {
-                LOG.warn("No institution specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOINST));
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Countl not given.", ex);
                 save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Institution not given.", ex);
-            save = false;
-        }
 
-        // Wenn keine Leistung angegeben
-        try {
-            if (Objects.equals(saveSchadenBean.getProperty(FIELD__KLEISTUNG), true)) {
-                // Nicht ersichtlich warum
-                if (Objects.equals(saveSchadenBean.getProperty(FIELD__GEFAHR), false)
-                            && Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), false)
-                            && Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), false)
-                            && Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), false)) {
-                    if ((saveSchadenBean.getProperty(FIELD__BEGRUENDUNG) == null)
-                                || (saveSchadenBean.getProperty(FIELD__BEGRUENDUNG).toString()).trim().isEmpty()) {
-                        LOG.warn("No text keine leistung specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOLEISTUNG));
+            // Geometrie vorhanden und Punkt
+            try {
+                if (saveSchadenBean.getProperty(FIELD__GEOREFERENZ) == null) {
+                    LOG.warn("No geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOGEOM));
+                    save = false;
+                } else {
+                    final CidsBean geom_pos = (CidsBean)saveSchadenBean.getProperty(FIELD__GEOREFERENZ);
+                    if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                        LOG.warn("Wrong geom specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGGEOM));
                         save = false;
                     }
                 }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Geom not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Begruendung not given.", ex);
-            save = false;
-        }
 
-        // Text zur Baugehnemigung, wenn mit
-        try {
-            if ((saveSchadenBean.getProperty(FIELD__BAU) != null)
-                        && (((CidsBean)saveSchadenBean.getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)) {
-                if ((saveSchadenBean.getProperty(FIELD__BAU_TEXT) == null)
-                            || (saveSchadenBean.getProperty(FIELD__BAU_TEXT).toString()).trim().isEmpty()) {
-                    LOG.warn("No text bau specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOBAU));
+            // Institution muss angegeben werden
+            try {
+                if (saveSchadenBean.getProperty(FIELD__INST) == null) {
+                    LOG.warn("No institution specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOINST));
                     save = false;
                 }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Institution not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Text Bau not given.", ex);
-            save = false;
-        }
 
-        // Haekchen Wurzel gesetzt?
-        try {
-            final Collection<CidsBean> collectionWurzel = saveSchadenBean.getBeanCollectionProperty(FIELD__WURZEL_ARR);
-            if ((collectionWurzel != null) && !collectionWurzel.isEmpty()) {
-                if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true))) {
-                    LOG.warn("No wurzel specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOWURZEL));
-                    save = false;
+            // Wenn keine Leistung angegeben 
+            try {
+                if (Objects.equals(saveSchadenBean.getProperty(FIELD__KLEISTUNG), true)) {
+                    //Nicht ersichtlich warum
+                    if (Objects.equals(saveSchadenBean.getProperty(FIELD__GEFAHR), false)
+                            && Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), false)
+                            && Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), false)
+                            && Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), false)){
+                        if ((saveSchadenBean.getProperty(FIELD__BEGRUENDUNG) == null)
+                                    || (saveSchadenBean.getProperty(FIELD__BEGRUENDUNG).toString()).trim().isEmpty()) {
+                            LOG.warn("No text keine leistung specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOLEISTUNG));
+                            save = false;
+                        } 
+                    }
                 }
+            }catch (final MissingResourceException ex) {
+                LOG.warn("Begruendung not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("wurzel not given.", ex);
-            save = false;
-        }
 
-        // Haekchen Stamm gesetzt?
-        try {
-            final Collection<CidsBean> collectionStamm = saveSchadenBean.getBeanCollectionProperty(FIELD__STAMM_ARR);
-            if ((collectionStamm != null) && !collectionStamm.isEmpty()) {
-                if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true))) {
-                    LOG.warn("No stamm specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSTAMM));
-                    save = false;
+            // Text zur Baugehnemigung, wenn mit
+            try {
+                if ((saveSchadenBean.getProperty(FIELD__BAU) != null)
+                            && ((getCidsBean().getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
+                    if ((saveSchadenBean.getProperty(FIELD__BAU_TEXT) == null)
+                                || (saveSchadenBean.getProperty(FIELD__BAU_TEXT).toString()).trim().isEmpty()) {
+                        LOG.warn("No text bau specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOBAU));
+                        save = false;
+                    }
                 }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Text Bau not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("stamm not given.", ex);
-            save = false;
-        }
 
-        // Haekchen Krone gesetzt?
-        try {
-            final Collection<CidsBean> collectionKrone = saveSchadenBean.getBeanCollectionProperty(FIELD__KRONE_ARR);
-            if ((collectionKrone != null) && !collectionKrone.isEmpty()) {
-                if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true))) {
-                    LOG.warn("No krone specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOKRONE));
-                    save = false;
+            // Haekchen Wurzel gesetzt?
+            try {
+                final Collection<CidsBean> collectionWurzel = saveSchadenBean.getBeanCollectionProperty(FIELD__WURZEL_ARR);
+                if ((collectionWurzel != null) && !collectionWurzel.isEmpty()) {
+                    if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true))) {
+                        LOG.warn("No wurzel specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOWURZEL));
+                        save = false;
+                    }
                 }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("wurzel not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("krone not given.", ex);
-            save = false;
-        }
 
-        // Haekchen abgestorben gesetzt?
-        try {
-            if (Objects.equals(saveSchadenBean.getProperty(FIELD__OHNE), true)) {
-                if (Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true)) {
-                    LOG.warn("Wrong wurzel specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGWURZEL));
-                    save = false;
+            // Haekchen Stamm gesetzt?
+            try {
+                final Collection<CidsBean> collectionStamm = saveSchadenBean.getBeanCollectionProperty(FIELD__STAMM_ARR);
+                if ((collectionStamm != null) && !collectionStamm.isEmpty()) {
+                    if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true))) {
+                        LOG.warn("No stamm specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSTAMM));
+                        save = false;
+                    }
                 }
-                if (Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true)) {
-                    LOG.warn("Wrong stamm specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGSTAMM));
-                    save = false;
-                }
-                if (Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true)) {
-                    LOG.warn("Wrong krone specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGKRONE));
-                    save = false;
-                }
-                if (Objects.equals(saveSchadenBean.getProperty(FIELD__STURM), true)) {
-                    LOG.warn("Wrong sturm specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGSTURM));
-                    save = false;
-                }
-                if (Objects.equals(saveSchadenBean.getProperty(FIELD__ABGESTORBEN), true)) {
-                    LOG.warn("Wrong abgestorben specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGABG));
-                    save = false;
-                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("stamm not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("abgestorben set.", ex);
-            save = false;
-        }
 
-        if (errorMessage.length() > 0) {
-            if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
-                final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
-                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WHICH))
-                        .append(saveSchadenBean.getPrimaryKeyValue());
-                final CidsBean meldungBean = (CidsBean)saveSchadenBean.getProperty(FIELD__FK_MELDUNG);
-                errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_MESSAGE))
-                        .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+            // Haekchen Krone gesetzt?
+            try {
+                final Collection<CidsBean> collectionKrone = saveSchadenBean.getBeanCollectionProperty(FIELD__KRONE_ARR);
+                if ((collectionKrone != null) && !collectionKrone.isEmpty()) {
+                    if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true))) {
+                        LOG.warn("No krone specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOKRONE));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("krone not given.", ex);
+                save = false;
             }
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
+
+            // Haekchen abgestorben gesetzt?
+            try {
+                if (Objects.equals(saveSchadenBean.getProperty(FIELD__OHNE), true)) {
+                    if (Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true)) {
+                        LOG.warn("Wrong wurzel specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGWURZEL));
+                        save = false;
+                    }
+                    if (Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true)) {
+                        LOG.warn("Wrong stamm specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGSTAMM));
+                        save = false;
+                    }
+                    if (Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true)) {
+                        LOG.warn("Wrong krone specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGKRONE));
+                        save = false;
+                    }
+                    if (Objects.equals(saveSchadenBean.getProperty(FIELD__STURM), true)) {
+                        LOG.warn("Wrong sturm specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGSTURM));
+                        save = false;
+                    }
+                    if (Objects.equals(saveSchadenBean.getProperty(FIELD__ABGESTORBEN), true)) {
+                        LOG.warn("Wrong abgestorben specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WRONGABG));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("abgestorben set.", ex);
+                save = false;
+            }
+
+            if (errorMessage.length() > 0) {
+                if (baumChildrenLoader.getParentOrganizer() instanceof BaumGebietEditor) {
+                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_WHICH))
+                            .append(saveSchadenBean.getPrimaryKeyValue());
+                    final CidsBean meldungBean = (CidsBean)saveSchadenBean.getProperty(FIELD__FK_MELDUNG);
+                    errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_MESSAGE))
+                            .append(formatTag.format(meldungBean.getProperty(FIELD__MDATUM)));
+                }
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
+            }
+            return save & noErrorErsatz & noErrorFest;
         }
-        return save & noErrorErsatz & noErrorFest;
     }
 
     @Override
@@ -2513,6 +2526,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
+                if (isEditor()){
+                    setErrorNoSave(ex);
+                    noSave();
+                }
             }
         }
         if (isEditor()) {
@@ -2520,6 +2537,18 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         } else {
             setReadOnly();
         }
+    }
+    
+    public void noSave(){
+        final ErrorInfo info = new ErrorInfo(
+                    NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
+        JXErrorPane.showDialog(BaumSchadenPanel.this, info);
     }
 
     /**
@@ -2540,7 +2569,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         cbOrdnung.setEnabled(edit);
         if (isEditor() && (getCidsBean() != null)
                     && (getCidsBean().getProperty(FIELD__BAU) != null)
-                    && (((CidsBean)getCidsBean().getProperty(FIELD__BAU)).getPrimaryKeyValue() == 2)) {
+                    && ((getCidsBean().getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
             txtBau.setEnabled(true);
         } else {
             txtBau.setEnabled(false);
