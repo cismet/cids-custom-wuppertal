@@ -79,7 +79,10 @@
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_vorort}" target="cbVorort" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_vorort}" target="cbVorort" targetPath="selectedItem" updateStrategy="0" immediately="false">
+              <Property name="nullValue" type="java.lang.Object" value="null"/>
+              <Property name="incompletePathValue" type="java.lang.Object" value="null"/>
+            </BindingProperty>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableScrollableComboBox(MC__VORORT);"/>

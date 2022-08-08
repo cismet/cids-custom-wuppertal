@@ -30,6 +30,8 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -55,6 +57,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.JList;
@@ -174,6 +177,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         "BaumGebietEditor.btnRemoveMeldungActionPerformed().JOptionPane.title";
     public static final String BUNDLE_DEL_MELDUNG =
         "BaumGebietEditor.btnRemoveMeldungActionPerformed().JOptionPane.message";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "BaumGebietEditor.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "BaumGebietEditor.noSave().title";
     public static final String BUNDLE_LOAD_ERROR = "BaumGebietEditor.loadChildren().error";
     private static final String TITLE_NEW_GEBIET = "ein neues Gebiet (mit Meldung) anlegen...";
     private static Color colorAlarm = new java.awt.Color(255, 0, 0);
@@ -184,6 +189,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     /** DOCUMENT ME! */
     public static String beschrPattern = ""; // [0-9a-zA-Z\\s\\-\\_\\ä\\ö\\ü\\ß]{1,}";
     public static String azPattern = "";     // [0-9a-zA-Z\\-\\_]{1,}";
+    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Enums ------------------------------------------------------------------
 
@@ -1381,60 +1387,83 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        if (isEditor() && (getCidsBean() != null)) {
-            LOG.info("remove propchange baum_gebiet: " + getCidsBean());
-            getCidsBean().removePropertyChangeListener(this);
-        }
-        bindingGroup.unbind();
-        this.cidsBean = cb;
-        if (isEditor() && (getCidsBean() != null)) {
-            LOG.info("add propchange baum_gebiet: " + getCidsBean());
-            getCidsBean().addPropertyChangeListener(this);
-        }
-        if (getCidsBean() != null) {
-            zeigeKinderMeldung();
-        }
-        // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
-        // evtl. kann dies verbessert werden.
-        DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-            bindingGroup,
-            cb,
-            getConnectionContext());
-        setMapWindow();
-        bindingGroup.bind();
-        if (getCidsBean() != null) {
-            loadChildren(getCidsBean().getPrimaryKeyValue());
-        }
-        if (isEditor()) {
-            if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
-                cbHNr.setEnabled(true);
+        try {
+            if (isEditor() && (getCidsBean() != null)) {
+                LOG.info("remove propchange baum_gebiet: " + getCidsBean());
+                getCidsBean().removePropertyChangeListener(this);
             }
-            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
-            {
-                final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0)).getList();
-                final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
-                cbHNr.addActionListener(new ActionListener() {
+            bindingGroup.unbind();
+            this.cidsBean = cb;
+            if (isEditor() && (getCidsBean() != null)) {
+                LOG.info("add propchange baum_gebiet: " + getCidsBean());
+                getCidsBean().addPropertyChangeListener(this);
+            }
+            if (getCidsBean() != null) {
+                zeigeKinderMeldung();
+            }
+            // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
+            // evtl. kann dies verbessert werden.
+            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                bindingGroup,
+                cb,
+                getConnectionContext());
+            setMapWindow();
+            bindingGroup.bind();
+            if (getCidsBean() != null) {
+                loadChildren(getCidsBean().getPrimaryKeyValue());
+            }
+            if (isEditor()) {
+                if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
+                    cbHNr.setEnabled(true);
+                }
+                StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
+                {
+                    final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0)).getList();
+                    final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
+                    cbHNr.addActionListener(new ActionListener() {
 
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                            final Object selectedValue = pop.getSelectedValue();
-                            txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
-                        }
-                    });
+                            @Override
+                            public void actionPerformed(final ActionEvent e) {
+                                final Object selectedValue = pop.getSelectedValue();
+                                txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
+                            }
+                        });
+                }
+                refreshHnr();
             }
-            refreshHnr();
+            setTitle(getTitle());
+            btnReport.setVisible(false);
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
+                allowAddRemove();
+            }
+            beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
+            if (isEditor()) {
+                checkSigns(patternCases.withae);
+                checkSigns(patternCases.withoutae);
+            }
+        } catch (Exception ex) {
+            LOG.error("Bean not set", ex);
+            if (isEditor()) {
+                setErrorNoSave(ex);
+                noSave();
+            }
         }
-        setTitle(getTitle());
-        btnReport.setVisible(false);
-        if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
-            getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
-            allowAddRemove();
-        }
-        beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
-        if (isEditor()) {
-            checkSigns(patternCases.withae);
-            checkSigns(patternCases.withoutae);
-        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
+        final ErrorInfo info = new ErrorInfo(
+                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
+        JXErrorPane.showDialog(BaumGebietEditor.this, info);
     }
 
     /**
@@ -1576,104 +1605,109 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public boolean isOkForSaving() {
-        if (!areChildrenLoad) {
+        if (getErrorNoSave() != null) {
+            noSave();
             return false;
-        }
-        boolean save = true;
-        final StringBuilder errorMessage = new StringBuilder();
-        boolean noErrorOccured = true;
-        for (final CidsBean meldungBean
-                    : getBaumChildrenLoader().getMapValueMeldung(getCidsBean().getPrimaryKeyValue())) {
-            try {
-                noErrorOccured = baumMeldungPanel.isOkayForSaving(meldungBean);
-                if (!noErrorOccured) {
-                    break;
-                }
-            } catch (final Exception ex) {
-                noErrorOccured = false;
-                LOG.error(ex, ex);
+        } else {
+            if (!areChildrenLoad) {
+                return false;
             }
-        }
+            boolean save = true;
+            final StringBuilder errorMessage = new StringBuilder();
+            boolean noErrorOccured = true;
+            for (final CidsBean meldungBean
+                        : getBaumChildrenLoader().getMapValueMeldung(getCidsBean().getPrimaryKeyValue())) {
+                try {
+                    noErrorOccured = baumMeldungPanel.isOkayForSaving(meldungBean);
+                    if (!noErrorOccured) {
+                        break;
+                    }
+                } catch (final Exception ex) {
+                    noErrorOccured = false;
+                    LOG.error(ex, ex);
+                }
+            }
 
-        // name vorhanden
-        try {
-            if (txtName.getText().trim().isEmpty()) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
-                save = false;
-            } else {
-                if (!boolNameOk) {
-                    LOG.warn("False name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NAMEFALSE));
-                    save = false;
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Name not given.", ex);
-            save = false;
-        }
-        // aktenzeichen vorhanden und nicht redundant
-        try {
-            if (txtAktenzeichen.getText().trim().isEmpty()) {
-                LOG.warn("No aktenzeichen specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOAZ));
-                save = false;
-            } else {
-                if (redundantName) {
-                    LOG.warn("Duplicate name specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATEAZ));
+            // name vorhanden
+            try {
+                if (txtName.getText().trim().isEmpty()) {
+                    LOG.warn("No name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
                     save = false;
                 } else {
-                    if (!boolAzOk) {
+                    if (!boolNameOk) {
                         LOG.warn("False name specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_AZFALSE));
+                        errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NAMEFALSE));
                         save = false;
                     }
                 }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Aktenzeichen not given.", ex);
-            save = false;
-        }
-        // Straße muss angegeben werden
-        try {
-            if (cbStrasse.getSelectedItem() == null) {
-                LOG.warn("No strasse specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSTREET));
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Name not given.", ex);
                 save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("strasse not given.", ex);
-            save = false;
-        }
-
-        // georeferenz muss gefüllt sein
-        try {
-            if (getCidsBean().getProperty(FIELD__GEOREFERENZ) == null) {
-                LOG.warn("No geom specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
+            // aktenzeichen vorhanden und nicht redundant
+            try {
+                if (txtAktenzeichen.getText().trim().isEmpty()) {
+                    LOG.warn("No aktenzeichen specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOAZ));
+                    save = false;
+                } else {
+                    if (redundantName) {
+                        LOG.warn("Duplicate name specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATEAZ));
+                        save = false;
+                    } else {
+                        if (!boolAzOk) {
+                            LOG.warn("False name specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_AZFALSE));
+                            save = false;
+                        }
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Aktenzeichen not given.", ex);
                 save = false;
-            } else {
-                final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOREFERENZ);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
+            }
+            // Straße muss angegeben werden
+            try {
+                if (cbStrasse.getSelectedItem() == null) {
+                    LOG.warn("No strasse specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSTREET));
                     save = false;
                 }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("strasse not given.", ex);
+                save = false;
             }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Geom not given.", ex);
-            save = false;
+
+            // georeferenz muss gefüllt sein
+            try {
+                if (getCidsBean().getProperty(FIELD__GEOREFERENZ) == null) {
+                    LOG.warn("No geom specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOGEOM));
+                    save = false;
+                } else {
+                    final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOREFERENZ);
+                    if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                        LOG.warn("Wrong geom specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_WRONGGEOM));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Geom not given.", ex);
+                save = false;
+            }
+            if (errorMessage.length() > 0) {
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX)
+                            + errorMessage.toString()
+                            + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE),
+                    JOptionPane.WARNING_MESSAGE);
+            }
+            return save && noErrorOccured;
         }
-        if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX)
-                        + errorMessage.toString()
-                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-        }
-        return save && noErrorOccured;
     }
 
     @Override
