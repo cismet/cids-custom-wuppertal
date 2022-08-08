@@ -18,6 +18,7 @@ import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
@@ -27,6 +28,8 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
@@ -52,6 +55,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.logging.Level;
 
 import javax.swing.Box;
 import javax.swing.DefaultListCellRenderer;
@@ -102,10 +106,6 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.util.logging.Level;
-import lombok.Setter;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -141,43 +141,44 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 connectionContext);
     }
 
-    public static final String FIELD__ALTER = "alter";             // baum_schaden
-    public static final String FIELD__HOEHE = "hoehe";             // baum_schaden
-    public static final String FIELD__UMFANG = "umfang";           // baum_schaden
-    public static final String FIELD__ART = "fk_art";              // baum_schaden
-    public static final String FIELD__INST = "fk_institution";     // baum_schaden
-    public static final String FIELD__GEOM = "fk_geom";            // baum_schaden
-    public static final String FIELD__PRIVAT = "privatbaum";       // baum_schaden
-    public static final String FIELD__OHNE = "ohne_schaden";       // baum_schaden
-    public static final String FIELD__KRONE = "kronenschaden";     // baum_schaden
-    public static final String FIELD__GEFAHR = "gefahrensbaum";    // baum_schaden
-    public static final String FIELD__STAMM = "stammschaden";      // baum_schaden
-    public static final String FIELD__WURZEL = "wurzelschaden";    // baum_schaden
-    public static final String FIELD__KRONE_ARR = "arr_krone";     // baum_schaden
-    public static final String FIELD__STAMM_ARR = "arr_stamm";     // baum_schaden
-    public static final String FIELD__WURZEL_ARR = "arr_wurzel";   // baum_schaden
-    public static final String FIELD__MASSNAHME = "arr_massnahme"; // baum_schaden
-    public static final String FIELD__STURM = "sturmschaden";      // baum_schaden
-    public static final String FIELD__ABGESTORBEN = "abgestorben"; // baum_schaden
-    public static final String FIELD__BAU = "fk_bau";              // baum_schaden
-    public static final String FIELD__BAU_TEXT = "bau";            // baum_schaden
-    public static final String FIELD__BAU_SCHLUESSEL = "fk_bau.schluessel";// baum_schaden --> baum_bau
-    public static final String FIELD__GUTACHTEN = "gutachten";     // baum_schaden
-    public static final String FIELD__BERATUNG = "baumberatung";   // baum_schaden
-    public static final String FIELD__BEMERKUNG = "bemerkung";     // baum_schaden
-    public static final String FIELD__BETRAG = "betrag";           // baum_schaden
-    public static final String FIELD__EINGANG = "eingegangen";     // baum_schaden
-    public static final String FIELD__FAELLUNG = "faellung";       // baum_schaden
-    public static final String FIELD__KLEISTUNG = "keine_leistung";// baum_schaden
-    public static final String FIELD__BEGRUENDUNG = "begruendung"; // baum_schaden
-    public static final String FIELD__FK_ORDNUNG = "fk_ordnungswidrigkeit"; // baum_schaden
-    public static final String FIELD__ORDNUNG_SCHLUESSEL = "fk_ordnungswidrigkeit.schluessel";    // baum_ordnungwidrigkeit
-    public static final String FIELD__FK_SCHADEN = "fk_schaden";   // baum_ersatz
-    public static final String FIELD__SELBST = "selbststaendig";   // baum_ersatz
-    public static final String FIELD__DISPENS = "dispensbau";      // baum_ersatz
-    public static final String FIELD__ID = "id";                   // baum_schaden
-    public static final String FIELD__FK_MELDUNG = "fk_meldung";   // baum_schaden
-    public static final String FIELD__MDATUM = "datum";            // baum_meldung
+    public static final String FIELD__ALTER = "alter";                                         // baum_schaden
+    public static final String FIELD__HOEHE = "hoehe";                                         // baum_schaden
+    public static final String FIELD__UMFANG = "umfang";                                       // baum_schaden
+    public static final String FIELD__ART = "fk_art";                                          // baum_schaden
+    public static final String FIELD__INST = "fk_institution";                                 // baum_schaden
+    public static final String FIELD__GEOM = "fk_geom";                                        // baum_schaden
+    public static final String FIELD__PRIVAT = "privatbaum";                                   // baum_schaden
+    public static final String FIELD__OHNE = "ohne_schaden";                                   // baum_schaden
+    public static final String FIELD__KRONE = "kronenschaden";                                 // baum_schaden
+    public static final String FIELD__GEFAHR = "gefahrensbaum";                                // baum_schaden
+    public static final String FIELD__STAMM = "stammschaden";                                  // baum_schaden
+    public static final String FIELD__WURZEL = "wurzelschaden";                                // baum_schaden
+    public static final String FIELD__KRONE_ARR = "arr_krone";                                 // baum_schaden
+    public static final String FIELD__STAMM_ARR = "arr_stamm";                                 // baum_schaden
+    public static final String FIELD__WURZEL_ARR = "arr_wurzel";                               // baum_schaden
+    public static final String FIELD__MASSNAHME = "arr_massnahme";                             // baum_schaden
+    public static final String FIELD__STURM = "sturmschaden";                                  // baum_schaden
+    public static final String FIELD__ABGESTORBEN = "abgestorben";                             // baum_schaden
+    public static final String FIELD__BAU = "fk_bau";                                          // baum_schaden
+    public static final String FIELD__BAU_TEXT = "bau";                                        // baum_schaden
+    public static final String FIELD__BAU_SCHLUESSEL = "fk_bau.schluessel";                    // baum_schaden -->
+                                                                                               // baum_bau
+    public static final String FIELD__GUTACHTEN = "gutachten";                                 // baum_schaden
+    public static final String FIELD__BERATUNG = "baumberatung";                               // baum_schaden
+    public static final String FIELD__BEMERKUNG = "bemerkung";                                 // baum_schaden
+    public static final String FIELD__BETRAG = "betrag";                                       // baum_schaden
+    public static final String FIELD__EINGANG = "eingegangen";                                 // baum_schaden
+    public static final String FIELD__FAELLUNG = "faellung";                                   // baum_schaden
+    public static final String FIELD__KLEISTUNG = "keine_leistung";                            // baum_schaden
+    public static final String FIELD__BEGRUENDUNG = "begruendung";                             // baum_schaden
+    public static final String FIELD__FK_ORDNUNG = "fk_ordnungswidrigkeit";                    // baum_schaden
+    public static final String FIELD__ORDNUNG_SCHLUESSEL = "fk_ordnungswidrigkeit.schluessel"; // baum_ordnungwidrigkeit
+    public static final String FIELD__FK_SCHADEN = "fk_schaden";                               // baum_ersatz
+    public static final String FIELD__SELBST = "selbststaendig";                               // baum_ersatz
+    public static final String FIELD__DISPENS = "dispensbau";                                  // baum_ersatz
+    public static final String FIELD__ID = "id";                                               // baum_schaden
+    public static final String FIELD__FK_MELDUNG = "fk_meldung";                               // baum_schaden
+    public static final String FIELD__MDATUM = "datum";                                        // baum_meldung
 
     public static final String FIELD__GEOREFERENZ = "fk_geom";                      // baum_schaden
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
@@ -1732,6 +1733,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         }
     } // </editor-fold>//GEN-END:initComponents
 
+    @Getter @Setter private static Exception errorNoSave = null;
+
     //~ Instance fields --------------------------------------------------------
 
     private BaumChildrenLoader.Listener loadChildrenListener;
@@ -1740,7 +1743,6 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     @Getter private final BaumChildrenLoader baumChildrenLoader;
     private Integer saveGeom;
     private Integer saveArt;
-    @Getter @Setter private static Exception errorNoSave = null;
 
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
@@ -2115,10 +2117,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
      * @return  DOCUMENT ME!
      */
     public boolean isOkForSaving(final CidsBean saveSchadenBean) {
-        if (getErrorNoSave()!= null){
+        if (getErrorNoSave() != null) {
             noSave();
             return false;
-        } else {    
+        } else {
             boolean save = true;
             final StringBuilder errorMessage = new StringBuilder();
             boolean noErrorErsatz = true;
@@ -2126,7 +2128,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
             final List<CidsBean> listErsatz = getBaumChildrenLoader().getMapValueErsatz(
                     saveSchadenBean.getPrimaryKeyValue());
-            final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(saveSchadenBean.getPrimaryKeyValue());
+            final List<CidsBean> listFest = getBaumChildrenLoader().getMapValueFest(
+                    saveSchadenBean.getPrimaryKeyValue());
             // Ersatzpflanzungen ueberpruefen
             if ((listErsatz != null) && !(listErsatz.isEmpty())) {
                 for (final CidsBean ersatzBean : listErsatz) {
@@ -2199,23 +2202,23 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 save = false;
             }
 
-            // Wenn keine Leistung angegeben 
+            // Wenn keine Leistung angegeben
             try {
                 if (Objects.equals(saveSchadenBean.getProperty(FIELD__KLEISTUNG), true)) {
-                    //Nicht ersichtlich warum
+                    // Nicht ersichtlich warum
                     if (Objects.equals(saveSchadenBean.getProperty(FIELD__GEFAHR), false)
-                            && Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), false)
-                            && Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), false)
-                            && Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), false)){
+                                && Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), false)
+                                && Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), false)
+                                && Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), false)) {
                         if ((saveSchadenBean.getProperty(FIELD__BEGRUENDUNG) == null)
                                     || (saveSchadenBean.getProperty(FIELD__BEGRUENDUNG).toString()).trim().isEmpty()) {
                             LOG.warn("No text keine leistung specified. Skip persisting.");
                             errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOLEISTUNG));
                             save = false;
-                        } 
+                        }
                     }
                 }
-            }catch (final MissingResourceException ex) {
+            } catch (final MissingResourceException ex) {
                 LOG.warn("Begruendung not given.", ex);
                 save = false;
             }
@@ -2238,7 +2241,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
             // Haekchen Wurzel gesetzt?
             try {
-                final Collection<CidsBean> collectionWurzel = saveSchadenBean.getBeanCollectionProperty(FIELD__WURZEL_ARR);
+                final Collection<CidsBean> collectionWurzel = saveSchadenBean.getBeanCollectionProperty(
+                        FIELD__WURZEL_ARR);
                 if ((collectionWurzel != null) && !collectionWurzel.isEmpty()) {
                     if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__WURZEL), true))) {
                         LOG.warn("No wurzel specified. Skip persisting.");
@@ -2253,7 +2257,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
             // Haekchen Stamm gesetzt?
             try {
-                final Collection<CidsBean> collectionStamm = saveSchadenBean.getBeanCollectionProperty(FIELD__STAMM_ARR);
+                final Collection<CidsBean> collectionStamm = saveSchadenBean.getBeanCollectionProperty(
+                        FIELD__STAMM_ARR);
                 if ((collectionStamm != null) && !collectionStamm.isEmpty()) {
                     if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__STAMM), true))) {
                         LOG.warn("No stamm specified. Skip persisting.");
@@ -2268,7 +2273,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
             // Haekchen Krone gesetzt?
             try {
-                final Collection<CidsBean> collectionKrone = saveSchadenBean.getBeanCollectionProperty(FIELD__KRONE_ARR);
+                final Collection<CidsBean> collectionKrone = saveSchadenBean.getBeanCollectionProperty(
+                        FIELD__KRONE_ARR);
                 if ((collectionKrone != null) && !collectionKrone.isEmpty()) {
                     if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true))) {
                         LOG.warn("No krone specified. Skip persisting.");
@@ -2526,7 +2532,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
-                if (isEditor()){
+                if (isEditor()) {
                     setErrorNoSave(ex);
                     noSave();
                 }
@@ -2538,16 +2544,19 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             setReadOnly();
         }
     }
-    
-    public void noSave(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                    NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSAVE_TITLE),
-                    NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSAVE_MESSAGE),
-                    null,
-                    null,
-                    getErrorNoSave(),
-                    Level.SEVERE,
-                    null);
+                NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
         JXErrorPane.showDialog(BaumSchadenPanel.this, info);
     }
 

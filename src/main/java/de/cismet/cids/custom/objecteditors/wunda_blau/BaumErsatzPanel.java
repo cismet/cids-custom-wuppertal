@@ -28,7 +28,9 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
@@ -59,6 +61,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractCellEditor;
@@ -125,23 +128,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.Component;
-import java.text.NumberFormat;
-import java.util.EventObject;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import javax.swing.AbstractAction;
-import javax.swing.AbstractCellEditor;
-import javax.swing.Action;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -237,7 +223,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public static final String BUNDLE_PANE_TITLE = "BaumErsatzPanel.isOkForSaving().JOptionPane.title";
     public static final String BUNDLE_NOSAVE_MESSAGE = "BaumErsatzPanel.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "BaumErsatzPanel.noSave().title";
-    
+
     private static final String[] KONTROLLE_COL_NAMES = new String[] {
             "Datum",
             "Bemerkung"
@@ -1175,6 +1161,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         }
     } // </editor-fold>//GEN-END:initComponents
 
+    @Getter @Setter private static Exception errorNoSave = null;
+
     //~ Instance fields --------------------------------------------------------
 
     @Getter FastBindableReferenceComboCellEditor sorteCellEditor;
@@ -1199,7 +1187,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     private Integer saveGeom;
     private Date savePflanzung;
     private Date saveUmsetzung;
-    @Getter @Setter private static Exception errorNoSave = null;
 
     private final ActionListener hnrActionListener = new ActionListener() {
 
@@ -1363,31 +1350,31 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddKontActionPerformed
+    private void btnAddKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
             setChangeFlag();
         }
-    }//GEN-LAST:event_btnAddKontActionPerformed
+    }                                                               //GEN-LAST:event_btnAddKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
+    private void btnRemKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtKont);
             setChangeFlag();
         }
-    }//GEN-LAST:event_btnRemKontActionPerformed
+    }                                                               //GEN-LAST:event_btnRemKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
         if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE) != null)) {
             cbHNr.setSelectedItem(null);
             if (isEditor()) {
@@ -1395,32 +1382,32 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             }
             refreshHnr();
         }
-    }//GEN-LAST:event_cbStrasseActionPerformed
+    }                                                                             //GEN-LAST:event_cbStrasseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBaumActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddBaumActionPerformed
+    private void btnAddBaumActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBaumActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtBaum, TABLE_NAME__ERSATZBAUM, getConnectionContext());
             setChangeFlag();
             getSorteCellEditor().getComboBox().setEnabled(true);
         }
-    }//GEN-LAST:event_btnAddBaumActionPerformed
+    }                                                               //GEN-LAST:event_btnAddBaumActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemBaumActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemBaumActionPerformed
+    private void btnRemBaumActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemBaumActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtBaum);
             setChangeFlag();
         }
-    }//GEN-LAST:event_btnRemBaumActionPerformed
+    }                                                               //GEN-LAST:event_btnRemBaumActionPerformed
     /**
      * DOCUMENT ME!
      *
@@ -1794,7 +1781,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 }
             } catch (final Exception ex) {
                 LOG.warn("problem in setCidsBean.", ex);
-                if (isEditor()){
+                if (isEditor()) {
                     setErrorNoSave(ex);
                     noSave();
                 }
@@ -1812,16 +1799,19 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             }
         }
     }
-    
-    public void noSave(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                    NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSAVE_TITLE),
-                    NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSAVE_MESSAGE),
-                    null,
-                    null,
-                    getErrorNoSave(),
-                    Level.SEVERE,
-                    null);
+                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                null,
+                null,
+                getErrorNoSave(),
+                Level.SEVERE,
+                null);
         JXErrorPane.showDialog(BaumErsatzPanel.this, info);
     }
 
@@ -1988,21 +1978,21 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      * @return  DOCUMENT ME!
      */
     public boolean isOkForSaving(final CidsBean saveErsatzBean) {
-        if (getErrorNoSave()!= null){
+        if (getErrorNoSave() != null) {
             noSave();
             return false;
         } else {
             boolean save = true;
             final StringBuilder errorMessage = new StringBuilder();
 
-            final Collection<CidsBean> baumCollection = saveErsatzBean.getBeanCollectionProperty(FIELD__BAUM);               
+            final Collection<CidsBean> baumCollection = saveErsatzBean.getBeanCollectionProperty(FIELD__BAUM);
             final Date jetztDatum = new java.sql.Date(System.currentTimeMillis());
             final boolean isSetStrasse = saveErsatzBean.getProperty(FIELD__STRASSE) != null;
             final boolean isSetHNr = saveErsatzBean.getProperty(FIELD__HNR) != null;
             final boolean isSetGeom = saveErsatzBean.getProperty(FIELD__GEOM) != null;
             final boolean isSetBis = saveErsatzBean.getProperty(FIELD__DATUM_U) != null;
-            final boolean isSetFirma = saveErsatzBean.getProperty(FIELD__FIRMA) != null 
-                    && ! saveErsatzBean.getProperty(FIELD__FIRMA).toString().isEmpty();
+            final boolean isSetFirma = (saveErsatzBean.getProperty(FIELD__FIRMA) != null)
+                        && !saveErsatzBean.getProperty(FIELD__FIRMA).toString().isEmpty();
             final boolean isSetSelbst = Objects.equals(saveErsatzBean.getProperty(FIELD__SELBST), true);
             final boolean isSetPflanzung = saveErsatzBean.getProperty(FIELD__DATUM_P) != null;
             final boolean isSetAnzahl = (saveErsatzBean.getProperty(FIELD__ANZAHL) != null)
@@ -2013,7 +2003,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             if (isSetStrasse || isSetHNr || isSetGeom || isSetFirma || isSetSelbst || isSetPflanzung || isSetBaum) {
                 // Straße muss angegeben werden
                 try {
-                    if (! isSetStrasse) {
+                    if (!isSetStrasse) {
                         LOG.warn("No strasse specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOSTREET));
                         save = false;
@@ -2025,7 +2015,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
                 // georeferenz muss gefüllt sein
                 try {
-                    if (! isSetGeom) {
+                    if (!isSetGeom) {
                         LOG.warn("No geom specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOM));
                         save = false;
@@ -2043,7 +2033,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 }
                 // Pflanzung muss angegeben werden
                 try {
-                    if (! isSetPflanzung) {
+                    if (!isSetPflanzung) {
                         LOG.warn("No pflanzung specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NODATE));
                         save = false;
@@ -2061,14 +2051,14 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                     LOG.warn("bis not given.", ex);
                     save = false;
                 }
-                //Ersatzbaeume muessen angegeben werden
+                // Ersatzbaeume muessen angegeben werden
                 try {
-                    if (! isSetBaum) {
+                    if (!isSetBaum) {
                         LOG.warn("No ersatzbaum specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOBAUM));
                         save = false;
                     } else {
-                        if (iAnz > 0 && baumCollection.size() != iAnz ){
+                        if ((iAnz > 0) && (baumCollection.size() != iAnz)) {
                             LOG.warn("Wrong Anzahl ersatzbaum specified. Skip persisting.");
                             errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGANZAHLBAUM));
                             save = false;
@@ -2080,13 +2070,19 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                                 try {
                                     if (baumBean.getProperty(FIELD__GEOM) == null) {
                                         LOG.warn("No geom baum specified. Skip persisting.");
-                                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOGEOMBAUM));
+                                        errorMessage.append(NbBundle.getMessage(
+                                                BaumErsatzPanel.class,
+                                                BUNDLE_NOGEOMBAUM));
                                         save = false;
                                     } else {
                                         final CidsBean geom_pos = (CidsBean)baumBean.getProperty(FIELD__GEOM);
-                                        if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOM_POINT)) {
+                                        if (
+                                            !((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType()
+                                                    .equals(GEOM_POINT)) {
                                             LOG.warn("Wrong geom baum specified. Skip persisting.");
-                                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_WRONGGEOMBAUM));
+                                            errorMessage.append(NbBundle.getMessage(
+                                                    BaumErsatzPanel.class,
+                                                    BUNDLE_WRONGGEOMBAUM));
                                             save = false;
                                         }
                                     }
@@ -2107,8 +2103,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                         }
                         if (!(insideBox)) {
                             LOG.warn("Wrong Geometry Location. Skip persisting.");
-                            errorMessage.append(NbBundle.getMessage(StrAdrStrasseEditor.class, 
-                                    BUNDLE_LOCATION_GEOMETRY))
+                            errorMessage.append(NbBundle.getMessage(
+                                        StrAdrStrasseEditor.class,
+                                        BUNDLE_LOCATION_GEOMETRY))
                                     .append(outsidePoint);
                             save = false;
                         }
@@ -2119,16 +2116,16 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                 }
             } else {
                 // Wenn keine Pflanzung, bis wann?
-                 if (! isSetBis) {
+                if (!isSetBis) {
                     LOG.warn("No bis specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOBIS));
                     save = false;
                 }
             }
 
-            // Anzahl 
+            // Anzahl
             try {
-                if (! isSetAnzahl) {
+                if (!isSetAnzahl) {
                     LOG.warn("No count specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCOUNT));
                     save = false;
@@ -2140,7 +2137,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
             // Kontrolle
             try {
-                final Collection<CidsBean> controlCollection = saveErsatzBean.getBeanCollectionProperty(FIELD__KONTROLLE);
+                final Collection<CidsBean> controlCollection = saveErsatzBean.getBeanCollectionProperty(
+                        FIELD__KONTROLLE);
                 for (final CidsBean controlBean : controlCollection) {
                     // Datum vorhanden
                     if (controlBean.getProperty(FIELD__KONTROLLE_DATUM) == null) {
