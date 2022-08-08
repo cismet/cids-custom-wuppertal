@@ -113,24 +113,24 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
 
     private static final Logger LOG = Logger.getLogger(BaumMeldungPanel.class);
 
-    public static final String FIELD__APARTNER = "arr_ansprechpartner";     // baum_meldung
-    public static final String FIELD__DATUM = "datum";                      // baum_meldung
-    public static final String FIELD__ZEIT = "zeit";                        // baum_ortstermin
-    public static final String FIELD__FK_MELDUNG = "fk_meldung";            // baum_ortstermin bzw. schaden
-    public static final String FIELD__ID = "id";                            // baum_schaden
-    public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";        // baum_schaden
-    public static final String FIELD__SCHADEN_EFEU = "efeu";                // baum_schaden
-    public static final String FIELD__SCHADEN_KRONE = "kronenschaden";      // baum_schaden
-    public static final String FIELD__SCHADEN_STAMM = "stammschaden";       // baum_schaden
-    public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";     // baum_schaden
-    public static final String FIELD__SCHADEN_GEFAHR = "gefahrensbaum";     // baum_schaden
-    public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung"; // baum_schaden
-    public static final String FIELD__SCHADEN_STURM = "sturmschaden";       // baum_schaden
-    public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben";  // baum_schaden
-    public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";      // baum_schaden
-    public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";    // baum_schaden
-    public static final String FIELD__SCHADEN_EINGANG = "eingegangen";      // baum_schaden
-    public static final String FIELD__SCHADEN_FAELLUNG = "faellung";        // baum_schaden
+    public static final String FIELD__APARTNER = "arr_ansprechpartner";    // baum_meldung
+    public static final String FIELD__DATUM = "datum";                     // baum_meldung
+    public static final String FIELD__ZEIT = "zeit";                       // baum_ortstermin
+    public static final String FIELD__FK_MELDUNG = "fk_meldung";           // baum_ortstermin bzw. schaden
+    public static final String FIELD__ID = "id";                           // baum_schaden
+    public static final String FIELD__SCHADEN_OHNE = "ohne_schaden";       // baum_schaden
+    public static final String FIELD__SCHADEN_EFEU = "efeu";               // baum_schaden
+    public static final String FIELD__SCHADEN_KRONE = "kronenschaden";     // baum_schaden
+    public static final String FIELD__SCHADEN_STAMM = "stammschaden";      // baum_schaden
+    public static final String FIELD__SCHADEN_WURZEL = "wurzelschaden";    // baum_schaden
+    public static final String FIELD__SCHADEN_GEFAHR = "gefahrensbaum";    // baum_schaden
+    public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung";// baum_schaden
+    public static final String FIELD__SCHADEN_STURM = "sturmschaden";      // baum_schaden
+    public static final String FIELD__SCHADEN_ABGESTORBEN = "abgestorben"; // baum_schaden
+    public static final String FIELD__SCHADEN_GUTACHTEN = "gutachten";     // baum_schaden
+    public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";   // baum_schaden
+    public static final String FIELD__SCHADEN_EINGANG = "eingegangen";     // baum_schaden
+    public static final String FIELD__SCHADEN_FAELLUNG = "faellung";       // baum_schaden
     public static final String TABLE__ORT = "baum_ortstermin";
     public static final String TABLE__SCHADEN = "baum_schaden";
 
@@ -891,8 +891,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         }
     } // </editor-fold>//GEN-END:initComponents
 
-    @Getter @Setter private static Exception errorNoSave = null;
-
     //~ Instance fields --------------------------------------------------------
 
     private BaumChildrenLoader.Listener loadChildrenListener;
@@ -900,6 +898,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
 
     @Getter private final BaumChildrenLoader baumChildrenLoader;
     private final boolean editor;
+    @Getter @Setter private static Exception errorNoSave = null;
 
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
@@ -1361,7 +1360,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        try {
+        try{
             if (!(Objects.equals(this.cidsBean, cidsBean))) {
                 if (isEditor() && (this.cidsBean != null)) {
                     this.cidsBean.removePropertyChangeListener(changeListener);
@@ -1387,9 +1386,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                     allowAddRemove();
                 }
             }
-        } catch (Exception ex) {
+        } catch (Exception ex ){
             LOG.error("Bean not set", ex);
-            if (isEditor()) {
+            if (isEditor()){
                 setErrorNoSave(ex);
                 noSave();
             }
@@ -1400,19 +1399,16 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         }
         btnApartner.setEnabled(getCidsBean() != null);
     }
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void noSave() {
+    
+    public void noSave(){
         final ErrorInfo info = new ErrorInfo(
-                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOSAVE_TITLE),
-                NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOSAVE_MESSAGE),
-                null,
-                null,
-                getErrorNoSave(),
-                Level.SEVERE,
-                null);
+                    NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
         JXErrorPane.showDialog(BaumMeldungPanel.this, info);
     }
 
@@ -1427,9 +1423,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         taBemerkung.setEnabled(edit);
         btnAddApartner.setEnabled(edit);
         btnRemoveApartner.setEnabled(edit);
-        if (!edit) {
-            taBemerkung.setText("");
-        }
     }
 
     /**
@@ -1440,7 +1433,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
      * @return  DOCUMENT ME!
      */
     public boolean isOkayForSaving(final CidsBean saveMeldungBean) {
-        if (getErrorNoSave() != null) {
+        if (getErrorNoSave()!= null){
             noSave();
             return false;
         } else {
@@ -1489,10 +1482,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 LOG.warn("Datum not given.", ex);
                 save = false;
             }
-            // Ap vorhanden
+            //Ap vorhanden
             try {
                 final Collection<CidsBean> collectionAp = saveMeldungBean.getBeanCollectionProperty(FIELD__APARTNER);
-                if ((collectionAp == null) || collectionAp.isEmpty()) {
+                if (collectionAp == null || collectionAp.isEmpty()) {
                     LOG.warn("No ap specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_NOAP));
                     save = false;
@@ -1503,14 +1496,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             }
 
             if (errorMessage.length() > 0) {
-                String meldung;
-                if (saveMeldungBean.getProperty(FIELD__DATUM) != null) {
-                    final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
-                    meldung = formatTag.format(saveMeldungBean.getProperty(FIELD__DATUM));
-                } else {
-                    meldung = saveMeldungBean.getPrimaryKeyValue().toString();
-                }
-                errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_WHICH)).append(meldung);
+                errorMessage.append(NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_WHICH))
+                        .append(saveMeldungBean.getPrimaryKeyValue());
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     NbBundle.getMessage(BaumMeldungPanel.class, BUNDLE_PANE_PREFIX)
                             + errorMessage.toString()

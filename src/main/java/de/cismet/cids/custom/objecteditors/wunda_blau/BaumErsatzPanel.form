@@ -530,7 +530,6 @@
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="spAnzahl" noResource="true"/>
-                            <Property name="opaque" type="boolean" value="false"/>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[75, 20]"/>
                             </Property>

@@ -30,8 +30,6 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -57,7 +55,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.JList;
@@ -95,6 +92,9 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.util.logging.Level;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 /**
  * DOCUMENT ME!
  *
@@ -189,7 +189,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     /** DOCUMENT ME! */
     public static String beschrPattern = ""; // [0-9a-zA-Z\\s\\-\\_\\ä\\ö\\ü\\ß]{1,}";
     public static String azPattern = "";     // [0-9a-zA-Z\\-\\_]{1,}";
-    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Enums ------------------------------------------------------------------
 
@@ -212,6 +211,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     Collection<CidsBean> beansMeldung = new ArrayList<>();
     private BaumChildrenLoader.Listener loadChildrenListener;
+    @Getter @Setter private static Exception errorNoSave = null;
 
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
             AdresseLightweightSearch.Subject.HNR,
@@ -1387,7 +1387,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void setCidsBean(final CidsBean cb) {
-        try {
+        try{
             if (isEditor() && (getCidsBean() != null)) {
                 LOG.info("remove propchange baum_gebiet: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
@@ -1438,31 +1438,28 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 allowAddRemove();
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
-            if (isEditor()) {
+            if (isEditor()){
                 checkSigns(patternCases.withae);
                 checkSigns(patternCases.withoutae);
             }
-        } catch (Exception ex) {
+        } catch (Exception ex ){
             LOG.error("Bean not set", ex);
-            if (isEditor()) {
+            if (isEditor()){
                 setErrorNoSave(ex);
                 noSave();
             }
-        }
+        }    
     }
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void noSave() {
+    
+    public void noSave(){
         final ErrorInfo info = new ErrorInfo(
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_TITLE),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_MESSAGE),
-                null,
-                null,
-                getErrorNoSave(),
-                Level.SEVERE,
-                null);
+                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
         JXErrorPane.showDialog(BaumGebietEditor.this, info);
     }
 
@@ -1605,7 +1602,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public boolean isOkForSaving() {
-        if (getErrorNoSave() != null) {
+        if (getErrorNoSave()!= null){
             noSave();
             return false;
         } else {
@@ -1635,7 +1632,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NONAME));
                     save = false;
                 } else {
-                    if (!boolNameOk) {
+                    if (!boolNameOk){
                         LOG.warn("False name specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NAMEFALSE));
                         save = false;
@@ -1656,8 +1653,8 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                         LOG.warn("Duplicate name specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_DUPLICATEAZ));
                         save = false;
-                    } else {
-                        if (!boolAzOk) {
+                    }else {
+                        if (!boolAzOk){
                             LOG.warn("False name specified. Skip persisting.");
                             errorMessage.append(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_AZFALSE));
                             save = false;

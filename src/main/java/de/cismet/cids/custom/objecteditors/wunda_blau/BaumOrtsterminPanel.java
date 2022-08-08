@@ -18,7 +18,6 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
@@ -105,6 +104,19 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.BorderLayout;
+import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import lombok.Setter;
+import org.jdesktop.swingbinding.JListBinding;
+import org.jdesktop.swingbinding.SwingBindings;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -280,12 +292,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         cbVorort.setName("cbVorort");                // NOI18N
         cbVorort.setPreferredSize(new Dimension(100, 24));
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_vorort}"),
-                cbVorort,
-                BeanProperty.create("selectedItem"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_vorort}"), cbVorort, BeanProperty.create("selectedItem"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -678,30 +685,25 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      * @version  $Revision$, $Date$
      */
     private class FormListener implements ActionListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
+        FormListener() {}
+        public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == btnAddAp) {
                 BaumOrtsterminPanel.this.btnAddApActionPerformed(evt);
-            } else if (evt.getSource() == btnRemAp) {
+            }
+            else if (evt.getSource() == btnRemAp) {
                 BaumOrtsterminPanel.this.btnRemApActionPerformed(evt);
-            } else if (evt.getSource() == btnApartner) {
+            }
+            else if (evt.getSource() == btnApartner) {
                 BaumOrtsterminPanel.this.btnApartnerActionPerformed(evt);
-            } else if (evt.getSource() == btnAddTeilnehmer) {
+            }
+            else if (evt.getSource() == btnAddTeilnehmer) {
                 BaumOrtsterminPanel.this.btnAddTeilnehmerActionPerformed(evt);
-            } else if (evt.getSource() == btnRemTeilnehmer) {
+            }
+            else if (evt.getSource() == btnRemTeilnehmer) {
                 BaumOrtsterminPanel.this.btnRemTeilnehmerActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
-
-    @Getter @Setter private static Exception errorNoSave = null;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -709,6 +711,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     private String uhrzeit;
     private java.util.Date datum;
     @Getter private final BaumChildrenLoader baumChildrenLoader;
+    @Getter @Setter private static Exception errorNoSave = null;
     // private final PropertyChangeListener dateTimeListener = null;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
@@ -1008,9 +1011,9 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 panOrtstermin.updateUI();
                 taBemerkungOrt.updateUI();
             }
-        } catch (Exception ex) {
+        } catch (Exception ex ){
             LOG.error("Bean not set", ex);
-            if (isEditor()) {
+            if (isEditor()){
                 setErrorNoSave(ex);
                 noSave();
             }
@@ -1022,19 +1025,16 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
         }
         btnApartner.setEnabled(getCidsBean() != null);
     }
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void noSave() {
+    
+    public void noSave(){
         final ErrorInfo info = new ErrorInfo(
-                NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOSAVE_TITLE),
-                NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOSAVE_MESSAGE),
-                null,
-                null,
-                getErrorNoSave(),
-                Level.SEVERE,
-                null);
+                    NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOSAVE_TITLE),
+                    NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                    null,
+                    null,
+                    getErrorNoSave(),
+                    Level.SEVERE,
+                    null);
         JXErrorPane.showDialog(BaumOrtsterminPanel.this, info);
     }
 
@@ -1064,10 +1064,6 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
     private void nullNoEdit(final boolean edit) {
         taBemerkungOrt.setEnabled(edit);
         cbVorort.setEnabled(edit);
-        ftZeit.setEnabled(edit);
-        if (!edit) {
-            ftZeit.setText("");
-        }
     }
 
     /**
@@ -1078,7 +1074,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      * @return  DOCUMENT ME!
      */
     public boolean isOkayForSaving(final CidsBean saveOrtsterminBean) {
-        if (getErrorNoSave() != null) {
+        if (getErrorNoSave()!= null){
             noSave();
             return false;
         } else {
@@ -1107,8 +1103,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                         errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_NOTIME));
                         save = false;
                     } else {
-                        if ((calDatumZeit.get(Calendar.HOUR_OF_DAY) < 7)
-                                    || (calDatumZeit.get(Calendar.HOUR_OF_DAY) > 19)) {
+                        if ((calDatumZeit.get(Calendar.HOUR_OF_DAY) < 7) || (calDatumZeit.get(Calendar.HOUR_OF_DAY) > 19)) {
                             LOG.warn("Wrong time specified. Skip persisting.");
                             errorMessage.append(NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_WRONGTIME));
                             save = false;
@@ -1134,8 +1129,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
             // Ansprechpartner muss einen Namen haben
             try {
-                final Collection<CidsBean> teilCollection = saveOrtsterminBean.getBeanCollectionProperty(
-                        FIELD__TEILNEHMER);
+                final Collection<CidsBean> teilCollection = saveOrtsterminBean.getBeanCollectionProperty(FIELD__TEILNEHMER);
                 for (final CidsBean tBean : teilCollection) {
                     if (tBean.getProperty(FIELD__NAME) == null) {
                         LOG.warn("No name specified. Skip persisting.");
@@ -1188,8 +1182,8 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                     && (dcDatum.getDate() != null)) {
             givenDate = dcDatum.getDate();
         } else {
-            if ((getCidsBean() != null)
-                        && (getCidsBean().getProperty(FIELD__ZEIT) != null)) {
+            if (getCidsBean() != null &&
+                    getCidsBean().getProperty(FIELD__ZEIT) != null) {
                 final Calendar calDatumZeit = Calendar.getInstance();
                 calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ZEIT));
                 givenDate = calDatumZeit.getTime();
