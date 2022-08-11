@@ -29,11 +29,11 @@ import javax.swing.JButton;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
+import de.cismet.cids.custom.clientutils.TifferDownload;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.StadtbilderUtils;
-import de.cismet.cids.custom.utils.TifferDownload;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 
 import de.cismet.cids.dynamics.CidsBean;

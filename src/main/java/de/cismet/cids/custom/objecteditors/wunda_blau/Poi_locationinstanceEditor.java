@@ -59,10 +59,10 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
+import de.cismet.cids.custom.clientutils.HexcolorFormatter;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
-import de.cismet.cids.custom.utils.HexcolorFormatter;
 import de.cismet.cids.custom.wunda_blau.search.server.PoiKategorienLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;

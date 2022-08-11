@@ -76,7 +76,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import de.cismet.cids.custom.utils.ConversionUtils;
+import de.cismet.cids.custom.clientutils.ConversionUtils;
 
 import de.cismet.cismap.commons.MappingModel;
 import de.cismet.cismap.commons.RetrievalServiceLayer;

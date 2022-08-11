@@ -829,6 +829,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 ELProperty.create("${cidsBean.stammschaden}"),
                 chStamm,
                 BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();

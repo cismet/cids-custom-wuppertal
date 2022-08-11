@@ -72,13 +72,13 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlkisProductServerAction;

@@ -60,6 +60,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
+import de.cismet.cids.custom.clientutils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
@@ -67,7 +68,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSoapUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.DownloadInfoFactory;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;

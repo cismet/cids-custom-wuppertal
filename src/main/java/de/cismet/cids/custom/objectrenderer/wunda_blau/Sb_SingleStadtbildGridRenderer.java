@@ -20,7 +20,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JLabel;
 
-import de.cismet.cids.custom.utils.StadtbilderUtils;
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
 
 /**
  * A JGrid renderer for a Stadtbildserie. It is used in the Vorschau and Bin panel of the

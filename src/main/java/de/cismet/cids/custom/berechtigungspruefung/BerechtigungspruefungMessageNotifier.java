@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.cismet.cids.custom.utils.BerechtigungspruefungKonfiguration;
+import de.cismet.cids.custom.clientutils.BerechtigungspruefungKonfiguration;
 import de.cismet.cids.custom.wunda_blau.search.server.BerechtigungspruefungOffeneAnfragenStatement;
 
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;

@@ -47,10 +47,10 @@ import java.util.logging.Level;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
-import de.cismet.cids.custom.utils.ByteArrayActionDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.wunda_blau.search.actions.FormSolutionDownloadBestellungAction;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;

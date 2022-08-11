@@ -24,8 +24,8 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.clientutils.PotenzialflaecheReportDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.utils.PotenzialflaecheReportDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
 

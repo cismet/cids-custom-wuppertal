@@ -27,8 +27,8 @@ import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
+import de.cismet.cids.custom.clientutils.HexcolorFormatter;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
-import de.cismet.cids.custom.utils.HexcolorFormatter;
 
 import de.cismet.cids.dynamics.CidsBean;
 

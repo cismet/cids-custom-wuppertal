@@ -52,13 +52,13 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import de.cismet.cids.custom.clientutils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.DownloadInfoFactory;
 import de.cismet.cids.custom.utils.berechtigungspruefung.katasterauszug.BerechtigungspruefungAlkisEinzelnachweisDownloadInfo;

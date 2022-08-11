@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.DefaultListModel;
 
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.StadtbilderUtils;
+import de.cismet.cids.custom.clientutils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.clientutils.StadtbilderUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 

@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.utils;
 
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
+import de.cismet.cids.custom.clientutils.Sb_RestrictionLevelUtils.RestrictionLevel;
 
 import de.cismet.cids.dynamics.CidsBean;
 

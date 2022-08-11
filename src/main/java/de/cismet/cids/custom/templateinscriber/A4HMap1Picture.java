@@ -45,7 +45,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
-import de.cismet.cids.custom.utils.ConversionUtils;
+import de.cismet.cids.custom.clientutils.ConversionUtils;
 
 import de.cismet.cismap.actions.MergeFeatureAction;
 

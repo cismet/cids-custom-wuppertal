@@ -14,7 +14,7 @@ package de.cismet.cids.custom.orbit;
 
 import java.util.Properties;
 
-import de.cismet.cids.custom.utils.ServerResourceProperties;
+import de.cismet.cids.custom.clientutils.ServerResourceProperties;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 /**
