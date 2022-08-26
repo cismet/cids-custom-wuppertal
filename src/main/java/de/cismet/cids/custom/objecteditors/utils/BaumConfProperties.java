@@ -53,6 +53,10 @@ public class BaumConfProperties {
     private final String urlFestsetzung;
     private final String urlSchaden;
     private final String urlDefault;
+    private final String urlRasterfari;
+    private final String ordnerDokumente;
+    private final String ordnerFotos;
+    private final String ordnerThema;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -69,6 +73,10 @@ public class BaumConfProperties {
         urlFestsetzung = String.valueOf(readProperty(properties, "MAP_CALL_STRING_FESTSETZUNG", null));
         urlSchaden = String.valueOf(readProperty(properties, "MAP_CALL_STRING_SCHADEN", null));
         urlDefault = String.valueOf(readProperty(properties, "MAP_CALL_STRING_DEFAULT", null));
+        urlRasterfari = String.valueOf(readProperty(properties, "RASTERFARI_URL", null));
+        ordnerDokumente = String.valueOf(readProperty(properties, "ORDNER_DOKUMENTE", null));
+        ordnerFotos = String.valueOf(readProperty(properties, "ORDNER_FOTOS", null));
+        ordnerThema = String.valueOf(readProperty(properties, "ORDNER_THEMA", null));
     }
 
     //~ Methods ----------------------------------------------------------------
