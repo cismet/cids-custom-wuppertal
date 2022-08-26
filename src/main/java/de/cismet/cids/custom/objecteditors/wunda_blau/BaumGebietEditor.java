@@ -71,7 +71,7 @@ import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
-import de.cismet.cids.custom.wunda_blau.search.server.BaumFotosLightweightSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.BaumFotosDokLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -92,6 +92,7 @@ import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -102,9 +103,13 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.jdesktop.swingx.JXBusyLabel;
+import org.openide.util.Exceptions;
 /**
  * DOCUMENT ME!
  *
@@ -156,6 +161,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__GEBIET = "fk_gebiet";                                 // baum_meldung
     public static final String FIELD__FOTO_GEBIET = "fk_gebiet";                            // baum_fotos
     public static final String FIELD__FOTONAME = "name";                                    // baum_fotos
+    public static final String FIELD__DOKNAME = "name";                                     // baum_dokumente
     public static final String FIELD__SCHADEN = "fk_schaden";                               // baum_ersatz/fest
     public static final String FIELD__MELDUNG = "fk_meldung";                               // baum_ot/schaden
     public static final String FIELD__STRASSE_NAME = "name";                                // strasse
@@ -167,6 +173,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_MELDUNG = "baum_meldung";
     public static final String TABLE_ADRESSE = "adresse";
     public static final String TABLE_FOTOS = "baum_fotos";
+    public static final String TABLE_DOKUMENTE = "baum_dokumente";
 
     public static final String BUNDLE_NOLOAD = "BaumGebietEditor.loadPictureWithUrl().noLoad";
     public static final String BUNDLE_NONAME = "BaumGebietEditor.isOkForSaving().noName";
@@ -204,7 +211,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private static Color colorNormal = new java.awt.Color(0, 0, 0);
 
     @Getter @Setter private static Integer counterMeldung = -1;
-    private final BaumFotosLightweightSearch searchFotos;
+    private final BaumFotosDokLightweightSearch searchFotosDok;
 
     /** DOCUMENT ME! */
     public static String beschrPattern = ""; // [0-9a-zA-Z\\s\\-\\_\\ä\\ö\\ü\\ß]{1,}";
@@ -300,6 +307,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblHNrRenderer;
     private JLabel lblHeaderDocument;
     private JLabel lblHeaderListe;
+    private JLabel lblHeaderListeDok;
     private JLabel lblHeaderPages;
     private JLabel lblHnr;
     private JLabel lblKeineFotos;
@@ -307,6 +315,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblName;
     private JLabel lblStrasse;
     private JLabel lblTitle;
+    private JList lstDok;
     private JList lstFotos;
     private JList lstMeldungen;
     private JList lstPages;
@@ -329,11 +338,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private RoundedPanel pnlDocument;
     private SemiRoundedPanel pnlHeaderDocument;
     private SemiRoundedPanel pnlHeaderListe;
+    private SemiRoundedPanel pnlHeaderListeDok;
     private SemiRoundedPanel pnlHeaderPages;
     private RoundedPanel pnlListe;
+    private RoundedPanel pnlListeDok;
     private RoundedPanel pnlPages;
     private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
+    private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanelDok;
     private JScrollPane scpBemerkung;
+    private JScrollPane scpDok;
     private JScrollPane scpFotos;
     private JScrollPane scpLaufendeMeldungen;
     private JScrollPane scpPages;
@@ -359,7 +372,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      */
     public BaumGebietEditor(final boolean boolEditor) {
         this.editor = boolEditor;
-        searchFotos = new BaumFotosLightweightSearch(
+        searchFotosDok = new BaumFotosDokLightweightSearch(
                 FOTOS_TOSTRING_TEMPLATE,
                 FOTOS_TOSTRING_FIELDS);
     }
@@ -426,16 +439,57 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                             newValue = "unbenannt";
                         }
                     }
-                    final Component compoDatum = super.getListCellRendererComponent(
+                    final Component compoName = super.getListCellRendererComponent(
                             list,
                             newValue,
                             index,
                             isSelected,
                             cellHasFocus);
-                    compoDatum.setForeground(Color.black);
-                    return compoDatum;
+                    compoName.setForeground(Color.black);
+                    return compoName;
                 }
             });
+        lstDok.setCellRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        newValue = bean.getProperty(FIELD__DOKNAME);
+                        try {
+                            if (newValue == null) {
+                                newValue = new URI("unbenannt");
+                            } 
+                        } catch (URISyntaxException ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
+                    }
+                    final Component compoName = super.getListCellRendererComponent(
+                            list,
+                            newValue,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    compoName.setForeground(Color.blue);
+                    return compoName;
+                }
+            });
+        lstDok.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (e.getValueIsAdjusting())
+                    return;
+                showDokument();
+            }
+        });
+        rasterfariDocumentLoaderPanelDok.setVisible(false);
+
         if (lstFotos != null){
            lstFotos.setSelectedIndex(0); 
         }
@@ -513,6 +567,16 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         btnRemoveMeldung = new JButton();
         panFillerUnten4 = new JPanel();
         jPanelDokumente = new JPanel();
+        pnlListeDok = new RoundedPanel();
+        pnlHeaderListeDok = new SemiRoundedPanel();
+        lblHeaderListeDok = new JLabel();
+        scpDok = new JScrollPane();
+        lstDok = new JList();
+        rasterfariDocumentLoaderPanelDok = new RasterfariDocumentLoaderPanel(
+            RASTERFARI,
+            this,
+            getConnectionContext()
+        );
         jPanelFotos = new JPanel();
         jPanelFotoAuswahl = new JPanel();
         pnlDocument = new RoundedPanel();
@@ -1091,6 +1155,38 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         jPanelDokumente.setOpaque(false);
         jPanelDokumente.setLayout(new GridBagLayout());
+
+        pnlListeDok.setMinimumSize(new Dimension(200, 49));
+
+        pnlHeaderListeDok.setBackground(new Color(51, 51, 51));
+        pnlHeaderListeDok.setLayout(new FlowLayout());
+
+        lblHeaderListeDok.setForeground(new Color(255, 255, 255));
+        lblHeaderListeDok.setText("Dokumentliste");
+        pnlHeaderListeDok.add(lblHeaderListeDok);
+
+        pnlListeDok.add(pnlHeaderListeDok, BorderLayout.NORTH);
+
+        scpDok.setPreferredSize(new Dimension(80, 130));
+
+        lstDok.setModel(new DefaultListModel<>());
+        lstDok.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstDok.setFixedCellWidth(75);
+        scpDok.setViewportView(lstDok);
+
+        pnlListeDok.add(scpDok, BorderLayout.CENTER);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 0.3;
+        gridBagConstraints.weighty = 0.9;
+        gridBagConstraints.insets = new Insets(10, 5, 5, 10);
+        jPanelDokumente.add(pnlListeDok, gridBagConstraints);
+        jPanelDokumente.add(rasterfariDocumentLoaderPanelDok, new GridBagConstraints());
+
         jTabbedPane.addTab("Dokumente", jPanelDokumente);
 
         jPanelFotos.setOpaque(false);
@@ -1682,7 +1778,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 noSave();
             }
         }
-        loadFotoList();
+        loadFotoDokList();
         showFoto();
     }
 
@@ -1717,12 +1813,12 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
     
-    private void loadFotoList(){
+    private void loadFotoDokList(){
         try {
-            searchFotos.setGebietId(getCidsBean().getPrimaryKeyValue());
-            searchFotos.setRepresentationFields(FOTOS_TOSTRING_FIELDS);
-            final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(
-                    searchFotos,
+            searchFotosDok.setGebietId(getCidsBean().getPrimaryKeyValue());
+            searchFotosDok.setTableName(TABLE_FOTOS);
+            searchFotosDok.setRepresentationFields(FOTOS_TOSTRING_FIELDS);
+            final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(searchFotosDok,
                     getConnectionContext());
             final List<CidsBean> beansFotos = new ArrayList<>();
             if (!mons.isEmpty()) {
@@ -1751,6 +1847,26 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             }
         } catch (ConnectionException ex) {
             LOG.error("Error during loading fotos", ex);
+        }
+        try {
+            searchFotosDok.setTableName(TABLE_DOKUMENTE);
+            final Collection<MetaObjectNode> mons = SessionManager.getProxy().customServerSearch(searchFotosDok,
+                    getConnectionContext());
+            final List<CidsBean> beansDok = new ArrayList<>();
+            if (!mons.isEmpty()) {
+                for (final MetaObjectNode mon : mons) {
+                    beansDok.add(SessionManager.getProxy().getMetaObject(
+                            mon.getObjectId(),
+                            mon.getClassId(),
+                            "WUNDA_BLAU",
+                            getConnectionContext()).getBean());
+                }
+                for (final CidsBean dokBean : beansDok){
+                    ((DefaultListModel)lstDok.getModel()).addElement(dokBean);
+                }
+            }
+        } catch (ConnectionException ex) {
+            LOG.error("Error during loading doks", ex);
         }
     }
 
@@ -1794,9 +1910,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 az = cidsBean.getProperty(FIELD__AZ).toString();
                 id = cidsBean.getPrimaryKeyValue().toString();
                 gebiet = az + "_Id" + id;
-                //fotoName = "210113_S_Apfel-Sturm.jpg";
                 fotoUrl = THEMA + "/" + gebiet + "/" + FOTOS + "/" + fotoName;
-                //fotoUrl = "qsgeb/2018/qsgeb_2018_2.tif";
                 rasterfariDocumentLoaderPanel1.setDocument(fotoUrl);
                 if (rasterfariDocumentLoaderPanel1.getCurrentPage() == -1){
                     showDocumentCard(DocumentCard.ERROR);
@@ -1809,6 +1923,24 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             showDocumentCard(DocumentCard.NO_DOCUMENT);
         }
         
+    }
+    
+    private void showDokument(){
+        String az;
+        String id;
+        String gebiet;
+        String dokUrl;
+        String dokName;
+        if (!lstFotos.isSelectionEmpty()){
+            dokName = lstDok.getSelectedValue().toString();
+            az = cidsBean.getProperty(FIELD__AZ).toString();
+            id = cidsBean.getPrimaryKeyValue().toString();
+            gebiet = az + "_Id" + id;
+            dokUrl = THEMA + "/" + gebiet + "/" + DOKUMENTE + "/" + dokName;
+            rasterfariDocumentLoaderPanelDok.setDocument(dokUrl);
+            URL url = rasterfariDocumentLoaderPanelDok.getDocumentUrl();
+            BrowserLauncher.openURLorFile(url.toString());
+        }
     }
 
     /**
@@ -1875,6 +2007,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         }
         baumMeldungPanel.dispose();
         rasterfariDocumentLoaderPanel1.dispose();
+        rasterfariDocumentLoaderPanelDok.dispose();
     }
 
     @Override
