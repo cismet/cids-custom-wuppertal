@@ -481,7 +481,8 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/up.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/up.png"))); // NOI18N
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setFocusPainted(false);
@@ -499,7 +500,8 @@ public class PfSchluesseltabelleEditor extends javax.swing.JPanel implements Cid
         gridBagConstraints.gridx = 0;
         jPanel3.add(jButton1, gridBagConstraints);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/down.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/down.png"))); // NOI18N
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
         jButton2.setFocusPainted(false);

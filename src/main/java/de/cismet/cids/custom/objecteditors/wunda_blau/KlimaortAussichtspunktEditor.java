@@ -334,15 +334,16 @@ public class KlimaortAussichtspunktEditor extends javax.swing.JPanel implements 
         panIndikator.setOpaque(false);
         panIndikator.setPreferredSize(new java.awt.Dimension(35, 100));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/up.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/up.png"))); // NOI18N
         jButton1.setText(org.openide.util.NbBundle.getMessage(
                 KlimaortAussichtspunktEditor.class,
-                "KlimaortAussichtspunktEditor.jButton1.text"));                                                     // NOI18N
+                "KlimaortAussichtspunktEditor.jButton1.text"));                        // NOI18N
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setMaximumSize(new java.awt.Dimension(24, 24));
         jButton1.setMinimumSize(new java.awt.Dimension(24, 24));
-        jButton1.setName("jButton1");                                                                               // NOI18N
+        jButton1.setName("jButton1");                                                  // NOI18N
         jButton1.setPreferredSize(new java.awt.Dimension(24, 24));
         jButton1.setRequestFocusEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -355,15 +356,16 @@ public class KlimaortAussichtspunktEditor extends javax.swing.JPanel implements 
         panIndikator.add(jButton1);
         jButton1.setVisible(isEditable());
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/down.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/down.png"))); // NOI18N
         jButton2.setText(org.openide.util.NbBundle.getMessage(
                 KlimaortAussichtspunktEditor.class,
-                "KlimaortAussichtspunktEditor.jButton2.text"));                                                       // NOI18N
+                "KlimaortAussichtspunktEditor.jButton2.text"));                          // NOI18N
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
         jButton2.setMaximumSize(new java.awt.Dimension(24, 24));
         jButton2.setMinimumSize(new java.awt.Dimension(24, 24));
-        jButton2.setName("jButton2");                                                                                 // NOI18N
+        jButton2.setName("jButton2");                                                    // NOI18N
         jButton2.setPreferredSize(new java.awt.Dimension(24, 24));
         jButton2.setRequestFocusEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {

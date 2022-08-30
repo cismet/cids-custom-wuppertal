@@ -320,12 +320,13 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panBeschreibungTitle.add(jLabel2, gridBagConstraints);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/circle.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/circle.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel3,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.jLabel3.text"));                                                             // NOI18N
+                "VzkatStandortSchildPanel.jLabel3.text"));                                 // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -554,12 +555,13 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/down.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/down.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton2,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.jButton2.text"));                                                           // NOI18N
+                "VzkatStandortSchildPanel.jButton2.text"));                              // NOI18N
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
         jButton2.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -599,12 +601,13 @@ public class VzkatStandortSchildPanel extends javax.swing.JPanel implements Conn
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/up.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/up.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton1,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortSchildPanel.class,
-                "VzkatStandortSchildPanel.jButton1.text"));                                                         // NOI18N
+                "VzkatStandortSchildPanel.jButton1.text"));                            // NOI18N
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setMaximumSize(new java.awt.Dimension(24, 24));
