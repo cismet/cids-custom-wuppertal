@@ -945,24 +945,23 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
             lblPreviewTitle,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.lblPreviewTitle.text")); // NOI18N
+                "VzkatStandortEditor.lblPreviewTitle.text"));                              // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panBildTitle.add(lblPreviewTitle, gridBagConstraints);
-
         btnPreviewUpload.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/upload.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/upload.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnPreviewUpload,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.btnPreviewUpload.text"));                       // NOI18N
+                "VzkatStandortEditor.btnPreviewUpload.text"));                             // NOI18N
         btnPreviewUpload.setToolTipText(org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.btnPreviewUpload.toolTipText"));                // NOI18N
+                "VzkatStandortEditor.btnPreviewUpload.toolTipText"));                      // NOI18N
         btnPreviewUpload.setBorderPainted(false);
         btnPreviewUpload.setContentAreaFilled(false);
         btnPreviewUpload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -984,15 +983,15 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panBildTitle.add(btnPreviewUpload, gridBagConstraints);
 
         btnPreviewMaximize.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/maximize.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/maximize.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnPreviewMaximize,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.btnPreviewMaximize.text"));                       // NOI18N
+                "VzkatStandortEditor.btnPreviewMaximize.text"));                             // NOI18N
         btnPreviewMaximize.setToolTipText(org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.btnPreviewMaximize.toolTipText"));                // NOI18N
+                "VzkatStandortEditor.btnPreviewMaximize.toolTipText"));                      // NOI18N
         btnPreviewMaximize.setBorderPainted(false);
         btnPreviewMaximize.setContentAreaFilled(false);
         btnPreviewMaximize.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -1013,7 +1012,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panBildTitle.add(btnPreviewMaximize, gridBagConstraints);
 
         btnPreviewPrev.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/left.png")));                                       // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/left.png")));                                 // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnPreviewPrev,
             org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.btnPreviewPrev.text")); // NOI18N
@@ -1038,7 +1037,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panBildTitle.add(btnPreviewPrev, gridBagConstraints);
 
         btnPreviewNext.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/right.png")));                                      // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/right.png")));                                // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnPreviewNext,
             org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.btnPreviewNext.text")); // NOI18N
@@ -1397,15 +1396,15 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panBildTitle1.add(lblFullTitle, gridBagConstraints);
 
         btnFullMinimize.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/minimize.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/minimize.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnFullMinimize,
             org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.btnFullMinimize.text"));                          // NOI18N
+                "VzkatStandortEditor.btnFullMinimize.text"));                                // NOI18N
         btnFullMinimize.setToolTipText(org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.btnFullMinimize.toolTipText"));                   // NOI18N
+                "VzkatStandortEditor.btnFullMinimize.toolTipText"));                         // NOI18N
         btnFullMinimize.setBorderPainted(false);
         btnFullMinimize.setContentAreaFilled(false);
         btnFullMinimize.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -1426,7 +1425,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panBildTitle1.add(btnFullMinimize, gridBagConstraints);
 
         btnFullNext.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/right.png")));                                   // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/right.png")));                             // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnFullNext,
             org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.btnFullNext.text")); // NOI18N
@@ -1453,13 +1452,14 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 150, 4, 0);
         panBildTitle1.add(btnFullNext, gridBagConstraints);
 
-        btnFullPrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/utils/left.png"))); // NOI18N
+        btnFullPrev.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/clientutils/left.png")));                              // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnFullPrev,
-            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.btnFullPrev.text"));    // NOI18N
+            org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.btnFullPrev.text")); // NOI18N
         btnFullPrev.setToolTipText(org.openide.util.NbBundle.getMessage(
                 VzkatStandortEditor.class,
-                "VzkatStandortEditor.btnFullPrev.toolTipText"));                                                         // NOI18N
+                "VzkatStandortEditor.btnFullPrev.toolTipText"));                                                      // NOI18N
         btnFullPrev.setBorderPainted(false);
         btnFullPrev.setContentAreaFilled(false);
         btnFullPrev.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -1481,7 +1481,7 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
         panBildTitle1.add(btnFullPrev, gridBagConstraints);
 
         btnFullUpload.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/utils/upload.png")));                                    // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/clientutils/upload.png")));                              // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnFullUpload,
             org.openide.util.NbBundle.getMessage(VzkatStandortEditor.class, "VzkatStandortEditor.btnFullUpload.text")); // NOI18N
