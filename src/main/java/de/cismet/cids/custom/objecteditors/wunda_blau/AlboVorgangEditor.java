@@ -1403,7 +1403,9 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             ceBearbeiter = new DefaultBindableComboboxCellEditor(CidsBean.getMetaClassFromTableName(
                         "WUNDA_BLAU",
                         "ALBO_BEARBEITER",
-                        getConnectionContext())) {
+                        getConnectionContext()),
+                    false,
+                    true) {
 
                     @Override
                     public boolean isCellEditable(final EventObject anEvent) {
