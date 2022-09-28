@@ -446,7 +446,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         try {
             cidsBeansTableActionPanel1.setMetaClass(CidsBean.getMetaClassFromTableName(
                     "WUNDA_BLAU",
-                    "VIEW_POTENZIALFLAECHE_CSV",
+                    "VIEW_POTENZIALFLAECHE_CSV_CACHED",
                     getConnectionContext()));
         } catch (final Exception ex) {
             LOG.fatal(ex, ex);
