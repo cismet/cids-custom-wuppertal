@@ -425,7 +425,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     }
 
     /**
-     * DOCUMENT ME!
+     * DOCUMENT ME! The WebAccessManager should be used. See <code>EmobLadestationEditor.checkUrl(String, JLabel)</code>
      *
      * @param   url  DOCUMENT ME!
      *
@@ -1761,6 +1761,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"),
                 chkVeroeffentlicht,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

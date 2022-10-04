@@ -1278,7 +1278,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     }
 
     /**
-     * DOCUMENT ME!
+     * DOCUMENT ME! The WebAccessManager should be used. See <code>EmobLadestationEditor.checkUrl(String, JLabel)</code>
      *
      * @param   url  DOCUMENT ME!
      *
