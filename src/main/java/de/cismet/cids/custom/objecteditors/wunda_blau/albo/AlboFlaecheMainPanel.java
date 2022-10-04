@@ -944,26 +944,28 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
             if (model != null) {
                 final List<CidsBean> vorgangList = model.getCidsBeans();
 
-                for (final CidsBean vorgangBean : vorgangList) {
-                    final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
-                            vorgangBean,
-                            "arr_flaechen");
+                if (vorgangList != null) {
+                    for (final CidsBean vorgangBean : vorgangList) {
+                        final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                                vorgangBean,
+                                "arr_flaechen");
 
-                    if (flaechen != null) {
-                        if (!flaechen.contains(super.getCidsBean())) {
-                            flaechen.add(super.getCidsBean());
+                        if (flaechen != null) {
+                            if (!flaechen.contains(super.getCidsBean())) {
+                                flaechen.add(super.getCidsBean());
 
-                            try {
-                                vorgangBean.persist(getConnectionContext());
-                            } catch (Exception e) {
-                                LOG.error("Cannot persist dependent vorgang object", e);
+                                try {
+                                    vorgangBean.persist(getConnectionContext());
+                                } catch (Exception e) {
+                                    LOG.error("Cannot persist dependent vorgang object", e);
+                                }
                             }
                         }
                     }
                 }
 
                 for (final CidsBean vorgangBean : originVorgangObjects) {
-                    if (!vorgangList.contains(vorgangBean)) {
+                    if ((vorgangList == null) || !vorgangList.contains(vorgangBean)) {
                         final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
                                 vorgangBean,
                                 "arr_flaechen");
