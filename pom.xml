@@ -13,7 +13,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>7.8-SNAPSHOT</version>
+    <version>7.9-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
