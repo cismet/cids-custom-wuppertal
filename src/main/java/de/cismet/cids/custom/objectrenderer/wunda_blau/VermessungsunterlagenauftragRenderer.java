@@ -31,6 +31,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -142,8 +143,6 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -152,7 +151,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JList<String> jList2;
     private javax.swing.JList<String> jList3;
     private javax.swing.JList<VermessungsunterlagenException> jList4;
+    private javax.swing.JList<String> jList5;
+    private javax.swing.JList<String> jList6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -160,34 +165,58 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
-    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
-    private javax.swing.JLabel lblEingangsdatum;
-    private javax.swing.JLabel lblEingangsdatum1;
-    private javax.swing.JLabel lblErstellungsdatumZip;
-    private javax.swing.JLabel lblErstellungsdatumZip1;
-    private javax.swing.JLabel lblGeschBuchNummer;
-    private javax.swing.JLabel lblGeschBuchNummer1;
-    private javax.swing.JLabel lblKatasterId;
-    private javax.swing.JLabel lblKatasterId1;
-    private javax.swing.JLabel lblMitGrenzniederschriften;
-    private javax.swing.JLabel lblMitGrenzniederschriften1;
-    private javax.swing.JLabel lblMitPunktnummernreservierung;
-    private javax.swing.JLabel lblMitPunktnummernreservierung1;
-    private javax.swing.JLabel lblSaumAP;
-    private javax.swing.JLabel lblSaumAP1;
-    private javax.swing.JLabel lblStatus;
+    private org.jdesktop.swingx.JXHyperlink jxhStatusAlt;
+    private org.jdesktop.swingx.JXHyperlink jxhStatusNeuValue;
+    private javax.swing.JLabel lblAnonymNeu;
+    private javax.swing.JLabel lblAnonymNeuValue;
+    private javax.swing.JLabel lblEingangsdatumAlt;
+    private javax.swing.JLabel lblEingangsdatumAltValue;
+    private javax.swing.JLabel lblEingangsdatumNeu;
+    private javax.swing.JLabel lblEingangsdatumNeuValue;
+    private javax.swing.JLabel lblErstellungsdatumZipAlt;
+    private javax.swing.JLabel lblErstellungsdatumZipAltValue;
+    private javax.swing.JLabel lblErstellungsdatumZipNeu;
+    private javax.swing.JLabel lblErstellungsdatumZipNeuValue;
+    private javax.swing.JLabel lblGeschBuchNummerAlt;
+    private javax.swing.JLabel lblGeschBuchNummerAltValue;
+    private javax.swing.JLabel lblGeschBuchNummerNeu;
+    private javax.swing.JLabel lblGeschBuchNummerNeuValue;
+    private javax.swing.JLabel lblKatasterIdAlt;
+    private javax.swing.JLabel lblKatasterIdAltValue;
+    private javax.swing.JLabel lblKatasterIdNeu;
+    private javax.swing.JLabel lblKatasterIdNeuValue;
+    private javax.swing.JLabel lblMitGrenzniederschriftenAlt;
+    private javax.swing.JLabel lblMitGrenzniederschriftenAltValue;
+    private javax.swing.JLabel lblNurPunktnummernreservierungAlt;
+    private javax.swing.JLabel lblNurPunktnummernreservierungAltValue;
+    private javax.swing.JLabel lblProdukteNeu;
+    private javax.swing.JLabel lblSaumAPAlt;
+    private javax.swing.JLabel lblSaumAPAltValue;
+    private javax.swing.JLabel lblSaumAPNeu;
+    private javax.swing.JLabel lblSaumAPNeuValue;
+    private javax.swing.JLabel lblStatusAlt;
+    private javax.swing.JLabel lblStatusNeu;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblVermStelle;
-    private javax.swing.JLabel lblVermStelle1;
-    private javax.swing.JLabel lblVermessungsarten;
+    private javax.swing.JLabel lblVermStelleAlt;
+    private javax.swing.JLabel lblVermStelleAltValue;
+    private javax.swing.JLabel lblVermStelleNeu;
+    private javax.swing.JLabel lblVermStelleNeuValue;
+    private javax.swing.JLabel lblVermessungsartenAlt;
+    private javax.swing.JLabel lblVermessungsartenNeu;
+    private javax.swing.JLabel lblVermessungsstelleAltValue;
+    private javax.swing.JLabel lblVermessungsstelleNeuValue;
+    private javax.swing.JLabel lblVorgangsnummerAlt;
+    private javax.swing.JLabel lblVorgangsnummerNeu;
     private javax.swing.JPanel panContent;
     private javax.swing.JPanel panContent1;
     private javax.swing.JPanel panContent2;
@@ -203,6 +232,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel5;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel8;
+    private javax.swing.JTextField txtVorgangsnummerAlt;
+    private javax.swing.JTextField txtVorgangsnummerNeuValue;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -269,32 +300,62 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
         panContent = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        lblStatus = new javax.swing.JLabel();
-        lblGeschBuchNummer = new javax.swing.JLabel();
-        lblVermStelle = new javax.swing.JLabel();
-        lblKatasterId = new javax.swing.JLabel();
-        lblEingangsdatum = new javax.swing.JLabel();
-        lblErstellungsdatumZip = new javax.swing.JLabel();
-        lblMitGrenzniederschriften = new javax.swing.JLabel();
-        lblMitPunktnummernreservierung = new javax.swing.JLabel();
-        lblSaumAP = new javax.swing.JLabel();
-        lblVermessungsarten = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
-        lblGeschBuchNummer1 = new javax.swing.JLabel();
-        lblVermStelle1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lblKatasterId1 = new javax.swing.JLabel();
-        lblEingangsdatum1 = new javax.swing.JLabel();
-        lblErstellungsdatumZip1 = new javax.swing.JLabel();
-        lblMitGrenzniederschriften1 = new javax.swing.JLabel();
-        lblMitPunktnummernreservierung1 = new javax.swing.JLabel();
-        lblSaumAP1 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        lblVorgangsnummerAlt = new javax.swing.JLabel();
+        lblStatusAlt = new javax.swing.JLabel();
+        lblGeschBuchNummerAlt = new javax.swing.JLabel();
+        lblVermStelleAlt = new javax.swing.JLabel();
+        lblKatasterIdAlt = new javax.swing.JLabel();
+        lblEingangsdatumAlt = new javax.swing.JLabel();
+        lblErstellungsdatumZipAlt = new javax.swing.JLabel();
+        lblMitGrenzniederschriftenAlt = new javax.swing.JLabel();
+        lblNurPunktnummernreservierungAlt = new javax.swing.JLabel();
+        lblSaumAPAlt = new javax.swing.JLabel();
+        lblVermessungsartenAlt = new javax.swing.JLabel();
+        txtVorgangsnummerAlt = new javax.swing.JTextField();
+        jxhStatusAlt = new org.jdesktop.swingx.JXHyperlink();
+        lblGeschBuchNummerAltValue = new javax.swing.JLabel();
+        lblVermStelleAltValue = new javax.swing.JLabel();
+        lblVermessungsstelleAltValue = new javax.swing.JLabel();
+        lblKatasterIdAltValue = new javax.swing.JLabel();
+        lblEingangsdatumAltValue = new javax.swing.JLabel();
+        lblErstellungsdatumZipAltValue = new javax.swing.JLabel();
+        lblMitGrenzniederschriftenAltValue = new javax.swing.JLabel();
+        lblNurPunktnummernreservierungAltValue = new javax.swing.JLabel();
+        lblSaumAPAltValue = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<String>();
         jPanel6 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        lblVorgangsnummerNeu = new javax.swing.JLabel();
+        lblStatusNeu = new javax.swing.JLabel();
+        lblGeschBuchNummerNeu = new javax.swing.JLabel();
+        lblAnonymNeu = new javax.swing.JLabel();
+        lblVermStelleNeu = new javax.swing.JLabel();
+        lblKatasterIdNeu = new javax.swing.JLabel();
+        lblEingangsdatumNeu = new javax.swing.JLabel();
+        lblErstellungsdatumZipNeu = new javax.swing.JLabel();
+        lblProdukteNeu = new javax.swing.JLabel();
+        lblSaumAPNeu = new javax.swing.JLabel();
+        lblVermessungsartenNeu = new javax.swing.JLabel();
+        txtVorgangsnummerNeuValue = new javax.swing.JTextField();
+        jxhStatusNeuValue = new org.jdesktop.swingx.JXHyperlink();
+        lblGeschBuchNummerNeuValue = new javax.swing.JLabel();
+        lblAnonymNeuValue = new javax.swing.JLabel();
+        lblVermStelleNeuValue = new javax.swing.JLabel();
+        lblVermessungsstelleNeuValue = new javax.swing.JLabel();
+        lblKatasterIdNeuValue = new javax.swing.JLabel();
+        lblEingangsdatumNeuValue = new javax.swing.JLabel();
+        lblErstellungsdatumZipNeuValue = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jList6 = new javax.swing.JList<String>();
+        lblSaumAPNeuValue = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jList5 = new javax.swing.JList<String>();
+        jPanel11 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         roundedPanel3 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -453,106 +514,114 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.ipadx = 1;
         roundedPanel2.add(semiRoundedPanel3, gridBagConstraints);
 
-        panContent.setOpaque(false);
-        panContent.setLayout(new java.awt.GridBagLayout());
+        jPanel13.setOpaque(false);
+        jPanel13.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setText("Vorgangsnummer:");
+        panContent.setOpaque(false);
+        panContent.setLayout(new java.awt.CardLayout());
+
+        jPanel12.setOpaque(false);
+        panContent.add(jPanel12, "panDatenKeine");
+
+        jPanel9.setOpaque(false);
+        jPanel9.setLayout(new java.awt.GridBagLayout());
+
+        lblVorgangsnummerAlt.setText("Vorgangsnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(jLabel4, gridBagConstraints);
+        jPanel9.add(lblVorgangsnummerAlt, gridBagConstraints);
 
-        lblStatus.setText("Status des Auftrags:");
+        lblStatusAlt.setText("Status des Auftrags:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblStatus, gridBagConstraints);
+        jPanel9.add(lblStatusAlt, gridBagConstraints);
 
-        lblGeschBuchNummer.setText("Geschäftsbuchnummer:");
+        lblGeschBuchNummerAlt.setText("Geschäftsbuchnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblGeschBuchNummer, gridBagConstraints);
+        jPanel9.add(lblGeschBuchNummerAlt, gridBagConstraints);
 
-        lblVermStelle.setText("Vermessungsstelle:");
+        lblVermStelleAlt.setText("Vermessungsstelle:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblVermStelle, gridBagConstraints);
+        jPanel9.add(lblVermStelleAlt, gridBagConstraints);
 
-        lblKatasterId.setText("Katasteramts ID:");
+        lblKatasterIdAlt.setText("Katasteramts ID:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblKatasterId, gridBagConstraints);
+        jPanel9.add(lblKatasterIdAlt, gridBagConstraints);
 
-        lblEingangsdatum.setText("Eingangsdatum:");
+        lblEingangsdatumAlt.setText("Eingangsdatum:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblEingangsdatum, gridBagConstraints);
+        jPanel9.add(lblEingangsdatumAlt, gridBagConstraints);
 
-        lblErstellungsdatumZip.setText("Erstellungsdatum Zip:");
+        lblErstellungsdatumZipAlt.setText("Erstellungsdatum Zip:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblErstellungsdatumZip, gridBagConstraints);
+        jPanel9.add(lblErstellungsdatumZipAlt, gridBagConstraints);
 
-        lblMitGrenzniederschriften.setText("Mit Grenzniederschriften:");
+        lblMitGrenzniederschriftenAlt.setText("Mit Grenzniederschriften:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblMitGrenzniederschriften, gridBagConstraints);
+        jPanel9.add(lblMitGrenzniederschriftenAlt, gridBagConstraints);
 
-        lblMitPunktnummernreservierung.setText("Nur Punktnummernreservierung:");
+        lblNurPunktnummernreservierungAlt.setText("Nur Punktnummernreservierung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblMitPunktnummernreservierung, gridBagConstraints);
+        jPanel9.add(lblNurPunktnummernreservierungAlt, gridBagConstraints);
 
-        lblSaumAP.setText("Saum AP-Suche:");
+        lblSaumAPAlt.setText("Saum AP-Suche:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblSaumAP, gridBagConstraints);
+        jPanel9.add(lblSaumAPAlt, gridBagConstraints);
 
-        lblVermessungsarten.setText("Vermessungsarten:");
+        lblVermessungsartenAlt.setText("Vermessungsarten:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblVermessungsarten, gridBagConstraints);
+        jPanel9.add(lblVermessungsartenAlt, gridBagConstraints);
 
-        jTextField1.setEditable(false);
-        jTextField1.setBackground(null);
-        jTextField1.setBorder(null);
-        jTextField1.setOpaque(false);
+        txtVorgangsnummerAlt.setEditable(false);
+        txtVorgangsnummerAlt.setBackground(null);
+        txtVorgangsnummerAlt.setBorder(null);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
-                jTextField1,
+                txtVorgangsnummerAlt,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
@@ -565,20 +634,22 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(jTextField1, gridBagConstraints);
+        jPanel9.add(txtVorgangsnummerAlt, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status != null}"),
-                jXHyperlink1,
+                jxhStatusAlt,
                 org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status}"),
-                jXHyperlink1,
+                jxhStatusAlt,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "status");
         binding.setSourceNullValue("in Bearbeitung");
@@ -586,11 +657,11 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         binding.setConverter(new BooleanToStringConverter("OK - Download", "Fehler", "in Bearbeitung"));
         bindingGroup.addBinding(binding);
 
-        jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
+        jxhStatusAlt.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jXHyperlink1ActionPerformed(evt);
+                    jxhStatusAltActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -600,13 +671,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(jXHyperlink1, gridBagConstraints);
+        jPanel9.add(jxhStatusAlt, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschaeftsbuchnummer}"),
-                lblGeschBuchNummer1,
+                lblGeschBuchNummerAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "geschaeftsbuchnummer");
         binding.setSourceNullValue("-");
@@ -621,13 +692,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblGeschBuchNummer1, gridBagConstraints);
+        jPanel9.add(lblGeschBuchNummerAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vermessungsstelle}"),
-                lblVermStelle1,
+                lblVermStelleAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "vermessungsstelle");
         binding.setSourceNullValue("-");
@@ -640,17 +711,15 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblVermStelle1, gridBagConstraints);
+        jPanel9.add(lblVermStelleAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("(${vermStelle})"),
-                jLabel5,
+                lblVermessungsstelleAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "vermStelle");
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
+                "vermStelleAlt");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -659,13 +728,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(jLabel5, gridBagConstraints);
+        jPanel9.add(lblVermessungsstelleAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.katasteramtsid}"),
-                lblKatasterId1,
+                lblKatasterIdAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "katasteramtsid");
         binding.setSourceNullValue("-");
@@ -680,13 +749,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblKatasterId1, gridBagConstraints);
+        jPanel9.add(lblKatasterIdAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.timestamp}"),
-                lblEingangsdatum1,
+                lblEingangsdatumAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "timestamp");
         binding.setSourceNullValue("-");
@@ -702,13 +771,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblEingangsdatum1, gridBagConstraints);
+        jPanel9.add(lblEingangsdatumAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zip_timestamp}"),
-                lblErstellungsdatumZip1,
+                lblErstellungsdatumZipAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "zip_timestamp");
         binding.setSourceNullValue("-");
@@ -724,13 +793,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblErstellungsdatumZip1, gridBagConstraints);
+        jPanel9.add(lblErstellungsdatumZipAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mit_grenzniederschriften}"),
-                lblMitGrenzniederschriften1,
+                lblMitGrenzniederschriftenAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "mit_grenzniederschriften");
         binding.setSourceNullValue("-");
@@ -746,13 +815,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblMitGrenzniederschriften1, gridBagConstraints);
+        jPanel9.add(lblMitGrenzniederschriftenAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nur_punktnummernreservierung}"),
-                lblMitPunktnummernreservierung1,
+                lblNurPunktnummernreservierungAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "nur_punktnummernreservierung");
         binding.setSourceNullValue("-");
@@ -768,13 +837,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblMitPunktnummernreservierung1, gridBagConstraints);
+        jPanel9.add(lblNurPunktnummernreservierungAltValue, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.saumap} m"),
-                lblSaumAP1,
+                lblSaumAPAltValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
                 "saumap");
         binding.setSourceNullValue("-");
@@ -789,7 +858,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblSaumAP1, gridBagConstraints);
+        jPanel9.add(lblSaumAPAltValue, gridBagConstraints);
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(200, 80));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 80));
@@ -798,7 +867,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 "${cidsBean.vermessungsarten}");
         org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
                     .createJListBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                         this,
                         eLProperty,
                         jList1,
@@ -815,7 +884,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(jScrollPane1, gridBagConstraints);
+        jPanel9.add(jScrollPane1, gridBagConstraints);
 
         jPanel6.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -826,7 +895,350 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(jPanel6, gridBagConstraints);
+        jPanel9.add(jPanel6, gridBagConstraints);
+
+        panContent.add(jPanel9, "panDatenAlt");
+
+        jPanel10.setOpaque(false);
+        jPanel10.setLayout(new java.awt.GridBagLayout());
+
+        lblVorgangsnummerNeu.setText("Vorgangsnummer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblVorgangsnummerNeu, gridBagConstraints);
+
+        lblStatusNeu.setText("Status des Auftrags:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblStatusNeu, gridBagConstraints);
+
+        lblGeschBuchNummerNeu.setText("Geschäftsbuchnummer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblGeschBuchNummerNeu, gridBagConstraints);
+
+        lblAnonymNeu.setText("Registrierter Nutzer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblAnonymNeu, gridBagConstraints);
+
+        lblVermStelleNeu.setText("Vermessungsstelle:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblVermStelleNeu, gridBagConstraints);
+
+        lblKatasterIdNeu.setText("Katasteramts ID:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblKatasterIdNeu, gridBagConstraints);
+
+        lblEingangsdatumNeu.setText("Eingangsdatum:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblEingangsdatumNeu, gridBagConstraints);
+
+        lblErstellungsdatumZipNeu.setText("Erstellungsdatum Zip:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblErstellungsdatumZipNeu, gridBagConstraints);
+
+        lblProdukteNeu.setText("Produkte:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblProdukteNeu, gridBagConstraints);
+
+        lblSaumAPNeu.setText("Saum AP-Suche:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblSaumAPNeu, gridBagConstraints);
+
+        lblVermessungsartenNeu.setText("Vermessungsarten:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblVermessungsartenNeu, gridBagConstraints);
+
+        txtVorgangsnummerNeuValue.setEditable(false);
+        txtVorgangsnummerNeuValue.setBackground(null);
+        txtVorgangsnummerNeuValue.setBorder(null);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schluessel}"),
+                txtVorgangsnummerNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(txtVorgangsnummerNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status != null}"),
+                jxhStatusNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status}"),
+                jxhStatusNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("in Bearbeitung");
+        binding.setSourceUnreadableValue("-");
+        binding.setConverter(new BooleanToStringConverter("OK - Download", "Fehler", "in Bearbeitung"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jxhStatusNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschaeftsbuchnummer}"),
+                lblGeschBuchNummerNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblGeschBuchNummerNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${!cidsBean.anonym}"),
+                lblAnonymNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        binding.setConverter(new BooleanToStringConverter("ja", "nein", "-"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblAnonymNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vermessungsstelle}"),
+                lblVermStelleNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblVermStelleNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("(${vermStelle})"),
+                lblVermessungsstelleNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "vermStelleNeu");
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblVermessungsstelleNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.katasteramtsid}"),
+                lblKatasterIdNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblKatasterIdNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.timestamp}"),
+                lblEingangsdatumNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblEingangsdatumNeuValue, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zip_timestamp}"),
+                lblErstellungsdatumZipNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        binding.setConverter(new SQLTimestampToStringConverter(DATE_FORMAT));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblErstellungsdatumZipNeuValue, gridBagConstraints);
+
+        jScrollPane6.setMinimumSize(new java.awt.Dimension(200, 80));
+        jScrollPane6.setPreferredSize(new java.awt.Dimension(200, 80));
+
+        jList6.setModel(new DefaultListModel<String>());
+        jScrollPane6.setViewportView(jList6);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jScrollPane6, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.saumap} m"),
+                lblSaumAPNeuValue,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(lblSaumAPNeuValue, gridBagConstraints);
+
+        jScrollPane5.setMinimumSize(new java.awt.Dimension(200, 80));
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(200, 80));
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vermessungsarten}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                eLProperty,
+                jList5);
+        bindingGroup.addBinding(jListBinding);
+
+        jScrollPane5.setViewportView(jList5);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jScrollPane5, gridBagConstraints);
+
+        jPanel11.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel10.add(jPanel11, gridBagConstraints);
+
+        panContent.add(jPanel10, "panDatenNeu");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -834,7 +1246,15 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        roundedPanel2.add(panContent, gridBagConstraints);
+        jPanel13.add(panContent, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        roundedPanel2.add(jPanel13, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1176,7 +1596,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jXHyperlink1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink1ActionPerformed
+    private void jxhStatusAltActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhStatusAltActionPerformed
         if (Boolean.TRUE.equals(cidsBean.getProperty("status"))) {
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 try {
@@ -1272,7 +1692,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 JXErrorPane.showDialog(this, errorInfo);
             }
         }
-    } //GEN-LAST:event_jXHyperlink1ActionPerformed
+    } //GEN-LAST:event_jxhStatusAltActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1420,8 +1840,15 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     public void setCidsBean(final CidsBean cidsBean) {
         fsMap.clear();
         bindingGroup.unbind();
+        ((CardLayout)panContent.getLayout()).show(panContent, "panDatenKeine");
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
+            if ("2.1.0".equals(cidsBean.getProperty("portalversion"))) {
+                ((CardLayout)panContent.getLayout()).show(panContent, "panDatenNeu");
+            } else {
+                ((CardLayout)panContent.getLayout()).show(panContent, "panDatenAlt");
+            }
+
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 this.cidsBean,
@@ -1500,6 +1927,36 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         }
                     }.execute();
                 ((DefaultListModel<String>)jList2.getModel()).addElement(name);
+            }
+
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_alkisbestandsdatenmiteigentuemerinfo"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement(
+                    "ALKIS Bestandsdaten mit Eigentümerinformationen");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_alkisbestandsdatenohneeigentuemerinfo"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement(
+                    "ALKIS Bestandsdaten ohne Eigentümerinformationen");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_alkisbestandsdatennurpunkte"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement("ALKIS Bestandsdaten (nur Punkte)");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_risse"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement("Risse");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_grenzniederschriften"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement("Grenzniederschriften");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_apuebersichten"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement("AP Übersichten");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_apbeschreibungen"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement("AP Beschreibungen");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_apkarten"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement("AP Karten");
+            }
+            if (Boolean.TRUE.equals(cidsBean.getProperty("mit_punktnummernreservierung"))) {
+                ((DefaultListModel<String>)jList6.getModel()).addElement("Punktnummernreservierung");
             }
         }
     }
@@ -1689,7 +2146,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
      */
     private void updateVermessungsstelle() {
         this.vermStelle = null;
-        bindingGroup.getBinding("vermStelle").unbind();
+        bindingGroup.getBinding("vermStelleAlt").unbind();
+        bindingGroup.getBinding("vermStelleNeu").unbind();
 
         final String vermessungsstelle = (String)cidsBean.getProperty("vermessungsstelle");
         new SwingWorker<String, Void>() {
@@ -1723,7 +2181,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                         setTitle(null);
                     } catch (final Exception ex) {
                     } finally {
-                        bindingGroup.getBinding("vermStelle").bind();
+                        bindingGroup.getBinding("vermStelleAlt").bind();
+                        bindingGroup.getBinding("vermStelleNeu").bind();
                     }
                 }
             }.execute();
