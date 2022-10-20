@@ -91,6 +91,8 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
+import de.cismet.security.WebAccessManager;
+
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
@@ -425,25 +427,14 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     }
 
     /**
-     * DOCUMENT ME! The WebAccessManager should be used. See <code>EmobLadestationEditor.checkUrl(String, JLabel)</code>
+     * DOCUMENT ME!
      *
      * @param   url  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     private boolean checkURL(final URL url) {
-        try {
-            final HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.setRequestMethod("HEAD");
-            final int responseCode = connection.getResponseCode();
-            if (responseCode == 200) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (IOException e) {
-            return false;
-        }
+        return WebAccessManager.getInstance().checkIfURLaccessible(url);
     }
 
     /**
@@ -1777,7 +1768,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblRvrPrio.setText("RVR-Priorität:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblRvrPrio, gridBagConstraints);
