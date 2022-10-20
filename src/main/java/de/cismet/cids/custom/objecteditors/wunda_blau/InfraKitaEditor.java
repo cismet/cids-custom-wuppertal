@@ -92,6 +92,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
+import de.cismet.security.WebAccessManager;
+
 import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
@@ -1278,21 +1280,14 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     }
 
     /**
-     * DOCUMENT ME! The WebAccessManager should be used. See <code>EmobLadestationEditor.checkUrl(String, JLabel)</code>
+     * DOCUMENT ME!
      *
      * @param   url  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     private boolean checkURL(final URL url) {
-        try {
-            final HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.setRequestMethod("HEAD");
-            final int responseCode = connection.getResponseCode();
-            return (responseCode >= 200) && (responseCode < 400);
-        } catch (final Exception e) {
-            return false;
-        }
+        return WebAccessManager.getInstance().checkIfURLaccessible(url);
     }
 
     @Override
