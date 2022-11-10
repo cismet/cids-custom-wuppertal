@@ -96,14 +96,14 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     private final VCMProperties properties = VCMProperties.getInstance();
     private final ConnectionContext connectionContext;
 
-    private int rotationIndex = 0;
+    private int rotationIndex = 3;
 
-    private final int[] headings = new int[] { 0, 90, 180, 270 };
-    private final double[][] sweetSpots = new double[][] {
-            { 0.5, 0 },
-            { 1, 0.5 },
-            { 0.5, 1 },
-            { 0, 0.5 }
+    private int[] headings = new int[] { 45, 135, 225, 315 };
+    private double[][] sweetSpots = new double[][] {
+            { 1, 0 },
+            { 1, 1 },
+            { 0, 1 },
+            { 0, 0 }
         };
     private FixedPImage arrow;
 
@@ -120,6 +120,14 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         setCanBeSelected(true);
         setLinePaint(new Color(0, 0, 0, 0));
         setHighlightingEnabled(false);
+
+        if (properties != null) {
+            rotationIndex = properties.getRotationIndex();
+            headings = properties.getHeadings();
+            sweetSpots = properties.getSweetSpots();
+        } else {
+            LOG.warn("VCMProperties == null. Use default values.");
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -168,6 +176,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
         children.add(createRotateArea(parent));
         children.add(createLinkArea(parent));
         children.add(createCloseArea(parent));
+        rotate();
     }
 
     /**
