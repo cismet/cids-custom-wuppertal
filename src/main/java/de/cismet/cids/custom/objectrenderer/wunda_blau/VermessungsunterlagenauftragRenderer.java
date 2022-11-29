@@ -1031,6 +1031,13 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         binding.setConverter(new BooleanToStringConverter("OK - Download", "Fehler", "in Bearbeitung"));
         bindingGroup.addBinding(binding);
 
+        jxhStatusNeuValue.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxhStatusNeuValueActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
@@ -1266,7 +1273,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         jPanel1.add(roundedPanel2, gridBagConstraints);
 
         jPanel7.setOpaque(false);
-        jPanel7.setLayout(new java.awt.GridBagLayout());
+        jPanel7.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
         roundedPanel3.setMaximumSize(new java.awt.Dimension(268, 165));
         roundedPanel3.setLayout(new java.awt.GridBagLayout());
@@ -1322,12 +1329,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         roundedPanel3.add(panContent1, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel7.add(roundedPanel3, gridBagConstraints);
+        jPanel7.add(roundedPanel3);
 
         roundedPanel4.setMaximumSize(new java.awt.Dimension(268, 165));
         roundedPanel4.setLayout(new java.awt.GridBagLayout());
@@ -1386,17 +1388,14 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         roundedPanel4.add(panContent2, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel7.add(roundedPanel4, gridBagConstraints);
+        jPanel7.add(roundedPanel4);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jPanel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1593,10 +1592,8 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
      */
-    private void jxhStatusAltActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhStatusAltActionPerformed
+    private void downloadProduktOrShowError() {
         if (Boolean.TRUE.equals(cidsBean.getProperty("status"))) {
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(this)) {
                 try {
@@ -1692,7 +1689,16 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 JXErrorPane.showDialog(this, errorInfo);
             }
         }
-    } //GEN-LAST:event_jxhStatusAltActionPerformed
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jxhStatusAltActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhStatusAltActionPerformed
+        downloadProduktOrShowError();
+    }                                                                                //GEN-LAST:event_jxhStatusAltActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1824,6 +1830,15 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jxhStatusNeuValueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhStatusNeuValueActionPerformed
+        downloadProduktOrShowError();
+    }                                                                                     //GEN-LAST:event_jxhStatusNeuValueActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     @Override
@@ -1855,6 +1870,12 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                 getConnectionContext());
             initFeatures();
             initMap();
+
+            if (Boolean.TRUE.equals(cidsBean.getProperty("anonym"))) {
+                jPanel7.remove(roundedPanel3);
+            }
+            lblVermessungsartenNeu.setVisible(!Boolean.TRUE.equals(cidsBean.getProperty("anonym")));
+            jScrollPane5.setVisible(!Boolean.TRUE.equals(cidsBean.getProperty("anonym")));
 
             bindingGroup.bind();
             setTitle(null);
