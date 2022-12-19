@@ -31,7 +31,6 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.DefaultListModel;
@@ -43,11 +42,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinderClientUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
@@ -716,34 +712,34 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         rasterfariDocumentLoaderPanel1.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         rasterfariDocumentLoaderPanel1.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         rasterfariDocumentLoaderPanel1.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         try {
             final String priceGroup = "ea";
             final URL documentUrl;
@@ -796,14 +792,14 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                     }
                 }
             });
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmbGeometrieStatusActionPerformed
+    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGeometrieStatusActionPerformed
         if (cmbGeometrieStatus.getSelectedItem() instanceof CidsBean) {
             final CidsBean geometrieStatus = (CidsBean)cmbGeometrieStatus.getSelectedItem();
 
@@ -812,7 +808,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                         (Integer)geometrieStatus.getProperty("id")));
             }
         }
-    } //GEN-LAST:event_cmbGeometrieStatusActionPerformed
+    }//GEN-LAST:event_cmbGeometrieStatusActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -887,13 +883,18 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * @return  DOCUMENT ME!
      */
     private String getDocumentFilename() {
-        final CidsBean gemarkung = (CidsBean)cidsBean.getProperty("gemarkung");
+        final Integer gemarkung = (Integer)cidsBean.getProperty("gemarkung.id");
         final String schluessel = (String)cidsBean.getProperty("schluessel");
         final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
         final String bezeichner = (String)cidsBean.getProperty("bezeichner");
         final boolean historisch = Boolean.TRUE.equals(cidsBean.getProperty("historisch"));
-        return VermessungsrissWebAccessPictureFinder.getInstance()
-                    .getVermessungsbuchwerkPictureFilename(schluessel, gemarkung, steuerbezirk, bezeichner, historisch);
+        return VermessungsrissPictureFinderClientUtils.getInstance()
+                    .getBuchwerkPictureFilename(
+                        schluessel,
+                        gemarkung,
+                        steuerbezirk,
+                        bezeichner,
+                        historisch);
     }
 
     /**
@@ -1195,7 +1196,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      *
      * @version  $Revision$, $Date$
      */
-    protected final class RefreshDocumentWorker extends SwingWorker<List[], Object> {
+    protected final class RefreshDocumentWorker extends SwingWorker<String, Object> {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -1236,21 +1237,20 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
          * @throws  Exception  DOCUMENT ME!
          */
         @Override
-        protected List[] doInBackground() throws Exception {
-            final List[] result = new List[1];
-
-            final CidsBean gemarkung = (CidsBean)cidsBean.getProperty("gemarkung");
+        protected String doInBackground() throws Exception {
+            final Integer gemarkung = (Integer)cidsBean.getProperty("gemarkung.id");
             final String schluessel = (String)cidsBean.getProperty("schluessel");
             final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
             final String bezeichner = (String)cidsBean.getProperty("bezeichner");
             final boolean historisch = Boolean.TRUE.equals(cidsBean.getProperty("historisch"));
 
-            result[BUCHWERK] = VermessungsrissWebAccessPictureFinder.getInstance()
-                        .findVermessungsbuchwerkPicture(schluessel, gemarkung, steuerbezirk, bezeichner, historisch);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Textblätter:" + result[BUCHWERK]);
-            }
-            return result;
+            return VermessungsrissPictureFinderClientUtils.getInstance()
+                        .findBuchwerkPicture(
+                            schluessel,
+                            gemarkung,
+                            steuerbezirk,
+                            bezeichner,
+                            historisch);
         }
 
         /**
@@ -1260,33 +1260,10 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         protected void done() {
             try {
                 if (!isCancelled()) {
-                    final List[] result = get();
-                    final StringBuffer collisionLists = new StringBuffer();
-                    for (int i = 0; i < result.length; ++i) {
-                        // cast!
-                        final List<String> current = result[i];
-                        if (current != null) {
-                            if (current.size() > 0) {
-                                if (current.size() > 1) {
-                                    if (collisionLists.length() > 0) {
-                                        collisionLists.append(",\n");
-                                    }
-                                    collisionLists.append(current);
-                                }
-                                document = current.get(0);
-                            }
-                        }
-                    }
-                    if (collisionLists.length() > 0) {
-                        final String collisionWarning = "Achtung: im Zielverzeichnis sind mehrere Dateien mit"
-                                    + " demselben Namen in unterschiedlichen Dateiformaten "
-                                    + "vorhanden.\n\nBitte löschen Sie die ungültigen Formate "
-                                    + "und setzen Sie die Bearbeitung in WuNDa anschließend fort."
-                                    + "\n\nDateien:\n"
-                                    + collisionLists
-                                    + "\n";
-                        LOG.info(collisionWarning);
-                    }
+                    final String current = get();
+//                    if (current != null) {
+                    document = current;
+//                    }
                 }
             } catch (final InterruptedException ex) {
                 LOG.warn("Was interrupted while refreshing document.", ex);
@@ -1364,35 +1341,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
             }
 
             return result;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private final class DocumentSizeFilter extends DocumentFilter {
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public void insertString(final FilterBypass fb, final int offset, final String string, final AttributeSet attr)
-                throws BadLocationException {
-            if ((fb.getDocument().getLength() + string.length()) <= 31) {
-                super.insertString(fb, offset, string, attr);
-            }
-        }
-
-        @Override
-        public void replace(final FilterBypass fb,
-                final int offset,
-                final int length,
-                final String text,
-                final AttributeSet attrs) throws BadLocationException {
-            if ((fb.getDocument().getLength() + text.length() - length) <= 31) {
-                super.replace(fb, offset, length, text, attrs);
-            }
         }
     }
 }
