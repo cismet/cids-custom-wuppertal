@@ -61,8 +61,8 @@ import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
-import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenHandler;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenProperties;
+import de.cismet.cids.custom.utils.vermessungsunterlagen.VermessungsunterlagenUtils;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenException;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenJobException;
 import de.cismet.cids.custom.utils.vermessungsunterlagen.exceptions.VermessungsunterlagenTaskException;
@@ -1906,7 +1906,7 @@ public class VermessungsunterlagenauftragRenderer extends JPanel implements Cids
                     nenner = null;
                 }
 
-                final String[] parts = VermessungsunterlagenHandler.createFlurstueckParts(
+                final String[] parts = VermessungsunterlagenUtils.createFlurstueckParts(
                         gemarkung,
                         flur,
                         zaehler,
