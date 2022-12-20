@@ -123,12 +123,11 @@ public class VermessungsrissPictureFinderClientUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   schluessel     DOCUMENT ME!
-     * @param   gemarkung      DOCUMENT ME!
-     * @param   gemarkungName  DOCUMENT ME!
-     * @param   steuerbezirk   DOCUMENT ME!
-     * @param   bezeichner     DOCUMENT ME!
-     * @param   historisch     DOCUMENT ME!
+     * @param   schluessel    DOCUMENT ME!
+     * @param   gemarkung     DOCUMENT ME!
+     * @param   steuerbezirk  DOCUMENT ME!
+     * @param   bezeichner    DOCUMENT ME!
+     * @param   historisch    DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
