@@ -52,7 +52,7 @@ import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel.MODE;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinderClientUtils;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungPictureFinderClientUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -347,8 +347,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                             editor.reloadDocument(lastCheckedDocument);
                         } else {
                             // no file exists we need to show a warning...
-                            lastCheckedDocument = VermessungsrissPictureFinderClientUtils
-                                        .getGrenzniederschriftLinkFilename(getLinkDocument());
+                            lastCheckedDocument = VermessungPictureFinderClientUtils.getGrenzniederschriftLinkFilename(
+                                    getLinkDocument());
                             editor.warnAlert();
                         }
                     } catch (InterruptedException ex) {
@@ -368,23 +368,23 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                     }
                     if (isPlatzhalter) {
                         return (isGrenzniederschrift
-                                ? VermessungsrissPictureFinderClientUtils.getGrenzniederschriftLinkFilename(
+                                ? VermessungPictureFinderClientUtils.getGrenzniederschriftLinkFilename(
                                     linkDokument)
-                                : VermessungsrissPictureFinderClientUtils.getVermessungsrissLinkFilename(linkDokument))
+                                : VermessungPictureFinderClientUtils.getVermessungsrissLinkFilename(linkDokument))
                                     + ".jpg";
                     } else {
                         final String[] props = parsePropertiesFromLink(linkDokument);
 
                         // check if we need to format the flur and the blatt
                         if (isGrenzniederschrift) {
-                            return VermessungsrissPictureFinderClientUtils.getInstance()
+                            return VermessungPictureFinderClientUtils.getInstance()
                                         .findVermessungsrissPicture(
                                             props[0],
                                             Integer.parseInt(props[1]),
                                             props[2],
                                             props[3]);
                         } else {
-                            return VermessungsrissPictureFinderClientUtils.getInstance()
+                            return VermessungPictureFinderClientUtils.getInstance()
                                         .findGrenzniederschriftPicture(
                                             props[0],
                                             Integer.parseInt(props[1]),
@@ -620,10 +620,10 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
         final String fullPath;
         if (MODE.GRENZNIEDERSCHRIFT.equals(mode)) {
-            fullPath = VermessungsrissPictureFinderClientUtils.getInstance()
+            fullPath = VermessungPictureFinderClientUtils.getInstance()
                         .getGrenzniederschriftPictureFilename(schluessel, gemarkung, flur, blatt);
         } else {
-            fullPath = VermessungsrissPictureFinderClientUtils.getInstance()
+            fullPath = VermessungPictureFinderClientUtils.getInstance()
                         .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
         }
         return Paths.get(fullPath).getFileName().toString();
