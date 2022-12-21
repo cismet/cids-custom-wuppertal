@@ -57,7 +57,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinderClientUtils;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungPictureFinderClientUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.VermessungRissAggregationRenderer.SelectionCheckBox;
@@ -568,14 +568,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             final String document;
             // we search for reduced size images, since we need the reduced size image for the report
             if (host.equals(ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften())) {
-                document = VermessungsrissPictureFinderClientUtils.getInstance()
+                document = VermessungPictureFinderClientUtils.getInstance()
                             .findGrenzniederschriftPicture(
                                     schluessel,
                                     gemarkung,
                                     flur,
                                     blatt);
             } else {
-                document = VermessungsrissPictureFinderClientUtils.getInstance()
+                document = VermessungPictureFinderClientUtils.getInstance()
                             .findVermessungsrissPicture(
                                     schluessel,
                                     gemarkung,
@@ -960,7 +960,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     private static boolean hasVermessungsriss(final CidsBean cidsBean) {
         try {
-            return VermessungsrissPictureFinderClientUtils.getInstance()
+            return VermessungPictureFinderClientUtils.getInstance()
                         .findVermessungsrissPicture((String)cidsBean.getProperty("schluessel"),
                                 (Integer)cidsBean.getProperty("gemarkung.id"),
                                 (String)cidsBean.getProperty("flur"),
@@ -980,7 +980,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     private static boolean hasErgaenzendeDokumente(final CidsBean cidsBean) {
         try {
-            return VermessungsrissPictureFinderClientUtils.getInstance()
+            return VermessungPictureFinderClientUtils.getInstance()
                         .findGrenzniederschriftPicture((String)cidsBean.getProperty("schluessel"),
                                 (Integer)cidsBean.getProperty("gemarkung.id"),
                                 (String)cidsBean.getProperty("flur"),

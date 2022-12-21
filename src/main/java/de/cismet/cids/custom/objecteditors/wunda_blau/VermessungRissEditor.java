@@ -81,10 +81,10 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinderClientUtils;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungPictureFinderClientUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.utils.alkis.VermessungPictureFinder;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
@@ -1317,9 +1317,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if ((currentDocument != NO_SELECTION) && (documents[currentDocument] != null)) {
             try {
                 final String document;
-                if (documents[currentDocument].contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                if (documents[currentDocument].contains(VermessungPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
                     document = documents[currentDocument].replaceAll(
-                            VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                            VermessungPictureFinder.SUFFIX_REDUCED_SIZE,
                             "");
                 } else {
                     document = documents[currentDocument];
@@ -1825,10 +1825,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
         final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
         if (currentSelectedButton == togBild) {
-            return VermessungsrissPictureFinderClientUtils.getInstance()
+            return VermessungPictureFinderClientUtils.getInstance()
                         .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
         } else {
-            return VermessungsrissPictureFinderClientUtils.getInstance()
+            return VermessungPictureFinderClientUtils.getInstance()
                         .getGrenzniederschriftPictureFilename(schluessel, gemarkung, flur, blatt);
         }
     }
@@ -1851,7 +1851,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         boolean isUmleitung = false;
         lblReducedSize.setVisible(false);
         if (document != null) {
-            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+            if (document.contains(VermessungPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
                 lblReducedSize.setVisible(true);
             }
             jxlUmleitung.setText("");
@@ -2434,7 +2434,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         InputStream urlStream = null;
         try {
             final URL objectURL = ClientAlkisConf.getInstance()
-                        .getDownloadUrlForDocument(documentFileName + VermessungsrissPictureFinder.LINKEXTENSION);
+                        .getDownloadUrlForDocument(documentFileName + VermessungPictureFinder.LINKEXTENSION);
             if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
                 urlStream = WebAccessManager.getInstance().doRequest(objectURL);
                 if (urlStream != null) {
@@ -2621,9 +2621,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
             final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
 
-            result[VERMESSUNGSRISS] = VermessungsrissPictureFinderClientUtils.getInstance()
+            result[VERMESSUNGSRISS] = VermessungPictureFinderClientUtils.getInstance()
                         .findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
-            result[GRENZNIEDERSCHRIFT] = VermessungsrissPictureFinderClientUtils.getInstance()
+            result[GRENZNIEDERSCHRIFT] = VermessungPictureFinderClientUtils.getInstance()
                         .findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Textblätter:" + result[VERMESSUNGSRISS]);
