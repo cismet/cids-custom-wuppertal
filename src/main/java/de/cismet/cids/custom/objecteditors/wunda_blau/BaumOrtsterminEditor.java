@@ -404,7 +404,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeGebietActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeGebietActionPerformed
+    private void btnChangeGebietActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeGebietActionPerformed
         final Object selectedItem = comboBoxFilterDialogGebiet.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean meldungBean = (CidsBean)selectedItem;
@@ -417,7 +417,7 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                 LOG.warn("problem in setbeanproperty: fk_meldung.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeGebietActionPerformed
+    }//GEN-LAST:event_btnChangeGebietActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -529,11 +529,23 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
                     formatTag.format(datum));
         }
     }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void clearBaumChildrenLoader() {
+        getBaumChildrenLoader().clearAllMaps();
+        getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
+    }
 
     @Override
     public void dispose() {
         super.dispose();
         baumOrtsterminPanel.dispose();
+        xtMeldung.removeAll();
+        ((OrtsterminMeldungTableModel)xtMeldung.getModel()).clear();
+        clearBaumChildrenLoader();
+        comboBoxFilterDialogGebiet.dispose();
     }
 
     @Override
