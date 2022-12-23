@@ -1350,31 +1350,31 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddKontActionPerformed
+    private void btnAddKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
             setChangeFlag();
         }
-    }                                                               //GEN-LAST:event_btnAddKontActionPerformed
+    }//GEN-LAST:event_btnAddKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemKontActionPerformed
+    private void btnRemKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtKont);
             setChangeFlag();
         }
-    }                                                               //GEN-LAST:event_btnRemKontActionPerformed
+    }//GEN-LAST:event_btnRemKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
         if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE) != null)) {
             cbHNr.setSelectedItem(null);
             if (isEditor()) {
@@ -1382,32 +1382,32 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             }
             refreshHnr();
         }
-    }                                                                             //GEN-LAST:event_cbStrasseActionPerformed
+    }//GEN-LAST:event_cbStrasseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBaumActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBaumActionPerformed
+    private void btnAddBaumActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddBaumActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtBaum, TABLE_NAME__ERSATZBAUM, getConnectionContext());
             setChangeFlag();
             getSorteCellEditor().getComboBox().setEnabled(true);
         }
-    }                                                               //GEN-LAST:event_btnAddBaumActionPerformed
+    }//GEN-LAST:event_btnAddBaumActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemBaumActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemBaumActionPerformed
+    private void btnRemBaumActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemBaumActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtBaum);
             setChangeFlag();
         }
-    }                                                               //GEN-LAST:event_btnRemBaumActionPerformed
+    }//GEN-LAST:event_btnRemBaumActionPerformed
     /**
      * DOCUMENT ME!
      *
@@ -1507,12 +1507,22 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public void dispose() {
         baumLagePanel.dispose();
         baumErsatzLagePanel.dispose();
+        baumChildrenLoader.clearAllMaps();
+        bindingGroup.unbind();
+        if (isEditor()) {
+            if (getCidsBean() != null) {
+                getCidsBean().removePropertyChangeListener(changeListener);
+            }
+            cbHNr.removeActionListener(hnrActionListener);
+        }
         cidsBean = null;
         if (isEditor() && (cbGeomErsatz != null)) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).dispose();
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(null);
             cbGeomErsatz = null;
         }
+        xtBaum.removeAll();
+        xtKont.removeAll();
     }
 
     @Override
