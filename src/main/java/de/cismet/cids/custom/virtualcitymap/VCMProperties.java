@@ -40,6 +40,9 @@ public class VCMProperties extends Properties {
     private static final String PROP_USER = "USER";
     private static final String PROP_PASSWORD = "PASSWORD";
     private static final String PROP_TOOLBAR_CONFATTR = "TOOLBAR_CONFATTR";
+    private static final String PROP_ROTATION_INDEX = "ROTATION_INDEX";
+    private static final String PROP_HEADINGS = "HEADINGS";
+    private static final String PROP_SWEET_SPOTS = "SWEET_SPOTS";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -85,6 +88,100 @@ public class VCMProperties extends Properties {
      */
     public String getToolbarConfAttr() {
         return getProperty(PROP_TOOLBAR_CONFATTR);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getRotationIndex() {
+        try {
+            return Integer.parseInt(getProperty(PROP_ROTATION_INDEX));
+        } catch (NumberFormatException e) {
+            LOG.warn("VCMProperties: Cannot parse rotation index");
+            return 0;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int[] getHeadings() {
+        try {
+            final int[] headings = new int[4];
+            final String headingsString = getProperty(PROP_HEADINGS);
+
+            if (headingsString != null) {
+                final String[] splitted = headingsString.split(",");
+
+                if (splitted.length == 4) {
+                    for (int i = 0; i < 4; ++i) {
+                        headings[i] = Integer.parseInt(splitted[i].trim());
+                    }
+
+                    return headings;
+                }
+            }
+        } catch (NumberFormatException e) {
+            // nothing to do
+        }
+
+        LOG.warn("VCMProperties: Cannot parse headings. Use default values");
+        return new int[] { 45, 135, 225, 315 };
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public double[][] getSweetSpots() {
+        try {
+            final double[][] sweetSpots = new double[4][];
+            final String spotsString = getProperty(PROP_SWEET_SPOTS);
+
+            if (spotsString != null) {
+                final String[] splitted = spotsString.split(";");
+
+                if (splitted.length == 4) {
+                    for (int i = 0; i < 4; ++i) {
+                        final String singleSpot = splitted[i].replace("{", "").replace("}", "").trim();
+
+                        final String[] singleSpotValues = singleSpot.split(",");
+
+                        if (singleSpotValues.length == 2) {
+                            final double[] spotValues = new double[2];
+                            spotValues[0] = Double.parseDouble(singleSpotValues[0].trim());
+                            spotValues[1] = Double.parseDouble(singleSpotValues[1].trim());
+                            sweetSpots[i] = spotValues;
+                        } else {
+                            LOG.warn("VCMProperties: Cannot parse sweet spots. Use default values");
+                            return new double[][] {
+                                    { 1, 0 },
+                                    { 1, 1 },
+                                    { 0, 1 },
+                                    { 0, 0 }
+                                };
+                        }
+                    }
+
+                    return sweetSpots;
+                }
+            }
+        } catch (NumberFormatException e) {
+            // nothing to do
+        }
+
+        LOG.warn("Cannot parse sweet spots. Use default values");
+        return new double[][] {
+                { 1, 0 },
+                { 1, 1 },
+                { 0, 1 },
+                { 0, 0 }
+            };
     }
 
     /**

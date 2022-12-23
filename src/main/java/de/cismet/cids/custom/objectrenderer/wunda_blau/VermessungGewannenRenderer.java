@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
+import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungGewannenEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -17,7 +17,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class VermessungRissRenderer extends VermessungRissEditor implements CidsBeanRenderer {
+public class VermessungGewannenRenderer extends VermessungGewannenEditor implements CidsBeanRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -28,7 +28,7 @@ public class VermessungRissRenderer extends VermessungRissEditor implements Cids
     /**
      * Creates a new VermessungRissRenderer object.
      */
-    public VermessungRissRenderer() {
+    public VermessungGewannenRenderer() {
         super(true);
 
         title = "";

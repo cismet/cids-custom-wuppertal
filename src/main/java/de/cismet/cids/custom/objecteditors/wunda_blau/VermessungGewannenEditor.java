@@ -10,8 +10,6 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +55,6 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
-import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -80,7 +77,7 @@ import de.cismet.tools.gui.panels.LayeredAlertPanel;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class VermessungBuchwerkEditor extends javax.swing.JPanel implements DisposableCidsBeanStore,
+public class VermessungGewannenEditor extends javax.swing.JPanel implements DisposableCidsBeanStore,
     TitleComponentProvider,
     FooterComponentProvider,
     BorderProvider,
@@ -90,13 +87,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(VermessungBuchwerkEditor.class);
-    protected static final int BUCHWERK = 0;
-    protected static final int NO_SELECTION = -1;
-
-    protected static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(
-                PrecisionModel.FLOATING),
-            CrsTransformer.extractSridFromCrs(ClientAlkisConf.getInstance().getSrsService()));
+    private static final Logger LOG = Logger.getLogger(VermessungGewannenEditor.class);
     protected static final Map<Integer, Color> COLORS_GEOMETRIE_STATUS = new HashMap<Integer, Color>();
     private static final ListModel MODEL_LOAD = new DefaultListModel() {
 
@@ -117,10 +108,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     //~ Instance fields --------------------------------------------------------
 
     protected CidsBean cidsBean;
-    protected Object schluessel;
-    protected Object gemarkung;
-    protected Object steuerbezirk;
-    protected Object bezeichner;
     protected boolean readOnly;
     protected String document;
     private AlertPanel alertPanel;
@@ -131,14 +118,13 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     private javax.swing.ButtonGroup bgrControls;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnOpen;
-    private javax.swing.JComboBox cmbFormat;
     private javax.swing.JComboBox cmbGemarkung;
     private javax.swing.JComboBox cmbGeometrie;
     private javax.swing.JComboBox cmbGeometrieStatus;
     private javax.swing.Box.Filler gluGapControls;
     private javax.swing.Box.Filler gluGeneralInformationGap;
     private org.jdesktop.swingx.JXBusyLabel jxLBusyMeasure;
-    private javax.swing.JLabel lblFormat;
+    private javax.swing.JLabel lblFlur;
     private javax.swing.JLabel lblGemarkung;
     private javax.swing.JLabel lblGeneralInformation;
     private javax.swing.JLabel lblGeometrie;
@@ -171,6 +157,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     private javax.swing.Box.Filler strFooter;
     private javax.swing.JToggleButton togPan;
     private javax.swing.JToggleButton togZoom;
+    private javax.swing.JTextField txtKmquadrat;
     private javax.swing.JLabel warnMessage;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -178,18 +165,18 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new VermessungBuchwerkEditor object.
+     * Creates a new VermessungGewannenEditor object.
      */
-    public VermessungBuchwerkEditor() {
+    public VermessungGewannenEditor() {
         this(false);
     }
 
     /**
-     * Creates new form VermessungBuchwerkEditor.
+     * Creates new form VermessungGewannenEditor.
      *
      * @param  readOnly  DOCUMENT ME!
      */
-    public VermessungBuchwerkEditor(final boolean readOnly) {
+    public VermessungGewannenEditor(final boolean readOnly) {
         this.readOnly = readOnly;
     }
 
@@ -204,14 +191,16 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         alertPanel = new AlertPanel(AlertPanel.TYPE.DANGER, warnMessage, true);
         initAlertPanel();
         lblReducedSize.setVisible(false);
+
         if (readOnly) {
-            lblGemarkung.setVisible(false);
-            cmbGemarkung.setVisible(false);
-            cmbFormat.setEditable(false);
-            cmbFormat.setEnabled(false);
+            pnlGeneralInformation.setVisible(false);
+            /*lblGemarkung.setVisible(false);
+             * lblFlur.setVisible(false); lblBlatt.setVisible(false); lblGeometrie.setVisible(false);
+             * cmbGemarkung.setVisible(false); txtBlatt.setVisible(false);txtFlur.setVisible(false);*/
+
             cmbGeometrieStatus.setEditable(false);
             cmbGeometrieStatus.setEnabled(false);
-            lblGeometrie.setVisible(false);
+            txtKmquadrat.setEditable(false);
         }
     }
 
@@ -249,10 +238,10 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
+        lblGeometrieStatus = new javax.swing.JLabel();
+        cmbGeometrieStatus = new DefaultBindableReferenceCombo();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
         lblGeneralInformation = new javax.swing.JLabel();
-        lblFormat = new javax.swing.JLabel();
-        cmbFormat = new DefaultBindableReferenceCombo();
         lblGeometrie = new javax.swing.JLabel();
         if (!readOnly) {
             cmbGeometrie = new DefaultCismapGeometryComboBoxEditor();
@@ -260,10 +249,10 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         gluGeneralInformationGap = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        lblGeometrieStatus = new javax.swing.JLabel();
-        cmbGeometrieStatus = new DefaultBindableReferenceCombo();
         lblGemarkung = new javax.swing.JLabel();
         cmbGemarkung = new DefaultBindableReferenceCombo();
+        lblFlur = new javax.swing.JLabel();
+        txtKmquadrat = new javax.swing.JTextField();
         panRight = new javax.swing.JPanel();
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
         togPan = rasterfariDocumentLoaderPanel1.getTogPan();
@@ -287,8 +276,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitle.setForeground(java.awt.Color.white);
         lblTitle.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblTitle.text"));   // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblTitle.text"));   // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -318,8 +307,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         pnlGrenzniederschriftAlert.setLayout(new java.awt.BorderLayout());
 
         warnMessage.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.warnMessage.text")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.warnMessage.text")); // NOI18N
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -334,8 +323,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
 
         lblHeaderDocument.setForeground(java.awt.Color.white);
         lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblHeaderDocument.text")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblHeaderDocument.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -348,8 +337,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
 
         lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
         lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblReducedSize.text_1")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblReducedSize.text_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -363,23 +352,58 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         panLeft.add(pnlDocument, gridBagConstraints);
 
         pnlGeneralInformation.setLayout(new java.awt.GridBagLayout());
+
+        lblGeometrieStatus.setText(org.openide.util.NbBundle.getMessage(
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblGeometrieStatus.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        pnlGeneralInformation.add(lblGeometrieStatus, gridBagConstraints);
+
+        cmbGeometrieStatus.setRenderer(new GeometrieStatusRenderer(cmbGeometrieStatus.getRenderer()));
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie_status}"),
+                cmbGeometrieStatus,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cmbGeometrieStatus.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmbGeometrieStatusActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
+        pnlGeneralInformation.add(cmbGeometrieStatus, gridBagConstraints);
 
         pnlHeaderGeneralInformation.setBackground(new java.awt.Color(51, 51, 51));
         pnlHeaderGeneralInformation.setLayout(new java.awt.FlowLayout());
 
         lblGeneralInformation.setForeground(new java.awt.Color(255, 255, 255));
         lblGeneralInformation.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblGeneralInformation.text")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblGeneralInformation.text")); // NOI18N
         pnlHeaderGeneralInformation.add(lblGeneralInformation);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -390,40 +414,12 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         gridBagConstraints.weightx = 0.1;
         pnlGeneralInformation.add(pnlHeaderGeneralInformation, gridBagConstraints);
 
-        lblFormat.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblFormat.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlGeneralInformation.add(lblFormat, gridBagConstraints);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.format}"),
-                cmbFormat,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
-        pnlGeneralInformation.add(cmbFormat, gridBagConstraints);
-
         lblGeometrie.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblGeometrie.text")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblGeometrie.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -442,7 +438,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         if (!readOnly) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 2;
+            gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
             gridBagConstraints.weightx = 0.5;
@@ -451,58 +447,22 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         }
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         pnlGeneralInformation.add(gluGeneralInformationGap, gridBagConstraints);
 
-        lblGeometrieStatus.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblGeometrieStatus.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlGeneralInformation.add(lblGeometrieStatus, gridBagConstraints);
-
-        cmbGeometrieStatus.setRenderer(new GeometrieStatusRenderer(cmbGeometrieStatus.getRenderer()));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie_status}"),
-                cmbGeometrieStatus,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        cmbGeometrieStatus.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cmbGeometrieStatusActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
-        pnlGeneralInformation.add(cmbGeometrieStatus, gridBagConstraints);
-
         lblGemarkung.setLabelFor(cmbGemarkung);
         lblGemarkung.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblGemarkung.text")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblGemarkung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGeneralInformation.add(lblGemarkung, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -514,7 +474,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
@@ -522,13 +482,41 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGeneralInformation.add(cmbGemarkung, gridBagConstraints);
 
+        lblFlur.setText(org.openide.util.NbBundle.getMessage(
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblFlur.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        pnlGeneralInformation.add(lblFlur, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flur}"),
+                txtKmquadrat,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
+        pnlGeneralInformation.add(txtKmquadrat, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.75;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 5);
         panLeft.add(pnlGeneralInformation, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -547,11 +535,11 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
         togPan.setSelected(true);
         togPan.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.togPan.text"));                                  // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.togPan.text"));                                  // NOI18N
         togPan.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.togPan.toolTipText"));                           // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.togPan.toolTipText"));                           // NOI18N
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.addActionListener(new java.awt.event.ActionListener() {
@@ -572,11 +560,11 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         togZoom.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
         togZoom.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.togZoom.text"));                                  // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.togZoom.text"));                                  // NOI18N
         togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.togZoom.toolTipText"));                           // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.togZoom.toolTipText"));                           // NOI18N
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.addActionListener(new java.awt.event.ActionListener() {
@@ -596,11 +584,11 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         btnHome.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
         btnHome.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.btnHome.text"));                                  // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.btnHome.text"));                                  // NOI18N
         btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.btnHome.toolTipText"));                           // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.btnHome.toolTipText"));                           // NOI18N
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
@@ -622,8 +610,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
 
         lblHeaderControls.setForeground(new java.awt.Color(255, 255, 255));
         lblHeaderControls.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblHeaderControls.text")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblHeaderControls.text")); // NOI18N
         pnlHeaderControls.add(lblHeaderControls);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -634,11 +622,11 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         btnOpen.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
         btnOpen.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.btnOpen.text"));                                          // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.btnOpen.text"));                                          // NOI18N
         btnOpen.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.btnOpen.toolTipText"));                                   // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.btnOpen.toolTipText"));                                   // NOI18N
         btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
@@ -668,8 +656,8 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
 
         lblHeaderPages.setForeground(new java.awt.Color(255, 255, 255));
         lblHeaderPages.setText(org.openide.util.NbBundle.getMessage(
-                VermessungBuchwerkEditor.class,
-                "VermessungBuchwerkEditor.lblHeaderPages.text")); // NOI18N
+                VermessungGewannenEditor.class,
+                "VermessungGewannenEditor.lblHeaderPages.text")); // NOI18N
         pnlHeaderPages.add(lblHeaderPages);
 
         pnlPages.add(pnlHeaderPages, java.awt.BorderLayout.PAGE_START);
@@ -690,13 +678,14 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         panRight.add(pnlPages, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.weighty = 1.0;
         panRight.add(gluGapControls, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -776,7 +765,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                 @Override
                 public void run() {
                     if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
-                                    VermessungBuchwerkEditor.this)) {
+                                    VermessungGewannenEditor.this)) {
                         final String urlString = url.toExternalForm();
                         final String filename = urlString.substring(urlString.lastIndexOf("/") + 1);
 
@@ -786,7 +775,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                                         url,
                                         "",
                                         DownloadManagerDialog.getInstance().getJobName(),
-                                        "Buchwerk",
+                                        "Gewanne",
                                         filename.substring(0, filename.lastIndexOf(".")),
                                         filename.substring(filename.lastIndexOf("."))));
                     }
@@ -883,18 +872,13 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * @return  DOCUMENT ME!
      */
     private String getDocumentFilename() {
+        final Boolean liste = (Boolean)cidsBean.getProperty("liste");
         final Integer gemarkung = (Integer)cidsBean.getProperty("gemarkung.id");
-        final String schluessel = (String)cidsBean.getProperty("schluessel");
-        final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
-        final String bezeichner = (String)cidsBean.getProperty("bezeichner");
-        final boolean historisch = Boolean.TRUE.equals(cidsBean.getProperty("historisch"));
+        final Integer kmquadrat = (Integer)cidsBean.getProperty("kmquadrat");
         return VermessungPictureFinderClientUtils.getInstance()
-                    .getBuchwerkPictureFilename(
-                        schluessel,
-                        gemarkung,
-                        steuerbezirk,
-                        bezeichner,
-                        historisch);
+                    .getGewannePictureFilename(
+                        liste ? gemarkung : kmquadrat,
+                        liste);
     }
 
     /**
@@ -926,12 +910,12 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
 
         if (!readOnly && isUmleitung) {
             lblHeaderDocument.setText(NbBundle.getMessage(
-                    VermessungBuchwerkEditor.class,
-                    "VermessungBuchwerkEditor.lblHeaderDocument.text.buchwerk_umleitung"));
+                    VermessungGewannenEditor.class,
+                    "VermessungGewannenEditor.lblHeaderDocument.text.gewanne_umleitung"));
         } else {
             lblHeaderDocument.setText(NbBundle.getMessage(
-                    VermessungBuchwerkEditor.class,
-                    "VermessungBuchwerkEditor.lblHeaderDocument.text.buchwerk"));
+                    VermessungGewannenEditor.class,
+                    "VermessungGewannenEditor.lblHeaderDocument.text.gewanne"));
         }
     }
 
@@ -992,11 +976,6 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                 cmbGeometrieStatus.setBackground(COLORS_GEOMETRIE_STATUS.get(
                         (Integer)cidsBean.getProperty("geometrie_status.id")));
             }
-
-            schluessel = cidsBean.getProperty("schluessel");
-            gemarkung = (cidsBean.getProperty("gemarkung") != null) ? cidsBean.getProperty("gemarkung.id") : null;
-            steuerbezirk = cidsBean.getProperty("steuerbezirk");
-            bezeichner = cidsBean.getProperty("bezeichner");
         }
 
         setCurrentDocumentNull();
@@ -1073,48 +1052,17 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
      * @return  DOCUMENT ME!
      */
     protected String generateTitle() {
-        final StringBuilder result = new StringBuilder();
-        final Object schluessel = cidsBean.getProperty("schluessel");
-        final Object steuerbezirk = cidsBean.getProperty("steuerbezirk");
-        final Object bezeichner = cidsBean.getProperty("bezeichner");
+        final Integer kmquadrat = (Integer)cidsBean.getProperty("kmquadrat");
+        final String gemarkung = (String)cidsBean.getProperty("gemarkung.name");
+        final Boolean liste = (Boolean)cidsBean.getProperty("liste");
 
-        result.append("Schlüssel ");
-        if ((schluessel instanceof String) && (((String)schluessel).trim().length() > 0)) {
-            result.append(schluessel);
+        final StringBuilder sb = new StringBuilder();
+        if (Boolean.TRUE.equals(liste)) {
+            sb.append("Gemarkung ").append((gemarkung != null) ? gemarkung : "unbekannt");
         } else {
-            result.append("unbekannt");
+            sb.append("ḱm-Quadrat ").append((kmquadrat != null) ? Integer.toString(kmquadrat) : "unbekannt");
         }
-        result.append(" - ");
-
-        result.append("Gemarkung ");
-        String gemarkung = "unbekannt";
-        if ((cidsBean.getProperty("gemarkung") instanceof CidsBean)
-                    && (cidsBean.getProperty("gemarkung.name") instanceof String)) {
-            final String gemarkungFromBean = (String)cidsBean.getProperty("gemarkung.name");
-
-            if (gemarkungFromBean.trim().length() > 0) {
-                gemarkung = gemarkungFromBean;
-            }
-        }
-        result.append(gemarkung);
-        result.append(" - ");
-
-        result.append("Steuerbezirk ");
-        if (steuerbezirk instanceof Integer) {
-            result.append(steuerbezirk);
-        } else {
-            result.append("unbekannt");
-        }
-        result.append(" - ");
-
-        result.append("Bezeichner ");
-        if ((bezeichner instanceof String) && (((String)bezeichner).trim().length() > 0)) {
-            result.append(bezeichner);
-        } else {
-            result.append("unbekannt");
-        }
-
-        return result.toString();
+        return sb.toString();
     }
 
     /**
@@ -1140,7 +1088,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
     /**
      * DOCUMENT ME!
      */
-    protected void loadBuchwerk() {
+    protected void loadDokument() {
         showMeasureIsLoading();
         checkLinkInTitle();
         showAlert(false);
@@ -1239,18 +1187,13 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
         @Override
         protected String doInBackground() throws Exception {
             final Integer gemarkung = (Integer)cidsBean.getProperty("gemarkung.id");
-            final String schluessel = (String)cidsBean.getProperty("schluessel");
-            final Integer steuerbezirk = (Integer)cidsBean.getProperty("steuerbezirk");
-            final String bezeichner = (String)cidsBean.getProperty("bezeichner");
-            final boolean historisch = Boolean.TRUE.equals(cidsBean.getProperty("historisch"));
+            final Integer kmquadrat = (Integer)cidsBean.getProperty("kmquadrat");
+            final Boolean liste = (Boolean)cidsBean.getProperty("liste");
 
             return VermessungPictureFinderClientUtils.getInstance()
-                        .findBuchwerkPicture(
-                            schluessel,
-                            gemarkung,
-                            steuerbezirk,
-                            bezeichner,
-                            historisch);
+                        .findGewannePicture(
+                            liste ? gemarkung : kmquadrat,
+                            liste);
         }
 
         /**
@@ -1271,7 +1214,7 @@ public class VermessungBuchwerkEditor extends javax.swing.JPanel implements Disp
                 LOG.warn("There was an exception while refreshing document.", ex);
             } finally {
                 if (refreshMeasuringComponent) {
-                    loadBuchwerk();
+                    loadDokument();
                 }
             }
         }

@@ -18,16 +18,17 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 
 import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,25 +39,29 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.cismet.cids.client.tools.DevelopmentTools;
-
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsRissWebAccessReportHelper;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungPictureFinderClientUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.VermessungRissAggregationRenderer.SelectionCheckBox;
+import de.cismet.cids.custom.utils.alkis.VermessungsRissReportHelper;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungsrissReportServerAction;
 
@@ -76,8 +81,6 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
-
-import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -102,6 +105,16 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
     private static final Logger LOG = Logger.getLogger(VermessungRissAggregationRenderer.class);
     private static final double BUFFER = 0.005;
+
+    private static final ImageIcon ICON_LOADING = new javax.swing.ImageIcon(VermessungRissAggregationRenderer.class
+                    .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png"));
+    private static final ImageIcon ICON_FOUND = new javax.swing.ImageIcon(VermessungRissAggregationRenderer.class
+                    .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png"));
+    private static final ImageIcon ICON_NOTFOUND = new javax.swing.ImageIcon(VermessungRissAggregationRenderer.class
+                    .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
+    private static final ImageIcon ICON_ERROR = new javax.swing.ImageIcon(VermessungRissAggregationRenderer.class
+                    .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
+
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
             "Auswahl",
@@ -110,27 +123,41 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "Flur",
             "Blatt",
             "Jahr",
-            "Format"
+            "Format",
+            "Riss",
+            "Erg."
         };
     // Namen der Properties -> Spalten
     private static final String[] AGR_PROPERTY_NAMES = new String[] {
+            null,
             "schluessel",
             "gemarkung.name",
             "flur",
             "blatt",
             "jahr",
-            "format"
+            "format",
+            null,
+            null
         };
-    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 40, 130, 85, 85, 60, 40 };
+    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 40, 100, 60, 40, 60, 80, 30, 30 };
 
     //~ Instance fields --------------------------------------------------------
 
     private List<CidsBean> cidsBeans;
     private String title = "";
-    private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
+
+    private boolean allowErgaenzendeDokumenteReport = false;
+    private boolean allowVermessungsrisseReport = false;
+
+    private final Map<CidsBean, Boolean> rissCheckerMap = new HashMap<>();
+    private final Map<CidsBean, Exception> rissCheckerExceptionMap = new HashMap<>();
+    private final Map<CidsBean, Boolean> ergCheckerMap = new HashMap<>();
+    private final Map<CidsBean, Exception> ergCheckerExceptionMap = new HashMap<>();
+
+    private final Map<CidsBean, Boolean> risseSelectionMap = new HashMap<>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -165,6 +192,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         scpRisse.getViewport().setOpaque(false);
         tblRisse.getSelectionModel().addListSelectionListener(new TableSelectionListener());
+        tblRisse.getColumnModel().getColumn(7).setCellRenderer(new PictureStateCellRenderer(false));
+        tblRisse.getColumnModel().getColumn(8).setCellRenderer(new PictureStateCellRenderer(true));
 
         tableComparator = new TableModelIndexConvertingToViewIndexComparator(tblRisse);
     }
@@ -225,14 +254,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             });
         setLayout(new java.awt.GridBagLayout());
 
-        tblRisse.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                    {},
-                    {},
-                    {},
-                    {}
-                },
-                new String[] {}));
+        tblRisse.setModel(new PointTableModel());
         tblRisse.addFocusListener(new java.awt.event.FocusAdapter() {
 
                 @Override
@@ -417,11 +439,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 }
 
                                 final boolean isDocumentAvailable;
-                                if (type.equalsIgnoreCase(VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE)) {
-                                    isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
+                                if (type.equalsIgnoreCase(VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE)) {
+                                    isDocumentAvailable = rissCheckerMap.get(selectedVermessungsriss);
                                 } else if (type.equalsIgnoreCase(
-                                                VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
-                                    isDocumentAvailable = hasErgaenzendeDokumente(selectedVermessungsriss);
+                                                VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                    isDocumentAvailable = ergCheckerMap.get(selectedVermessungsriss);
                                 } else {
                                     isDocumentAvailable = false;
                                 }
@@ -463,7 +485,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     i++;
                                 }
 
-                                if (type.equalsIgnoreCase(VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE)) {
+                                if (type.equalsIgnoreCase(VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE)) {
                                     if (BillingPopup.doBilling(
                                                     "vrpdf"
                                                     + ((productGroupExt != null) ? productGroupExt : ""),
@@ -474,7 +496,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         downloadBilder = true;
                                     }
                                 } else if (type.equalsIgnoreCase(
-                                                VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                                VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS)) {
                                     if (BillingPopup.doBilling(
                                                     "doklapdf"
                                                     + ((productGroupExt != null) ? productGroupExt : ""),
@@ -543,17 +565,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 continue;
             }
 
-            final List<String> documents;
+            final String document;
             // we search for reduced size images, since we need the reduced size image for the report
             if (host.equals(ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften())) {
-                documents = VermessungsrissWebAccessPictureFinder.getInstance()
+                document = VermessungPictureFinderClientUtils.getInstance()
                             .findGrenzniederschriftPicture(
                                     schluessel,
                                     gemarkung,
                                     flur,
                                     blatt);
             } else {
-                documents = VermessungsrissWebAccessPictureFinder.getInstance()
+                document = VermessungPictureFinderClientUtils.getInstance()
                             .findVermessungsrissPicture(
                                     schluessel,
                                     gemarkung,
@@ -561,29 +583,27 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     blatt);
             }
 
-            if ((documents == null) || documents.isEmpty()) {
+            if (document == null) {
                 LOG.info("No document URLS found for the Vermessungsriss report");
             }
             boolean isOfReducedSize = false;
-            if (documents != null) {
-                for (final String document : documents) {
-                    try {
-                        final URL url = ClientAlkisConf.getInstance().getDownloadUrlForDocument(document);
-                        if (url.toString().contains("_rs")) {
-                            isOfReducedSize = true;
-                        }
-
-                        // when a reduced size image was found we download the original file as jpg also
-                        if (isOfReducedSize) {
-                            additionalFilesToDownload.add(new URL(
-                                    url.toString().replaceAll("_rs", "")));
-                        }
-                        break;
-                    } catch (final Exception ex) {
-                        LOG.warn("Could not read document from URL '" + document
-                                    + "'. Skipping this url.",
-                            ex);
+            if (document != null) {
+                try {
+                    final URL url = ClientAlkisConf.getInstance().getDownloadUrlForDocument(document);
+                    if (url.toString().contains("_rs")) {
+                        isOfReducedSize = true;
                     }
+
+                    // when a reduced size image was found we download the original file as jpg also
+                    if (isOfReducedSize) {
+                        additionalFilesToDownload.add(new URL(
+                                url.toString().replaceAll("_rs", "")));
+                    }
+                    break;
+                } catch (final Exception ex) {
+                    LOG.warn("Could not read document from URL '" + document
+                                + "'. Skipping this url.",
+                        ex);
                 }
             }
         }
@@ -640,8 +660,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 saps,
                                 finalProjectname,
                                 jobname,
-                                (VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type))
-                                    ? "vermriss" : "ergdok",
+                                (VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) ? "vermriss"
+                                                                                                           : "ergdok",
                                 ".pdf",
                                 getConnectionContext());
 
@@ -710,7 +730,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         final Collection<CidsBean> result = new LinkedList<>();
         final List<Integer> selectedIndexes = new ArrayList<>();
 
-        final TableModel tableModel = tblRisse.getModel();
+        final TableModel tableModel = getTableModel();
         for (int i = 0; i < tableModel.getRowCount(); ++i) {
             final Object includedObj = tableModel.getValueAt(i, 0);
             if ((includedObj instanceof Boolean) && (Boolean)includedObj) {
@@ -733,10 +753,18 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      * @return  DOCUMENT ME!
      */
     @Override
-    public Collection<CidsBean> getCidsBeans() {
+    public List<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private PointTableModel getTableModel() {
+        return (PointTableModel)tblRisse.getModel();
+    }
     /**
      * DOCUMENT ME!
      *
@@ -745,28 +773,20 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
+            clearMaps();
             this.cidsBeans = (List<CidsBean>)beans;
             features = new HashMap<>(beans.size());
 
             initMap();
 
-            boolean allowVermessungsrisseReport = false;
-            boolean allowErgaenzendeDokumenteReport = false;
-
-            final List<Object[]> tableData = new ArrayList<>();
-            for (final CidsBean vermessungsrissBean : cidsBeans) {
-                tableData.add(cidsBean2Row(vermessungsrissBean));
-
-                if (!allowVermessungsrisseReport) {
-                    allowVermessungsrisseReport = hasVermessungsriss(vermessungsrissBean);
-                }
-                if (!allowErgaenzendeDokumenteReport) {
-                    allowErgaenzendeDokumenteReport = hasErgaenzendeDokumente(vermessungsrissBean);
-                }
+            for (final CidsBean cidsBean : beans) {
+                risseSelectionMap.put(cidsBean, true);
             }
-
-            tableModel = new PointTableModel(tableData.toArray(new Object[tableData.size()][]), AGR_COMLUMN_NAMES);
-            tblRisse.setModel(tableModel);
+            getTableModel().refresh();
+            for (final CidsBean bean : beans) {
+                new PictureWorker(bean, true).execute();
+                new PictureWorker(bean, false).execute();
+            }
 
             final TableColumnModel cModel = tblRisse.getColumnModel();
             for (int i = 0; i < cModel.getColumnCount(); ++i) {
@@ -781,29 +801,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
             tableSorter.setSortKeys(sortKeys);
 
-            final boolean billingAllowed = BillingPopup.isBillingAllowed("doklapdf", getConnectionContext())
-                        || BillingPopup.isBillingAllowed("vrpdf", getConnectionContext());
-
-            final boolean enabled = billingAllowed
-                        && ((allowErgaenzendeDokumenteReport && allowVermessungsrisseReport)
-                            || allowErgaenzendeDokumenteReport || allowVermessungsrisseReport);
-            if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {
-                cmbType.setModel(new DefaultComboBoxModel(
-                        new String[] {
-                            VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE,
-                            VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS
-                        }));
-            } else if (allowErgaenzendeDokumenteReport) {
-                cmbType.setModel(new DefaultComboBoxModel(
-                        new String[] { VermessungsRissWebAccessReportHelper.TYPE_COMPLEMENTARYDOCUMENTS }));
-            } else if (allowVermessungsrisseReport) {
-                cmbType.setModel(new DefaultComboBoxModel(
-                        new String[] { VermessungsRissWebAccessReportHelper.TYPE_VERMESSUNGSRISSE }));
-            }
-            cmbType.setEnabled(enabled);
-            btnGenerateReport.setEnabled(enabled);
-            txtJobnumber.setEnabled(enabled);
-            txtProjectname.setEnabled(enabled);
+            updateButtons();
         }
 
         setTitle(null);
@@ -812,9 +810,51 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     /**
      * DOCUMENT ME!
      */
+    private void updateButtons() {
+        final boolean billingAllowed = BillingPopup.isBillingAllowed("doklapdf", getConnectionContext())
+                    || BillingPopup.isBillingAllowed("vrpdf", getConnectionContext());
+
+        final boolean enabled = billingAllowed
+                    && ((allowErgaenzendeDokumenteReport && allowVermessungsrisseReport)
+                        || allowErgaenzendeDokumenteReport || allowVermessungsrisseReport);
+        if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {
+            cmbType.setModel(new DefaultComboBoxModel(
+                    new String[] {
+                        VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE,
+                        VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS
+                    }));
+        } else if (allowErgaenzendeDokumenteReport) {
+            cmbType.setModel(new DefaultComboBoxModel(
+                    new String[] { VermessungsRissReportHelper.TYPE_COMPLEMENTARYDOCUMENTS }));
+        } else if (allowVermessungsrisseReport) {
+            cmbType.setModel(new DefaultComboBoxModel(
+                    new String[] { VermessungsRissReportHelper.TYPE_VERMESSUNGSRISSE }));
+        }
+
+        cmbType.setEnabled(enabled);
+        btnGenerateReport.setEnabled(enabled);
+        txtJobnumber.setEnabled(enabled);
+        txtProjectname.setEnabled(enabled);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         mappingComponent.dispose();
+        clearMaps();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void clearMaps() {
+        rissCheckerMap.clear();
+        rissCheckerExceptionMap.clear();
+        ergCheckerMap.clear();
+        ergCheckerExceptionMap.clear();
+        risseSelectionMap.clear();
     }
 
     /**
@@ -912,71 +952,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     }
 
     /**
-     * Extracts the date from a CidsBean into an Object[] -> table row. (Collection attributes are flatened to
-     * comaseparated lists)
-     *
-     * @param   vermessungsriss  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    protected Object[] cidsBean2Row(final CidsBean vermessungsriss) {
-        if (vermessungsriss != null) {
-            final Object[] result = new Object[AGR_COMLUMN_NAMES.length];
-            result[0] = Boolean.TRUE;
-
-            for (int i = 0; i < AGR_PROPERTY_NAMES.length; ++i) {
-                final Object property = vermessungsriss.getProperty(AGR_PROPERTY_NAMES[i]);
-                final String propertyString;
-                propertyString = ObjectRendererUtils.propertyPrettyPrint(property);
-                result[i + 1] = propertyString;
-            }
-            return result;
-        }
-
-        return new Object[0];
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   host        DOCUMENT ME!
-     * @param   schluessel  DOCUMENT ME!
-     * @param   gemarkung   DOCUMENT ME!
-     * @param   flur        DOCUMENT ME!
-     * @param   blatt       DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static Boolean isImageAvailable(final String host,
-            final String schluessel,
-            final Integer gemarkung,
-            final String flur,
-            final String blatt) {
-        final List<String> validDocuments;
-        if (host.equals(ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften())) {
-            validDocuments = VermessungsrissWebAccessPictureFinder.getInstance()
-                        .findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
-        } else {
-            validDocuments = VermessungsrissWebAccessPictureFinder.getInstance()
-                        .findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
-        }
-
-        boolean imageAvailable = false;
-        for (final String document : validDocuments) {
-            try {
-                final URL url = ClientAlkisConf.getInstance().getDownloadUrlForDocument(document);
-                if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
-                    imageAvailable = true;
-                    break;
-                }
-            } catch (final Exception ex) {
-                LOG.error(ex, ex);
-            }
-        }
-        return imageAvailable;
-    }
-
-    /**
      * DOCUMENT ME!
      *
      * @param   cidsBean  DOCUMENT ME!
@@ -985,11 +960,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     private static boolean hasVermessungsriss(final CidsBean cidsBean) {
         try {
-            return isImageAvailable(ClientAlkisConf.getInstance().getVermessungHostBilder(),
-                    (String)cidsBean.getProperty("schluessel"),
-                    (Integer)cidsBean.getProperty("gemarkung.id"),
-                    (String)cidsBean.getProperty("flur"),
-                    (String)cidsBean.getProperty("blatt"));
+            return VermessungPictureFinderClientUtils.getInstance()
+                        .findVermessungsrissPicture((String)cidsBean.getProperty("schluessel"),
+                                (Integer)cidsBean.getProperty("gemarkung.id"),
+                                (String)cidsBean.getProperty("flur"),
+                                (String)cidsBean.getProperty("blatt")) != null;
         } catch (final Exception ex) {
             LOG.info("Could not determine if CidsBean has measurement sketches.", ex);
             return false;
@@ -1005,58 +980,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     private static boolean hasErgaenzendeDokumente(final CidsBean cidsBean) {
         try {
-            return isImageAvailable(ClientAlkisConf.getInstance().getVermessungHostGrenzniederschriften(),
-                    (String)cidsBean.getProperty("schluessel"),
-                    (Integer)cidsBean.getProperty("gemarkung.id"),
-                    (String)cidsBean.getProperty("flur"),
-                    (String)cidsBean.getProperty("blatt"));
+            return VermessungPictureFinderClientUtils.getInstance()
+                        .findGrenzniederschriftPicture((String)cidsBean.getProperty("schluessel"),
+                                (Integer)cidsBean.getProperty("gemarkung.id"),
+                                (String)cidsBean.getProperty("flur"),
+                                (String)cidsBean.getProperty("blatt")) != null;
         } catch (final Exception ex) {
             LOG.info("Could not determine if CidsBean has measurement sketches.", ex);
             return false;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  args  DOCUMENT ME!
-     */
-    public static void main(final String[] args) {
-        try {
-            final CidsBean[] vermessungsrisse = DevelopmentTools.createCidsBeansFromRMIConnectionOnLocalhost(
-                    "WUNDA_BLAU",
-                    "Administratoren",
-                    "admin",
-                    "sb",
-                    "vermessung_riss",
-                    5);
-//            final CidsBean[] vermessungsrisse = new CidsBean[] {
-//                    DevelopmentTools.createCidsBeanFromRMIConnectionOnLocalhost(
-//                        "WUNDA_BLAU",
-//                        "Administratoren",
-//                        "admin",
-//                        "sb",
-//                        "vermessung_riss",
-//                        // 6818)
-//                        4),
-//                };
-
-            DevelopmentTools.createAggregationRendererInFrameFromRMIConnectionOnLocalhost(
-                Arrays.asList(vermessungsrisse),
-                "Aggregationsrenderer",
-                1024,
-                768);
-
-//            final Collection<VermessungRissReportBean> reportBeans = new LinkedList<VermessungRissReportBean>();
-//            reportBeans.add(new VermessungRissReportBean((Arrays.asList(vermessungsrisse))));
-//            DevelopmentTools.showReportForBeans(
-//                "/de/cismet/cids/custom/wunda_blau/res/vermessungsrisse.jasper",
-//                reportBeans);
-//            DevelopmentTools.showReportForCidsBeans(
-//                "/de/cismet/cids/custom/wunda_blau/res/vermessungsriss.jasper",
-//                vermessungsrisse);
-        } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
         }
     }
 
@@ -1066,6 +997,72 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public class PictureWorker extends SwingWorker<Boolean, Void> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        final boolean rissOrErg;
+
+        private final CidsBean cidsBean;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PictureWorker object.
+         *
+         * @param  cidsBean   DOCUMENT ME!
+         * @param  rissOrErg  DOCUMENT ME!
+         */
+        public PictureWorker(final CidsBean cidsBean, final boolean rissOrErg) {
+            this.cidsBean = cidsBean;
+            this.rissOrErg = rissOrErg;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Boolean doInBackground() throws Exception {
+            return rissOrErg ? hasVermessungsriss(cidsBean) : hasErgaenzendeDokumente(cidsBean);
+        }
+
+        @Override
+        protected void done() {
+            final Map<CidsBean, Boolean> checkerMap = (rissOrErg ? rissCheckerMap : ergCheckerMap);
+            final Map<CidsBean, Exception> exceptionMap = (rissOrErg ? rissCheckerExceptionMap
+                                                                     : ergCheckerExceptionMap);
+            try {
+                checkerMap.put(cidsBean, get());
+                getTableModel().refresh();
+            } catch (final Exception ex) {
+                checkerMap.put(cidsBean, null);
+                exceptionMap.put(cidsBean, ex);
+            } finally {
+                if (checkerMap.size() == cidsBeans.size()) {
+                    boolean allowReport = false;
+
+                    for (final Boolean value : checkerMap.values()) {
+                        if (value) {
+                            allowReport = true;
+                            break;
+                        }
+                    }
+
+                    if (rissOrErg) {
+                        allowVermessungsrisseReport = allowReport;
+                    } else {
+                        allowErgaenzendeDokumenteReport = allowReport;
+                    }
+                    updateButtons();
+                }
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -1127,21 +1124,160 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @version  $Revision$, $Date$
      */
-    class PointTableModel extends DefaultTableModel {
+    class SelectionCheckBox extends JCheckBox {
 
         //~ Constructors -------------------------------------------------------
 
         /**
-         * Creates a new PointTableModel object.
+         * Creates a new SelectionCheckBox object.
          *
-         * @param  data    DOCUMENT ME!
-         * @param  labels  DOCUMENT ME!
+         * @param  cidsBean  DOCUMENT ME!
          */
-        public PointTableModel(final Object[][] data, final String[] labels) {
-            super(data, labels);
+        public SelectionCheckBox(final CidsBean cidsBean) {
+            addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent evt) {
+                        risseSelectionMap.put(cidsBean, isSelected());
+                    }
+                });
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class SelectionCellRenderer extends DefaultTableCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getTableCellRendererComponent(final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final boolean hasFocus,
+                final int row,
+                final int column) {
+            return new SelectionCheckBox(cidsBeans.get(tblRisse.convertRowIndexToModel(row)));
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class PictureStateCellRenderer extends DefaultTableCellRenderer {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final boolean erg;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PictureStateCellRenderer object.
+         *
+         * @param  erg  DOCUMENT ME!
+         */
+        public PictureStateCellRenderer(final boolean erg) {
+            this.erg = erg;
         }
 
         //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getTableCellRendererComponent(final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final boolean hasFocus,
+                final int row,
+                final int column) {
+            final CidsBean cidsBean = cidsBeans.get(tblRisse.convertRowIndexToModel(row));
+            final Exception ex = (erg ? ergCheckerExceptionMap : rissCheckerExceptionMap).get(cidsBean);
+            final Boolean status = (erg ? ergCheckerMap : rissCheckerMap).get(cidsBean);
+            if (ex != null) {
+                final JLabel label = new JLabel(ICON_ERROR);
+                label.setToolTipText(ex.getMessage());
+                // TODO click => error dialog
+                return label;
+            } else if (Boolean.TRUE.equals(status)) {
+                return new JLabel(ICON_FOUND);
+            } else if (Boolean.FALSE.equals(status)) {
+                return new JLabel(ICON_NOTFOUND);
+            } else {
+                return new JLabel(ICON_LOADING);
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class PointTableModel extends DefaultTableModel {
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         */
+        public void refresh() {
+            fireTableDataChanged();
+        }
+
+        @Override
+        public int getRowCount() {
+            return (cidsBeans != null) ? cidsBeans.size() : 0;
+        }
+
+        @Override
+        public int getColumnCount() {
+            return AGR_COMLUMN_NAMES.length;
+        }
+
+        @Override
+        public String getColumnName(final int column) {
+            return AGR_COMLUMN_NAMES[column];
+        }
+
+        @Override
+        public void setValueAt(final Object value, final int row, final int column) {
+            final CidsBean cidsBean = cidsBeans.get(tblRisse.convertRowIndexToModel(row));
+            if (column == 0) {
+                if (value instanceof Boolean) {
+                    risseSelectionMap.put(cidsBean, (Boolean)value);
+                } else {
+                    risseSelectionMap.remove(cidsBean);
+                }
+            }
+        }
+
+        @Override
+        public Object getValueAt(final int row, final int column) {
+            final CidsBean cidsBean = cidsBeans.get(tblRisse.convertRowIndexToModel(row));
+            switch (column) {
+                case 0: {
+                    return risseSelectionMap.get(cidsBean);
+                }
+                default: {
+                    if ((column >= 0) && (column < AGR_PROPERTY_NAMES.length)) {
+                        return (cidsBean != null) ? cidsBean.getProperty(AGR_PROPERTY_NAMES[column]) : null;
+                    } else {
+                        return null;
+                    }
+                }
+                case (7): {
+                    return rissCheckerMap.get(cidsBean);
+                }
+                case (8): {
+                    return ergCheckerMap.get(cidsBean);
+                }
+            }
+        }
 
         /**
          * DOCUMENT ME!
@@ -1165,7 +1301,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
-            if (columnIndex == 0) {
+            if ((columnIndex == 0) || (columnIndex == 7) || (columnIndex == 8)) {
                 return Boolean.class;
             } else {
                 return super.getColumnClass(columnIndex);

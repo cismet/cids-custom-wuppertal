@@ -35,10 +35,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-import java.net.URL;
+import java.nio.file.Paths;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -53,7 +52,7 @@ import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel.MODE;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungPictureFinderClientUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -64,7 +63,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
-import de.cismet.netutil.Proxy;
 import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.PasswordEncrypter;
@@ -161,7 +159,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                                 cl.show(pnlControls, "card4");
                                 editor.handleRissDoesNotExists();
                             } else {
-                                checkIfLinkDocumentExists(false);
+                                checkIfLinkDocumentExists();
                             }
                         } else {
                             showError();
@@ -325,25 +323,21 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
      * DOCUMENT ME!
      */
     public void checkState() {
-        checkIfLinkDocumentExists(false);
+        checkIfLinkDocumentExists();
     }
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  createUmleitung  DOCUMENT ME!
      */
-    private void checkIfLinkDocumentExists(final boolean createUmleitung) {
+    private void checkIfLinkDocumentExists() {
+        final String linkDokument = getLinkDocument();
+        final boolean isGrenzniederschrift = MODE.GRENZNIEDERSCHRIFT.equals(mode);
         final SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
 
                 @Override
                 protected void done() {
                     try {
                         final String document = get();
-                        if (createUmleitung) {
-                            VermessungUmleitungPanel.this.createLinkFile();
-                            return;
-                        }
                         jXBusyLabel1.setBusy(false);
                         final CardLayout cl = (CardLayout)pnlControls.getLayout();
                         cl.show(pnlControls, "card3");
@@ -353,10 +347,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                             editor.reloadDocument(lastCheckedDocument);
                         } else {
                             // no file exists we need to show a warning...
-                            lastCheckedDocument = VermessungsrissWebAccessPictureFinder.getInstance()
-                                        .getObjectPath(
-                                                true,
-                                                getLinkDocument());
+                            lastCheckedDocument = VermessungPictureFinderClientUtils.getGrenzniederschriftLinkFilename(
+                                    getLinkDocument());
                             editor.warnAlert();
                         }
                     } catch (InterruptedException ex) {
@@ -370,41 +362,35 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
                 @Override
                 protected String doInBackground() throws Exception {
-                    final String input = getLinkDocument();
-//                if (!isNummerConsistent(input)) {
-//                    return null;
-//                }
-                    final boolean isPlatzhalter = input.toLowerCase().startsWith(PLATZHALTER_PREFIX);
-                    if ((mode == MODE.VERMESSUNGSRISS) && !isPlatzhalter) {
+                    final boolean isPlatzhalter = linkDokument.toLowerCase().startsWith(PLATZHALTER_PREFIX);
+                    if (!isGrenzniederschrift && !isPlatzhalter) {
                         return null;
                     }
                     if (isPlatzhalter) {
-                        return VermessungsrissWebAccessPictureFinder.getInstance()
-                                    .getObjectPath(mode == MODE.GRENZNIEDERSCHRIFT, input) + ".jpg";
+                        return (isGrenzniederschrift
+                                ? VermessungPictureFinderClientUtils.getGrenzniederschriftLinkFilename(
+                                    linkDokument)
+                                : VermessungPictureFinderClientUtils.getVermessungsrissLinkFilename(linkDokument))
+                                    + ".jpg";
                     } else {
-                        final List<String> documents;
-                        final String[] props = parsePropertiesFromLink(input);
+                        final String[] props = parsePropertiesFromLink(linkDokument);
 
                         // check if we need to format the flur and the blatt
-                        if (mode == MODE.VERMESSUNGSRISS) {
-                            documents = VermessungsrissWebAccessPictureFinder.getInstance()
+                        if (isGrenzniederschrift) {
+                            return VermessungPictureFinderClientUtils.getInstance()
                                         .findVermessungsrissPicture(
-                                                props[0],
-                                                Integer.parseInt(props[1]),
-                                                props[2],
-                                                props[3]);
+                                            props[0],
+                                            Integer.parseInt(props[1]),
+                                            props[2],
+                                            props[3]);
                         } else {
-                            documents = VermessungsrissWebAccessPictureFinder.getInstance()
+                            return VermessungPictureFinderClientUtils.getInstance()
                                         .findGrenzniederschriftPicture(
-                                                props[0],
-                                                Integer.parseInt(props[1]),
-                                                props[2],
-                                                props[3]);
+                                            props[0],
+                                            Integer.parseInt(props[1]),
+                                            props[2],
+                                            props[3]);
                         }
-                        if ((documents == null) || documents.isEmpty()) {
-                            return null;
-                        }
-                        return documents.get(0);
                     }
                 }
             };
@@ -456,7 +442,6 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         return false;
                     }
                     final String filename = createFilename();
-                    final File f = File.createTempFile(filename, ".txt");
                     return webDavHelper.deleteFileFromWebDAV(
                             filename
                                     + ".txt",
@@ -633,15 +618,15 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         final String flur = vermessungBean.getProperty("flur").toString();
         final String blatt = vermessungBean.getProperty("blatt").toString();
 
-        return VermessungsrissWebAccessPictureFinder.getInstance()
-                    .getObjectFilename(
-                        false,
-                        mode
-                        == MODE.GRENZNIEDERSCHRIFT,
-                        schluessel,
-                        gemarkung,
-                        flur,
-                        blatt);
+        final String fullPath;
+        if (MODE.GRENZNIEDERSCHRIFT.equals(mode)) {
+            fullPath = VermessungPictureFinderClientUtils.getInstance()
+                        .getGrenzniederschriftPictureFilename(schluessel, gemarkung, flur, blatt);
+        } else {
+            fullPath = VermessungPictureFinderClientUtils.getInstance()
+                        .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+        }
+        return Paths.get(fullPath).getFileName().toString();
     }
 
     /**
@@ -950,7 +935,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         final String url = PLATZHALTER_PREFIX + SEP + StringUtils.leftPad(schluessel, 3, '0');
         tfName.setText(url);
         tfName.getDocument().addDocumentListener(this);
-        checkIfLinkDocumentExists(false);
+        checkIfLinkDocumentExists();
     }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
 
     @Override

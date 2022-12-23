@@ -588,7 +588,7 @@
                 <Component class="javax.swing.JButton" name="btnPreviewUpload">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/upload.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/upload.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnPreviewUpload.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -622,7 +622,7 @@
                 <Component class="javax.swing.JButton" name="btnPreviewMaximize">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/maximize.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/maximize.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnPreviewMaximize.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -655,7 +655,7 @@
                 <Component class="javax.swing.JButton" name="btnPreviewPrev">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/left.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/left.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnPreviewPrev.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -686,7 +686,7 @@
                 <Component class="javax.swing.JButton" name="btnPreviewNext">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/right.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/right.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnPreviewNext.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -1178,7 +1178,7 @@
                 <Component class="javax.swing.JButton" name="btnFullMinimize">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/minimize.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/minimize.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnFullMinimize.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -1211,7 +1211,7 @@
                 <Component class="javax.swing.JButton" name="btnFullNext">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/right.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/right.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnFullNext.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -1245,7 +1245,7 @@
                 <Component class="javax.swing.JButton" name="btnFullPrev">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/left.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/left.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnFullPrev.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -1279,7 +1279,7 @@
                 <Component class="javax.swing.JButton" name="btnFullUpload">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/de/cismet/cids/custom/utils/upload.png"/>
+                      <Image iconType="3" name="/de/cismet/cids/custom/clientutils/upload.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="VzkatStandortEditor.btnFullUpload.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>

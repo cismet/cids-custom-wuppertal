@@ -18,6 +18,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
@@ -37,6 +38,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import java.io.InputStream;
 
 import java.net.URL;
 
@@ -78,10 +81,10 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
-import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissWebAccessPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungPictureFinderClientUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.utils.alkis.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.utils.alkis.VermessungPictureFinder;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
@@ -105,6 +108,8 @@ import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
+
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -1312,9 +1317,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if ((currentDocument != NO_SELECTION) && (documents[currentDocument] != null)) {
             try {
                 final String document;
-                if (documents[currentDocument].contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+                if (documents[currentDocument].contains(VermessungPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
                     document = documents[currentDocument].replaceAll(
-                            VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                            VermessungPictureFinder.SUFFIX_REDUCED_SIZE,
                             "");
                 } else {
                     document = documents[currentDocument];
@@ -1820,11 +1825,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
         final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
         if (currentSelectedButton == togBild) {
-            return VermessungsrissWebAccessPictureFinder.getInstance()
+            return VermessungPictureFinderClientUtils.getInstance()
                         .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
         } else {
-            return VermessungsrissWebAccessPictureFinder.getInstance()
-                        .getGrenzniederschriftFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungPictureFinderClientUtils.getInstance()
+                        .getGrenzniederschriftPictureFilename(schluessel, gemarkung, flur, blatt);
         }
     }
 
@@ -1846,7 +1851,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         boolean isUmleitung = false;
         lblReducedSize.setVisible(false);
         if (document != null) {
-            if (document.contains(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
+            if (document.contains(VermessungPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
                 lblReducedSize.setVisible(true);
             }
             jxlUmleitung.setText("");
@@ -2420,6 +2425,38 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     /**
      * DOCUMENT ME!
+     *
+     * @param   documentFileName  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getLinkFromLinkDocument(final String documentFileName) {
+        InputStream urlStream = null;
+        try {
+            final URL objectURL = ClientAlkisConf.getInstance()
+                        .getDownloadUrlForDocument(documentFileName + VermessungPictureFinder.LINKEXTENSION);
+            if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
+                urlStream = WebAccessManager.getInstance().doRequest(objectURL);
+                if (urlStream != null) {
+                    return IOUtils.toString(urlStream, "UTF8");
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error("Exception while checking link docuemtn", ex);
+        } finally {
+            if (urlStream != null) {
+                try {
+                    urlStream.close();
+                } catch (Exception e) {
+                    LOG.warn("Error during closing InputStream.", e);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void loadVermessungsriss() {
         showMeasureIsLoading();
@@ -2429,8 +2466,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         showAlert(false);
         final String document = documents[currentDocument];
         if (document == null) {
-            final String link = VermessungsrissWebAccessPictureFinder.getInstance()
-                        .getLinkFromLinkDocument(false, getDocumentFilename());
+            final String link = getLinkFromLinkDocument(getDocumentFilename());
             if ((link != null) && !link.isEmpty()) {
                 jxlUmleitung.setText(link);
                 showLinkInTitle(true);
@@ -2456,8 +2492,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         showAlert(false);
         final String document = documents[currentDocument];
         if (document == null) {
-            final String link = VermessungsrissWebAccessPictureFinder.getInstance()
-                        .getLinkFromLinkDocument(true, getDocumentFilename());
+            final String link = getLinkFromLinkDocument(getDocumentFilename());
             if ((link != null) && !link.isEmpty()) {
                 jxlUmleitung.setText(link);
                 showLinkInTitle(true);
@@ -2537,7 +2572,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @version  $Revision$, $Date$
      */
-    private final class RefreshDocumentWorker extends SwingWorker<List[], Object> {
+    private final class RefreshDocumentWorker extends SwingWorker<String[], Object> {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -2578,17 +2613,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
          * @throws  Exception  DOCUMENT ME!
          */
         @Override
-        protected List[] doInBackground() throws Exception {
-            final List[] result = new List[2];
+        protected String[] doInBackground() throws Exception {
+            final String[] result = new String[2];
 
             final Integer gemarkung = getGemarkungOfCurrentCidsBean();
             final String flur = getSimplePropertyOfCurrentCidsBean("flur");
             final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
             final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
 
-            result[VERMESSUNGSRISS] = VermessungsrissWebAccessPictureFinder.getInstance()
+            result[VERMESSUNGSRISS] = VermessungPictureFinderClientUtils.getInstance()
                         .findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
-            result[GRENZNIEDERSCHRIFT] = VermessungsrissWebAccessPictureFinder.getInstance()
+            result[GRENZNIEDERSCHRIFT] = VermessungPictureFinderClientUtils.getInstance()
                         .findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Textblätter:" + result[VERMESSUNGSRISS]);
@@ -2604,32 +2639,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         protected void done() {
             try {
                 if (!isCancelled()) {
-                    final List[] result = get();
-                    final StringBuffer collisionLists = new StringBuffer();
+                    final String[] result = get();
                     for (int i = 0; i < result.length; ++i) {
-                        // cast!
-                        final List<String> current = result[i];
-                        if (current != null) {
-                            if (current.size() > 0) {
-                                if (current.size() > 1) {
-                                    if (collisionLists.length() > 0) {
-                                        collisionLists.append(",\n");
-                                    }
-                                    collisionLists.append(current);
-                                }
-                                documents[i] = current.get(0);
-                            }
-                        }
-                    }
-                    if (collisionLists.length() > 0) {
-                        final String collisionWarning = "Achtung: im Zielverzeichnis sind mehrere Dateien mit"
-                                    + " demselben Namen in unterschiedlichen Dateiformaten "
-                                    + "vorhanden.\n\nBitte löschen Sie die ungültigen Formate "
-                                    + "und setzen Sie die Bearbeitung in WuNDa anschließend fort."
-                                    + "\n\nDateien:\n"
-                                    + collisionLists
-                                    + "\n";
-                        LOG.info(collisionWarning);
+                        final String current = result[i];
+//                        if (current != null) {
+                        documents[i] = current;
+//                        }
                     }
                 }
             } catch (final InterruptedException ex) {

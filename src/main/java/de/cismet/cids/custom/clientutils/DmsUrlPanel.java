@@ -95,7 +95,7 @@ public class DmsUrlPanel extends javax.swing.JPanel {
                 case 0: {
                     // Collectionze WMS Icon und h?nge Kassenzeichen an
                     icon = new javax.swing.ImageIcon(DmsUrlPanel.class.getResource(
-                                "/de/cismet/cids/custom/utils/filetypes/dms_default.png"));
+                                "/de/cismet/cids/custom/clientutils/filetypes/dms_default.png"));
                 }
                 break;
                 case 1: {
@@ -113,14 +113,14 @@ public class DmsUrlPanel extends javax.swing.JPanel {
                     ImageIcon tryIcon;
                     try {
                         tryIcon = new javax.swing.ImageIcon(DmsUrlPanel.class.getResource(
-                                    "/de/cismet/cids/custom/utils/filetypes/"
+                                    "/de/cismet/cids/custom/clientutils/filetypes/"
                                             + filename));
                     } catch (Exception e) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("Fehler beim Suchen des Icons:" + type);
                         }
                         tryIcon = new javax.swing.ImageIcon(DmsUrlPanel.class.getResource(
-                                    "/de/cismet/cids/custom/utils/filetypes/dms_default.png"));
+                                    "/de/cismet/cids/custom/clientutils/filetypes/dms_default.png"));
                     }
                     icon = tryIcon;
                 }
