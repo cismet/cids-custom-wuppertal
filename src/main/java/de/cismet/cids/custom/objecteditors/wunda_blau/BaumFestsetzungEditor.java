@@ -352,7 +352,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeSchadenActionPerformed
+    private void btnChangeSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeSchadenActionPerformed
         final Object selectedItem = comboBoxFilterDialogSchaden.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean schadenBean = (CidsBean)selectedItem;
@@ -365,7 +365,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeSchadenActionPerformed
+    }//GEN-LAST:event_btnChangeSchadenActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -501,7 +501,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         } else {
             final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
-                    "G: %s - M: %s - S: %s, %s - E:%s, %s",
+                    "G: %s - M: %s - S: %s, %s - F:%s, %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
                     formatTag.format(
                         getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
@@ -511,10 +511,21 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
                     getCidsBean().getProperty(FIELD__ART));
         }
     }
-
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void clearBaumChildrenLoader() {
+        getBaumChildrenLoader().clearAllMaps();
+        getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
+    }
+    
     @Override
     public void dispose() {
         baumFestsetzungPanel.dispose();
+        xtSchaden.removeAll();
+        clearBaumChildrenLoader();
+        comboBoxFilterDialogSchaden.dispose();
     }
 
     @Override

@@ -340,7 +340,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangeSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChangeSchadenActionPerformed
+    private void btnChangeSchadenActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnChangeSchadenActionPerformed
         final Object selectedItem = comboBoxFilterDialogSchaden.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean schadenBean = (CidsBean)selectedItem;
@@ -353,7 +353,7 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("problem in setbeanproperty: fk_schaden.", ex);
             }
         }
-    } //GEN-LAST:event_btnChangeSchadenActionPerformed
+    }//GEN-LAST:event_btnChangeSchadenActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -493,10 +493,22 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
                     getCidsBean().getProperty(FIELD__ID));
         }
     }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void clearBaumChildrenLoader() {
+        getBaumChildrenLoader().clearAllMaps();
+        getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
+    }
 
     @Override
     public void dispose() {
         baumErsatzPanel.dispose();
+        xtSchaden.removeAll();
+        ((ErsatzSchadenTableModel)xtSchaden.getModel()).clear();
+        clearBaumChildrenLoader();
+        comboBoxFilterDialogSchaden.dispose();
     }
 
     @Override
