@@ -494,9 +494,21 @@ public class BaumErsatzEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void clearBaumChildrenLoader() {
+        getBaumChildrenLoader().clearAllMaps();
+        getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
+    }
+
     @Override
     public void dispose() {
         baumErsatzPanel.dispose();
+        xtSchaden.removeAll();
+        ((ErsatzSchadenTableModel)xtSchaden.getModel()).clear();
+        clearBaumChildrenLoader();
+        comboBoxFilterDialogSchaden.dispose();
     }
 
     @Override

@@ -562,6 +562,11 @@ public class BaumFestsetzungPanel extends javax.swing.JPanel implements Disposab
     @Override
     public void dispose() {
         baumLagePanel.dispose();
+        baumChildrenLoader.clearAllMaps();
+        bindingGroup.unbind();
+        if (isEditor() && (getCidsBean() != null)) {
+            getCidsBean().removePropertyChangeListener(changeListener);
+        }
         cidsBean = null;
         if (isEditor() && (cbGeomFest != null)) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomFest).dispose();

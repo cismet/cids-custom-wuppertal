@@ -1328,6 +1328,12 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         baumSchadenPanel.dispose();
         getBaumChildrenLoader().removeListener(loadChildrenListener);
         setCounterSchaden(null);
+        comboBoxFilterDialogApartner.dispose();
+        baumChildrenLoader.clearAllMaps();
+        bindingGroup.unbind();
+        if (isEditor() && (getCidsBean() != null)) {
+            getCidsBean().removePropertyChangeListener(changeListener);
+        }
     }
 
     @Override

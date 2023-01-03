@@ -553,6 +553,10 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     @Override
     public void dispose() {
         baumSchadenPanel.dispose();
+        xtMeldung.removeAll();
+        ((SchadenMeldungTableModel)xtMeldung.getModel()).clear();
+        baumChildrenLoader.clearAllMaps();
+        comboBoxFilterDialogGebiet.dispose();
     }
 
     /**

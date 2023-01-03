@@ -501,7 +501,7 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         } else {
             final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
             return String.format(
-                    "G: %s - M: %s - S: %s, %s - E:%s, %s",
+                    "G: %s - M: %s - S: %s, %s - F:%s, %s",
                     getCidsBean().getProperty(FIELD__GEBIET_AZ),
                     formatTag.format(
                         getCidsBean().getProperty(FIELD__MELDUNG_DATUM)),
@@ -512,9 +512,20 @@ public class BaumFestsetzungEditor extends DefaultCustomObjectEditor implements 
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void clearBaumChildrenLoader() {
+        getBaumChildrenLoader().clearAllMaps();
+        getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
+    }
+
     @Override
     public void dispose() {
         baumFestsetzungPanel.dispose();
+        xtSchaden.removeAll();
+        clearBaumChildrenLoader();
+        comboBoxFilterDialogSchaden.dispose();
     }
 
     @Override

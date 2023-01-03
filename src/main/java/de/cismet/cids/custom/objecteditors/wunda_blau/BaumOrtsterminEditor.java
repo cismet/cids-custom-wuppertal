@@ -530,10 +530,22 @@ public class BaumOrtsterminEditor extends DefaultCustomObjectEditor implements C
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void clearBaumChildrenLoader() {
+        getBaumChildrenLoader().clearAllMaps();
+        getBaumChildrenLoader().setLoadingCompletedWithoutError(false);
+    }
+
     @Override
     public void dispose() {
         super.dispose();
         baumOrtsterminPanel.dispose();
+        xtMeldung.removeAll();
+        ((OrtsterminMeldungTableModel)xtMeldung.getModel()).clear();
+        clearBaumChildrenLoader();
+        comboBoxFilterDialogGebiet.dispose();
     }
 
     @Override

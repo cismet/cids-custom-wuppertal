@@ -2374,6 +2374,15 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public void dispose() {
         baumLagePanel.dispose();
         bindingGroup.unbind();
+        if (labelsPanels != null) {
+            for (final DefaultBindableLabelsPanel panel : labelsPanels) {
+                panel.dispose();
+            }
+        }
+        labelsPanels.clear();
+        if (isEditor() && (getCidsBean() != null)) {
+            getCidsBean().removePropertyChangeListener(changeListener);
+        }
         cidsBean = null;
         if (isEditor() && (cbGeomSchaden != null)) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).dispose();
@@ -2384,6 +2393,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         baumErsatzPanel.dispose();
         ((DefaultListModel)lstFest.getModel()).clear();
         getBaumChildrenLoader().removeListener(loadChildrenListener);
+        getBaumChildrenLoader().clearAllMaps();
     }
 
     @Override

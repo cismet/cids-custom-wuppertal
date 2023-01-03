@@ -903,8 +903,20 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
 
     @Override
     public void dispose() {
+        if ((this.getBaumChildrenLoader() != null)
+                    && (this.getBaumChildrenLoader().getParentOrganizer() != null)
+                    && (this.getBaumChildrenLoader().getParentOrganizer() instanceof BaumOrtsterminEditor)) {
+            dcDatum.removeAll();
+        }
+        comboBoxFilterDialogApartner.dispose();
+        baumChildrenLoader.clearAllMaps();
         bindingGroup.unbind();
+        if (isEditor() && (getCidsBean() != null)) {
+            getCidsBean().removePropertyChangeListener(changeListener);
+        }
+        ftZeit.removeAll();
         cidsBean = null;
+        xtTeil.removeAll();
     }
 
     @Override

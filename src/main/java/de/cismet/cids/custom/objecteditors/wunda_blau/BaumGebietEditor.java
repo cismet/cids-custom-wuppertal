@@ -2090,14 +2090,24 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public void dispose() {
         baumLagePanel.dispose();
         dlgAddMeldung.dispose();
+
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
-        } else {
-            clearBaumChildrenLoader();
-        }
+            cbHNr.removeAll();
+            if (getCidsBean() != null) {
+                LOG.info("remove propchange baum_gebiet: " + getCidsBean());
+                getCidsBean().removePropertyChangeListener(this);
+            }
+        } // else {
+        clearBaumChildrenLoader();
+        // }
         baumMeldungPanel.dispose();
+        lstFotos.removeAll();
+        lstDok.removeAll();
         rasterfariDocumentLoaderPanel1.dispose();
         rasterfariDocumentLoaderPanelDok.dispose();
+        bindingGroup.unbind();
+        super.dispose();
     }
 
     @Override

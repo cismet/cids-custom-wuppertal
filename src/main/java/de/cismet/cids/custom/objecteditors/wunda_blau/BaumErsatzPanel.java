@@ -1507,12 +1507,22 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     public void dispose() {
         baumLagePanel.dispose();
         baumErsatzLagePanel.dispose();
+        baumChildrenLoader.clearAllMaps();
+        bindingGroup.unbind();
+        if (isEditor()) {
+            if (getCidsBean() != null) {
+                getCidsBean().removePropertyChangeListener(changeListener);
+            }
+            cbHNr.removeActionListener(hnrActionListener);
+        }
         cidsBean = null;
         if (isEditor() && (cbGeomErsatz != null)) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).dispose();
             ((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).setCidsMetaObject(null);
             cbGeomErsatz = null;
         }
+        xtBaum.removeAll();
+        xtKont.removeAll();
     }
 
     @Override
