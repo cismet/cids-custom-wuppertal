@@ -2090,7 +2090,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     public void dispose() {
         baumLagePanel.dispose();
         dlgAddMeldung.dispose();
-        
+
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
             cbHNr.removeAll();
@@ -2098,9 +2098,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.info("remove propchange baum_gebiet: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
             }
-        } //else {
+        } // else {
         clearBaumChildrenLoader();
-        //}
+        // }
         baumMeldungPanel.dispose();
         lstFotos.removeAll();
         lstDok.removeAll();
