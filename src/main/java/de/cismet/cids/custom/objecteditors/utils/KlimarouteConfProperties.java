@@ -75,7 +75,7 @@ public class KlimarouteConfProperties {
             value = properties.getProperty(property, defaultValue);
         } catch (final Exception ex) {
             final String message = "could not read " + property + " from "
-                        + WundaBlauServerResources.KLIMAROUTE_CONF_PROPERTIES.getValue()
+                        + WundaBlauServerResources.KLIMA_CONF_PROPERTIES.getValue()
                         + ". setting to default value: " + defaultValue;
             LOG.warn(message, ex);
         }
@@ -114,7 +114,7 @@ public class KlimarouteConfProperties {
                             .executeTask(user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
-                                WundaBlauServerResources.KLIMAROUTE_CONF_PROPERTIES.getValue(),
+                                WundaBlauServerResources.KLIMA_CONF_PROPERTIES.getValue(),
                                 ConnectionContext.create(Category.STATIC, KlimarouteConfProperties.class.getSimpleName()));
                 if (ret instanceof Exception) {
                     throw (Exception)ret;
