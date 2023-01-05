@@ -475,35 +475,4 @@ public class VermessungPictureFinderClientUtils {
             return null;
         }
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static VermessungPictureFinderClientUtils getInstance() {
-        return LazyInitialiser.INSTANCE;
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private static final class LazyInitialiser {
-
-        //~ Static fields/initializers -----------------------------------------
-
-        private static final VermessungPictureFinderClientUtils INSTANCE = new VermessungPictureFinderClientUtils();
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new LazyInitialiser object.
-         */
-        private LazyInitialiser() {
-        }
-    }
 }
