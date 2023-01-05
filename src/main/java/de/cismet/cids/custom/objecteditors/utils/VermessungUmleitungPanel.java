@@ -377,19 +377,17 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
                         // check if we need to format the flur and the blatt
                         if (isGrenzniederschrift) {
-                            return VermessungPictureFinderClientUtils.getInstance()
-                                        .findVermessungsrissPicture(
-                                            props[0],
-                                            Integer.parseInt(props[1]),
-                                            props[2],
-                                            props[3]);
+                            return VermessungPictureFinderClientUtils.findVermessungsrissPicture(
+                                    props[0],
+                                    Integer.parseInt(props[1]),
+                                    props[2],
+                                    props[3]);
                         } else {
-                            return VermessungPictureFinderClientUtils.getInstance()
-                                        .findGrenzniederschriftPicture(
-                                            props[0],
-                                            Integer.parseInt(props[1]),
-                                            props[2],
-                                            props[3]);
+                            return VermessungPictureFinderClientUtils.findGrenzniederschriftPicture(
+                                    props[0],
+                                    Integer.parseInt(props[1]),
+                                    props[2],
+                                    props[3]);
                         }
                     }
                 }
@@ -620,11 +618,17 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
         final String fullPath;
         if (MODE.GRENZNIEDERSCHRIFT.equals(mode)) {
-            fullPath = VermessungPictureFinderClientUtils.getInstance()
-                        .getGrenzniederschriftPictureFilename(schluessel, gemarkung, flur, blatt);
+            fullPath = VermessungPictureFinderClientUtils.getGrenzniederschriftPictureFilename(
+                    schluessel,
+                    gemarkung,
+                    flur,
+                    blatt);
         } else {
-            fullPath = VermessungPictureFinderClientUtils.getInstance()
-                        .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+            fullPath = VermessungPictureFinderClientUtils.getVermessungsrissPictureFilename(
+                    schluessel,
+                    gemarkung,
+                    flur,
+                    blatt);
         }
         return Paths.get(fullPath).getFileName().toString();
     }
