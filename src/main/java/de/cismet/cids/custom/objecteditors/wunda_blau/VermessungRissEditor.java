@@ -222,7 +222,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JLabel lblJahr;
     private javax.swing.JLabel lblLetzteAenderungDatum;
     private javax.swing.JLabel lblLetzteAenderungName;
-    private javax.swing.JLabel lblReducedSize;
     private javax.swing.JLabel lblSchluessel;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstLandparcels;
@@ -305,7 +304,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         currentSelectedButton = togBild;
         initAlertPanel();
         jxlUmleitung.setClickedColor(new Color(204, 204, 204));
-        lblReducedSize.setVisible(false);
         if (readOnly) {
             lblSchluessel.setVisible(false);
             cmbSchluessel.setVisible(false);
@@ -398,7 +396,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlUmleitungHeader = new javax.swing.JPanel();
         lblHeaderDocument = new javax.swing.JLabel();
         jxlUmleitung = new org.jdesktop.swingx.JXHyperlink();
-        lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -547,15 +544,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         pnlHeaderDocument.add(pnlUmleitungHeader, gridBagConstraints);
-
-        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
-        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblReducedSize.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
 
         pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
 
@@ -1090,10 +1078,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         togPan.setSelected(true);
         togPan.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
-                "VermessungRissEditor.togPan.text"));                                      // NOI18N
+                "VermessungRissEditor.togPan.text_1"));                                    // NOI18N
         togPan.setToolTipText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
-                "VermessungRissEditor.togPan.toolTipText"));                               // NOI18N
+                "VermessungRissEditor.togPan.toolTipText_1_1"));                           // NOI18N
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1108,10 +1096,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
         togZoom.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
-                "VermessungRissEditor.togZoom.text"));                                      // NOI18N
+                "VermessungRissEditor.togZoom.text_1"));                                    // NOI18N
         togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
-                "VermessungRissEditor.togZoom.toolTipText"));                               // NOI18N
+                "VermessungRissEditor.togZoom.toolTipText_1"));                             // NOI18N
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1125,10 +1113,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
         btnHome.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
-                "VermessungRissEditor.btnHome.text"));                                      // NOI18N
+                "VermessungRissEditor.btnHome.text_1"));                                    // NOI18N
         btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
-                "VermessungRissEditor.btnHome.toolTipText"));                               // NOI18N
+                "VermessungRissEditor.btnHome.toolTipText_1"));                             // NOI18N
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1307,82 +1295,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
-        if ((currentDocument != NO_SELECTION) && (documents[currentDocument] != null)) {
-            try {
-                final String document;
-                if (documents[currentDocument].contains(VermessungPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
-                    document = documents[currentDocument].replaceAll(
-                            VermessungPictureFinder.SUFFIX_REDUCED_SIZE,
-                            "");
-                } else {
-                    document = documents[currentDocument];
-                }
-                final URL url = rasterfariDocumentLoaderPanel1.getDocumentUrl(document);
-                final String productGroupExt = (String)cidsBean.getProperty("format.productgroup_ext");
-                final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
-                if (currentDocument == VERMESSUNGSRISS) {
-                    if (BillingPopup.doBilling(
-                                    "vrpdf"
-                                    + ((productGroupExt != null) ? productGroupExt : ""),
-                                    url.toExternalForm(),
-                                    (Geometry)null,
-                                    getConnectionContext(),
-                                    new BillingProductGroupAmount(priceGroup, 1))) {
-                        downloadProduct(url, true);
-                    }
-                } else {
-                    if (BillingPopup.doBilling(
-                                    "doklapdf"
-                                    + ((productGroupExt != null) ? productGroupExt : ""),
-                                    url.toExternalForm(),
-                                    (Geometry)null,
-                                    getConnectionContext(),
-                                    new BillingProductGroupAmount(priceGroup, 1))) {
-                        downloadProduct(url, false);
-                    }
-                }
-            } catch (Exception e) {
-                LOG.error("Error when trying to produce a alkis product", e);
-                // Hier noch ein Fehlerdialog
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  url                DOCUMENT ME!
-     * @param  isVermessungsriss  DOCUMENT ME!
-     */
-    private void downloadProduct(final URL url, final boolean isVermessungsriss) {
-        CismetThreadPool.execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(VermessungRissEditor.this)) {
-                        final String urlString = url.toExternalForm();
-                        final String filename = urlString.substring(urlString.lastIndexOf("/") + 1);
-
-                        DownloadManager.instance()
-                                .add(
-                                    new HttpDownload(
-                                        url,
-                                        "",
-                                        DownloadManagerDialog.getInstance().getJobName(),
-                                        (isVermessungsriss) ? "Vermessungsriss" : "Ergänzende Dokumente",
-                                        filename.substring(0, filename.lastIndexOf(".")),
-                                        filename.substring(filename.lastIndexOf("."))));
-                    }
-                }
-            });
-    } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1647,6 +1559,74 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+        if ((currentDocument != NO_SELECTION) && (documents[currentDocument] != null)) {
+            try {
+                final URL url = rasterfariDocumentLoaderPanel1.getDocumentUrl(documents[currentDocument]);
+                final String productGroupExt = (String)cidsBean.getProperty("format.productgroup_ext");
+                final String priceGroup = (String)cidsBean.getProperty("format.pricegroup");
+                if (currentDocument == VERMESSUNGSRISS) {
+                    if (BillingPopup.doBilling(
+                                    "vrpdf"
+                                    + ((productGroupExt != null) ? productGroupExt : ""),
+                                    url.toExternalForm(),
+                                    (Geometry)null,
+                                    getConnectionContext(),
+                                    new BillingProductGroupAmount(priceGroup, 1))) {
+                        downloadProduct(url, true);
+                    }
+                } else {
+                    if (BillingPopup.doBilling(
+                                    "doklapdf"
+                                    + ((productGroupExt != null) ? productGroupExt : ""),
+                                    url.toExternalForm(),
+                                    (Geometry)null,
+                                    getConnectionContext(),
+                                    new BillingProductGroupAmount(priceGroup, 1))) {
+                        downloadProduct(url, false);
+                    }
+                }
+            } catch (Exception e) {
+                LOG.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url                DOCUMENT ME!
+     * @param  isVermessungsriss  DOCUMENT ME!
+     */
+    private void downloadProduct(final URL url, final boolean isVermessungsriss) {
+        CismetThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(VermessungRissEditor.this)) {
+                        final String urlString = url.toExternalForm();
+                        final String filename = urlString.substring(urlString.lastIndexOf("/") + 1);
+
+                        DownloadManager.instance()
+                                .add(
+                                    new HttpDownload(
+                                        url,
+                                        "",
+                                        DownloadManagerDialog.getInstance().getJobName(),
+                                        (isVermessungsriss) ? "Vermessungsriss" : "Ergänzende Dokumente",
+                                        filename.substring(0, filename.lastIndexOf(".")),
+                                        filename.substring(filename.lastIndexOf("."))));
+                    }
+                }
+            });
+    } //GEN-LAST:event_btnOpenActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void initAlertPanel() {
         if (currentSelectedButton == togBild) {
@@ -1825,11 +1805,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
         final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
         if (currentSelectedButton == togBild) {
-            return VermessungPictureFinderClientUtils.getInstance()
-                        .getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungPictureFinderClientUtils.getVermessungsrissPictureFilename(
+                    schluessel,
+                    gemarkung,
+                    flur,
+                    blatt);
         } else {
-            return VermessungPictureFinderClientUtils.getInstance()
-                        .getGrenzniederschriftPictureFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungPictureFinderClientUtils.getGrenzniederschriftPictureFilename(
+                    schluessel,
+                    gemarkung,
+                    flur,
+                    blatt);
         }
     }
 
@@ -1849,11 +1835,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private void checkLinkInTitle(final String document) {
         showLinkInTitle(false);
         boolean isUmleitung = false;
-        lblReducedSize.setVisible(false);
         if (document != null) {
-            if (document.contains(VermessungPictureFinder.SUFFIX_REDUCED_SIZE + ".")) {
-                lblReducedSize.setVisible(true);
-            }
             jxlUmleitung.setText("");
             final String filename = getDocumentFilename();
 
@@ -2409,7 +2391,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @return  DOCUMENT ME!
      */
     private Integer getGemarkungOfCurrentCidsBean() {
-        Integer result = Integer.valueOf(-1);
+        Integer result = -1;
 
         if (cidsBean != null) {
             if (cidsBean.getProperty("gemarkung") != null) {
@@ -2621,10 +2603,16 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
             final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
 
-            result[VERMESSUNGSRISS] = VermessungPictureFinderClientUtils.getInstance()
-                        .findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
-            result[GRENZNIEDERSCHRIFT] = VermessungPictureFinderClientUtils.getInstance()
-                        .findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
+            result[VERMESSUNGSRISS] = VermessungPictureFinderClientUtils.findVermessungsrissPicture(
+                    schluessel,
+                    gemarkung,
+                    flur,
+                    blatt);
+            result[GRENZNIEDERSCHRIFT] = VermessungPictureFinderClientUtils.findGrenzniederschriftPicture(
+                    schluessel,
+                    gemarkung,
+                    flur,
+                    blatt);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Textblätter:" + result[VERMESSUNGSRISS]);
                 LOG.debug("Lagepläne:" + result[GRENZNIEDERSCHRIFT]);
