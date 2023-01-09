@@ -14,9 +14,13 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
 
+import Sirius.server.middleware.types.MetaObjectNode;
+
 import org.apache.log4j.Logger;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.VermessungPictureServerAction;
+
+import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
@@ -61,8 +65,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.FIND_VERMESSUNGSRISS,
+                                VermessungPictureServerAction.Body.FIND,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.VERMESSUNGSRISS),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     riss),
@@ -100,8 +107,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.FIND_GRENZNIEDERSCHRIFT,
+                                VermessungPictureServerAction.Body.FIND,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.GRENZNIEDERSCHRIFT),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     riss),
@@ -141,8 +151,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.FIND_BUCHWERK,
+                                VermessungPictureServerAction.Body.FIND,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.BUCHWERK),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     schluessel),
@@ -185,8 +198,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.FIND_INSELKARTE,
+                                VermessungPictureServerAction.Body.FIND,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.INSELKARTE),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     schluessel),
@@ -223,12 +239,69 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.FIND_GEWANNE,
+                                VermessungPictureServerAction.Body.FIND,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.GEWANNE),
                                 new ServerActionParameter<>(
                                     liste ? VermessungPictureServerAction.Param.GEMARKUNG.toString()
                                           : VermessungPictureServerAction.Param.KMQUADRAT.toString(),
                                     gemarkungOrKmquadrat));
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String findGebaeudebeschreibungPicture(final CidsBean cidsBean) {
+        try {
+            return (String)SessionManager.getProxy()
+                        .executeTask(
+                                VermessungPictureServerAction.TASK_NAME,
+                                DOMAIN,
+                                VermessungPictureServerAction.Body.FIND,
+                                CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.GEBAEUDEBESCHREIBUNG),
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.MON.toString(),
+                                    new MetaObjectNode(cidsBean)));
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getGebaeudebeschreibungFilename(final CidsBean cidsBean) {
+        try {
+            return (String)SessionManager.getProxy()
+                        .executeTask(
+                                VermessungPictureServerAction.TASK_NAME,
+                                DOMAIN,
+                                VermessungPictureServerAction.Body.BASENAME,
+                                CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.GEBAEUDEBESCHREIBUNG),
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.MON.toString(),
+                                    new MetaObjectNode(cidsBean)));
         } catch (final Exception ex) {
             LOG.error(ex, ex);
             return null;
@@ -256,8 +329,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.GET_INSELKARTE_FILENAME,
+                                VermessungPictureServerAction.Body.BASENAME,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.INSELKARTE),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     schluessel),
@@ -294,8 +370,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.GET_GEWANNE_FILENAME,
+                                VermessungPictureServerAction.Body.BASENAME,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.GEWANNE),
                                 new ServerActionParameter<>(
                                     liste ? VermessungPictureServerAction.Param.GEMARKUNG.toString()
                                           : VermessungPictureServerAction.Param.KMQUADRAT.toString(),
@@ -325,8 +404,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.GET_VERMESSUNGSRISS_FILENAME,
+                                VermessungPictureServerAction.Body.BASENAME,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.VERMESSUNGSRISS),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     riss),
@@ -364,8 +446,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.GET_GRENZNIEDERSCHRIFT_FILENAME,
+                                VermessungPictureServerAction.Body.BASENAME,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.GRENZNIEDERSCHRIFT),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     riss),
@@ -405,8 +490,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.GET_BUCHWERK_FILENAME,
+                                VermessungPictureServerAction.Body.BASENAME,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.BUCHWERK),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.SCHLUESSEL.toString(),
                                     schluessel),
@@ -441,8 +529,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.GET_VERMESSUNGSRISS_LINK_FILENAME,
+                                VermessungPictureServerAction.Body.LINK,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.VERMESSUNGSRISS),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.LINK.toString(),
                                     link));
@@ -465,8 +556,11 @@ public class VermessungPictureFinderClientUtils {
                         .executeTask(
                                 VermessungPictureServerAction.TASK_NAME,
                                 DOMAIN,
-                                VermessungPictureServerAction.Body.GET_GRENZNIEDERSCHRIFT_LINK_FILENAME,
+                                VermessungPictureServerAction.Body.LINK,
                                 CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.TYPE.toString(),
+                                    VermessungPictureServerAction.Type.GRENZNIEDERSCHRIFT),
                                 new ServerActionParameter<>(
                                     VermessungPictureServerAction.Param.LINK.toString(),
                                     link));
