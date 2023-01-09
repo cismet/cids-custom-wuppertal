@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.MetaClass;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -83,7 +84,8 @@ import javax.swing.event.ChangeListener;
  */
 public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     SaveVetoable,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    RequestsFullSizeComponent{
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -139,6 +141,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblDistanzRO;
     private JLabel lblGeom;
     private JLabel lblKarte;
+    private JLabel lblMeter;
     private JLabel lblMinute;
     private JLabel lblName;
     private JLabel lblSchwierigkeit;
@@ -147,9 +150,11 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panBeschreibung;
     private JPanel panContent;
     private JPanel panDaten;
-    private JPanel panFiller;
+    private JPanel panFillerUnten;
     private JPanel panLage;
+    private JPanel panLinks;
     private DefaultPreviewMapPanel panPreviewMap;
+    private JPanel panRechts;
     private RoundedPanel rpKarte;
     private JScrollPane scpBeschreibung;
     private SemiRoundedPanel semiRoundedPanel7;
@@ -185,8 +190,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-        if (isEditor()){
-            
+        if (isEditor()){ 
             spMinute.addChangeListener(listener);
             spStunde.addChangeListener(listener);
         }
@@ -203,33 +207,36 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
+        panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
         jPanelAllgemein = new JPanel();
         panDaten = new JPanel();
-        lblDauer = new JLabel();
-        txtUrl = new JTextField();
+        panLinks = new JPanel();
+        lblMinute = new JLabel();
+        lblStunde = new JLabel();
+        spMinute = new JSpinner();
+        spStunde = new JSpinner();
+        lblUrl = new JLabel();
+        cbSchwierigkeit = new DefaultBindableReferenceCombo(true) ;
+        lblDistanzRO = new JLabel();
+        txtName = new JTextField();
+        lblName = new JLabel();
+        lblDistanz = new JLabel();
+        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        lblSchwierigkeit = new JLabel();
         lblGeom = new JLabel();
         if (isEditor()){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
-        lblSchwierigkeit = new JLabel();
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        lblDistanz = new JLabel();
-        lblName = new JLabel();
-        txtName = new JTextField();
-        lblBeschreibung = new JLabel();
+        txtUrl = new JTextField();
+        lblDauer = new JLabel();
+        lblMeter = new JLabel();
+        filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        panRechts = new JPanel();
         panBeschreibung = new JPanel();
         scpBeschreibung = new JScrollPane();
         taBeschreibung = new JTextArea();
-        panFiller = new JPanel();
-        lblDistanzRO = new JLabel();
-        lblUrl = new JLabel();
-        cbSchwierigkeit = new DefaultBindableReferenceCombo(true) ;
-        filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        spStunde = new JSpinner();
-        spMinute = new JSpinner();
-        lblStunde = new JLabel();
-        lblMinute = new JLabel();
+        lblBeschreibung = new JLabel();
         panLage = new JPanel();
         rpKarte = new RoundedPanel();
         panPreviewMap = new DefaultPreviewMapPanel();
@@ -238,8 +245,30 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
 
         setLayout(new GridBagLayout());
 
+        panFillerUnten.setName(""); // NOI18N
+        panFillerUnten.setOpaque(false);
+
+        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        panFillerUnten.setLayout(panFillerUntenLayout);
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        add(panFillerUnten, gridBagConstraints);
+
         panContent.setName(""); // NOI18N
         panContent.setOpaque(false);
+        panContent.setPreferredSize(new Dimension(840, 298));
         panContent.setLayout(new GridBagLayout());
 
         jPanelAllgemein.setOpaque(false);
@@ -248,40 +277,151 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
 
-        lblDauer.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblDauer.setText("Dauer:");
+        panLinks.setOpaque(false);
+        panLinks.setLayout(new GridBagLayout());
+
+        lblMinute.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblMinute.setText("min");
+        lblMinute.setToolTipText("");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 5);
+        panLinks.add(lblMinute, gridBagConstraints);
+
+        lblStunde.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblStunde.setText("h");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 5);
+        panLinks.add(lblStunde, gridBagConstraints);
+
+        spMinute.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spMinute.setModel(new SpinnerNumberModel(0, 0, 59, 1));
+        spMinute.setPreferredSize(new Dimension(48, 20));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panLinks.add(spMinute, gridBagConstraints);
+
+        spStunde.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spStunde.setModel(new SpinnerNumberModel(0, 0, 20, 1));
+        spStunde.setPreferredSize(new Dimension(48, 20));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panLinks.add(spStunde, gridBagConstraints);
+
+        lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblUrl.setText("URL:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panLinks.add(lblUrl, gridBagConstraints);
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_schwierigkeitsgrad}"), cbSchwierigkeit, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panLinks.add(cbSchwierigkeit, gridBagConstraints);
+        ((DefaultBindableReferenceCombo)cbSchwierigkeit).setNullable(true);
+
+        lblDistanzRO.setFont(new Font("Dialog", 0, 12)); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.distanz}"), lblDistanzRO, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        panLinks.add(lblDistanzRO, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panLinks.add(txtName, gridBagConstraints);
+
+        lblName.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblName.setText("Name:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panLinks.add(lblName, gridBagConstraints);
+
+        lblDistanz.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDistanz.setText("Distanz:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblDauer, gridBagConstraints);
-
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.url}"), txtUrl, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        panLinks.add(lblDistanz, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 10, 0, 10);
+        panLinks.add(filler3, gridBagConstraints);
+
+        lblSchwierigkeit.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblSchwierigkeit.setText("Schwierigkeit:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(txtUrl, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panLinks.add(lblSchwierigkeit, gridBagConstraints);
 
         lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblGeom, gridBagConstraints);
+        panLinks.add(lblGeom, gridBagConstraints);
 
         if (isEditor()){
             if (editor){
@@ -295,77 +435,68 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 2;
+            gridBagConstraints.gridwidth = 12;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-            panDaten.add(cbGeom, gridBagConstraints);
+            panLinks.add(cbGeom, gridBagConstraints);
         }
 
-        lblSchwierigkeit.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblSchwierigkeit.setText("Schwierigkeit:");
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.url}"), txtUrl, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panLinks.add(txtUrl, gridBagConstraints);
+
+        lblDauer.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDauer.setText("Dauer:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblSchwierigkeit, gridBagConstraints);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panDaten.add(filler3, gridBagConstraints);
-
-        lblDistanz.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblDistanz.setText("Distanz:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblDistanz, gridBagConstraints);
+        panLinks.add(lblDauer, gridBagConstraints);
 
-        lblName.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblName.setText("Name:");
+        lblMeter.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblMeter.setText(NbBundle.getMessage(KlimarouteEditor.class, "KlimarouteEditor.lblMeter.text")); // NOI18N
+        lblMeter.setToolTipText("");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 5);
+        panLinks.add(lblMeter, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 10, 0, 10);
+        panLinks.add(filler4, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblName, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(txtName, gridBagConstraints);
+        panDaten.add(panLinks, gridBagConstraints);
 
-        lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBeschreibung.setText("Beschreibung:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblBeschreibung, gridBagConstraints);
+        panRechts.setOpaque(false);
+        panRechts.setLayout(new GridBagLayout());
 
         panBeschreibung.setOpaque(false);
         panBeschreibung.setLayout(new GridBagLayout());
@@ -392,122 +523,35 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         panBeschreibung.add(scpBeschreibung, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(panBeschreibung, gridBagConstraints);
+        panRechts.add(panBeschreibung, gridBagConstraints);
 
-        panFiller.setMinimumSize(new Dimension(20, 0));
-        panFiller.setOpaque(false);
-
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
-        panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        panDaten.add(panFiller, gridBagConstraints);
-
-        lblDistanzRO.setFont(new Font("Dialog", 0, 12)); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.distanz}"), lblDistanzRO, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
-        panDaten.add(lblDistanzRO, gridBagConstraints);
-
-        lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblUrl.setText("URL:");
+        lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBeschreibung.setText("Beschreibung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblUrl, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_schwierigkeitsgrad}"), cbSchwierigkeit, BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
+        panRechts.add(lblBeschreibung, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(cbSchwierigkeit, gridBagConstraints);
-        ((DefaultBindableReferenceCombo)cbSchwierigkeit).setNullable(true);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panDaten.add(filler4, gridBagConstraints);
-
-        spStunde.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spStunde.setModel(new SpinnerNumberModel(0, 0, 20, 1));
-        spStunde.setPreferredSize(new Dimension(75, 20));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(spStunde, gridBagConstraints);
-
-        spMinute.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spMinute.setModel(new SpinnerNumberModel(0, 0, 59, 1));
-        spMinute.setPreferredSize(new Dimension(75, 20));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(spMinute, gridBagConstraints);
-
-        lblStunde.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblStunde.setText("h");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 5);
-        panDaten.add(lblStunde, gridBagConstraints);
-
-        lblMinute.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblMinute.setText("min");
-        lblMinute.setToolTipText("");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 5);
-        panDaten.add(lblMinute, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        panDaten.add(panRechts, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -515,7 +559,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        gridBagConstraints.insets = new Insets(2, 10, 0, 10);
         jPanelAllgemein.add(panDaten, gridBagConstraints);
 
         panLage.setMinimumSize(new Dimension(300, 142));
@@ -591,10 +635,13 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
 
     public void writeDauer(){
         String minute = spMinute.getValue().toString();
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
         String stunde = spStunde.getValue().toString();
         String dauer = stunde + ":" + minute;
         try{
-            getCidsBean().setProperty("dauer", dauer);
+            getCidsBean().setProperty(FIELD__DAUER, dauer);
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
             LOG.warn("dauer not set.", ex);
@@ -602,11 +649,11 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     }
     
     public void readDauer(){
-        if (getCidsBean()!= null && getCidsBean().getProperty("dauer") != null){
-            String dauer = getCidsBean().getProperty("dauer").toString();
+        if (getCidsBean()!= null && getCidsBean().getProperty(FIELD__DAUER) != null){
+            String dauer = getCidsBean().getProperty(FIELD__DAUER).toString();
             String [] values = dauer.split(":");
-            spMinute.setValue(values[1]);
-            spStunde.setValue(values[0]);
+            spMinute.setValue(Integer.parseInt(values[1]));
+            spStunde.setValue(Integer.parseInt(values[0]));
         }
     }
     
@@ -640,13 +687,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
                 getConnectionContext());
             setMapWindow();
             bindingGroup.bind();
-            if (isEditor()) {
-                ((DefaultCismapGeometryComboBoxEditor)cbGeom).setCidsMetaObject(getCidsBean()
-                            .getMetaObject());
-            }
             readDauer();
-            //final DateTimeFormListener dateTimeFormListener = new DateTimeFormListener();
-            //ftDauer.addPropertyChangeListener(dateTimeFormListener);
             setTitle(getTitle());
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
@@ -685,12 +726,15 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void setReadOnly() {
         if (!(isEditor())) {
-            txtUrl.setEnabled(false);
-            txtName.setEnabled(false);
-            taBeschreibung.setEnabled(false);
-            lblGeom.setVisible(isEditor());
-            
+            RendererTools.makeReadOnly(txtName);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spStunde, 0);
+            RendererTools.makeReadOnly(spStunde);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spMinute, 0);
             RendererTools.makeReadOnly(spMinute);
+            RendererTools.makeReadOnly(cbSchwierigkeit);
+            RendererTools.makeReadOnly(txtUrl);
+            RendererTools.makeReadOnly(taBeschreibung);
+            lblGeom.setVisible(isEditor());
         }
     }
 
@@ -735,14 +779,14 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
                 ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
                 ((DefaultCismapGeometryComboBoxEditor)cbGeom).setCidsMetaObject(null);
                 cbGeom = null;
-        }
+            }
+            spMinute.removeChangeListener(listener);
+            spStunde.removeChangeListener(listener);
             if (getCidsBean() != null) {
                 LOG.info("remove propchangeklimaroute: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
             }
         }
-        spMinute.removeChangeListener(listener);
-        spStunde.removeChangeListener(listener);
         bindingGroup.unbind();
         super.dispose();
     }
@@ -780,15 +824,15 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         }
         //schwierigkeitsgrad vorhanden
         try {
-                if (getCidsBean().getProperty(FIELD__DIFICULTY) == null) {
-                    LOG.warn("No schwierigkeitsgrad specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BaumFestsetzungPanel.class, BUNDLE_NODIFICULTY));
-                    save = false;
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("schwierigkeitsgrad not given.", ex);
+            if (getCidsBean().getProperty(FIELD__DIFICULTY) == null) {
+                LOG.warn("No schwierigkeitsgrad specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(KlimarouteEditor.class, BUNDLE_NODIFICULTY));
                 save = false;
             }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("schwierigkeitsgrad not given.", ex);
+            save = false;
+        }
             
         // georeferenz muss gefüllt sein
         try {
