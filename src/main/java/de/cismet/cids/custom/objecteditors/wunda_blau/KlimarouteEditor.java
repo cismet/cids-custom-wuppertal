@@ -698,8 +698,9 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         final CidsBean cb = this.getCidsBean();
         try {
             final Double bufferMeter = KlimarouteConfProperties.getInstance().getBufferMeter();
+            final String mapUrl = KlimarouteConfProperties.getInstance().getMapUrl();
             if (cb.getProperty(FIELD__GEOM) != null) {
-                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter);
+                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter, mapUrl);
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
                 final BoundingBox initialBoundingBox;
@@ -797,11 +798,13 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             title = "<Error>";
         }
     }
-
+ 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(FIELD__GEOM)) {
-            setMapWindow();
+       if (evt.getPropertyName().equals(FIELD__GEOM)) {
+            if(!evt.getNewValue().equals(evt.getOldValue())){
+                setMapWindow();
+            }
         }
         
     }
