@@ -703,8 +703,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
                 panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter, mapUrl);
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                final BoundingBox initialBoundingBox;
-                initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
+                final BoundingBox initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
                             .getInitialBoundingBox();
                 final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
 
@@ -802,8 +801,18 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
        if (evt.getPropertyName().equals(FIELD__GEOM)) {
-            if(!evt.getNewValue().equals(evt.getOldValue())){
-                setMapWindow();
+            if (evt.getOldValue() == null){
+                if(evt.getNewValue() != null){
+                    setMapWindow();
+                }
+            } else {
+                if(evt.getNewValue() == null){
+                    setMapWindow();
+                } else {
+                    if (evt.getOldValue() != evt.getNewValue()){
+                        setMapWindow();
+                    }
+                }
             }
         }
         
