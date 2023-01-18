@@ -739,7 +739,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         Collections.sort(selectedIndexes, tableComparator);
 
         for (final Integer selectedIndex : selectedIndexes) {
-            result.add(cidsBeans.get(selectedIndex));
+            result.add(cidsBeans.get(tblRisse.convertRowIndexToModel(selectedIndex)));
         }
 
         return result;
