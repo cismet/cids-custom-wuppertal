@@ -46,7 +46,7 @@ import javax.swing.text.BadLocationException;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
-import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReservationServerAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
@@ -621,30 +621,30 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
                         startwert = 0;
                     }
 
-                    final ServerActionParameter<PointNumberReserverationServerAction.Action> action;
+                    final ServerActionParameter<PointNumberReservationServerAction.Action> action;
                     if (pnrDialog.isErgaenzenMode()) {
                         action = new ServerActionParameter<>(
-                                PointNumberReserverationServerAction.Parameter.ACTION.toString(),
-                                PointNumberReserverationServerAction.Action.DO_ADDITION);
+                                PointNumberReservationServerAction.Parameter.ACTION.toString(),
+                                PointNumberReservationServerAction.Action.DO_ADDITION);
                     } else {
                         action = new ServerActionParameter<>(
-                                PointNumberReserverationServerAction.Parameter.ACTION.toString(),
-                                PointNumberReserverationServerAction.Action.DO_RESERVATION);
+                                PointNumberReservationServerAction.Parameter.ACTION.toString(),
+                                PointNumberReservationServerAction.Action.DO_RESERVATION);
                     }
                     final ServerActionParameter<String> prefix = new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
+                            PointNumberReservationServerAction.Parameter.PREFIX.toString(),
                             anrPrefix);
                     final ServerActionParameter<String> aNummer = new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
+                            PointNumberReservationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                             anr);
                     final ServerActionParameter<String> nbz = new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.NBZ.toString(),
+                            PointNumberReservationServerAction.Parameter.NBZ.toString(),
                             nummerierungsbezirk);
                     final ServerActionParameter<Integer> amount = new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.ANZAHL.toString(),
+                            PointNumberReservationServerAction.Parameter.ANZAHL.toString(),
                             anzahl);
                     final ServerActionParameter startVal = new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.STARTWERT.toString(),
+                            PointNumberReservationServerAction.Parameter.STARTWERT.toString(),
                             startwert);
 
                     final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
@@ -739,15 +739,15 @@ public class PointNumberReservationPanel extends javax.swing.JPanel implements C
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    final ServerActionParameter<PointNumberReserverationServerAction.Action> action =
+                    final ServerActionParameter<PointNumberReservationServerAction.Action> action =
                         new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.ACTION.toString(),
-                            PointNumberReserverationServerAction.Action.IS_ANTRAG_EXISTING);
+                            PointNumberReservationServerAction.Parameter.ACTION.toString(),
+                            PointNumberReservationServerAction.Action.IS_ANTRAG_EXISTING);
                     final ServerActionParameter<String> prefix = new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
+                            PointNumberReservationServerAction.Parameter.PREFIX.toString(),
                             anrPrefix);
                     final ServerActionParameter<String> aNummer = new ServerActionParameter<>(
-                            PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
+                            PointNumberReservationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                             anr);
                     final boolean isAntragExisting = (Boolean)SessionManager.getProxy()
                                 .executeTask(
