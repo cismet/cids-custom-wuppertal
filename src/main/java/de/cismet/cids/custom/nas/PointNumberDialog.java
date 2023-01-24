@@ -56,12 +56,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 
-import de.cismet.cids.custom.butler.ButlerDownload;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
 import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
-import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReservationServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
@@ -1518,11 +1517,11 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
      * @throws  ConnectionException  DOCUMENT ME!
      */
     private List<String> executeGetAllReservationsAction() throws ConnectionException {
-        final ServerActionParameter<PointNumberReserverationServerAction.Action> action = new ServerActionParameter<>(
-                PointNumberReserverationServerAction.Parameter.ACTION.toString(),
-                PointNumberReserverationServerAction.Action.GET_ALL_RESERVATIONS);
+        final ServerActionParameter<PointNumberReservationServerAction.Action> action = new ServerActionParameter<>(
+                PointNumberReservationServerAction.Parameter.ACTION.toString(),
+                PointNumberReservationServerAction.Action.GET_ALL_RESERVATIONS);
         final ServerActionParameter<String> prefix = new ServerActionParameter<>(
-                PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
+                PointNumberReservationServerAction.Parameter.PREFIX.toString(),
                 getAnrPrefix());
 
         return (List<String>)SessionManager.getProxy()
@@ -1627,15 +1626,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
 
                 final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
                 final ServerActionParameter<String> prefix = new ServerActionParameter<>(
-                        PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
+                        PointNumberReservationServerAction.Parameter.PREFIX.toString(),
                         anrPrefix);
                 final ServerActionParameter<String> aNummer = new ServerActionParameter<>(
-                        PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
+                        PointNumberReservationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                         anr);
-                final ServerActionParameter<PointNumberReserverationServerAction.Action> action =
+                final ServerActionParameter<PointNumberReservationServerAction.Action> action =
                     new ServerActionParameter<>(
-                        PointNumberReserverationServerAction.Parameter.ACTION.toString(),
-                        PointNumberReserverationServerAction.Action.GET_POINT_NUMBERS);
+                        PointNumberReservationServerAction.Parameter.ACTION.toString(),
+                        PointNumberReservationServerAction.Action.GET_POINT_NUMBERS);
                 final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>)
                     SessionManager.getProxy()
                             .executeTask(
@@ -1825,14 +1824,14 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
 
             final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
             final ServerActionParameter prefix = new ServerActionParameter(
-                    PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
+                    PointNumberReservationServerAction.Parameter.PREFIX.toString(),
                     anrPrefix);
             final ServerActionParameter aNummer = new ServerActionParameter(
-                    PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
+                    PointNumberReservationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                     anr);
             final ServerActionParameter action = new ServerActionParameter(
-                    PointNumberReserverationServerAction.Parameter.ACTION.toString(),
-                    PointNumberReserverationServerAction.Action.DO_STORNO);
+                    PointNumberReservationServerAction.Parameter.ACTION.toString(),
+                    PointNumberReservationServerAction.Action.DO_STORNO);
 
             // do release for each interval...
             final ArrayList<PointNumberReservation> releasedPoints = new ArrayList<>();
@@ -1846,13 +1845,13 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
 
                 final String nummerierungsbezirk = "" + (interval.get(0) / 1000000);
                 final ServerActionParameter on1 = new ServerActionParameter(
-                        PointNumberReserverationServerAction.Parameter.ON1.toString(),
+                        PointNumberReservationServerAction.Parameter.ON1.toString(),
                         start);
                 final ServerActionParameter on2 = new ServerActionParameter(
-                        PointNumberReserverationServerAction.Parameter.ON2.toString(),
+                        PointNumberReservationServerAction.Parameter.ON2.toString(),
                         end);
                 final ServerActionParameter nbz = new ServerActionParameter(
-                        PointNumberReserverationServerAction.Parameter.NBZ.toString(),
+                        PointNumberReservationServerAction.Parameter.NBZ.toString(),
                         nummerierungsbezirk);
                 final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
                             .getProxy()
@@ -1991,18 +1990,18 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
 
             final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
             final ServerActionParameter<String> prefixSap = new ServerActionParameter<>(
-                    PointNumberReserverationServerAction.Parameter.PREFIX.toString(),
+                    PointNumberReservationServerAction.Parameter.PREFIX.toString(),
                     anrPrefix);
             final ServerActionParameter<String> aNummerSap = new ServerActionParameter<>(
-                    PointNumberReserverationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
+                    PointNumberReservationServerAction.Parameter.AUFTRAG_NUMMER.toString(),
                     anr);
-            final ServerActionParameter<PointNumberReserverationServerAction.Action> actionSap =
+            final ServerActionParameter<PointNumberReservationServerAction.Action> actionSap =
                 new ServerActionParameter<>(
-                    PointNumberReserverationServerAction.Parameter.ACTION.toString(),
-                    PointNumberReserverationServerAction.Action.DO_PROLONGATION);
+                    PointNumberReservationServerAction.Parameter.ACTION.toString(),
+                    PointNumberReservationServerAction.Action.DO_PROLONGATION);
 
             final ServerActionParameter<Date> dateSap = new ServerActionParameter<>(
-                    PointNumberReserverationServerAction.Parameter.PROLONG_DATE.toString(),
+                    PointNumberReservationServerAction.Parameter.PROLONG_DATE.toString(),
                     jXDatePicker1.getDate());
 
             allSaps.add(prefixSap);
@@ -2011,7 +2010,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements Connection
             allSaps.add(dateSap);
             for (final PointNumberReservation pnr : selectedValues) {
                 final ServerActionParameter<Long> pnrSap = new ServerActionParameter<>(
-                        PointNumberReserverationServerAction.Parameter.POINT_NUMBER.toString(),
+                        PointNumberReservationServerAction.Parameter.POINT_NUMBER.toString(),
                         Long.parseLong(pnr.getPunktnummer()));
                 LOG.info("adding pnr SAP: " + pnrSap.getValue());
                 allSaps.add(pnrSap);
