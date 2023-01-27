@@ -132,6 +132,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JComboBox cbGeom;
     private DefaultBindableReferenceCombo cbSchwierigkeit;
+    private DefaultBindableReferenceCombo cbWegeart;
     private Box.Filler filler3;
     private Box.Filler filler4;
     private JPanel jPanelAllgemein;
@@ -147,6 +148,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblSchwierigkeit;
     private JLabel lblStunde;
     private JLabel lblUrl;
+    private JLabel lblWegeart;
     private JPanel panBeschreibung;
     private JPanel panContent;
     private JPanel panDaten;
@@ -232,6 +234,8 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         lblDauer = new JLabel();
         lblMeter = new JLabel();
         filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        lblWegeart = new JLabel();
+        cbWegeart = new DefaultBindableReferenceCombo(true) ;
         panRechts = new JPanel();
         panBeschreibung = new JPanel();
         scpBeschreibung = new JScrollPane();
@@ -327,7 +331,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         lblUrl.setText("URL:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -416,7 +420,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -436,7 +440,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 2;
+            gridBagConstraints.gridy = 3;
             gridBagConstraints.gridwidth = 12;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -450,7 +454,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -486,6 +490,30 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 10, 0, 10);
         panLinks.add(filler4, gridBagConstraints);
+
+        lblWegeart.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblWegeart.setText("Wegeart:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panLinks.add(lblWegeart, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_wegeart}"), cbWegeart, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panLinks.add(cbWegeart, gridBagConstraints);
+        ((DefaultBindableReferenceCombo)cbSchwierigkeit).setNullable(true);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -734,6 +762,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(cbSchwierigkeit);
             RendererTools.makeReadOnly(txtUrl);
             RendererTools.makeReadOnly(taBeschreibung);
+            RendererTools.makeReadOnly(cbWegeart);
             lblGeom.setVisible(isEditor());
         }
     }
