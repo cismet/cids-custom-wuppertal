@@ -98,6 +98,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__NAME = "name";                                        // klimaroute
     public static final String FIELD__ID = "id";                                            // klimaroute
     public static final String FIELD__DIFICULTY = "fk_schwierigkeitsgrad";                  // klimaroute
+    public static final String FIELD__DISTANCE = "distanz";                                 // klimaroute
     public static final String FIELD__GEOM = "geom";                                        // klimaroute
     public static final String FIELD__DAUER = "dauer";                                      // klimaroute
     public static final String FIELD__GEO_FIELD = "geo_field";                              // geom
@@ -833,18 +834,36 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             if (evt.getOldValue() == null){
                 if(evt.getNewValue() != null){
                     setMapWindow();
+                    setDistance();
                 }
             } else {
                 if(evt.getNewValue() == null){
                     setMapWindow();
+                    setDistance();
                 } else {
                     if (evt.getOldValue() != evt.getNewValue()){
                         setMapWindow();
+                        setDistance();
                     }
                 }
             }
         }
         
+    }
+    
+    public void setDistance(){
+        if (this.getCidsBean() != null){
+            if (this.getCidsBean().getProperty(FIELD__GEOM) != null){
+                final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOM);
+                final double length = Math.round(((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getLength())/1000.0;
+                try{
+                    getCidsBean().setProperty(FIELD__DISTANCE, length);
+                } catch (final Exception ex) {
+                    Exceptions.printStackTrace(ex);
+                    LOG.warn("distanz not set.", ex);
+                }
+            }
+        }
     }
 
     @Override
