@@ -98,6 +98,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__NAME = "name";                                        // klimaroute
     public static final String FIELD__ID = "id";                                            // klimaroute
     public static final String FIELD__DIFICULTY = "fk_schwierigkeitsgrad";                  // klimaroute
+    public static final String FIELD__WAY = "fk_wegeart";                                   // klimaroute
     public static final String FIELD__DISTANCE = "distanz";                                 // klimaroute
     public static final String FIELD__GEOM = "geom";                                        // klimaroute
     public static final String FIELD__DAUER = "dauer";                                      // klimaroute
@@ -108,6 +109,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
 
     public static final String BUNDLE_NONAME = "KlimarouteEditor.isOkForSaving().noName";
     public static final String BUNDLE_NODIFICULTY = "KlimarouteEditor.isOkForSaving().noDificulty";
+    public static final String BUNDLE_NOWAY= "KlimarouteEditor.isOkForSaving().noWay";
     public static final String BUNDLE_WRONGGEOM = "KlimarouteEditor.isOkForSaving().wrongGeom";
     public static final String BUNDLE_PANE_PREFIX = "KlimarouteEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "KlimarouteEditor.isOkForSaving().JOptionPane.message.suffix";
@@ -891,6 +893,18 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("schwierigkeitsgrad not given.", ex);
+            save = false;
+        }
+        
+        //wegeart vorhanden
+        try {
+            if (getCidsBean().getProperty(FIELD__WAY) == null) {
+                LOG.warn("No wegeart specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(KlimarouteEditor.class, BUNDLE_NOWAY));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("wegeart not given.", ex);
             save = false;
         }
             
