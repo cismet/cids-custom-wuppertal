@@ -41,7 +41,8 @@ public class KlimarouteConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(KlimarouteConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            KlimarouteConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -113,11 +114,14 @@ public class KlimarouteConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.KLIMAROUTE_CONF_PROPERTIES.getValue(),
-                                ConnectionContext.create(Category.STATIC, KlimarouteConfProperties.class.getSimpleName()));
+                                ConnectionContext.create(
+                                    Category.STATIC,
+                                    KlimarouteConfProperties.class.getSimpleName()));
                 if (ret instanceof Exception) {
                     throw (Exception)ret;
                 }
