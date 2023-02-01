@@ -874,7 +874,9 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
        if (evt.getPropertyName().equals(FIELD__GEOM)) {
-            if (evt.getOldValue() == null){
+            setMapWindow();
+            setDistance();
+            /*if (evt.getOldValue() == null){
                 if(evt.getNewValue() != null){
                     setMapWindow();
                     setDistance();
@@ -889,22 +891,24 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
                         setDistance();
                     }
                 }
-            }
+            }*/
         }
     }
     
     public void setDistance(){
+        double length = 0.0;
         if (this.getCidsBean() != null){
             if (this.getCidsBean().getProperty(FIELD__GEOM) != null){
                 final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOM);
-                final double length = Math.round(((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getLength())/1000.0;
-                try{
-                    getCidsBean().setProperty(FIELD__DISTANCE, length);
-                } catch (final Exception ex) {
-                    Exceptions.printStackTrace(ex);
-                    LOG.warn("distanz not set.", ex);
-                }
+                length = Math.round(((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getLength())/1000.0;
+                
             }
+        }
+        try{
+            getCidsBean().setProperty(FIELD__DISTANCE, length);
+        } catch (final Exception ex) {
+            Exceptions.printStackTrace(ex);
+            LOG.warn("distanz not set.", ex);
         }
     }
 
@@ -949,7 +953,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             save = false;
         }
 
-        // georeferenz muss gefüllt sein
+        // georeferenz muss, wenn gefüllt. ein Punkt sein
         try {
             if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__GEOM) != null)) {
                 final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOM);
