@@ -238,6 +238,34 @@ public class VermessungPictureFinderClientUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   ordner  DOCUMENT ME!
+     * @param   nummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String findGebaeudebeschreibungPicture(final String ordner, final Integer nummer) {
+        try {
+            return (String)SessionManager.getProxy()
+                        .executeTask(
+                                VermessungPictureServerAction.TASK_NAME,
+                                DOMAIN,
+                                VermessungPictureServerAction.Body.FIND_GEBAEUDEBESCHREIBUNG,
+                                CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.ORDNER.toString(),
+                                    ordner),
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.NUMMER.toString(),
+                                    nummer));
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        steuerbezirk DOCUMENT ME!
@@ -300,6 +328,34 @@ public class VermessungPictureFinderClientUtils {
                                     liste ? VermessungPictureServerAction.Param.GEMARKUNG.toString()
                                           : VermessungPictureServerAction.Param.KMQUADRAT.toString(),
                                     gemarkungOrKmquadrat));
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   ordner  DOCUMENT ME!
+     * @param   nummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getGebauedebschreibungPictureFilename(final String ordner, final Integer nummer) {
+        try {
+            return (String)SessionManager.getProxy()
+                        .executeTask(
+                                VermessungPictureServerAction.TASK_NAME,
+                                DOMAIN,
+                                VermessungPictureServerAction.Body.GET_GEBAEUDEBESCHREIBUNG_FILENAME,
+                                CONNECTION_CONTEXT,
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.ORDNER.toString(),
+                                    ordner),
+                                new ServerActionParameter<>(
+                                    VermessungPictureServerAction.Param.NUMMER.toString(),
+                                    nummer));
         } catch (final Exception ex) {
             LOG.error(ex, ex);
             return null;
