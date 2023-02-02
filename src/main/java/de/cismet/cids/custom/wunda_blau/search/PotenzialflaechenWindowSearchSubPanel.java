@@ -139,6 +139,9 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                     if (Date.class.getCanonicalName().equals(className)) {
                         jXDatePicker1.setDate(((Date[])value)[0]);
                         jXDatePicker2.setDate(((Date[])value)[1]);
+                    } else if (Integer[].class.getCanonicalName().equals(className)) {
+                        jSpinner1.setValue(((Integer[])value)[0]);
+                        jSpinner2.setValue(((Integer[])value)[1]);
                     } else {
                         jTextField1.setText(String.valueOf(value));
                     }
@@ -283,6 +286,13 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         jTextField1.setText(org.openide.util.NbBundle.getMessage(
                 PotenzialflaechenWindowSearchSubPanel.class,
                 "PotenzialflaechenWindowSearchSubPanel.jTextField1.text")); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jTextField1ActionPerformed(evt);
+                }
+            });
         jPanel1.add(jTextField1, "text");
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -453,6 +463,10 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                     jXDatePicker1.setDate(null);
                     jXDatePicker2.setDate(null);
                     ((CardLayout)jPanel1.getLayout()).show(jPanel1, "date");
+                } else if (Integer.class.getCanonicalName().equals(className)) {
+                    jSpinner1.setValue(0d);
+                    jSpinner2.setValue(0d);
+                    ((CardLayout)jPanel1.getLayout()).show(jPanel1, "double");
                 } else {
                     jTextField1.setText("");
                     ((CardLayout)jPanel1.getLayout()).show(jPanel1, "text");
@@ -516,6 +530,15 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_jTextField1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public PotenzialflaecheSearch.FilterInfo getFilter() {
@@ -559,6 +582,13 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                 return new PotenzialflaecheSearch.FilterInfo(
                         prop,
                         new Date[] { jXDatePicker1.getDate(), jXDatePicker2.getDate() });
+            } else if (Integer.class.getCanonicalName().equals(className)) {
+                return new PotenzialflaecheSearch.FilterInfo(
+                        prop,
+                        new Integer[] {
+                            ((Double)jSpinner1.getValue()).intValue(),
+                            ((Double)jSpinner2.getValue()).intValue()
+                        });
             } else {
                 return new PotenzialflaecheSearch.FilterInfo(prop, jTextField1.getText());
             }
