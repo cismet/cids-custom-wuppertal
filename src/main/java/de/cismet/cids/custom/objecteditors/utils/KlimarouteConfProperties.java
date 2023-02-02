@@ -47,6 +47,7 @@ public class KlimarouteConfProperties {
     //~ Instance fields --------------------------------------------------------
 
     private final Double bufferMeter;
+    private final String mapUrl;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -57,6 +58,7 @@ public class KlimarouteConfProperties {
      */
     private KlimarouteConfProperties(final Properties properties) {
         bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
+        mapUrl = String.valueOf(readProperty(properties, "URL_LAGE", null));
     }
 
     //~ Methods ----------------------------------------------------------------
