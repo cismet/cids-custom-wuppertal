@@ -103,6 +103,9 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import de.cismet.cids.editors.SaveVetoable;
+import java.util.MissingResourceException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * DOCUMENT ME!
@@ -111,7 +114,7 @@ import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTable
  * @version  $1.0$, $31.05.2018$ Die TIFF Anzeige ist nicht gut und muss noch verbessert werden.
  */
 public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    SaveVetoable,
     FooterComponentProvider,
     BindingGroupStore,
     PropertyChangeListener,
@@ -1205,29 +1208,29 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         ((CardLayout)getLayout()).show(this, "cardContent");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }                                                            //GEN-LAST:event_btnInfoActionPerformed
+    }//GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
         ((CardLayout)getLayout()).show(this, "cardBild");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }                                                              //GEN-LAST:event_btnImagesActionPerformed
+    }//GEN-LAST:event_btnImagesActionPerformed
 
     @Override
-    public boolean prepareForSave() {
+    public boolean isOkForSaving() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
@@ -1247,7 +1250,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                             "QsgebMarkerEditor.prepareForSave().wrongGeom"));
                 }
             }
-        } catch (final Exception ex) {
+        } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;
         }
@@ -1262,7 +1265,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                         QsgebMarkerEditor.class,
                         "QsgebMarkerEditor.prepareForSave().noErgebnis"));
             }
-        } catch (final Exception ex) {
+        } catch (final MissingResourceException ex) {
             LOG.warn("Ergebnis not given.", ex);
             save = false;
         }
@@ -1465,7 +1468,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                                     lblFlurstueck.setText(zaehler);
                                 }
                             }
-                        } catch (final Exception ex) {
+                        } catch (final InterruptedException | ExecutionException ex) {
                             LOG.warn("Geom Search Error.", ex);
                         }
                     }
@@ -1777,9 +1780,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     public void setTitle(final String string) {
     }
 
-    @Override
-    public void editorClosed(final EditorClosedEvent ece) {
-    }
 
     @Override
     public BindingGroup getBindingGroup() {
