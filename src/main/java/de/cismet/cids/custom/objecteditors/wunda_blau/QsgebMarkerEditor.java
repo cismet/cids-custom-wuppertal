@@ -99,6 +99,7 @@ import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.SaveVetoable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -218,6 +219,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     private DefaultBindableReferenceCombo cbErgebnis;
     private JComboBox cbGeom;
     FastBindableReferenceCombo cbStatus;
+    DefaultBindableDateChooser dcDatum;
     private JCheckBox jCkbHistorisch;
     private JLabel jLabel1;
     private JLabel jLabel2;
@@ -229,6 +231,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     private JScrollPane jScrollPaneBearbeitung;
     private JXBusyLabel jxLBusy;
     private JLabel lblBemerkung_txt;
+    private JLabel lblDatum;
     private JLabel lblDatumHistorisch;
     private JLabel lblDatumHistorisch_txt;
     private JLabel lblErgebnis_txt;
@@ -389,6 +392,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblDatumHistorisch = new JLabel();
         jScrollPaneBearbeitung = new JScrollPane();
         xtBearbeitung = new JXTable();
+        dcDatum = new DefaultBindableDateChooser();
+        lblDatum = new JLabel();
         rpKarte = new RoundedPanel();
         semiRoundedPanel7 = new SemiRoundedPanel();
         lblKarte = new JLabel();
@@ -526,9 +531,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -700,7 +704,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblLage_txt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLage_txt.setText("Lage:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(4, 5, 4, 5);
@@ -816,6 +820,27 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(jScrollPaneBearbeitung, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.wiedervorlage}"), dcDatum, BeanProperty.create("date"));
+        binding.setConverter(dcDatum.getConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(dcDatum, gridBagConstraints);
+
+        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDatum.setText("Vorlage 102.21:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(4, 5, 4, 5);
+        panDaten.add(lblDatum, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
