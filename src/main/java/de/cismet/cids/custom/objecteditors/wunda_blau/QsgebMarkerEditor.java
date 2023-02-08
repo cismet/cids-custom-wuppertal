@@ -1142,6 +1142,9 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             if ((getCidsBean() != null) &&  (getCidsBean().getProperty(FIELD__STATUS) != null)){
                 oldStatusBean = (CidsBean)getCidsBean().getProperty(FIELD__STATUS);
             }
+            if (getCidsBean()!=null && getCidsBean().getPrimaryKeyValue() != -1){
+                RendererTools.makeReadOnly(cbGeom);
+            }
         } catch (final Exception ex) {
             LOG.warn("Error setCidsBean.", ex);
         }
@@ -1340,6 +1343,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         taBemerkung.setEnabled(false);
         lblGeom_txt.setVisible(false);
         jCkbHistorisch.setEnabled(false);
+        RendererTools.makeReadOnly(dcDatum);
     }
 
     /**
