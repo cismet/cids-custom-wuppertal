@@ -1145,6 +1145,9 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             if (getCidsBean()!=null && getCidsBean().getPrimaryKeyValue() != -1){
                 RendererTools.makeReadOnly(cbGeom);
             }
+            if (getCidsBean()!=null && Boolean.TRUE.equals(getCidsBean().getProperty(FIELD__HISTORISCH))){
+                setNoEditHistorisch();
+            }
         } catch (final Exception ex) {
             LOG.warn("Error setCidsBean.", ex);
         }
@@ -1345,6 +1348,15 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         jCkbHistorisch.setEnabled(false);
         RendererTools.makeReadOnly(dcDatum);
     }
+    
+    private void setNoEditHistorisch(){
+        RendererTools.makeReadOnly(dcDatum);
+        RendererTools.makeReadOnly(cbStatus);
+        RendererTools.makeReadOnly(cbErgebnis);
+        RendererTools.makeReadOnly(txtLage);
+        RendererTools.makeReadOnly(taBemerkung);
+        RendererTools.makeReadOnly(lblGeom_txt);
+    }
 
     /**
      * DOCUMENT ME!
@@ -1358,8 +1370,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             lblDatumHistorisch.setVisible(false);
         }
     }
-
-    /**
+    
+       /**
      * DOCUMENT ME!
      */
     public void setMapWindow() {
