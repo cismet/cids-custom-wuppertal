@@ -57,7 +57,6 @@ import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.BindingGroupStore;
 
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -116,7 +115,9 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__STRASSE = "fk_strasse";                               
     public static final String FIELD__HNR = "fk_adresse";                                   
     public static final String FIELD__HAUSNUMMER = "hausnummer";                            
-    public static final String FIELD__ID = "id";                                            
+    public static final String FIELD__ID = "id";                              
+    public static final String FIELD__VEROEFFENTLICHT = "to_publish";                              
+    public static final String FIELD__UEBERPRUEFT = "ueberprueft";                                            
     public static final String FIELD__GEOREFERENZ = "fk_geom";                            
     public static final String FIELD__ART = "fk_art";                           
     public static final String FIELD__STRASSE_NAME = "name";                                // strasse
@@ -550,6 +551,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         chUeberprueft.setContentAreaFilled(false);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ueberprueft}"), chUeberprueft, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -574,6 +577,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         chVeroeffentlicht.setContentAreaFilled(false);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.to_publish}"), chVeroeffentlicht, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -764,7 +769,14 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 refreshHnr();
             }
             setTitle(getTitle());
-            
+            try {
+                if (getCidsBean().getPrimaryKeyValue() == -1){
+                    getCidsBean().setProperty(FIELD__VEROEFFENTLICHT, false);
+                    getCidsBean().setProperty(FIELD__UEBERPRUEFT, false);
+                }
+            }catch (Exception ex){
+                LOG.error("default values not set", ex);
+            }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);

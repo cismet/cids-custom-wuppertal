@@ -371,7 +371,10 @@
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ueberprueft}" target="chUeberprueft" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.ueberprueft}" target="chUeberprueft" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -401,7 +404,10 @@
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.to_publish}" target="chVeroeffentlicht" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.to_publish}" target="chVeroeffentlicht" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
