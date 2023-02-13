@@ -79,6 +79,9 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.util.concurrent.ExecutionException;
+import lombok.Getter;
+import lombok.Setter;
 /**
  * DOCUMENT ME!
  *
@@ -104,6 +107,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     public static final String GEOMTYPE = "Point";
+    public static final int GEOM_CHECK_BUFFER_POINT = 500;
+    public static final int GEOM_CHECK_BUFFER_AREA = 50;
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
 
@@ -112,8 +117,10 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
     public static final String FIELD__NAME = "name";                                        
     public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel"; 
-    public static final String FIELD__STRASSE = "fk_strasse";                               
-    public static final String FIELD__HNR = "fk_adresse";                                   
+    public static final String FIELD__STRASSE = "fk_strasse";                                  
+    public static final String FIELD__STRASSE_GEOREFERENZ = "fk_strasse.umschreibendes_rechteck";                             
+    public static final String FIELD__HNR = "fk_adresse";                                
+    public static final String FIELD__HNR_GEOREFERENZ = "fk_adresse.umschreibendes_rechteck";                                   
     public static final String FIELD__HAUSNUMMER = "hausnummer";                            
     public static final String FIELD__ID = "id";                              
     public static final String FIELD__VEROEFFENTLICHT = "to_publish";                              
@@ -131,6 +138,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_NOART = "SpstAnlageEditor.isOkForSaving().noArt";
     public static final String BUNDLE_NOSTREET = "SpstAnlageEditor.isOkForSaving().noStrasse";
     public static final String BUNDLE_NOGEOM = "SpstAnlageEditor.isOkForSaving().noGeom";
+    public static final String BUNDLE_GEOMOKAY = "SpstAnlageEditor.isOkForSaving().GeomNotOkay";
     public static final String BUNDLE_WRONGGEOM = "SpstAnlageEditor.isOkForSaving().wrongGeom";
     public static final String BUNDLE_PANE_PREFIX = "SpstAnlageEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "SpstAnlageEditor.isOkForSaving().JOptionPane.message.suffix";
@@ -162,6 +170,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             }
         };
     private final boolean editor;
+    private SwingWorker worker_geom;
+    @Getter @Setter private Boolean geomOkay;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JComboBox<String> cbArt;
@@ -913,8 +923,14 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public void propertyChange(final PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)) {
             setMapWindow();
+            checkGeom();
         }
-        
+        if (evt.getPropertyName().equals(FIELD__HNR)) {
+            checkGeom();
+        }
+        if (evt.getPropertyName().equals(FIELD__STRASSE)) {
+            checkGeom();
+        }
     }
 
     @Override
@@ -944,6 +960,18 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("Art not given.", ex);
                 save = false;
             }
+            
+        // Geom muss okay sein
+        try {
+            if (!getGeomOkay()) {
+                LOG.warn("geom not okay. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_GEOMOKAY));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("geom not okay.", ex);
+            save = false;
+        }    
             
         // Straße muss angegeben werden
         try {
@@ -985,7 +1013,72 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         }
         return save;
     }
+    
+    public boolean checkPointInsidePolygon(final Point midpoint, final Geometry geomArea) {
+        return midpoint.intersects(geomArea);
+    }
+    
+    private void checkNearBy(final Geometry adressGeom, final Point sportPoint) {
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    return checkPointInsidePolygon(sportPoint, adressGeom);
+                }
+
+                @Override
+                protected void done() {
+                    final Boolean result;
+                    try {
+                        result = get();
+                        if (!isCancelled()) {
+                            setGeomOkay(result);
+                        }
+                    } catch (InterruptedException | ExecutionException ex) {
+                        LOG.warn("problem in Worker: check NearBy.", ex);
+                    }         
+                }             
+            };              
+
+        if (worker_geom != null) {
+            worker_geom.cancel(true);
+        }
+        worker_geom = worker;
+        worker_geom.execute();
+               
+    }
+
+    
+    private void checkGeom(){
+        Point sportPoint = null;
+        Geometry adressGeom = null;
+        try {
+            if (getCidsBean().getProperty(FIELD__GEOREFERENZ) != null) {
+                final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOREFERENZ);
+                if (((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+                    sportPoint = (Point)(getCidsBean().getProperty(FIELD__GEOREFERENZ__GEO_FIELD));
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Geom for Check not given.", ex);
+        }
+        try {
+            if (getCidsBean().getProperty(FIELD__HNR) != null) {
+                final CidsBean geom_hnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR_GEOREFERENZ);
+                adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(GEOM_CHECK_BUFFER_POINT);
+            } else{
+                if (getCidsBean().getProperty(FIELD__STRASSE) != null) {
+                    final CidsBean geom_hnr = (CidsBean)getCidsBean().getProperty(FIELD__STRASSE_GEOREFERENZ);
+                    adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(GEOM_CHECK_BUFFER_AREA);
+                }
+            }
+            if (sportPoint != null && adressGeom != null){
+                checkNearBy(adressGeom, sportPoint);
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Geom for Check not given.", ex);
+        }
+    }
     /**
      * DOCUMENT ME!
      */
