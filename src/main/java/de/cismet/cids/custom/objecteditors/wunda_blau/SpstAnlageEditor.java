@@ -103,7 +103,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 connectionContext);
     }
 
-    public static final String GEOMTYPE = "Polygon";
+    public static final String GEOMTYPE = "Point";
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
 
@@ -247,6 +247,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         lblGeom = new JLabel();
         if (isEditor()){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class });
         }
         lblStrasse = new JLabel();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
