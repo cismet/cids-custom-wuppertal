@@ -151,7 +151,16 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             ADRESSE_TOSTRING_FIELDS);
 
     private CidsBean beanHNr;
+    private final ActionListener hnrActionListener = new ActionListener() {
 
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0)).getList();
+                final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
+                final Object selectedValue = pop.getSelectedValue();
+                txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
+            }
+        };
     private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -215,7 +224,9 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
-
+        if (isEditor()) {
+            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
+        }
         setReadOnly();
     }
 
@@ -731,9 +742,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
-            if (isEditor() && (getCidsBean() != null)) {
-                LOG.info("remove propchange spst_anlage: " + getCidsBean());
-                getCidsBean().removePropertyChangeListener(this);
+            if (isEditor()) {
+                cbHNr.removeActionListener(hnrActionListener);
+                if (getCidsBean() != null) {
+                    LOG.info("remove propchange spst_anlage: " + getCidsBean());
+                    getCidsBean().removePropertyChangeListener(this);
+                }
             }
             bindingGroup.unbind();
             this.cidsBean = cb;
@@ -750,6 +764,15 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             setMapWindow();
             bindingGroup.bind();
             if (isEditor()) {
+                    if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE) != null)) {
+                        cbHNr.setEnabled(true);
+                    } else {
+                        cbHNr.setEnabled(false);
+                    }
+                    cbHNr.addActionListener(hnrActionListener);
+                    refreshHnr();
+                }
+           /* if (isEditor()) {
                 if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
                     cbHNr.setEnabled(true);
                 }
@@ -767,7 +790,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                         });
                 }
                 refreshHnr();
-            }
+            }*/
             setTitle(getTitle());
             try {
                 if (getCidsBean().getPrimaryKeyValue() == -1){
@@ -864,13 +887,15 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
 
     @Override
-    public void dispose() { if (isEditor()) {
+    public void dispose() { 
+        if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
             cbHNr.removeAll();
             if (getCidsBean() != null) {
                 LOG.info("remove propchange spst_anlage: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
             }
+            cbHNr.removeActionListener(hnrActionListener);
         } 
         bindingGroup.unbind();
         super.dispose();
