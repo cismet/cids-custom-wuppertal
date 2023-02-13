@@ -21,9 +21,9 @@ import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
@@ -34,6 +34,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXTable;
 
 import org.openide.util.NbBundle;
 
@@ -54,27 +55,37 @@ import java.beans.PropertyChangeListener;
 
 import java.io.StringReader;
 
+import java.time.LocalDate;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
+import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
 
-
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
+import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
+import de.cismet.cids.editors.SaveVetoable;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -97,18 +108,6 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-
-import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.SaveVetoable;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.concurrent.ExecutionException;
-import lombok.Setter;
-import org.jdesktop.swingx.JXTable;
 
 /**
  * DOCUMENT ME!
@@ -135,7 +134,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__BEARBEITUNG_DATUM = "datum";
     public static final String FIELD__STATUS = "status";
     public static final String FIELD__STATUS__SCHLUESSEL = "status.schluessel";
-    public static final String STATUS_ERLEDIGT_SCHLUESSEL = "erledigt";    
+    public static final String STATUS_ERLEDIGT_SCHLUESSEL = "erledigt";
     public static final String FIELD__BEARBEITUNG = "n_bearbeitung";
     public static final String FIELD__ID = "id";
     public static final String FIELD__LAGE = "lage";
@@ -156,9 +155,9 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     public static final String TABLE_NAME_STATUS = "qsgeb_status";
     public static final String TABLE_NAME_BEARBEITUNG = "qsgeb_bearbeitung";
     public static final String FIELD__SCHLUESSEL = "schluessel";
-    
-    private static final String[] BEARBEITUNG_COL_NAMES = new String[] { 
-            "Bearbeiter", 
+
+    private static final String[] BEARBEITUNG_COL_NAMES = new String[] {
+            "Bearbeiter",
             "Datum",
             "Status alt",
             "Status neu"
@@ -331,7 +330,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         super.initWithConnectionContext(connectionContext);
         initProperties();
         initComponents();
-        
+
         if (isEditor) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setLocalRenderFeatureString(FIELD__GEOREFERENZ);
         } else {
@@ -366,7 +365,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblJahr_txt = new JLabel();
         lblGeom_txt = new JLabel();
         txtLage = new JTextField();
-        if (isEditor){
+        if (isEditor) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         lblGemarkung_txt = new JLabel();
@@ -380,7 +379,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblFlurstueck_txt = new JLabel();
         lblStatus_txt = new JLabel();
         lblBemerkung_txt = new JLabel();
-        cbErgebnis = new DefaultBindableReferenceCombo(true) ;
+        cbErgebnis = new DefaultBindableReferenceCombo(true);
         lblLage_txt = new JLabel();
         lblErgebnis_txt = new JLabel();
         jScrollPane2 = new JScrollPane();
@@ -405,12 +404,11 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         pnlBild = new JPanel();
         jPanel1 = new JPanel();
         rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
-            PROPERTIES.getRasterfariUrl(),
-            this,
-            getConnectionContext()
-        );
+                PROPERTIES.getRasterfariUrl(),
+                this,
+                getConnectionContext());
         jPanel2 = new JPanel();
-        jxLBusy = new JXBusyLabel(new Dimension(64,64));
+        jxLBusy = new JXBusyLabel(new Dimension(64, 64));
         jPanel3 = new JPanel();
         jLabel1 = new JLabel();
         jPanel4 = new JPanel();
@@ -438,10 +436,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         btnInfo.setEnabled(false);
         btnInfo.setFocusPainted(false);
         btnInfo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnInfoActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnInfoActionPerformed(evt);
+                }
+            });
         panLeft.add(btnInfo);
 
         gridBagConstraints = new GridBagConstraints();
@@ -457,10 +457,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         btnImages.setContentAreaFilled(false);
         btnImages.setFocusPainted(false);
         btnImages.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnImagesActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnImagesActionPerformed(evt);
+                }
+            });
         panRight.add(btnImages);
 
         lblImages.setFont(new Font("DejaVu Sans", 1, 14)); // NOI18N
@@ -527,7 +529,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panDaten.add(lblGeom_txt, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.lage}"), txtLage, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.lage}"),
+                txtLage,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -539,17 +546,21 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(4, 4, 4, 2);
         panDaten.add(txtLage, gridBagConstraints);
 
-        if (isEditor){
-            if (isEditor){
+        if (isEditor) {
+            if (isEditor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.georeferenz}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.georeferenz}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor){
+        if (isEditor) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 5;
             gridBagConstraints.gridy = 0;
@@ -591,7 +602,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
         lblId.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.id}"), lblId, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.id}"),
+                lblId,
+                BeanProperty.create("text"));
         binding.setSourceNullValue("- -");
         bindingGroup.addBinding(binding);
 
@@ -607,7 +623,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblGemarkung.setFont(new Font("Dialog", 0, 12)); // NOI18N
         lblGemarkung.setMinimumSize(new Dimension(120, 15));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gemarkung}"), lblGemarkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.gemarkung}"),
+                lblGemarkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -622,7 +643,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblFlur.setFont(new Font("Dialog", 0, 12)); // NOI18N
         lblFlur.setMinimumSize(new Dimension(60, 15));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.flur}"), lblFlur, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.flur}"),
+                lblFlur,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -637,7 +663,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         lblFlurstueck.setFont(new Font("Dialog", 0, 12)); // NOI18N
         lblFlurstueck.setMinimumSize(new Dimension(120, 15));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.flurstueck}"), lblFlurstueck, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.flurstueck}"),
+                lblFlurstueck,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -688,7 +719,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         cbErgebnis.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbErgebnis.setPreferredSize(new Dimension(150, 23));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ergebnis}"), cbErgebnis, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ergebnis}"),
+                cbErgebnis,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -724,7 +760,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         taBemerkung.setRows(5);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane2.setViewportView(taBemerkung);
@@ -744,7 +785,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         ((FastBindableReferenceCombo)cbStatus).setNullable(false);
         cbStatus.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.status}"), cbStatus, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.status}"),
+                cbStatus,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -767,7 +813,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
         jCkbHistorisch.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.historisch}"), jCkbHistorisch, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.historisch}"),
+                jCkbHistorisch,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -790,7 +841,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
         lblDatumHistorisch.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_historisch}"), lblDatumHistorisch, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_historisch}"),
+                lblDatumHistorisch,
+                BeanProperty.create("text"));
         binding.setConverter(sqlDateToStringConverter);
         bindingGroup.addBinding(binding);
 
@@ -821,7 +877,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(jScrollPaneBearbeitung, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.wiedervorlage}"), dcDatum, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.wiedervorlage}"),
+                dcDatum,
+                BeanProperty.create("date"));
         binding.setConverter(dcDatum.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -964,7 +1025,9 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         pnlHeaderPages.setLayout(new FlowLayout());
 
         lblHeaderPages.setForeground(new Color(255, 255, 255));
-        lblHeaderPages.setText(NbBundle.getMessage(QsgebMarkerEditor.class, "VermessungRissEditor.lblHeaderPages.text")); // NOI18N
+        lblHeaderPages.setText(NbBundle.getMessage(
+                QsgebMarkerEditor.class,
+                "VermessungRissEditor.lblHeaderPages.text")); // NOI18N
         pnlHeaderPages.add(lblHeaderPages);
 
         pnlPages.add(pnlHeaderPages, BorderLayout.NORTH);
@@ -992,33 +1055,33 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         add(panBild, "cardBild");
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
         ((CardLayout)getLayout()).show(this, "cardContent");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }//GEN-LAST:event_btnInfoActionPerformed
+    }                                                            //GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
         ((CardLayout)getLayout()).show(this, "cardBild");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }//GEN-LAST:event_btnImagesActionPerformed
+    }                                                              //GEN-LAST:event_btnImagesActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -1061,7 +1124,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         try {
             if ((getCidsBean().getProperty(FIELD__ERGEBNIS) == null)
                         && STATUS_ERLEDIGT_SCHLUESSEL.equals(
-                                getCidsBean().getProperty(FIELD__STATUS__SCHLUESSEL))) {
+                            getCidsBean().getProperty(FIELD__STATUS__SCHLUESSEL))) {
                 LOG.warn("Wrong Ergebnis specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(
                         QsgebMarkerEditor.class,
@@ -1086,7 +1149,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                 JOptionPane.WARNING_MESSAGE);
 
             return false;
-        } else{
+        } else {
             prepareMarkerBearbeitung();
         }
         return save;
@@ -1119,33 +1182,34 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
                 getConnectionContext());
             setMapWindow();
             bindingGroup.bind();
-            if (getCidsBean()!= null){
+            if (getCidsBean() != null) {
                 setBearbeitungBeans(getCidsBean().getBeanCollectionProperty(FIELD__BEARBEITUNG));
             } else {
                 setBearbeitungBeans(null);
             }
             prepareIt();
             final DivBeanTable bearbeitungModel = new DivBeanTable(
-                        isEditor,
-                        getCidsBean(),
-                        FIELD__BEARBEITUNG,
-                        BEARBEITUNG_COL_NAMES,
-                        BEARBEITUNG_PROP_NAMES,
-                        BEARBEITUNG_PROP_TYPES);
+                    isEditor,
+                    getCidsBean(),
+                    FIELD__BEARBEITUNG,
+                    BEARBEITUNG_COL_NAMES,
+                    BEARBEITUNG_PROP_NAMES,
+                    BEARBEITUNG_PROP_TYPES);
             xtBearbeitung.setModel(bearbeitungModel);
-            JScrollBar vertical = jScrollPaneBearbeitung.getVerticalScrollBar();
-            vertical.setValue( vertical.getMaximum() );
-            jScrollPaneBearbeitung.getVerticalScrollBar().setValue(
-                    jScrollPaneBearbeitung.getVerticalScrollBar().getMaximum());
+            final JScrollBar vertical = jScrollPaneBearbeitung.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+            jScrollPaneBearbeitung.getVerticalScrollBar()
+                    .setValue(
+                        jScrollPaneBearbeitung.getVerticalScrollBar().getMaximum());
             xtBearbeitung.packAll();
             RendererTools.makeReadOnly(xtBearbeitung);
-            if ((getCidsBean() != null) &&  (getCidsBean().getProperty(FIELD__STATUS) != null)){
+            if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STATUS) != null)) {
                 oldStatusBean = (CidsBean)getCidsBean().getProperty(FIELD__STATUS);
             }
-            if (getCidsBean()!=null && getCidsBean().getPrimaryKeyValue() != -1){
+            if ((getCidsBean() != null) && (getCidsBean().getPrimaryKeyValue() != -1)) {
                 RendererTools.makeReadOnly(cbGeom);
             }
-            if (getCidsBean()!=null && Boolean.TRUE.equals(getCidsBean().getProperty(FIELD__HISTORISCH))){
+            if ((getCidsBean() != null) && Boolean.TRUE.equals(getCidsBean().getProperty(FIELD__HISTORISCH))) {
                 setNoEditHistorisch();
             }
         } catch (final Exception ex) {
@@ -1158,7 +1222,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      */
     private void prepareIt() {
         if (getCidsBean() != null) {
-            lookForYear();           // Ist nur ein Label, welches sich aus dem Anlegedatum ergibt.
+            lookForYear(); // Ist nur ein Label, welches sich aus dem Anlegedatum ergibt.
             loadDocument();
         }
 
@@ -1171,40 +1235,41 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      */
     private void prepareMarkerBearbeitung() {
         try {
-            CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(
-                    TABLE_NAME_BEARBEITUNG, getConnectionContext());
+            final CidsBean bean = CidsBeanSupport.createNewCidsBeanFromTableName(
+                    TABLE_NAME_BEARBEITUNG,
+                    getConnectionContext());
             try {
                 bean.setProperty(
-                FIELD__BEARBEITUNG_STATUS_ALT,
-                oldStatusBean);
+                    FIELD__BEARBEITUNG_STATUS_ALT,
+                    oldStatusBean);
             } catch (Exception ex) {
                 LOG.warn("old Status not set.", ex);
             }
             try {
                 bean.setProperty(
-                FIELD__BEARBEITUNG_STATUS_NEU,
-                (CidsBean)getCidsBean().getProperty(FIELD__STATUS));
+                    FIELD__BEARBEITUNG_STATUS_NEU,
+                    (CidsBean)getCidsBean().getProperty(FIELD__STATUS));
             } catch (Exception ex) {
                 LOG.warn("new Status not set.", ex);
             }
             try {
                 bean.setProperty(
-                FIELD__BEARBEITUNG_MARKER,
-                getCidsBean().getPrimaryKeyValue());
+                    FIELD__BEARBEITUNG_MARKER,
+                    getCidsBean().getPrimaryKeyValue());
             } catch (Exception ex) {
                 LOG.warn("marker not set.", ex);
             }
             try {
                 bean.setProperty(
-                FIELD__BEARBEITUNG_BEARBEITUNG,
-                getCurrentUser());
+                    FIELD__BEARBEITUNG_BEARBEITUNG,
+                    getCurrentUser());
             } catch (Exception ex) {
                 LOG.warn("User not set.", ex);
             }
             try {
                 bean.setProperty(
-                FIELD__BEARBEITUNG_DATUM,
-                new java.sql.Date(System.currentTimeMillis()));
+                    FIELD__BEARBEITUNG_DATUM,
+                    new java.sql.Date(System.currentTimeMillis()));
             } catch (Exception ex) {
                 LOG.warn("old Status not set.", ex);
             }
@@ -1237,7 +1302,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      * @return  DOCUMENT ME!
      */
     private String getPictureUrl() {
-        if (getYear() == null){
+        if (getYear() == null) {
             lookForYear();
         }
         final String id = cidsBean.getProperty(FIELD__ID).toString();
@@ -1248,15 +1313,15 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      * DOCUMENT ME!
      */
     private void lookForYear() {
-        if (getCidsBean()!= null) {
+        if (getCidsBean() != null) {
             final LocalDate datum = LocalDate.now();
             setYear(datum.getYear());
-            if(!bearbeitungBeans.isEmpty()){
+            if (!bearbeitungBeans.isEmpty()) {
                 for (final CidsBean bearbeitungBean : bearbeitungBeans) {
-                    Calendar calendar =  Calendar.getInstance();
+                    final Calendar calendar = Calendar.getInstance();
                     calendar.setTime((Date)bearbeitungBean.getProperty(FIELD__BEARBEITUNG_DATUM));
-                    int beanYear = calendar.get(Calendar.YEAR);
-                    if (beanYear < getYear()){
+                    final int beanYear = calendar.get(Calendar.YEAR);
+                    if (beanYear < getYear()) {
                         year = beanYear;
                     }
                 }
@@ -1334,7 +1399,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     /**
      * DOCUMENT ME!
      */
-    
 
     /**
      * DOCUMENT ME!
@@ -1348,8 +1412,11 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         jCkbHistorisch.setEnabled(false);
         RendererTools.makeReadOnly(dcDatum);
     }
-    
-    private void setNoEditHistorisch(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setNoEditHistorisch() {
         RendererTools.makeReadOnly(dcDatum);
         RendererTools.makeReadOnly(cbStatus);
         RendererTools.makeReadOnly(cbErgebnis);
@@ -1370,8 +1437,8 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             lblDatumHistorisch.setVisible(false);
         }
     }
-    
-       /**
+
+    /**
      * DOCUMENT ME!
      */
     public void setMapWindow() {
@@ -1399,7 +1466,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         }
     }
 
-    
     /**
      * DOCUMENT ME!
      *
@@ -1409,7 +1475,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
         return SessionManager.getSession().getUser().getName();
     }
 
-   
     @Override
     public void dispose() {
         super.dispose();
@@ -1429,7 +1494,6 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
     public void setTitle(final String string) {
     }
 
-
     @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
@@ -1437,10 +1501,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(FIELD__STATUS) && (getCidsBean().getMetaObject().getStatus() != MetaObject.NEW)) {
-            //setUserStatus();
+        if (evt.getPropertyName().equals(FIELD__STATUS)
+                    && (getCidsBean().getMetaObject().getStatus() != MetaObject.NEW)) {
+            // setUserStatus();
         }
-        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ) && (getCidsBean().getProperty(FIELD__GEOREFERENZ) != null)) {
+        if (evt.getPropertyName().equals(FIELD__GEOREFERENZ)
+                    && (getCidsBean().getProperty(FIELD__GEOREFERENZ) != null)) {
             setMapWindow();
             final Geometry myPoint = (Geometry)getCidsBean().getProperty(FIELD__GEOREFERENZ__GEO_FIELD);
             lookForLandparcel(myPoint);
@@ -1505,7 +1571,7 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
 
         private final String rasterfariUrl;
         private final String rasterfariPath;
-        
+
         //~ Constructors -------------------------------------------------------
 
         /**
