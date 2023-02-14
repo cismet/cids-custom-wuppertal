@@ -79,7 +79,10 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.text.DecimalFormat;
 import java.util.concurrent.ExecutionException;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 import lombok.Getter;
 import lombok.Setter;
 /**
@@ -125,7 +128,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__ID = "id";                              
     public static final String FIELD__VEROEFFENTLICHT = "to_publish";                              
     public static final String FIELD__UEBERPRUEFT = "ueberprueft";                              
-    public static final String FIELD__ORT = "ort";                                            
+    public static final String FIELD__ORT = "ort";                                
+    public static final String FIELD__PLZ = "plz";                                            
     public static final String FIELD__GEOREFERENZ = "fk_geom";                            
     public static final String FIELD__ART = "fk_art";                           
     public static final String FIELD__STRASSE_NAME = "name";                                // strasse
@@ -138,6 +142,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_NONAME = "SpstAnlageEditor.isOkForSaving().noName";
     public static final String BUNDLE_NOORT = "SpstAnlageEditor.isOkForSaving().noOrt";
     public static final String BUNDLE_NOPLZ = "SpstAnlageEditor.isOkForSaving().noPlz";
+    public static final String BUNDLE_WRONGPLZ = "SpstAnlageEditor.isOkForSaving().wrongPlz";
     public static final String BUNDLE_NOART = "SpstAnlageEditor.isOkForSaving().noArt";
     public static final String BUNDLE_NOSTREET = "SpstAnlageEditor.isOkForSaving().noStrasse";
     public static final String BUNDLE_NOGEOM = "SpstAnlageEditor.isOkForSaving().noGeom";
@@ -184,6 +189,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     JCheckBox chUeberprueft;
     JCheckBox chVeroeffentlicht;
     private Box.Filler filler3;
+    private JFormattedTextField ftxtPlz;
     private JLabel lblArt;
     private JLabel lblBemerkung;
     private JLabel lblGeom;
@@ -208,7 +214,6 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     private JTextArea taBemerkung;
     private JTextField txtName;
     private JTextField txtOrt;
-    private JTextField txtPlz;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -256,7 +261,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         panContent = new RoundedPanel();
         panDaten = new JPanel();
         lblPlz = new JLabel();
-        txtPlz = new JTextField();
+        ftxtPlz = new JFormattedTextField();
         lblGeom = new JLabel();
         if (isEditor()){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
@@ -311,30 +316,32 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         lblPlz.setText("Plz:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblPlz, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), txtPlz, BeanProperty.create("text"));
+        ftxtPlz.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), ftxtPlz, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.3;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(txtPlz, gridBagConstraints);
+        panDaten.add(ftxtPlz, gridBagConstraints);
 
         lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -354,7 +361,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 8;
+            gridBagConstraints.gridy = 7;
             gridBagConstraints.gridwidth = 4;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -438,7 +445,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         panZusatz.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -452,7 +459,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -485,7 +492,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -509,7 +516,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         panDaten.add(panFiller, gridBagConstraints);
 
         cbStrasse.setMaximumRowCount(20);
@@ -543,7 +550,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         if (!isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 7;
+            gridBagConstraints.gridy = 6;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.ipady = 10;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -566,7 +573,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         lblUeberprueft.setText("Überprüft:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -582,7 +589,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -592,7 +599,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         lblVeroeffentlich.setText("Veröffentlicht:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -608,7 +615,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -634,7 +641,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         lblOrt.setText("Ort:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -646,7 +653,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -829,7 +836,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             lblGeom.setVisible(isEditor());
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtOrt);
-            RendererTools.makeReadOnly(txtPlz);
+            RendererTools.makeReadOnly(ftxtPlz);
             RendererTools.makeReadOnly(cbArt);
             RendererTools.makeReadOnly(cbHNr);
             RendererTools.makeReadOnly(cbStrasse);
@@ -1023,10 +1030,16 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         
         // name vorhanden
         try {
-            if (txtPlz.getText().trim().isEmpty()) {
+            if (ftxtPlz.getText().trim().isEmpty()) {
                 LOG.warn("No plz specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_NOPLZ));
                 save = false;
+            } else {
+                if (getCidsBean().getProperty(FIELD__PLZ).toString().length() != 5){
+                    LOG.warn("Wrong plz specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_WRONGPLZ));
+                    save = false;
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("PLZ not given.", ex);
