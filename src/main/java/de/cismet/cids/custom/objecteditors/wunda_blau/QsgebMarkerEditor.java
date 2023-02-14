@@ -1062,26 +1062,26 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         ((CardLayout)getLayout()).show(this, "cardContent");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }                                                            //GEN-LAST:event_btnInfoActionPerformed
+    }//GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
         ((CardLayout)getLayout()).show(this, "cardBild");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    }                                                              //GEN-LAST:event_btnImagesActionPerformed
+    }//GEN-LAST:event_btnImagesActionPerformed
 
     @Override
     public boolean isOkForSaving() {
@@ -1319,10 +1319,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             if (!bearbeitungBeans.isEmpty()) {
                 for (final CidsBean bearbeitungBean : bearbeitungBeans) {
                     final Calendar calendar = Calendar.getInstance();
-                    calendar.setTime((Date)bearbeitungBean.getProperty(FIELD__BEARBEITUNG_DATUM));
-                    final int beanYear = calendar.get(Calendar.YEAR);
-                    if (beanYear < getYear()) {
-                        year = beanYear;
+                    if(bearbeitungBean.getProperty(FIELD__BEARBEITUNG_DATUM) != null){
+                        calendar.setTime((Date)bearbeitungBean.getProperty(FIELD__BEARBEITUNG_DATUM));
+                        final int beanYear = calendar.get(Calendar.YEAR);
+                        if (beanYear < getYear()) {
+                            year = beanYear;
+                        }
                     }
                 }
             }
