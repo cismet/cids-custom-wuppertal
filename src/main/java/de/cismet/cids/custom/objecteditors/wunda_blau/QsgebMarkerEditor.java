@@ -1319,10 +1319,12 @@ public class QsgebMarkerEditor extends DefaultCustomObjectEditor implements Cids
             if (!bearbeitungBeans.isEmpty()) {
                 for (final CidsBean bearbeitungBean : bearbeitungBeans) {
                     final Calendar calendar = Calendar.getInstance();
-                    calendar.setTime((Date)bearbeitungBean.getProperty(FIELD__BEARBEITUNG_DATUM));
-                    final int beanYear = calendar.get(Calendar.YEAR);
-                    if (beanYear < getYear()) {
-                        year = beanYear;
+                    if (bearbeitungBean.getProperty(FIELD__BEARBEITUNG_DATUM) != null) {
+                        calendar.setTime((Date)bearbeitungBean.getProperty(FIELD__BEARBEITUNG_DATUM));
+                        final int beanYear = calendar.get(Calendar.YEAR);
+                        if (beanYear < getYear()) {
+                            year = beanYear;
+                        }
                     }
                 }
             }
