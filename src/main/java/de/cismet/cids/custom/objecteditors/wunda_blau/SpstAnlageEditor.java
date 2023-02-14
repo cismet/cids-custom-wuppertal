@@ -136,6 +136,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_GEOM = "geom";
 
     public static final String BUNDLE_NONAME = "SpstAnlageEditor.isOkForSaving().noName";
+    public static final String BUNDLE_NOORT = "SpstAnlageEditor.isOkForSaving().noOrt";
+    public static final String BUNDLE_NOPLZ = "SpstAnlageEditor.isOkForSaving().noPlz";
     public static final String BUNDLE_NOART = "SpstAnlageEditor.isOkForSaving().noArt";
     public static final String BUNDLE_NOSTREET = "SpstAnlageEditor.isOkForSaving().noStrasse";
     public static final String BUNDLE_NOGEOM = "SpstAnlageEditor.isOkForSaving().noGeom";
@@ -951,6 +953,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Name not given.", ex);
             save = false;
         }
+        
         // Art muss angegeben werden
             try {
                 if (getCidsBean().getProperty(FIELD__ART) == null) {
@@ -1005,6 +1008,31 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Geom not given.", ex);
             save = false;
         }
+        
+        // ort vorhanden
+        try {
+            if (txtOrt.getText().trim().isEmpty()) {
+                LOG.warn("No ort specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_NOORT));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Ort not given.", ex);
+            save = false;
+        }
+        
+        // name vorhanden
+        try {
+            if (txtPlz.getText().trim().isEmpty()) {
+                LOG.warn("No plz specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_NOPLZ));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("PLZ not given.", ex);
+            save = false;
+        }
+        
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_PANE_PREFIX)
