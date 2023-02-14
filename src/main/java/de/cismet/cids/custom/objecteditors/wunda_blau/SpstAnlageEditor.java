@@ -172,7 +172,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         };
     private final boolean editor;
     private SwingWorker worker_geom;
-    @Getter @Setter private Boolean geomOkay;
+    @Getter @Setter private Boolean geomOkay = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JComboBox<String> cbArt;
