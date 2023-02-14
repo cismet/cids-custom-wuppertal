@@ -52,6 +52,7 @@ import javax.swing.text.DefaultFormatter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.SpstConfProperties;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
@@ -110,8 +111,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     public static final String GEOMTYPE = "Point";
-    public static final int GEOM_CHECK_BUFFER_POINT = 500;
-    public static final int GEOM_CHECK_BUFFER_AREA = 50;
+    public static final double GEOM_CHECK_BUFFER_POINT = 500;
+    public static final double GEOM_CHECK_BUFFER_AREA = 50;
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
 
@@ -121,7 +122,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__NAME = "name";                                        
     public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel"; 
     public static final String FIELD__STRASSE = "fk_strasse";                                  
-    public static final String FIELD__STRASSE_GEOREFERENZ = "fk_strasse.umschreibendes_rechteck";                             
+    public static final String FIELD__STRASSE_GEOREFERENZ = "fk_strasse.bsa_bbox";                             
     public static final String FIELD__HNR = "fk_adresse";                                
     public static final String FIELD__HNR_GEOREFERENZ = "fk_adresse.umschreibendes_rechteck";                                   
     public static final String FIELD__HAUSNUMMER = "hausnummer";                            
@@ -785,14 +786,15 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             setMapWindow();
             bindingGroup.bind();
             if (isEditor()) {
-                    if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE) != null)) {
-                        cbHNr.setEnabled(true);
-                    } else {
-                        cbHNr.setEnabled(false);
-                    }
-                    cbHNr.addActionListener(hnrActionListener);
-                    refreshHnr();
+                checkGeom();
+                if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE) != null)) {
+                    cbHNr.setEnabled(true);
+                } else {
+                    cbHNr.setEnabled(false);
                 }
+                cbHNr.addActionListener(hnrActionListener);
+                refreshHnr();
+            }
            /* if (isEditor()) {
                 if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
                     cbHNr.setEnabled(true);
@@ -853,8 +855,14 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public void setMapWindow() {
         final CidsBean cb = getCidsBean();
         try {
+            String mapUrl = null;
+            try {
+                mapUrl = SpstConfProperties.getInstance().getUrlKarte();
+            } catch (final Exception ex) {
+                LOG.warn("Get no conf properties.", ex);
+            }
             if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
-                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, 20.0);
+                panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, 20.0, mapUrl);
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
                 final BoundingBox initialBoundingBox;
@@ -868,7 +876,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                         getConnectionContext());
                 final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
                 newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
-                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, 20.0);
+                panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, 20.0, mapUrl);
             }
         } catch (final Exception ex) {
             LOG.warn("Can't load Overview.", ex);
@@ -1095,6 +1103,14 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     private void checkGeom(){
         Point sportPoint = null;
         Geometry adressGeom = null;
+        Double bufferHnr = GEOM_CHECK_BUFFER_POINT;
+        Double bufferStr = GEOM_CHECK_BUFFER_AREA;
+        try {
+            bufferHnr= SpstConfProperties.getInstance().getBufferHnr();
+            bufferStr= SpstConfProperties.getInstance().getBufferStr();
+        } catch (final Exception ex) {
+            LOG.warn("Get no conf properties.", ex);
+        }
         try {
             if (getCidsBean().getProperty(FIELD__GEOREFERENZ) != null) {
                 final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOREFERENZ);
@@ -1108,11 +1124,11 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             if (getCidsBean().getProperty(FIELD__HNR) != null) {
                 final CidsBean geom_hnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR_GEOREFERENZ);
-                adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(GEOM_CHECK_BUFFER_POINT);
+                adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(bufferHnr);
             } else{
                 if (getCidsBean().getProperty(FIELD__STRASSE) != null) {
                     final CidsBean geom_hnr = (CidsBean)getCidsBean().getProperty(FIELD__STRASSE_GEOREFERENZ);
-                    adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(GEOM_CHECK_BUFFER_AREA);
+                    adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(bufferStr);
                 }
             }
             if (sportPoint != null && adressGeom != null){
