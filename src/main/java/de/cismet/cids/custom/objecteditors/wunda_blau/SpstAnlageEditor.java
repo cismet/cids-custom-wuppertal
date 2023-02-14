@@ -153,8 +153,6 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_SUFFIX = "SpstAnlageEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "SpstAnlageEditor.isOkForSaving().JOptionPane.title";
     private static final String TITLE_NEW_ANLAGE = "eine neue Sportanlage anlegen...";
-    private static Color colorAlarm = new java.awt.Color(255, 0, 0);
-    private static Color colorNormal = new java.awt.Color(0, 0, 0);
     
 
     //~ Enums ------------------------------------------------------------------
@@ -550,8 +548,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if (!isEditor()){
             gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 6;
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 2;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.ipady = 10;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -795,25 +793,6 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 cbHNr.addActionListener(hnrActionListener);
                 refreshHnr();
             }
-           /* if (isEditor()) {
-                if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
-                    cbHNr.setEnabled(true);
-                }
-                StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbHNr);
-                {
-                    final JList pop = ((ComboPopup)cbHNr.getUI().getAccessibleChild(cbHNr, 0)).getList();
-                    final JTextField txt = (JTextField)cbHNr.getEditor().getEditorComponent();
-                    cbHNr.addActionListener(new ActionListener() {
-
-                            @Override
-                            public void actionPerformed(final ActionEvent e) {
-                                final Object selectedValue = pop.getSelectedValue();
-                                txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
-                            }
-                        });
-                }
-                refreshHnr();
-            }*/
             setTitle(getTitle());
             try {
                 if (getCidsBean().getPrimaryKeyValue() == -1){
