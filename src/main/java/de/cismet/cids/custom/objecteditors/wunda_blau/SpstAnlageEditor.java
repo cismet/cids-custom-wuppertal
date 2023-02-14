@@ -124,7 +124,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__HAUSNUMMER = "hausnummer";                            
     public static final String FIELD__ID = "id";                              
     public static final String FIELD__VEROEFFENTLICHT = "to_publish";                              
-    public static final String FIELD__UEBERPRUEFT = "ueberprueft";                                            
+    public static final String FIELD__UEBERPRUEFT = "ueberprueft";                              
+    public static final String FIELD__ORT = "ort";                                            
     public static final String FIELD__GEOREFERENZ = "fk_geom";                            
     public static final String FIELD__ART = "fk_art";                           
     public static final String FIELD__STRASSE_NAME = "name";                                // strasse
@@ -807,6 +808,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 if (getCidsBean().getPrimaryKeyValue() == -1){
                     getCidsBean().setProperty(FIELD__VEROEFFENTLICHT, false);
                     getCidsBean().setProperty(FIELD__UEBERPRUEFT, false);
+                    getCidsBean().setProperty(FIELD__ORT, "Wuppertal");
                 }
             }catch (Exception ex){
                 LOG.error("default values not set", ex);
