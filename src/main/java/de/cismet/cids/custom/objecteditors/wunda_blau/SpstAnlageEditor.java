@@ -1112,6 +1112,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             }
             if (sportPoint != null && adressGeom != null){
                 checkNearBy(adressGeom, sportPoint);
+            } else {
+                setGeomOkay(false);
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom for Check not given.", ex);

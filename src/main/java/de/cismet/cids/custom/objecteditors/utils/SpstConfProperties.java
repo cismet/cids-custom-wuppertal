@@ -52,7 +52,7 @@ public class SpstConfProperties {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new EmobProperties object.
+     * Creates a new SpstProperties object.
      *
      * @param  properties  DOCUMENT ME!
      */
@@ -79,7 +79,7 @@ public class SpstConfProperties {
             value = properties.getProperty(property, defaultValue);
         } catch (final Exception ex) {
             final String message = "could not read " + property + " from "
-                        + WundaBlauServerResources.EMOB_CONF_PROPERTIES.getValue()
+                        + WundaBlauServerResources.SPST_CONF_PROPERTIES.getValue()
                         + ". setting to default value: " + defaultValue;
             LOG.warn(message, ex);
         }
