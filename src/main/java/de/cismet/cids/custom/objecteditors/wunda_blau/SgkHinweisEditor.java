@@ -13,12 +13,13 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import Sirius.server.middleware.types.MetaClass;
 
 import com.vividsolutions.jts.geom.MultiPolygon;
-
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
+
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.AutoBinding;
@@ -40,6 +41,8 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import javax.swing.*;
@@ -52,19 +55,20 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
 
+import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.SaveVetoable;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
-
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -74,8 +78,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.util.Arrays;
-import java.util.List;
 /**
  * DOCUMENT ME!
  *
@@ -87,45 +89,45 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
     RequestsFullSizeComponent,
     PropertyChangeListener {
 
-    //~ Static fields/initializers --------------------------------------------- 
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final MetaClass MC__STATUS;
     private static final MetaClass MC__KATHER;
     private static final MetaClass MC__KATEGORIE;
 
     static {
-        final ConnectionContext connectionContext = ConnectionContext.create(ConnectionContext.Category.STATIC,
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
                 SgkHinweisEditor.class.getSimpleName());
         MC__STATUS = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
                 "SGK_STATUS",
                 connectionContext);
-    
+
         MC__KATHER = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
                 "SGK_KATEGORIEHERKUNFT",
                 connectionContext);
-        
+
         MC__KATEGORIE = ClassCacheMultiple.getMetaClass(
                 "WUNDA_BLAU",
                 "SGK_KATEGORIE",
                 connectionContext);
     }
 
-    List<String> STATUS_LIST = Arrays.asList("verifiziert","abgelehnt");
-    
     private static final Logger LOG = Logger.getLogger(SgkHinweisEditor.class);
 
-    public static final String FIELD__ID = "id";                              
-    public static final String FIELD__ANZEIGEN = "anzeigen";                                            
-    public static final String FIELD__GEOREFERENZ = "fk_geom";                            
-    public static final String FIELD__STATUS = "fk_status";                            
-    public static final String FIELD__BDATUM = "beurteilungsdatum";                            
-    public static final String FIELD__MDATUM = "meldungsdatum";                             
-    public static final String FIELD__KATHER = "fk_kategorieherkunft";                             
-    public static final String FIELD__KATEGORIE= "fk_kategorie";                           
-    public static final String FIELD__STATUS_KEY = "fk_status.schluessel";                   // status
-    public static final String FIELD__GEO_FIELD = "geo_field";                              // geom
-    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";         // geom.geo_field
+    public static final String FIELD__ID = "id";
+    public static final String FIELD__ANZEIGEN = "anzeigen";
+    public static final String FIELD__GEOREFERENZ = "fk_geom";
+    public static final String FIELD__STATUS = "fk_status";
+    public static final String FIELD__BDATUM = "beurteilungsdatum";
+    public static final String FIELD__MDATUM = "meldungsdatum";
+    public static final String FIELD__KATHER = "fk_kategorieherkunft";
+    public static final String FIELD__KATEGORIE = "fk_kategorie";
+    public static final String FIELD__STATUS_KEY = "fk_status.schluessel";          // status
+    public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
+    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // geom.geo_field
     public static final String TABLE_NAME = "sgk_hinweis";
     public static final String TABLE_GEOM = "geom";
 
@@ -141,14 +143,11 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_PREFIX = "SgkHinweisEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "SgkHinweisEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "SgkHinweisEditor.isOkForSaving().JOptionPane.title";
-    
 
-    //~ Enums ------------------------------------------------------------------
-
-   
     //~ Instance fields --------------------------------------------------------
 
-    
+    List<String> STATUS_LIST = Arrays.asList("verifiziert", "abgelehnt");
+
     private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -211,7 +210,6 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Methods ----------------------------------------------------------------
 
-
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
@@ -234,9 +232,10 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         lblBeurteilungsdatum = new JLabel();
         dcBeurteilungsdatum = new DefaultBindableDateChooser();
         lblGeom = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Polygon.class, MultiPolygon.class});
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(
+                new Class[] { Polygon.class, MultiPolygon.class });
         }
         lblBeschreibung = new JLabel();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
@@ -292,7 +291,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBeurteilungsdatum, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beurteilungsdatum}"), dcBeurteilungsdatum, BeanProperty.create("date"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beurteilungsdatum}"),
+                dcBeurteilungsdatum,
+                BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(dcBeurteilungsdatum.getConverter());
@@ -317,17 +321,21 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()){
-            if (editor){
+        if (isEditor()) {
+            if (editor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 3;
@@ -378,7 +386,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblTitel, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.titel}"), txtTitel, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.titel}"),
+                txtTitel,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -409,7 +422,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         taBemerkung.setRows(4);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -459,7 +477,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
 
         chAnzeigen.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzeigen}"), chAnzeigen, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anzeigen}"),
+                chAnzeigen,
+                BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -474,7 +497,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         cbStatus.setMaximumRowCount(15);
         cbStatus.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_status}"), cbStatus, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_status}"),
+                cbStatus,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -505,7 +533,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         taBeschreibung.setRows(6);
         taBeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibung.setViewportView(taBeschreibung);
@@ -539,7 +572,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         taHerkunft.setRows(2);
         taHerkunft.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.herkunft}"), taHerkunft, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.herkunft}"),
+                taHerkunft,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpHerkunft.setViewportView(taHerkunft);
@@ -569,7 +607,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         cbKatHerk.setMaximumRowCount(15);
         cbKatHerk.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_kategorieherkunft}"), cbKatHerk, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_kategorieherkunft}"),
+                cbKatHerk,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -596,7 +639,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         cbKategorie.setMaximumRowCount(15);
         cbKategorie.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_kategorie}"), cbKategorie, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_kategorie}"),
+                cbKategorie,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -618,7 +666,12 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblMeldungsdatum, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.meldungsdatum}"), dcMeldungsdatum, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.meldungsdatum}"),
+                dcMeldungsdatum,
+                BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(dcMeldungsdatum.getConverter());
@@ -699,13 +752,16 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isEditor() {
         return this.editor;
     }
-
-
 
     @Override
     public CidsBean getCidsBean() {
@@ -737,10 +793,10 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             bindingGroup.bind();
             setTitle(getTitle());
             try {
-                if (getCidsBean().getPrimaryKeyValue() == -1){
+                if (getCidsBean().getPrimaryKeyValue() == -1) {
                     getCidsBean().setProperty(FIELD__ANZEIGEN, false);
                 }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 LOG.error("default values not set", ex);
             }
         } catch (Exception ex) {
@@ -767,8 +823,8 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(chAnzeigen);
         }
     }
-    
-       /**
+
+    /**
      * DOCUMENT ME!
      */
     public void setMapWindow() {
@@ -796,7 +852,6 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
 
-    
     /**
      * DOCUMENT ME!
      *
@@ -824,16 +879,15 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         return getCidsBean().toString();
     }
 
-
     @Override
-    public void dispose() { 
+    public void dispose() {
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
             if (getCidsBean() != null) {
                 LOG.info("remove propchange SgkHinweis: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
             }
-        } 
+        }
         bindingGroup.unbind();
         super.dispose();
     }
@@ -868,7 +922,7 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Titel not given.", ex);
             save = false;
         }
-        
+
         // beschreibung vorhanden
         try {
             if (taBeschreibung.getText().trim().isEmpty()) {
@@ -880,7 +934,7 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Beschreibung not given.", ex);
             save = false;
         }
-        
+
         // herkunft vorhanden
         try {
             if (taHerkunft.getText().trim().isEmpty()) {
@@ -892,7 +946,7 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("herkunft not given.", ex);
             save = false;
         }
-        
+
         // Status muss angegeben werden
         try {
             if (getCidsBean().getProperty(FIELD__STATUS) == null) {
@@ -900,9 +954,9 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
                 errorMessage.append(NbBundle.getMessage(SgkHinweisEditor.class, BUNDLE_NOSTATUS));
                 save = false;
             } else {
-                //wenn dann auch datum
-                String schluessel = getCidsBean().getProperty(FIELD__STATUS_KEY).toString();
-                if (STATUS_LIST.contains(schluessel)){
+                // wenn dann auch datum
+                final String schluessel = getCidsBean().getProperty(FIELD__STATUS_KEY).toString();
+                if (STATUS_LIST.contains(schluessel)) {
                     if (getCidsBean().getProperty(FIELD__BDATUM) == null) {
                         LOG.warn("No bearbeitungsdatum specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(SgkHinweisEditor.class, BUNDLE_NOBDATUM));
@@ -914,7 +968,7 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Status not given.", ex);
             save = false;
         }
-            
+
         // Kategorie Herkunft muss angegeben werden
         try {
             if (getCidsBean().getProperty(FIELD__KATHER) == null) {
@@ -926,7 +980,7 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Kategorie Herkunft not given.", ex);
             save = false;
         }
-           
+
         // Meldungsdatum muss angegeben werden
         try {
             if (getCidsBean().getProperty(FIELD__MDATUM) == null) {
@@ -938,7 +992,7 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Meldungsdatum not given.", ex);
             save = false;
         }
-            
+
         // Kategorie muss angegeben werden
         try {
             if (getCidsBean().getProperty(FIELD__KATEGORIE) == null) {
@@ -958,19 +1012,16 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
                 errorMessage.append(NbBundle.getMessage(SgkHinweisEditor.class, BUNDLE_NOGEOM));
                 save = false;
             } /*else {
-                final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOREFERENZ);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(SgkHinweisEditor.class, BUNDLE_WRONGGEOM));
-                    save = false;
-                }
-            }*/
+               * final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOREFERENZ); if
+               * (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
+               * LOG.warn("Wrong geom specified. Skip persisting.");
+               * errorMessage.append(NbBundle.getMessage(SgkHinweisEditor.class, BUNDLE_WRONGGEOM));   save = false;
+               * }}*/
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;
         }
-        
-        
+
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(SgkHinweisEditor.class, BUNDLE_PANE_PREFIX)
@@ -981,7 +1032,7 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
         }
         return save;
     }
-    
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1063,5 +1114,4 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             super(new String[] { "Die Daten bitte zuweisen......" });
         }
     }
-
 }
