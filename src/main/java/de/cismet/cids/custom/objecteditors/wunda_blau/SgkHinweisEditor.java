@@ -48,7 +48,6 @@ import javax.swing.text.DefaultFormatter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.SpstConfProperties;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
@@ -775,12 +774,6 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
     public void setMapWindow() {
         final CidsBean cb = getCidsBean();
         try {
-            String mapUrl = null;
-            try {
-                mapUrl = SpstConfProperties.getInstance().getUrlKarte();
-            } catch (final Exception ex) {
-                LOG.warn("Get no conf properties.", ex);
-            }
             if (cb.getProperty(FIELD__GEOREFERENZ) != null) {
                 panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, 20.0);
             } else {
