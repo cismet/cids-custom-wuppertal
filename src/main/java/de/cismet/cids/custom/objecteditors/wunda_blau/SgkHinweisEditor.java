@@ -754,6 +754,8 @@ public class SgkHinweisEditor extends DefaultCustomObjectEditor implements CidsB
             lblGeom.setVisible(isEditor());
             RendererTools.makeReadOnly(cbGeom);
             RendererTools.makeReadOnly(txtTitel);
+            RendererTools.makeReadOnly(dcMeldungsdatum);
+            RendererTools.makeReadOnly(cbKategorie);
             RendererTools.makeReadOnly(taBeschreibung);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(taHerkunft);
