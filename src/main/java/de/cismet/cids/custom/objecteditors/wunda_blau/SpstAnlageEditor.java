@@ -13,12 +13,16 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
-import Sirius.server.middleware.types.MetaClass;
 
+import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.AutoBinding;
@@ -42,12 +46,17 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.text.DecimalFormat;
+
 import java.util.MissingResourceException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 import javax.swing.JList;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.DefaultFormatter;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -63,14 +72,15 @@ import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.SaveVetoable;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
-
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -80,12 +90,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.text.DecimalFormat;
-import java.util.concurrent.ExecutionException;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
-import lombok.Getter;
-import lombok.Setter;
 /**
  * DOCUMENT ME!
  *
@@ -97,7 +101,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     RequestsFullSizeComponent,
     PropertyChangeListener {
 
-    //~ Static fields/initializers --------------------------------------------- 
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final MetaClass MC__ART;
 
     static {
@@ -116,27 +121,26 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
 
-
     private static final Logger LOG = Logger.getLogger(SpstAnlageEditor.class);
 
-    public static final String FIELD__NAME = "name";                                        
-    public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel"; 
-    public static final String FIELD__STRASSE = "fk_strasse";                                  
-    public static final String FIELD__STRASSE_GEOREFERENZ = "fk_strasse.bsa_bbox";                             
-    public static final String FIELD__HNR = "fk_adresse";                                
-    public static final String FIELD__HNR_GEOREFERENZ = "fk_adresse.umschreibendes_rechteck";                                   
-    public static final String FIELD__HAUSNUMMER = "hausnummer";                            
-    public static final String FIELD__ID = "id";                              
-    public static final String FIELD__VEROEFFENTLICHT = "to_publish";                              
-    public static final String FIELD__UEBERPRUEFT = "ueberprueft";                              
-    public static final String FIELD__ORT = "ort";                                
-    public static final String FIELD__PLZ = "plz";                                            
-    public static final String FIELD__GEOREFERENZ = "fk_geom";                            
-    public static final String FIELD__ART = "fk_art";                           
-    public static final String FIELD__STRASSE_NAME = "name";                                // strasse
-    public static final String FIELD__STRASSE_KEY = "strassenschluessel";                   // strasse
-    public static final String FIELD__GEO_FIELD = "geo_field";                              // geom
-    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";         // geom.geo_field
+    public static final String FIELD__NAME = "name";
+    public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel";
+    public static final String FIELD__STRASSE = "fk_strasse";
+    public static final String FIELD__STRASSE_GEOREFERENZ = "fk_strasse.bsa_bbox";
+    public static final String FIELD__HNR = "fk_adresse";
+    public static final String FIELD__HNR_GEOREFERENZ = "fk_adresse.umschreibendes_rechteck";
+    public static final String FIELD__HAUSNUMMER = "hausnummer";
+    public static final String FIELD__ID = "id";
+    public static final String FIELD__VEROEFFENTLICHT = "to_publish";
+    public static final String FIELD__UEBERPRUEFT = "ueberprueft";
+    public static final String FIELD__ORT = "ort";
+    public static final String FIELD__PLZ = "plz";
+    public static final String FIELD__GEOREFERENZ = "fk_geom";
+    public static final String FIELD__ART = "fk_art";
+    public static final String FIELD__STRASSE_NAME = "name";                        // strasse
+    public static final String FIELD__STRASSE_KEY = "strassenschluessel";           // strasse
+    public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
+    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // geom.geo_field
     public static final String TABLE_NAME = "spst_anlage";
     public static final String TABLE_GEOM = "geom";
 
@@ -153,11 +157,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_SUFFIX = "SpstAnlageEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "SpstAnlageEditor.isOkForSaving().JOptionPane.title";
     private static final String TITLE_NEW_ANLAGE = "eine neue Sportanlage anlegen...";
-    
 
-    //~ Enums ------------------------------------------------------------------
-
-   
     //~ Instance fields --------------------------------------------------------
 
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
@@ -176,6 +176,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
             }
         };
+
     private final boolean editor;
     private SwingWorker worker_geom;
     @Getter @Setter private Boolean geomOkay = false;
@@ -236,7 +237,6 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Methods ----------------------------------------------------------------
 
-
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
@@ -262,19 +262,18 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         lblPlz = new JLabel();
         ftxtPlz = new JFormattedTextField();
         lblGeom = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class });
         }
         lblStrasse = new JLabel();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblHnr = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbHNr = new FastBindableReferenceCombo(
-                hnrSearch,
-                hnrSearch.getRepresentationPattern(),
-                hnrSearch.getRepresentationFields()
-            );
+                    hnrSearch,
+                    hnrSearch.getRepresentationPattern(),
+                    hnrSearch.getRepresentationFields());
         }
         lblName = new JLabel();
         txtName = new JTextField();
@@ -285,7 +284,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         taBemerkung = new JTextArea();
         panFiller = new JPanel();
         cbStrasse = new FastBindableReferenceCombo();
-        if (!isEditor()){
+        if (!isEditor()) {
             lblHNrRenderer = new JLabel();
         }
         lblArt = new JLabel();
@@ -324,7 +323,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         ftxtPlz.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#####"))));
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.plz}"), ftxtPlz, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.plz}"),
+                ftxtPlz,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -347,17 +351,21 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()){
-            if (editor){
+        if (isEditor()) {
+            if (editor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 7;
@@ -397,17 +405,21 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHnr, gridBagConstraints);
 
-        if (isEditor()){
+        if (isEditor()) {
             cbHNr.setMaximumRowCount(20);
             cbHNr.setEnabled(false);
             cbHNr.setMinimumSize(new Dimension(100, 19));
             cbHNr.setPreferredSize(new Dimension(100, 19));
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_adresse}"),
+                    cbHNr,
+                    BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 4;
             gridBagConstraints.gridy = 2;
@@ -427,7 +439,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -473,7 +490,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -504,14 +526,16 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -522,14 +546,21 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         cbStrasse.setModel(new LoadModelCb());
         cbStrasse.setNullable(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_strasse}"),
+                cbStrasse,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbStrasse.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbStrasseActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    cbStrasseActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -539,14 +570,18 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(cbStrasse, gridBagConstraints);
 
-        if (!isEditor()){
+        if (!isEditor()) {
             lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_adresse.hausnummer}"),
+                    lblHNrRenderer,
+                    BeanProperty.create("text"));
             bindingGroup.addBinding(binding);
-
         }
-        if (!isEditor()){
+        if (!isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 4;
             gridBagConstraints.gridy = 2;
@@ -581,7 +616,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         chUeberprueft.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ueberprueft}"), chUeberprueft, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ueberprueft}"),
+                chUeberprueft,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -607,7 +647,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
 
         chVeroeffentlicht.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.to_publish}"), chVeroeffentlicht, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.to_publish}"),
+                chVeroeffentlicht,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -624,7 +669,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         cbArt.setMaximumRowCount(15);
         cbArt.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArt, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_art}"),
+                cbArt,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -647,7 +697,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblOrt, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ort}"), txtOrt, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ort}"),
+                txtOrt,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -719,25 +774,29 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
         if (isEditor() && (getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
         }
-    }//GEN-LAST:event_cbStrasseActionPerformed
+    }                                                              //GEN-LAST:event_cbStrasseActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isEditor() {
         return this.editor;
     }
-
 
     /**
      * DOCUMENT ME!
@@ -795,12 +854,12 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             }
             setTitle(getTitle());
             try {
-                if (getCidsBean().getPrimaryKeyValue() == -1){
+                if (getCidsBean().getPrimaryKeyValue() == -1) {
                     getCidsBean().setProperty(FIELD__VEROEFFENTLICHT, false);
                     getCidsBean().setProperty(FIELD__UEBERPRUEFT, false);
                     getCidsBean().setProperty(FIELD__ORT, "Wuppertal");
                 }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 LOG.error("default values not set", ex);
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
@@ -827,8 +886,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(chVeroeffentlicht);
         }
     }
-    
-       /**
+
+    /**
      * DOCUMENT ME!
      */
     public void setMapWindow() {
@@ -862,7 +921,6 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
 
-    
     /**
      * DOCUMENT ME!
      *
@@ -894,9 +952,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
 
-
     @Override
-    public void dispose() { 
+    public void dispose() {
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
             cbHNr.removeAll();
@@ -905,7 +962,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 getCidsBean().removePropertyChangeListener(this);
             }
             cbHNr.removeActionListener(hnrActionListener);
-        } 
+        }
         bindingGroup.unbind();
         super.dispose();
     }
@@ -947,19 +1004,19 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Name not given.", ex);
             save = false;
         }
-        
+
         // Art muss angegeben werden
-            try {
-                if (getCidsBean().getProperty(FIELD__ART) == null) {
-                    LOG.warn("No art specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_NOART));
-                    save = false;
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("Art not given.", ex);
+        try {
+            if (getCidsBean().getProperty(FIELD__ART) == null) {
+                LOG.warn("No art specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_NOART));
                 save = false;
             }
-            
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Art not given.", ex);
+            save = false;
+        }
+
         // Geom muss okay sein
         try {
             if (!getGeomOkay()) {
@@ -970,8 +1027,8 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         } catch (final MissingResourceException ex) {
             LOG.warn("geom not okay.", ex);
             save = false;
-        }    
-            
+        }
+
         // Straße muss angegeben werden
         try {
             if (cbStrasse.getSelectedItem() == null) {
@@ -1002,7 +1059,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Geom not given.", ex);
             save = false;
         }
-        
+
         // ort vorhanden
         try {
             if (txtOrt.getText().trim().isEmpty()) {
@@ -1014,7 +1071,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Ort not given.", ex);
             save = false;
         }
-        
+
         // name vorhanden
         try {
             if (ftxtPlz.getText().trim().isEmpty()) {
@@ -1022,7 +1079,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                 errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_NOPLZ));
                 save = false;
             } else {
-                if (getCidsBean().getProperty(FIELD__PLZ).toString().length() != 5){
+                if (getCidsBean().getProperty(FIELD__PLZ).toString().length() != 5) {
                     LOG.warn("Wrong plz specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_WRONGPLZ));
                     save = false;
@@ -1032,7 +1089,7 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("PLZ not given.", ex);
             save = false;
         }
-        
+
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(SpstAnlageEditor.class, BUNDLE_PANE_PREFIX)
@@ -1043,11 +1100,25 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
         }
         return save;
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   midpoint  DOCUMENT ME!
+     * @param   geomArea  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean checkPointInsidePolygon(final Point midpoint, final Geometry geomArea) {
         return midpoint.intersects(geomArea);
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  adressGeom  DOCUMENT ME!
+     * @param  sportPoint  DOCUMENT ME!
+     */
     private void checkNearBy(final Geometry adressGeom, final Point sportPoint) {
         final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 
@@ -1066,27 +1137,28 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
                         }
                     } catch (InterruptedException | ExecutionException ex) {
                         LOG.warn("problem in Worker: check NearBy.", ex);
-                    }         
-                }             
-            };              
+                    }
+                }
+            };
 
         if (worker_geom != null) {
             worker_geom.cancel(true);
         }
         worker_geom = worker;
         worker_geom.execute();
-               
     }
 
-    
-    private void checkGeom(){
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkGeom() {
         Point sportPoint = null;
         Geometry adressGeom = null;
         Double bufferHnr = GEOM_CHECK_BUFFER_POINT;
         Double bufferStr = GEOM_CHECK_BUFFER_AREA;
         try {
-            bufferHnr= SpstConfProperties.getInstance().getBufferHnr();
-            bufferStr= SpstConfProperties.getInstance().getBufferStr();
+            bufferHnr = SpstConfProperties.getInstance().getBufferHnr();
+            bufferStr = SpstConfProperties.getInstance().getBufferStr();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
@@ -1104,13 +1176,13 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             if (getCidsBean().getProperty(FIELD__HNR) != null) {
                 final CidsBean geom_hnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR_GEOREFERENZ);
                 adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(bufferHnr);
-            } else{
+            } else {
                 if (getCidsBean().getProperty(FIELD__STRASSE) != null) {
                     final CidsBean geom_hnr = (CidsBean)getCidsBean().getProperty(FIELD__STRASSE_GEOREFERENZ);
                     adressGeom = ((Geometry)(geom_hnr.getProperty(FIELD__GEO_FIELD))).buffer(bufferStr);
                 }
             }
-            if (sportPoint != null && adressGeom != null){
+            if ((sportPoint != null) && (adressGeom != null)) {
                 checkNearBy(adressGeom, sportPoint);
             } else {
                 setGeomOkay(false);
@@ -1137,8 +1209,6 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             }.execute();
     }
 
-
-    
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1220,5 +1290,4 @@ public class SpstAnlageEditor extends DefaultCustomObjectEditor implements CidsB
             super(new String[] { "Die Daten bitte zuweisen......" });
         }
     }
-
 }
