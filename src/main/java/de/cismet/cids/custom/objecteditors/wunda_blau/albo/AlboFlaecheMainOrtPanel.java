@@ -18,10 +18,10 @@ import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Polygon;
 
 import org.jdesktop.beansbinding.BindingGroup;
-
-import java.awt.Color;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -90,6 +90,11 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     @Override
     protected void initGui() {
         initComponents();
+
+        if (isEditable()) {
+            ((DefaultCismapGeometryComboBoxEditor)jComboBox31).setAllowedGeometryTypes(
+                new Class[] { Polygon.class, MultiPolygon.class });
+        }
     }
 
     /**

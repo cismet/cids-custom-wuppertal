@@ -19,7 +19,9 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
@@ -769,12 +771,76 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         jComboBox27.setSelectedItem(null);
-        ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen", getConnectionContext());
+        final ComboBoxFilterDialogEnabledFilter filter = new ComboBoxFilterDialogEnabledFilter() {
+
+//                Map<String, CidsBean> beanMap = new HashMap<>();
+//
+//                {
+//                    for (int i = 0; i < jComboBox27.getModel().getSize(); ++i) {
+//                        final Object bean = jComboBox27.getModel().getElementAt(i);
+//
+//                        if (bean instanceof CidsBean) {
+//                            beanMap.put(bean.toString(), (CidsBean)bean);
+//                        }
+//                    }
+//                }
+
+                @Override
+                public boolean isEnabled(final Object o, final int row) {
+                    if (row == -1) {
+                        return true;
+                    }
+//                    final CidsBean bean = beanMap.get(o);
+                    final Object bean = jComboBox27.getModel().getElementAt(row);
+
+                    if (bean instanceof CidsBean) {
+                        final Object schluessel = ((CidsBean)bean).getProperty("fk_erhebungsklasse.schluessel");
+
+                        return (schluessel == null) || (!schluessel.equals("0") && !schluessel.equals("4"));
+                    }
+//                    if (bean != null) {
+//                        final Object schluessel = bean.getProperty("fk_erhebungsklasse.schluessel");
+//
+//                        return (schluessel == null) || (!schluessel.equals("0") && !schluessel.equals("4"));
+//                    }
+
+                    return true;
+                }
+
+                @Override
+                public String getTooltip(final Object o, final int row) {
+                    if (row == -1) {
+                        return "";
+                    }
+                    final Object bean = jComboBox27.getModel().getElementAt(row);
+
+                    if (bean instanceof CidsBean) {
+                        final Object schluessel = ((CidsBean)bean).getProperty("fk_erhebungsklasse.schluessel");
+
+                        if ((schluessel != null) && (schluessel.equals("0") || schluessel.equals("4"))) {
+                            return "Wirtschaftszweig " + String.valueOf(schluessel) + " ist nicht erlaubt";
+                        }
+                    }
+
+//                    final CidsBean bean = beanMap.get(o);
+
+//                    if (bean != null) {
+//                        final Object schluessel = bean.getProperty("fk_erhebungsklasse.schluessel");
+//
+//                        if ((schluessel != null) && (schluessel.equals("0") || schluessel.equals("4"))) {
+//                            return "Wirtschaftszweig " + String.valueOf(schluessel) + " ist nicht erlaubt";
+//                        }
+//                    }
+
+                    return "";
+                }
+            };
+        ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen", filter, getConnectionContext());
         final CidsBean selected = (CidsBean)jComboBox27.getSelectedItem();
         if (selected != null) {
             ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).add(selected);
         }
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    } //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
