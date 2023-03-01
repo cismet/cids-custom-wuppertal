@@ -9,7 +9,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.KlimarouteEditor;
+import de.cismet.cids.custom.objecteditors.wunda_blau.KlimastoppZwischenstoppEditor;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -22,14 +22,14 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class KlimarouteRenderer extends KlimarouteEditor {
+public class KlimastoppZwischenstoppRenderer extends KlimastoppZwischenstoppEditor {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new KlimarouteRenderer object.
+     * Creates a new KlimastoppZwischenstoppRenderer object.
      */
-    public KlimarouteRenderer() {
+    public KlimastoppZwischenstoppRenderer() {
         super(false);
     }
 
@@ -51,7 +51,7 @@ public class KlimarouteRenderer extends KlimarouteEditor {
             "WUNDA_BLAU",
             null,
             false,
-            "klimaroute",
+            "klimastopp_zwischenstopp",
             1,
             1280,
             1024);
