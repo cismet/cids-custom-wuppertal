@@ -117,7 +117,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Landesregistrier-Nr.:"/>
+                <Property name="text" type="java.lang.String" value="Hauptnr.:"/>
                 <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
               </Properties>
               <Constraints>
@@ -157,7 +157,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Geodaten-ID:"/>
+                <Property name="text" type="java.lang.String" value="FISAlBo ID:"/>
                 <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
               </Properties>
               <Constraints>
@@ -181,7 +181,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel10">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Lfd. Nummer:"/>
+                <Property name="text" type="java.lang.String" value="Haupt-/Teilfläche:"/>
                 <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
               </Properties>
               <Constraints>
