@@ -18,6 +18,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import org.openide.util.NbBundle;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -817,8 +819,14 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
                     if (bean instanceof CidsBean) {
                         final Object schluessel = ((CidsBean)bean).getProperty("fk_erhebungsklasse.schluessel");
 
-                        if ((schluessel != null) && (schluessel.equals("0") || schluessel.equals("4"))) {
-                            return "Wirtschaftszweig " + String.valueOf(schluessel) + " ist nicht erlaubt";
+                        if ((schluessel != null) && (schluessel.equals("0"))) {
+                            return NbBundle.getMessage(
+                                    AlboFlaecheMainStandortPanel.class,
+                                    "AlboFlaecheMainStandortPanel.getTooltip().wz0");
+                        } else if ((schluessel != null) && (schluessel.equals("4"))) {
+                            return NbBundle.getMessage(
+                                    AlboFlaecheMainStandortPanel.class,
+                                    "AlboFlaecheMainStandortPanel.getTooltip().wz4");
                         }
                     }
 
