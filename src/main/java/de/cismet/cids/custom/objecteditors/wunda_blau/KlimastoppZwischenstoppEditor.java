@@ -94,12 +94,12 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
     public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
 
-    public static final String FIELD__NAME = "name";                             // klimastopp
-    public static final String FIELD__ID = "id";                                 // klimastopp
-    public static final String FIELD__TOPUBLISH = "to_publish";                  // klimastopp
-    public static final String FIELD__DESC = "beschreibung";                     // klimastopp
-    public static final String FIELD__GEOM = "fk_geom";                          // klimastopp
-    public static final String FIELD__GEO_FIELD = "geo_field";                   // geom
+    public static final String FIELD__NAME = "name";                                // klimastopp
+    public static final String FIELD__ID = "id";                                    // klimastopp
+    public static final String FIELD__TOPUBLISH = "to_publish";                     // klimastopp
+    public static final String FIELD__DESC = "beschreibung";                        // klimastopp
+    public static final String FIELD__GEOM = "fk_geom";                             // klimastopp
+    public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // klimastopp.geom
 
     public static final String TABLE_NAME = "klimastopp_zwischenstopp";
@@ -109,13 +109,14 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
     public static final String BUNDLE_NODESC = "KlimastoppZwischenstoppEditor.isOkForSaving().noBeschreibung";
     public static final String BUNDLE_WRONGGEOM = "KlimastoppZwischenstoppEditor.isOkForSaving().wrongGeom";
     public static final String BUNDLE_NOGEOM = "KlimastoppZwischenstoppEditor.isOkForSaving().noGeom";
-    public static final String BUNDLE_PANE_PREFIX = "KlimastoppZwischenstoppEditor.isOkForSaving().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "KlimastoppZwischenstoppEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX =
+        "KlimastoppZwischenstoppEditor.isOkForSaving().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "KlimastoppZwischenstoppEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "KlimastoppZwischenstoppEditor.isOkForSaving().JOptionPane.title";
     private static final String TITLE_NEW_KLIMASTOPP = "einen neuen Klimastopp anlegen...";
 
     //~ Instance fields --------------------------------------------------------
-
 
     /** DOCUMENT ME! */
     private final boolean editor;
@@ -191,7 +192,7 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
         lblName = new JLabel();
         lblToPublish = new JLabel();
         lblGeom = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class });
         }
@@ -212,14 +213,12 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -244,7 +243,12 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
         panLinks.setOpaque(false);
         panLinks.setLayout(new GridBagLayout());
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -290,17 +294,21 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
         gridBagConstraints.insets = new Insets(2, 10, 2, 5);
         panLinks.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()){
-            if (editor){
+        if (isEditor()) {
+            if (editor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 1;
@@ -313,7 +321,12 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
 
         chToPublish.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.to_publish}"), chToPublish, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.to_publish}"),
+                chToPublish,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -335,7 +348,12 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
         taBeschreibung.setRows(2);
         taBeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibung.setViewportView(taBeschreibung);
@@ -474,7 +492,7 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -663,7 +681,7 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
                     errorMessage.append(NbBundle.getMessage(KlimastoppZwischenstoppEditor.class, BUNDLE_WRONGGEOM));
                     save = false;
                 }
-            } else{
+            } else {
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(KlimastoppZwischenstoppEditor.class, BUNDLE_NOGEOM));
                 save = false;

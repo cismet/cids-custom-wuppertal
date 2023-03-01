@@ -588,6 +588,7 @@ public class Oab_projektEditor extends AbstractCidsBeanRenderer implements Reque
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        oab_zustand_massnahmeEditor.initWithConnectionContext(connectionContext);
         lstConditionsMeasures.addListSelectionListener(WeakListeners.create(
                 ListSelectionListener.class,
                 condMeasSelL,
