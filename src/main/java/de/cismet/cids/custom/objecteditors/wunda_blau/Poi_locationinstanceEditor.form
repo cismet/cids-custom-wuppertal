@@ -452,6 +452,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtFax">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fax}" target="txtFax" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -466,6 +469,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtStrasse">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.strasse}" target="txtStrasse" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -480,6 +486,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtStadt">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.stadt}" target="txtStadt" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -494,6 +503,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtPLZ">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.plz}" target="txtPLZ" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -508,6 +520,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtTelefon">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.telefon}" target="txtTelefon" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -522,6 +537,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtEmail">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.email}" target="txtEmail" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -556,6 +574,7 @@
                     <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="4"/>
                     <Property name="wrapStyleWord" type="boolean" value="true"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <BindingProperties>
                     <BindingProperty name="text" source="Form" sourcePath="${cidsBean.info}" target="txtaInfo" targetPath="text" updateStrategy="0" immediately="false">
@@ -568,6 +587,9 @@
               </SubComponents>
             </Container>
             <Component class="javax.swing.JTextField" name="txtUrl">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.url}" target="txtUrl" targetPath="text" updateStrategy="0" immediately="false"/>
               </BindingProperties>
@@ -591,6 +613,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtBezeichnung">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.geographicidentifier}" target="txtBezeichnung" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -647,6 +672,8 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="lightWeightPopupEnabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.pos}" target="cbGeomPoint" targetPath="selectedItem" updateStrategy="0" immediately="false">
@@ -669,6 +696,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.geom_area}" target="cbGeomArea" targetPath="selectedItem" updateStrategy="0" immediately="false">
@@ -701,6 +729,7 @@
             </Component>
             <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="cbInfoArt">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 20]"/>
                 </Property>
@@ -737,6 +766,7 @@
                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="PoiLocationsinstanceEditor.btnCreateAreaFromPoinr.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusPainted" type="boolean" value="false"/>
               </Properties>
               <Events>
@@ -766,6 +796,7 @@
                 <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
                   <Format format="****" subtype="-1" type="5"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="value" source="Form" sourcePath="${cidsBean.wup_live_id}" target="jFormattedTextField1" targetPath="value" updateStrategy="0" immediately="false">
@@ -829,6 +860,7 @@
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="1"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <BindingProperties>
                     <BindingProperty name="text" source="Form" sourcePath="${cidsBean.foto}" target="txtaImageUrl" targetPath="text" updateStrategy="0" immediately="false"/>
@@ -869,6 +901,7 @@
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="1"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <BindingProperties>
                     <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fotostrecke}" target="txtaWebsiteUrl" targetPath="text" updateStrategy="0" immediately="false"/>
@@ -890,6 +923,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtAuthor">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.urheber_foto}" target="txtAuthor" targetPath="text" updateStrategy="0" immediately="false"/>
               </BindingProperties>
@@ -947,6 +983,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_copyright}" target="cbCopy" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
@@ -1022,6 +1059,7 @@
                       <StringArray count="0"/>
                     </Property>
                     <Property name="selectionMode" type="int" value="0"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="visibleRowCount" type="int" value="6"/>
                   </Properties>
                   <BindingProperties>
@@ -1047,6 +1085,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddThemaActionPerformed"/>
@@ -1062,6 +1101,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveThemaActionPerformed"/>
@@ -1105,6 +1145,7 @@
                       <StringArray count="0"/>
                     </Property>
                     <Property name="selectionMode" type="int" value="0"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="visibleRowCount" type="int" value="6"/>
                   </Properties>
                   <BindingProperties>
@@ -1130,6 +1171,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddVeranstaltungsartActionPerformed"/>
@@ -1145,6 +1187,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveVeranstaltungsartActionPerformed"/>
@@ -1172,6 +1215,7 @@
             </Component>
             <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="cbMainLocationType">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 20]"/>
                 </Property>
@@ -1242,6 +1286,7 @@
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                       <StringArray count="0"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="visibleRowCount" type="int" value="6"/>
                   </Properties>
                   <BindingProperties>
@@ -1267,6 +1312,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddZusNamenActionPerformed"/>
@@ -1282,6 +1328,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"/>
                     </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveZusNamenActionPerformed"/>
@@ -1312,6 +1359,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.signatur}" target="cbSignatur" targetPath="selectedItem" updateStrategy="0" immediately="false">
@@ -1348,6 +1396,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JFormattedTextField" name="txtFarbe">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="value" source="Form" sourcePath="${cidsBean.color}" target="txtFarbe" targetPath="value" updateStrategy="0" immediately="false"/>
               </BindingProperties>
@@ -1376,6 +1427,7 @@
             <Component class="javax.swing.JCheckBox" name="chkVeroeffentlicht">
               <Properties>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.to_publish}" target="chkVeroeffentlicht" targetPath="selected" updateStrategy="0" immediately="false">
@@ -1407,6 +1459,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_prio_rvr}" target="cbRvrPrio" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
@@ -1434,6 +1487,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JComboBox" name="cbRvrKat">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_kategorie}" target="cbRvrKat" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
@@ -1503,6 +1559,9 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JTextField" name="txtKeyUrl">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.keyurl}" target="txtKeyUrl" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
@@ -1536,6 +1595,7 @@
             <Component class="javax.swing.JCheckBox" name="chkKeyPublish">
               <Properties>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.key_publish}" target="chkKeyPublish" targetPath="selected" updateStrategy="0" immediately="false"/>
@@ -1562,6 +1622,7 @@
             <Component class="javax.swing.JCheckBox" name="chkToKlima">
               <Properties>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.to_klima}" target="chkToKlima" targetPath="selected" updateStrategy="0" immediately="false">
