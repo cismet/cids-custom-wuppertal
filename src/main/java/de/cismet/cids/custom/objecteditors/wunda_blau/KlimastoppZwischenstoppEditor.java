@@ -529,7 +529,13 @@ public class KlimastoppZwischenstoppEditor extends DefaultCustomObjectEditor imp
                 getConnectionContext());
             setMapWindow();
             bindingGroup.bind();
-            getCidsBean().setProperty(FIELD__TOPUBLISH, false);
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    getCidsBean().setProperty(FIELD__TOPUBLISH, false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set default values", e);
+                }
+            }
             setTitle(getTitle());
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
