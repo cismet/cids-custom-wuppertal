@@ -1958,6 +1958,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.key_publish}"),
                 chkKeyPublish,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2029,16 +2031,17 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
             final CidsBean prioRvrBean = (CidsBean)cidsBean.getProperty("fk_prio_rvr");
             if (prioRvrBean == null) {
-                errorMessage.append("Die RVR-Priorität wurde nicht ausgewählt (Pflichtfeld).");
+                errorMessage.append("<li>Die RVR-Priorität wurde nicht ausgewählt (Pflichtfeld).</li>");
                 save = false;
             } else if (Boolean.TRUE.equals(cidsBean.getProperty("to_publish"))
                         && "prio 0".equals((String)prioRvrBean.getProperty("schluessel"))) {
-                errorMessage.append("Die RVR-Priorität „Prio 0“ ist nur möglich, wenn das POI nicht öffentlich ist.");
+                errorMessage.append(
+                    "<li>Die RVR-Priorität „Prio 0“ ist nur möglich, wenn das POI nicht öffentlich ist.</li>");
                 save = false;
             } else if (Boolean.FALSE.equals(cidsBean.getProperty("to_publish"))
                         && !"prio 0".equals((String)prioRvrBean.getProperty("schluessel"))) {
                 errorMessage.append(
-                    "Das POI ist nicht öffentlich, daher muss die RVR-Priorität „Prio 0“ ausgewählt werden.");
+                    "<li>Das POI ist nicht öffentlich, daher muss die RVR-Priorität „Prio 0“ ausgewählt werden.</li>");
                 save = false;
             }
 
