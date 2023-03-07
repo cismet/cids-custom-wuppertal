@@ -1598,7 +1598,10 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.key_publish}" target="chkKeyPublish" targetPath="selected" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.key_publish}" target="chkKeyPublish" targetPath="selected" updateStrategy="0" immediately="false">
+                  <Property name="nullValue" type="boolean" value="false"/>
+                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                </BindingProperty>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
