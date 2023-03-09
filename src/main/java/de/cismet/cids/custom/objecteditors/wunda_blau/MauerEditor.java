@@ -35,7 +35,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 
 import java.sql.Date;
@@ -44,6 +43,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Currency;
 import java.util.HashMap;
@@ -162,6 +162,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private final ZustandOverview overview = new ZustandOverview();
 
     private boolean filterLastFromType = false;
+
+    private boolean bound = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImages;
@@ -1379,6 +1381,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(cbArtErstePruefung, gridBagConstraints);
+        cbArtErstePruefung.setNullable(true);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1445,6 +1448,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cbArtLetztePruefung.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbArtLetztePruefungActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -1452,6 +1462,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         jPanel6.add(cbArtLetztePruefung, gridBagConstraints);
+        cbArtLetztePruefung.setNullable(true);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1525,6 +1536,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         jPanel7.add(cbArtNaechstePruefung1, gridBagConstraints);
+        cbArtNaechstePruefung1.setNullable(true);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -2716,6 +2728,55 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbArtLetztePruefungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbArtLetztePruefungActionPerformed
+        final Object selection = cbArtLetztePruefung.getSelectedItem();
+        if (bound && (selection instanceof CidsBean)) {
+            CidsBean hauptpruefung = null;
+            CidsBean einfachePruefung = null;
+            for (int index = 0; index < cbArtNaechstePruefung1.getItemCount(); index++) {
+                final Object object = cbArtNaechstePruefung1.getItemAt(index);
+                if (object instanceof CidsBean) {
+                    final CidsBean cidsBean = (CidsBean)object;
+                    switch ((String)cidsBean.getProperty("name")) {
+                        case "Hauptprüfung": {
+                            hauptpruefung = cidsBean;
+                        }
+                        break;
+                        case "Einfache Prüfung": {
+                            einfachePruefung = cidsBean;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            final Calendar c = Calendar.getInstance();
+            c.setTime(new Date(System.currentTimeMillis()));
+            final int year = c.get(Calendar.YEAR);
+            c.set(year + 3, 11, 31, 23, 59, 59);
+            final java.util.Date in3Years = c.getTime();
+
+            final CidsBean cidsBean = (CidsBean)selection;
+            switch ((String)((CidsBean)selection).getProperty("name")) {
+                case "Hauptprüfung": {
+                    cbArtNaechstePruefung1.setSelectedItem(einfachePruefung);
+                    dcNaechstePruefung.setDate(in3Years);
+                }
+                break;
+                case "Einfache Prüfung": {
+                    cbArtNaechstePruefung1.setSelectedItem(hauptpruefung);
+                    dcNaechstePruefung.setDate(in3Years);
+                }
+                break;
+            }
+        }
+    } //GEN-LAST:event_cbArtLetztePruefungActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  index  DOCUMENT ME!
      * @param  link   DOCUMENT ME!
      */
@@ -2797,61 +2858,66 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        bound = false;
         bindingGroup.unbind();
-        if (cidsBean != null) {
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cidsBean,
-                getConnectionContext());
-            this.cidsBean = cidsBean;
-            final String lagebez = (String)cidsBean.getProperty("lagebezeichnung");
-            this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
-                        + ((lagebez != null) ? lagebez : "");
-            lblTitle.setText(this.title);
-            ((MassnahmenTableModel)jXTable1.getModel()).setCidsBeans(cidsBean.getBeanCollectionProperty(
-                    "n_massnahmen"));
+        try {
+            if (cidsBean != null) {
+                DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+                    bindingGroup,
+                    cidsBean,
+                    getConnectionContext());
+                this.cidsBean = cidsBean;
+                final String lagebez = (String)cidsBean.getProperty("lagebezeichnung");
+                this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
+                            + ((lagebez != null) ? lagebez : "");
+                lblTitle.setText(this.title);
+                ((MassnahmenTableModel)jXTable1.getModel()).setCidsBeans(cidsBean.getBeanCollectionProperty(
+                        "n_massnahmen"));
 
-            try {
-                final MetaClass mcZustand = CidsBean.getMetaClassFromTableName(
-                        "WUNDA_BLAU",
-                        "mauer_zustand",
-                        getConnectionContext());
-                if (cidsBean.getProperty("fk_zustand_gelaender") == null) {
-                    cidsBean.setProperty(
-                        "fk_zustand_gelaender",
-                        mcZustand.getEmptyInstance(getConnectionContext()).getBean());
+                try {
+                    final MetaClass mcZustand = CidsBean.getMetaClassFromTableName(
+                            "WUNDA_BLAU",
+                            "mauer_zustand",
+                            getConnectionContext());
+                    if (cidsBean.getProperty("fk_zustand_gelaender") == null) {
+                        cidsBean.setProperty(
+                            "fk_zustand_gelaender",
+                            mcZustand.getEmptyInstance(getConnectionContext()).getBean());
+                    }
+                    if (cidsBean.getProperty("fk_zustand_kopf") == null) {
+                        cidsBean.setProperty(
+                            "fk_zustand_kopf",
+                            mcZustand.getEmptyInstance(getConnectionContext()).getBean());
+                    }
+                    if (cidsBean.getProperty("fk_zustand_ansicht") == null) {
+                        cidsBean.setProperty(
+                            "fk_zustand_ansicht",
+                            mcZustand.getEmptyInstance(getConnectionContext()).getBean());
+                    }
+                    if (cidsBean.getProperty("fk_zustand_gruendung") == null) {
+                        cidsBean.setProperty(
+                            "fk_zustand_gruendung",
+                            mcZustand.getEmptyInstance(getConnectionContext()).getBean());
+                    }
+                    if (cidsBean.getProperty("fk_zustand_gelaende_oben") == null) {
+                        cidsBean.setProperty(
+                            "fk_zustand_gelaende_oben",
+                            mcZustand.getEmptyInstance(getConnectionContext()).getBean());
+                    }
+                    if (cidsBean.getProperty("fk_zustand_gelaende") == null) {
+                        cidsBean.setProperty(
+                            "fk_zustand_gelaende",
+                            mcZustand.getEmptyInstance(getConnectionContext()).getBean());
+                    }
+                    recalculateOverview();
+                } catch (final Exception ex) {
+                    LOG.error(ex, ex);
                 }
-                if (cidsBean.getProperty("fk_zustand_kopf") == null) {
-                    cidsBean.setProperty(
-                        "fk_zustand_kopf",
-                        mcZustand.getEmptyInstance(getConnectionContext()).getBean());
-                }
-                if (cidsBean.getProperty("fk_zustand_ansicht") == null) {
-                    cidsBean.setProperty(
-                        "fk_zustand_ansicht",
-                        mcZustand.getEmptyInstance(getConnectionContext()).getBean());
-                }
-                if (cidsBean.getProperty("fk_zustand_gruendung") == null) {
-                    cidsBean.setProperty(
-                        "fk_zustand_gruendung",
-                        mcZustand.getEmptyInstance(getConnectionContext()).getBean());
-                }
-                if (cidsBean.getProperty("fk_zustand_gelaende_oben") == null) {
-                    cidsBean.setProperty(
-                        "fk_zustand_gelaende_oben",
-                        mcZustand.getEmptyInstance(getConnectionContext()).getBean());
-                }
-                if (cidsBean.getProperty("fk_zustand_gelaende") == null) {
-                    cidsBean.setProperty(
-                        "fk_zustand_gelaende",
-                        mcZustand.getEmptyInstance(getConnectionContext()).getBean());
-                }
-                recalculateOverview();
-            } catch (final Exception ex) {
-                LOG.error(ex, ex);
             }
+            bindingGroup.bind();
+        } finally {
+            bound = true;
         }
-        bindingGroup.bind();
         jumpToTab(0, jXHyperlink7);
     }
 

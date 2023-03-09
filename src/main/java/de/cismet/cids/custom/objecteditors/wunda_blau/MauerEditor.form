@@ -1055,6 +1055,9 @@
                                   <BindingProperties>
                                     <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.art_erste_pruefung}" target="cbArtErstePruefung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                                   </BindingProperties>
+                                  <AuxValues>
+                                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="cbArtErstePruefung.setNullable(true);"/>
+                                  </AuxValues>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                       <GridBagConstraints gridX="3" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="0.0"/>
@@ -1145,6 +1148,12 @@
                                   <BindingProperties>
                                     <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.art_letzte_pruefung}" target="cbArtLetztePruefung" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                                   </BindingProperties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbArtLetztePruefungActionPerformed"/>
+                                  </Events>
+                                  <AuxValues>
+                                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="cbArtLetztePruefung.setNullable(true);"/>
+                                  </AuxValues>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                       <GridBagConstraints gridX="3" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="0.0"/>
@@ -1235,6 +1244,9 @@
                                   <BindingProperties>
                                     <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.art_naechste_pruefung}" target="cbArtNaechstePruefung1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                                   </BindingProperties>
+                                  <AuxValues>
+                                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="cbArtNaechstePruefung1.setNullable(true);"/>
+                                  </AuxValues>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                                       <GridBagConstraints gridX="3" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="0.0"/>
@@ -1381,9 +1393,9 @@
                                 <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (editable){"/>
                                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor()"/>
                                 <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (editable){&#xa;&#xa;"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (editable){"/>
                                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editable){  "/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (editable){"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
