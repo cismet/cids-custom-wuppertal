@@ -65,8 +65,6 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMauernSearchStatement;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsMauernSearchStatement.PropertyKeys;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsMauernSearchStatement.SearchMode;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -138,6 +136,10 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private de.cismet.cids.editors.DefaultBindableDateChooser dcPruefBis;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcPruefVon;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -457,6 +459,10 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jComboBox4 = new javax.swing.JComboBox<>();
         pnlButtons = new javax.swing.JPanel();
         cbMapSearch = new javax.swing.JCheckBox();
         pnlHoehe = new javax.swing.JPanel();
@@ -1175,13 +1181,13 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlPruefung.add(cbGewerkDurchge, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         pnlPruefung.add(cbGewerkDurchzu, gridBagConstraints);
 
@@ -1205,11 +1211,43 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlPruefung.add(jLabel13, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         pnlPruefung.add(filler1, gridBagConstraints);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "nicht erledigt", "erledigt" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlPruefung.add(jComboBox1, gridBagConstraints);
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "nicht erledigt", "erledigt" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlPruefung.add(jComboBox2, gridBagConstraints);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "nicht erledigt", "erledigt" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlPruefung.add(jComboBox3, gridBagConstraints);
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "nicht erledigt", "erledigt" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlPruefung.add(jComboBox4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1339,8 +1377,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      * @param  filterProps  DOCUMENT ME!
      */
     private static void appendZustandFilterProp(final JTextField textField,
-            final PropertyKeys propKey,
-            final HashMap<PropertyKeys, Object> filterProps) {
+            final CidsMauernSearchStatement.PropertyKeys propKey,
+            final HashMap<CidsMauernSearchStatement.PropertyKeys, Object> filterProps) {
         if ((textField.getText() != null) && !textField.getText().equals("")) {
             try {
                 final double hv = Double.parseDouble(textField.getText().replace(',', '.'));
@@ -1359,8 +1397,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      * @param  filterProps  DOCUMENT ME!
      */
     private static void appendMassnahmeFilterProp(final JXDatePicker datePicker,
-            final PropertyKeys propKey,
-            final HashMap<PropertyKeys, Object> filterProps) {
+            final CidsMauernSearchStatement.PropertyKeys propKey,
+            final HashMap<CidsMauernSearchStatement.PropertyKeys, Object> filterProps) {
         if (datePicker.getDate() != null) {
             final Date date = datePicker.getDate();
             filterProps.put(propKey, date);
@@ -1376,14 +1414,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      */
     private MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         Geometry geometryToSearchFor = null;
-        SearchMode mode = null;
+        CidsMauernSearchStatement.SearchMode mode = null;
         LinkedList<Integer> eigentuemer = null;
         LinkedList<Integer> lastklassen = null;
 
         if (rbAll.isSelected()) {
-            mode = SearchMode.AND_SEARCH;
+            mode = CidsMauernSearchStatement.SearchMode.AND_SEARCH;
         } else {
-            mode = SearchMode.OR_SEARCH;
+            mode = CidsMauernSearchStatement.SearchMode.OR_SEARCH;
         }
         if (geometry != null) {
             geometryToSearchFor = geometry;
@@ -1422,51 +1460,178 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             }
         }
 
-        final HashMap<PropertyKeys, Object> filterProps = new HashMap<>();
+        final HashMap<CidsMauernSearchStatement.PropertyKeys, Object> filterProps = new HashMap<>();
 
-        appendZustandFilterProp(tfHoeheVon, PropertyKeys.ZUSTAND_HOEHE_VON, filterProps);
-        appendZustandFilterProp(tfHoeheBis, PropertyKeys.ZUSTAND_HOEHE_BIS, filterProps);
-        appendZustandFilterProp(tfGelaenderVon, PropertyKeys.ZUSTAND_GELAENDER_VON, filterProps);
-        appendZustandFilterProp(tfGelaenderBis, PropertyKeys.ZUSTAND_GELAENDER_BIS, filterProps);
-        appendZustandFilterProp(tfWandkopfVon, PropertyKeys.ZUSTAND_WANDKOPF_VON, filterProps);
-        appendZustandFilterProp(tfWandkopfBis, PropertyKeys.ZUSTAND_WANDKOPF_BIS, filterProps);
-        appendZustandFilterProp(tfAnsichtVon, PropertyKeys.ZUSTAND_ANSICHT_VON, filterProps);
-        appendZustandFilterProp(tfAnsichtBis, PropertyKeys.ZUSTAND_ANSICHT_BIS, filterProps);
-        appendZustandFilterProp(tfGruendungVon, PropertyKeys.ZUSTAND_GRUENDUNG_VON, filterProps);
-        appendZustandFilterProp(tfGruendungBis, PropertyKeys.ZUSTAND_GRUENDUNG_BIS, filterProps);
-        appendZustandFilterProp(tfGelaendeObenVon, PropertyKeys.ZUSTAND_GELAENDE_OBEN_VON, filterProps);
-        appendZustandFilterProp(tfGelaendeObenBis, PropertyKeys.ZUSTAND_GELAENDE_OBEN_BIS, filterProps);
-        appendZustandFilterProp(tfGelaendeVon, PropertyKeys.ZUSTAND_GELAENDE_VON, filterProps);
-        appendZustandFilterProp(tfGelaendeBis, PropertyKeys.ZUSTAND_GELAENDE_BIS, filterProps);
-        appendZustandFilterProp(tfBausubstanzVon, PropertyKeys.ZUSTAND_BAUSUBSTANZ_VON, filterProps);
-        appendZustandFilterProp(tfBausubstanzBis, PropertyKeys.ZUSTAND_BAUSUBSTANZ_BIS, filterProps);
+        appendZustandFilterProp(tfHoeheVon, CidsMauernSearchStatement.PropertyKeys.ZUSTAND_HOEHE_VON, filterProps);
+        appendZustandFilterProp(tfHoeheBis, CidsMauernSearchStatement.PropertyKeys.ZUSTAND_HOEHE_BIS, filterProps);
+        appendZustandFilterProp(
+            tfGelaenderVon,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GELAENDER_VON,
+            filterProps);
+        appendZustandFilterProp(
+            tfGelaenderBis,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GELAENDER_BIS,
+            filterProps);
+        appendZustandFilterProp(
+            tfWandkopfVon,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_WANDKOPF_VON,
+            filterProps);
+        appendZustandFilterProp(
+            tfWandkopfBis,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_WANDKOPF_BIS,
+            filterProps);
+        appendZustandFilterProp(tfAnsichtVon, CidsMauernSearchStatement.PropertyKeys.ZUSTAND_ANSICHT_VON, filterProps);
+        appendZustandFilterProp(tfAnsichtBis, CidsMauernSearchStatement.PropertyKeys.ZUSTAND_ANSICHT_BIS, filterProps);
+        appendZustandFilterProp(
+            tfGruendungVon,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GRUENDUNG_VON,
+            filterProps);
+        appendZustandFilterProp(
+            tfGruendungBis,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GRUENDUNG_BIS,
+            filterProps);
+        appendZustandFilterProp(
+            tfGelaendeObenVon,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GELAENDE_OBEN_VON,
+            filterProps);
+        appendZustandFilterProp(
+            tfGelaendeObenBis,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GELAENDE_OBEN_BIS,
+            filterProps);
+        appendZustandFilterProp(
+            tfGelaendeVon,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GELAENDE_VON,
+            filterProps);
+        appendZustandFilterProp(
+            tfGelaendeBis,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_GELAENDE_BIS,
+            filterProps);
+        appendZustandFilterProp(
+            tfBausubstanzVon,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_BAUSUBSTANZ_VON,
+            filterProps);
+        appendZustandFilterProp(
+            tfBausubstanzBis,
+            CidsMauernSearchStatement.PropertyKeys.ZUSTAND_BAUSUBSTANZ_BIS,
+            filterProps);
 
         filterProps.put(
-            PropertyKeys.SANIERUNG,
+            CidsMauernSearchStatement.PropertyKeys.SANIERUNG,
             (cbSanierung.getSelectedItem() != null) ? ((CidsBean)cbSanierung.getSelectedItem()).getMetaObject()
                         .getId() : null);
 
-        appendMassnahmeFilterProp(dcPruefVon, PropertyKeys.MASSNAHME_PRUEFUNG_VON, filterProps);
-        appendMassnahmeFilterProp(dcPruefBis, PropertyKeys.MASSNAHME_PRUEFUNG_BIS, filterProps);
+        appendMassnahmeFilterProp(
+            dcPruefVon,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_PRUEFUNG_VON,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcPruefBis,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_PRUEFUNG_BIS,
+            filterProps);
 
-        appendMassnahmeFilterProp(dcDurchzuSanVon, PropertyKeys.MASSNAHME_SANIERUNG_GEPLANT_VON, filterProps);
-        appendMassnahmeFilterProp(dcDurchzuSanBis, PropertyKeys.MASSNAHME_SANIERUNG_GEPLANT_BIS, filterProps);
-        appendMassnahmeFilterProp(dcDurchgeSanVon, PropertyKeys.MASSNAHME_SANIERUNG_DURCHGEFUEHRT_VON, filterProps);
-        appendMassnahmeFilterProp(dcDurchgeSanBis, PropertyKeys.MASSNAHME_SANIERUNG_DURCHGEFUEHRT_BIS, filterProps);
-        appendMassnahmeFilterProp(dcBauwerksbesichtigVon, PropertyKeys.MASSNAHME_BAUWERKSBESICHTIGUNG_VON, filterProps);
-        appendMassnahmeFilterProp(dcBauwerksbesichtigBis, PropertyKeys.MASSNAHME_BAUWERKSBESICHTIGUNG_BIS, filterProps);
-        appendMassnahmeFilterProp(dcBauwerksbegehVon, PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_VON, filterProps);
-        appendMassnahmeFilterProp(dcBauwerksbegehBis, PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_BIS, filterProps);
+        appendMassnahmeFilterProp(
+            dcDurchzuSanVon,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_GEPLANT_VON,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcDurchzuSanBis,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_GEPLANT_BIS,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcDurchgeSanVon,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_DURCHGEFUEHRT_VON,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcDurchgeSanBis,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_DURCHGEFUEHRT_BIS,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcBauwerksbesichtigVon,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBESICHTIGUNG_VON,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcBauwerksbesichtigBis,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBESICHTIGUNG_BIS,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcBauwerksbegehVon,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_VON,
+            filterProps);
+        appendMassnahmeFilterProp(
+            dcBauwerksbegehBis,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_BIS,
+            filterProps);
 
         filterProps.put(
-            PropertyKeys.MASSNAHME_GEWERK_DURCHGE,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_GEWERK_DURCHGE,
             (cbGewerkDurchge.getSelectedItem() != null)
                 ? ((CidsBean)cbGewerkDurchge.getSelectedItem()).getMetaObject().getId() : null);
         filterProps.put(
-            PropertyKeys.MASSNAHME_GEWERK_DURCHZU,
+            CidsMauernSearchStatement.PropertyKeys.MASSNAHME_GEWERK_DURCHZU,
             (cbGewerkDurchzu.getSelectedItem() != null)
                 ? ((CidsBean)cbGewerkDurchzu.getSelectedItem()).getMetaObject().getId() : null);
 
+        final String selectedErledigt1 = (String)jComboBox1.getSelectedItem();
+        switch (selectedErledigt1) {
+            case "nicht erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_GEPLANT_ERLEDIGT,
+                    Boolean.FALSE);
+            }
+            break;
+            case "erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_GEPLANT_ERLEDIGT,
+                    Boolean.TRUE);
+            }
+            break;
+        }
+        final String selectedErledigt2 = (String)jComboBox2.getSelectedItem();
+        switch (selectedErledigt2) {
+            case "nicht erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_DURCHGEFUEHRT_ERLEDIGT,
+                    Boolean.FALSE);
+            }
+            break;
+            case "erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_SANIERUNG_DURCHGEFUEHRT_ERLEDIGT,
+                    Boolean.TRUE);
+            }
+            break;
+        }
+        final String selectedErledigt3 = (String)jComboBox3.getSelectedItem();
+        switch (selectedErledigt3) {
+            case "nicht erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_ERLEDIGT,
+                    Boolean.FALSE);
+            }
+            break;
+            case "erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBEGEHUNG_ERLEDIGT,
+                    Boolean.TRUE);
+            }
+            break;
+        }
+
+        final String selectedErledigt4 = (String)jComboBox4.getSelectedItem();
+        switch (selectedErledigt4) {
+            case "nicht erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBESICHTIGUNG_ERLEDIGT,
+                    Boolean.FALSE);
+            }
+            break;
+            case "erledigt": {
+                filterProps.put(
+                    CidsMauernSearchStatement.PropertyKeys.MASSNAHME_BAUWERKSBESICHTIGUNG_ERLEDIGT,
+                    Boolean.TRUE);
+            }
+            break;
+        }
         return new CidsMauernSearchStatement(
                 eigentuemer,
                 lastklassen,
