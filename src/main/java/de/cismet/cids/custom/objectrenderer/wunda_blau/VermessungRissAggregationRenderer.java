@@ -46,6 +46,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -115,6 +116,18 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final ImageIcon ICON_ERROR = new javax.swing.ImageIcon(VermessungRissAggregationRenderer.class
                     .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
 
+    private static final Class[] AGR_COMLUMN_CLASSES = new Class[] {
+            Boolean.class,
+            Integer.class,
+            String.class,
+            String.class,
+            Integer.class,
+            Integer.class,
+            String.class,
+            Boolean.class,
+            Boolean.class
+        };
+
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
             "Auswahl",
@@ -135,7 +148,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "flur",
             "blatt",
             "jahr",
-            "format",
+            "format.name",
             null,
             null
         };
@@ -196,6 +209,19 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         tblRisse.getColumnModel().getColumn(8).setCellRenderer(new PictureStateCellRenderer(true));
 
         tableComparator = new TableModelIndexConvertingToViewIndexComparator(tblRisse);
+
+        final TableColumnModel cModel = tblRisse.getColumnModel();
+        for (int i = 0; i < cModel.getColumnCount(); ++i) {
+            cModel.getColumn(i).setPreferredWidth(AGR_COMLUMN_WIDTH[i]);
+        }
+
+        final TableRowSorter tableSorter = ObjectRendererUtils.decorateTableWithSorter(tblRisse);
+        final List<RowSorter.SortKey> sortKeys = new LinkedList<>();
+        sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+        sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
+        sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING));
+        sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
+        tableSorter.setSortKeys(sortKeys);
     }
 
     /**
@@ -725,9 +751,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      * @return  DOCUMENT ME!
      */
     protected Collection<CidsBean> getSelectedVermessungsrisse() {
-        final Collection<CidsBean> result = new LinkedList<>();
         final List<Integer> selectedIndexes = new ArrayList<>();
-
         final TableModel tableModel = getTableModel();
         for (int i = 0; i < tableModel.getRowCount(); ++i) {
             final Object includedObj = tableModel.getValueAt(i, 0);
@@ -736,12 +760,10 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             }
         }
 
-        Collections.sort(selectedIndexes, tableComparator);
-
+        final Collection<CidsBean> result = new LinkedList<>();
         for (final Integer selectedIndex : selectedIndexes) {
-            result.add(cidsBeans.get(tblRisse.convertRowIndexToModel(selectedIndex)));
+            result.add(cidsBeans.get(selectedIndex));
         }
-
         return result;
     }
 
@@ -785,19 +807,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 new PictureWorker(bean, true).execute();
                 new PictureWorker(bean, false).execute();
             }
-
-            final TableColumnModel cModel = tblRisse.getColumnModel();
-            for (int i = 0; i < cModel.getColumnCount(); ++i) {
-                cModel.getColumn(i).setPreferredWidth(AGR_COMLUMN_WIDTH[i]);
-            }
-
-            final TableRowSorter tableSorter = ObjectRendererUtils.decorateTableWithSorter(tblRisse);
-            final List<RowSorter.SortKey> sortKeys = new LinkedList<>();
-            sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-            sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
-            sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING));
-            sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
-            tableSorter.setSortKeys(sortKeys);
 
             updateButtons();
         }
@@ -848,11 +857,21 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      * DOCUMENT ME!
      */
     public void clearMaps() {
-        rissCheckerMap.clear();
-        rissCheckerExceptionMap.clear();
-        ergCheckerMap.clear();
-        ergCheckerExceptionMap.clear();
-        risseSelectionMap.clear();
+        if (SwingUtilities.isEventDispatchThread()) {
+            rissCheckerMap.clear();
+            rissCheckerExceptionMap.clear();
+            ergCheckerMap.clear();
+            ergCheckerExceptionMap.clear();
+            risseSelectionMap.clear();
+        } else {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        clearMaps();
+                    }
+                });
+        }
     }
 
     /**
@@ -918,7 +937,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             mappingComponent.getFeatureCollection().addFeatures(features.values());
             mappingComponent.setAnimationDuration(500);
         } catch (Exception e) {
-            LOG.fatal(e, e);
+            LOG.error(e, e);
         }
     }
 
@@ -1038,6 +1057,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 checkerMap.put(cidsBean, get());
                 getTableModel().refresh();
             } catch (final Exception ex) {
+                LOG.error(ex, ex);
                 checkerMap.put(cidsBean, null);
                 exceptionMap.put(cidsBean, ex);
             } finally {
@@ -1045,7 +1065,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     boolean allowReport = false;
 
                     for (final Boolean value : checkerMap.values()) {
-                        if (value) {
+                        if (Boolean.TRUE.equals(value)) {
                             allowReport = true;
                             break;
                         }
@@ -1158,7 +1178,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 final boolean hasFocus,
                 final int row,
                 final int column) {
-            return new SelectionCheckBox(cidsBeans.get(tblRisse.convertRowIndexToModel(row)));
+            return new SelectionCheckBox(cidsBeans.get(tblRisse.getRowSorter().convertRowIndexToModel(row)));
         }
     }
 
@@ -1193,7 +1213,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 final boolean hasFocus,
                 final int row,
                 final int column) {
-            final CidsBean cidsBean = cidsBeans.get(tblRisse.convertRowIndexToModel(row));
+            final CidsBean cidsBean = cidsBeans.get(tblRisse.getRowSorter().convertRowIndexToModel(row));
             final Exception ex = (erg ? ergCheckerExceptionMap : rissCheckerExceptionMap).get(cidsBean);
             final Boolean status = (erg ? ergCheckerMap : rissCheckerMap).get(cidsBean);
             if (ex != null) {
@@ -1224,7 +1244,13 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          * DOCUMENT ME!
          */
         public void refresh() {
-            fireTableDataChanged();
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        fireTableDataChanged();
+                    }
+                });
         }
 
         @Override
@@ -1244,7 +1270,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         @Override
         public void setValueAt(final Object value, final int row, final int column) {
-            final CidsBean cidsBean = cidsBeans.get(tblRisse.convertRowIndexToModel(row));
+            final CidsBean cidsBean = cidsBeans.get(row);
             if (column == 0) {
                 if (value instanceof Boolean) {
                     risseSelectionMap.put(cidsBean, (Boolean)value);
@@ -1256,10 +1282,16 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         @Override
         public Object getValueAt(final int row, final int column) {
-            final CidsBean cidsBean = cidsBeans.get(tblRisse.convertRowIndexToModel(row));
+            final CidsBean cidsBean = cidsBeans.get(row);
             switch (column) {
                 case 0: {
                     return risseSelectionMap.get(cidsBean);
+                }
+                case (7): {
+                    return rissCheckerMap.get(cidsBean);
+                }
+                case (8): {
+                    return ergCheckerMap.get(cidsBean);
                 }
                 default: {
                     if ((column >= 0) && (column < AGR_PROPERTY_NAMES.length)) {
@@ -1267,12 +1299,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     } else {
                         return null;
                     }
-                }
-                case (7): {
-                    return rissCheckerMap.get(cidsBean);
-                }
-                case (8): {
-                    return ergCheckerMap.get(cidsBean);
                 }
             }
         }
@@ -1299,11 +1325,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
-            if ((columnIndex == 0) || (columnIndex == 7) || (columnIndex == 8)) {
-                return Boolean.class;
-            } else {
-                return super.getColumnClass(columnIndex);
-            }
+            return AGR_COMLUMN_CLASSES[columnIndex];
         }
     }
 }
