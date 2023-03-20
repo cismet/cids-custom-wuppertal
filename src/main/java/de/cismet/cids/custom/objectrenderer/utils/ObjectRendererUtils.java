@@ -39,6 +39,7 @@ import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -563,10 +564,9 @@ public class ObjectRendererUtils {
      * @return  DOCUMENT ME!
      */
     public static TableRowSorter<TableModel> decorateTableWithSorter(final JTable tbl) {
-        final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tbl.getModel());
-//        sorter.setSortsOnUpdates(true);
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<>(tbl.getModel());
         for (int i = 0; i < tbl.getColumnCount(); ++i) {
-            sorter.setComparator(i, AlphanumComparator.getInstance());
+            sorter.setComparator(i, Comparator.nullsLast(AlphanumComparator.getInstance()));
         }
         tbl.setRowSorter(sorter);
         tbl.getTableHeader().addMouseListener(new TableHeaderUnsortMouseAdapter(tbl));
