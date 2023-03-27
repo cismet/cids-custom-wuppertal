@@ -9,12 +9,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.wunda_blau;
+package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaObject;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -24,6 +26,8 @@ import lombok.Setter;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Binding;
+
+import org.openide.util.lookup.ServiceProvider;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -37,6 +41,7 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.wunda_blau.search.abfrage.AbstractAbfragePanel;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -49,14 +54,14 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
  *
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements ConnectionContextStore {
+@ServiceProvider(service = AbstractAbfragePanel.class)
+public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSearch.Configuration> {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -65,8 +70,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
 
     //~ Instance fields --------------------------------------------------------
 
-    final boolean editable;
-    boolean showVorgaenge = false;
+    private final boolean showVorgaenge;
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
     private final Collection<AlboFlaecheArtSearchPanel> artInfoPanels = new ArrayList<>();
@@ -125,7 +129,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      * Creates a new AlboFlaecheSearchPanel object.
      */
     public AlboFlaecheSearchPanel() {
-        this(true);
+        this(true, true);
     }
 
     /**
@@ -134,7 +138,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      * @param  editable  DOCUMENT ME!
      */
     public AlboFlaecheSearchPanel(final boolean editable) {
-        this.editable = editable;
+        this(editable, false);
     }
 
     /**
@@ -144,7 +148,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      * @param  showVorgaenge  DOCUMENT ME!
      */
     public AlboFlaecheSearchPanel(final boolean editable, final boolean showVorgaenge) {
-        this.editable = editable;
+        super(editable);
         this.showVorgaenge = showVorgaenge;
     }
 
@@ -157,16 +161,20 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
 
         initComponents();
 
+        final boolean editable = isEditable();
+
         jPanel7.setVisible(showVorgaenge);
         RendererTools.makeReadOnly(jRadioButton1, !editable);
         RendererTools.makeReadOnly(jRadioButton2, !editable);
         RendererTools.makeReadOnly(jRadioButton5, !editable);
         RendererTools.makeReadOnly(jRadioButton6, !editable);
+        RendererTools.makeReadOnly(jCheckBox1, !editable);
         RendererTools.makeReadOnly(jTextField1, !editable);
         RendererTools.makeReadOnly(jTextField2, !editable);
         RendererTools.makeReadOnly(cbFlaechenstatus, !editable);
         RendererTools.makeReadOnly(cbFlaechentyp, !editable);
         RendererTools.makeReadOnly(cbFlaechenzuordnung, !editable);
+        RendererTools.makeReadOnly(cbVorgang, !editable);
     }
 
     @Override
@@ -504,6 +512,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Unterdrückte Flächen:"));
         jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jCheckBox1.setText("unterdrückte Flächen mit einbeziehen");
@@ -630,7 +639,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel5.add(jButton3, gridBagConstraints);
-        jButton3.setVisible(editable);
+        jButton3.setVisible(isEditable());
 
         jLabel5.setText("Bedingung hinzufügen");
         jLabel5.setName("jLabel5"); // NOI18N
@@ -724,7 +733,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      * @param  evt  DOCUMENT ME!
      */
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
-        artInfoPanels.add(new AlboFlaecheArtSearchPanel(this, editable));
+        artInfoPanels.add(new AlboFlaecheArtSearchPanel(this, isEditable()));
         refreshArtInfoPanels();
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
@@ -733,6 +742,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      *
      * @return  DOCUMENT ME!
      */
+    @Override
     public AlboFlaecheSearch.Configuration createConfiguration() {
         final AlboFlaecheSearch.Configuration configuration = new AlboFlaecheSearch.Configuration();
         configuration.setSearchModeMain(jRadioButton1.isSelected() ? AlboFlaecheSearch.SearchMode.AND
@@ -799,6 +809,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
      *
      * @param  configuration  DOCUMENT ME!
      */
+    @Override
     public void initFromConfiguration(final AlboFlaecheSearch.Configuration configuration) {
         this.bean = new Bean();
         artInfoPanels.clear();
@@ -878,7 +889,7 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
 
             if (configuration.getArtInfos() != null) {
                 for (final AlboFlaecheSearch.ArtInfo artInfo : configuration.getArtInfos()) {
-                    final AlboFlaecheArtSearchPanel artInfoPanel = new AlboFlaecheArtSearchPanel(this, editable);
+                    final AlboFlaecheArtSearchPanel artInfoPanel = new AlboFlaecheArtSearchPanel(this, isEditable());
                     artInfoPanel.initFromArtInfo(artInfo);
                     artInfoPanels.add(artInfoPanel);
                 }
@@ -996,6 +1007,28 @@ public class AlboFlaecheSearchPanel extends javax.swing.JPanel implements Connec
         artInfoPanels.remove(artPanel);
 
         refreshArtInfoPanels();
+    }
+
+    @Override
+    public String getTableName() {
+        return "albo_flaeche";
+    }
+
+    @Override
+    public void initFromConfiguration(final Object configuration) {
+        initFromConfiguration((AlboFlaecheSearch.Configuration)configuration);
+    }
+
+    @Override
+    public ObjectMapper getConfigurationMapper() {
+        return AlboFlaecheSearch.OBJECT_MAPPER;
+    }
+
+    @Override
+    public AlboFlaecheSearch.Configuration readConfiguration(final String confJson) throws Exception {
+        return getConfigurationMapper().readValue(
+                confJson,
+                AlboFlaecheSearch.Configuration.class);
     }
 
     //~ Inner Classes ----------------------------------------------------------

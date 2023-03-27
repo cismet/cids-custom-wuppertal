@@ -21,16 +21,18 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.lookup.ServiceProvider;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.abfrage.AbstractAbfrageWindowSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMauernSearchStatement;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -51,8 +53,9 @@ import de.cismet.connectioncontext.ConnectionContext;
  *
  * @version  $Revision$, $Date$
  */
-@org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class MauernWindowSearch extends AbstractAbfrageWindowSearch<CidsMauernSearchStatement.Configuration>
+@ServiceProvider(service = CidsWindowSearch.class)
+public class MauernWindowSearch
+        extends AbstractAbfrageWindowSearch<MauernWindowSearchPanel, CidsMauernSearchStatement.Configuration>
         implements PropertyChangeListener,
             SearchControlListener {
 
@@ -64,8 +67,16 @@ public class MauernWindowSearch extends AbstractAbfrageWindowSearch<CidsMauernSe
 
     //~ Instance fields --------------------------------------------------------
 
-    private final MauernWindowSearchPanel searchPanel = new MauernWindowSearchPanel();
     private ImageIcon icon;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new MauernWindowSearch object.
+     */
+    public MauernWindowSearch() {
+        super(new MauernWindowSearchPanel());
+    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -107,11 +118,6 @@ public class MauernWindowSearch extends AbstractAbfrageWindowSearch<CidsMauernSe
     }
 
     @Override
-    public JPanel getSearchPanel() {
-        return searchPanel;
-    }
-
-    @Override
     public GeoSearchButton createGeoSearchButton() {
         final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
         final MauernCreateSearchGeometryListener geometryListener = new MauernCreateSearchGeometryListener(
@@ -123,11 +129,6 @@ public class MauernWindowSearch extends AbstractAbfrageWindowSearch<CidsMauernSe
                 mappingComponent,
                 null,
                 "Geo-Suche nach Stützmauern");
-    }
-
-    @Override
-    public String getTableName() {
-        return "mauer";
     }
 
     @Override
@@ -173,28 +174,8 @@ public class MauernWindowSearch extends AbstractAbfrageWindowSearch<CidsMauernSe
     }
 
     @Override
-    public void initFromConfiguration(final CidsMauernSearchStatement.Configuration configuration) {
-        ((MauernWindowSearchPanel)getSearchPanel()).initFromConfiguration(configuration);
-    }
-
-    @Override
-    public void initFromConfiguration(final Object configuration) {
-        initFromConfiguration((CidsMauernSearchStatement.Configuration)configuration);
-    }
-
-    @Override
-    public CidsMauernSearchStatement.Configuration readConfiguration(final String configuration) throws Exception {
-        return getObjectMapper().readValue(configuration, CidsMauernSearchStatement.Configuration.class);
-    }
-
-    @Override
     public MetaObjectNodeServerSearch createServerSearch(final Geometry geometry) {
-        return new CidsMauernSearchStatement(createConfiguration(), geometry);
-    }
-
-    @Override
-    public CidsMauernSearchStatement.Configuration createConfiguration() {
-        return ((MauernWindowSearchPanel)getSearchPanel()).createConfiguration();
+        return new CidsMauernSearchStatement(getSearchPanel().createConfiguration(), geometry);
     }
 
     @Override
