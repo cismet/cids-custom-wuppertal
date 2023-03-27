@@ -14,18 +14,17 @@ package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.search.CidsSearchExecutor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.vividsolutions.jts.geom.Geometry;
+
+import org.openide.util.lookup.ServiceProvider;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.util.Arrays;
 
-import javax.swing.JPanel;
-
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.abfrage.AbstractAbfrageWindowSearch;
 import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.PotenzialflaecheSearch;
 
@@ -46,17 +45,14 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-@org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class PotenzialflaechenWindowSearch extends AbstractAbfrageWindowSearch<PotenzialflaecheSearch.Configuration>
+@ServiceProvider(service = CidsWindowSearch.class)
+public class PotenzialflaechenWindowSearch
+        extends AbstractAbfrageWindowSearch<PotenzialflaechenWindowSearchPanel, PotenzialflaecheSearch.Configuration>
         implements PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String ACTION_TAG = "custom.potenzialflaeche.search@WUNDA_BLAU";
-
-    //~ Instance fields --------------------------------------------------------
-
-    private final PotenzialflaechenWindowSearchPanel searchPanel;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -64,14 +60,14 @@ public class PotenzialflaechenWindowSearch extends AbstractAbfrageWindowSearch<P
      * Creates a new PotenzialflaechenWindowSearch object.
      */
     public PotenzialflaechenWindowSearch() {
-        this.searchPanel = new PotenzialflaechenWindowSearchPanel();
+        super(new PotenzialflaechenWindowSearchPanel());
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public MetaObjectNodeServerSearch createServerSearch(final Geometry geometry) {
-        return new PotenzialflaecheSearch(searchPanel.createConfiguration(), geometry);
+        return new PotenzialflaecheSearch(getSearchPanel().createConfiguration(), geometry);
     }
 
     @Override
@@ -90,16 +86,6 @@ public class PotenzialflaechenWindowSearch extends AbstractAbfrageWindowSearch<P
     }
 
     @Override
-    public ObjectMapper getObjectMapper() {
-        return PotenzialflaecheSearch.OBJECT_MAPPER;
-    }
-
-    @Override
-    public JPanel getSearchPanel() {
-        return searchPanel;
-    }
-
-    @Override
     public GeoSearchButton createGeoSearchButton() {
         final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
         final PotenzialflaechenCreateSearchGeometryListener geometryListener =
@@ -115,11 +101,6 @@ public class PotenzialflaechenWindowSearch extends AbstractAbfrageWindowSearch<P
     }
 
     @Override
-    public String getTableName() {
-        return "pf_potenzialflaeche";
-    }
-
-    @Override
     public String getArtificialId() {
         return "pf.abfragen";
     }
@@ -127,31 +108,11 @@ public class PotenzialflaechenWindowSearch extends AbstractAbfrageWindowSearch<P
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
-        searchPanel.initWithConnectionContext(connectionContext);
-        searchPanel.setFilters(Arrays.asList(
+        getSearchPanel().initWithConnectionContext(connectionContext);
+        getSearchPanel().setFilters(Arrays.asList(
                 new PotenzialflaecheSearch.FilterInfo(
                     PotenzialflaecheReportServerAction.Property.BEZEICHNUNG,
                     "")));
-    }
-
-    @Override
-    public PotenzialflaecheSearch.Configuration createConfiguration() {
-        return searchPanel.createConfiguration();
-    }
-
-    @Override
-    public void initFromConfiguration(final PotenzialflaecheSearch.Configuration configuration) {
-        searchPanel.initFromConfiguration(configuration);
-    }
-
-    @Override
-    public void initFromConfiguration(final Object configuration) {
-        initFromConfiguration((PotenzialflaecheSearch.Configuration)configuration);
-    }
-
-    @Override
-    public PotenzialflaecheSearch.Configuration readConfiguration(final String configuration) throws Exception {
-        return getObjectMapper().readValue(configuration, PotenzialflaecheSearch.Configuration.class);
     }
 
     @Override

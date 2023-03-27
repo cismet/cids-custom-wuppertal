@@ -14,17 +14,16 @@ package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.search.CidsSearchExecutor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.openide.util.NbBundle;
+import org.openide.util.lookup.ServiceProvider;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel;
+import de.cismet.cids.custom.wunda_blau.search.abfrage.AbstractAbfrageWindowSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheSearch;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
@@ -44,17 +43,14 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-@org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class AlboFlaecheWindowSearch extends AbstractAbfrageWindowSearch<AlboFlaecheSearch.Configuration>
+@ServiceProvider(service = CidsWindowSearch.class)
+public class AlboFlaecheWindowSearch
+        extends AbstractAbfrageWindowSearch<AlboFlaecheSearchPanel, AlboFlaecheSearch.Configuration>
         implements PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String ACTION_TAG = "custom.albo.search@WUNDA_BLAU";
-
-    //~ Instance fields --------------------------------------------------------
-
-    private final AlboFlaecheSearchPanel searchPanel;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -71,15 +67,10 @@ public class AlboFlaecheWindowSearch extends AbstractAbfrageWindowSearch<AlboFla
      * @param  editable  DOCUMENT ME!
      */
     public AlboFlaecheWindowSearch(final boolean editable) {
-        this.searchPanel = new AlboFlaecheSearchPanel(editable, true);
+        super(new AlboFlaecheSearchPanel(editable, true));
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public ObjectMapper getObjectMapper() {
-        return AlboFlaecheSearch.OBJECT_MAPPER;
-    }
 
     @Override
     public boolean checkActionTag() {
@@ -87,20 +78,10 @@ public class AlboFlaecheWindowSearch extends AbstractAbfrageWindowSearch<AlboFla
     }
 
     @Override
-    public String getTableName() {
-        return "albo_flaeche";
-    }
-
-    @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
-        searchPanel.initWithConnectionContext(connectionContext);
+        getSearchPanel().initWithConnectionContext(connectionContext);
         revalidate();
-    }
-
-    @Override
-    public AlboFlaecheSearchPanel getSearchPanel() {
-        return searchPanel;
     }
 
     @Override
@@ -124,29 +105,9 @@ public class AlboFlaecheWindowSearch extends AbstractAbfrageWindowSearch<AlboFla
 
     @Override
     public MetaObjectNodeServerSearch createServerSearch(final Geometry geometry) {
-        final AlboFlaecheSearch search = new AlboFlaecheSearch(createConfiguration());
+        final AlboFlaecheSearch search = new AlboFlaecheSearch(getSearchPanel().createConfiguration());
         search.setGeometry(geometry);
         return search;
-    }
-
-    @Override
-    public AlboFlaecheSearch.Configuration createConfiguration() {
-        return searchPanel.createConfiguration();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  configuration  DOCUMENT ME!
-     */
-    @Override
-    public void initFromConfiguration(final AlboFlaecheSearch.Configuration configuration) {
-        searchPanel.initFromConfiguration(configuration);
-    }
-
-    @Override
-    public void initFromConfiguration(final Object configuration) {
-        initFromConfiguration((AlboFlaecheSearch.Configuration)configuration);
     }
 
     @Override
@@ -162,12 +123,5 @@ public class AlboFlaecheWindowSearch extends AbstractAbfrageWindowSearch<AlboFla
     @Override
     public String getName() {
         return NbBundle.getMessage(AlboFlaecheWindowSearch.class, "AlboFlaecheWindowSearch.name");
-    }
-
-    @Override
-    public AlboFlaecheSearch.Configuration readConfiguration(final String conf_json) throws Exception {
-        return getObjectMapper().readValue(
-                conf_json,
-                AlboFlaecheSearch.Configuration.class);
     }
 }
