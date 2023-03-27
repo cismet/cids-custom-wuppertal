@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.wunda_blau;
+package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.server.middleware.types.MetaClass;
 
@@ -46,7 +46,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
-import static de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel.getSchluesselBean;
+import static de.cismet.cids.custom.wunda_blau.search.AlboFlaecheSearchPanel.getSchluesselBean;
 
 /**
  * DOCUMENT ME!
