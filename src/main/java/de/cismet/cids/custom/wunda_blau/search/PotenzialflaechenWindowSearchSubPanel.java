@@ -119,10 +119,13 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                 if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
                     if (value instanceof MetaObjectNode) {
                         for (int index = 0; index < cbForeign.getModel().getSize(); index++) {
-                            final CidsBean cidsBean = (CidsBean)cbForeign.getModel().getElementAt(index);
-                            if (new MetaObjectNode(cidsBean).equals(((MetaObjectNode)value))) {
-                                cbForeign.setSelectedItem(cidsBean);
-                                break;
+                            final Object element = cbForeign.getModel().getElementAt(index);
+                            if (element instanceof CidsBean) {
+                                final CidsBean cidsBean = (CidsBean)element;
+                                if (new MetaObjectNode(cidsBean).equals(((MetaObjectNode)value))) {
+                                    cbForeign.setSelectedItem(cidsBean);
+                                    break;
+                                }
                             }
                         }
                     } else if (value instanceof Collection) {
@@ -234,6 +237,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         jCheckBox3 = new javax.swing.JCheckBox();
         jSpinner2 = new javax.swing.JSpinner();
 
+        setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
         jButton1.setIcon(new javax.swing.ImageIcon(
@@ -276,6 +280,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         add(jComboBox1, gridBagConstraints);
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.CardLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -297,6 +302,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
             });
         jPanel1.add(jTextField1, "text");
 
+        jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -334,6 +340,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
 
         jPanel1.add(jPanel3, "foreign");
 
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -389,6 +396,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                         PotenzialflaechenWindowSearchSubPanel.class,
                         "PotenzialflaechenWindowSearchSubPanel.jPanel4.AccessibleContext.accessibleName")); // NOI18N
 
+        jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(

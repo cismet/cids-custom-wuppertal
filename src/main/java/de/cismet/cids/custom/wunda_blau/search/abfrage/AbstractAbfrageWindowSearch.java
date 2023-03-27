@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.wunda_blau.search;
+package de.cismet.cids.custom.wunda_blau.search.abfrage;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.search.dynamic.SearchControlListener;
@@ -19,9 +19,9 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.vividsolutions.jts.geom.Geometry;
+
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
@@ -61,19 +61,20 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 /**
  * DOCUMENT ME!
  *
+ * @param    <C>
+ *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Configuration> extends javax.swing.JPanel
-        implements CidsWindowSearch,
-            ActionTagProtected,
-            SearchControlListener,
-            ConnectionContextStore {
+public abstract class AbstractAbfrageWindowSearch<P extends AbstractAbfragePanel, C extends StorableSearch.Configuration>
+        extends javax.swing.JPanel implements CidsWindowSearch,
+        ActionTagProtected,
+        SearchControlListener,
+        ConnectionContextStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(AbstractAbfrageWindowSearch.class);
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -85,17 +86,21 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
+    @Getter private final P searchPanel;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbAbfragen;
     private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panTitle;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlMain;
     // End of variables declaration//GEN-END:variables
@@ -104,8 +109,11 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
 
     /**
      * Creates a new AbstractAbfrageWindowSearch object.
+     *
+     * @param  searchPanel  DOCUMENT ME!
      */
-    public AbstractAbfrageWindowSearch() {
+    public AbstractAbfrageWindowSearch(final P searchPanel) {
+        this.searchPanel = searchPanel;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -115,15 +123,9 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
      *
      * @return  DOCUMENT ME!
      */
-    public abstract JPanel getSearchPanel();
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public ObjectMapper getObjectMapper() {
-        return OBJECT_MAPPER;
+    private String getTableName() {
+        final AbstractAbfragePanel searchPanel = getSearchPanel();
+        return (searchPanel != null) ? searchPanel.getTableName() : null;
     }
 
     /**
@@ -132,13 +134,6 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
      * @return  DOCUMENT ME!
      */
     public abstract GeoSearchButton createGeoSearchButton();
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public abstract String getTableName();
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
@@ -210,6 +205,12 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        panTitle = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         pnlMain = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -225,12 +226,24 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = getSearchPanel();
-        jPanel3 = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
         cbMapSearch = new javax.swing.JCheckBox();
         pnlButtons = new javax.swing.JPanel();
+
+        panTitle.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Abfrage:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panTitle.add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panTitle.add(lblTitle, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panTitle.add(filler1, gridBagConstraints);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -304,19 +317,7 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlMain.add(jPanel2, gridBagConstraints);
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(jPanel3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(filler1, gridBagConstraints);
-
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jScrollPane1.setViewportView(jPanel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -351,13 +352,6 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
         gridBagConstraints.weighty = 1.0;
         add(pnlMain, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public abstract C createConfiguration();
 
     /**
      * DOCUMENT ME!
@@ -420,7 +414,8 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
                     abfrageBean.setProperty("name", name);
                     abfrageBean.setProperty("search_name", getTableName());
                 }
-                final String conf_json = getObjectMapper().writeValueAsString(createConfiguration());
+                final String conf_json = getSearchPanel().getConfigurationMapper()
+                            .writeValueAsString(getSearchPanel().createConfiguration());
                 abfrageBean.setProperty("conf_json", conf_json);
                 final CidsBean persisted = abfrageBean.persist(getConnectionContext());
 
@@ -466,31 +461,6 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
     /**
      * DOCUMENT ME!
      *
-     * @param  configuration  DOCUMENT ME!
-     */
-    public abstract void initFromConfiguration(final C configuration);
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  configuration  DOCUMENT ME!
-     */
-    public abstract void initFromConfiguration(final Object configuration); // jalopy workaround
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   configuration  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public abstract C readConfiguration(final String configuration) throws Exception;
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param  evt  DOCUMENT ME!
      */
     private void cbAbfragenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAbfragenActionPerformed
@@ -500,12 +470,12 @@ public abstract class AbstractAbfrageWindowSearch<C extends StorableSearch.Confi
                 final CidsBean abfrageBean = (CidsBean)selected;
                 final String conf_json = (String)abfrageBean.getProperty("conf_json");
                 if (conf_json != null) {
-                    initFromConfiguration(readConfiguration(conf_json));
+                    getSearchPanel().initFromConfiguration(getSearchPanel().readConfiguration(conf_json));
                 } else {
-                    initFromConfiguration(null);
+                    getSearchPanel().initFromConfiguration(null);
                 }
             } else {
-                initFromConfiguration(null);
+                getSearchPanel().initFromConfiguration(null);
             }
         } catch (final Exception ex) {
             LOG.error(ex, ex);
