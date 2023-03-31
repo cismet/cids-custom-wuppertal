@@ -15,6 +15,10 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.localserver.attribute.MemberAttributeInfo;
+import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
@@ -23,6 +27,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -31,6 +36,7 @@ import java.awt.image.BufferedImage;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,6 +47,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -49,10 +56,16 @@ import javax.swing.table.TableColumn;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.reports.wunda_blau.MauernReportGenerator;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.search.QuerySearchResultsAction;
+
+import de.cismet.cids.server.actions.CsvExportServerAction;
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
@@ -71,6 +84,8 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -101,11 +116,95 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     private CidsBeanWrapper selectedCidsBeanWrapper;
     private MauerTableModel tableModel;
     private MappingComponent map;
-    private final Collection<Feature> pointFeatures = new LinkedList<Feature>();
+    private final Collection<Feature> pointFeatures = new LinkedList<>();
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
+    private final QuerySearchResultsAction csvAction = new QuerySearchResultsAction() {
+
+            @Override
+            public String getName() {
+                return "nach CSV exportieren";
+            }
+
+            @Override
+            public void doAction() {
+                final String title = cidsBeansTableActionPanel1.getMetaClass().getName();
+
+                if (DownloadManagerDialog.showAskingForUserTitle(
+                                StaticSwingTools.getParentFrame(MauerAggregationRenderer.this))) {
+                    final List<String> columnNames = new ArrayList<>(
+                            cidsBeansTableActionPanel1.getAttributeNames().size());
+                    final List<String> fields = new ArrayList<>(
+                            cidsBeansTableActionPanel1.getAttributeNames().size());
+                    final List<String> keys = cidsBeansTableActionPanel1.getKeys();
+                    if (keys != null) {
+                        for (final String attrKey : keys) {
+                            final MemberAttributeInfo mai = (MemberAttributeInfo)
+                                cidsBeansTableActionPanel1.getMetaClass().getMemberAttributeInfos().get(attrKey);
+                            columnNames.add(cidsBeansTableActionPanel1.getAttributeNames().get(attrKey));
+                            fields.add(mai.getFieldName());
+                        }
+                    }
+
+                    final List<MetaObjectNode> mons = new ArrayList<>();
+                    for (final CidsBean cidsBean : cidsBeansTableActionPanel1.getCidsBeans()) {
+                        mons.add(new MetaObjectNode(cidsBean));
+                    }
+
+                    final ServerActionParameter[] params = new ServerActionParameter[] {
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.COLUMN_NAMES.toString(),
+                                columnNames),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.FIELDS.toString(),
+                                fields),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.MONS.toString(),
+                                mons),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.DATE_FORMAT.toString(),
+                                "dd.MM.yy"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.BOOLEAN_YES.toString(),
+                                "ja"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.BOOLEAN_NO.toString(),
+                                "nein"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.DISTINCT_ON.toString(),
+                                "id"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.CHARSET.toString(),
+                                "LATIN9"),
+                        };
+                    DownloadManager.instance()
+                            .add(
+                                new ByteArrayActionDownload(
+                                    "WUNDA_BLAU",
+                                    CsvExportServerAction.TASKNAME,
+                                    cidsBeansTableActionPanel1.getMetaClass().getTableName(),
+                                    params,
+                                    title,
+                                    DownloadManagerDialog.getInstance().getJobName(),
+                                    title,
+                                    ".csv",
+                                    ConnectionContext.createDeprecated()));
+                    final DownloadManagerDialog downloadManagerDialog = DownloadManagerDialog.getInstance();
+                    StaticSwingTools.showDialog(
+                        StaticSwingTools.getParentFrame(MauerAggregationRenderer.this),
+                        downloadManagerDialog,
+                        true);
+                }
+            }
+        };
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private de.cismet.cids.search.CidsBeansTableActionPanel cidsBeansTableActionPanel1;
+    private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private org.jdesktop.swingx.JXHyperlink jxlHauptinfo;
     private org.jdesktop.swingx.JXHyperlink jxlKatasterblatt;
     private org.jdesktop.swingx.JXHyperlink jxlKatasterblatt1;
@@ -168,6 +267,15 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             LOG.error(ex, ex);
         }
         pnlHeaderProducts1.setVisible(rechteManagement);
+        jDialog1.pack();
+        try {
+            cidsBeansTableActionPanel1.setMetaClass(CidsBean.getMetaClassFromTableName(
+                    "WUNDA_BLAU",
+                    "VIEW_MAUER_EXPORT",
+                    getConnectionContext()));
+        } catch (final Exception ex) {
+            LOG.fatal(ex, ex);
+        }
     }
 
     /**
@@ -179,6 +287,12 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jDialog1 = new javax.swing.JDialog();
+        jPanel1 = new javax.swing.JPanel();
+        cidsBeansTableActionPanel1 = new de.cismet.cids.search.CidsBeansTableActionPanel(Arrays.asList(csvAction),
+                true);
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         pnlMap = new javax.swing.JPanel();
         pnlMauern = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderMauern = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -195,6 +309,33 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         pnlHeaderProducts1 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblheaderProdutke1 = new javax.swing.JLabel();
         jxlKatasterblatt1 = new org.jdesktop.swingx.JXHyperlink();
+
+        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(
+                MauerAggregationRenderer.class,
+                "MauerAggregationRenderer.jDialog1.title")); // NOI18N
+        jDialog1.setModal(true);
+        jDialog1.getContentPane().setLayout(new java.awt.CardLayout());
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        cidsBeansTableActionPanel1.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(cidsBeansTableActionPanel1, gridBagConstraints);
+
+        jDialog1.getContentPane().add(jPanel1, "exporter");
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(
+                MauerAggregationRenderer.class,
+                "MauerAggregationRenderer.jLabel1.text")); // NOI18N
+        jPanel2.add(jLabel1, new java.awt.GridBagConstraints());
+
+        jDialog1.getContentPane().add(jPanel2, "loader");
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -426,21 +567,65 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         }
         MauernReportGenerator.generateKatasterBlatt(reportBeans, MauerAggregationRenderer.this, getConnectionContext());
     }                                                                                    //GEN-LAST:event_jxlKatasterblattActionPerformed
-
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<CidsBean> getSelectedBeans() {
+        final List<CidsBean> reportBeans = new LinkedList<>();
+        for (final CidsBeanWrapper beanWrapper : cidsBeanWrappers) {
+            if (beanWrapper.isSelected()) {
+                reportBeans.add(beanWrapper.cidsBean);
+            }
+        }
+        return reportBeans;
+    }
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
     private void jxlHauptinfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlHauptinfoActionPerformed
-        final List<CidsBean> reportBeans = new LinkedList<CidsBean>();
-        for (final CidsBeanWrapper beanWrapper : cidsBeanWrappers) {
-            if (beanWrapper.isSelected()) {
-                reportBeans.add(beanWrapper.cidsBean);
-            }
+        if (cidsBeans != null) {
+            ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(), "loader");
+            final Collection<CidsBean> selectedBeans = getSelectedBeans();
+            new SwingWorker<List<CidsBean>, Void>() {
+
+                    @Override
+                    protected List<CidsBean> doInBackground() throws Exception {
+                        final List<CidsBean> viewBeans = new ArrayList<>();
+                        for (final CidsBean cidsBean : selectedBeans) {
+                            if (cidsBean != null) {
+                                final MetaObject mo = cidsBean.getMetaObject();
+                                final MetaObject viewMo = SessionManager.getConnection()
+                                            .getMetaObject(SessionManager.getSession().getUser(),
+                                                mo.getId(),
+                                                cidsBeansTableActionPanel1.getMetaClass().getId(),
+                                                cidsBeansTableActionPanel1.getMetaClass().getDomain(),
+                                                getConnectionContext());
+                                if (viewMo != null) {
+                                    viewBeans.add(viewMo.getBean());
+                                }
+                            }
+                        }
+                        return viewBeans;
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            cidsBeansTableActionPanel1.setCidsBeans(get());
+                            ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(),
+                                "exporter");
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                    }
+                }.execute();
+            StaticSwingTools.showDialog(this, jDialog1, true);
         }
-        MauernReportGenerator.generateMainInfo(reportBeans, MauerAggregationRenderer.this, getConnectionContext());
-    }                                                                                //GEN-LAST:event_jxlHauptinfoActionPerformed
+    } //GEN-LAST:event_jxlHauptinfoActionPerformed
 
     /**
      * DOCUMENT ME!
