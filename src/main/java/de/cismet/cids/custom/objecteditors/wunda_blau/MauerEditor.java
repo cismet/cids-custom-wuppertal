@@ -17,6 +17,11 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 
+import com.vividsolutions.jts.geom.Geometry;
+
+import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
+import edu.umd.cs.piccolo.event.PInputEvent;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +35,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -58,6 +64,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.RowFilter;
+import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
@@ -76,6 +83,8 @@ import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.reports.wunda_blau.MauernReportGenerator;
 import de.cismet.cids.custom.wunda_blau.search.server.MauerNummerSearch;
 
@@ -90,6 +99,15 @@ import de.cismet.cids.server.search.CidsServerSearch;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.StyledFeature;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
@@ -164,6 +182,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private boolean filterLastFromType = false;
 
     private boolean bound = false;
+    private final MappingComponent map = new MappingComponent();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImages;
@@ -315,6 +334,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JPanel pnlHoehe;
     private javax.swing.JPanel pnlLeft;
     private javax.swing.JPanel pnlLeft1;
+    private javax.swing.JPanel pnlMap;
     private de.cismet.tools.gui.RoundedPanel pnlMassnahmen;
     private de.cismet.tools.gui.SemiRoundedPanel pnlMassnahmenHeader;
     de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel roundedPanel1;
@@ -364,6 +384,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+
         mauerBauteilZustandKostenPanel1.initWithConnectionContext(connectionContext);
         mauerBauteilZustandKostenPanel2.initWithConnectionContext(connectionContext);
         mauerBauteilZustandKostenPanel3.initWithConnectionContext(connectionContext);
@@ -636,6 +657,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel5 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         roundedPanel6 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         roundedPanel7 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
+        pnlMap = new javax.swing.JPanel();
         webDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(
                 editable,
                 "url_mauern",
@@ -1917,6 +1939,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         pnlCard1.add(jTabbedPane1, gridBagConstraints);
         jTabbedPane1.setUI(new TabbedPaneUITransparent());
 
@@ -2011,6 +2034,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
@@ -2556,10 +2581,24 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         pnlCard1.add(panZusammenfassung, gridBagConstraints);
+
+        pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnlMap.setMinimumSize(new java.awt.Dimension(500, 200));
+        pnlMap.setPreferredSize(new java.awt.Dimension(500, 200));
+        pnlMap.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        pnlCard1.add(pnlMap, gridBagConstraints);
+        pnlMap.add(map, BorderLayout.CENTER);
 
         add(pnlCard1, "card1");
 
@@ -2601,6 +2640,88 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
     }                                                                           //GEN-LAST:event_btnInfoActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void initMap() {
+        if (cidsBean != null) {
+            final Object geoField = cidsBean.getProperty("georeferenz.geo_field");
+            if (geoField instanceof Geometry) {
+                final Geometry geometry = (Geometry)geoField;
+                new SwingWorker<Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            try {
+                                final Geometry pureGeom = CrsTransformer.transformToGivenCrs(
+                                        geometry,
+                                        ClientAlkisConf.getInstance().getSrsService());
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("ALKISConstatns.Commons.GeoBUffer: "
+                                                + ClientAlkisConf.getInstance().getGeoBuffer());
+                                }
+                                final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
+                                            ClientAlkisConf.getInstance().getGeoBuffer()));
+                                final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
+                                                + (box.getHeight() * box.getHeight()));
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("Buffer for map: " + diagonalLength);
+                                }
+                                final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(
+                                            diagonalLength));
+                                final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                                mappingModel.setSrs(ClientAlkisConf.getInstance().getSrsService());
+                                mappingModel.addHome(new XBoundingBox(
+                                        bufferedBox.getX1(),
+                                        bufferedBox.getY1(),
+                                        bufferedBox.getX2(),
+                                        bufferedBox.getY2(),
+                                        ClientAlkisConf.getInstance().getSrsService(),
+                                        true));
+                                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                                            ClientAlkisConf.getInstance().getMapCallString()));
+                                swms.setName("Treppe");
+                                final StyledFeature dsf = new DefaultStyledFeature();
+                                dsf.setGeometry(pureGeom);
+                                dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
+                                dsf.setLineWidth(3);
+                                dsf.setLinePaint(new Color(1, 0, 0, 1f));
+                                // add the raster layer to the model
+                                mappingModel.addLayer(swms);
+                                // set the model
+                                map.setMappingModel(mappingModel);
+                                // initial positioning of the map
+                                final int duration = map.getAnimationDuration();
+                                map.setAnimationDuration(0);
+                                map.gotoInitialBoundingBox();
+                                // interaction mode
+                                map.setInteractionMode(MappingComponent.ZOOM);
+                                // finally when all configurations are done ...
+                                map.unlock();
+                                map.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
+
+                                        @Override
+                                        public void mouseClicked(final PInputEvent evt) {
+                                            if (evt.getClickCount() > 1) {
+                                                final CidsBean bean = cidsBean;
+                                                ObjectRendererUtils.switchToCismapMap();
+                                                ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
+                                            }
+                                        }
+                                    });
+                                map.setInteractionMode("MUTE");
+                                map.getFeatureCollection().addFeature(dsf);
+                                map.setAnimationDuration(duration);
+                            } catch (final Exception ex) {
+                                LOG.error("error while init map", ex);
+                            }
+                            return null;
+                        }
+                    }.execute();
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -2915,6 +3036,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 }
             }
             bindingGroup.bind();
+            initMap();
         } finally {
             bound = true;
         }
@@ -2941,6 +3063,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
         }
         bindingGroup.unbind();
+
+        map.getFeatureCollection().removeAllFeatures();
+        map.dispose();
     }
 
     @Override
