@@ -105,9 +105,6 @@
               <Image iconType="3" name="/de/cismet/cids/custom/icons/printer.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="PDF-Bericht zum aktuell betrachteten Gebiet erstellen"/>
-            <Property name="borderPainted" type="boolean" value="false"/>
-            <Property name="contentAreaFilled" type="boolean" value="false"/>
-            <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportActionPerformed"/>
