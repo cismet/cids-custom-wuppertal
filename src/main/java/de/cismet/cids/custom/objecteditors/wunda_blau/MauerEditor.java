@@ -12,7 +12,6 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
@@ -32,7 +31,6 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
@@ -91,8 +89,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.MauerNummerSearch;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.AfterSavingHook;
+import de.cismet.cids.editors.hooks.BeforeSavingHook;
 
 import de.cismet.cids.server.search.CidsServerSearch;
 
@@ -125,7 +124,9 @@ import de.cismet.tools.gui.TitleComponentProvider;
  */
 public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanRenderer,
-    EditorSaveListener,
+    SaveVetoable,
+    AfterSavingHook,
+    BeforeSavingHook,
     FooterComponentProvider,
     TitleComponentProvider,
     BorderProvider,
@@ -319,6 +320,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         mauerBauteilZustandKostenPanel5;
     private de.cismet.cids.custom.objecteditors.wunda_blau.mauer.MauerBauteilZustandKostenPanel
         mauerBauteilZustandKostenPanel7;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor mauerDokumenteEditor1;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panLeft;
     private javax.swing.JPanel panRight;
@@ -329,6 +331,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private de.cismet.tools.gui.RoundedPanel pnlAllgemein;
     private de.cismet.tools.gui.RoundedPanel pnlAllgemein1;
     private javax.swing.JPanel pnlCard1;
+    private javax.swing.JPanel pnlCard2;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderAllgemein;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderAllgemein1;
     private javax.swing.JPanel pnlHoehe;
@@ -356,14 +359,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JTextField tfStaerkeOben;
     private javax.swing.JTextField tfStaerke_unten;
     private javax.swing.JTextField tfUmgebung;
-    private de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel webDavPicturePanel1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form MauerEditor.
+     * Creates a new MauerEditor object.
      */
     public MauerEditor() {
         this(true);
@@ -381,10 +383,25 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     //~ Methods ----------------------------------------------------------------
 
     @Override
+    public void beforeSaving() {
+        mauerDokumenteEditor1.getDocumentBeans().removeAll(mauerDokumenteEditor1.getRemovedDocumentBeans());
+    }
+
+    @Override
+    public void afterSaving(final AfterSavingHook.Event event) {
+        if (AfterSavingHook.Status.SAVE_SUCCESS == event.getStatus()) {
+            mauerDokumenteEditor1.deleteRemovedDocumentBeans();
+        } else {
+            mauerDokumenteEditor1.deleteAddedDocumentBeans();
+        }
+    }
+
+    @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
 
+        mauerDokumenteEditor1.initWithConnectionContext(connectionContext);
         mauerBauteilZustandKostenPanel1.initWithConnectionContext(connectionContext);
         mauerBauteilZustandKostenPanel2.initWithConnectionContext(connectionContext);
         mauerBauteilZustandKostenPanel3.initWithConnectionContext(connectionContext);
@@ -658,14 +675,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         roundedPanel6 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         roundedPanel7 = new de.cismet.cids.custom.objecteditors.utils.FullyRoundedPanel();
         pnlMap = new javax.swing.JPanel();
-        webDavPicturePanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(
-                editable,
-                "url_mauern",
-                "bilder",
-                "mauer_bilder",
-                "mauer_nummer",
-                "georeferenz.geo_field",
-                getConnectionContext());
+        pnlCard2 = new javax.swing.JPanel();
+        mauerDokumenteEditor1 = new de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor(isEditable());
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -2602,15 +2613,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         add(pnlCard1, "card1");
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
-                webDavPicturePanel1,
-                org.jdesktop.beansbinding.BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
+        pnlCard2.setOpaque(false);
+        pnlCard2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        pnlCard2.add(mauerDokumenteEditor1, gridBagConstraints);
 
-        add(webDavPicturePanel1, "card2");
+        add(pnlCard2, "card2");
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -3034,7 +3045,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
+            } else {
             }
+            mauerDokumenteEditor1.setMauerBean(cidsBean);
             bindingGroup.bind();
             initMap();
         } finally {
@@ -3052,7 +3065,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
     @Override
     public void dispose() {
-        webDavPicturePanel1.dispose();
+        mauerDokumenteEditor1.dispose();
         mauerBauteilZustandKostenPanel1.dispose();
         mauerBauteilZustandKostenPanel2.dispose();
         mauerBauteilZustandKostenPanel3.dispose();
@@ -3111,12 +3124,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     }
 
     @Override
-    public void editorClosed(final EditorClosedEvent event) {
-        webDavPicturePanel1.editorClosed(event);
-    }
-
-    @Override
-    public boolean prepareForSave() {
+    public boolean isOkForSaving() {
         try {
             LOG.info("prepare for save");
             final String mauerNummer = (String)cidsBean.getProperty("mauer_nummer");
@@ -3153,9 +3161,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     }
                 }
             }
+            mauerDokumenteEditor1.reenumerate();
             return true;
-        } catch (ConnectionException ex) {
-            Exceptions.printStackTrace(ex);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
             return false;
         }
     }

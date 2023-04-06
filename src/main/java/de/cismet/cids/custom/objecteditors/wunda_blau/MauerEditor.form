@@ -2685,18 +2685,29 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel" name="webDavPicturePanel1">
-      <BindingProperties>
-        <BindingProperty name="cidsBean" source="Form" sourcePath="${cidsBean}" target="webDavPicturePanel1" targetPath="cidsBean" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.WebDavPicturePanel(editable, &quot;url_mauern&quot;, &quot;bilder&quot;, &quot;mauer_bilder&quot;, &quot;mauer_nummer&quot;, &quot;georeferenz.geo_field&quot;, getConnectionContext())"/>
-      </AuxValues>
+    <Container class="javax.swing.JPanel" name="pnlCard2">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
           <CardConstraints cardName="card2"/>
         </Constraint>
       </Constraints>
-    </Component>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+      <SubComponents>
+        <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor" name="mauerDokumenteEditor1">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor(isEditable())"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+              <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="1.0"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>
