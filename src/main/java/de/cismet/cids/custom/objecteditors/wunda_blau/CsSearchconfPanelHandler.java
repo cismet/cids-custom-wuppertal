@@ -63,15 +63,16 @@ public class CsSearchconfPanelHandler {
     /**
      * DOCUMENT ME!
      *
-     * @param   name  DOCUMENT ME!
+     * @param   name    DOCUMENT ME!
+     * @param   editor  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public AbstractAbfragePanel getStorableSearchPanel(final String name) {
+    public AbstractAbfragePanel getStorableSearchPanel(final String name, final boolean editor) {
         final AbstractAbfragePanel wrapper = storableSearchPanels.get(name);
         if (wrapper != null) {
             try {
-                return wrapper.getClass().getConstructor(boolean.class).newInstance(false);
+                return wrapper.getClass().getConstructor(boolean.class).newInstance(editor);
             } catch (final Exception ex) {
                 LOG.error(ex, ex);
                 return null;

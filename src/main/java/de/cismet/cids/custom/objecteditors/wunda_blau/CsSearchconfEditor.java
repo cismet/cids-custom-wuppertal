@@ -178,7 +178,7 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
             final String seachInfoJson = (cidsBean != null) ? (String)cidsBean.getProperty("conf_json") : null;
             final String searchName = (cidsBean != null) ? (String)cidsBean.getProperty("search_name") : null;
 
-            searchPanel = CsSearchconfPanelHandler.getInstance().getStorableSearchPanel(searchName);
+            searchPanel = CsSearchconfPanelHandler.getInstance().getStorableSearchPanel(searchName, isEditable());
             if (searchPanel != null) {
                 searchPanel.initWithConnectionContext(getConnectionContext());
                 searchPanel.setOpaque(false);
