@@ -203,13 +203,13 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
             properties.setProperties(ServerResourcesLoaderClient.getInstance().loadProperties(
                     (PropertiesServerResource)WundaBlauServerResources.MAUERN_PROPERTIES.getValue()));
 
-            String pass = String.format("password=%s", properties.getWebdavPassword());
+            String pass = properties.getWebdavPassword();
 
             if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
                 pass = PasswordEncrypter.decryptString(pass);
             }
 
-            final String user = properties.getWebdavPassword();
+            final String user = properties.getWebdavUser();
             webdavHelper = new WebDavTunnelHelper(
                     "WUNDA_BLAU",
                     ProxyHandler.getInstance().getProxy(),
