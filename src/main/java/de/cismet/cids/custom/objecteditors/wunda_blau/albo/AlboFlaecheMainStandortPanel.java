@@ -775,18 +775,6 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         jComboBox27.setSelectedItem(null);
         final ComboBoxFilterDialogEnabledFilter filter = new ComboBoxFilterDialogEnabledFilter() {
 
-//                Map<String, CidsBean> beanMap = new HashMap<>();
-//
-//                {
-//                    for (int i = 0; i < jComboBox27.getModel().getSize(); ++i) {
-//                        final Object bean = jComboBox27.getModel().getElementAt(i);
-//
-//                        if (bean instanceof CidsBean) {
-//                            beanMap.put(bean.toString(), (CidsBean)bean);
-//                        }
-//                    }
-//                }
-
                 @Override
                 public boolean isEnabled(final Object o, final int row) {
                     if (row == -1) {
@@ -800,11 +788,6 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
 
                         return (schluessel == null) || (!schluessel.equals("0") && !schluessel.equals("4"));
                     }
-//                    if (bean != null) {
-//                        final Object schluessel = bean.getProperty("fk_erhebungsklasse.schluessel");
-//
-//                        return (schluessel == null) || (!schluessel.equals("0") && !schluessel.equals("4"));
-//                    }
 
                     return true;
                 }
@@ -829,16 +812,6 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
                                     "AlboFlaecheMainStandortPanel.getTooltip().wz4");
                         }
                     }
-
-//                    final CidsBean bean = beanMap.get(o);
-
-//                    if (bean != null) {
-//                        final Object schluessel = bean.getProperty("fk_erhebungsklasse.schluessel");
-//
-//                        if ((schluessel != null) && (schluessel.equals("0") || schluessel.equals("4"))) {
-//                            return "Wirtschaftszweig " + String.valueOf(schluessel) + " ist nicht erlaubt";
-//                        }
-//                    }
 
                     return "";
                 }

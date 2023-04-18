@@ -44,6 +44,7 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -77,6 +78,7 @@ import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -1128,9 +1130,19 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         final Object selectedItem = comboBoxFilterDialog1.showAndGetSelected();
         if (selectedItem instanceof CidsBean) {
             final CidsBean flaecheBean = (CidsBean)selectedItem;
-            ((VorgangFlaecheTableModel)jXTable1.getModel()).add(flaecheBean);
+            final List<CidsBean> beans = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBeans();
+
+            if ((beans == null) || !beans.contains(selectedItem)) {
+                ((VorgangFlaecheTableModel)jXTable1.getModel()).add(flaecheBean);
+            } else if (beans.contains(selectedItem)) {
+                JOptionPane.showMessageDialog(
+                    StaticSwingTools.getParentFrame(this),
+                    "Diese Fläche wurde bereits zugewiesen",
+                    "Fläche bereits vorhanden",
+                    JOptionPane.WARNING_MESSAGE);
+            }
         }
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+    } //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
