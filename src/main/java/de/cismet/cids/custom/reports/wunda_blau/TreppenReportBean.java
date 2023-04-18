@@ -31,7 +31,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @version  $Revision$, $Date$
  */
 @Getter
-public class TreppenReportBean extends ReportBeanWithMapAndImages {
+public class TreppenReportBean extends ReportBeanWithMapAndTwoWebDavImages {
 
     //~ Instance fields --------------------------------------------------------
 

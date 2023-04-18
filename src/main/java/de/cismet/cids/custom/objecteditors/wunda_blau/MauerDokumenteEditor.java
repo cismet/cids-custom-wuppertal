@@ -11,11 +11,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
-
-import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
-
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
@@ -66,11 +62,14 @@ import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.clientutils.ServerResourcesLoaderClient;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.MauernProperties;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -105,24 +104,32 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
     private static final Logger LOG = Logger.getLogger(MauerDokumenteEditor.class);
 
-    private static final String DOCUMENTS_TABLE = "mauer_bilder";
-    private static final String DOCUMENTS_PROPERTY = "bilder";
-    private static final String ORDER_PROPERTY = "laufende_nummer";
+    public static final String GEOFIELD_PROPERTY = "georeferenz.geo_field";
+    public static final String DOCUMENTS_TABLE = "mauer_dokument";
+    public static final String DOCUMENTS_PROPERTY = "n_dokumente";
+    public static final String POSITION_PROPERTY = "position";
+    public static final String NAME_PROPERTY = "name";
+    public static final String FILENAME_PROPERTY = "filename";
+    public static final String ART_PROPERTY = "fk_art";
 
     private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile(
             ".*\\.(bmp|png|jpg|jpeg|tif|tiff|wbmp)$",
             Pattern.CASE_INSENSITIVE);
+
     private static final String[] COLUMN_PROPERTIES = new String[] {
-            ORDER_PROPERTY,
-            "name"
+            POSITION_PROPERTY,
+            NAME_PROPERTY,
+            ART_PROPERTY
         };
     private static final String[] FLAECHE_COLUMN_NAMES = new String[] {
             "#",
-            "Dateiname"
+            "Dateiname",
+            "Art"
         };
     private static final Class[] FLAECHE_COLUMN_CLASSES = new Class[] {
             Integer.class, // laufende_nummer
-            String.class   // name
+            String.class,  // name
+            String.class
         };
 
     //~ Enums ------------------------------------------------------------------
@@ -150,7 +157,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private final List<CidsBean> removedDocumentBeans = new ArrayList<>();
 
     private CidsBean mauerBean;
-    private final MauernProperties properties = new MauernProperties();
+    private final MauernProperties properties;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton btnAddImg;
@@ -159,9 +166,16 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     javax.swing.JButton btnRemoveImg;
     javax.swing.JButton btnUp;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
@@ -170,6 +184,8 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane3;
     private org.jdesktop.swingx.JXTable jXTable2;
     private org.jdesktop.swingx.JXBusyLabel jxLBusy;
@@ -181,6 +197,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderDocuments;
     private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -199,9 +216,10 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     public MauerDokumenteEditor(final boolean editable) {
         this.editable = editable;
         WebDavTunnelHelper webdavHelper = null;
+        MauernProperties properties = null;
         try {
-            properties.setProperties(ServerResourcesLoaderClient.getInstance().loadProperties(
-                    (PropertiesServerResource)WundaBlauServerResources.MAUERN_PROPERTIES.getValue()));
+            properties = (MauernProperties)ServerResourcesLoaderClient.getInstance()
+                        .get((PropertiesServerResource)WundaBlauServerResources.MAUERN_PROPERTIES.getValue(), true);
 
             String pass = properties.getWebdavPassword();
 
@@ -222,6 +240,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
             ObjectRendererUtils.showExceptionWindowToUser(message, ex, null);
         }
         this.webdavHelper = webdavHelper;
+        this.properties = properties;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -286,6 +305,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        jDialog1.pack();
 
         jXTable2.addHighlighter(new ColorHighlighter(new HighlightPredicate() {
 
@@ -317,7 +337,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                             return false;
                         }
                         final Integer lfd = (Integer)getTableModel().getCidsBean(
-                                jXTable2.convertRowIndexToModel(componentAdapter.row)).getProperty(ORDER_PROPERTY);
+                                jXTable2.convertRowIndexToModel(componentAdapter.row)).getProperty(POSITION_PROPERTY);
                         return (lfd != null) && (lfd.equals(1) || lfd.equals(2));
                     }
                 }, new LineBorder(Color.GRAY)));
@@ -349,8 +369,26 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jFileChooser1 = new javax.swing.JFileChooser();
+        jDialog1 = new javax.swing.JDialog();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox1 = new DefaultBindableReferenceCombo(new DefaultBindableReferenceCombo.MetaClassOption(
+                    ClassCacheMultiple.getMetaClass(
+                        CidsBeanSupport.DOMAIN_NAME,
+                        "mauer_dokument_art",
+                        getConnectionContext())));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        jPanel8 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel15 = new javax.swing.JPanel();
         pnlDocuments = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocuments = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -397,6 +435,84 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                 }
             });
         jFileChooser1.setMultiSelectionEnabled(true);
+
+        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(
+                MauerDokumenteEditor.class,
+                "MauerDokumenteEditor.jDialog1.title")); // NOI18N
+        jDialog1.setModal(true);
+        jDialog1.setResizable(false);
+        jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        jLabel3.setText(org.openide.util.NbBundle.getMessage(
+                MauerDokumenteEditor.class,
+                "MauerDokumenteEditor.jLabel3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        jPanel7.add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel7.add(jComboBox1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel7.add(filler2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel7.add(filler3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jDialog1.getContentPane().add(jPanel7, gridBagConstraints);
+
+        jPanel8.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        jButton1.setText(org.openide.util.NbBundle.getMessage(
+                MauerDokumenteEditor.class,
+                "MauerDokumenteEditor.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        jPanel8.add(jButton1);
+
+        jButton2.setText(org.openide.util.NbBundle.getMessage(
+                MauerDokumenteEditor.class,
+                "MauerDokumenteEditor.jButton2.text")); // NOI18N
+
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                jComboBox1,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem != null}"),
+                jButton2,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        jPanel8.add(jButton2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jDialog1.getContentPane().add(jPanel8, gridBagConstraints);
 
         setMaximumSize(new java.awt.Dimension(1190, 1625));
         setMinimumSize(new java.awt.Dimension(807, 485));
@@ -655,6 +771,8 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         jPanel15.add(panRasterfari, gridBagConstraints);
 
         add(jPanel15, "card2");
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -663,11 +781,13 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
-        if (JFileChooser.APPROVE_OPTION == jFileChooser1.showOpenDialog(this)) {
-            final File[] selFiles = jFileChooser1.getSelectedFiles();
-            if ((selFiles != null) && (selFiles.length > 0)) {
-                CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
-            }
+        ((DefaultBindableReferenceCombo)jComboBox1).reload();
+        if (((DefaultBindableReferenceCombo)jComboBox1).getItemCount() == 0) {
+            addForArt(null);
+        } else if (((DefaultBindableReferenceCombo)jComboBox1).getItemCount() == 1) {
+            addForArt((CidsBean)((DefaultBindableReferenceCombo)jComboBox1).getModel().getElementAt(0));
+        } else {
+            StaticSwingTools.showDialog(this, jDialog1, true);
         }
     }                                                                             //GEN-LAST:event_btnAddImgActionPerformed
 
@@ -723,12 +843,13 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private void documentSelectionChanged() {
         final CidsBean selectedDocumnentBean = getSelectedDocumentBean();
         if (selectedDocumnentBean != null) {
-            final Integer lfd = (Integer)selectedDocumnentBean.getProperty(ORDER_PROPERTY);
+            final Integer lfd = (Integer)selectedDocumnentBean.getProperty(POSITION_PROPERTY);
             try {
                 rasterfariDocumentLoaderPanel1.setDocument(
                     String.format(
-                        "mauern/%s",
-                        URLEncoder.encode((String)selectedDocumnentBean.getProperty("url.object_name"),
+                        "%s/%s",
+                        properties.getRasterfariPath(),
+                        URLEncoder.encode((String)selectedDocumnentBean.getProperty(FILENAME_PROPERTY),
                             "UTF-8")));
                 showDocumentCard(DocumentCard.DOCUMENT);
                 btnOpen.setEnabled(true);
@@ -772,7 +893,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                     for (final Object toDeleteObj : removeList) {
                         if (toDeleteObj instanceof CidsBean) {
                             final CidsBean documentToDelete = (CidsBean)toDeleteObj;
-                            documentToDelete.setProperty(ORDER_PROPERTY, null);
+                            documentToDelete.setProperty(POSITION_PROPERTY, null);
                             removedDocumentBeans.add(documentToDelete);
                         }
                     }
@@ -822,8 +943,8 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
                 @Override
                 public int compare(final CidsBean o1, final CidsBean o2) {
-                    final Integer lfd1 = (o1 != null) ? (Integer)o1.getProperty(ORDER_PROPERTY) : null;
-                    final Integer lfd2 = (o2 != null) ? (Integer)o2.getProperty(ORDER_PROPERTY) : null;
+                    final Integer lfd1 = (o1 != null) ? (Integer)o1.getProperty(POSITION_PROPERTY) : null;
+                    final Integer lfd2 = (o2 != null) ? (Integer)o2.getProperty(POSITION_PROPERTY) : null;
                     if ((lfd1 == null) || (lfd2 == null)) {
                         if (o1 == null) {
                             return -1;
@@ -839,7 +960,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
         int lfd = 1;
         for (final CidsBean sortedDocumentBean : sortedDocumentBeans) {
-            sortedDocumentBean.setProperty(ORDER_PROPERTY, lfd++);
+            sortedDocumentBean.setProperty(POSITION_PROPERTY, lfd++);
         }
     }
 
@@ -888,7 +1009,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                                 DownloadManagerDialog.getInstance().getJobName(),
                                 String.format(
                                     "Stützmauer - Dokument #%d",
-                                    getSelectedDocumentBean().getProperty(ORDER_PROPERTY)),
+                                    getSelectedDocumentBean().getProperty(POSITION_PROPERTY)),
                                 downloadName,
                                 downloadExtension);
                         DownloadManager.instance().add(download);
@@ -907,17 +1028,17 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         unremovedDocumentBeans.removeAll(removedDocumentBeans);
         final CidsBean selectedDocumentBean = getSelectedDocumentBean();
         if (selectedDocumentBean != null) {
-            final Integer lfd = (Integer)selectedDocumentBean.getProperty(ORDER_PROPERTY);
+            final Integer lfd = (Integer)selectedDocumentBean.getProperty(POSITION_PROPERTY);
             if (lfd < (unremovedDocumentBeans.size())) {
                 try {
                     for (final CidsBean otherDocumentBean : unremovedDocumentBeans) {
-                        final Integer otherLfd = (Integer)otherDocumentBean.getProperty(ORDER_PROPERTY);
+                        final Integer otherLfd = (Integer)otherDocumentBean.getProperty(POSITION_PROPERTY);
                         if (otherLfd == (lfd + 1)) {
-                            otherDocumentBean.setProperty(ORDER_PROPERTY, lfd);
+                            otherDocumentBean.setProperty(POSITION_PROPERTY, lfd);
                             break;
                         }
                     }
-                    selectedDocumentBean.setProperty(ORDER_PROPERTY, lfd + 1);
+                    selectedDocumentBean.setProperty(POSITION_PROPERTY, lfd + 1);
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
@@ -940,17 +1061,17 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         final List<CidsBean> otherDocumentBeans = getDocumentBeans();
         final CidsBean selectedDocumentBean = getSelectedDocumentBean();
         if (selectedDocumentBean != null) {
-            final Integer lfd = (Integer)selectedDocumentBean.getProperty(ORDER_PROPERTY);
+            final Integer lfd = (Integer)selectedDocumentBean.getProperty(POSITION_PROPERTY);
             if (lfd > 1) {
                 try {
                     for (final CidsBean otherDocumentBean : otherDocumentBeans) {
-                        final Integer otherLfd = (Integer)otherDocumentBean.getProperty(ORDER_PROPERTY);
+                        final Integer otherLfd = (Integer)otherDocumentBean.getProperty(POSITION_PROPERTY);
                         if (otherLfd == (lfd - 1)) {
-                            otherDocumentBean.setProperty(ORDER_PROPERTY, lfd);
+                            otherDocumentBean.setProperty(POSITION_PROPERTY, lfd);
                             break;
                         }
                     }
-                    selectedDocumentBean.setProperty(ORDER_PROPERTY, lfd - 1);
+                    selectedDocumentBean.setProperty(POSITION_PROPERTY, lfd - 1);
                 } catch (final Exception ex) {
                     LOG.error(ex, ex);
                 }
@@ -964,6 +1085,40 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         }
     }                                                                         //GEN-LAST:event_btnUpActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        jDialog1.setVisible(false);
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        jDialog1.setVisible(false);
+        addForArt((CidsBean)((DefaultBindableReferenceCombo)jComboBox1).getSelectedItem());
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  artBean  DOCUMENT ME!
+     */
+    private void addForArt(final CidsBean artBean) {
+        if (JFileChooser.APPROVE_OPTION == jFileChooser1.showOpenDialog(this)) {
+            final File[] selFiles = jFileChooser1.getSelectedFiles();
+            if ((selFiles != null) && (selFiles.length > 0)) {
+                CismetThreadPool.execute(new ImageUploadWorker(
+                        Arrays.asList(selFiles),
+                        artBean));
+            }
+        }
+    }
     /**
      * DOCUMENT ME!
      *
@@ -1044,6 +1199,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         //~ Instance fields ----------------------------------------------------
 
         private final Collection<File> documentFiles;
+        private final CidsBean artBean;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1051,9 +1207,11 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
          * Creates a new ImageUploadWorker object.
          *
          * @param  documentFiles  DOCUMENT ME!
+         * @param  artBean        DOCUMENT ME!
          */
-        public ImageUploadWorker(final Collection<File> documentFiles) {
+        public ImageUploadWorker(final Collection<File> documentFiles, final CidsBean artBean) {
             this.documentFiles = documentFiles;
+            this.artBean = artBean;
             showDocumentCard(DocumentCard.BUSY);
         }
 
@@ -1067,67 +1225,26 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
             int laufendeNummer = unremovedDocumentBeans.size() + 1;
             for (final File imageFile : documentFiles) {
                 final String mauerNummer = (String)mauerBean.getProperty("mauer_nummer");
-                final String fileName = ((mauerNummer == null)
+                final String filename = ((mauerNummer == null)
                         ? "____" : new DecimalFormat("#0000").format(Integer.parseInt(mauerNummer))) + "-"
-                            + laufendeNummer + "_" + imageFile.getName();
+                            + RandomStringUtils.randomAlphanumeric(8) + "_" + imageFile.getName();
                 final String webdavUrl = properties.getWebdavUrl();
                 webdavHelper.uploadFileToWebDAV(
-                    fileName,
+                    filename,
                     imageFile,
                     webdavUrl,
                     MauerDokumenteEditor.this,
                     getConnectionContext());
 
-                final MetaClass MB_MC = ClassCacheMultiple.getMetaClass(
-                        "WUNDA_BLAU",
-                        "url_base",
-                        getConnectionContext());
-
-                final String protPrefix = webdavUrl.substring(0, webdavUrl.indexOf("://")) + "://";
-                final String server = webdavUrl.substring(protPrefix.length(),
-                        webdavUrl.indexOf("/", protPrefix.length()));
-                final String path = webdavUrl.substring(protPrefix.length() + server.length());
-
-                final String query = String.format(
-                        "SELECT %s, %s FROM %s WHERE prot_prefix ILIKE '%s' AND server ILIKE '%s' AND path ILIKE '%s';",
-                        MB_MC.getID(),
-                        MB_MC.getPrimaryKey(),
-                        MB_MC.getTableName(),
-                        protPrefix,
-                        server,
-                        path);
-                final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
-
-                final CidsBean urlBase;
-                if (metaObjects.length <= 0) {
-                    final CidsBean urlBaseTmp = CidsBean.createNewCidsBeanFromTableName(
-                            "WUNDA_BLAU",
-                            "url_base",
-                            getConnectionContext());
-                    urlBaseTmp.setProperty("prot_prefix", protPrefix);
-                    urlBaseTmp.setProperty("server", server);
-                    urlBaseTmp.setProperty("path", path);
-                    urlBase = urlBaseTmp.persist(getConnectionContext());
-                } else {
-                    urlBase = metaObjects[0].getBean();
-                }
-
-                final CidsBean url = CidsBean.createNewCidsBeanFromTableName(
-                        "WUNDA_BLAU",
-                        "url",
-                        getConnectionContext());
-                url.setProperty("url_base_id", urlBase);
-                url.setProperty("object_name", fileName);
-
                 final CidsBean newDocumentBean = CidsBean.createNewCidsBeanFromTableName(
                         "WUNDA_BLAU",
                         DOCUMENTS_TABLE,
                         getConnectionContext());
-                newDocumentBean.setProperty(ORDER_PROPERTY, laufendeNummer);
-                newDocumentBean.setProperty("name", imageFile.getName());
-                newDocumentBean.setProperty("url", url);
+                newDocumentBean.setProperty(POSITION_PROPERTY, laufendeNummer++);
+                newDocumentBean.setProperty(NAME_PROPERTY, imageFile.getName());
+                newDocumentBean.setProperty(FILENAME_PROPERTY, filename);
+                newDocumentBean.setProperty(ART_PROPERTY, artBean);
                 newBeans.add(newDocumentBean);
-                laufendeNummer++;
             }
             return newBeans;
         }

@@ -13,7 +13,9 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
+import de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor;
+import de.cismet.cids.custom.utils.MauernProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -25,7 +27,7 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauernReportBean extends ReportBeanWithMapAndImages {
+public class MauernReportBean extends ReportBeanWithMapAndTwoRasterfariImages {
 
     //~ Constructors -----------------------------------------------------------
 
@@ -34,18 +36,22 @@ public class MauernReportBean extends ReportBeanWithMapAndImages {
      *
      * @param  mauer              DOCUMENT ME!
      * @param  beanOnly           DOCUMENT ME!
+     * @param  properties         DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public MauernReportBean(final CidsBean mauer, final boolean beanOnly, final ConnectionContext connectionContext) {
+    public MauernReportBean(final CidsBean mauer,
+            final boolean beanOnly,
+            final MauernProperties properties,
+            final ConnectionContext connectionContext) {
         super(
             mauer,
-            beanOnly ? null : "georeferenz.geo_field",
-            beanOnly ? null : "bilder",
-            beanOnly ? null : "url",
-            beanOnly
-                ? null
-                : java.util.ResourceBundle.getBundle("de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString(
-                    "map_url"),
+            beanOnly ? null : MauerDokumenteEditor.GEOFIELD_PROPERTY,
+            beanOnly ? null : MauerDokumenteEditor.DOCUMENTS_PROPERTY,
+            beanOnly ? null : MauerDokumenteEditor.POSITION_PROPERTY,
+            beanOnly ? null : MauerDokumenteEditor.FILENAME_PROPERTY,
+            beanOnly ? null : properties.getMapUrl(),
+            beanOnly ? null : properties.getRasterfariUrl(),
+            beanOnly ? null : properties.getRasterfariPath(),
             connectionContext);
     }
 
