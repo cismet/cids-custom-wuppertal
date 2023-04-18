@@ -66,7 +66,7 @@ import java.io.IOException;
 public class BaumGebietReportGenerator {
 
     //~ Static fields/initializers ---------------------------------------------
-    private static final Color FEATURE_COLOR_GEBIET = new Color(0f, 0f, 1f);
+    private static final Color FEATURE_COLOR_GEBIET = new Color(0f, 1f, 0f);
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BaumGebietReportGenerator.class);
 
     //~ Methods ----------------------------------------------------------------
