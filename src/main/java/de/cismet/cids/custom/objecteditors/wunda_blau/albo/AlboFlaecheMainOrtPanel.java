@@ -294,7 +294,7 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
                             getConnectionContext())));
                 search.setGeometry(geom);
 
-                jLabel4.setText(Math.round( geom.getArea() ) + " m²");
+                jLabel4.setText(Math.round(geom.getArea()) + " m²");
                 jLabel2.setText("<html><i>wird gesucht...");
                 new SwingWorker<CidsBean, Void>() {
 
