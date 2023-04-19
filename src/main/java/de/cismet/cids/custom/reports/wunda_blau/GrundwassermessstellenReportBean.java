@@ -11,11 +11,12 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 
 import java.awt.Image;
@@ -73,7 +74,6 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
             final ConnectionContext connectionContext) {
         super(
             messstelleBean,
-            "geometrie.geo_field",
             RESOURCE_BUNDLE.getString("map_url"),
             connectionContext);
         this.kategorieBean = kategorieBean;
@@ -89,6 +89,11 @@ public class GrundwassermessstellenReportBean extends ReportBeanWithMap {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected Geometry getGeometry() {
+        return (getCidsBean() != null) ? (Geometry)getCidsBean().getProperty("geometrie.geo_field") : null;
+    }
 
     /**
      * DOCUMENT ME!

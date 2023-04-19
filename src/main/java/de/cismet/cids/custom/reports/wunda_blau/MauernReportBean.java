@@ -11,15 +11,26 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
+import com.vividsolutions.jts.geom.Geometry;
+
+import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor;
 import de.cismet.cids.custom.utils.MauernProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.DOCUMENTS_PROPERTY;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.FILENAME_PROPERTY;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.GEOFIELD_PROPERTY;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.POSITION_PROPERTY;
 
 /**
  * DOCUMENT ME!
@@ -27,7 +38,16 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauernReportBean extends ReportBeanWithMapAndTwoRasterfariImages {
+public class MauernReportBean extends ReportBeanWithMapAndTwoUrlImages {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String DOWNLOAD_TEMPLATE =
+        "<rasterfari:url>?REQUEST=GetMap&SERVICE=WMS&customDocumentInfo=download&LAYERS=<rasterfari:path>/<rasterfari:document>";
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final MauernProperties properties;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -45,17 +65,50 @@ public class MauernReportBean extends ReportBeanWithMapAndTwoRasterfariImages {
             final ConnectionContext connectionContext) {
         super(
             mauer,
-            beanOnly ? null : MauerDokumenteEditor.GEOFIELD_PROPERTY,
-            beanOnly ? null : MauerDokumenteEditor.DOCUMENTS_PROPERTY,
-            beanOnly ? null : MauerDokumenteEditor.POSITION_PROPERTY,
-            beanOnly ? null : MauerDokumenteEditor.FILENAME_PROPERTY,
             beanOnly ? null : properties.getMapUrl(),
-            beanOnly ? null : properties.getRasterfariUrl(),
-            beanOnly ? null : properties.getRasterfariPath(),
             connectionContext);
+        this.properties = properties;
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected List<CidsBean> getImageBeans() {
+        if (getCidsBean() == null) {
+            return null;
+        }
+        return getCidsBean().getBeanCollectionProperty(DOCUMENTS_PROPERTY).stream().filter((b) -> {
+                    return b.getProperty(POSITION_PROPERTY) != null;
+                }).filter((b) -> { return "foto".equals(b.getProperty("fk_art.schluessel")); })
+                    .sorted(Comparator.comparing((b) -> {
+                                    return (b != null) ? (Integer)b.getProperty(POSITION_PROPERTY) : null;
+                                },
+                                Comparator.nullsLast(Integer::compareTo)))
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    protected URL getUrl(final CidsBean cidsBean) throws Exception {
+        return new URL(DOWNLOAD_TEMPLATE.replace("<rasterfari:path>", properties.getRasterfariPath()).replace(
+                    "<rasterfari:url>",
+                    properties.getRasterfariUrl()).replace(
+                    "<rasterfari:document>",
+                    (String)cidsBean.getProperty(FILENAME_PROPERTY)));
+    }
+
+    @Override
+    protected Geometry getGeometry() {
+        return (getCidsBean() != null) ? (Geometry)getCidsBean().getProperty(GEOFIELD_PROPERTY) : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private MauernProperties getProperties() {
+        return properties;
+    }
 
     /**
      * DOCUMENT ME!
