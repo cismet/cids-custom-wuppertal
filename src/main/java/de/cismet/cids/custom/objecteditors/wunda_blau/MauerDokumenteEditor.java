@@ -117,6 +117,9 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile(
             ".*\\.(bmp|png|jpg|jpeg|tif|tiff|wbmp)$",
             Pattern.CASE_INSENSITIVE);
+    private static final Pattern PDF_FILE_PATTERN = Pattern.compile(
+            ".*\\.pdf$",
+            Pattern.CASE_INSENSITIVE);
 
     private static final String[] COLUMN_PROPERTIES = new String[] {
             POSITION_PROPERTY,
@@ -145,7 +148,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
         //~ Enum constants -----------------------------------------------------
 
-        BUSY, DOCUMENT, NO_DOCUMENT, ERROR
+        BUSY, DOCUMENT, NO_DOCUMENT, ERROR, NOPREVIEW
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -160,6 +163,32 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
     private CidsBean mauerBean;
     private final MauernProperties properties;
+
+    private final FileFilter imageFileFilter = new FileFilter() {
+
+            @Override
+            public boolean accept(final File f) {
+                return f.isDirectory() || IMAGE_FILE_PATTERN.matcher(f.getName()).matches();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Bilddateien";
+            }
+        };
+
+    private final FileFilter pdfFileFilter = new FileFilter() {
+
+            @Override
+            public boolean accept(final File f) {
+                return f.isDirectory() || PDF_FILE_PATTERN.matcher(f.getName()).matches();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Dokumente";
+            }
+        };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton btnAddImg;
@@ -178,6 +207,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
@@ -188,6 +218,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private org.jdesktop.swingx.JXTable jXTable2;
     private org.jdesktop.swingx.JXBusyLabel jxLBusy;
@@ -428,19 +459,9 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
 
-        jFileChooser1.setFileFilter(new FileFilter() {
-
-                @Override
-                public boolean accept(final File f) {
-                    return f.isDirectory() || IMAGE_FILE_PATTERN.matcher(f.getName()).matches();
-                }
-
-                @Override
-                public String getDescription() {
-                    return "Bilddateien";
-                }
-            });
         jFileChooser1.setMultiSelectionEnabled(true);
 
         jDialog1.setTitle(org.openide.util.NbBundle.getMessage(
@@ -761,6 +782,14 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
         pnlBild.add(jPanel4, "ERROR");
 
+        jPanel9.setLayout(new java.awt.BorderLayout());
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Keine Vorschau verfügbar."); // NOI18N
+        jPanel9.add(jLabel4, java.awt.BorderLayout.CENTER);
+
+        pnlBild.add(jPanel9, "NOPREVIEW");
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -850,7 +879,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private void documentSelectionChanged() {
         final CidsBean selectedDocumnentBean = getSelectedDocumentBean();
         if (selectedDocumnentBean != null) {
-            final Integer lfd = (Integer)selectedDocumnentBean.getProperty(POSITION_PROPERTY);
+            final Integer position = (Integer)selectedDocumnentBean.getProperty(POSITION_PROPERTY);
             try {
                 rasterfariDocumentLoaderPanel1.setDocument(
                     String.format(
@@ -858,7 +887,11 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                         properties.getRasterfariPath(),
                         URLEncoder.encode((String)selectedDocumnentBean.getProperty(FILENAME_PROPERTY),
                             "UTF-8")));
-                showDocumentCard(DocumentCard.DOCUMENT);
+                if ("plan".equals(selectedDocumnentBean.getProperty("fk_art.schluessel"))) {
+                    showDocumentCard(DocumentCard.NOPREVIEW);
+                } else {
+                    showDocumentCard(DocumentCard.DOCUMENT);
+                }
                 btnOpen.setEnabled(true);
             } catch (final Exception ex) {
                 LOG.error(ex, ex);
@@ -867,8 +900,8 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
             }
             final List<CidsBean> unremovedDocumentBeans = new ArrayList<>(getDocumentBeans());
             unremovedDocumentBeans.removeAll(removedDocumentBeans);
-            btnUp.setEnabled((lfd != null) && (lfd > 1));
-            btnDown.setEnabled((lfd != null) && (lfd < unremovedDocumentBeans.size()));
+            btnUp.setEnabled((position != null) && (position > 1));
+            btnDown.setEnabled((position != null) && (position < unremovedDocumentBeans.size()));
         } else {
             rasterfariDocumentLoaderPanel1.setDocument(null);
             showDocumentCard(DocumentCard.NO_DOCUMENT);
@@ -1115,13 +1148,15 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         jDialog1.setVisible(false);
         addForArt((CidsBean)((DefaultBindableReferenceCombo)jComboBox1).getSelectedItem());
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
-
     /**
      * DOCUMENT ME!
      *
      * @param  artBean  DOCUMENT ME!
      */
     private void addForArt(final CidsBean artBean) {
+        final String artSchluessel = (String)artBean.getProperty("schluessel");
+        jFileChooser1.setFileFilter("foto".equals(artSchluessel)
+                ? imageFileFilter : ("plan".equals(artSchluessel) ? pdfFileFilter : null));
         if (JFileChooser.APPROVE_OPTION == jFileChooser1.showOpenDialog(this)) {
             final File[] selFiles = jFileChooser1.getSelectedFiles();
             if ((selFiles != null) && (selFiles.length > 0)) {
