@@ -19,7 +19,6 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.decorator.BorderHighlighter;
 import org.jdesktop.swingx.decorator.ColorHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.CardLayout;
@@ -42,17 +41,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import javax.swing.DefaultRowSorter;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SwingWorker;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
@@ -267,14 +269,10 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private void deleteDocumentBeans(final Collection<CidsBean> documentBeans) {
         for (final CidsBean deleteBean : documentBeans) {
             final String fileName = (String)deleteBean.getProperty("url_object_name");
-            final StringBuilder fileDir = new StringBuilder();
-            fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
-            fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
-            fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
-
+            final String webdavUrl = properties.getWebdavUrl();
             try {
                 webdavHelper.deleteFileFromWebDAV(fileName,
-                    fileDir.toString(), getConnectionContext());
+                    webdavUrl, getConnectionContext());
                 deleteBean.delete();
             } catch (final Exception ex) {
                 LOG.error(ex, ex);
@@ -307,58 +305,67 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         initComponents();
         jDialog1.pack();
 
-        jXTable2.addHighlighter(new ColorHighlighter(new HighlightPredicate() {
-
-                    @Override
-                    public boolean isHighlighted(final Component component, final ComponentAdapter componentAdapter) {
-                        if (!isEditable() || (componentAdapter.column != 1)) {
-                            return false;
-                        }
-                        return removedDocumentBeans.contains(
-                                getTableModel().getCidsBean(jXTable2.convertRowIndexToModel(componentAdapter.row)));
+        jXTable2.addHighlighter(new ColorHighlighter(
+                (final Component component1, final ComponentAdapter componentAdapter) -> {
+                    if (!isEditable() || (componentAdapter.column != 1)) {
+                        return false;
                     }
-                }, Color.WHITE, Color.RED));
-        jXTable2.addHighlighter(new ColorHighlighter(new HighlightPredicate() {
-
-                    @Override
-                    public boolean isHighlighted(final Component component, final ComponentAdapter componentAdapter) {
-                        if (!isEditable() || (componentAdapter.column != 1)) {
-                            return false;
-                        }
-                        return addedDocumentBeans.contains(
-                                getTableModel().getCidsBean(jXTable2.convertRowIndexToModel(componentAdapter.row)));
+                    return removedDocumentBeans.contains(
+                            getTableModel().getCidsBean(jXTable2.convertRowIndexToModel(componentAdapter.row)));
+                },
+                Color.WHITE,
+                Color.RED));
+        jXTable2.addHighlighter(new ColorHighlighter(
+                (final Component component1, final ComponentAdapter componentAdapter) -> {
+                    if (!isEditable() || (componentAdapter.column != 1)) {
+                        return false;
                     }
-                }, Color.WHITE, Color.GREEN.darker()));
-        jXTable2.addHighlighter(new BorderHighlighter(new HighlightPredicate() {
-
-                    @Override
-                    public boolean isHighlighted(final Component component, final ComponentAdapter componentAdapter) {
-                        if (componentAdapter.column != 0) {
-                            return false;
-                        }
-                        final Integer lfd = (Integer)getTableModel().getCidsBean(
-                                jXTable2.convertRowIndexToModel(componentAdapter.row)).getProperty(POSITION_PROPERTY);
-                        return (lfd != null) && (lfd.equals(1) || lfd.equals(2));
+                    return addedDocumentBeans.contains(
+                            getTableModel().getCidsBean(jXTable2.convertRowIndexToModel(componentAdapter.row)));
+                },
+                Color.WHITE,
+                Color.GREEN.darker()));
+        jXTable2.addHighlighter(new BorderHighlighter(
+                (final Component component1, final ComponentAdapter componentAdapter) -> {
+                    if (componentAdapter.column != 0) {
+                        return false;
                     }
-                }, new LineBorder(Color.GRAY)));
+                    final CidsBean documentBean = getTableModel().getCidsBean(
+                            jXTable2.convertRowIndexToModel(componentAdapter.row));
+                    if (documentBean == null) {
+                        return false;
+                    }
+                    final List<CidsBean> sortedByPositionFotos = getDocumentBeans().stream().filter((b) -> {
+                            return !removedDocumentBeans.contains(b);
+                        }).filter((b) -> { return "foto".equals(b.getProperty("fk_art.schluessel")); }).sorted(
+                            Comparator.comparing((b) -> { return (Integer)b.getProperty(POSITION_PROPERTY); },
+                                Comparator.nullsLast(Integer::compareTo))).collect(Collectors.toList());
+
+                    final CidsBean lowest1 = (sortedByPositionFotos.size() > 0) ? sortedByPositionFotos.get(0) : null;
+                    final CidsBean lowest2 = (sortedByPositionFotos.size() > 1) ? sortedByPositionFotos.get(1) : null;
+                    return documentBean.equals(lowest1) || documentBean.equals(lowest2);
+                },
+                new LineBorder(Color.GRAY)));
 
         jXTable2.getColumnModel().getColumn(0).setMinWidth(30);
         jXTable2.getColumnModel().getColumn(0).setMaxWidth(30);
         jXTable2.getColumnModel().getColumn(0).setPreferredWidth(30);
-        jXTable2.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        jXTable2.getSelectionModel().addListSelectionListener((final ListSelectionEvent e) -> {
+            documentSelectionChanged();
+        });
 
-                @Override
-                public void valueChanged(final ListSelectionEvent e) {
-                    documentSelectionChanged();
-                }
-            });
-//        jXTable2.setRowSorter(new DokumenteRowSorter());
-        jXTable2.setSortOrder(0, SortOrder.ASCENDING);
+        final TableRowSorter tableRowSorter = new TableRowSorter(getTableModel());
+        tableRowSorter.setComparator(2, Comparator.nullsLast(Comparator.comparing(CidsBean::toString)));
+        tableRowSorter.setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+        jXTable2.setRowSorter(tableRowSorter);
+
+        tableRowSorter.setRowFilter(new DocumentRowFilter());
 
         btnAddImg.setVisible(editable);
         btnRemoveImg.setVisible(editable);
         btnDown.setVisible(editable);
         btnUp.setVisible(editable);
+        tableRowSorter.sort();
     }
 
     /**
@@ -858,8 +865,10 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                 showDocumentCard(DocumentCard.ERROR);
                 btnOpen.setEnabled(false);
             }
+            final List<CidsBean> unremovedDocumentBeans = new ArrayList<>(getDocumentBeans());
+            unremovedDocumentBeans.removeAll(removedDocumentBeans);
             btnUp.setEnabled((lfd != null) && (lfd > 1));
-            btnDown.setEnabled((lfd != null) && (lfd < jXTable2.getRowCount()));
+            btnDown.setEnabled((lfd != null) && (lfd < unremovedDocumentBeans.size()));
         } else {
             rasterfariDocumentLoaderPanel1.setDocument(null);
             showDocumentCard(DocumentCard.NO_DOCUMENT);
@@ -904,6 +913,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                     showExceptionToUser(ex, this);
                 } finally {
                     if (getTableModel().getRowCount() > 0) {
+                        ((TableRowSorter)jXTable2.getRowSorter()).sort();
                         jXTable2.getSelectionModel().setSelectionInterval(0, 0);
                     } else {
                         showDocumentCard(DocumentCard.NO_DOCUMENT);
@@ -1049,6 +1059,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                 final int viewIndex = jXTable2.convertRowIndexToView(index);
                 jXTable2.getSelectionModel().setSelectionInterval(viewIndex, viewIndex);
             }
+            ((TableRowSorter)jXTable2.getRowSorter()).sort();
         }
     }                                                                           //GEN-LAST:event_btnDownActionPerformed
 
@@ -1082,6 +1093,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                 final int viewIndex = jXTable2.convertRowIndexToView(index);
                 jXTable2.getSelectionModel().setSelectionInterval(viewIndex, viewIndex);
             }
+            ((TableRowSorter)jXTable2.getRowSorter()).sort();
         }
     }                                                                         //GEN-LAST:event_btnUpActionPerformed
 
@@ -1169,7 +1181,15 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
      *
      * @version  $Revision$, $Date$
      */
-    class DokumenteRowSorter extends DefaultRowSorter {
+    class DocumentRowFilter extends RowFilter<TableModel, Integer> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public boolean include(final RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+            final CidsBean documentBean = getTableModel().getCidsBean(entry.getIdentifier());
+            return !(addedDocumentBeans.contains(documentBean) && removedDocumentBeans.contains(documentBean));
+        }
     }
 
     /**
@@ -1260,6 +1280,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
                     getTableModel().fireTableDataChanged();
 
+                    ((TableRowSorter)jXTable2.getRowSorter()).sort();
                     final List<CidsBean> dokumenteBeans = mauerBean.getBeanCollectionProperty(DOCUMENTS_PROPERTY);
                     final int index = dokumenteBeans.indexOf(newBeans.iterator().next());
                     final int viewIndex = jXTable2.convertRowIndexToView(index);

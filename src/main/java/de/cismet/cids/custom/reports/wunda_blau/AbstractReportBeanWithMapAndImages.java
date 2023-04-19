@@ -18,8 +18,6 @@ import java.awt.Image;
 
 import java.util.List;
 
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -37,9 +35,6 @@ public abstract class AbstractReportBeanWithMapAndImages extends ReportBeanWithM
     //~ Instance fields --------------------------------------------------------
 
     private final ImageState[] imgStates = new ImageState[2];
-    private final List<CidsBean> imageBeans;
-    private final String positionProp;
-    private final String filenameProp;
 
     private boolean img0Ready = false;
     private boolean img1Ready = false;
@@ -50,24 +45,13 @@ public abstract class AbstractReportBeanWithMapAndImages extends ReportBeanWithM
      * Creates a new MauernBeanWithMapAndImages object.
      *
      * @param  cidsBean           DOCUMENT ME!
-     * @param  geomProp           DOCUMENT ME!
-     * @param  imgsProp           DOCUMENT ME!
-     * @param  positionProp       DOCUMENT ME!
-     * @param  filenameProp       DOCUMENT ME!
      * @param  mapUrl             DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     protected AbstractReportBeanWithMapAndImages(final CidsBean cidsBean,
-            final String geomProp,
-            final String imgsProp,
-            final String positionProp,
-            final String filenameProp,
             final String mapUrl,
             final ConnectionContext connectionContext) {
-        super(cidsBean, geomProp, mapUrl, connectionContext);
-        this.imageBeans = (imgsProp != null) ? CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, imgsProp) : null;
-        this.positionProp = positionProp;
-        this.filenameProp = filenameProp;
+        super(cidsBean, mapUrl, connectionContext);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -77,27 +61,7 @@ public abstract class AbstractReportBeanWithMapAndImages extends ReportBeanWithM
      *
      * @return  DOCUMENT ME!
      */
-    public String getPositionProp() {
-        return positionProp;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getFilenameProp() {
-        return filenameProp;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public List<CidsBean> getImageBeans() {
-        return imageBeans;
-    }
+    protected abstract List<CidsBean> getImageBeans();
 
     /**
      * DOCUMENT ME!

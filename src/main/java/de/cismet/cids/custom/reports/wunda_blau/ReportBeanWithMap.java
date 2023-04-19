@@ -39,7 +39,7 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class ReportBeanWithMap implements ConnectionContextProvider {
+public abstract class ReportBeanWithMap implements ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -58,27 +58,25 @@ public class ReportBeanWithMap implements ConnectionContextProvider {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new MauernBeanWithMapAndImages object.
+     * Creates a new ReportBeanWithMap object.
      *
      * @param  cidsBean           DOCUMENT ME!
-     * @param  geomProp           DOCUMENT ME!
      * @param  mapUrl             DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
     public ReportBeanWithMap(final CidsBean cidsBean,
-            final String geomProp,
             final String mapUrl,
             final ConnectionContext connectionContext) {
         this.cidsBean = cidsBean;
         this.connectionContext = connectionContext;
 
-        final Geometry g = (geomProp != null) ? (Geometry)cidsBean.getProperty(geomProp) : null;
-        if (g == null) {
+        final Geometry geometry = getGeometry();
+        if (geometry == null) {
             mapError = true;
             LOG.info("Geometry is null. Can not create a map for the mauer katasterblatt report");
         } else {
             final DefaultStyledFeature dsf = new DefaultStyledFeature();
-            dsf.setGeometry(g);
+            dsf.setGeometry(geometry);
             dsf.setLineWidth(5);
             dsf.setLinePaint(Color.RED);
             dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
@@ -97,7 +95,7 @@ public class ReportBeanWithMap implements ConnectionContextProvider {
             final int width = Integer.parseInt(NbBundle.getMessage(
                         ReportBeanWithMap.class,
                         "MauernReportBeanWithMapAndImages.mapWidth"));
-            final XBoundingBox boundingBox = new XBoundingBox(g);
+            final XBoundingBox boundingBox = new XBoundingBox(geometry);
             mapProvider.setBoundingBox(boundingBox);
             final Future<Image> f = mapProvider.getImage(72, MAP_DPI, width, height);
             try {
@@ -111,6 +109,13 @@ public class ReportBeanWithMap implements ConnectionContextProvider {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected abstract Geometry getGeometry();
 
     /**
      * DOCUMENT ME!
