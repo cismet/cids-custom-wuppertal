@@ -257,6 +257,13 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
 
         initComponents();
 
+        setListCellRenderer();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setListCellRenderer() {
         jList1.setCellRenderer(new DefaultListCellRenderer() {
 
                 @Override
@@ -323,6 +330,17 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
     private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
         ((CardLayout)jPanel10.getLayout()).show(jPanel10, (jList1.getSelectedValue() == null) ? "null" : "standort");
     }                                                                                 //GEN-LAST:event_jList1ValueChanged
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        super.setCidsBean(cidsBean);
+
+        if (!isEditable()) {
+            // RendererTools.makeReadOnly from the super method will removes the cell renderer. So it should be added
+            // again
+            setListCellRenderer();
+        }
+    }
 
     @Override
     public void dispose() {
