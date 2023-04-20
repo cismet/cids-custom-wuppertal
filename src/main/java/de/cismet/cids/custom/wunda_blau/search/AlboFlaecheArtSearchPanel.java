@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.wunda_blau;
+package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.server.middleware.types.MetaClass;
 
@@ -21,7 +21,10 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Binding;
 
+import org.openide.util.NbBundle;
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.DefaultListCellRenderer;
@@ -32,6 +35,7 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.LongNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheSearch;
@@ -46,7 +50,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
-import static de.cismet.cids.custom.wunda_blau.AlboFlaecheSearchPanel.getSchluesselBean;
+import static de.cismet.cids.custom.wunda_blau.search.AlboFlaecheSearchPanel.getSchluesselBean;
 
 /**
  * DOCUMENT ME!
@@ -151,6 +155,51 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         RendererTools.makeReadOnly(cbStilllegung, !editable);
         RendererTools.makeReadOnly(cbVerfuellkategorie, !editable);
         RendererTools.makeReadOnly(cbWirtschaftszweig, !editable);
+
+        cbWirtschaftszweig.setRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList<?> list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final Component result = super.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+
+                    if (value instanceof DefaultBindableReferenceCombo.NullableItem) {
+                        ((JLabel)result).setText(" ");
+                    }
+
+                    if ((result instanceof JLabel) && (value instanceof CidsBean)) {
+                        final CidsBean bean = (CidsBean)value;
+
+                        final Object schluessel = ((CidsBean)bean).getProperty("fk_erhebungsklasse.schluessel");
+                        String tooltip = "";
+
+                        if ((schluessel != null) && (schluessel.equals("0"))) {
+                            tooltip = NbBundle.getMessage(
+                                    AlboFlaecheMainStandortPanel.class,
+                                    "AlboFlaecheMainStandortPanel.getTooltip().wz0");
+                        } else if ((schluessel != null) && (schluessel.equals("4"))) {
+                            tooltip = NbBundle.getMessage(
+                                    AlboFlaecheMainStandortPanel.class,
+                                    "AlboFlaecheMainStandortPanel.getTooltip().wz4");
+                        }
+
+                        if ((schluessel != null) && (schluessel.equals("0") || schluessel.equals("4"))) {
+                            ((JLabel)result).setForeground(Color.GRAY);
+                        }
+                        ((JLabel)result).setToolTipText(tooltip);
+                    }
+
+                    return result;
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------

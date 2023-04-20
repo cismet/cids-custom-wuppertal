@@ -14,12 +14,20 @@ package de.cismet.cids.custom.reports.wunda_blau;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.apache.log4j.Logger;
+
 import java.awt.Component;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
+import de.cismet.cids.custom.clientutils.ServerResourcesLoaderClient;
+import de.cismet.cids.custom.utils.MauernProperties;
+import de.cismet.cids.custom.utils.WundaBlauServerResources;
+
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.utils.serverresources.PropertiesServerResource;
 
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
@@ -37,6 +45,23 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @version  $Revision$, $Date$
  */
 public class MauernReportGenerator {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(MauernReportGenerator.class);
+
+    private static final MauernProperties PROPERTIES;
+
+    static {
+        MauernProperties properties = null;
+        try {
+            properties = (MauernProperties)ServerResourcesLoaderClient.getInstance()
+                        .get((PropertiesServerResource)WundaBlauServerResources.MAUERN_PROPERTIES.getValue(), true);
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
+        PROPERTIES = properties;
+    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -56,7 +81,7 @@ public class MauernReportGenerator {
                 public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b, false, connectionContext));
+                        reportBeans.add(new MauernReportBean(b, false, PROPERTIES, connectionContext));
                     }
                     boolean ready;
                     do {
@@ -104,7 +129,7 @@ public class MauernReportGenerator {
                 public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBean(b, true, connectionContext));
+                        reportBeans.add(new MauernReportBean(b, true, PROPERTIES, connectionContext));
                     }
                     boolean ready;
                     do {

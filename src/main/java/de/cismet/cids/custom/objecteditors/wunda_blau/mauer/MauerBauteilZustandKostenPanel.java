@@ -43,6 +43,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -285,8 +286,8 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final JLabel lblEingriffAnsicht1 = new JLabel();
         cbEingriffGruendung = new DefaultBindableReferenceCombo();
-        final JPanel jPanel1 = new JPanel();
         final JLabel jLabel5 = new JLabel();
+        final Box.Filler filler9 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         final JPanel jPanel4 = new JPanel();
         jLabel1 = new JLabel();
         jLabel2 = new JLabel();
@@ -310,6 +311,7 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         final Box.Filler filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
         final Box.Filler filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         jSpinner1 = new JSpinner();
+        final JSeparator jSeparator1 = new JSeparator();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -372,11 +374,13 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
         jPanel2.add(jScrollPane10, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
@@ -389,7 +393,7 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 5);
         jPanel2.add(lblbeschreibungGruendung, gridBagConstraints);
 
         filler3.setName("filler3"); // NOI18N
@@ -411,7 +415,7 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 5);
         jPanel2.add(lblEingriffAnsicht1, gridBagConstraints);
 
         cbEingriffGruendung.setName("cbEingriffGruendung"); // NOI18N
@@ -426,20 +430,11 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
         jPanel2.add(cbEingriffGruendung, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 10);
-        panZusammenfassungContent.add(jPanel2, gridBagConstraints);
-
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new GridBagLayout());
 
         Mnemonics.setLocalizedText(
             jLabel5,
@@ -447,10 +442,19 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         jLabel5.setName("jLabel5");                                                                                    // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
-        jPanel1.add(jLabel5, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 5);
+        jPanel2.add(jLabel5, gridBagConstraints);
+
+        filler9.setName("filler9"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(filler9, gridBagConstraints);
 
         jPanel4.setName("jPanel4"); // NOI18N
         jPanel4.setOpaque(false);
@@ -522,7 +526,9 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         jFormattedTextField1.setText(NbBundle.getMessage(
                 MauerBauteilZustandKostenPanel.class,
                 "MauerBauteilZustandKostenPanel.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField1.setMinimumSize(new Dimension(50, 32));
         jFormattedTextField1.setName("jFormattedTextField1");                 // NOI18N
+        jFormattedTextField1.setPreferredSize(new Dimension(50, 32));
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
@@ -547,7 +553,9 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         jFormattedTextField2.setText(NbBundle.getMessage(
                 MauerBauteilZustandKostenPanel.class,
                 "MauerBauteilZustandKostenPanel.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField2.setMinimumSize(new Dimension(50, 32));
         jFormattedTextField2.setName("jFormattedTextField2");                 // NOI18N
+        jFormattedTextField2.setPreferredSize(new Dimension(50, 32));
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
@@ -572,7 +580,9 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         jFormattedTextField3.setText(NbBundle.getMessage(
                 MauerBauteilZustandKostenPanel.class,
                 "MauerBauteilZustandKostenPanel.jFormattedTextField1.text")); // NOI18N
+        jFormattedTextField3.setMinimumSize(new Dimension(50, 32));
         jFormattedTextField3.setName("jFormattedTextField3");                 // NOI18N
+        jFormattedTextField3.setPreferredSize(new Dimension(50, 32));
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
@@ -598,7 +608,9 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         jFormattedTextField4.setText(NbBundle.getMessage(
                 MauerBauteilZustandKostenPanel.class,
                 "MauerBauteilZustandKostenPanel.jFormattedTextField4.text_1")); // NOI18N
+        jFormattedTextField4.setMinimumSize(new Dimension(50, 32));
         jFormattedTextField4.setName("jFormattedTextField4");                   // NOI18N
+        jFormattedTextField4.setPreferredSize(new Dimension(50, 32));
 
         binding = Bindings.createAutoBinding(
                 AutoBinding.UpdateStrategy.READ_WRITE,
@@ -654,30 +666,31 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
-        jPanel1.add(jPanel4, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
+        jPanel2.add(jPanel4, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jLabel11,
             NbBundle.getMessage(MauerBauteilZustandKostenPanel.class, "MauerBauteilZustandKostenPanel.jLabel11.text")); // NOI18N
-        jLabel11.setVerticalAlignment(SwingConstants.TOP);
         jLabel11.setName("jLabel11");                                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
-        jPanel1.add(jLabel11, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 5);
+        jPanel2.add(jLabel11, gridBagConstraints);
 
         filler8.setName("filler8"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(19, 0, 19, 0);
-        jPanel1.add(filler8, gridBagConstraints);
+        jPanel2.add(filler8, gridBagConstraints);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -699,12 +712,14 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
-        jPanel1.add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
 
         Mnemonics.setLocalizedText(
             jLabel6,
@@ -712,10 +727,11 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
         jLabel6.setName("jLabel6");                                                                                    // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 5);
-        jPanel1.add(jLabel6, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 5);
+        jPanel2.add(jLabel6, gridBagConstraints);
 
         jPanel3.setName("jPanel3"); // NOI18N
         jPanel3.setOpaque(false);
@@ -769,15 +785,28 @@ public class MauerBauteilZustandKostenPanel extends javax.swing.JPanel implement
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(1, 0, 1, 0);
-        jPanel1.add(jPanel3, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
+        jPanel2.add(jPanel3, gridBagConstraints);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(5, 0, 5, 0);
+        jPanel2.add(jSeparator1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
-        panZusammenfassungContent.add(jPanel1, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 10);
+        panZusammenfassungContent.add(jPanel2, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
