@@ -148,7 +148,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
         //~ Enum constants -----------------------------------------------------
 
-        BUSY, DOCUMENT, NO_DOCUMENT, ERROR, NOPREVIEW
+        BUSY, DOCUMENT, NO_DOCUMENT, ERROR, NO_PREVIEW
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -199,6 +199,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -208,10 +209,12 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -219,15 +222,19 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private org.jdesktop.swingx.JXTable jXTable2;
     private org.jdesktop.swingx.JXBusyLabel jxLBusy;
     private javax.swing.JLabel lblCurrentViewTitle;
     private javax.swing.JLabel lblHeaderDocuments;
+    private javax.swing.JLabel lblHeaderDocuments1;
     private de.cismet.tools.gui.RoundedPanel panRasterfari;
     private javax.swing.JPanel pnlBild;
     private de.cismet.tools.gui.RoundedPanel pnlDocuments;
+    private de.cismet.tools.gui.RoundedPanel pnlDocuments1;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderDocuments;
+    private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderDocuments1;
     private de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -428,21 +435,6 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel15 = new javax.swing.JPanel();
-        pnlDocuments = new de.cismet.tools.gui.RoundedPanel();
-        pnlHeaderDocuments = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblHeaderDocuments = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0));
-        jPanel5 = new javax.swing.JPanel();
-        btnAddImg = new javax.swing.JButton();
-        btnRemoveImg = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
-        btnDown = new javax.swing.JButton();
-        btnUp = new javax.swing.JButton();
-        jPanel20 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jXTable2 = new org.jdesktop.swingx.JXTable();
         panRasterfari = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCurrentViewTitle = new javax.swing.JLabel();
@@ -461,6 +453,30 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         jLabel2 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        pnlDocuments = new de.cismet.tools.gui.RoundedPanel();
+        pnlHeaderDocuments = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblHeaderDocuments = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
+        jPanel5 = new javax.swing.JPanel();
+        btnAddImg = new javax.swing.JButton();
+        btnRemoveImg = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        btnDown = new javax.swing.JButton();
+        btnUp = new javax.swing.JButton();
+        jPanel20 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jXTable2 = new org.jdesktop.swingx.JXTable();
+        pnlDocuments1 = new de.cismet.tools.gui.RoundedPanel();
+        pnlHeaderDocuments1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblHeaderDocuments1 = new javax.swing.JLabel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0));
+        jPanel21 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = rasterfariDocumentLoaderPanel1.getLstPages();
 
         jFileChooser1.setMultiSelectionEnabled(true);
 
@@ -551,6 +567,119 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         jPanel15.setOpaque(false);
         jPanel15.setLayout(new java.awt.GridBagLayout());
 
+        panRasterfari.setMinimumSize(new java.awt.Dimension(400, 200));
+        panRasterfari.setPreferredSize(new java.awt.Dimension(400, 200));
+        panRasterfari.setLayout(new java.awt.GridBagLayout());
+
+        semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        semiRoundedPanel1.setPreferredSize(new java.awt.Dimension(67, 32));
+        semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
+
+        lblCurrentViewTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblCurrentViewTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCurrentViewTitle.setText("Vorschau"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel1.add(lblCurrentViewTitle, gridBagConstraints);
+
+        btnOpen.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/inbox-download.png"))); // NOI18N
+        btnOpen.setText(org.openide.util.NbBundle.getMessage(
+                MauerDokumenteEditor.class,
+                "MauerDokumenteEditor.btnOpen.text"));                                                          // NOI18N
+        btnOpen.setToolTipText("Download zum Öffnen in externer Anwendung");                                    // NOI18N
+        btnOpen.setBorderPainted(false);
+        btnOpen.setContentAreaFilled(false);
+        btnOpen.setFocusPainted(false);
+        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnOpenActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        semiRoundedPanel1.add(btnOpen, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panRasterfari.add(semiRoundedPanel1, gridBagConstraints);
+
+        pnlBild.setOpaque(false);
+        pnlBild.setLayout(new java.awt.CardLayout());
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
+
+        pnlBild.add(jPanel1, "DOCUMENT");
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jxLBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jxLBusy.setPreferredSize(new java.awt.Dimension(64, 64));
+        jPanel2.add(jxLBusy, java.awt.BorderLayout.CENTER);
+
+        pnlBild.add(jPanel2, "BUSY");
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Kein Dokument ausgewählt."); // NOI18N
+        jPanel3.add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        pnlBild.add(jPanel3, "NO_DOCUMENT");
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Das Dokument konnte nicht geladen werden."); // NOI18N
+        jPanel4.add(jLabel2, java.awt.BorderLayout.CENTER);
+
+        pnlBild.add(jPanel4, "ERROR");
+
+        jPanel9.setLayout(new java.awt.BorderLayout());
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Keine Vorschau verfügbar."); // NOI18N
+        jPanel9.add(jLabel4, java.awt.BorderLayout.CENTER);
+
+        pnlBild.add(jPanel9, "NO_PREVIEW");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panRasterfari.add(pnlBild, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel15.add(panRasterfari, gridBagConstraints);
+
         pnlDocuments.setMinimumSize(new java.awt.Dimension(400, 200));
         pnlDocuments.setPreferredSize(new java.awt.Dimension(400, 200));
         pnlDocuments.setLayout(new java.awt.GridBagLayout());
@@ -562,7 +691,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
 
         lblHeaderDocuments.setForeground(new java.awt.Color(255, 255, 255));
         lblHeaderDocuments.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblHeaderDocuments.setText("Fotos"); // NOI18N
+        lblHeaderDocuments.setText("Dokumente"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -691,104 +820,60 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         pnlDocuments.add(jPanel20, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel15.add(pnlDocuments, gridBagConstraints);
 
-        panRasterfari.setMinimumSize(new java.awt.Dimension(400, 200));
-        panRasterfari.setPreferredSize(new java.awt.Dimension(400, 200));
-        panRasterfari.setLayout(new java.awt.GridBagLayout());
+        pnlDocuments1.setMinimumSize(new java.awt.Dimension(400, 200));
+        pnlDocuments1.setPreferredSize(new java.awt.Dimension(400, 200));
+        pnlDocuments1.setLayout(new java.awt.GridBagLayout());
 
-        semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
-        semiRoundedPanel1.setPreferredSize(new java.awt.Dimension(67, 32));
-        semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
+        pnlHeaderDocuments1.setBackground(new java.awt.Color(51, 51, 51));
+        pnlHeaderDocuments1.setForeground(new java.awt.Color(51, 51, 51));
+        pnlHeaderDocuments1.setPreferredSize(new java.awt.Dimension(74, 32));
+        pnlHeaderDocuments1.setLayout(new java.awt.GridBagLayout());
 
-        lblCurrentViewTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblCurrentViewTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCurrentViewTitle.setText("Vorschau"); // NOI18N
+        lblHeaderDocuments1.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeaderDocuments1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHeaderDocuments1.setText("Seiten"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        semiRoundedPanel1.add(lblCurrentViewTitle, gridBagConstraints);
-
-        btnOpen.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/inbox-download.png"))); // NOI18N
-        btnOpen.setText(org.openide.util.NbBundle.getMessage(
-                MauerDokumenteEditor.class,
-                "MauerDokumenteEditor.btnOpen.text"));                                                          // NOI18N
-        btnOpen.setToolTipText("Download zum Öffnen in externer Anwendung");                                    // NOI18N
-        btnOpen.setBorderPainted(false);
-        btnOpen.setContentAreaFilled(false);
-        btnOpen.setFocusPainted(false);
-        btnOpen.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnOpenActionPerformed(evt);
-                }
-            });
+        pnlHeaderDocuments1.add(lblHeaderDocuments1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        semiRoundedPanel1.add(btnOpen, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        pnlHeaderDocuments1.add(filler4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        panRasterfari.add(semiRoundedPanel1, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        pnlDocuments1.add(pnlHeaderDocuments1, gridBagConstraints);
 
-        pnlBild.setOpaque(false);
-        pnlBild.setLayout(new java.awt.CardLayout());
+        jPanel21.setOpaque(false);
+        jPanel21.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        jScrollPane1.setViewportView(jList1);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel1.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
-
-        pnlBild.add(jPanel1, "DOCUMENT");
-
-        jPanel2.setLayout(new java.awt.BorderLayout());
-
-        jxLBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jxLBusy.setPreferredSize(new java.awt.Dimension(64, 64));
-        jPanel2.add(jxLBusy, java.awt.BorderLayout.CENTER);
-
-        pnlBild.add(jPanel2, "BUSY");
-
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Kein Dokument ausgewählt."); // NOI18N
-        jPanel3.add(jLabel1, java.awt.BorderLayout.CENTER);
-
-        pnlBild.add(jPanel3, "NO_DOCUMENT");
-
-        jPanel4.setLayout(new java.awt.BorderLayout());
-
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Das Dokument konnte nicht geladen werden."); // NOI18N
-        jPanel4.add(jLabel2, java.awt.BorderLayout.CENTER);
-
-        pnlBild.add(jPanel4, "ERROR");
-
-        jPanel9.setLayout(new java.awt.BorderLayout());
-
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Keine Vorschau verfügbar."); // NOI18N
-        jPanel9.add(jLabel4, java.awt.BorderLayout.CENTER);
-
-        pnlBild.add(jPanel9, "NOPREVIEW");
+        jPanel21.add(jScrollPane1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -797,14 +882,16 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        panRasterfari.add(pnlBild, gridBagConstraints);
+        pnlDocuments1.add(jPanel21, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel15.add(panRasterfari, gridBagConstraints);
+        jPanel15.add(pnlDocuments1, gridBagConstraints);
 
         add(jPanel15, "card2");
 
@@ -887,11 +974,10 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                         properties.getRasterfariPath(),
                         URLEncoder.encode((String)selectedDocumnentBean.getProperty(FILENAME_PROPERTY),
                             "UTF-8")));
-                if ("plan".equals(selectedDocumnentBean.getProperty("fk_art.schluessel"))) {
-                    showDocumentCard(DocumentCard.NOPREVIEW);
-                } else {
-                    showDocumentCard(DocumentCard.DOCUMENT);
-                }
+                /*if ("plan".equals(selectedDocumnentBean.getProperty("fk_art.schluessel"))) {
+                 *  showDocumentCard(DocumentCard.NO_PREVIEW);} else {*/
+                showDocumentCard(DocumentCard.DOCUMENT);
+                // }
                 btnOpen.setEnabled(true);
             } catch (final Exception ex) {
                 LOG.error(ex, ex);

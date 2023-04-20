@@ -14,6 +14,7 @@ package de.cismet.cids.custom.reports.wunda_blau;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.net.URL;
+import java.net.URLEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -93,7 +94,7 @@ public class MauernReportBean extends ReportBeanWithMapAndTwoUrlImages {
                     "<rasterfari:url>",
                     properties.getRasterfariUrl()).replace(
                     "<rasterfari:document>",
-                    (String)cidsBean.getProperty(FILENAME_PROPERTY)));
+                    URLEncoder.encode((String)cidsBean.getProperty(FILENAME_PROPERTY))));
     }
 
     @Override
