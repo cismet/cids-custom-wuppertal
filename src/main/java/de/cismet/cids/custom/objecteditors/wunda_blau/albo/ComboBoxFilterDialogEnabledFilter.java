@@ -35,6 +35,13 @@ public interface ComboBoxFilterDialogEnabledFilter {
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    boolean selectionOfDisabledElementsAllowed();
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   o    DOCUMENT ME!
      * @param   row  DOCUMENT ME!
      *

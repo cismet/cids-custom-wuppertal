@@ -28,6 +28,9 @@
           <BindingProperties>
             <BindingProperty name="selectedItem" source="Form" sourcePath="${bean.fkWirtschaftszweig}" target="cbWirtschaftszweig" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbWirtschaftszweigActionPerformed"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="((DefaultBindableReferenceCombo)cbWirtschaftszweig).setNullable(true);"/>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableScrollableComboBox(mcWirtschaftszweig, true, false)"/>
