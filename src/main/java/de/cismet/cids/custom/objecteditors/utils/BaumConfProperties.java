@@ -57,9 +57,6 @@ public class BaumConfProperties {
     private final String ordnerDokumente;
     private final String ordnerFotos;
     private final String ordnerThema;
-    private final Integer gebietMapDpi;
-    private final Integer gebietMapWidth;
-    private final Integer gebietMapHeight;
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -79,9 +76,6 @@ public class BaumConfProperties {
         ordnerDokumente = String.valueOf(readProperty(properties, "ORDNER_DOKUMENTE", null));
         ordnerFotos = String.valueOf(readProperty(properties, "ORDNER_FOTOS", null));
         ordnerThema = String.valueOf(readProperty(properties, "ORDNER_THEMA", null));
-        gebietMapDpi = Integer.valueOf(readProperty(properties, "GEBIET_MAP_DPI", null));
-        gebietMapHeight = Integer.valueOf(readProperty(properties, "GEBIET_MAP_HEIGHT", null));
-        gebietMapWidth = Integer.valueOf(readProperty(properties, "GEBIET_MAP_WIDTH", null));
     }
 
     //~ Methods ----------------------------------------------------------------

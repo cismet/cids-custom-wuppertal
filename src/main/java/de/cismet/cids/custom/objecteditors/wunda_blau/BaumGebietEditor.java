@@ -1783,9 +1783,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                         });
                 }
                 refreshHnr();
+                btnReport.setVisible(false);
             }
             setTitle(getTitle());
-            //btnReport.setVisible(false);
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
                 getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
                 allowAddRemove();
