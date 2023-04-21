@@ -112,34 +112,43 @@ public abstract class ReportBeanWithMapAndTwoUrlImages extends AbstractReportBea
      */
     private ImageState loadImage(final CidsBean imageBean, final boolean oneOrTwo) throws Exception {
         final ImageState imgState = new ImageState();
-        CismetThreadPool.execute(new Runnable() {
+        if (imageBean != null) {
+            CismetThreadPool.execute(new Runnable() {
 
-                @Override
-                public void run() {
-                    try {
-                        final URL url = getUrl(imageBean);
-                        if (url == null) {
+                    @Override
+                    public void run() {
+                        try {
+                            final URL url = getUrl(imageBean);
+                            if (url == null) {
+                                imgState.setError(true);
+                                return;
+                            }
+                            final InputStream iStream = new SimpleHttpAccessHandler().doRequest(url);
+                            final Image img = ImageIO.read(iStream);
+                            if (img == null) {
+                                imgState.setError(true);
+                                LOG.warn("error during image retrieval from Rasterfari");
+                            }
+                            imgState.setImg(img);
+                        } catch (final Exception e) {
+                            LOG.error(e, e);
                             imgState.setError(true);
-                            return;
-                        }
-                        final InputStream iStream = new SimpleHttpAccessHandler().doRequest(url);
-                        final Image img = ImageIO.read(iStream);
-                        if (img == null) {
-                            imgState.setError(true);
-                            LOG.warn("error during image retrieval from Rasterfari");
-                        }
-                        imgState.setImg(img);
-                    } catch (final Exception e) {
-                        imgState.setError(true);
-                    } finally {
-                        if (oneOrTwo) {
-                            setImg0Ready(true);
-                        } else {
-                            setImg1Ready(true);
+                        } finally {
+                            if (oneOrTwo) {
+                                setImg0Ready(true);
+                            } else {
+                                setImg1Ready(true);
+                            }
                         }
                     }
-                }
-            });
+                });
+        } else {
+            if (oneOrTwo) {
+                setImg0Ready(true);
+            } else {
+                setImg1Ready(true);
+            }
+        }
         return imgState;
     }
 }

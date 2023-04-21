@@ -163,7 +163,8 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
                         if (lastSelectedRow < selectedRow) {
                             step = 1;
                         }
-                        while ((filter != null) && !filter.isEnabled(selectedValue, indexModel)) {
+                        while ((filter != null) && !filter.selectionOfDisabledElementsAllowed()
+                                    && !filter.isEnabled(selectedValue, indexModel)) {
                             index = index + step;
                             indexModel = ((index != -1) ? getRowSorter().convertRowIndexToModel(index) : -1);
                             selectedValue = String.valueOf(
