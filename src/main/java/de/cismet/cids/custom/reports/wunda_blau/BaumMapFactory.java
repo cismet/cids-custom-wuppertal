@@ -7,15 +7,13 @@
 ****************************************************/
 package de.cismet.cids.custom.reports.wunda_blau;
 
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
-
-
+/**
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ * <p>... and it just works.**************************************************</p>
+ *
+ * @version  $Revision$, $Date$
+ */
 
 /**
  * DOCUMENT ME!
@@ -24,10 +22,4 @@ package de.cismet.cids.custom.reports.wunda_blau;
  * @version  $Revision$, $Date$
  */
 public class BaumMapFactory extends BaumMapImageFactory {
-
-    //~ Static fields/initializers ---------------------------------------------
-
-
-    //~ Methods ----------------------------------------------------------------
-
 }

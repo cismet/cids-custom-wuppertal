@@ -14,13 +14,11 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObjectNode;
 
-
 import java.awt.Component;
 
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 
 import de.cismet.cids.dynamics.CidsBean;
-
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -36,16 +34,17 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 public class BaumGebietReportGenerator {
 
     //~ Static fields/initializers ---------------------------------------------
-    private static final org.apache.log4j.Logger LOG = 
-            org.apache.log4j.Logger.getLogger(BaumGebietReportGenerator.class);
-    public static final String FIELD__AZ = "aktenzeichen";                             
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            BaumGebietReportGenerator.class);
+    public static final String FIELD__AZ = "aktenzeichen";
 
     //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
      *
-     * @param  gebietBean        DOCUMENT ME!
+     * @param  gebietBean         DOCUMENT ME!
      * @param  parent             DOCUMENT ME!
      * @param  taskName           DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
