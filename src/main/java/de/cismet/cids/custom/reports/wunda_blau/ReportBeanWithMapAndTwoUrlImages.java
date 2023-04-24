@@ -23,10 +23,10 @@ import javax.imageio.ImageIO;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.commons.security.handler.SimpleHttpAccessHandler;
-
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
+
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -123,7 +123,7 @@ public abstract class ReportBeanWithMapAndTwoUrlImages extends AbstractReportBea
                                 imgState.setError(true);
                                 return;
                             }
-                            final InputStream iStream = new SimpleHttpAccessHandler().doRequest(url);
+                            final InputStream iStream = WebAccessManager.getInstance().doRequest(url);
                             final Image img = ImageIO.read(iStream);
                             if (img == null) {
                                 imgState.setError(true);
