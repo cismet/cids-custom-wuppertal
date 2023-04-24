@@ -168,6 +168,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String FIELD__BEMERKUNG = "bemerkung";                                 // baum_schaden
     public static final String FIELD__BETRAG = "betrag";                                       // baum_schaden
     public static final String FIELD__EINGANG = "eingegangen";                                 // baum_schaden
+    public static final String FIELD__ABGELEHNT = "abgelehnt";                                 // baum_schaden
     public static final String FIELD__FAELLUNG = "faellung";                                   // baum_schaden
     public static final String FIELD__KLEISTUNG = "keine_leistung";                            // baum_schaden
     public static final String FIELD__BEGRUENDUNG = "begruendung";                             // baum_schaden
@@ -203,6 +204,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String BUNDLE_WRONGSTURM = "BaumSchadenPanel.isOkForSaving().wrongSturm";
     public static final String BUNDLE_NOGEOM = "BaumSchadenPanel.isOkForSaving().noGeom";
     public static final String BUNDLE_WRONGGEOM = "BaumSchadenPanel.isOkForSaving().wrongGeom";
+    public static final String BUNDLE_ABGELEHNT = "BaumSchadenPanel.isOkForSaving().abgelehnt";
 
     public static final String BUNDLE_PANE_TITLE_ERROR_FEST = "BaumSchadenPanel.zeigeErrorFest().JOptionPane.title";
     public static final String BUNDLE_PANE_TITLE_ERROR_ERSATZ = "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.title";
@@ -244,10 +246,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         lblUmfang = new JLabel();
         lblArt = new JLabel();
         cbArt = new DefaultBindableScrollableComboBox(MC__ART);
-        if (isEditor()) {
+        if (isEditor()){
             lblGeom = new JLabel();
         }
-        if (isEditor()) {
+        if (isEditor()){
             cbGeomSchaden = new DefaultCismapGeometryComboBoxEditor();
         }
         panGeometrie = new JPanel();
@@ -255,7 +257,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         lblOhne = new JLabel();
         chOhne = new JCheckBox();
         lblBau = new JLabel();
-        cbBau = new DefaultBindableReferenceCombo(true);
+        cbBau = new DefaultBindableReferenceCombo(true) ;
         txtBau = new JTextField();
         lblAbgest = new JLabel();
         chAbgest = new JCheckBox();
@@ -285,6 +287,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         taBemerkung = new JTextArea();
         lblFaellung = new JLabel();
         chFaellung = new JCheckBox();
+        lblAbgelehnt = new JLabel();
+        chAbgelehnt = new JCheckBox();
         spHoehe = new JSpinner();
         spUmfang = new JSpinner();
         spAlter = new JSpinner();
@@ -295,7 +299,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chGefahr = new JCheckBox();
         chKLeistung = new JCheckBox();
         lblOrdnung = new JLabel();
-        cbOrdnung = new DefaultBindableReferenceCombo(true);
+        cbOrdnung = new DefaultBindableReferenceCombo(true) ;
         txtAnmerkung = new JTextField();
         txtBegruendung = new JTextField();
         filler7 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
@@ -328,7 +332,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         btnAddNewFest = new JButton();
         btnRemoveFest = new JButton();
 
-        final FormListener formListener = new FormListener();
+        FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -351,7 +355,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblAlter.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblAlter, "Alter:");
-        lblAlter.setName("lblAlter");                // NOI18N
+        lblAlter.setName("lblAlter"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -361,11 +365,9 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panSchaden.add(lblAlter, gridBagConstraints);
 
-        lblInst.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
-        Mnemonics.setLocalizedText(
-            lblInst,
-            NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblInst.text")); // NOI18N
-        lblInst.setName("lblInst");                                                        // NOI18N
+        lblInst.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblInst, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblInst.text")); // NOI18N
+        lblInst.setName("lblInst"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -378,15 +380,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         cbInst.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbInst.setMaximumRowCount(15);
         cbInst.setEnabled(false);
-        cbInst.setName("cbInst");                  // NOI18N
+        cbInst.setName("cbInst"); // NOI18N
         cbInst.setPreferredSize(new Dimension(100, 24));
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_institution}"),
-                cbInst,
-                BeanProperty.create("selectedItem"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_institution}"), cbInst, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -400,7 +397,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblHoehe.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblHoehe, "Höhe [m]:");
-        lblHoehe.setName("lblHoehe");                // NOI18N
+        lblHoehe.setName("lblHoehe"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -412,7 +409,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblUmfang.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblUmfang, "Umfang [cm]:");
-        lblUmfang.setName("lblUmfang");               // NOI18N
+        lblUmfang.setName("lblUmfang"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
@@ -424,7 +421,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblArt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblArt, "Art:");
-        lblArt.setName("lblArt");                  // NOI18N
+        lblArt.setName("lblArt"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -437,15 +434,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         cbArt.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbArt.setMaximumRowCount(15);
         cbArt.setEnabled(false);
-        cbArt.setName("cbArt");                   // NOI18N
+        cbArt.setName("cbArt"); // NOI18N
         cbArt.setPreferredSize(new Dimension(100, 24));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_art}"),
-                cbArt,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_art}"), cbArt, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -457,12 +449,12 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(cbArt, gridBagConstraints);
 
-        if (isEditor()) {
+        if (isEditor()){
             lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
             Mnemonics.setLocalizedText(lblGeom, "Geometrie:");
-            lblGeom.setName("lblGeom");                 // NOI18N
+            lblGeom.setName("lblGeom"); // NOI18N
         }
-        if (isEditor()) {
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 1;
@@ -473,23 +465,19 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             panSchaden.add(lblGeom, gridBagConstraints);
         }
 
-        if (isEditor()) {
+        if (isEditor()){
             cbGeomSchaden.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeomSchaden.setEnabled(false);
-            cbGeomSchaden.setName("cbGeomSchaden");           // NOI18N
+            cbGeomSchaden.setName("cbGeomSchaden"); // NOI18N
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.fk_geom}"),
-                    cbGeomSchaden,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomSchaden, BeanProperty.create("selectedItem"));
             binding.setSourceNullValue(null);
             binding.setSourceUnreadableValue(null);
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomSchaden).getConverter());
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor()) {
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 1;
@@ -525,7 +513,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblOhne.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblOhne, "ohne:");
-        lblOhne.setName("lblOhne");                 // NOI18N
+        lblOhne.setName("lblOhne"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -539,12 +527,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chOhne.setEnabled(false);
         chOhne.setName("chOhne"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.ohne_schaden}"),
-                chOhne,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ohne_schaden}"), chOhne, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -557,9 +540,9 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(chOhne, gridBagConstraints);
 
-        lblBau.setFont(new Font("Tahoma", 1, 11));                                                                       // NOI18N
+        lblBau.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBau, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblBau.text")); // NOI18N
-        lblBau.setName("lblBau");                                                                                        // NOI18N
+        lblBau.setName("lblBau"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -572,12 +555,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         cbBau.setEnabled(false);
         cbBau.setName("cbBau"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_bau}"),
-                cbBau,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_bau}"), cbBau, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -594,12 +572,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         txtBau.setName("txtBau"); // NOI18N
         txtBau.setPreferredSize(new Dimension(10, 24));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.bau}"),
-                txtBau,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bau}"), txtBau, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -613,7 +586,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblAbgest.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblAbgest, "abgestorben:");
-        lblAbgest.setName("lblAbgest");               // NOI18N
+        lblAbgest.setName("lblAbgest"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -627,12 +600,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chAbgest.setEnabled(false);
         chAbgest.setName("chAbgest"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.abgestorben}"),
-                chAbgest,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.abgestorben}"), chAbgest, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -647,7 +615,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblSturm.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblSturm, "Sturm:");
-        lblSturm.setName("lblSturm");                // NOI18N
+        lblSturm.setName("lblSturm"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 7;
@@ -661,12 +629,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chSturm.setEnabled(false);
         chSturm.setName("chSturm"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.sturmschaden}"),
-                chSturm,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.sturmschaden}"), chSturm, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -681,7 +644,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblBeratung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBeratung, "Beratung:");
-        lblBeratung.setName("lblBeratung");             // NOI18N
+        lblBeratung.setName("lblBeratung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -695,12 +658,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chBeratung.setEnabled(false);
         chBeratung.setName("chBeratung"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.baumberatung}"),
-                chBeratung,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.baumberatung}"), chBeratung, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -715,7 +673,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblGutachten.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblGutachten, "Gutachten vorh.:");
-        lblGutachten.setName("lblGutachten");            // NOI18N
+        lblGutachten.setName("lblGutachten"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
@@ -729,12 +687,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chGutachten.setEnabled(false);
         chGutachten.setName("chGutachten"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.gutachten}"),
-                chGutachten,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gutachten}"), chGutachten, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -749,7 +702,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblKroneArr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblKroneArr, "Kronenschaden:");
-        lblKroneArr.setName("lblKroneArr");             // NOI18N
+        lblKroneArr.setName("lblKroneArr"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -763,12 +716,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chKrone.setEnabled(false);
         chKrone.setName("chKrone"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.kronenschaden}"),
-                chKrone,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.kronenschaden}"), chKrone, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -782,17 +730,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(chKrone, gridBagConstraints);
 
         blpKrone.setEnabled(false);
-        blpKrone.setManageableButtonText(NbBundle.getMessage(
-                BaumSchadenPanel.class,
-                "BaumSchadenPanel.blpKrone.manageableButtonText")); // NOI18N
+        blpKrone.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpKrone.manageableButtonText")); // NOI18N
         blpKrone.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.arr_krone}"),
-                blpKrone,
-                BeanProperty.create("selectedElements"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_krone}"), blpKrone, BeanProperty.create("selectedElements"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -809,7 +750,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblStammArr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblStammArr, "Stammschaden:");
-        lblStammArr.setName("lblStammArr");             // NOI18N
+        lblStammArr.setName("lblStammArr"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -823,12 +764,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chStamm.setEnabled(false);
         chStamm.setName("chStamm"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.stammschaden}"),
-                chStamm,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.stammschaden}"), chStamm, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -850,18 +786,11 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(filler22, gridBagConstraints);
 
         blpStamm.setEnabled(false);
-        blpStamm.setManageableButtonText(NbBundle.getMessage(
-                BaumSchadenPanel.class,
-                "BaumSchadenPanel.blpStamm.manageableButtonText")); // NOI18N
-        blpStamm.setName("blpStamm");                               // NOI18N
+        blpStamm.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpStamm.manageableButtonText")); // NOI18N
+        blpStamm.setName("blpStamm"); // NOI18N
         blpStamm.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.arr_stamm}"),
-                blpStamm,
-                BeanProperty.create("selectedElements"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_stamm}"), blpStamm, BeanProperty.create("selectedElements"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -878,7 +807,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblWurzelArr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblWurzelArr, "Wurzelschaden:");
-        lblWurzelArr.setName("lblWurzelArr");            // NOI18N
+        lblWurzelArr.setName("lblWurzelArr"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 15;
@@ -893,12 +822,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chWurzel.setEnabled(false);
         chWurzel.setName("chWurzel"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.wurzelschaden}"),
-                chWurzel,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.wurzelschaden}"), chWurzel, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -918,18 +842,11 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(filler23, gridBagConstraints);
 
         blpWurzel.setEnabled(false);
-        blpWurzel.setManageableButtonText(NbBundle.getMessage(
-                BaumSchadenPanel.class,
-                "BaumSchadenPanel.blpWurzel.manageableButtonText")); // NOI18N
-        blpWurzel.setName("blpWurzel");                              // NOI18N
+        blpWurzel.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpWurzel.manageableButtonText")); // NOI18N
+        blpWurzel.setName("blpWurzel"); // NOI18N
         blpWurzel.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.arr_wurzel}"),
-                blpWurzel,
-                BeanProperty.create("selectedElements"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_wurzel}"), blpWurzel, BeanProperty.create("selectedElements"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -946,7 +863,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblMassnahmeArr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblMassnahmeArr, "Maßnahme:");
-        lblMassnahmeArr.setName("lblMassnahmeArr");         // NOI18N
+        lblMassnahmeArr.setName("lblMassnahmeArr"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 18;
@@ -963,18 +880,11 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panSchaden.add(filler24, gridBagConstraints);
 
         blpMassnahme.setEnabled(false);
-        blpMassnahme.setManageableButtonText(NbBundle.getMessage(
-                BaumSchadenPanel.class,
-                "BaumSchadenPanel.blpMassnahme.manageableButtonText")); // NOI18N
-        blpMassnahme.setName("blpMassnahme");                           // NOI18N
+        blpMassnahme.setManageableButtonText(NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.blpMassnahme.manageableButtonText")); // NOI18N
+        blpMassnahme.setName("blpMassnahme"); // NOI18N
         blpMassnahme.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.arr_massnahme}"),
-                blpMassnahme,
-                BeanProperty.create("selectedElements"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_massnahme}"), blpMassnahme, BeanProperty.create("selectedElements"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -1001,7 +911,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
-        lblBemerkung.setName("lblBemerkung");            // NOI18N
+        lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 22;
@@ -1019,12 +929,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         taBemerkung.setWrapStyleWord(true);
         taBemerkung.setName("taBemerkung"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.bemerkung}"),
-                taBemerkung,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -1043,7 +948,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblFaellung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblFaellung, "Fällung:");
-        lblFaellung.setName("lblFaellung");             // NOI18N
+        lblFaellung.setName("lblFaellung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 28;
@@ -1057,12 +962,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chFaellung.setEnabled(false);
         chFaellung.setName("chFaellung"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.faellung}"),
-                chFaellung,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.faellung}"), chFaellung, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1075,18 +975,42 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(chFaellung, gridBagConstraints);
 
+        lblAbgelehnt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblAbgelehnt, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblAbgelehnt.text")); // NOI18N
+        lblAbgelehnt.setName("lblAbgelehnt"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panSchaden.add(lblAbgelehnt, gridBagConstraints);
+
+        chAbgelehnt.setContentAreaFilled(false);
+        chAbgelehnt.setEnabled(false);
+        chAbgelehnt.setName("chAbgelehnt"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.abgelehnt}"), chAbgelehnt, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panSchaden.add(chAbgelehnt, gridBagConstraints);
+
         spHoehe.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spHoehe.setModel(new SpinnerNumberModel(0.0d, 0.0d, 100.0d, 0.1d));
         spHoehe.setEnabled(false);
-        spHoehe.setName("spHoehe");                 // NOI18N
+        spHoehe.setName("spHoehe"); // NOI18N
         spHoehe.setPreferredSize(new Dimension(75, 20));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.hoehe}"),
-                spHoehe,
-                BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hoehe}"), spHoehe, BeanProperty.create("value"));
         binding.setSourceNullValue(0.0d);
         binding.setSourceUnreadableValue(0.0d);
         bindingGroup.addBinding(binding);
@@ -1102,14 +1026,9 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         spUmfang.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spUmfang.setModel(new SpinnerNumberModel(0, 0, 1000, 1));
         spUmfang.setEnabled(false);
-        spUmfang.setName("spUmfang");                // NOI18N
+        spUmfang.setName("spUmfang"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.umfang}"),
-                spUmfang,
-                BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umfang}"), spUmfang, BeanProperty.create("value"));
         binding.setSourceNullValue(0);
         binding.setSourceUnreadableValue(0);
         bindingGroup.addBinding(binding);
@@ -1124,15 +1043,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         spAlter.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spAlter.setModel(new SpinnerNumberModel(0, 0, 500, 1));
         spAlter.setEnabled(false);
-        spAlter.setName("spAlter");                 // NOI18N
+        spAlter.setName("spAlter"); // NOI18N
         spAlter.setPreferredSize(new Dimension(75, 20));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.alter}"),
-                spAlter,
-                BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.alter}"), spAlter, BeanProperty.create("value"));
         binding.setSourceNullValue(0);
         binding.setSourceUnreadableValue(0);
         bindingGroup.addBinding(binding);
@@ -1144,11 +1058,9 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(spAlter, gridBagConstraints);
 
-        lblEfeu.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
-        Mnemonics.setLocalizedText(
-            lblEfeu,
-            NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblEfeu.text")); // NOI18N
-        lblEfeu.setName("lblEfeu");                                                        // NOI18N
+        lblEfeu.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblEfeu, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblEfeu.text")); // NOI18N
+        lblEfeu.setName("lblEfeu"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
@@ -1162,12 +1074,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chEfeu.setEnabled(false);
         chEfeu.setName("chEfeu"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.efeu}"),
-                chEfeu,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.efeu}"), chEfeu, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1182,7 +1089,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblGefahr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblGefahr, "Gefahrensbaum:");
-        lblGefahr.setName("lblGefahr");               // NOI18N
+        lblGefahr.setName("lblGefahr"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 26;
@@ -1192,11 +1099,9 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panSchaden.add(lblGefahr, gridBagConstraints);
 
-        lblKLeistung.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
-        Mnemonics.setLocalizedText(
-            lblKLeistung,
-            NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblKLeistung.text")); // NOI18N
-        lblKLeistung.setName("lblKLeistung");                                                   // NOI18N
+        lblKLeistung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblKLeistung, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblKLeistung.text")); // NOI18N
+        lblKLeistung.setName("lblKLeistung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 29;
@@ -1210,12 +1115,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chGefahr.setEnabled(false);
         chGefahr.setName("chGefahr"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.gefahrensbaum}"),
-                chGefahr,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gefahrensbaum}"), chGefahr, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1232,12 +1132,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chKLeistung.setEnabled(false);
         chKLeistung.setName("chKLeistung"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.keine_leistung}"),
-                chKLeistung,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.keine_leistung}"), chKLeistung, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1252,7 +1147,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblOrdnung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblOrdnung, "Ordnungswidrigkeit:");
-        lblOrdnung.setName("lblOrdnung");              // NOI18N
+        lblOrdnung.setName("lblOrdnung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 27;
@@ -1265,12 +1160,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         cbOrdnung.setEnabled(false);
         cbOrdnung.setName("cbOrdnung"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_ordnungswidrigkeit}"),
-                cbOrdnung,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_ordnungswidrigkeit}"), cbOrdnung, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1287,12 +1177,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         txtAnmerkung.setName("txtAnmerkung"); // NOI18N
         txtAnmerkung.setPreferredSize(new Dimension(10, 24));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.anmerkung}"),
-                txtAnmerkung,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anmerkung}"), txtAnmerkung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1309,12 +1194,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         txtBegruendung.setName("txtBegruendung"); // NOI18N
         txtBegruendung.setPreferredSize(new Dimension(10, 24));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.begruendung}"),
-                txtBegruendung,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.begruendung}"), txtBegruendung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1375,12 +1255,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(0, 10, 0, 0);
         panErsatz.add(panErsatzMain, gridBagConstraints);
 
-        lblLadenErsatz.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
+        lblLadenErsatz.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLadenErsatz.setForeground(new Color(153, 153, 153));
-        Mnemonics.setLocalizedText(
-            lblLadenErsatz,
-            NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblLadenErsatz.text")); // NOI18N
-        lblLadenErsatz.setName("lblLadenErsatz");                                                 // NOI18N
+        Mnemonics.setLocalizedText(lblLadenErsatz, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblLadenErsatz.text")); // NOI18N
+        lblLadenErsatz.setName("lblLadenErsatz"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1411,12 +1289,11 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panControlsNewErsatz.setOpaque(false);
         panControlsNewErsatz.setLayout(new GridBagLayout());
 
-        btnAddNewErsatz.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewErsatz.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewErsatz.setEnabled(false);
         btnAddNewErsatz.setMaximumSize(new Dimension(39, 20));
         btnAddNewErsatz.setMinimumSize(new Dimension(39, 20));
-        btnAddNewErsatz.setName("btnAddNewErsatz");                                                            // NOI18N
+        btnAddNewErsatz.setName("btnAddNewErsatz"); // NOI18N
         btnAddNewErsatz.setPreferredSize(new Dimension(39, 25));
         btnAddNewErsatz.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -1425,12 +1302,11 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewErsatz.add(btnAddNewErsatz, gridBagConstraints);
 
-        btnRemoveErsatz.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveErsatz.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveErsatz.setEnabled(false);
         btnRemoveErsatz.setMaximumSize(new Dimension(39, 20));
         btnRemoveErsatz.setMinimumSize(new Dimension(39, 20));
-        btnRemoveErsatz.setName("btnRemoveErsatz");                                                               // NOI18N
+        btnRemoveErsatz.setName("btnRemoveErsatz"); // NOI18N
         btnRemoveErsatz.setPreferredSize(new Dimension(39, 25));
         btnRemoveErsatz.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -1476,7 +1352,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblBetrag.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBetrag, "Betrag:");
-        lblBetrag.setName("lblBetrag");               // NOI18N
+        lblBetrag.setName("lblBetrag"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1489,12 +1365,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         txtBetrag.setEnabled(false);
         txtBetrag.setName("txtBetrag"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.betrag}"),
-                txtBetrag,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.betrag}"), txtBetrag, BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -1510,7 +1381,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         lblEingang.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblEingang, "eingegangen:");
-        lblEingang.setName("lblEingang");              // NOI18N
+        lblEingang.setName("lblEingang"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1524,12 +1395,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         chEingang.setEnabled(false);
         chEingang.setName("chEingang"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.eingegangen}"),
-                chEingang,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.eingegangen}"), chEingang, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1573,12 +1439,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
 
         baumFestsetzungPanel.setName("baumFestsetzungPanel"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                lstFest,
-                ELProperty.create("${selectedElement}"),
-                baumFestsetzungPanel,
-                BeanProperty.create("cidsBean"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstFest, ELProperty.create("${selectedElement}"), baumFestsetzungPanel, BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1599,12 +1460,10 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(0, 10, 10, 0);
         panFest.add(panFestMain, gridBagConstraints);
 
-        lblLadenFest.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
+        lblLadenFest.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLadenFest.setForeground(new Color(153, 153, 153));
-        Mnemonics.setLocalizedText(
-            lblLadenFest,
-            NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblLadenFest.text")); // NOI18N
-        lblLadenFest.setName("lblLadenFest");                                                   // NOI18N
+        Mnemonics.setLocalizedText(lblLadenFest, NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblLadenFest.text")); // NOI18N
+        lblLadenFest.setName("lblLadenFest"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1634,12 +1493,11 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         panControlsNewFest.setOpaque(false);
         panControlsNewFest.setLayout(new GridBagLayout());
 
-        btnAddNewFest.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewFest.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewFest.setEnabled(false);
         btnAddNewFest.setMaximumSize(new Dimension(39, 20));
         btnAddNewFest.setMinimumSize(new Dimension(39, 20));
-        btnAddNewFest.setName("btnAddNewFest");                                                                // NOI18N
+        btnAddNewFest.setName("btnAddNewFest"); // NOI18N
         btnAddNewFest.setPreferredSize(new Dimension(39, 25));
         btnAddNewFest.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -1648,12 +1506,11 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewFest.add(btnAddNewFest, gridBagConstraints);
 
-        btnRemoveFest.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveFest.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveFest.setEnabled(false);
         btnRemoveFest.setMaximumSize(new Dimension(39, 20));
         btnRemoveFest.setMinimumSize(new Dimension(39, 20));
-        btnRemoveFest.setName("btnRemoveFest");                                                                   // NOI18N
+        btnRemoveFest.setName("btnRemoveFest"); // NOI18N
         btnRemoveFest.setPreferredSize(new Dimension(39, 25));
         btnRemoveFest.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -1701,39 +1558,31 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         bindingGroup.bind();
     }
 
-    /**
-     * Code for dispatching events from components to event handlers.
-     *
-     * @version  $Revision$, $Date$
-     */
+    // Code for dispatching events from components to event handlers.
+
     private class FormListener implements ActionListener, ListSelectionListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
+        FormListener() {}
+        public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == btnAddNewErsatz) {
                 BaumSchadenPanel.this.btnAddNewErsatzActionPerformed(evt);
-            } else if (evt.getSource() == btnRemoveErsatz) {
+            }
+            else if (evt.getSource() == btnRemoveErsatz) {
                 BaumSchadenPanel.this.btnRemoveErsatzActionPerformed(evt);
-            } else if (evt.getSource() == btnAddNewFest) {
+            }
+            else if (evt.getSource() == btnAddNewFest) {
                 BaumSchadenPanel.this.btnAddNewFestActionPerformed(evt);
-            } else if (evt.getSource() == btnRemoveFest) {
+            }
+            else if (evt.getSource() == btnRemoveFest) {
                 BaumSchadenPanel.this.btnRemoveFestActionPerformed(evt);
             }
         }
 
-        @Override
-        public void valueChanged(final ListSelectionEvent evt) {
+        public void valueChanged(ListSelectionEvent evt) {
             if (evt.getSource() == lstErsatz) {
                 BaumSchadenPanel.this.lstErsatzValueChanged(evt);
             }
         }
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Getter @Setter private static Exception errorNoSave = null;
 
@@ -1825,6 +1674,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     JComboBox cbGeomSchaden;
     JComboBox<String> cbInst;
     DefaultBindableReferenceCombo cbOrdnung;
+    JCheckBox chAbgelehnt;
     JCheckBox chAbgest;
     JCheckBox chBeratung;
     JCheckBox chEfeu;
@@ -1850,6 +1700,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     JPanel jPanelErsatzzahlung;
     JPanel jPanelFestsetzung;
     JTabbedPane jTabbedPane;
+    JLabel lblAbgelehnt;
     JLabel lblAbgest;
     JLabel lblAlter;
     JLabel lblArt;
@@ -2288,6 +2139,20 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 LOG.warn("krone not given.", ex);
                 save = false;
             }
+            
+            // Haekchen abgelehnt und Faellung gesetzt
+            try {
+                if ((Objects.equals(saveSchadenBean.getProperty(FIELD__FAELLUNG), true))) {
+                    if ((Objects.equals(saveSchadenBean.getProperty(FIELD__ABGELEHNT), true))) {
+                        LOG.warn("Gefaellt and abgelehnt specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_ABGELEHNT));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("krone not given.", ex);
+                save = false;
+            }
 
             // Haekchen abgestorben gesetzt?
             try {
@@ -2610,6 +2475,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             txtBegruendung.setEnabled(false);
         }
         chAbgest.setEnabled(edit);
+        chAbgelehnt.setEnabled(edit);
         chSturm.setEnabled(edit);
         chBeratung.setEnabled(edit);
         chGutachten.setEnabled(edit);
@@ -2708,6 +2574,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         RendererTools.makeReadOnly(chKLeistung);
         taBemerkung.setEnabled(false);
         RendererTools.makeReadOnly(chFaellung);
+        RendererTools.makeReadOnly(chAbgelehnt);
         RendererTools.makeReadOnly(txtBetrag);
         RendererTools.makeReadOnly(chEingang);
         panControlsNewErsatz.setVisible(isEditor());
