@@ -70,7 +70,7 @@ public class BaumGebietReportGenerator {
                                 connectionContext));
             }
         } catch (final Exception ex) {
-            LOG.fatal(ex, ex);
+            LOG.error("Fehler beim Download Gebiet-Report.", ex);
         }
     }
 }

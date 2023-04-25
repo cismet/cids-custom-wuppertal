@@ -1014,7 +1014,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                         (CidsBean)selectedItem);
             }
         } catch (Exception ex) {
-            LOG.error(ex, ex);
+            LOG.error("Fehler beim Hinzufuegen des Ansprechpartners.", ex);
         } finally {
             getCidsBean().setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
@@ -1152,7 +1152,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             getCidsBean().setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         } catch (Exception ex) {
-            LOG.error(ex, ex);
+            LOG.error("Fehler beim Hinzufuegen des Ortstermins.", ex);
         } finally {
             dlgAddOrtstermin.setVisible(false);
         }
@@ -1466,7 +1466,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                         }
                     } catch (final Exception ex) {
                         noErrorOrt = false;
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Speicher-Check der Ortstermine.", ex);
                     }
                 }
             }
@@ -1479,7 +1479,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                         }
                     } catch (final Exception ex) {
                         noErrorSchaden = false;
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Speicher-Check der Schaeden.", ex);
                     }
                 }
             }
