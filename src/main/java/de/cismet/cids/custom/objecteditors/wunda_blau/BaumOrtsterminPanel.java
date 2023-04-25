@@ -787,31 +787,31 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddTeilnehmerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddTeilnehmerActionPerformed
+    private void btnAddTeilnehmerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddTeilnehmerActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtTeil, TABLE_NAME__TEILNEHMER, getConnectionContext());
             setChangeFlag();
         }
-    }                                                                     //GEN-LAST:event_btnAddTeilnehmerActionPerformed
+    }//GEN-LAST:event_btnAddTeilnehmerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemTeilnehmerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemTeilnehmerActionPerformed
+    private void btnRemTeilnehmerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemTeilnehmerActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtTeil);
             setChangeFlag();
         }
-    }                                                                     //GEN-LAST:event_btnRemTeilnehmerActionPerformed
+    }//GEN-LAST:event_btnRemTeilnehmerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnApartnerActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnApartnerActionPerformed
+    private void btnApartnerActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnApartnerActionPerformed
         final JDialog dialog = new JDialog((Frame)null,
                 "Ansprechpartnerinformationen",
                 true);
@@ -835,14 +835,14 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 NbBundle.getMessage(BaumOrtsterminPanel.class, BUNDLE_PANE_TITLE_SELECTION),
                 JOptionPane.WARNING_MESSAGE);
         }
-    } //GEN-LAST:event_btnApartnerActionPerformed
+    }//GEN-LAST:event_btnApartnerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddApActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddApActionPerformed
+    private void btnAddApActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddApActionPerformed
         if (getCidsBean() != null) {
             final Object selectedItem = comboBoxFilterDialogApartner.showAndGetSelected();
             try {
@@ -853,20 +853,20 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                             (CidsBean)selectedItem);
                 }
             } catch (Exception ex) {
-                LOG.error(ex, ex);
+                LOG.error("Fehler beim Hinzufuegen des Ansprechpartners.", ex);
             } finally {
                 getCidsBean().setArtificialChangeFlag(true);
                 getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
             }
         }
-    }                                                             //GEN-LAST:event_btnAddApActionPerformed
+    }//GEN-LAST:event_btnAddApActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemApActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemApActionPerformed
+    private void btnRemApActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemApActionPerformed
         if (getCidsBean() != null) {
             final Object selection = lstApartner.getSelectedValue();
             if (selection != null) {
@@ -893,7 +893,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                 }
             }
         }
-    }                                                             //GEN-LAST:event_btnRemApActionPerformed
+    }//GEN-LAST:event_btnRemApActionPerformed
 
     @Override
     public final ConnectionContext getConnectionContext() {
