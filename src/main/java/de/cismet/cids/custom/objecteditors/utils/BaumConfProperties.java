@@ -57,6 +57,7 @@ public class BaumConfProperties {
     private final String ordnerDokumente;
     private final String ordnerFotos;
     private final String ordnerThema;
+
     //~ Constructors -----------------------------------------------------------
 
     /**

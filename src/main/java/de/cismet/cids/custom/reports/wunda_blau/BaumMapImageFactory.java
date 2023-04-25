@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.reports.wunda_blau;
 /***************************************************
 *
@@ -9,12 +16,28 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.tools.MapImageFactory;
+
 import Sirius.server.middleware.types.MetaObject;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.operation.buffer.BufferOp;
+
+import lombok.Getter;
+
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.cismet.cids.custom.utils.BaumMapImageFactoryConfiguration;
+
 import de.cismet.cids.dynamics.CidsBean;
+
 import de.cismet.cismap.commons.HeadlessMapProvider;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -23,16 +46,8 @@ import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import lombok.Getter;
-
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -43,19 +58,22 @@ import java.util.Map;
 /**
  * DOCUMENT ME!
  *
- *
  * @author   sandra
  * @version  $Revision$, $Date$
  */
 public class BaumMapImageFactory extends MapImageFactory<BaumMapImageFactoryConfiguration>
         implements ConnectionContextStore {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static Map<String, String> colorMap = new HashMap<>();
+    private static final Color DEFAULT_COLOR = new Color(0.5f, 0.5f, 0.5f);
+    private static final String FIELD__GEOM = "fk_geom.geo_field";
+
     //~ Instance fields --------------------------------------------------------
 
     @Getter private ConnectionContext connectionContext = ConnectionContext.createDummy();
-    private static Map<String, String> colorMap = new HashMap<>();
-    private static final Color DEFAULT_COLOR = new Color (0.5f, 0.5f, 0.5f);
-    private static final String FIELD__GEOM = "fk_geom.geo_field";
+
     //~ Methods ----------------------------------------------------------------
 
     @Override
@@ -67,7 +85,15 @@ public class BaumMapImageFactory extends MapImageFactory<BaumMapImageFactoryConf
     protected BaumMapImageFactoryConfiguration extractConfiguration(final String confJson) throws Exception {
         return new ObjectMapper().readValue(confJson, BaumMapImageFactoryConfiguration.class);
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   geom   DOCUMENT ME!
+     * @param   color  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private DefaultStyledFeature createPointFeature(final Geometry geom, final Color color) {
         final DefaultStyledFeature dsf = new DefaultStyledFeature();
         final Geometry polygon = BufferOp.bufferOp(geom, 0.1);
@@ -77,7 +103,15 @@ public class BaumMapImageFactory extends MapImageFactory<BaumMapImageFactoryConf
         dsf.setLinePaint(color);
         return dsf;
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   geom   DOCUMENT ME!
+     * @param   color  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private DefaultStyledFeature createRectangleFeature(final Geometry geom, final Color color) {
         final DefaultStyledFeature dsf = new DefaultStyledFeature();
         dsf.setGeometry(geom);
@@ -90,30 +124,30 @@ public class BaumMapImageFactory extends MapImageFactory<BaumMapImageFactoryConf
     protected BufferedImage generateMap(final BaumMapImageFactoryConfiguration config) throws Exception {
         Geometry geom = null;
         final Collection<Feature> features = new ArrayList<>();
-                
-        for (final BaumMapImageFactoryConfiguration.ObjectIdentifier oi:config.getMons()){
-            final MetaObject mo = SessionManager.getProxy().getMetaObject(
-                    oi.getObjectId(),
-                    oi.getClassId(),
-                    "WUNDA_BLAU",
-                    connectionContext);
+
+        for (final BaumMapImageFactoryConfiguration.ObjectIdentifier oi : config.getMons()) {
+            final MetaObject mo = SessionManager.getProxy()
+                        .getMetaObject(
+                            oi.getObjectId(),
+                            oi.getClassId(),
+                            "WUNDA_BLAU",
+                            connectionContext);
             final CidsBean bean = mo.getBean();
 
             final Geometry baumGeom = (Geometry)bean.getProperty(FIELD__GEOM);
             if (baumGeom != null) {
                 colorMap = config.getColorMap();
-                final Color classColor = ((colorMap.containsKey(mo.getMetaClass().getName())) 
-                                                ? Color.decode(colorMap.get(mo.getMetaClass().getName())) 
-                                                : DEFAULT_COLOR);
+                final Color classColor = ((colorMap.containsKey(mo.getMetaClass().getName()))
+                        ? Color.decode(colorMap.get(mo.getMetaClass().getName())) : DEFAULT_COLOR);
                 StyledFeature dsf;
-                if (baumGeom.getGeometryType().equals("Polygon")){
+                if (baumGeom.getGeometryType().equals("Polygon")) {
                     dsf = createRectangleFeature(baumGeom, classColor);
                 } else {
                     dsf = createPointFeature(baumGeom, classColor);
                 }
                 features.add(dsf);
                 if (geom == null) {
-                    geom = (Geometry) dsf.getGeometry().buffer(0).clone();
+                    geom = (Geometry)dsf.getGeometry().buffer(0).clone();
                 } else {
                     geom = geom.union((Geometry)dsf.getGeometry().buffer(0).clone());
                 }
@@ -136,9 +170,7 @@ public class BaumMapImageFactory extends MapImageFactory<BaumMapImageFactoryConf
             final SimpleWMS simpleWms = new SimpleWMS(getMapUrl);
             mapProvider.addLayer(simpleWms);
 
-            features.forEach((feature) -> {
-                mapProvider.addFeature(feature);
-            });
+            features.forEach((feature) -> { mapProvider.addFeature(feature); });
 
             return (BufferedImage)mapProvider.getImageAndWait(
                     72,
