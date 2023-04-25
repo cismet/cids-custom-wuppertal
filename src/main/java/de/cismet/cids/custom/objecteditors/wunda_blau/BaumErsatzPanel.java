@@ -2149,28 +2149,30 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             try {
                 final Collection<CidsBean> controlCollection = saveErsatzBean.getBeanCollectionProperty(
                         FIELD__KONTROLLE);
-                for (final CidsBean controlBean : controlCollection) {
-                    // Datum vorhanden
-                    if (controlBean.getProperty(FIELD__KONTROLLE_DATUM) == null) {
-                        LOG.warn("No kontolldatum specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLDATE));
-                        save = false;
-                    } else {
-                        // Datum nicht in der Zukunft
-                        final Object controllDate = controlBean.getProperty(FIELD__KONTROLLE_DATUM);
-                        if (controllDate instanceof Date) {
-                            if (((Date)controllDate).after(jetztDatum)) {
-                                LOG.warn("Wrong kontolldatum specified. Skip persisting.");
-                                errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATE));
-                                save = false;
+                if (controlCollection != null) {
+                    for (final CidsBean controlBean : controlCollection) {
+                        // Datum vorhanden
+                        if (controlBean.getProperty(FIELD__KONTROLLE_DATUM) == null) {
+                            LOG.warn("No kontolldatum specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLDATE));
+                            save = false;
+                        } else {
+                            // Datum nicht in der Zukunft
+                            final Object controllDate = controlBean.getProperty(FIELD__KONTROLLE_DATUM);
+                            if (controllDate instanceof Date) {
+                                if (((Date)controllDate).after(jetztDatum)) {
+                                    LOG.warn("Wrong kontolldatum specified. Skip persisting.");
+                                    errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_FUTUREDATE));
+                                    save = false;
+                                }
                             }
                         }
-                    }
-                    // Bemerkung vorhanden
-                    if (controlBean.getProperty(FIELD__KONTROLLE_BEMERKUNG) == null) {
-                        LOG.warn("No bemerkung specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLTEXT));
-                        save = false;
+                        // Bemerkung vorhanden
+                        if (controlBean.getProperty(FIELD__KONTROLLE_BEMERKUNG) == null) {
+                            LOG.warn("No bemerkung specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(BaumErsatzPanel.class, BUNDLE_NOCONTROLTEXT));
+                            save = false;
+                        }
                     }
                 }
             } catch (final MissingResourceException ex) {

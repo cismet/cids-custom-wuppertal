@@ -168,6 +168,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String FIELD__BEMERKUNG = "bemerkung";                                 // baum_schaden
     public static final String FIELD__BETRAG = "betrag";                                       // baum_schaden
     public static final String FIELD__EINGANG = "eingegangen";                                 // baum_schaden
+    public static final String FIELD__ABGELEHNT = "abgelehnt";                                 // baum_schaden
     public static final String FIELD__FAELLUNG = "faellung";                                   // baum_schaden
     public static final String FIELD__KLEISTUNG = "keine_leistung";                            // baum_schaden
     public static final String FIELD__BEGRUENDUNG = "begruendung";                             // baum_schaden
@@ -203,6 +204,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String BUNDLE_WRONGSTURM = "BaumSchadenPanel.isOkForSaving().wrongSturm";
     public static final String BUNDLE_NOGEOM = "BaumSchadenPanel.isOkForSaving().noGeom";
     public static final String BUNDLE_WRONGGEOM = "BaumSchadenPanel.isOkForSaving().wrongGeom";
+    public static final String BUNDLE_ABGELEHNT = "BaumSchadenPanel.isOkForSaving().abgelehnt";
 
     public static final String BUNDLE_PANE_TITLE_ERROR_FEST = "BaumSchadenPanel.zeigeErrorFest().JOptionPane.title";
     public static final String BUNDLE_PANE_TITLE_ERROR_ERSATZ = "BaumSchadenPanel.zeigeErrorErsatz().JOptionPane.title";
@@ -285,6 +287,8 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         taBemerkung = new JTextArea();
         lblFaellung = new JLabel();
         chFaellung = new JCheckBox();
+        lblAbgelehnt = new JLabel();
+        chAbgelehnt = new JCheckBox();
         spHoehe = new JSpinner();
         spUmfang = new JSpinner();
         spAlter = new JSpinner();
@@ -1075,6 +1079,42 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panSchaden.add(chFaellung, gridBagConstraints);
 
+        lblAbgelehnt.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
+        Mnemonics.setLocalizedText(
+            lblAbgelehnt,
+            NbBundle.getMessage(BaumSchadenPanel.class, "BaumSchadenPanel.lblAbgelehnt.text")); // NOI18N
+        lblAbgelehnt.setName("lblAbgelehnt");                                                   // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panSchaden.add(lblAbgelehnt, gridBagConstraints);
+
+        chAbgelehnt.setContentAreaFilled(false);
+        chAbgelehnt.setEnabled(false);
+        chAbgelehnt.setName("chAbgelehnt"); // NOI18N
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.abgelehnt}"),
+                chAbgelehnt,
+                BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panSchaden.add(chAbgelehnt, gridBagConstraints);
+
         spHoehe.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spHoehe.setModel(new SpinnerNumberModel(0.0d, 0.0d, 100.0d, 0.1d));
         spHoehe.setEnabled(false);
@@ -1825,6 +1865,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     JComboBox cbGeomSchaden;
     JComboBox<String> cbInst;
     DefaultBindableReferenceCombo cbOrdnung;
+    JCheckBox chAbgelehnt;
     JCheckBox chAbgest;
     JCheckBox chBeratung;
     JCheckBox chEfeu;
@@ -1850,6 +1891,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     JPanel jPanelErsatzzahlung;
     JPanel jPanelFestsetzung;
     JTabbedPane jTabbedPane;
+    JLabel lblAbgelehnt;
     JLabel lblAbgest;
     JLabel lblAlter;
     JLabel lblArt;
@@ -2142,7 +2184,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                         }
                     } catch (final Exception ex) {
                         noErrorErsatz = false;
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Speicher-Check der Ersatzpflanzungen.", ex);
                     }
                 }
             }
@@ -2156,7 +2198,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                         }
                     } catch (final Exception ex) {
                         noErrorFest = false;
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Speicher-Check der Festsetzungen.", ex);
                     }
                 }
             }
@@ -2228,7 +2270,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             // Text zur Baugehnemigung, wenn mit
             try {
                 if ((saveSchadenBean.getProperty(FIELD__BAU) != null)
-                            && ((getCidsBean().getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
+                            && ((saveSchadenBean.getProperty(FIELD__BAU_SCHLUESSEL)).toString().equals("mit"))) {
                     if ((saveSchadenBean.getProperty(FIELD__BAU_TEXT) == null)
                                 || (saveSchadenBean.getProperty(FIELD__BAU_TEXT).toString()).trim().isEmpty()) {
                         LOG.warn("No text bau specified. Skip persisting.");
@@ -2281,6 +2323,20 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     if (!(Objects.equals(saveSchadenBean.getProperty(FIELD__KRONE), true))) {
                         LOG.warn("No krone specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_NOKRONE));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("krone not given.", ex);
+                save = false;
+            }
+
+            // Haekchen abgelehnt und Faellung gesetzt
+            try {
+                if ((Objects.equals(saveSchadenBean.getProperty(FIELD__FAELLUNG), true))) {
+                    if ((Objects.equals(saveSchadenBean.getProperty(FIELD__ABGELEHNT), true))) {
+                        LOG.warn("Gefaellt and abgelehnt specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(BaumSchadenPanel.class, BUNDLE_ABGELEHNT));
                         save = false;
                     }
                 }
@@ -2610,6 +2666,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             txtBegruendung.setEnabled(false);
         }
         chAbgest.setEnabled(edit);
+        chAbgelehnt.setEnabled(edit);
         chSturm.setEnabled(edit);
         chBeratung.setEnabled(edit);
         chGutachten.setEnabled(edit);
@@ -2708,6 +2765,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         RendererTools.makeReadOnly(chKLeistung);
         taBemerkung.setEnabled(false);
         RendererTools.makeReadOnly(chFaellung);
+        RendererTools.makeReadOnly(chAbgelehnt);
         RendererTools.makeReadOnly(txtBetrag);
         RendererTools.makeReadOnly(chEingang);
         panControlsNewErsatz.setVisible(isEditor());
