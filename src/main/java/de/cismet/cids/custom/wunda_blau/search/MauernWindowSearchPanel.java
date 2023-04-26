@@ -105,13 +105,19 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
     private de.cismet.cids.editors.DefaultBindableDateChooser dcDurchgeSanVon;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcDurchzuSanBis;
     private de.cismet.cids.editors.DefaultBindableDateChooser dcDurchzuSanVon;
-    private de.cismet.cids.editors.DefaultBindableDateChooser dcPruefBis;
-    private de.cismet.cids.editors.DefaultBindableDateChooser dcPruefVon;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcErstePruefBis;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcErstePruefVon;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcLetztePruefBis;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcLetztePruefVon;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcNaechstePruefBis;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcNaechstePruefVon;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler12;
+    private javax.swing.Box.Filler filler13;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
@@ -127,6 +133,12 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -139,6 +151,8 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAnsicht;
     private javax.swing.JLabel lblBausubstanz;
+    private javax.swing.JLabel lblErstePruefBis;
+    private javax.swing.JLabel lblErstePruefVon;
     private javax.swing.JLabel lblFiller2;
     private javax.swing.JLabel lblFiller3;
     private javax.swing.JLabel lblFiller5;
@@ -147,6 +161,10 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
     private javax.swing.JLabel lblGruendung;
     private javax.swing.JLabel lblHoeheBis;
     private javax.swing.JLabel lblHoeheVon;
+    private javax.swing.JLabel lblLetztePruefBis;
+    private javax.swing.JLabel lblLetztePruefVon;
+    private javax.swing.JLabel lblNaechstePruefBis;
+    private javax.swing.JLabel lblNaechstePruefVon;
     private javax.swing.JLabel lblNotenBis;
     private javax.swing.JLabel lblNotenBis1;
     private javax.swing.JLabel lblNotenBis2;
@@ -159,12 +177,10 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
     private javax.swing.JLabel lblNotenFrom4;
     private javax.swing.JLabel lblNotenFrom5;
     private javax.swing.JLabel lblNotenFrom6;
-    private javax.swing.JLabel lblPruefTil;
     private javax.swing.JLabel lblPruefTil1;
     private javax.swing.JLabel lblPruefTil2;
     private javax.swing.JLabel lblPruefTil3;
     private javax.swing.JLabel lblPruefTil4;
-    private javax.swing.JLabel lblPruefVon;
     private javax.swing.JLabel lblPruefVon1;
     private javax.swing.JLabel lblPruefVon2;
     private javax.swing.JLabel lblPruefVon3;
@@ -178,10 +194,12 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
     private javax.swing.JList lstLastklasse;
     private javax.swing.JPanel pnlEigentuemerCtrlBtns;
     private javax.swing.JPanel pnlEigetuemer;
+    private javax.swing.JPanel pnlErstePruefung;
     private javax.swing.JPanel pnlHoehe;
     private javax.swing.JPanel pnlLastklasse;
+    private javax.swing.JPanel pnlLetztePruefung;
+    private javax.swing.JPanel pnlNaechstePruefung;
     private javax.swing.JPanel pnlNoten;
-    private javax.swing.JPanel pnlPruefung;
     private javax.swing.JPanel pnlSearchMode;
     private javax.swing.JRadioButton rbAll;
     private javax.swing.JRadioButton rbOne;
@@ -300,8 +318,12 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
                 RendererTools.makeReadOnly(dcDurchgeSanVon);
                 RendererTools.makeReadOnly(dcDurchzuSanBis);
                 RendererTools.makeReadOnly(dcDurchzuSanVon);
-                RendererTools.makeReadOnly(dcPruefBis);
-                RendererTools.makeReadOnly(dcPruefVon);
+                RendererTools.makeReadOnly(dcLetztePruefBis);
+                RendererTools.makeReadOnly(dcLetztePruefVon);
+                RendererTools.makeReadOnly(dcErstePruefBis);
+                RendererTools.makeReadOnly(dcErstePruefVon);
+                RendererTools.makeReadOnly(dcNaechstePruefBis);
+                RendererTools.makeReadOnly(dcNaechstePruefVon);
                 RendererTools.makeReadOnly(cbErledigtBegeh);
                 RendererTools.makeReadOnly(cbErledigtBesichtigt);
                 RendererTools.makeReadOnly(cbErledigtDurchge);
@@ -357,11 +379,33 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         scpListLastklasse = new javax.swing.JScrollPane();
         lstLastklasse = new javax.swing.JList();
         lblSelektierteLastklassen = new javax.swing.JLabel();
-        pnlPruefung = new javax.swing.JPanel();
-        lblPruefVon = new javax.swing.JLabel();
-        dcPruefVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        lblPruefTil = new javax.swing.JLabel();
-        dcPruefBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        pnlErstePruefung = new javax.swing.JPanel();
+        lblErstePruefVon = new javax.swing.JLabel();
+        dcErstePruefVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        lblErstePruefBis = new javax.swing.JLabel();
+        dcErstePruefBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        jPanel16 = new javax.swing.JPanel();
+        jPanel17 = new javax.swing.JPanel();
+        jPanel18 = new javax.swing.JPanel();
+        pnlLetztePruefung = new javax.swing.JPanel();
+        lblLetztePruefVon = new javax.swing.JLabel();
+        dcLetztePruefVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        lblLetztePruefBis = new javax.swing.JLabel();
+        dcLetztePruefBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        jPanel13 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        jPanel15 = new javax.swing.JPanel();
+        pnlNaechstePruefung = new javax.swing.JPanel();
+        lblNaechstePruefVon = new javax.swing.JLabel();
+        dcNaechstePruefVon = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        lblNaechstePruefBis = new javax.swing.JLabel();
+        dcNaechstePruefBis = new de.cismet.cids.editors.DefaultBindableDateChooser();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -481,7 +525,7 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        pnlSearchMode.setBorder(javax.swing.BorderFactory.createTitledBorder("Suchmodus")); // NOI18N
+        pnlSearchMode.setBorder(javax.swing.BorderFactory.createTitledBorder("Suchmodus"));
         pnlSearchMode.setOpaque(false);
         pnlSearchMode.setLayout(new java.awt.GridBagLayout());
 
@@ -527,7 +571,7 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         jPanel12.setOpaque(false);
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        pnlEigetuemer.setBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer")); // NOI18N
+        pnlEigetuemer.setBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer"));
         pnlEigetuemer.setOpaque(false);
         pnlEigetuemer.setLayout(new java.awt.GridBagLayout());
 
@@ -570,7 +614,7 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(pnlEigetuemer, gridBagConstraints);
 
-        pnlLastklasse.setBorder(javax.swing.BorderFactory.createTitledBorder("Lastklasse")); // NOI18N
+        pnlLastklasse.setBorder(javax.swing.BorderFactory.createTitledBorder("Lastklasse"));
         pnlLastklasse.setOpaque(false);
         pnlLastklasse.setLayout(new java.awt.GridBagLayout());
 
@@ -611,73 +655,215 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(pnlLastklasse, gridBagConstraints);
 
-        pnlPruefung.setBorder(javax.swing.BorderFactory.createTitledBorder("nächste Prüfung")); // NOI18N
-        pnlPruefung.setOpaque(false);
-        pnlPruefung.setLayout(new java.awt.GridBagLayout());
+        pnlErstePruefung.setBorder(javax.swing.BorderFactory.createTitledBorder("erste Prüfung")); // NOI18N
+        pnlErstePruefung.setOpaque(false);
+        pnlErstePruefung.setLayout(new java.awt.GridBagLayout());
 
-        lblPruefVon.setText("von:");
+        lblErstePruefVon.setText("von:"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlPruefung.add(lblPruefVon, gridBagConstraints);
+        pnlErstePruefung.add(lblErstePruefVon, gridBagConstraints);
 
-        dcPruefVon.setPreferredSize(new java.awt.Dimension(124, 20));
+        dcErstePruefVon.setPreferredSize(new java.awt.Dimension(124, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        pnlPruefung.add(dcPruefVon, gridBagConstraints);
+        pnlErstePruefung.add(dcErstePruefVon, gridBagConstraints);
 
-        lblPruefTil.setText("bis:");
+        lblErstePruefBis.setText("bis:"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        pnlPruefung.add(lblPruefTil, gridBagConstraints);
+        pnlErstePruefung.add(lblErstePruefBis, gridBagConstraints);
 
-        dcPruefBis.setPreferredSize(new java.awt.Dimension(124, 20));
+        dcErstePruefBis.setPreferredSize(new java.awt.Dimension(124, 20));
+        dcErstePruefBis.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    dcErstePruefBisActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        pnlPruefung.add(dcPruefBis, gridBagConstraints);
+        pnlErstePruefung.add(dcErstePruefBis, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        pnlPruefung.add(filler1, gridBagConstraints);
+        pnlErstePruefung.add(filler13, gridBagConstraints);
 
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        jPanel16.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
-        pnlPruefung.add(jPanel2, gridBagConstraints);
+        pnlErstePruefung.add(jPanel16, gridBagConstraints);
 
-        jPanel3.setLayout(new java.awt.GridBagLayout());
-        pnlPruefung.add(jPanel3, new java.awt.GridBagConstraints());
+        jPanel17.setLayout(new java.awt.GridBagLayout());
+        pnlErstePruefung.add(jPanel17, new java.awt.GridBagConstraints());
 
-        jPanel4.setLayout(new java.awt.GridBagLayout());
-        pnlPruefung.add(jPanel4, new java.awt.GridBagConstraints());
+        jPanel18.setLayout(new java.awt.GridBagLayout());
+        pnlErstePruefung.add(jPanel18, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel12.add(pnlPruefung, gridBagConstraints);
-        pnlPruefung.getAccessibleContext()
+        jPanel12.add(pnlErstePruefung, gridBagConstraints);
+
+        pnlLetztePruefung.setBorder(javax.swing.BorderFactory.createTitledBorder("letzte Prüfung")); // NOI18N
+        pnlLetztePruefung.setOpaque(false);
+        pnlLetztePruefung.setLayout(new java.awt.GridBagLayout());
+
+        lblLetztePruefVon.setText("von:"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        pnlLetztePruefung.add(lblLetztePruefVon, gridBagConstraints);
+
+        dcLetztePruefVon.setPreferredSize(new java.awt.Dimension(124, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlLetztePruefung.add(dcLetztePruefVon, gridBagConstraints);
+
+        lblLetztePruefBis.setText("bis:"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        pnlLetztePruefung.add(lblLetztePruefBis, gridBagConstraints);
+
+        dcLetztePruefBis.setPreferredSize(new java.awt.Dimension(124, 20));
+        dcLetztePruefBis.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    dcLetztePruefBisActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        pnlLetztePruefung.add(dcLetztePruefBis, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        pnlLetztePruefung.add(filler3, gridBagConstraints);
+
+        jPanel13.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        pnlLetztePruefung.add(jPanel13, gridBagConstraints);
+
+        jPanel14.setLayout(new java.awt.GridBagLayout());
+        pnlLetztePruefung.add(jPanel14, new java.awt.GridBagConstraints());
+
+        jPanel15.setLayout(new java.awt.GridBagLayout());
+        pnlLetztePruefung.add(jPanel15, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(pnlLetztePruefung, gridBagConstraints);
+
+        pnlNaechstePruefung.setBorder(javax.swing.BorderFactory.createTitledBorder("nächste Prüfung"));
+        pnlNaechstePruefung.setOpaque(false);
+        pnlNaechstePruefung.setLayout(new java.awt.GridBagLayout());
+
+        lblNaechstePruefVon.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearchPanel.class,
+                "MauernWindowSearchPanel.lblNaechstePruefVon.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        pnlNaechstePruefung.add(lblNaechstePruefVon, gridBagConstraints);
+
+        dcNaechstePruefVon.setPreferredSize(new java.awt.Dimension(124, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
+        pnlNaechstePruefung.add(dcNaechstePruefVon, gridBagConstraints);
+
+        lblNaechstePruefBis.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearchPanel.class,
+                "MauernWindowSearchPanel.lblNaechstePruefBis.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        pnlNaechstePruefung.add(lblNaechstePruefBis, gridBagConstraints);
+
+        dcNaechstePruefBis.setPreferredSize(new java.awt.Dimension(124, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        pnlNaechstePruefung.add(dcNaechstePruefBis, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        pnlNaechstePruefung.add(filler1, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        pnlNaechstePruefung.add(jPanel2, gridBagConstraints);
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+        pnlNaechstePruefung.add(jPanel3, new java.awt.GridBagConstraints());
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+        pnlNaechstePruefung.add(jPanel4, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel12.add(pnlNaechstePruefung, gridBagConstraints);
+        pnlNaechstePruefung.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
                         MauernWindowSearchPanel.class,
-                        "MauernWindowSearchPanel.pnlPruefung.AccessibleContext.accessibleName")); // NOI18N
+                        "MauernWindowSearchPanel.pnlNaechstePruefung.AccessibleContext.accessibleName")); // NOI18N
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Durchzuführende Arbeiten")); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Durchzuführende Arbeiten"));
         jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
@@ -766,7 +952,7 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(jPanel5, gridBagConstraints);
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Arbeiten durchgeführt")); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Arbeiten durchgeführt"));
         jPanel7.setOpaque(false);
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
@@ -857,7 +1043,7 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(jPanel7, gridBagConstraints);
 
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Beobachtung")); // NOI18N
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Beobachtung"));
         jPanel9.setOpaque(false);
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
@@ -927,7 +1113,7 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(jPanel9, gridBagConstraints);
 
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Besichtigung")); // NOI18N
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Besichtigung"));
         jPanel10.setOpaque(false);
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
@@ -1000,7 +1186,7 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(jPanel10, gridBagConstraints);
 
-        pnlHoehe.setBorder(javax.swing.BorderFactory.createTitledBorder("Eigenschaften")); // NOI18N
+        pnlHoehe.setBorder(javax.swing.BorderFactory.createTitledBorder("Eigenschaften"));
         pnlHoehe.setOpaque(false);
         pnlHoehe.setLayout(new java.awt.GridBagLayout());
 
@@ -1061,12 +1247,12 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(pnlHoehe, gridBagConstraints);
 
-        pnlNoten.setBorder(javax.swing.BorderFactory.createTitledBorder("Noten")); // NOI18N
+        pnlNoten.setBorder(javax.swing.BorderFactory.createTitledBorder("Noten"));
         pnlNoten.setOpaque(false);
         pnlNoten.setLayout(new java.awt.GridBagLayout());
 
@@ -1405,13 +1591,13 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel12.add(pnlNoten, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -1430,6 +1616,24 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
         gridBagConstraints.weighty = 1.0;
         add(filler8, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void dcLetztePruefBisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dcLetztePruefBisActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_dcLetztePruefBisActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void dcErstePruefBisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dcErstePruefBisActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_dcErstePruefBisActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1583,7 +1787,9 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
                 ? ((CidsBean)cbSanierung.getSelectedItem()).getMetaObject().getId() : null);
 
         final CidsMauernSearchStatement.MassnahmenInfo massnahmen = new CidsMauernSearchStatement.MassnahmenInfo();
-        massnahmen.setPruefung(createMassnahmeInfo(dcPruefVon, dcPruefBis));
+        massnahmen.setErstePruefung(createMassnahmeInfo(dcErstePruefVon, dcErstePruefBis));
+        massnahmen.setLetztePruefung(createMassnahmeInfo(dcLetztePruefVon, dcLetztePruefBis));
+        massnahmen.setPruefung(createMassnahmeInfo(dcNaechstePruefVon, dcNaechstePruefBis));
         massnahmen.setSanierungGeplant(createMassnahmeInfo(
                 dcDurchzuSanVon,
                 dcDurchzuSanBis,
@@ -1723,9 +1929,15 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
 
             final CidsMauernSearchStatement.MassnahmenInfo massnahmen = configuration.getMassnahmen();
             if (massnahmen != null) {
-                final CidsMauernSearchStatement.MassnahmeInfo pruefung = massnahmen.getPruefung();
-                dcPruefVon.setDate((pruefung != null) ? pruefung.getVon() : null);
-                dcPruefBis.setDate((pruefung != null) ? pruefung.getBis() : null);
+                final CidsMauernSearchStatement.MassnahmeInfo erstePuefung = massnahmen.getPruefung();
+                dcErstePruefVon.setDate((erstePuefung != null) ? erstePuefung.getVon() : null);
+                dcErstePruefBis.setDate((erstePuefung != null) ? erstePuefung.getBis() : null);
+                final CidsMauernSearchStatement.MassnahmeInfo letztePruefung = massnahmen.getPruefung();
+                dcLetztePruefVon.setDate((letztePruefung != null) ? letztePruefung.getVon() : null);
+                dcLetztePruefBis.setDate((letztePruefung != null) ? letztePruefung.getBis() : null);
+                final CidsMauernSearchStatement.MassnahmeInfo nachestePruefung = massnahmen.getPruefung();
+                dcNaechstePruefVon.setDate((nachestePruefung != null) ? nachestePruefung.getVon() : null);
+                dcNaechstePruefBis.setDate((nachestePruefung != null) ? nachestePruefung.getBis() : null);
                 final CidsMauernSearchStatement.MassnahmeInfo geplant = massnahmen.getSanierungGeplant();
                 dcDurchzuSanVon.setDate((geplant != null) ? geplant.getVon() : null);
                 dcDurchzuSanBis.setDate((geplant != null) ? geplant.getBis() : null);
@@ -1804,8 +2016,12 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
                 lstEigentuemer.removeAll();
                 lstLastklasse.removeAll();
             }
-            dcPruefVon.setDate(null);
-            dcPruefBis.setDate(null);
+            dcErstePruefVon.setDate(null);
+            dcErstePruefVon.setDate(null);
+            dcLetztePruefVon.setDate(null);
+            dcLetztePruefVon.setDate(null);
+            dcNaechstePruefVon.setDate(null);
+            dcNaechstePruefBis.setDate(null);
             dcDurchzuSanVon.setDate(null);
             dcDurchzuSanBis.setDate(null);
             cbGewerkDurchzu.setSelectedItem(null);
