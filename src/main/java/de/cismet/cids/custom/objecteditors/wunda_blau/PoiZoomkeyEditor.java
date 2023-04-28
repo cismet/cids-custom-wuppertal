@@ -73,9 +73,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
 import org.jdesktop.swingx.JXTable;
+import org.openide.util.Exceptions;
 /**
  * DOCUMENT ME!
  *
@@ -96,6 +98,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__NAME = "name";                             // PoiZoomkey
     public static final String FIELD__ID = "id";                                 // PoiZoomkey
     public static final String FIELD__POI = "fk_locationinstance";               // PoiZoomdefinition
+    public static final String FIELD__PRIO = "fk_zoomprio";                      // PoiZoomdefinition
     public static final String FIELD__DEFS = "n_zoomdefinitionen";
     public static final String TABLE_NAME = "poi_zoomkey";
     public static final String TABLE_DEF = "poi_zoomdefinition";
@@ -106,6 +109,9 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_WRONGNAME = "PoiZoomkeyEditor.isOkForSaving().wrongName";
     public static final String BUNDLE_DUPLICATENAME = "PoiZoomkeyEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_LENGTHNAME = "PoiZoomkeyEditor.isOkForSaving().lengthName";
+    public static final String BUNDLE_NOPOI= "PoiZoomkeyEditor.isOkForSaving().noPoi";
+    public static final String BUNDLE_TWICEPOI= "PoiZoomkeyEditor.isOkForSaving().twicePoi";
+    public static final String BUNDLE_NOPRIO = "PoiZoomkeyEditor.isOkForSaving().noPrio";
     public static final String BUNDLE_PANE_PREFIX = "PoiZoomkeyEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "PoiZoomkeyEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "PoiZoomkeyEditor.isOkForSaving().JOptionPane.title";
@@ -660,6 +666,46 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
             800,
             600);
     }
+    
+    /**
+     * Ueberprueft die Eingaben der Tabelle, sobald Fehler Abbruch.
+     *
+     * @return  DOCUMENT ME!
+     */
+    private int checkValuesForDefs() {
+        try {
+            final List<CidsBean> listDefBeans = CidsBeanSupport.getBeanCollectionFromProperty(
+                    cidsBean,
+                    FIELD__DEFS);
+
+            if ((listDefBeans != null) && (listDefBeans.size() > 0)) {
+                for (int i = 0; i < listDefBeans.size(); i++) {
+                    final CidsBean defBean = listDefBeans.get(i);
+                    // .......Überprüfen ob alle Einträge gefüllt.......
+                    if ((null == defBean.getProperty(FIELD__POI))
+                                || "".equals(defBean.getProperty(FIELD__POI).toString())) {
+                        return 1;
+                    }
+                    if ((null == defBean.getProperty(FIELD__PRIO))
+                                || "".equals(defBean.getProperty(FIELD__PRIO).toString())) {
+                        return 2;
+                    }
+                    // Redundante Einträge
+                    if (listDefBeans.size() > (i + 1)) {
+                        for (int j = i + 1; j < listDefBeans.size(); j++) {
+                            if (defBean.getProperty(FIELD__POI).equals(
+                                            listDefBeans.get(j).getProperty(FIELD__POI))) {
+                                return 3;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return 0;
+    }
 
     @Override
     public String getTitle() {
@@ -733,6 +779,32 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
+            save = false;
+        }
+        // Liste ueberpruefen
+        try {
+            switch (checkValuesForDefs()) {
+                case 1: {
+                    LOG.warn("No poi specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(PoiZoomkeyEditor.class, BUNDLE_NOPOI));
+                    save = false;
+                    break;
+                }
+                case 2: {
+                    LOG.warn("No prio specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(PoiZoomkeyEditor.class, BUNDLE_NOPRIO));
+                    save = false;
+                    break;
+                }
+                case 3: {
+                    LOG.warn("Twice poi specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(PoiZoomkeyEditor.class, BUNDLE_TWICEPOI));
+                    save = false;
+                    break;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Error in Tabele.", ex);
             save = false;
         }
 
