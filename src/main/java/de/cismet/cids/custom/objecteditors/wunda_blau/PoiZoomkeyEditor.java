@@ -49,6 +49,7 @@ import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DivBeanTable;
+import de.cismet.cids.custom.wunda_blau.search.server.PoiLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -215,7 +216,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        comboBoxFilterDialogPoi = new ComboBoxFilterDialog(null, new de.cismet.cids.custom.wunda_blau.search.server.PoiLightweightSearch(), "Poi auswählen", getConnectionContext()) ;
+        comboBoxFilterDialogPoi = new ComboBoxFilterDialog(null, new PoiLightweightSearch(), "Poi auswählen", getConnectionContext()) ;
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
         jPanelAllgemein = new JPanel();
@@ -388,6 +389,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         panZoomdefAdd.setLayout(new GridBagLayout());
 
         btnAddZoomdef.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZoomdef.setToolTipText("Poi hinzufügen");
         btnAddZoomdef.setBorderPainted(false);
         btnAddZoomdef.setContentAreaFilled(false);
         btnAddZoomdef.setFocusPainted(false);
@@ -406,6 +408,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         panZoomdefAdd.add(btnAddZoomdef, gridBagConstraints);
 
         btnRemZoomdef.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemZoomdef.setToolTipText("markierten POI entfernen");
         btnRemZoomdef.setBorderPainted(false);
         btnRemZoomdef.setContentAreaFilled(false);
         btnRemZoomdef.setFocusPainted(false);
@@ -430,7 +433,10 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         panZoomdefAdd.add(filler2, gridBagConstraints);
 
         btnDeleteZoomdef.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
-        btnDeleteZoomdef.setToolTipText("Standorte entfernen");
+        btnDeleteZoomdef.setToolTipText("alle POI entfernen");
+        btnDeleteZoomdef.setBorderPainted(false);
+        btnDeleteZoomdef.setContentAreaFilled(false);
+        btnDeleteZoomdef.setFocusPainted(false);
         btnDeleteZoomdef.setMaximumSize(new Dimension(45, 21));
         btnDeleteZoomdef.setMinimumSize(new Dimension(45, 21));
         btnDeleteZoomdef.setPreferredSize(new Dimension(45, 28));

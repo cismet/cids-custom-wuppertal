@@ -241,6 +241,7 @@
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
                         </Property>
+                        <Property name="toolTipText" type="java.lang.String" value="Poi hinzuf&#xfc;gen"/>
                         <Property name="borderPainted" type="boolean" value="false"/>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="focusPainted" type="boolean" value="false"/>
@@ -268,6 +269,7 @@
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"/>
                         </Property>
+                        <Property name="toolTipText" type="java.lang.String" value="markierten POI entfernen"/>
                         <Property name="borderPainted" type="boolean" value="false"/>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="focusPainted" type="boolean" value="false"/>
@@ -310,7 +312,10 @@
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"/>
                         </Property>
-                        <Property name="toolTipText" type="java.lang.String" value="Standorte entfernen"/>
+                        <Property name="toolTipText" type="java.lang.String" value="alle POI entfernen"/>
+                        <Property name="borderPainted" type="boolean" value="false"/>
+                        <Property name="contentAreaFilled" type="boolean" value="false"/>
+                        <Property name="focusPainted" type="boolean" value="false"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[45, 21]"/>
                         </Property>
