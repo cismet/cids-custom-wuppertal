@@ -8,14 +8,6 @@
 package de.cismet.cids.custom.reports.wunda_blau;
 
 /**
- * cismet GmbH, Saarbruecken, Germany
- *
- * <p>... and it just works.**************************************************</p>
- *
- * @version  $Revision$, $Date$
- */
-
-/**
  * DOCUMENT ME!
  *
  * @author   sandra
