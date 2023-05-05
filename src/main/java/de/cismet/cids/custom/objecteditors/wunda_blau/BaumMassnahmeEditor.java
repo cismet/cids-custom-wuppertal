@@ -78,6 +78,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     public static final String TABLE_NAME = "baum_massnahme";
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
+    public static final String FIELD__KSCHNITT = "schnitt_krone";
 
     private static String TITLE_NEW_MASSNAHME = "eine neue Massnahme anlegen...";
 
@@ -95,9 +96,11 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    JCheckBox chSchnittKrone;
     private Box.Filler filler3;
     private JLabel lblName;
     private JLabel lblNummer;
+    private JLabel lblSchnittKrone;
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerUnten;
@@ -153,18 +156,22 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblNummer = new JLabel();
         txtNummer = new JTextField();
+        lblSchnittKrone = new JLabel();
+        chSchnittKrone = new JCheckBox();
         panFillerUnten2 = new JPanel();
         panFillerUnten = new JPanel();
 
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         setAutoscrolls(true);
         setMinimumSize(new Dimension(600, 646));
@@ -192,12 +199,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.name}"),
-                txtName,
-                BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -226,12 +228,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblNummer, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.nummer}"),
-                txtNummer,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.nummer}"), txtNummer, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -242,6 +239,32 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtNummer, gridBagConstraints);
+
+        lblSchnittKrone.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblSchnittKrone.setText("Kronenschnitt:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblSchnittKrone, gridBagConstraints);
+
+        chSchnittKrone.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.schnitt_krone}"), chSchnittKrone, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(chSchnittKrone, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -254,12 +277,14 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten2.setName(""); // NOI18N
         panFillerUnten2.setOpaque(false);
 
-        final GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
+        GroupLayout panFillerUnten2Layout = new GroupLayout(panFillerUnten2);
         panFillerUnten2.setLayout(panFillerUnten2Layout);
-        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten2Layout.setHorizontalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten2Layout.setVerticalGroup(panFillerUnten2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -283,12 +308,14 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGap(0, 0, Short.MAX_VALUE));
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -301,7 +328,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -314,6 +341,9 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
             bindingGroup.unbind();
             this.cidsBean = cb;
             bindingGroup.bind();
+            if (getCidsBean() != null && getCidsBean().getPrimaryKeyValue() ==-1){
+                getCidsBean().setProperty(FIELD__KSCHNITT, false);
+            }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
         }
@@ -335,6 +365,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtNummer);
+            RendererTools.makeReadOnly(chSchnittKrone);
         }
     }
 
