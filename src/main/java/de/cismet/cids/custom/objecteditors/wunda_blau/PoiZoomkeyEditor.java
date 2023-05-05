@@ -40,14 +40,10 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 
@@ -89,7 +85,6 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  */
 public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     SaveVetoable,
-    PropertyChangeListener,
     RequestsFullSizeComponent,
     BeforeSavingHook {
 
@@ -139,7 +134,6 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Instance fields --------------------------------------------------------
 
-    public Boolean boolNameOk = false;
     private MetaClass poiMetaClass;
     private MetaClass prioMetaClass;
 
@@ -522,7 +516,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZoomdefActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddZoomdefActionPerformed
+    private void btnAddZoomdefActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddZoomdefActionPerformed
         if (getCidsBean() != null) {
             final CidsBean poiBean;
             final Object selectedItem = comboBoxFilterDialogPoi.showAndGetSelected();
@@ -538,23 +532,23 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.error("Fehler beim Hinzufuegen des Poi.", ex);
             }
         }
-    }                                                                  //GEN-LAST:event_btnAddZoomdefActionPerformed
+    }//GEN-LAST:event_btnAddZoomdefActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemZoomdefActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemZoomdefActionPerformed
+    private void btnRemZoomdefActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemZoomdefActionPerformed
         TableUtils.removeObjectsFromTable(xtZoomdef);
-    }                                                                  //GEN-LAST:event_btnRemZoomdefActionPerformed
+    }//GEN-LAST:event_btnRemZoomdefActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDeleteZoomdefActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnDeleteZoomdefActionPerformed
+    private void btnDeleteZoomdefActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnDeleteZoomdefActionPerformed
         // Meldung: wirklich loeschen?
         final int answer = JOptionPane.showConfirmDialog(
                 StaticSwingTools.getParentFrame(this),
@@ -565,7 +559,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         if (answer == JOptionPane.YES_OPTION) {
             deleteZoomdef();
         }
-    } //GEN-LAST:event_btnDeleteZoomdefActionPerformed
+    }//GEN-LAST:event_btnDeleteZoomdefActionPerformed
 
     /**
      * Entfernt alle Zeilen aus der Tabelle.
@@ -592,16 +586,8 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
-            if (isEditor() && (getCidsBean() != null)) {
-                LOG.info("remove propchange PoiZoomkey: " + getCidsBean());
-                getCidsBean().removePropertyChangeListener(this);
-            }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (isEditor() && (getCidsBean() != null)) {
-                LOG.info("add propchange PoiZoomkey: " + getCidsBean());
-                getCidsBean().addPropertyChangeListener(this);
-            }
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -610,9 +596,6 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
                 getConnectionContext());
             bindingGroup.bind();
             setTitle(getTitle());
-            if (isEditor()) {
-                checkSigns();
-            }
             final DivBeanTable defModel = new DivBeanTable(
                     isEditor(),
                     cidsBean,
@@ -638,37 +621,6 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(xtZoomdef);
             panZoomdefAdd.setVisible(isEditor());
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void checkSigns() {
-        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-
-                @Override
-                protected Boolean doInBackground() throws Exception {
-                    return txtName.getText().matches(keyUrlPattern);
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        if (!isCancelled()) {
-                            final boolean result = get();
-                            boolNameOk = result;
-                        }
-                    } catch (final InterruptedException | ExecutionException ex) {
-                        LOG.error("Fehler bei der Überprüfung der erlaubten Zeichen.", ex);
-                    }
-                }
-            };
-
-        if (worker_name != null) {
-            worker_name.cancel(true);
-        }
-        worker_name = worker;
-        worker_name.execute();
     }
 
     @Override
@@ -766,29 +718,14 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void dispose() {
-        if (isEditor()) {
-            if (getCidsBean() != null) {
-                LOG.info("remove propchange PoiZoomkey: " + getCidsBean());
-                getCidsBean().removePropertyChangeListener(this);
-            }
-        }
         bindingGroup.unbind();
         super.dispose();
     }
 
     @Override
     public void setTitle(String title) {
-        if (title == null) {
-            title = "<Error>";
-        }
     }
 
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(FIELD__NAME)) {
-            checkSigns();
-        }
-    }
 
     @Override
     public boolean isOkForSaving() {
@@ -803,7 +740,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
                 save = false;
             } else {
                 // korrekte Zeichen
-                if (!boolNameOk) {
+                if (!txtName.getText().matches(keyUrlPattern)) {
                     LOG.warn("False name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(PoiZoomkeyEditor.class, BUNDLE_WRONGNAME));
                     save = false;
