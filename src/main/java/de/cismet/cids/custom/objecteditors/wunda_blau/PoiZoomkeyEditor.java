@@ -40,14 +40,10 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 
@@ -89,7 +85,6 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  */
 public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     SaveVetoable,
-    PropertyChangeListener,
     RequestsFullSizeComponent,
     BeforeSavingHook {
 
@@ -101,6 +96,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
 
     public static final String FIELD__NAME = "name";               // PoiZoomkey
     public static final String FIELD__ID = "id";                   // PoiZoomkey
+    public static final String FIELD__PUBLISH = "to_publish";      // PoiZoomkey
     public static final String FIELD__POI = "fk_locationinstance"; // PoiZoomdefinition
     public static final String FIELD__PRIO = "fk_zoomprio";        // PoiZoomdefinition
     public static final String FIELD__DEFS = "n_zoomdefinitionen";
@@ -139,7 +135,6 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Instance fields --------------------------------------------------------
 
-    public Boolean boolNameOk = false;
     private MetaClass poiMetaClass;
     private MetaClass prioMetaClass;
 
@@ -153,12 +148,14 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
     private JButton btnAddZoomdef;
     private JButton btnDeleteZoomdef;
     private JButton btnRemZoomdef;
+    private JCheckBox chkVeroeffentlicht;
     private ComboBoxFilterDialog comboBoxFilterDialogPoi;
     private Box.Filler filler2;
     private JPanel jPanelAllgemein;
     private JScrollPane jScrollPaneZoomdef;
     private JLabel lblBemerkung;
     private JLabel lblName;
+    private JLabel lblVeroeffentlicht;
     private JPanel panBemerkung;
     private JPanel panContent;
     private JPanel panDaten;
@@ -235,6 +232,8 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         panBemerkung = new JPanel();
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
+        lblVeroeffentlicht = new JLabel();
+        chkVeroeffentlicht = new JCheckBox();
         panPoi = new JPanel();
         panZoomdef = new JPanel();
         jScrollPaneZoomdef = new JScrollPane();
@@ -353,6 +352,35 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panBemerkung, gridBagConstraints);
+
+        lblVeroeffentlicht.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVeroeffentlicht.setText("Veröffentlicht:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblVeroeffentlicht, gridBagConstraints);
+
+        chkVeroeffentlicht.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.to_publish}"),
+                chkVeroeffentlicht,
+                BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
+        panDaten.add(chkVeroeffentlicht, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -592,16 +620,8 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
-            if (isEditor() && (getCidsBean() != null)) {
-                LOG.info("remove propchange PoiZoomkey: " + getCidsBean());
-                getCidsBean().removePropertyChangeListener(this);
-            }
             bindingGroup.unbind();
             this.cidsBean = cb;
-            if (isEditor() && (getCidsBean() != null)) {
-                LOG.info("add propchange PoiZoomkey: " + getCidsBean());
-                getCidsBean().addPropertyChangeListener(this);
-            }
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -610,9 +630,6 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
                 getConnectionContext());
             bindingGroup.bind();
             setTitle(getTitle());
-            if (isEditor()) {
-                checkSigns();
-            }
             final DivBeanTable defModel = new DivBeanTable(
                     isEditor(),
                     cidsBean,
@@ -623,6 +640,13 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
             xtZoomdef.setModel(defModel);
             // xtZoomdef.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(poiMetaClass));
             xtZoomdef.getColumn(1).setCellEditor(new DefaultBindableComboboxCellEditor(prioMetaClass));
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    getCidsBean().setProperty(FIELD__PUBLISH, false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set default values", e);
+                }
+            }
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
@@ -635,40 +659,10 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(taBemerkung);
+            RendererTools.makeReadOnly(chkVeroeffentlicht);
             RendererTools.makeReadOnly(xtZoomdef);
             panZoomdefAdd.setVisible(isEditor());
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void checkSigns() {
-        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-
-                @Override
-                protected Boolean doInBackground() throws Exception {
-                    return txtName.getText().matches(keyUrlPattern);
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        if (!isCancelled()) {
-                            final boolean result = get();
-                            boolNameOk = result;
-                        }
-                    } catch (final InterruptedException | ExecutionException ex) {
-                        LOG.error("Fehler bei der Überprüfung der erlaubten Zeichen.", ex);
-                    }
-                }
-            };
-
-        if (worker_name != null) {
-            worker_name.cancel(true);
-        }
-        worker_name = worker;
-        worker_name.execute();
     }
 
     @Override
@@ -766,28 +760,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Override
     public void dispose() {
-        if (isEditor()) {
-            if (getCidsBean() != null) {
-                LOG.info("remove propchange PoiZoomkey: " + getCidsBean());
-                getCidsBean().removePropertyChangeListener(this);
-            }
-        }
         bindingGroup.unbind();
         super.dispose();
     }
 
     @Override
-    public void setTitle(String title) {
-        if (title == null) {
-            title = "<Error>";
-        }
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(FIELD__NAME)) {
-            checkSigns();
-        }
+    public void setTitle(final String title) {
     }
 
     @Override
@@ -803,7 +781,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
                 save = false;
             } else {
                 // korrekte Zeichen
-                if (!boolNameOk) {
+                if (!txtName.getText().matches(keyUrlPattern)) {
                     LOG.warn("False name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(PoiZoomkeyEditor.class, BUNDLE_WRONGNAME));
                     save = false;

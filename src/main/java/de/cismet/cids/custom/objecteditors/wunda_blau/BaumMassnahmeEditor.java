@@ -78,6 +78,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     public static final String TABLE_NAME = "baum_massnahme";
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
+    public static final String FIELD__KSCHNITT = "schnitt_krone";
 
     private static String TITLE_NEW_MASSNAHME = "eine neue Massnahme anlegen...";
 
@@ -95,9 +96,11 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
     private final boolean editor;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    JCheckBox chSchnittKrone;
     private Box.Filler filler3;
     private JLabel lblName;
     private JLabel lblNummer;
+    private JLabel lblSchnittKrone;
     private JPanel panContent;
     private JPanel panDaten;
     private JPanel panFillerUnten;
@@ -153,6 +156,8 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblNummer = new JLabel();
         txtNummer = new JTextField();
+        lblSchnittKrone = new JLabel();
+        chSchnittKrone = new JCheckBox();
         panFillerUnten2 = new JPanel();
         panFillerUnten = new JPanel();
 
@@ -243,6 +248,37 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtNummer, gridBagConstraints);
 
+        lblSchnittKrone.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblSchnittKrone.setText("Kronenschnitt:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblSchnittKrone, gridBagConstraints);
+
+        chSchnittKrone.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.schnitt_krone}"),
+                chSchnittKrone,
+                BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(chSchnittKrone, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -314,6 +350,9 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
             bindingGroup.unbind();
             this.cidsBean = cb;
             bindingGroup.bind();
+            if ((getCidsBean() != null) && (getCidsBean().getPrimaryKeyValue() == -1)) {
+                getCidsBean().setProperty(FIELD__KSCHNITT, false);
+            }
         } catch (final Exception ex) {
             LOG.error("Bean not set.", ex);
         }
@@ -335,6 +374,7 @@ public class BaumMassnahmeEditor extends DefaultCustomObjectEditor implements Ci
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtNummer);
+            RendererTools.makeReadOnly(chSchnittKrone);
         }
     }
 
