@@ -217,7 +217,11 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        comboBoxFilterDialogPoi = new ComboBoxFilterDialog(null, new PoiLightweightSearch(), "Poi auswählen", getConnectionContext()) ;
+        comboBoxFilterDialogPoi = new ComboBoxFilterDialog(
+                null,
+                new PoiLightweightSearch(),
+                "Poi auswählen",
+                getConnectionContext());
         panFillerUnten = new JPanel();
         panContent = new RoundedPanel();
         jPanelAllgemein = new JPanel();
@@ -245,14 +249,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -284,7 +286,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -314,7 +321,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -352,7 +364,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
 
         chkVeroeffentlicht.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.to_publish}"), chkVeroeffentlicht, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.to_publish}"),
+                chkVeroeffentlicht,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -415,7 +432,8 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         panZoomdefAdd.setOpaque(false);
         panZoomdefAdd.setLayout(new GridBagLayout());
 
-        btnAddZoomdef.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZoomdef.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddZoomdef.setToolTipText("Poi hinzufügen");
         btnAddZoomdef.setBorderPainted(false);
         btnAddZoomdef.setContentAreaFilled(false);
@@ -424,17 +442,20 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         btnAddZoomdef.setMinimumSize(new Dimension(45, 22));
         btnAddZoomdef.setPreferredSize(new Dimension(45, 22));
         btnAddZoomdef.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddZoomdefActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddZoomdefActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panZoomdefAdd.add(btnAddZoomdef, gridBagConstraints);
 
-        btnRemZoomdef.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemZoomdef.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemZoomdef.setToolTipText("markierten POI entfernen");
         btnRemZoomdef.setBorderPainted(false);
         btnRemZoomdef.setContentAreaFilled(false);
@@ -443,10 +464,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         btnRemZoomdef.setMinimumSize(new Dimension(45, 22));
         btnRemZoomdef.setPreferredSize(new Dimension(45, 22));
         btnRemZoomdef.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemZoomdefActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemZoomdefActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -459,7 +482,8 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         panZoomdefAdd.add(filler2, gridBagConstraints);
 
-        btnDeleteZoomdef.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
+        btnDeleteZoomdef.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
         btnDeleteZoomdef.setToolTipText("alle POI entfernen");
         btnDeleteZoomdef.setBorderPainted(false);
         btnDeleteZoomdef.setContentAreaFilled(false);
@@ -468,10 +492,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         btnDeleteZoomdef.setMinimumSize(new Dimension(45, 21));
         btnDeleteZoomdef.setPreferredSize(new Dimension(45, 28));
         btnDeleteZoomdef.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnDeleteZoomdefActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnDeleteZoomdefActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -517,14 +543,14 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddZoomdefActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddZoomdefActionPerformed
+    private void btnAddZoomdefActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddZoomdefActionPerformed
         if (getCidsBean() != null) {
             final CidsBean poiBean;
             final Object selectedItem = comboBoxFilterDialogPoi.showAndGetSelected();
@@ -540,23 +566,23 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.error("Fehler beim Hinzufuegen des Poi.", ex);
             }
         }
-    }//GEN-LAST:event_btnAddZoomdefActionPerformed
+    }                                                                  //GEN-LAST:event_btnAddZoomdefActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemZoomdefActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemZoomdefActionPerformed
+    private void btnRemZoomdefActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemZoomdefActionPerformed
         TableUtils.removeObjectsFromTable(xtZoomdef);
-    }//GEN-LAST:event_btnRemZoomdefActionPerformed
+    }                                                                  //GEN-LAST:event_btnRemZoomdefActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDeleteZoomdefActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnDeleteZoomdefActionPerformed
+    private void btnDeleteZoomdefActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnDeleteZoomdefActionPerformed
         // Meldung: wirklich loeschen?
         final int answer = JOptionPane.showConfirmDialog(
                 StaticSwingTools.getParentFrame(this),
@@ -567,7 +593,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
         if (answer == JOptionPane.YES_OPTION) {
             deleteZoomdef();
         }
-    }//GEN-LAST:event_btnDeleteZoomdefActionPerformed
+    } //GEN-LAST:event_btnDeleteZoomdefActionPerformed
 
     /**
      * Entfernt alle Zeilen aus der Tabelle.
@@ -615,12 +641,12 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
             // xtZoomdef.getColumn(0).setCellEditor(new DefaultBindableComboboxCellEditor(poiMetaClass));
             xtZoomdef.getColumn(1).setCellEditor(new DefaultBindableComboboxCellEditor(prioMetaClass));
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
-            try {
-                getCidsBean().setProperty(FIELD__PUBLISH, false);
-            } catch (Exception e) {
-                LOG.error("Cannot set default values", e);
+                try {
+                    getCidsBean().setProperty(FIELD__PUBLISH, false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set default values", e);
+                }
             }
-        }
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
@@ -739,9 +765,8 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
     }
-
 
     @Override
     public boolean isOkForSaving() {
