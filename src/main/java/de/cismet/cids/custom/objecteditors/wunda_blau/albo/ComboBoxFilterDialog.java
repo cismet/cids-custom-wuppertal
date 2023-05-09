@@ -12,13 +12,17 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 
 import java.util.Arrays;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTable;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
@@ -28,6 +32,7 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.custom.wunda_blau.search.server.AbstractMonToLwmoSearch;
@@ -53,6 +58,7 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
     private final AbstractMonToLwmoSearch search;
 
     private final ConnectionContext connectionContext;
+    private ComboBoxFilterDialogEnabledFilter filter = null;
 
     private SwingWorker<Void, Void> refreshWorker;
 
@@ -138,6 +144,44 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
 
         initComponents();
 
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+                private int lastSelectedRow = -1;
+
+                @Override
+                public void valueChanged(final ListSelectionEvent e) {
+                    final int selectedRow = table.getSelectedRow();
+
+                    if (selectedRow > 0) {
+                        int step = -1;
+                        int index = selectedRow;
+                        int indexModel = getRowSorter().convertRowIndexToModel(selectedRow);
+                        String selectedValue = String.valueOf(
+                                ComboBoxFilterDialog.this.comboBox.getModel().getElementAt(
+                                    getRowSorter().convertRowIndexToModel(selectedRow)));
+
+                        if (lastSelectedRow < selectedRow) {
+                            step = 1;
+                        }
+                        while ((filter != null) && !filter.selectionOfDisabledElementsAllowed()
+                                    && !filter.isEnabled(selectedValue, indexModel)) {
+                            index = index + step;
+                            indexModel = ((index != -1) ? getRowSorter().convertRowIndexToModel(index) : -1);
+                            selectedValue = String.valueOf(
+                                    ComboBoxFilterDialog.this.comboBox.getModel().getElementAt(indexModel));
+
+                            if ((index < 0) || (index >= table.getRowCount())) {
+                                index = lastSelectedRow;
+                                break;
+                            }
+                        }
+                        if (index != -1) {
+                            table.getSelectionModel().setSelectionInterval(index, index);
+                        }
+                    }
+                    lastSelectedRow = table.getSelectedRow();
+                }
+            });
         this.comboBox = (search != null) ? cbSearch : comboBox;
 
         setTitle((title != null) ? title : "Auswahlfilter");
@@ -167,6 +211,42 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
                     if (!e.getValueIsAdjusting()) {
                         btnApply.setEnabled(e.getFirstIndex() >= 0);
                     }
+                }
+            });
+
+        getTable().getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+
+                @Override
+                public Component getTableCellRendererComponent(final JTable table,
+                        final Object value,
+                        final boolean isSelected,
+                        final boolean hasFocus,
+                        final int row,
+                        final int column) {
+                    final Component c = super.getTableCellRendererComponent(
+                            table,
+                            value,
+                            isSelected,
+                            hasFocus,
+                            row,
+                            column);
+                    final int modelRow = getRowSorter().convertRowIndexToModel(row);
+
+                    if ((filter != null) && !filter.isEnabled(value, modelRow)) {
+                        c.setEnabled(false);
+
+                        if (c instanceof JLabel) {
+                            ((JLabel)c).setToolTipText(filter.getTooltip(value, modelRow));
+                        }
+                    } else if (filter != null) {
+                        c.setEnabled(true);
+
+                        if (c instanceof JLabel) {
+                            ((JLabel)c).setToolTipText(filter.getTooltip(value, modelRow));
+                        }
+                    }
+
+                    return c;
                 }
             });
 
@@ -501,6 +581,15 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
     /**
      * DOCUMENT ME!
      *
+     * @param  filter  DOCUMENT ME!
+     */
+    public void setEnabledFilter(final ComboBoxFilterDialogEnabledFilter filter) {
+        this.filter = filter;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   comboBox           DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
@@ -523,6 +612,25 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
             final String title,
             final ConnectionContext connectionContext) {
         return new ComboBoxFilterDialog(comboBox, title, connectionContext).showAndGetSelected();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   comboBox           DOCUMENT ME!
+     * @param   title              DOCUMENT ME!
+     * @param   filter             DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Object showForCombobox(final JComboBox comboBox,
+            final String title,
+            final ComboBoxFilterDialogEnabledFilter filter,
+            final ConnectionContext connectionContext) {
+        final ComboBoxFilterDialog dialog = new ComboBoxFilterDialog(comboBox, title, connectionContext);
+        dialog.setEnabledFilter(filter);
+        return dialog.showAndGetSelected();
     }
 
     /**

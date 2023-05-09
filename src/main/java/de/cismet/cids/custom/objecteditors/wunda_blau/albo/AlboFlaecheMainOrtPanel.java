@@ -18,10 +18,10 @@ import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Polygon;
 
 import org.jdesktop.beansbinding.BindingGroup;
-
-import java.awt.Color;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,7 +60,9 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JComboBox<String> jComboBox31;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel9;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
@@ -90,6 +92,11 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     @Override
     protected void initGui() {
         initComponents();
+
+        if (isEditable()) {
+            ((DefaultCismapGeometryComboBoxEditor)jComboBox31).setAllowedGeometryTypes(
+                new Class[] { Polygon.class, MultiPolygon.class });
+        }
     }
 
     /**
@@ -116,6 +123,8 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -206,6 +215,21 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel1.add(jLabel2, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "Fläche");
+        jLabel3.setName("jLabel3"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jLabel3, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, "-");
+        jLabel4.setName("jLabel4"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(jLabel4, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -270,6 +294,7 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
                             getConnectionContext())));
                 search.setGeometry(geom);
 
+                jLabel4.setText(Math.round(geom.getArea()) + " m²");
                 jLabel2.setText("<html><i>wird gesucht...");
                 new SwingWorker<CidsBean, Void>() {
 
@@ -326,6 +351,7 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
                 mappingComponent1.getFeatureCollection().addFeature(dsf);
             } else {
                 jLabel2.setText("-");
+                jLabel4.setText("-");
             }
         } else {
             jLabel2.setText("-");

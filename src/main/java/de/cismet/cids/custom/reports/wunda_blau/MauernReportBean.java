@@ -11,13 +11,27 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
+import com.vividsolutions.jts.geom.Geometry;
+
+import java.net.URL;
+import java.net.URLEncoder;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import de.cismet.cids.custom.utils.MauernProperties;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.DOCUMENTS_PROPERTY;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.FILENAME_PROPERTY;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.GEOFIELD_PROPERTY;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerDokumenteEditor.POSITION_PROPERTY;
 
 /**
  * DOCUMENT ME!
@@ -25,7 +39,16 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauernReportBean extends ReportBeanWithMapAndImages {
+public class MauernReportBean extends ReportBeanWithMapAndTwoUrlImages {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String DOWNLOAD_TEMPLATE =
+        "<rasterfari:url>?REQUEST=GetMap&SERVICE=WMS&customDocumentInfo=download&LAYERS=<rasterfari:path>/<rasterfari:document>";
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final MauernProperties properties;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -34,22 +57,59 @@ public class MauernReportBean extends ReportBeanWithMapAndImages {
      *
      * @param  mauer              DOCUMENT ME!
      * @param  beanOnly           DOCUMENT ME!
+     * @param  properties         DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public MauernReportBean(final CidsBean mauer, final boolean beanOnly, final ConnectionContext connectionContext) {
+    public MauernReportBean(final CidsBean mauer,
+            final boolean beanOnly,
+            final MauernProperties properties,
+            final ConnectionContext connectionContext) {
         super(
             mauer,
-            beanOnly ? null : "georeferenz.geo_field",
-            beanOnly ? null : "bilder",
-            beanOnly ? null : "url",
-            beanOnly
-                ? null
-                : java.util.ResourceBundle.getBundle("de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString(
-                    "map_url"),
+            beanOnly ? null : properties.getMapUrl(),
             connectionContext);
+        this.properties = properties;
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected List<CidsBean> getImageBeans() {
+        if (getCidsBean() == null) {
+            return null;
+        }
+        return getCidsBean().getBeanCollectionProperty(DOCUMENTS_PROPERTY).stream().filter((b) -> {
+                    return b.getProperty(POSITION_PROPERTY) != null;
+                }).filter((b) -> { return "foto".equals(b.getProperty("fk_art.schluessel")); })
+                    .sorted(Comparator.comparing((b) -> {
+                                    return (b != null) ? (Integer)b.getProperty(POSITION_PROPERTY) : null;
+                                },
+                                Comparator.nullsLast(Integer::compareTo)))
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    protected URL getUrl(final CidsBean cidsBean) throws Exception {
+        return new URL(DOWNLOAD_TEMPLATE.replace("<rasterfari:path>", properties.getRasterfariPath()).replace(
+                    "<rasterfari:url>",
+                    properties.getRasterfariUrl()).replace(
+                    "<rasterfari:document>",
+                    URLEncoder.encode((String)cidsBean.getProperty(FILENAME_PROPERTY))));
+    }
+
+    @Override
+    protected Geometry getGeometry() {
+        return (getCidsBean() != null) ? (Geometry)getCidsBean().getProperty(GEOFIELD_PROPERTY) : null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private MauernProperties getProperties() {
+        return properties;
+    }
 
     /**
      * DOCUMENT ME!

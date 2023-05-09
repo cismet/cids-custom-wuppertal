@@ -11,18 +11,30 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
+import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
+import de.cismet.netutil.ProxyHandler;
+
+import de.cismet.tools.PasswordEncrypter;
 
 /**
  * DOCUMENT ME!
@@ -31,7 +43,31 @@ import de.cismet.connectioncontext.ConnectionContext;
  * @version  $Revision$, $Date$
  */
 @Getter
-public class TreppenReportBean extends ReportBeanWithMapAndImages {
+public class TreppenReportBean extends ReportBeanWithMapAndTwoWebDavImages {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final WebDavTunnelHelper WEBDAV_HELPER;
+    private static final String WEBDAV_DIRECTORY;
+
+    static {
+        final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
+        String pass = webDavBundle.getString("password");
+
+        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
+            pass = PasswordEncrypter.decryptString(pass);
+        }
+
+        final String webDavPassword = pass;
+        final String webDavUser = webDavBundle.getString("user");
+        WEBDAV_HELPER = new WebDavTunnelHelper(
+                "WUNDA_BLAU",
+                ProxyHandler.getInstance().getProxy(),
+                webDavUser,
+                webDavPassword,
+                false);
+        WEBDAV_DIRECTORY = webDavBundle.getString("url_treppen");
+    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -53,11 +89,10 @@ public class TreppenReportBean extends ReportBeanWithMapAndImages {
             final ConnectionContext connectionContext) {
         super(
             treppe,
-            "geometrie.geo_field",
-            "bilder",
-            "url_treppen",
             java.util.ResourceBundle.getBundle(
                 "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url"),
+            WEBDAV_HELPER,
+            WEBDAV_DIRECTORY,
             connectionContext);
 
         zustandStuetzmauern = editor.getZustandStuetzmauern();
@@ -76,6 +111,25 @@ public class TreppenReportBean extends ReportBeanWithMapAndImages {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected String getDavFile(final CidsBean cidsBean) {
+        return (String)cidsBean.getProperty("url.object_name");
+    }
+
+    @Override
+    protected List<CidsBean> getImageBeans() {
+        return (getCidsBean() != null) ? getCidsBean().getBeanCollectionProperty("bilder").stream().filter((b) -> {
+                        return b.getProperty("laufende_nummer") != null;
+                    }).sorted(
+                        Comparator.comparing((b) -> { return (Integer)b.getProperty("laufende_nummer"); },
+                            Comparator.nullsLast(Integer::compareTo))).collect(Collectors.toList()) : null;
+    }
+
+    @Override
+    protected Geometry getGeometry() {
+        return (getCidsBean() != null) ? (Geometry)getCidsBean().getProperty("geometrie.geo_field") : null;
+    }
 
     /**
      * DOCUMENT ME!

@@ -62,13 +62,13 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
     de.cismet.cids.editors.DefaultBindableReferenceCombo cbForeign;
     private de.cismet.cids.editors.DefaultBindableLabelsPanel defaultBindableLabelsPanel1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JComboBox<PotenzialflaecheReportServerAction.Property> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -79,6 +79,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
     private javax.swing.JTextField jTextField1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -118,10 +119,13 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                 if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
                     if (value instanceof MetaObjectNode) {
                         for (int index = 0; index < cbForeign.getModel().getSize(); index++) {
-                            final CidsBean cidsBean = (CidsBean)cbForeign.getModel().getElementAt(index);
-                            if (new MetaObjectNode(cidsBean).equals(((MetaObjectNode)value))) {
-                                cbForeign.setSelectedItem(cidsBean);
-                                break;
+                            final Object element = cbForeign.getModel().getElementAt(index);
+                            if (element instanceof CidsBean) {
+                                final CidsBean cidsBean = (CidsBean)element;
+                                if (new MetaObjectNode(cidsBean).equals(((MetaObjectNode)value))) {
+                                    cbForeign.setSelectedItem(cidsBean);
+                                    break;
+                                }
                             }
                         }
                     } else if (value instanceof Collection) {
@@ -139,6 +143,9 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                     if (Date.class.getCanonicalName().equals(className)) {
                         jXDatePicker1.setDate(((Date[])value)[0]);
                         jXDatePicker2.setDate(((Date[])value)[1]);
+                    } else if (Integer[].class.getCanonicalName().equals(className)) {
+                        jSpinner1.setValue(((Integer[])value)[0]);
+                        jSpinner2.setValue(((Integer[])value)[1]);
                     } else {
                         jTextField1.setText(String.valueOf(value));
                     }
@@ -207,6 +214,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -219,16 +227,17 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         cbForeign = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         defaultBindableLabelsPanel1 = new de.cismet.cids.editors.DefaultBindableLabelsPanel(true, "");
         jPanel4 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jCheckBox4 = new javax.swing.JCheckBox();
         jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
-        jLabel2 = new javax.swing.JLabel();
+        jCheckBox5 = new javax.swing.JCheckBox();
         jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
         jPanel5 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jSpinner1 = new javax.swing.JSpinner();
-        jLabel5 = new javax.swing.JLabel();
+        jCheckBox3 = new javax.swing.JCheckBox();
         jSpinner2 = new javax.swing.JSpinner();
 
+        setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
         jButton1.setIcon(new javax.swing.ImageIcon(
@@ -271,6 +280,7 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         add(jComboBox1, gridBagConstraints);
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.CardLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -283,8 +293,16 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         jTextField1.setText(org.openide.util.NbBundle.getMessage(
                 PotenzialflaechenWindowSearchSubPanel.class,
                 "PotenzialflaechenWindowSearchSubPanel.jTextField1.text")); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jTextField1ActionPerformed(evt);
+                }
+            });
         jPanel1.add(jTextField1, "text");
 
+        jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -322,33 +340,52 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
 
         jPanel1.add(jPanel3, "foreign");
 
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel3,
+            jCheckBox4,
             org.openide.util.NbBundle.getMessage(
                 PotenzialflaechenWindowSearchSubPanel.class,
-                "PotenzialflaechenWindowSearchSubPanel.jLabel3.text")); // NOI18N
+                "PotenzialflaechenWindowSearchSubPanel.jCheckBox4.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel4.add(jLabel3, gridBagConstraints);
+        jPanel4.add(jCheckBox4, gridBagConstraints);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox4,
+                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
+                jXDatePicker1,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel4.add(jXDatePicker1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
+            jCheckBox5,
             org.openide.util.NbBundle.getMessage(
                 PotenzialflaechenWindowSearchSubPanel.class,
-                "PotenzialflaechenWindowSearchSubPanel.jLabel2.text")); // NOI18N
+                "PotenzialflaechenWindowSearchSubPanel.jCheckBox5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel4.add(jLabel2, gridBagConstraints);
+        jPanel4.add(jCheckBox5, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox5,
+                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
+                jXDatePicker2,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanel4.add(jXDatePicker2, gridBagConstraints);
@@ -359,37 +396,58 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                         PotenzialflaechenWindowSearchSubPanel.class,
                         "PotenzialflaechenWindowSearchSubPanel.jPanel4.AccessibleContext.accessibleName")); // NOI18N
 
+        jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel4,
+            jCheckBox1,
             org.openide.util.NbBundle.getMessage(
                 PotenzialflaechenWindowSearchSubPanel.class,
-                "PotenzialflaechenWindowSearchSubPanel.jLabel4.text")); // NOI18N
+                "PotenzialflaechenWindowSearchSubPanel.jCheckBox1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel5.add(jLabel4, gridBagConstraints);
+        jPanel5.add(jCheckBox1, gridBagConstraints);
 
         jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox1,
+                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
+                jSpinner1,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel5.add(jSpinner1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel5,
+            jCheckBox3,
             org.openide.util.NbBundle.getMessage(
                 PotenzialflaechenWindowSearchSubPanel.class,
-                "PotenzialflaechenWindowSearchSubPanel.jLabel5.text")); // NOI18N
+                "PotenzialflaechenWindowSearchSubPanel.jCheckBox3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel5.add(jLabel5, gridBagConstraints);
+        jPanel5.add(jCheckBox3, gridBagConstraints);
 
         jSpinner2.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                jCheckBox3,
+                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
+                jSpinner2,
+                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanel5.add(jSpinner2, gridBagConstraints);
@@ -401,6 +459,8 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 1.0;
         add(jPanel1, gridBagConstraints);
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -453,6 +513,10 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
                     jXDatePicker1.setDate(null);
                     jXDatePicker2.setDate(null);
                     ((CardLayout)jPanel1.getLayout()).show(jPanel1, "date");
+                } else if (Integer.class.getCanonicalName().equals(className)) {
+                    jSpinner1.setValue(0d);
+                    jSpinner2.setValue(0d);
+                    ((CardLayout)jPanel1.getLayout()).show(jPanel1, "double");
                 } else {
                     jTextField1.setText("");
                     ((CardLayout)jPanel1.getLayout()).show(jPanel1, "text");
@@ -516,6 +580,15 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jTextField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_jTextField1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     public PotenzialflaecheSearch.FilterInfo getFilter() {
@@ -525,7 +598,10 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
         if (PotenzialflaecheReportServerAction.Property.GROESSE.equals(prop)) {
             return new PotenzialflaecheSearch.FilterInfo(
                     prop,
-                    new Double[] { (Double)jSpinner1.getValue(), (Double)jSpinner2.getValue() });
+                    new Double[] {
+                        jCheckBox1.isSelected() ? ((Double)jSpinner1.getValue()) : null,
+                        jCheckBox3.isSelected() ? ((Double)jSpinner2.getValue()) : null
+                    });
         } else if (prop.getValue() instanceof PotenzialflaecheReportServerAction.KeytableReportProperty) {
             if (jCheckBox2.isSelected()) {
                 final List<CidsBean> selectedElements = (List)defaultBindableLabelsPanel1.getSelectedElements();
@@ -558,7 +634,17 @@ public class PotenzialflaechenWindowSearchSubPanel extends javax.swing.JPanel im
             if (Date.class.getCanonicalName().equals(className)) {
                 return new PotenzialflaecheSearch.FilterInfo(
                         prop,
-                        new Date[] { jXDatePicker1.getDate(), jXDatePicker2.getDate() });
+                        new Date[] {
+                            jCheckBox4.isSelected() ? jXDatePicker1.getDate() : null,
+                            jCheckBox5.isSelected() ? jXDatePicker2.getDate() : null
+                        });
+            } else if (Integer.class.getCanonicalName().equals(className)) {
+                return new PotenzialflaecheSearch.FilterInfo(
+                        prop,
+                        new Integer[] {
+                            jCheckBox1.isSelected() ? ((Double)jSpinner1.getValue()).intValue() : null,
+                            jCheckBox3.isSelected() ? ((Double)jSpinner2.getValue()).intValue() : null
+                        });
             } else {
                 return new PotenzialflaecheSearch.FilterInfo(prop, jTextField1.getText());
             }

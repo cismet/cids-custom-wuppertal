@@ -131,6 +131,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";    // baum_schaden
     public static final String FIELD__SCHADEN_EINGANG = "eingegangen";      // baum_schaden
     public static final String FIELD__SCHADEN_FAELLUNG = "faellung";        // baum_schaden
+    public static final String FIELD__SCHADEN_ABGELEHNT = "abgelehnt";      // baum_schaden
     public static final String TABLE__ORT = "baum_ortstermin";
     public static final String TABLE__SCHADEN = "baum_schaden";
 
@@ -1013,7 +1014,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                         (CidsBean)selectedItem);
             }
         } catch (Exception ex) {
-            LOG.error(ex, ex);
+            LOG.error("Fehler beim Hinzufuegen des Ansprechpartners.", ex);
         } finally {
             getCidsBean().setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
@@ -1151,7 +1152,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             getCidsBean().setArtificialChangeFlag(true);
             getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
         } catch (Exception ex) {
-            LOG.error(ex, ex);
+            LOG.error("Fehler beim Hinzufuegen des Ortstermins.", ex);
         } finally {
             dlgAddOrtstermin.setVisible(false);
         }
@@ -1176,6 +1177,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                     beanSchaden.setProperty(FIELD__SCHADEN_BERATUNG, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_EINGANG, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_FAELLUNG, false);
+                    beanSchaden.setProperty(FIELD__SCHADEN_ABGELEHNT, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_GUTACHTEN, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_KRONE, false);
                     beanSchaden.setProperty(FIELD__SCHADEN_OHNE, false);
@@ -1464,7 +1466,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                         }
                     } catch (final Exception ex) {
                         noErrorOrt = false;
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Speicher-Check der Ortstermine.", ex);
                     }
                 }
             }
@@ -1477,7 +1479,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                         }
                     } catch (final Exception ex) {
                         noErrorSchaden = false;
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Speicher-Check der Schaeden.", ex);
                     }
                 }
             }

@@ -145,7 +145,7 @@ public class BaumConfProperties {
                 properties.load(new StringReader((String)ret));
                 instance = new BaumConfProperties(properties);
             } catch (final Exception ex) {
-                LOG.error(ex, ex);
+                LOG.error("Fehler beim Laden der Properties für Baum-Client", ex);
             }
 
             INSTANCE = instance;

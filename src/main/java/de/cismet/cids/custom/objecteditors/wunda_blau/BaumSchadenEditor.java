@@ -131,6 +131,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__SCHADEN_BERATUNG = "baumberatung";               // baum_schaden
     public static final String FIELD__SCHADEN_EINGANG = "eingegangen";                 // baum_schaden
     public static final String FIELD__SCHADEN_FAELLUNG = "faellung";                   // baum_schaden
+    public static final String FIELD__SCHADEN_ABGELEHNT = "abgelehnt";                 // baum_schaden
     public static final String FIELD__SCHADEN_GEFAHR = "gefahrensbaum";                // baum_schaden
     public static final String FIELD__SCHADEN_KLEISTUNG = "keine_leistung";            // baum_schaden
     public static final String FIELD__MELDUNG = "fk_meldung";                          // baum_ortstermin
@@ -568,6 +569,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
             getCidsBean().setProperty(FIELD__SCHADEN_BERATUNG, false);
             getCidsBean().setProperty(FIELD__SCHADEN_EINGANG, false);
             getCidsBean().setProperty(FIELD__SCHADEN_FAELLUNG, false);
+            getCidsBean().setProperty(FIELD__SCHADEN_ABGELEHNT, false);
             getCidsBean().setProperty(FIELD__SCHADEN_GUTACHTEN, false);
             getCidsBean().setProperty(FIELD__SCHADEN_KRONE, false);
             getCidsBean().setProperty(FIELD__SCHADEN_OHNE, false);
@@ -616,7 +618,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                             setTitle(NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_LOAD_ERROR));
                         }
                     } catch (final InterruptedException | ExecutionException ex) {
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Laden der Unterobjekte.", ex);
                     }
                 }
             }.execute();
@@ -648,7 +650,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                             ersatzBean.setProperty(FIELD__SCHADEN, event.getPersistedBean());
                             ersatzBean.persist(getConnectionContext());
                         } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                            LOG.error("Fehler beim Speichern der Ersatzpflanzungen.", ex);
                             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                                 NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_PREFIX_ERSATZ)
                                         + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_KONTROLLE)
@@ -666,7 +668,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                             festBean.setProperty(FIELD__SCHADEN, event.getPersistedBean());
                             festBean.persist(getConnectionContext());
                         } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                            LOG.error("Fehler beim Speichern der Festsetzungen.", ex);
                             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                                 NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_PREFIX_FEST)
                                         + NbBundle.getMessage(BaumSchadenEditor.class, BUNDLE_PANE_KONTROLLE)
@@ -679,7 +681,7 @@ public class BaumSchadenEditor extends DefaultCustomObjectEditor implements Cids
                 }
             }
         } catch (final HeadlessException | MissingResourceException ex) {
-            LOG.error(ex, ex);
+            LOG.error("Fehler bei der Speichernachbereitung.", ex);
         }
     }
 

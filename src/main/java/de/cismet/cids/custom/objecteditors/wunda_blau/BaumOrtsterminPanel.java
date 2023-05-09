@@ -853,7 +853,7 @@ public class BaumOrtsterminPanel extends javax.swing.JPanel implements Disposabl
                             (CidsBean)selectedItem);
                 }
             } catch (Exception ex) {
-                LOG.error(ex, ex);
+                LOG.error("Fehler beim Hinzufuegen des Ansprechpartners.", ex);
             } finally {
                 getCidsBean().setArtificialChangeFlag(true);
                 getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);

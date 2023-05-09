@@ -12,17 +12,22 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.Getter;
+
+import org.openide.util.lookup.ServiceProvider;
 
 import java.awt.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import de.cismet.cids.custom.wunda_blau.search.abfrage.AbfragePanel;
+import de.cismet.cids.custom.wunda_blau.search.abfrage.AbstractAbfragePanel;
 import de.cismet.cids.custom.wunda_blau.search.server.PotenzialflaecheSearch;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * DOCUMENT ME!
@@ -30,7 +35,8 @@ import de.cismet.connectioncontext.ConnectionContextStore;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel implements ConnectionContextStore {
+@ServiceProvider(service = AbfragePanel.class)
+public class PotenzialflaechenWindowSearchPanel extends AbstractAbfragePanel<PotenzialflaecheSearch.Configuration> {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -60,6 +66,16 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
      * Creates new form PotenzialflaechenWindowSearchPanel.
      */
     public PotenzialflaechenWindowSearchPanel() {
+        this(true);
+    }
+
+    /**
+     * Creates a new PotenzialflaechenWindowSearchPanel object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public PotenzialflaechenWindowSearchPanel(final boolean editable) {
+        super(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -69,6 +85,7 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
      *
      * @return  DOCUMENT ME!
      */
+    @Override
     public PotenzialflaecheSearch.Configuration createConfiguration() {
         final PotenzialflaecheSearch.SearchMode searchMode = rbAll.isSelected() ? PotenzialflaecheSearch.SearchMode.AND
                                                                                 : PotenzialflaecheSearch.SearchMode.OR;
@@ -85,6 +102,7 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
      *
      * @param  configuration  DOCUMENT ME!
      */
+    @Override
     public void initFromConfiguration(final PotenzialflaecheSearch.Configuration configuration) {
         if (configuration != null) {
             rbAll.setSelected(!PotenzialflaecheSearch.SearchMode.OR.equals(configuration.getSearchMode()));
@@ -337,5 +355,25 @@ public class PotenzialflaechenWindowSearchPanel extends javax.swing.JPanel imple
             filters.add(((PotenzialflaechenWindowSearchSubPanel)sub).getFilter());
         }
         return filters;
+    }
+
+    @Override
+    public ObjectMapper getConfigurationMapper() {
+        return new PotenzialflaecheSearch().getConfigurationMapper();
+    }
+
+    @Override
+    public void initFromConfiguration(final Object configuration) {
+        initFromConfiguration((PotenzialflaecheSearch.Configuration)configuration);
+    }
+
+    @Override
+    public PotenzialflaecheSearch.Configuration readConfiguration(final String configuration) throws Exception {
+        return getConfigurationMapper().readValue(configuration, PotenzialflaecheSearch.Configuration.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return "pf_potenzialflaeche";
     }
 }

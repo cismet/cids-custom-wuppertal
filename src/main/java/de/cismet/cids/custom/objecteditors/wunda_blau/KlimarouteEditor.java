@@ -108,6 +108,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String REDUNDANT_TABLE = "klimaroute";
 
 
+
     public static final String FIELD__NAME = "name";                                        // klimaroute
     public static final String FIELD__KEY = "key";                                          // klimaroute
     public static final String FIELD__ID = "id";                                            // klimaroute
@@ -130,7 +131,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_LENGTHKEY = "KlimarouteEditor.isOkForSaving().lengthKey";
     public static final String BUNDLE_WRONGKEY = "KlimarouteEditor.isOkForSaving().wrongKey";
     public static final String BUNDLE_NODIFICULTY = "KlimarouteEditor.isOkForSaving().noDificulty";
-    public static final String BUNDLE_NOWAY= "KlimarouteEditor.isOkForSaving().noWay";
+    public static final String BUNDLE_NOWAY = "KlimarouteEditor.isOkForSaving().noWay";
     public static final String BUNDLE_WRONGGEOM = "KlimarouteEditor.isOkForSaving().wrongGeom";
     public static final String BUNDLE_PANE_PREFIX = "KlimarouteEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "KlimarouteEditor.isOkForSaving().JOptionPane.message.suffix";
@@ -888,7 +889,9 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
                 panPreviewMap.initMap(cb, FIELD__GEOREFERENZ__GEO_FIELD, bufferMeter, mapUrl);
             } else {
                 final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
-                final BoundingBox initialBoundingBox = CismapBroker.getInstance().getMappingComponent().getMappingModel()
+                final BoundingBox initialBoundingBox = CismapBroker.getInstance()
+                            .getMappingComponent()
+                            .getMappingModel()
                             .getInitialBoundingBox();
                 final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
 
@@ -984,28 +987,16 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             title = "<Error>";
         }
     }
- 
+
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-       if (evt.getPropertyName().equals(FIELD__GEOM)) {
+        if (evt.getPropertyName().equals(FIELD__GEOM)) {
             setMapWindow();
             setDistance();
             /*if (evt.getOldValue() == null){
-                if(evt.getNewValue() != null){
-                    setMapWindow();
-                    setDistance();
-                }
-            } else {
-                if(evt.getNewValue() == null){
-                    setMapWindow();
-                    setDistance();
-                } else {
-                    if (evt.getOldValue() != evt.getNewValue()){
-                        setMapWindow();
-                        setDistance();
-                    }
-                }
-            }*/
+             *  if(evt.getNewValue() != null){     setMapWindow();     setDistance(); } } else { if(evt.getNewValue() ==
+             * null){     setMapWindow();     setDistance(); } else {     if (evt.getOldValue() != evt.getNewValue()){
+             *       setMapWindow();         setDistance();     } }}*/
         }
        if (evt.getPropertyName().equals(FIELD__KEY)) {
             if (getCidsBean().getMetaObject().getStatus() != MetaObject.NEW) {
@@ -1013,17 +1004,19 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             }
         }
     }
-    
-    public void setDistance(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void setDistance() {
         double length = 0.0;
-        if (this.getCidsBean() != null){
-            if (this.getCidsBean().getProperty(FIELD__GEOM) != null){
+        if (this.getCidsBean() != null) {
+            if (this.getCidsBean().getProperty(FIELD__GEOM) != null) {
                 final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOM);
-                length = Math.round(((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getLength())/1000.0;
-                
+                length = Math.round(((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getLength()) / 1000.0;
             }
         }
-        try{
+        try {
             getCidsBean().setProperty(FIELD__DISTANCE, length);
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
@@ -1066,8 +1059,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             save = false;
         }
 
-        
-        //wegeart vorhanden
+        // wegeart vorhanden
         try {
             if (getCidsBean().getProperty(FIELD__WAY) == null) {
                 LOG.warn("No wegeart specified. Skip persisting.");

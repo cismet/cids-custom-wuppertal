@@ -12,12 +12,15 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import lombok.Getter;
+
 import org.apache.log4j.Logger;
 
-import org.jdesktop.beansbinding.BindingGroup;
+import java.awt.BorderLayout;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheSearch;
+import de.cismet.cids.custom.wunda_blau.search.abfrage.AbstractAbfragePanel;
+import de.cismet.cids.custom.wunda_blau.search.server.StorableSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -45,30 +48,33 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
 
     //~ Instance fields --------------------------------------------------------
 
-    private final boolean editable;
+    AbstractAbfragePanel searchPanel = null;
+
+    @Getter private final boolean editable;
     private CidsBean cidsBean;
 
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.wunda_blau.search.AlboFlaecheWindowSearch alboFlaecheSearchPanel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JPanel searchPanelHolder;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AlboWirtschaftszweigEditor object.
+     * Creates a new CsSearchconfEditor object.
      */
     public CsSearchconfEditor() {
         this(true);
     }
 
     /**
-     * Creates a new AlboWirtschaftszweigEditor object.
+     * Creates a new CsSearchconfEditor object.
      *
      * @param  editable  DOCUMENT ME!
      */
@@ -91,7 +97,8 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        alboFlaecheSearchPanel1 = new de.cismet.cids.custom.wunda_blau.search.AlboFlaecheWindowSearch(editable);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        searchPanelHolder = new javax.swing.JPanel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -106,7 +113,7 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
 
         jTextField1.setName("jTextField1"); // NOI18N
@@ -122,18 +129,23 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel1.add(jTextField1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel1, gridBagConstraints);
 
-        alboFlaecheSearchPanel1.setName("alboFlaecheSearchPanel1"); // NOI18N
-        alboFlaecheSearchPanel1.setOpaque(false);
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        searchPanelHolder.setName("searchPanelHolder"); // NOI18N
+        searchPanelHolder.setOpaque(false);
+        searchPanelHolder.setLayout(new java.awt.BorderLayout());
+        jScrollPane1.setViewportView(searchPanelHolder);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -141,7 +153,7 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(alboFlaecheSearchPanel1, gridBagConstraints);
+        add(jScrollPane1, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -150,7 +162,6 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
     public CidsBean getCidsBean() {
         return cidsBean;
     }
-
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
@@ -162,18 +173,24 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
             RendererTools.makeReadOnly(bindingGroup, "cidsBean");
         }
         bindingGroup.bind();
-        if (alboFlaecheSearchPanel1 != null) {
+        searchPanelHolder.removeAll();
+        if (searchPanelHolder != null) {
             final String seachInfoJson = (cidsBean != null) ? (String)cidsBean.getProperty("conf_json") : null;
-            AlboFlaecheSearch.Configuration searchInfo;
-            try {
-                searchInfo = (seachInfoJson != null)
-                    ? AlboFlaecheSearch.OBJECT_MAPPER.readValue(
-                        seachInfoJson,
-                        AlboFlaecheSearch.Configuration.class) : null;
-            } catch (final Exception ex) {
-                searchInfo = null;
+            final String searchName = (cidsBean != null) ? (String)cidsBean.getProperty("search_name") : null;
+
+            searchPanel = CsSearchconfPanelHandler.getInstance().getStorableSearchPanel(searchName, isEditable());
+            if (searchPanel != null) {
+                searchPanel.initWithConnectionContext(getConnectionContext());
+                searchPanel.setOpaque(false);
+                searchPanelHolder.add(searchPanel, BorderLayout.CENTER);
+                StorableSearch.Configuration searchInfo;
+                try {
+                    searchInfo = searchPanel.readConfiguration(seachInfoJson);
+                } catch (final Exception ex) {
+                    searchInfo = null;
+                }
+                searchPanel.initFromConfiguration(searchInfo);
             }
-            alboFlaecheSearchPanel1.initFromConfiguration(searchInfo);
         }
     }
 
@@ -183,7 +200,10 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
 
     @Override
     public String getTitle() {
-        return null;
+        return String.format(
+                "Abfrage: %s",
+                ((cidsBean != null) && (cidsBean.getProperty("name") != null)) ? (String)cidsBean.getProperty("name")
+                                                                               : "");
     }
 
     @Override
@@ -196,31 +216,15 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
 
         initComponents();
 
-        alboFlaecheSearchPanel1.initWithConnectionContext(connectionContext);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public BindingGroup getBindingGroup() {
-//        return bindingGroup;
-        return null;
+        jPanel1.setVisible(isEditable());
+        if (searchPanel != null) {
+            searchPanel.initWithConnectionContext(connectionContext);
+        }
     }
 
     @Override
     public ConnectionContext getConnectionContext() {
         return connectionContext;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public boolean isEditable() {
-        return editable;
     }
 
     @Override
@@ -230,9 +234,7 @@ public class CsSearchconfEditor extends javax.swing.JPanel implements CidsBeanRe
     @Override
     public boolean prepareForSave() {
         try {
-            cidsBean.setProperty(
-                "conf_json",
-                AlboFlaecheSearch.OBJECT_MAPPER.writeValueAsString(alboFlaecheSearchPanel1.createConfiguration()));
+            cidsBean.setProperty("conf_json", searchPanel.createConfiguration());
             return true;
         } catch (final Exception ex) {
             LOG.error(ex, ex);

@@ -18,8 +18,14 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import org.openide.util.NbBundle;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.swing.JComboBox;
 
 import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.utils.ClientAlboProperties;
@@ -769,7 +775,8 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         jComboBox27.setSelectedItem(null);
-        ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen", getConnectionContext());
+        final ComboBoxFilterDialogEnabledFilter filter = new CustomWirtschaftszweigFilter(jComboBox27);
+        ComboBoxFilterDialog.showForCombobox(jComboBox27, "Wirtschaftszweig auswählen", filter, getConnectionContext());
         final CidsBean selected = (CidsBean)jComboBox27.getSelectedItem();
         if (selected != null) {
             ((StandortWirtschaftszweigTableModel)jXTable2.getModel()).add(selected);
@@ -982,6 +989,88 @@ public class AlboFlaecheMainStandortPanel extends AbstractAlboFlaechePanel {
         @Override
         public void beansDropped(final ArrayList<CidsBean> beans) {
             beansDroppedIntoListener(beans);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class CustomWirtschaftszweigFilter implements ComboBoxFilterDialogEnabledFilter {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private JComboBox correspondingCombobox;
+        private boolean selectionAllowed = false;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CustomWirtschaftszweigFilter object.
+         *
+         * @param  correspondingCombobox  DOCUMENT ME!
+         */
+        public CustomWirtschaftszweigFilter(final JComboBox correspondingCombobox) {
+            this(correspondingCombobox, false);
+        }
+
+        /**
+         * Creates a new CustomWirtschaftszweigFilter object.
+         *
+         * @param  correspondingCombobox  DOCUMENT ME!
+         * @param  selectionAllowed       DOCUMENT ME!
+         */
+        public CustomWirtschaftszweigFilter(final JComboBox correspondingCombobox, final boolean selectionAllowed) {
+            this.correspondingCombobox = correspondingCombobox;
+            this.selectionAllowed = selectionAllowed;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public boolean selectionOfDisabledElementsAllowed() {
+            return selectionAllowed;
+        }
+
+        @Override
+        public boolean isEnabled(final Object o, final int row) {
+            if (row == -1) {
+                return true;
+            }
+            final Object bean = correspondingCombobox.getModel().getElementAt(row);
+
+            if (bean instanceof CidsBean) {
+                final Object schluessel = ((CidsBean)bean).getProperty("fk_erhebungsklasse.schluessel");
+
+                return (schluessel == null) || (!schluessel.equals("0") && !schluessel.equals("4"));
+            }
+
+            return true;
+        }
+
+        @Override
+        public String getTooltip(final Object o, final int row) {
+            if (row == -1) {
+                return "";
+            }
+            final Object bean = correspondingCombobox.getModel().getElementAt(row);
+
+            if (bean instanceof CidsBean) {
+                final Object schluessel = ((CidsBean)bean).getProperty("fk_erhebungsklasse.schluessel");
+
+                if ((schluessel != null) && (schluessel.equals("0"))) {
+                    return NbBundle.getMessage(
+                            AlboFlaecheMainStandortPanel.class,
+                            "AlboFlaecheMainStandortPanel.getTooltip().wz0");
+                } else if ((schluessel != null) && (schluessel.equals("4"))) {
+                    return NbBundle.getMessage(
+                            AlboFlaecheMainStandortPanel.class,
+                            "AlboFlaecheMainStandortPanel.getTooltip().wz4");
+                }
+            }
+
+            return "";
         }
     }
 }

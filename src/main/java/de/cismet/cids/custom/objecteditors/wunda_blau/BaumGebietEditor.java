@@ -82,6 +82,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.BaumConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.reports.wunda_blau.BaumGebietReportGenerator;
+import de.cismet.cids.custom.wunda_blau.search.actions.BaumGebietReportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumFotosDokLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
@@ -686,9 +688,6 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
 
         btnReport.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
         btnReport.setToolTipText("PDF-Bericht zum aktuell betrachteten Gebiet erstellen");
-        btnReport.setBorderPainted(false);
-        btnReport.setContentAreaFilled(false);
-        btnReport.setFocusPainted(false);
         btnReport.addActionListener(new ActionListener() {
 
                 @Override
@@ -1495,7 +1494,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
             lstMeldungen.setSelectedValue(beanMeldung, true);
             getCidsBean().setArtificialChangeFlag(true);
         } catch (Exception ex) {
-            LOG.error(ex, ex);
+            LOG.error("Fehler beim Erzeugen der Meldung.", ex);
         } finally {
             dlgAddMeldung.setVisible(false);
         }
@@ -1622,7 +1621,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     azGeneriert = true;
                     checkSigns(patternCases.withoutae);
                 } catch (final Exception ex) {
-                    LOG.error(ex, ex);
+                    LOG.error("Fehler beim Erzeugen des Aktenzeichens.", ex);
                 }
             } else {
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -1640,6 +1639,11 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
      * @param  evt  DOCUMENT ME!
      */
     private void btnReportActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        BaumGebietReportGenerator.startGebietReportDownload(
+            getCidsBean(),
+            this,
+            BaumGebietReportServerAction.TASK_NAME,
+            getConnectionContext());
     }                                                              //GEN-LAST:event_btnReportActionPerformed
 
     /**
@@ -1837,9 +1841,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                         });
                 }
                 refreshHnr();
+                btnReport.setVisible(false);
             }
             setTitle(getTitle());
-            btnReport.setVisible(false);
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
                 getBaumChildrenLoader().setLoadingCompletedWithoutError(true);
                 allowAddRemove();
@@ -2172,7 +2176,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                     }
                 } catch (final Exception ex) {
                     noErrorOccured = false;
-                    LOG.error(ex, ex);
+                    LOG.error("Fehler beim Speicher-Check der Meldungen.", ex);
                 }
             }
 
@@ -2274,7 +2278,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                         try {
                             meldungBean = meldungBean.persist(getConnectionContext());
                         } catch (final Exception ex) {
-                            LOG.error(ex, ex);
+                            LOG.error("Fehler bei der Speicher-Vorbereitung der Meldungen.", ex);
                             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                                 NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
                                         + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
@@ -2290,7 +2294,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                                     ortBean.setProperty(FIELD__MELDUNG, meldungBean);
                                     ortBean.persist(getConnectionContext());
                                 } catch (final Exception ex) {
-                                    LOG.error(ex, ex);
+                                    LOG.error("Fehler bei der Speicher-Vorbereitung der Ortstermine.", ex);
                                     JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                                         NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_ORT)
                                                 + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
@@ -2318,7 +2322,9 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                                                 ersatzBean.setProperty(FIELD__SCHADEN, schadenBean);
                                                 ersatzBean.persist(getConnectionContext());
                                             } catch (final Exception ex) {
-                                                LOG.error(ex, ex);
+                                                LOG.error(
+                                                    "Fehler bei der Speichervorbereitung der Ersatzpflanzungen.",
+                                                    ex);
                                                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                                                     NbBundle.getMessage(
                                                         BaumGebietEditor.class,
@@ -2346,7 +2352,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                                                 festBean.setProperty(FIELD__SCHADEN, schadenBean);
                                                 festBean.persist(getConnectionContext());
                                             } catch (final Exception ex) {
-                                                LOG.error(ex, ex);
+                                                LOG.error("Fehler bei der Speichervorbereitung der Festsetzungen.", ex);
                                                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                                                     NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_FEST)
                                                             + NbBundle.getMessage(
@@ -2366,7 +2372,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                                         }
                                     }
                                 } catch (final Exception ex) {
-                                    LOG.error(ex, ex);
+                                    LOG.error("Fehler bei der Speichervorbereitung der Schaeden.", ex);
                                     JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                                         NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_SCHADEN)
                                                 + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
@@ -2459,7 +2465,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                             }
                         }
                     } catch (final InterruptedException | ExecutionException ex) {
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler beim Laden der Unterobjekte.", ex);
                     }
                 }
             }.execute();
@@ -2500,7 +2506,7 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
                             }
                         }
                     } catch (final InterruptedException | ExecutionException ex) {
-                        LOG.error(ex, ex);
+                        LOG.error("Fehler bei der Überprüfung der erlaubten Zeichen.", ex);
                     }
                 }
             };
