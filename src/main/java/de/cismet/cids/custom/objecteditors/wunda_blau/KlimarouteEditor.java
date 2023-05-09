@@ -105,6 +105,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__DISTANCE = "distanz";                                 // klimaroute
     public static final String FIELD__GEOM = "geom";                                        // klimaroute
     public static final String FIELD__DAUER = "dauer";                                      // klimaroute
+    public static final String FIELD__PUBLISH = "to_publish";                               // klimaroute
     public static final String FIELD__GEO_FIELD = "geo_field";                              // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "geom.geo_field";            // klimaroute.geom
 
@@ -137,6 +138,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     private JComboBox cbGeom;
     private DefaultBindableReferenceCombo cbSchwierigkeit;
     private DefaultBindableReferenceCombo cbWegeart;
+    private JCheckBox chkVeroeffentlicht;
     private Box.Filler filler3;
     private Box.Filler filler4;
     private JPanel jPanelAllgemein;
@@ -152,6 +154,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblSchwierigkeit;
     private JLabel lblStunde;
     private JLabel lblUrl;
+    private JLabel lblVeroeffentlicht;
     private JLabel lblWegeart;
     private JPanel panBeschreibung;
     private JPanel panContent;
@@ -223,7 +226,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         spMinute = new JSpinner();
         spStunde = new JSpinner();
         lblUrl = new JLabel();
-        cbSchwierigkeit = new DefaultBindableReferenceCombo(true);
+        cbSchwierigkeit = new DefaultBindableReferenceCombo(true) ;
         lblDistanzRO = new JLabel();
         txtName = new JTextField();
         lblName = new JLabel();
@@ -231,7 +234,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblSchwierigkeit = new JLabel();
         lblGeom = new JLabel();
-        if (isEditor()) {
+        if (isEditor()){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
         }
         txtUrl = new JTextField();
@@ -240,6 +243,8 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblWegeart = new JLabel();
         cbWegeart = new DefaultBindableReferenceCombo(true) ;
+        lblVeroeffentlicht = new JLabel();
+        chkVeroeffentlicht = new JCheckBox();
         panRechts = new JPanel();
         panBeschreibung = new JPanel();
         scpBeschreibung = new JScrollPane();
@@ -256,12 +261,14 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
-                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGap(0, 0, Short.MAX_VALUE));
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -340,12 +347,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panLinks.add(lblUrl, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_schwierigkeitsgrad}"),
-                cbSchwierigkeit,
-                BeanProperty.create("selectedItem"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_schwierigkeitsgrad}"), cbSchwierigkeit, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -359,12 +361,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblDistanzRO.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.distanz}"),
-                lblDistanzRO,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.distanz}"), lblDistanzRO, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -376,12 +373,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panLinks.add(lblDistanzRO, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.name}"),
-                txtName,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -436,7 +428,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
@@ -444,25 +436,21 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panLinks.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()) {
-            if (editor) {
+        if (isEditor()){
+            if (editor){
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.geom}"),
-                    cbGeom,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.geom}"), cbGeom, BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor()) {
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridx = 8;
             gridBagConstraints.gridy = 3;
-            gridBagConstraints.gridwidth = 12;
+            gridBagConstraints.gridwidth = 5;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.weightx = 1.0;
@@ -470,12 +458,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             panLinks.add(cbGeom, gridBagConstraints);
         }
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.url}"),
-                txtUrl,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.url}"), txtUrl, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -499,7 +482,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panLinks.add(lblDauer, gridBagConstraints);
 
-        lblMeter.setFont(new Font("Tahoma", 1, 11));                                                     // NOI18N
+        lblMeter.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblMeter.setText(NbBundle.getMessage(KlimarouteEditor.class, "KlimarouteEditor.lblMeter.text")); // NOI18N
         lblMeter.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
@@ -541,6 +524,31 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         panLinks.add(cbWegeart, gridBagConstraints);
         ((DefaultBindableReferenceCombo)cbSchwierigkeit).setNullable(true);
 
+        lblVeroeffentlicht.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVeroeffentlicht.setText("Veröffentlicht:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panLinks.add(lblVeroeffentlicht, gridBagConstraints);
+
+        chkVeroeffentlicht.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.to_publish}"), chkVeroeffentlicht, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panLinks.add(chkVeroeffentlicht, gridBagConstraints);
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -560,12 +568,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         taBeschreibung.setRows(2);
         taBeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.beschreibung}"),
-                taBeschreibung,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibung.setViewportView(taBeschreibung);
@@ -690,7 +693,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -759,6 +762,13 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             bindingGroup.bind();
             readDauer();
             setTitle(getTitle());
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    getCidsBean().setProperty(FIELD__PUBLISH, false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set default values", e);
+                }
+            }
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
@@ -808,6 +818,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(txtUrl);
             RendererTools.makeReadOnly(taBeschreibung);
             RendererTools.makeReadOnly(cbWegeart);
+            RendererTools.makeReadOnly(chkVeroeffentlicht);
             lblGeom.setVisible(isEditor());
         }
     }
