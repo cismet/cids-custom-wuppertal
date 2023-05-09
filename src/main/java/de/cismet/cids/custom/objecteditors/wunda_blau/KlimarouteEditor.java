@@ -136,6 +136,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_SUFFIX = "KlimarouteEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "KlimarouteEditor.isOkForSaving().JOptionPane.title";
     private static final String TITLE_NEW_KLIMAROUTE = "eine neue Klimaroute anlegen...";
+    private static Color colorAlarm = new java.awt.Color(255, 0, 0);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -1005,6 +1006,11 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
                     }
                 }
             }*/
+        }
+       if (evt.getPropertyName().equals(FIELD__KEY)) {
+            if (getCidsBean().getMetaObject().getStatus() != MetaObject.NEW) {
+                lblKey.setForeground(colorAlarm);
+            }
         }
     }
     
