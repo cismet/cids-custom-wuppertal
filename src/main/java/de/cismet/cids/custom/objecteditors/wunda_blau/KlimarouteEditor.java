@@ -84,6 +84,8 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.Getter;
+import lombok.Setter;
 /**
  * DOCUMENT ME!
  *
@@ -125,6 +127,7 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_DUPLICATENAME = "KlimarouteEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_NOKEY = "KlimarouteEditor.isOkForSaving().noKey";
     public static final String BUNDLE_DUPLICATEKEY = "KlimarouteEditor.isOkForSaving().duplicateKey";
+    public static final String BUNDLE_LENGTHKEY = "KlimarouteEditor.isOkForSaving().lengthKey";
     public static final String BUNDLE_WRONGKEY = "KlimarouteEditor.isOkForSaving().wrongKey";
     public static final String BUNDLE_NODIFICULTY = "KlimarouteEditor.isOkForSaving().noDificulty";
     public static final String BUNDLE_NOWAY= "KlimarouteEditor.isOkForSaving().noWay";
@@ -146,7 +149,8 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
 
     /** DOCUMENT ME! */
     private final boolean editor;
-    public static String keyPattern = "";
+    @Getter@Setter private static String keyPattern = "";
+    @Getter@Setter private Integer keyLength = 0;
     private Boolean keyRedundant = false;
     private Boolean nameRedundant = false;
 
@@ -222,7 +226,8 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
             spStunde.addChangeListener(listener);
         }
         setReadOnly();
-        keyPattern = KlimarouteConfProperties.getInstance().getKeyPattern();
+        setKeyPattern(KlimarouteConfProperties.getInstance().getKeyPattern());
+        setKeyLength(KlimarouteConfProperties.getInstance().getKeyLength());
     }
 
     /**
@@ -1101,8 +1106,15 @@ public class KlimarouteEditor extends DefaultCustomObjectEditor implements CidsB
                         LOG.warn("Wrong key specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(KlimarouteEditor.class, BUNDLE_DUPLICATEKEY));
                         save = false;
+                    } else{
+                    //key length
+                        if (getCidsBean().getProperty(FIELD__KEY).toString().length() > keyLength){
+                            LOG.warn("Wrong key length specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(KlimarouteEditor.class, BUNDLE_LENGTHKEY));
+                            save = false;
+                        }
                     }
-                }
+                } 
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Key not given.", ex);

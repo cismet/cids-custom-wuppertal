@@ -49,6 +49,7 @@ public class KlimarouteConfProperties {
     private final Double bufferMeter;
     private final String mapUrl;
     private final String keyPattern;
+    private final Integer keyLength;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,6 +62,7 @@ public class KlimarouteConfProperties {
         bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
         mapUrl = String.valueOf(readProperty(properties, "URL_LAGE", null));
         keyPattern = String.valueOf(readProperty(properties, "KEY_PATTERN", null));
+        keyLength = Integer.valueOf(readProperty(properties, "KEY_LENGTH", null));
     }
 
     //~ Methods ----------------------------------------------------------------
