@@ -176,6 +176,9 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                             new ServerActionParameter<>(
                                 CsvExportServerAction.ParameterType.CHARSET.toString(),
                                 "LATIN9"),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.ESCAPE_STRINGS.toString(),
+                                Boolean.TRUE),
                         };
                     DownloadManager.instance()
                             .add(
@@ -558,7 +561,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlKatasterblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlKatasterblattActionPerformed
+    private void jxlKatasterblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlKatasterblattActionPerformed
         final List<CidsBean> reportBeans = new LinkedList<CidsBean>();
         for (final CidsBeanWrapper beanWrapper : cidsBeanWrappers) {
             if (beanWrapper.isSelected()) {
@@ -566,7 +569,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             }
         }
         MauernReportGenerator.generateKatasterBlatt(reportBeans, MauerAggregationRenderer.this, getConnectionContext());
-    }                                                                                    //GEN-LAST:event_jxlKatasterblattActionPerformed
+    }//GEN-LAST:event_jxlKatasterblattActionPerformed
     /**
      * DOCUMENT ME!
      *
@@ -586,7 +589,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlHauptinfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlHauptinfoActionPerformed
+    private void jxlHauptinfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlHauptinfoActionPerformed
         if (cidsBeans != null) {
             ((CardLayout)jDialog1.getContentPane().getLayout()).show(jDialog1.getContentPane(), "loader");
             final Collection<CidsBean> selectedBeans = getSelectedBeans();
@@ -625,30 +628,30 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                 }.execute();
             StaticSwingTools.showDialog(this, jDialog1, true);
         }
-    } //GEN-LAST:event_jxlHauptinfoActionPerformed
+    }//GEN-LAST:event_jxlHauptinfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblMauernFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblMauernFocusLost
+    private void tblMauernFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblMauernFocusLost
         map.gotoInitialBoundingBox();
         map.getFeatureCollection().addFeatures(pointFeatures);
         tblMauern.clearSelection();
-    }                                                                      //GEN-LAST:event_tblMauernFocusLost
+    }//GEN-LAST:event_tblMauernFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlKatasterblatt1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlKatasterblatt1ActionPerformed
+    private void jxlKatasterblatt1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlKatasterblatt1ActionPerformed
         MauerObjectsPermissionsProviderDialog.getInstance().setCidsBeans(getCidsBeans());
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
             MauerObjectsPermissionsProviderDialog.getInstance(),
             true);
-    }                                                                                     //GEN-LAST:event_jxlKatasterblatt1ActionPerformed
+    }//GEN-LAST:event_jxlKatasterblatt1ActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
