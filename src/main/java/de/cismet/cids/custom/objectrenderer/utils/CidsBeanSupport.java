@@ -26,7 +26,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
-import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -97,15 +96,15 @@ public final class CidsBeanSupport {
     }
     
     /**
-     * DOCUMENT ME!
+     * Die Datentypen sollten bei Verwendung vorher getestet werden.
      *
      * @param bean
      * @param conCon 
+     * @param table 
      *
      * @return  DOCUMENT ME!
      */
     public static CidsBean cloneBean (final CidsBean bean, final ConnectionContext conCon, final String table){
-        //final String table = bean.getMetaObject().getName();
         CidsBean beanClone;
         try {
             beanClone = CidsBean.createNewCidsBeanFromTableName(
@@ -118,43 +117,31 @@ public final class CidsBeanSupport {
                     if (obj != null) {
                         if (obj instanceof CidsBean) {
                             beanClone.setProperty(propertyName, (CidsBean)obj);
-                        } else {
-                            if (obj instanceof Integer) {
-                                beanClone.setProperty(propertyName, new Integer(obj.toString()));
-                            } else {
-                                if ( obj instanceof Long) {
-                                    beanClone.setProperty(propertyName, new Long(obj.toString()));
-                                } else {
-                                    if (obj instanceof Double) {
-                                        beanClone.setProperty(propertyName, new Double(obj.toString()));
-                                    } else {
-                                        if (obj instanceof Boolean) {
-                                            beanClone.setProperty(propertyName, Boolean.valueOf(obj.toString()));
-                                        } else {
-                                            if (obj instanceof String) {
-                                                beanClone.setProperty(propertyName, obj.toString());
-                                            } else {
-                                                if (obj instanceof Collection){
-                                                    final List<CidsBean> listArray = (List<CidsBean>)obj;
-                                                    List<CidsBean> listArrayClone = (List)beanClone.getProperty(propertyName);
-                                                    for (CidsBean beanListClone : listArray) {
-                                                        listArrayClone.add(beanListClone);
-                                                    }
-                                                } else {
-                                                    LOG.error("unknown property type: " + obj.getClass().getName());
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                        } else if (obj instanceof Integer) {
+                            beanClone.setProperty(propertyName, new Integer(obj.toString()));
+                        } else if ( obj instanceof Long) {
+                            beanClone.setProperty(propertyName, new Long(obj.toString()));
+                        } else if (obj instanceof Double) {
+                            beanClone.setProperty(propertyName, new Double(obj.toString()));
+                        } else if (obj instanceof Boolean) {
+                            beanClone.setProperty(propertyName, Boolean.valueOf(obj.toString()));
+                        } else if (obj instanceof String) {
+                            beanClone.setProperty(propertyName, obj.toString());
+                        } else if (obj instanceof Collection){
+                            final List<CidsBean> listArray = (List<CidsBean>)obj;
+                            List<CidsBean> listArrayClone = (List)beanClone.getProperty(propertyName);
+                            for (CidsBean beanListClone : listArray) {
+                                listArrayClone.add(beanListClone);
                             }
+                        } else {
+                            LOG.error("unknown property type: " + obj.getClass().getName());
                         }
-                    }
+                    }           
                 }
             }
             return beanClone;
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.error("Cannot clone object", ex);
         }
         return null;                               
     }
