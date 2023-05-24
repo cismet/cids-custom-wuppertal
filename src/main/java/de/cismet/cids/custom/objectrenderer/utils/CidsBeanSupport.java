@@ -15,6 +15,7 @@ import Sirius.navigator.connection.SessionManager;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.newuser.User;
+import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +40,7 @@ public final class CidsBeanSupport {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CidsBeanSupport.class);
     public static final String DOMAIN_NAME = "WUNDA_BLAU";
+    public static final String TABLE__GEOM = "Geom";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -116,7 +118,17 @@ public final class CidsBeanSupport {
                     final Object obj = bean.getProperty(propertyName);
                     if (obj != null) {
                         if (obj instanceof CidsBean) {
-                            beanClone.setProperty(propertyName, (CidsBean)obj);
+                            if (obj.getClass().getSimpleName().equals(TABLE__GEOM)){
+                                CidsBean beanGeom = CidsBeanSupport.cloneBean(
+                                    (CidsBean)obj,
+                                    conCon,
+                                    TABLE__GEOM);
+                                beanClone.setProperty(propertyName, beanGeom);
+                            } else {
+                                beanClone.setProperty(propertyName, (CidsBean)obj);
+                            }
+                        } else if (obj instanceof Geometry){
+                            beanClone.setProperty(propertyName, (Geometry)obj);
                         } else if (obj instanceof Integer) {
                             beanClone.setProperty(propertyName, new Integer(obj.toString()));
                         } else if ( obj instanceof Long) {
