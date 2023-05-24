@@ -26,6 +26,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
+import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -37,7 +38,7 @@ public final class CidsBeanSupport {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CidsBeanSupport.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CidsBeanSupport.class);
     public static final String DOMAIN_NAME = "WUNDA_BLAU";
 
     //~ Constructors -----------------------------------------------------------
@@ -93,6 +94,69 @@ public final class CidsBeanSupport {
             }
         }
         throw new Exception("Could not find MetaClass for table " + tableName);
+    }
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param bean
+     * @param conCon 
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static CidsBean cloneBean (final CidsBean bean, final ConnectionContext conCon, final String table){
+        //final String table = bean.getMetaObject().getName();
+        CidsBean beanClone;
+        try {
+            beanClone = CidsBean.createNewCidsBeanFromTableName(
+                    "WUNDA_BLAU",
+                    table,
+                    conCon);
+            for (final String propertyName : beanClone.getPropertyNames()) {
+                if (!propertyName.toLowerCase().equals("id")) {
+                    final Object obj = bean.getProperty(propertyName);
+                    if (obj != null) {
+                        if (obj instanceof CidsBean) {
+                            beanClone.setProperty(propertyName, (CidsBean)obj);
+                        } else {
+                            if (obj instanceof Integer) {
+                                beanClone.setProperty(propertyName, new Integer(obj.toString()));
+                            } else {
+                                if ( obj instanceof Long) {
+                                    beanClone.setProperty(propertyName, new Long(obj.toString()));
+                                } else {
+                                    if (obj instanceof Double) {
+                                        beanClone.setProperty(propertyName, new Double(obj.toString()));
+                                    } else {
+                                        if (obj instanceof Boolean) {
+                                            beanClone.setProperty(propertyName, Boolean.valueOf(obj.toString()));
+                                        } else {
+                                            if (obj instanceof String) {
+                                                beanClone.setProperty(propertyName, obj.toString());
+                                            } else {
+                                                if (obj instanceof Collection){
+                                                    final List<CidsBean> listArray = (List<CidsBean>)obj;
+                                                    List<CidsBean> listArrayClone = (List)beanClone.getProperty(propertyName);
+                                                    for (CidsBean beanListClone : listArray) {
+                                                        listArrayClone.add(beanListClone);
+                                                    }
+                                                } else {
+                                                    LOG.error("unknown property type: " + obj.getClass().getName());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return beanClone;
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return null;                               
     }
 
     /**
