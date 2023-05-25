@@ -128,7 +128,7 @@ public final class CidsBeanSupport {
                                 beanClone.setProperty(propertyName, (CidsBean)obj);
                             }
                         } else if (obj instanceof Geometry){
-                            beanClone.setProperty(propertyName, (Geometry)obj);
+                            beanClone.setProperty(propertyName, ((Geometry)obj).clone());
                         } else if (obj instanceof Integer) {
                             beanClone.setProperty(propertyName, new Integer(obj.toString()));
                         } else if ( obj instanceof Long) {
