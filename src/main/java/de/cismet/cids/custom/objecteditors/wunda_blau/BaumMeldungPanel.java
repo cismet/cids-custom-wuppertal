@@ -75,10 +75,12 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -86,6 +88,7 @@ import de.cismet.cids.custom.objecteditors.utils.BaumChildrenLoader;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.server.BaumAnsprechpartnerLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -151,6 +154,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
 
     public static final String BUNDLE_NODATE = "BaumMeldungPanel.isOkForSaving().noDatum";
     public static final String BUNDLE_NOAP = "BaumMeldungPanel.isOkForSaving().noAp";
+    public static final String BUNDLE_NOCLONE = "BaumMeldungPanel.btnCreateMoreActionPerformed().noClone";
+    public static final String BUNDLE_PANE_TITLE_CLONE = "BaumMeldungPanel.btnCreateMoreActionPerformed().title";
     public static final String BUNDLE_PANE_TITLE = "BaumMeldungPanel.isOkForSaving().JOptionPane.title";
     public static final String BUNDLE_PANE_TITLE_ERROR_ORT = "BaumMeldungPanel.zeigeErrorOrt().JOptionPane.title";
     public static final String BUNDLE_PANE_TITLE_ERROR_SCHADEN =
@@ -198,6 +203,13 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 new BaumAnsprechpartnerLightweightSearch(),
                 "Ansprechpartner/Melder auswählen",
                 getConnectionContext());
+        dlgCloneSchaden = new JDialog();
+        panCloneSchaden = new JPanel();
+        lblCloneSchaden = new JLabel();
+        panMenButtonsCloneSchaden = new JPanel();
+        btnMenAbortCloneSchaden = new JButton();
+        btnMenOkCloneSchaden = new JButton();
+        spAnzahlSchaeden = new JSpinner();
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
@@ -239,6 +251,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         panControlsNewSchaden = new JPanel();
         btnAddNewSchaden = new JButton();
         btnRemoveSchaden = new JButton();
+        btnCreateMore = new JButton();
 
         final FormListener formListener = new FormListener();
 
@@ -296,6 +309,69 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         dlgAddOrtstermin.getContentPane().add(panAddOrtstermin, BorderLayout.CENTER);
 
         comboBoxFilterDialogApartner.setName("comboBoxFilterDialogApartner"); // NOI18N
+
+        dlgCloneSchaden.setTitle(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.dlgCloneSchaden.title")); // NOI18N
+        dlgCloneSchaden.setModal(true);
+        dlgCloneSchaden.setName("dlgCloneSchaden");                                                                      // NOI18N
+        dlgCloneSchaden.setPreferredSize(new Dimension(386, 200));
+
+        panCloneSchaden.setName("panCloneSchaden"); // NOI18N
+        panCloneSchaden.setLayout(new GridBagLayout());
+
+        lblCloneSchaden.setText(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.lblCloneSchaden.text")); // NOI18N
+        lblCloneSchaden.setName("lblCloneSchaden");                                                                    // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panCloneSchaden.add(lblCloneSchaden, gridBagConstraints);
+
+        panMenButtonsCloneSchaden.setName("panMenButtonsCloneSchaden"); // NOI18N
+        panMenButtonsCloneSchaden.setLayout(new GridBagLayout());
+
+        btnMenAbortCloneSchaden.setText(NbBundle.getMessage(
+                BaumMeldungPanel.class,
+                "BaumMeldungPanel.btnMenAbortCloneSchaden.text"));  // NOI18N
+        btnMenAbortCloneSchaden.setName("btnMenAbortCloneSchaden"); // NOI18N
+        btnMenAbortCloneSchaden.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panMenButtonsCloneSchaden.add(btnMenAbortCloneSchaden, gridBagConstraints);
+
+        btnMenOkCloneSchaden.setText(NbBundle.getMessage(
+                BaumMeldungPanel.class,
+                "BaumMeldungPanel.btnMenOkCloneSchaden.text")); // NOI18N
+        btnMenOkCloneSchaden.setName("btnMenOkCloneSchaden");   // NOI18N
+        btnMenOkCloneSchaden.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panMenButtonsCloneSchaden.add(btnMenOkCloneSchaden, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panCloneSchaden.add(panMenButtonsCloneSchaden, gridBagConstraints);
+
+        spAnzahlSchaeden.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spAnzahlSchaeden.setModel(new SpinnerNumberModel(1, 1, 500, 1));
+        spAnzahlSchaeden.setName("spAnzahlSchaeden");        // NOI18N
+        spAnzahlSchaeden.setPreferredSize(new Dimension(75, 20));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panCloneSchaden.add(spAnzahlSchaeden, gridBagConstraints);
+
+        dlgCloneSchaden.getContentPane().add(panCloneSchaden, BorderLayout.CENTER);
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -723,10 +799,8 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panSchaden.add(lblLadenSchaden, gridBagConstraints);
 
         scpLaufendeSchaeden.setName("scpLaufendeSchaeden"); // NOI18N
@@ -810,6 +884,24 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewSchaden.add(btnRemoveSchaden, gridBagConstraints);
 
+        btnCreateMore.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/plan.png"))); // NOI18N
+        btnCreateMore.setToolTipText(NbBundle.getMessage(
+                BaumMeldungPanel.class,
+                "BaumMeldungPanel.btnCreateMore.toolTipText"));                                                         // NOI18N
+        btnCreateMore.setEnabled(false);
+        btnCreateMore.setMaximumSize(new Dimension(39, 20));
+        btnCreateMore.setMinimumSize(new Dimension(39, 20));
+        btnCreateMore.setName("btnCreateMore");                                                                         // NOI18N
+        btnCreateMore.setPreferredSize(new Dimension(39, 25));
+        btnCreateMore.addActionListener(formListener);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewSchaden.add(btnCreateMore, gridBagConstraints);
+        btnCreateMore.setVisible(isEditor());
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -877,10 +969,16 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 BaumMeldungPanel.this.btnAddNewSchadenActionPerformed(evt);
             } else if (evt.getSource() == btnRemoveSchaden) {
                 BaumMeldungPanel.this.btnRemoveSchadenActionPerformed(evt);
+            } else if (evt.getSource() == btnCreateMore) {
+                BaumMeldungPanel.this.btnCreateMoreActionPerformed(evt);
             } else if (evt.getSource() == btnMenAbortOrtstermin) {
                 BaumMeldungPanel.this.btnMenAbortOrtsterminActionPerformed(evt);
             } else if (evt.getSource() == btnMenOkOrtstermin) {
                 BaumMeldungPanel.this.btnMenOkOrtsterminActionPerformed(evt);
+            } else if (evt.getSource() == btnMenAbortCloneSchaden) {
+                BaumMeldungPanel.this.btnMenAbortCloneSchadenActionPerformed(evt);
+            } else if (evt.getSource() == btnMenOkCloneSchaden) {
+                BaumMeldungPanel.this.btnMenOkCloneSchadenActionPerformed(evt);
             }
         }
 
@@ -923,7 +1021,10 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     JButton btnAddNewOrtstermin;
     JButton btnAddNewSchaden;
     JButton btnApartner;
+    JButton btnCreateMore;
+    JButton btnMenAbortCloneSchaden;
     JButton btnMenAbortOrtstermin;
+    JButton btnMenOkCloneSchaden;
     JButton btnMenOkOrtstermin;
     JButton btnRemoveApartner;
     JButton btnRemoveOrtstermin;
@@ -932,6 +1033,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     ComboBoxFilterDialog comboBoxFilterDialogApartner;
     DefaultBindableDateChooser dcOrtstermin;
     JDialog dlgAddOrtstermin;
+    JDialog dlgCloneSchaden;
     Box.Filler filler1;
     JPanel jPanelAllgemein;
     JPanel jPanelOrtstermine;
@@ -941,6 +1043,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     JLabel lblApartner;
     JLabel lblAuswaehlenOrtstermin;
     JLabel lblBemerkung;
+    JLabel lblCloneSchaden;
     JLabel lblLadenOrt;
     JLabel lblLadenSchaden;
     JList lstApartner;
@@ -949,12 +1052,14 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     JPanel panAddOrtstermin;
     JPanel panApartner;
     JPanel panButtonsApartner;
+    JPanel panCloneSchaden;
     JPanel panControlsNewOrtstermine;
     JPanel panControlsNewSchaden;
     JPanel panFillerUnten3;
     JPanel panFillerUnten4;
     JPanel panFillerUnten5;
     JPanel panInfo;
+    JPanel panMenButtonsCloneSchaden;
     JPanel panMenButtonsOrtstermin;
     JPanel panOrtstermin;
     JPanel panOrtstermineMain;
@@ -965,6 +1070,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
     JScrollPane scpBemerkung;
     JScrollPane scpLaufendeOrtstermine;
     JScrollPane scpLaufendeSchaeden;
+    JSpinner spAnzahlSchaeden;
     JTextArea taBemerkung;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -1298,6 +1404,83 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         isAbgenommen();
     }                                                              //GEN-LAST:event_chAbgenommenStateChanged
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnCreateMoreActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnCreateMoreActionPerformed
+        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
+                try {
+                    // Dialog oeffnen: schadenBean erzeugen und vorbelegen:
+                    final CidsBean selectedSchaden = (CidsBean)lstSchaeden.getSelectedValue();
+                    if (selectedSchaden != null) {
+                        if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
+                            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(BaumMeldungPanel.this),
+                                dlgCloneSchaden,
+                                true);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(this),
+                            NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOCLONE),
+                            NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_CLONE),
+                            JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    LOG.error("Cannot clone new BaumSchaden object", e);
+                }
+            }
+        }
+    } //GEN-LAST:event_btnCreateMoreActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortCloneSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortCloneSchadenActionPerformed
+        dlgCloneSchaden.setVisible(false);
+    }                                                                            //GEN-LAST:event_btnMenAbortCloneSchadenActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkCloneSchadenActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkCloneSchadenActionPerformed
+        final int anzSchaeden = (int)spAnzahlSchaeden.getValue();
+        try {
+            // schadenBean erzeugen und vorbelegen:
+            final CidsBean selectedSchaden = (CidsBean)lstSchaeden.getSelectedValue();
+            if (selectedSchaden != null) {
+                for (int i = 0; i < anzSchaeden; i++) {
+                    final CidsBean beanSchaden = CidsBeanSupport.cloneBean(
+                            selectedSchaden,
+                            getConnectionContext(),
+                            TABLE__SCHADEN);
+                    beanSchaden.setProperty(FIELD__ID, getCounterSchaden());
+                    setCounterSchaden(getCounterSchaden() - 1);
+                    // schaden erweitern:
+                    if (isEditor()) {
+                        getBaumChildrenLoader().addSchaden(getCidsBean().getPrimaryKeyValue(), beanSchaden);
+                    }
+                    ((DefaultListModel)lstSchaeden.getModel()).addElement(beanSchaden);
+
+                    // Refresh:
+                    lstSchaeden.setSelectedValue(beanSchaden, true);
+                    getCidsBean().setArtificialChangeFlag(true);
+                    getBaumChildrenLoader().getParentOrganizer().getCidsBean().setArtificialChangeFlag(true);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Cannot add new BaumSchaden object", e);
+        } finally {
+            dlgCloneSchaden.setVisible(false);
+        }
+    } //GEN-LAST:event_btnMenOkCloneSchadenActionPerformed
+
     @Override
     public ConnectionContext getConnectionContext() {
         return ((baumChildrenLoader != null) && (baumChildrenLoader.getParentOrganizer() != null))
@@ -1388,6 +1571,9 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                     this.cidsBean.addPropertyChangeListener(changeListener);
                 }
                 isAbgenommen();
+                dlgCloneSchaden.pack();
+                dlgCloneSchaden.getRootPane().setDefaultButton(btnMenOkCloneSchaden);
+
                 dlgAddOrtstermin.pack();
                 dlgAddOrtstermin.getRootPane().setDefaultButton(btnMenOkOrtstermin);
                 if ((cidsBean != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.NEW)) {
@@ -1435,6 +1621,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         taBemerkung.setEnabled(edit);
         btnAddApartner.setEnabled(edit);
         btnRemoveApartner.setEnabled(edit);
+        btnCreateMore.setEnabled(edit);
     }
 
     /**
@@ -1585,6 +1772,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
                 btnAddNewSchaden.setEnabled(true);
                 btnRemoveOrtstermin.setEnabled(true);
                 btnRemoveSchaden.setEnabled(true);
+                btnCreateMore.setEnabled(true);
             }
             lblLadenOrt.setVisible(false);
             lblLadenSchaden.setVisible(false);
