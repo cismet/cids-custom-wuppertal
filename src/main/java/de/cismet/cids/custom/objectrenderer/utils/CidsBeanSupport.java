@@ -15,6 +15,7 @@ import Sirius.navigator.connection.SessionManager;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.newuser.User;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.Collection;
@@ -96,18 +97,18 @@ public final class CidsBeanSupport {
         }
         throw new Exception("Could not find MetaClass for table " + tableName);
     }
-    
+
     /**
      * Die Datentypen sollten bei Verwendung vorher getestet werden.
      *
-     * @param bean
-     * @param conCon 
-     * @param table 
+     * @param   bean    DOCUMENT ME!
+     * @param   conCon  DOCUMENT ME!
+     * @param   table   DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static CidsBean cloneBean (final CidsBean bean, final ConnectionContext conCon, final String table){
-        CidsBean beanClone;
+    public static CidsBean cloneBean(final CidsBean bean, final ConnectionContext conCon, final String table) {
+        final CidsBean beanClone;
         try {
             beanClone = CidsBean.createNewCidsBeanFromTableName(
                     "WUNDA_BLAU",
@@ -118,20 +119,19 @@ public final class CidsBeanSupport {
                     final Object obj = bean.getProperty(propertyName);
                     if (obj != null) {
                         if (obj instanceof CidsBean) {
-                            if (obj.getClass().getSimpleName().equals(TABLE__GEOM)){
-                                CidsBean beanGeom = CidsBeanSupport.cloneBean(
-                                    (CidsBean)obj,
-                                    conCon,
-                                    TABLE__GEOM);
+                            if (obj.getClass().getSimpleName().equals(TABLE__GEOM)) {
+                                final CidsBean beanGeom = CidsBeanSupport.cloneBean((CidsBean)obj,
+                                        conCon,
+                                        TABLE__GEOM);
                                 beanClone.setProperty(propertyName, beanGeom);
                             } else {
                                 beanClone.setProperty(propertyName, (CidsBean)obj);
                             }
-                        } else if (obj instanceof Geometry){
+                        } else if (obj instanceof Geometry) {
                             beanClone.setProperty(propertyName, ((Geometry)obj).clone());
                         } else if (obj instanceof Integer) {
                             beanClone.setProperty(propertyName, new Integer(obj.toString()));
-                        } else if ( obj instanceof Long) {
+                        } else if (obj instanceof Long) {
                             beanClone.setProperty(propertyName, new Long(obj.toString()));
                         } else if (obj instanceof Double) {
                             beanClone.setProperty(propertyName, new Double(obj.toString()));
@@ -139,23 +139,23 @@ public final class CidsBeanSupport {
                             beanClone.setProperty(propertyName, Boolean.valueOf(obj.toString()));
                         } else if (obj instanceof String) {
                             beanClone.setProperty(propertyName, obj.toString());
-                        } else if (obj instanceof Collection){
+                        } else if (obj instanceof Collection) {
                             final List<CidsBean> listArray = (List<CidsBean>)obj;
-                            List<CidsBean> listArrayClone = (List)beanClone.getProperty(propertyName);
-                            for (CidsBean beanListClone : listArray) {
+                            final List<CidsBean> listArrayClone = (List)beanClone.getProperty(propertyName);
+                            for (final CidsBean beanListClone : listArray) {
                                 listArrayClone.add(beanListClone);
                             }
                         } else {
                             LOG.error("unknown property type: " + obj.getClass().getName());
                         }
-                    }           
+                    }
                 }
             }
             return beanClone;
         } catch (Exception ex) {
             LOG.error("Cannot clone object", ex);
         }
-        return null;                               
+        return null;
     }
 
     /**
