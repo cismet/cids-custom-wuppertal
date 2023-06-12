@@ -1082,7 +1082,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_ZONE;
         } else {
-            return getCidsBean().toString();
+            final String id = getCidsBean().getPrimaryKeyValue().toString();
+            final String zone = getCidsBean().getProperty(FIELD__ZONE).toString();
+            return (getCidsBean().getProperty(FIELD__NUMMER) == null 
+                        || getCidsBean().getProperty(FIELD__NUMMER).toString().trim().length() == 0)
+                    ? String.format("%s (%s)", zone, id) 
+                    : String.format("%s - %s (%s)", zone, getCidsBean().getProperty(FIELD__NUMMER).toString(), id);
         }
     }
 
