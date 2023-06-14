@@ -144,12 +144,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private static final int VERMESSUNGSRISS = 0;
     private static final int GRENZNIEDERSCHRIFT = 1;
     private static final int NO_SELECTION = -1;
-    private static final ListModel MODEL_LOAD = new DefaultListModel() {
-
-            {
-                add(0, "Wird geladen...");
-            }
-        };
 
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(
                 PrecisionModel.FLOATING),
@@ -2049,6 +2043,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     @Override
     public void dispose() {
+        scpPages.setViewportView(null);
+        bindingGroup.unbind();
         // dispose panels here if necessary
 // rasterfariDocumentLoaderPanel1.reset();
         rasterfariDocumentLoaderPanel1.dispose();
@@ -2577,7 +2573,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         public RefreshDocumentWorker(final boolean refreshMeasuringComponent) {
             this.refreshMeasuringComponent = refreshMeasuringComponent;
             if (this.refreshMeasuringComponent) {
-                lstPages.setModel(MODEL_LOAD);
 //                setCurrentDocumentNull();
 
                 showMeasureIsLoading();
