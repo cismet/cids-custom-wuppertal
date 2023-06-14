@@ -17,7 +17,6 @@ import Sirius.server.middleware.types.MetaClass;
 
 import Sirius.server.middleware.types.MetaObject;
 
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
@@ -55,7 +54,6 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;

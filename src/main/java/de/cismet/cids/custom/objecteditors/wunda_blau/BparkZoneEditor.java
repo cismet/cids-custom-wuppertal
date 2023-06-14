@@ -20,8 +20,9 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
-import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 
 import org.apache.log4j.Logger;
 
@@ -140,7 +141,6 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_DUPLICATEZONE = "BparkZoneEditor.isOkForSaving().duplicateZone";
     public static final String BUNDLE_NUMMERFALSE = "BparkZoneEditor.isOkForSaving().NummerFalse";
     public static final String BUNDLE_NOGEOM = "BparkZoneEditor.isOkForSaving().noGeom";
-    public static final String BUNDLE_WRONGGEOM = "BparkZoneEditor.isOkForSaving().wrongGeom";
     public static final String BUNDLE_PANE_PREFIX = "BparkZoneEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BparkZoneEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BparkZoneEditor.isOkForSaving().JOptionPane.title";
@@ -323,6 +323,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         lblGeom = new JLabel();
         if (isEditor()){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Polygon.class, MultiPolygon.class});
         }
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblHinweis = new JLabel();
@@ -1174,14 +1175,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BparkZoneEditor.class, BUNDLE_NOGEOM));
                 save = false;
-            } else {
-                final CidsBean geom_pos = (CidsBean)getCidsBean().getProperty(FIELD__GEOM);
-                if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals(GEOMTYPE)) {
-                    LOG.warn("Wrong geom specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(BparkZoneEditor.class, BUNDLE_WRONGGEOM));
-                    save = false;
-                }
-            }
+            } 
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;

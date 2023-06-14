@@ -172,7 +172,7 @@
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
                                 <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor()"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor();&#xa;((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Polygon.class, MultiPolygon.class});"/>
                                 <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
                                 <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor()){"/>
                                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
