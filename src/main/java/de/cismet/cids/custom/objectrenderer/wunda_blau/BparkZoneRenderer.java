@@ -8,7 +8,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
-import de.cismet.cids.custom.objecteditors.wunda_blau.BparkBereichEditor;
+import de.cismet.cids.custom.objecteditors.wunda_blau.BparkZoneEditor;
 
 
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -22,14 +22,14 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class BparkBereichRenderer extends BparkBereichEditor {
+public class BparkZoneRenderer extends BparkZoneEditor {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new BparkBereichRenderer object.
+     * Creates a new BparkZoneRenderer object.
      */
-    public BparkBereichRenderer() {
+    public BparkZoneRenderer() {
         super(false);
     }
 
@@ -51,7 +51,7 @@ public class BparkBereichRenderer extends BparkBereichEditor {
             "WUNDA_BLAU",
             null,
             false,
-            "bpark_bereich",
+            "bpark_zone",
             1,
             1280,
             1024);

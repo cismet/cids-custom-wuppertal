@@ -527,6 +527,7 @@ public class BparkCityausweisEditor extends DefaultCustomObjectEditor implements
     private void setReadOnly() {
         if (!(isEditor())) {
             lblGeom.setVisible(isEditor());
+            RendererTools.makeReadOnly(cbCity);
             RendererTools.makeReadOnly(taHinweis);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(chkVeroeffentlicht);

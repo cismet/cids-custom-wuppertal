@@ -526,6 +526,7 @@ public class BparkBereichEditor extends DefaultCustomObjectEditor implements Cid
     private void setReadOnly() {
         if (!(isEditor())) {
             lblGeom.setVisible(isEditor());
+            RendererTools.makeReadOnly(cbZone);
             RendererTools.makeReadOnly(taHinweis);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(chkVeroeffentlicht);
