@@ -105,7 +105,8 @@ public class BparkCityausweisEditor extends DefaultCustomObjectEditor implements
     private static final Logger LOG = Logger.getLogger(BparkCityausweisEditor.class);
 
     public static final String FIELD__ID = "id";                                        
-    public static final String FIELD__CITY = "fk_cityausweisbereich";                                    
+    public static final String FIELD__CITY = "fk_cityausweisbereich"; 
+    public static final String FIELD__PUBLISH = "veroeffentlicht";                                   
     public static final String FIELD__GEOM = "fk_geom";                             
     public static final String FIELD__GEO_FIELD = "geo_field";                              
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";         
@@ -515,6 +516,13 @@ public class BparkCityausweisEditor extends DefaultCustomObjectEditor implements
             setMapWindow();
             bindingGroup.bind();
             setTitle(getTitle());
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    getCidsBean().setProperty(FIELD__PUBLISH, false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set default values", e);
+                }
+            }
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
