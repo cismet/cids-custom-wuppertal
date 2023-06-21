@@ -100,7 +100,7 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
     private static final Logger LOG = Logger.getLogger(BparkCityausweisbereichEditor.class);
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
     public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
-    public static final String REDUNDANT_TABLE = "bpark_zone";
+    public static final String REDUNDANT_TABLE = "bpark_cityausweisbereich";
 
     public static final String FIELD__ID = "id";                                        
     public static final String FIELD__NAME = "name";                                        
