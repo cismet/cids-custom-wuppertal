@@ -239,7 +239,7 @@ public class BparkCityausweisEditor extends DefaultCustomObjectEditor implements
         panDaten.setLayout(new GridBagLayout());
 
         lblCity.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblCity.setText("City-Bereich:");
+        lblCity.setText("City-Parkzone:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

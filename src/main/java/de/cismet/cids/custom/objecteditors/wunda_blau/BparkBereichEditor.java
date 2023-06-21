@@ -238,7 +238,7 @@ public class BparkBereichEditor extends DefaultCustomObjectEditor implements Cid
         panDaten.setLayout(new GridBagLayout());
 
         lblZone.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblZone.setText("Zone:");
+        lblZone.setText("Bewohnerparkzone:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
