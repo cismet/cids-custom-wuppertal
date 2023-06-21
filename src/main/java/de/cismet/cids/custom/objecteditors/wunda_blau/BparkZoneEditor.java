@@ -146,9 +146,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_PANE_SUFFIX = "BparkZoneEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BparkZoneEditor.isOkForSaving().JOptionPane.title";
     
-    private static final String TITLE_NEW_ZONE = "eine neue Zone anlegen...";
-    private static Color colorAlarm = new java.awt.Color(255, 0, 0);
-    private static Color colorNormal = new java.awt.Color(0, 0, 0);
+    private static final String TITLE_NEW_ZONE = "eine neue Bewohnerparkzone anlegen...";
 
     /** DOCUMENT ME! */
     public static String nummerPattern = ""; // [0-9a-zA-Z\\s\\-\\_\\ä\\ö\\ü\\ß]{1,}";
@@ -876,25 +874,6 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         return this.editor;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   cbList  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Integer getActiveBeans(final List<CidsBean> cbList) {
-        Integer anzahl = 0;
-        if (cbList != null) {
-            for (final CidsBean bean : cbList) {
-                if (bean.getMetaObject().getStatus() != MetaObject.TO_DELETE) {
-                    anzahl += 1;
-                }
-            }
-        }
-        return anzahl;
-    }
-
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -1153,7 +1132,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
                     // korrekte Zeichen
                     if (!txtZone.getText().matches(zonePattern)) {
                         LOG.warn("False zone specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(PoiZoomkeyEditor.class, BUNDLE_ZONEFALSE));
+                        errorMessage.append(NbBundle.getMessage(BparkZoneEditor.class, BUNDLE_ZONEFALSE));
                         save = false;
                     }
                 }
@@ -1173,7 +1152,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
             
             }
         } catch (final MissingResourceException ex) {
-            LOG.warn("Aktenzeichen not given.", ex);
+            LOG.warn("nummmr wrong given.", ex);
             save = false;
         }
 

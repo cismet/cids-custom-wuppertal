@@ -119,7 +119,7 @@ public class BparkCityausweisEditor extends DefaultCustomObjectEditor implements
     public static final String BUNDLE_PANE_SUFFIX = "BparkCityausweisEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BparkCityausweisEditor.isOkForSaving().JOptionPane.title";
     
-    private static final String TITLE_NEW_ZONE = "eine neuen Citybereich anlegen...";
+    private static final String TITLE_NEW_ZONE = "eine neue City-Parkfläche anlegen...";
 
 
     //~ Enums ------------------------------------------------------------------
@@ -175,7 +175,7 @@ public class BparkCityausweisEditor extends DefaultCustomObjectEditor implements
     }
 
     /**
-     * Creates a new BparkZoneEditor object.
+     * Creates a new BparkCityausweisEditor object.
      *
      * @param  boolEditor  DOCUMENT ME!
      */

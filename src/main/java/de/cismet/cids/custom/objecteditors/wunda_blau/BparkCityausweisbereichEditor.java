@@ -118,9 +118,7 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
     public static final String BUNDLE_PANE_SUFFIX = "BparkCityausweisbereichEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BparkCityausweisbereichEditor.isOkForSaving().JOptionPane.title";
     
-    private static final String TITLE_NEW_CITYBEREICH = "eine neue Cityausweisbereich anlegen...";
-    private static Color colorAlarm = new java.awt.Color(255, 0, 0);
-    private static Color colorNormal = new java.awt.Color(0, 0, 0);
+    private static final String TITLE_NEW_CITYBEREICH = "eine neue City-Parkzone anlegen...";
 
 
     //~ Enums ------------------------------------------------------------------

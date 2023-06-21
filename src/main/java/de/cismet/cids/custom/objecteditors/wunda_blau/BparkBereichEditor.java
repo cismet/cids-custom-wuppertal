@@ -118,7 +118,7 @@ public class BparkBereichEditor extends DefaultCustomObjectEditor implements Cid
     public static final String BUNDLE_PANE_SUFFIX = "BparkBereichEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BparkBereichEditor.isOkForSaving().JOptionPane.title";
     
-    private static final String TITLE_NEW_BEREICH = "eine neuen Bereich anlegen...";
+    private static final String TITLE_NEW_BEREICH = "einen neuen Bewohnerparkbereich anlegen...";
 
 
     //~ Enums ------------------------------------------------------------------
