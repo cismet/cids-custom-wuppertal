@@ -168,6 +168,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
     private TableCellEditor ceBearbeiter;
     private TableCellEditor ceGeschaeft;
+    private ArrayList<CidsBean> arrFlaechen;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton btnReport;
@@ -1281,8 +1282,15 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         }
         updateLageFields();
 
-        ((VorgangFlaecheTableModel)jXTable1.getModel()).setCidsBeans((cidsBean != null)
-                ? cidsBean.getBeanCollectionProperty("arr_flaechen") : null);
+        arrFlaechen = new ArrayList<CidsBean>();
+
+        for (final CidsBean bean : cidsBean.getBeanCollectionProperty("arr_flaechen")) {
+            if (((bean.getProperty("loeschen") == null) || !(Boolean)bean.getProperty("loeschen"))) {
+                arrFlaechen.add(bean);
+            }
+        }
+
+        ((VorgangFlaecheTableModel)jXTable1.getModel()).setCidsBeans((cidsBean != null) ? arrFlaechen : null);
         ((VorgangBearbeitungTableModel)jXTable2.getModel()).setCidsBeans((cidsBean != null)
                 ? cidsBean.getBeanCollectionProperty("n_bearbeitungen") : null);
 
@@ -1580,6 +1588,22 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 return false;
             }
         }
+
+        final List<CidsBean> origBeans = cidsBean.getBeanCollectionProperty("arr_flaechen");
+
+        for (final CidsBean bean : arrFlaechen) {
+            if (!origBeans.contains(bean)) {
+                origBeans.add(bean);
+            }
+        }
+
+        for (final CidsBean bean : origBeans) {
+            if (!arrFlaechen.contains(bean)
+                        && ((bean.getProperty("loeschen") == null) || !(Boolean)bean.getProperty("loeschen"))) {
+                origBeans.remove(bean);
+            }
+        }
+
         return true;
     }
 

@@ -102,14 +102,14 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanStore,
+public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements CidsBeanStore,
     EditorSaveListener,
     Disposable,
     ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(SimpleWebDavPanel.class);
+    private static final Logger LOG = Logger.getLogger(SimpleAltlastWebDavPanel.class);
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -151,8 +151,8 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         lblHeaderFotos.setForeground(new Color(255, 255, 255));
         Mnemonics.setLocalizedText(
             lblHeaderFotos,
-            NbBundle.getMessage(SimpleWebDavPanel.class, "SimpleWebDavPanel.lblHeaderFotos.text")); // NOI18N
-        lblHeaderFotos.setName("lblHeaderFotos");                                                   // NOI18N
+            NbBundle.getMessage(SimpleAltlastWebDavPanel.class, "SimpleAltlastWebDavPanel.lblHeaderFotos.text")); // NOI18N
+        lblHeaderFotos.setName("lblHeaderFotos");                                                                 // NOI18N
         pnlHeaderFotos.add(lblHeaderFotos);
 
         gridBagConstraints = new GridBagConstraints();
@@ -206,7 +206,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         Mnemonics.setLocalizedText(
             btnAddImg,
-            NbBundle.getMessage(SimpleWebDavPanel.class, "SimpleWebDavPanel.btnAddImg.text"));                 // NOI18N
+            NbBundle.getMessage(SimpleAltlastWebDavPanel.class, "SimpleAltlastWebDavPanel.btnAddImg.text"));   // NOI18N
         btnAddImg.setBorderPainted(false);
         btnAddImg.setContentAreaFilled(false);
         btnAddImg.setName("btnAddImg");                                                                        // NOI18N
@@ -219,7 +219,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         Mnemonics.setLocalizedText(
             btnRemoveImg,
-            NbBundle.getMessage(SimpleWebDavPanel.class, "SimpleWebDavPanel.btnRemoveImg.text"));                 // NOI18N
+            NbBundle.getMessage(SimpleAltlastWebDavPanel.class, "SimpleAltlastWebDavPanel.btnRemoveImg.text"));   // NOI18N
         btnRemoveImg.setBorderPainted(false);
         btnRemoveImg.setContentAreaFilled(false);
         btnRemoveImg.setName("btnRemoveImg");                                                                     // NOI18N
@@ -277,77 +277,42 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         FormListener() {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddImg) {
-                SimpleWebDavPanel.this.btnAddImgActionPerformed(evt);
+                SimpleAltlastWebDavPanel.this.btnAddImgActionPerformed(evt);
             } else if (evt.getSource() == btnRemoveImg) {
-                SimpleWebDavPanel.this.btnRemoveImgActionPerformed(evt);
+                SimpleAltlastWebDavPanel.this.btnRemoveImgActionPerformed(evt);
             }
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseClicked(final MouseEvent evt) {
             if (evt.getSource() == lstFotos) {
-                SimpleWebDavPanel.this.lstFotosMouseClicked(evt);
+                SimpleAltlastWebDavPanel.this.lstFotosMouseClicked(evt);
             }
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseEntered(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseExited(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mousePressed(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseReleased(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void valueChanged(final ListSelectionEvent evt) {
             if (evt.getSource() == lstFotos) {
-                SimpleWebDavPanel.this.lstFotosValueChanged(evt);
+                SimpleAltlastWebDavPanel.this.lstFotosValueChanged(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -365,6 +330,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
     protected final MappingComponent map = new MappingComponent();
     protected boolean listListenerEnabled = true;
     protected CidsBean cidsBean;
+    private List<ListSelectionListener> listSelectionListeners = new ArrayList<>();
 
     private final ConnectionContext connectionContext;
 
@@ -380,8 +346,8 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
     /**
      * Creates a new WebDavPicturePanel object.
      */
-    public SimpleWebDavPanel() {
-        this(true, "dokumente", "dokumentClass", "name", "webDavTunnelAction", ConnectionContext.createDummy());
+    public SimpleAltlastWebDavPanel() {
+        this(true, "dokumente", "albo_flaeche_document", "name", "webDavTunnelAction", ConnectionContext.createDummy());
     }
 
     /**
@@ -394,7 +360,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
      * @param  tunnelAction       webdavDirectory urlProp DOCUMENT ME!
      * @param  connectionContext  DOCUMENT ME!
      */
-    public SimpleWebDavPanel(final boolean editable,
+    public SimpleAltlastWebDavPanel(final boolean editable,
             final String beanCollProp,
             final String bildClassName,
             final String nameProp,
@@ -470,31 +436,34 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
         if (!evt.getValueIsAdjusting() && listListenerEnabled) {
+            for (final ListSelectionListener listener : listSelectionListeners) {
+                listener.valueChanged(evt);
+            }
         }
-    }                                                                 //GEN-LAST:event_lstFotosValueChanged
+    }//GEN-LAST:event_lstFotosValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
+    private void btnAddImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddImgActionPerformed
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
             final File[] selFiles = fileChooser.getSelectedFiles();
             if ((selFiles != null) && (selFiles.length > 0)) {
                 CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
             }
         }
-    }                                                              //GEN-LAST:event_btnAddImgActionPerformed
+    }//GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
+    private void btnRemoveImgActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveImgActionPerformed
         final Object[] selection = lstFotos.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -535,14 +504,14 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveImgActionPerformed
+    }//GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosMouseClicked(final MouseEvent evt) { //GEN-FIRST:event_lstFotosMouseClicked
+    private void lstFotosMouseClicked(final MouseEvent evt) {//GEN-FIRST:event_lstFotosMouseClicked
         if (evt.getClickCount() == 2) {
             final CidsBean dokumentBean = (CidsBean)lstFotos.getSelectedValue();
             if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(getParent())) {
@@ -587,7 +556,27 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                 DownloadManager.instance().add(download);
             }
         }
-    } //GEN-LAST:event_lstFotosMouseClicked
+    }//GEN-LAST:event_lstFotosMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  l  DOCUMENT ME!
+     */
+    public void addListSelectionListener(final ListSelectionListener l) {
+        this.listSelectionListeners.add(l);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   l  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean removeListSelectionListener(final ListSelectionListener l) {
+        return this.listSelectionListeners.remove(l);
+    }
 
     @Override
     public CidsBean getCidsBean() {
@@ -651,6 +640,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                 null);
         JXErrorPane.showDialog(parent, ei);
     }
+
     @Override
     public void editorClosed(final EditorClosedEvent event) {
         if (EditorSaveStatus.SAVE_SUCCESS == event.getStatus()) {
@@ -728,7 +718,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
             for (final File dokument : dokumente) {
                 webdavHelper.uploadFileToWebDAV(dokument.getName(),
                     dokument,
-                    SimpleWebDavPanel.this,
+                    SimpleAltlastWebDavPanel.this,
                     getConnectionContext());
 
                 final CidsBean newDokument = CidsBean.createNewCidsBeanFromTableName(
@@ -736,7 +726,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                         bildClassName,
                         getConnectionContext());
                 newDokument.setProperty(nameProp, dokument.getName());
-                newDokument.setProperty("messstelle", cidsBean.getProperty("id"));
+                newDokument.setProperty("albo_flaeche", cidsBean.getProperty("id"));
                 newBeans.add(newDokument);
             }
             return newBeans;

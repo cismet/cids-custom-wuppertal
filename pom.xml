@@ -385,6 +385,26 @@
 
         <!-- BEGIN: Runtime dependencies -->
         <dependency>
+            <groupId>de.cismet</groupId>
+            <artifactId>Jump-sld-editor</artifactId>
+            <version>7.0.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.cismet.custom</groupId>
+            <artifactId>cismet-JUMP1.5</artifactId>
+            <version>7.0</version>
+            <scope>runtime</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>jama</groupId>
+            <artifactId>jama</artifactId>
+            <version>1.0.2</version>
+            <scope>runtime</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <scope>runtime</scope>
