@@ -8,8 +8,8 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
-import de.cismet.cids.custom.objecteditors.wunda_blau.BparkCityausweisEditor;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.BparkCityausweisEditor;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;

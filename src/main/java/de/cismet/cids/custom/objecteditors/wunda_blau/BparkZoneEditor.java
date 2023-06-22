@@ -15,8 +15,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
-import Sirius.server.middleware.types.MetaClass;
 
+import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
@@ -34,6 +34,7 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingx.JXBusyLabel;
 
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
@@ -51,7 +52,6 @@ import java.awt.event.MouseMotionAdapter;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,6 +68,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.BparkConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.BparkFotosLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
@@ -77,14 +78,15 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.SaveVetoable;
 import de.cismet.cids.editors.hooks.BeforeSavingHook;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
-
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -95,7 +97,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import org.openide.util.Exceptions;
 /**
  * DOCUMENT ME!
  *
@@ -125,14 +126,14 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String[] REDUNDANT_TOSTRING_FIELDS = { "zone", "nummer", "id" };
     public static final String REDUNDANT_TABLE = "bpark_zone";
 
-    public static final String FIELD__ID = "id";                                        
-    public static final String FIELD__ZONE = "zone";                                        
-    public static final String FIELD__NUMMER = "nummer";                     
+    public static final String FIELD__ID = "id";
+    public static final String FIELD__ZONE = "zone";
+    public static final String FIELD__NUMMER = "nummer";
     public static final String FIELD__FOTONAME = "name";
-    public static final String FIELD__PUBLISH = "veroeffentlicht";                                   
-    public static final String FIELD__GEOM = "fk_geom";                             
-    public static final String FIELD__GEO_FIELD = "geo_field";                              
-    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";         
+    public static final String FIELD__PUBLISH = "veroeffentlicht";
+    public static final String FIELD__GEOM = "fk_geom";
+    public static final String FIELD__GEO_FIELD = "geo_field";
+    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";
     public static final String TABLE_NAME = "bpark_zone";
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_FOTOS = "bpark_fotos";
@@ -145,15 +146,15 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_PANE_PREFIX = "BparkZoneEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "BparkZoneEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BparkZoneEditor.isOkForSaving().JOptionPane.title";
-    
+
     private static final String TITLE_NEW_ZONE = "eine neue Bewohnerparkzone anlegen...";
 
     /** DOCUMENT ME! */
     public static String nummerPattern = ""; // [0-9a-zA-Z\\s\\-\\_\\ä\\ö\\ü\\ß]{1,}";
-    public static String zonePattern = "";     // [0-9a-zA-Z\\-\\_]{1,}";
+    public static String zonePattern = "";   // [0-9a-zA-Z\\-\\_]{1,}";
 
     //~ Enums ------------------------------------------------------------------
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -165,12 +166,11 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
 
         BUSY, DOCUMENT, NO_DOCUMENT, ERROR
     }
-    
 
     //~ Instance fields --------------------------------------------------------
+
     private final BparkFotosLightweightSearch searchFotos;
     private Boolean redundantZoneNummer = false;
-
 
     private final boolean editor;
 
@@ -254,7 +254,6 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     //~ Methods ----------------------------------------------------------------
 
-
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
@@ -291,7 +290,6 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
                     return compoName;
                 }
             });
-        
 
         if (lstFotos != null) {
             lstFotos.setSelectedIndex(0);
@@ -320,9 +318,10 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         lblNummer = new JLabel();
         txtNummer = new JTextField();
         lblGeom = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Polygon.class, MultiPolygon.class});
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(
+                new Class[] { Polygon.class, MultiPolygon.class });
         }
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblHinweis = new JLabel();
@@ -349,12 +348,11 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         pnlBild = new JPanel();
         jPanel1 = new JPanel();
         rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
-            RASTERFARI,
-            this,
-            getConnectionContext()
-        );
+                RASTERFARI,
+                this,
+                getConnectionContext());
         jPanel2 = new JPanel();
-        jxLBusy = new JXBusyLabel(new Dimension(64,64));
+        jxLBusy = new JXBusyLabel(new Dimension(64, 64));
         jPanel3 = new JPanel();
         lblKeineFotos = new JLabel();
         jPanel4 = new JPanel();
@@ -399,7 +397,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblZone, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.zone}"), txtZone, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.zone}"),
+                txtZone,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -422,7 +425,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblNummer, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.nummer}"), txtNummer, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.nummer}"),
+                txtNummer,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -445,17 +453,21 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()){
-            if (editor){
+        if (isEditor()) {
+            if (editor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 1;
@@ -492,7 +504,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         taHinweis.setRows(2);
         taHinweis.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hinweis}"), taHinweis, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hinweis}"),
+                taHinweis,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpHinweis.setViewportView(taHinweis);
@@ -539,7 +556,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -570,14 +592,16 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -597,7 +621,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chkVeroeffentlicht.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.veroeffentlicht}"), chkVeroeffentlicht, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.veroeffentlicht}"),
+                chkVeroeffentlicht,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -795,10 +824,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         lstFotos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstFotos.setFixedCellWidth(75);
         lstFotos.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent evt) {
-                lstFotosValueChanged(evt);
-            }
-        });
+
+                @Override
+                public void valueChanged(final ListSelectionEvent evt) {
+                    lstFotosValueChanged(evt);
+                }
+            });
         scpFotos.setViewportView(lstFotos);
 
         pnlListe.add(scpFotos, BorderLayout.CENTER);
@@ -859,17 +890,22 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
         showFoto();
-    }//GEN-LAST:event_lstFotosValueChanged
+    }                                                                 //GEN-LAST:event_lstFotosValueChanged
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isEditor() {
         return this.editor;
     }
@@ -878,7 +914,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
     public CidsBean getCidsBean() {
         return cidsBean;
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -923,7 +959,6 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
             }
         }
     }
-
 
     /**
      * DOCUMENT ME!
@@ -981,7 +1016,9 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }
 
-    
+    /**
+     * DOCUMENT ME!
+     */
     public void setMapWindow() {
         final CidsBean cb = this.getCidsBean();
         try {
@@ -1035,12 +1072,12 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
             try {
                 fotoName = lstFotos.getSelectedValue().toString();
                 id = cidsBean.getPrimaryKeyValue().toString();
-                fotoUrl = THEMA + "/" + FOTOS + "/" + id + "/"  + fotoName;
+                fotoUrl = THEMA + "/" + FOTOS + "/" + id + "/" + fotoName;
                 rasterfariDocumentLoaderPanel1.setDocument(fotoUrl);
             } catch (final Exception ex) {
                 LOG.warn("Get no foto.", ex);
             }
-        } 
+        }
     }
 
     /**
@@ -1072,15 +1109,14 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         } else {
             final String id = getCidsBean().getPrimaryKeyValue().toString();
             final String zone = getCidsBean().getProperty(FIELD__ZONE).toString();
-            return (getCidsBean().getProperty(FIELD__NUMMER) == null 
-                        || getCidsBean().getProperty(FIELD__NUMMER).toString().trim().length() == 0)
-                    ? String.format("%s (%s)", zone, id) 
-                    : String.format("%s - %s (%s)", zone, getCidsBean().getProperty(FIELD__NUMMER).toString(), id);
+            return
+                ((getCidsBean().getProperty(FIELD__NUMMER) == null)
+                            || (getCidsBean().getProperty(FIELD__NUMMER).toString().trim().length() == 0))
+                ? String.format("%s (%s)", zone, id)
+                : String.format("%s - %s (%s)", zone, getCidsBean().getProperty(FIELD__NUMMER).toString(), id);
         }
     }
 
-
-    
     @Override
     public void dispose() {
         panPreviewMap.dispose();
@@ -1091,7 +1127,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
                 LOG.info("remove propchange bpark_zone: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
             }
-        } 
+        }
         lstFotos.removeAll();
         rasterfariDocumentLoaderPanel1.dispose();
         bindingGroup.unbind();
@@ -1107,7 +1143,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(FIELD__GEOM)){
+        if (evt.getPropertyName().equals(FIELD__GEOM)) {
             setMapWindow();
         }
     }
@@ -1149,7 +1185,6 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
                     errorMessage.append(NbBundle.getMessage(BparkZoneEditor.class, BUNDLE_NUMMERFALSE));
                     save = false;
                 }
-            
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("nummmr wrong given.", ex);
@@ -1162,7 +1197,7 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BparkZoneEditor.class, BUNDLE_NOGEOM));
                 save = false;
-            } 
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;
@@ -1187,10 +1222,10 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
                 REDUNDANT_TABLE);
         final Collection<String> conditions = new ArrayList<>();
         conditions.add(FIELD__ZONE + " ilike '" + txtZone.getText().trim() + "'");
-        if(txtNummer.getText().trim().isEmpty()){
-            conditions.add("((" + FIELD__NUMMER + " ilike '" + txtNummer.getText().trim() + "') OR" 
-                          + "(" + FIELD__NUMMER + " is null))");
-        }else{
+        if (txtNummer.getText().trim().isEmpty()) {
+            conditions.add("((" + FIELD__NUMMER + " ilike '" + txtNummer.getText().trim() + "') OR"
+                        + "(" + FIELD__NUMMER + " is null))");
+        } else {
             conditions.add(FIELD__NUMMER + " ilike '" + txtNummer.getText().trim() + "'");
         }
         conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
@@ -1216,8 +1251,6 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
         showDocumentCard(DocumentCard.DOCUMENT);
     }
 
-    
-    
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1265,6 +1298,4 @@ public class BparkZoneEditor extends DefaultCustomObjectEditor implements CidsBe
             return lastValid;
         }
     }
-
-
 }

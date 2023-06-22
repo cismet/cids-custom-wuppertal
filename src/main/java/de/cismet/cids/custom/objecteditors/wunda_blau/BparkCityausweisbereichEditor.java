@@ -15,8 +15,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
-import Sirius.server.middleware.types.MetaClass;
 
+import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.MultiPolygon;
@@ -32,6 +32,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -43,7 +44,6 @@ import java.awt.Insets;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,6 +55,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.BparkConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
 
@@ -63,14 +64,15 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.SaveVetoable;
 import de.cismet.cids.editors.hooks.BeforeSavingHook;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
-
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -80,7 +82,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import org.openide.util.Exceptions;
 /**
  * DOCUMENT ME!
  *
@@ -102,27 +103,28 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
     public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
     public static final String REDUNDANT_TABLE = "bpark_cityausweisbereich";
 
-    public static final String FIELD__ID = "id";                                        
-    public static final String FIELD__NAME = "name"; 
-    public static final String FIELD__PUBLISH = "veroeffentlicht";                                       
-    public static final String FIELD__GEOM = "fk_geom";                             
-    public static final String FIELD__GEO_FIELD = "geo_field";                              
-    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";         
+    public static final String FIELD__ID = "id";
+    public static final String FIELD__NAME = "name";
+    public static final String FIELD__PUBLISH = "veroeffentlicht";
+    public static final String FIELD__GEOM = "fk_geom";
+    public static final String FIELD__GEO_FIELD = "geo_field";
+    public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";
     public static final String TABLE_NAME = "bpark_cityausweisbereich";
     public static final String TABLE_GEOM = "geom";
 
     public static final String BUNDLE_NONAME = "BparkCityausweisbereichEditor.isOkForSaving().noName";
     public static final String BUNDLE_DUPLICATENAME = "BparkCityausweisbereichEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_NOGEOM = "BparkCityausweisbereichEditor.isOkForSaving().noGeom";
-    public static final String BUNDLE_PANE_PREFIX = "BparkCityausweisbereichEditor.isOkForSaving().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "BparkCityausweisbereichEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_PREFIX =
+        "BparkCityausweisbereichEditor.isOkForSaving().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX =
+        "BparkCityausweisbereichEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "BparkCityausweisbereichEditor.isOkForSaving().JOptionPane.title";
-    
+
     private static final String TITLE_NEW_CITYBEREICH = "eine neue City-Parkzone anlegen...";
 
-
     //~ Enums ------------------------------------------------------------------
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -134,11 +136,10 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
 
         BUSY, DOCUMENT, NO_DOCUMENT, ERROR
     }
-    
 
     //~ Instance fields --------------------------------------------------------
-    private Boolean redundantName = false;
 
+    private Boolean redundantName = false;
 
     private final boolean editor;
 
@@ -190,7 +191,6 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
 
     //~ Methods ----------------------------------------------------------------
 
-
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
@@ -216,9 +216,10 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         lblBereich = new JLabel();
         txtBereich = new JTextField();
         lblGeom = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Polygon.class, MultiPolygon.class});
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(
+                new Class[] { Polygon.class, MultiPolygon.class });
         }
         lblHinweis = new JLabel();
         panHinweis = new JPanel();
@@ -263,7 +264,12 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBereich, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtBereich, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtBereich,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -286,17 +292,21 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()){
-            if (editor){
+        if (isEditor()) {
+            if (editor) {
                 cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
             }
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 1;
@@ -326,7 +336,12 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         taHinweis.setRows(2);
         taHinweis.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.hinweis}"), taHinweis, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.hinweis}"),
+                taHinweis,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpHinweis.setViewportView(taHinweis);
@@ -372,7 +387,12 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -402,14 +422,16 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -429,7 +451,12 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
 
         chkVeroeffentlicht.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.veroeffentlicht}"), chkVeroeffentlicht, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.veroeffentlicht}"),
+                chkVeroeffentlicht,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -527,8 +554,13 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isEditor() {
         return this.editor;
     }
@@ -537,7 +569,7 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
     public CidsBean getCidsBean() {
         return cidsBean;
     }
-    
+
     @Override
     public void setCidsBean(final CidsBean cb) {
         try {
@@ -572,7 +604,6 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         }
     }
 
-
     /**
      * DOCUMENT ME!
      */
@@ -586,7 +617,9 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         }
     }
 
-    
+    /**
+     * DOCUMENT ME!
+     */
     public void setMapWindow() {
         final CidsBean cb = this.getCidsBean();
         try {
@@ -657,8 +690,6 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
         }
     }
 
-
-    
     @Override
     public void dispose() {
         panPreviewMap.dispose();
@@ -669,7 +700,7 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
                 LOG.info("remove propchange bpark_cityausweisbereich: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
             }
-        } 
+        }
         bindingGroup.unbind();
         super.dispose();
     }
@@ -683,7 +714,7 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(FIELD__GEOM)){
+        if (evt.getPropertyName().equals(FIELD__GEOM)) {
             setMapWindow();
         }
     }
@@ -704,7 +735,7 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
                     LOG.warn("False Name specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(BparkCityausweisbereichEditor.class, BUNDLE_DUPLICATENAME));
                     save = false;
-                } 
+                }
             }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
@@ -717,7 +748,7 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(BparkCityausweisbereichEditor.class, BUNDLE_NOGEOM));
                 save = false;
-            } 
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;
@@ -754,6 +785,4 @@ public class BparkCityausweisbereichEditor extends DefaultCustomObjectEditor imp
             LOG.warn("problem in beforeSaving.", ex);
         }
     }
-
-
 }

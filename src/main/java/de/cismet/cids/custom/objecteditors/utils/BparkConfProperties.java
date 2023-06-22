@@ -41,7 +41,8 @@ public class BparkConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BparkConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            BparkConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -123,7 +124,8 @@ public class BparkConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.BPARK_CONF_PROPERTIES.getValue(),
