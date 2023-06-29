@@ -102,13 +102,13 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>8.0.3</version>
+                <version>8.2.2</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>8.0.3</version>
+                <version>8.2.2</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>

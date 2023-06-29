@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -179,6 +180,9 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                             new ServerActionParameter<>(
                                 CsvExportServerAction.ParameterType.ESCAPE_STRINGS.toString(),
                                 Boolean.TRUE),
+                            new ServerActionParameter<>(
+                                CsvExportServerAction.ParameterType.LOCALE.toString(),
+                                Locale.GERMAN.toLanguageTag()),
                         };
                     DownloadManager.instance()
                             .add(
