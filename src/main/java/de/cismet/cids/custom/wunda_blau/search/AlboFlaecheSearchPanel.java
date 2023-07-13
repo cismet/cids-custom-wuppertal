@@ -886,8 +886,8 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
             // nothing to do
         }
 
-        configuration.setSmaller(cbGreater.isSelected() ? greater : null);
-        configuration.setGreater(cbSmaller.isSelected() ? smaller : null);
+        configuration.setSmaller((cbSmaller.isSelected() && (smaller != null)) ? smaller : null);
+        configuration.setGreater((cbGreater.isSelected() && (greater != null)) ? greater : null);
         return configuration;
     }
 
