@@ -52,12 +52,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -66,6 +69,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheArbeitssta
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkungenPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboPicturePanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.SimpleAltlastWebDavPanel;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
 
@@ -140,6 +145,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panCardArbeitsstandUndBemerkungen = new JPanel();
         panBemerkungen = new AlboFlaecheBemerkungenPanel(isEditable());
         panArbeitsstand = new AlboFlaecheArbeitsstandPanel(isEditable());
+        alboPicturePanel1 = new AlboPicturePanel();
+        simpleAltlastWebDavPanel1 = new SimpleAltlastWebDavPanel();
         panCardMassnahmen = new JPanel();
         panMassnahmen = new AlboFlaecheMassnahmenPanel(isEditable());
 
@@ -336,6 +343,25 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.weightx = 1.0;
         panCardArbeitsstandUndBemerkungen.add(panArbeitsstand, gridBagConstraints);
 
+        alboPicturePanel1.setName("alboPicturePanel1"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panCardArbeitsstandUndBemerkungen.add(alboPicturePanel1, gridBagConstraints);
+
+        simpleAltlastWebDavPanel1.setName("simpleAltlastWebDavPanel1"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 0, 5);
+        panCardArbeitsstandUndBemerkungen.add(simpleAltlastWebDavPanel1, gridBagConstraints);
+
         panMainCard.add(panCardArbeitsstandUndBemerkungen, "arbeitsstand");
 
         panCardMassnahmen.setName("panCardMassnahmen"); // NOI18N
@@ -422,6 +448,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private CardLayout cardLayout;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private AlboPicturePanel alboPicturePanel1;
     private JButton btnBack;
     private JButton btnForward;
     JButton btnLandRegNr;
@@ -444,6 +471,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     private JPanel panMainCard;
     private AlboFlaecheMassnahmenPanel panMassnahmen;
     private JPanel panTitle;
+    private SimpleAltlastWebDavPanel simpleAltlastWebDavPanel1;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -476,6 +504,18 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panArbeitsstand.initWithConnectionContext(connectionContext);
         panMassnahmen.initWithConnectionContext(connectionContext);
         panBemerkungen.initWithConnectionContext(connectionContext);
+        simpleAltlastWebDavPanel1.addListSelectionListener(new ListSelectionListener() {
+
+                @Override
+                public void valueChanged(final ListSelectionEvent e) {
+                    final Object selectedObject = ((JList)e.getSource()).getSelectedValue();
+
+                    if (selectedObject instanceof CidsBean) {
+                        alboPicturePanel1.setWebDavHelper(simpleAltlastWebDavPanel1.getWebdavHelper());
+                        alboPicturePanel1.setCidsBean((CidsBean)selectedObject);
+                    }
+                }
+            });
 
         this.cardLayout = (CardLayout)panMainCard.getLayout();
     }
@@ -545,6 +585,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
         updateTitleControls();
         updateFooterControls();
+        simpleAltlastWebDavPanel1.setCidsBean(cidsBean);
     }
 
     /**
@@ -805,6 +846,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panArbeitsstand.editorClosed(event);
         panMassnahmen.editorClosed(event);
         panBemerkungen.editorClosed(event);
+        simpleAltlastWebDavPanel1.editorClosed(event);
     }
 
     /**

@@ -13,7 +13,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>8.2.8</version>
+    <version>8.2.9</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
@@ -23,7 +23,7 @@
         <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
-        <tag>v8.2.8</tag>
+        <tag>v8.2.9</tag>
     </scm>
 
     <properties>
@@ -102,13 +102,13 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>8.2.2</version>
+                <version>8.2.3</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>8.2.2</version>
+                <version>8.2.3</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>8.1.10</version>
+                <version>8.1.13</version>
                 <type>jar</type>
             </dependency>
             
@@ -384,6 +384,26 @@
         <!-- END: managed dependencies -->
 
         <!-- BEGIN: Runtime dependencies -->
+        <dependency>
+            <groupId>de.cismet</groupId>
+            <artifactId>Jump-sld-editor</artifactId>
+            <version>7.0.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.cismet.custom</groupId>
+            <artifactId>cismet-JUMP1.5</artifactId>
+            <version>7.0</version>
+            <scope>runtime</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>jama</groupId>
+            <artifactId>jama</artifactId>
+            <version>1.0.2</version>
+            <scope>runtime</scope>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
