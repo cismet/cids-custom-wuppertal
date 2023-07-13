@@ -50,13 +50,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -72,14 +70,13 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheBemerkunge
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboPicturePanel;
+import de.cismet.cids.custom.objecteditors.wunda_blau.albo.SimpleAltlastWebDavPanel;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
-import de.cismet.cids.custom.wunda_blau.search.actions.GrundwassermessstellenWebDavTunnelAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -360,8 +357,9 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 0, 5);
         panCardArbeitsstandUndBemerkungen.add(simpleAltlastWebDavPanel1, gridBagConstraints);
 
         panMainCard.add(panCardArbeitsstandUndBemerkungen, "arbeitsstand");
@@ -513,6 +511,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                     final Object selectedObject = ((JList)e.getSource()).getSelectedValue();
 
                     if (selectedObject instanceof CidsBean) {
+                        alboPicturePanel1.setWebDavHelper(simpleAltlastWebDavPanel1.getWebdavHelper());
                         alboPicturePanel1.setCidsBean((CidsBean)selectedObject);
                     }
                 }
