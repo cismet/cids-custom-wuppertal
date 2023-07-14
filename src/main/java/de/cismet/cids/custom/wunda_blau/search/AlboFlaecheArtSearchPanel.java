@@ -836,6 +836,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
             pnlArt.add(jSeparator1, BorderLayout.NORTH);
             pnlArt.add(pnl, BorderLayout.CENTER);
         }
+        pnlArt.repaint();
     }
 
     /**
@@ -1155,9 +1156,14 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                 final boolean isSelected,
                 final boolean cellHasFocus) {
             final Component comp = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (value == null) {
+            if ((value instanceof DefaultBindableReferenceCombo.NullableItem) && (comp instanceof JLabel)) {
+                ((JLabel)comp).setText(" ");
+
+                return comp;
+            } else if (value == null) {
                 return new JLabel(" ");
             }
+
             if (comp instanceof JLabel) {
                 final String text = ((JLabel)comp).getText();
                 if (text != null) {

@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
+import Sirius.navigator.connection.SessionManager;
+
 import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -20,6 +22,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import java.awt.CardLayout;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -484,6 +487,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
+        ckProp1.addActionListener(formListener);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -563,6 +567,8 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                 AlboFlaecheMainBeschreibungPanel.this.jButton5ActionPerformed(evt);
             } else if (evt.getSource() == jButton6) {
                 AlboFlaecheMainBeschreibungPanel.this.jButton6ActionPerformed(evt);
+            } else if (evt.getSource() == ckProp1) {
+                AlboFlaecheMainBeschreibungPanel.this.ckProp1ActionPerformed(evt);
             }
         }
     } // </editor-fold>//GEN-END:initComponents
@@ -672,6 +678,27 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
     private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
         txtJahrBis.setValue(null);
     }                                                                            //GEN-LAST:event_jButton6ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ckProp1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_ckProp1ActionPerformed
+        if (ckProp1.isSelected() && (jComboBox5.getSelectedIndex() != -1)) {
+            final ComboBoxModel<String> model = jComboBox5.getModel();
+            final String currentUser = SessionManager.getSession().getUser().getName();
+
+            for (int i = 0; i < model.getSize(); ++i) {
+                final String name = model.getElementAt(i);
+
+                if (currentUser.contains(name) || name.contains(currentUser)) {
+                    jComboBox5.setSelectedItem(name);
+                    break;
+                }
+            }
+        }
+    } //GEN-LAST:event_ckProp1ActionPerformed
 
     @Override
     protected void initGui() {

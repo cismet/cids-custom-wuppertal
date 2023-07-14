@@ -83,10 +83,13 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
     private javax.swing.JComboBox<String> cbFlaechenstatus;
     private javax.swing.JComboBox<String> cbFlaechentyp;
     private javax.swing.JComboBox<String> cbFlaechenzuordnung;
+    private javax.swing.JCheckBox cbGreater;
     private javax.swing.JCheckBox cbOnlyVorgang;
+    private javax.swing.JCheckBox cbSmaller;
     private javax.swing.JCheckBox cbVorgang;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -113,6 +116,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton5;
@@ -120,6 +124,8 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel pnlPruefung;
+    private javax.swing.JTextField txtGreater;
+    private javax.swing.JTextField txtSmaller;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -175,6 +181,8 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
         RendererTools.makeReadOnly(cbFlaechentyp, !editable);
         RendererTools.makeReadOnly(cbFlaechenzuordnung, !editable);
         RendererTools.makeReadOnly(cbVorgang, !editable);
+        txtGreater.setEnabled(cbGreater.isSelected());
+        txtSmaller.setEnabled(cbSmaller.isSelected());
     }
 
     @Override
@@ -278,6 +286,14 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jPanel8 = new javax.swing.JPanel();
+        cbGreater = new javax.swing.JCheckBox();
+        cbSmaller = new javax.swing.JCheckBox();
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        txtGreater = new javax.swing.JTextField();
+        txtSmaller = new javax.swing.JTextField();
 
         filler2.setName("filler2"); // NOI18N
 
@@ -694,7 +710,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         add(jPanel5, gridBagConstraints);
@@ -718,11 +734,85 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
         filler6.setName("filler6"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         add(filler6, gridBagConstraints);
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Flächengröße"));
+        jPanel8.setName("jPanel8"); // NOI18N
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        cbGreater.setText("größer");
+        cbGreater.setMinimumSize(new java.awt.Dimension(100, 23));
+        cbGreater.setName("cbGreater"); // NOI18N
+        cbGreater.setPreferredSize(new java.awt.Dimension(100, 23));
+        cbGreater.addChangeListener(new javax.swing.event.ChangeListener() {
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    cbGreaterStateChanged(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel8.add(cbGreater, gridBagConstraints);
+
+        cbSmaller.setText("kleiner");
+        cbSmaller.setMinimumSize(new java.awt.Dimension(100, 23));
+        cbSmaller.setName("cbSmaller"); // NOI18N
+        cbSmaller.setPreferredSize(new java.awt.Dimension(100, 23));
+        cbSmaller.addChangeListener(new javax.swing.event.ChangeListener() {
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    cbSmallerStateChanged(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
+        jPanel8.add(cbSmaller, gridBagConstraints);
+
+        filler11.setName("filler11"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel8.add(filler11, gridBagConstraints);
+
+        txtGreater.setName("txtGreater"); // NOI18N
+        txtGreater.setPreferredSize(new java.awt.Dimension(80, 24));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel8.add(txtGreater, gridBagConstraints);
+
+        txtSmaller.setName("txtSmaller"); // NOI18N
+        txtSmaller.setPreferredSize(new java.awt.Dimension(80, 24));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel8.add(txtSmaller, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        add(jPanel8, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -736,6 +826,24 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
         artInfoPanels.add(new AlboFlaecheArtSearchPanel(this, isEditable()));
         refreshArtInfoPanels();
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbGreaterStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_cbGreaterStateChanged
+        txtGreater.setEnabled(cbGreater.isSelected());
+    }                                                                             //GEN-LAST:event_cbGreaterStateChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbSmallerStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_cbSmallerStateChanged
+        txtSmaller.setEnabled(cbSmaller.isSelected());
+    }                                                                             //GEN-LAST:event_cbSmallerStateChanged
 
     /**
      * DOCUMENT ME!
@@ -762,6 +870,24 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
                                                               : ((!jCheckBox1.isSelected()) ? Boolean.FALSE : null));
         configuration.setVorgaenge(cbOnlyVorgang.isSelected() ? Boolean.TRUE
                                                               : ((cbVorgang.isSelected()) ? Boolean.FALSE : null));
+
+        Double smaller = null;
+        Double greater = null;
+
+        try {
+            smaller = Double.parseDouble(txtSmaller.getText());
+        } catch (NumberFormatException e) {
+            // nothing to do
+        }
+
+        try {
+            greater = Double.parseDouble(txtGreater.getText());
+        } catch (NumberFormatException e) {
+            // nothing to do
+        }
+
+        configuration.setSmaller((cbSmaller.isSelected() && (smaller != null)) ? smaller : null);
+        configuration.setGreater((cbGreater.isSelected() && (greater != null)) ? greater : null);
         return configuration;
     }
 
