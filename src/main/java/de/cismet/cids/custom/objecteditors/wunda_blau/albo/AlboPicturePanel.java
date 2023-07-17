@@ -29,6 +29,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -44,7 +45,7 @@ import de.cismet.tools.gui.ImageUtil;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStore, ConnectionContextStore {
+public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStore, ConnectionContextStore, Disposable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -352,5 +353,10 @@ public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStor
      */
     public boolean isEditable() {
         return editable;
+    }
+
+    @Override
+    public void dispose() {
+        setCidsBean(null);
     }
 }

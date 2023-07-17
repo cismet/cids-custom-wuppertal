@@ -828,6 +828,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panArbeitsstand.dispose();
         panMassnahmen.dispose();
         panBemerkungen.dispose();
+        alboPicturePanel1.dispose();
+        simpleAltlastWebDavPanel1.dispose();
         bindingGroup.unbind();
         if (editable && (cidsBean != null)) {
             cidsBean.removePropertyChangeListener(this);

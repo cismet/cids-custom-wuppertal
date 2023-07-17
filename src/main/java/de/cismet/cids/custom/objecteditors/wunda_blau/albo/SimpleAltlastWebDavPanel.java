@@ -351,7 +351,6 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
     protected final JFileChooser fileChooser = new JFileChooser();
     protected final List<CidsBean> removeNewAddedFotoBean = new ArrayList<>();
     protected final List<CidsBean> removedFotoBeans = new ArrayList<>();
-    protected final MappingComponent map = new MappingComponent();
     protected boolean listListenerEnabled = true;
     protected CidsBean cidsBean;
     boolean editable = true;
@@ -859,8 +858,6 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
     @Override
     public void dispose() {
         bindingGroup.unbind();
-        map.getFeatureCollection().removeAllFeatures();
-        map.dispose();
         cidsBean = null;
     }
 
