@@ -95,6 +95,9 @@ import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
+import static de.cismet.cids.custom.objecteditors.wunda_blau.QsgebMarkerEditor.FIELD__BEARBEITUNG_BEARBEITUNG;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.QsgebMarkerEditor.FIELD__BEARBEITUNG_DATUM;
+
 /**
  * DOCUMENT ME!
  *
@@ -111,12 +114,16 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     public static final String CONF_POI = "onlyPoi";
     public static final String CONF_KLIMA = "poiToKlima";
 
-    public static final String FIELD__KEYURL = "keyurl";           // poi_locationinstance
-    public static final String FIELD__WARTUNG = "wartung";         // poi_locationinstance
-    public static final String FIELD__PUBLISH = "to_publish";      // poi_locationinstance
-    public static final String FIELD__KEY_PUBLISH = "key_publish"; // poi_locationinstance
-    public static final String FIELD__TO_KLIMA = "to_klima";       // poi_locationinstance
-    public static final String FIELD__ID = "id";                   // poi_locationinstance
+    public static final String FIELD__KEYURL = "keyurl";             // poi_locationinstance
+    public static final String FIELD__WARTUNG = "wartung";           // poi_locationinstance
+    public static final String FIELD__PUBLISH = "to_publish";        // poi_locationinstance
+    public static final String FIELD__KEY_PUBLISH = "key_publish";   // poi_locationinstance
+    public static final String FIELD__TO_KLIMA = "to_klima";         // poi_locationinstance
+    public static final String FIELD__ID = "id";                     // poi_locationinstance
+    public static final String FIELD__AN_DURCH = "angelegt_durch";   // poi_locationinstance
+    public static final String FIELD__AN_AM = "angelegt_am";         // poi_locationinstance
+    public static final String FIELD__BE_DURCH = "bearbeitet_durch"; // poi_locationinstance
+    public static final String FIELD__BE_AM = "bearbeitet_am";       // poi_locationinstance
     public static final String BUNDLE_NOKEYURL = "PoiLocationsinstanceEditor.isOkForSaving().noKeyUrl";
     public static final String BUNDLE_KEYURLFALSE = "PoiLocationsinstanceEditor.isOkForSaving().KeyUrlFalse";
     public static final String BUNDLE_DUPLICATEKEYURL = "PoiLocationsinstanceEditor.isOkForSaving().duplicateKeyUrl";
@@ -126,6 +133,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     public static final String BUNDLE_PANE_SUFFIX =
         "PoiLocationsinstanceEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "PoiLocationsinstanceEditor.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_PANE_TITLE_SET =
+        "PoiLocationsinstanceEditor.isOkForSaving().JOptionPane.titleSet";
+    public static final String BUNDLE_PANE_MESSAGE_SET =
+        "PoiLocationsinstanceEditor.isOkForSaving().JOptionPane.messageSet";
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
     public static final String[] REDUNDANT_TOSTRING_FIELDS = { "keyurl", "id" };
     public static final String REDUNDANT_TABLE = "poi_locationinstance";
@@ -2087,6 +2098,19 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                             + NbBundle.getMessage(Poi_locationinstanceEditor.class, BUNDLE_PANE_SUFFIX),
                     NbBundle.getMessage(Poi_locationinstanceEditor.class, BUNDLE_PANE_TITLE),
                     JOptionPane.WARNING_MESSAGE);
+            } else {
+                boolean set = false;
+                if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                    set = setTimestamp(FIELD__AN_AM, FIELD__AN_DURCH);
+                } else {
+                    set = setTimestamp(FIELD__BE_AM, FIELD__BE_DURCH);
+                }
+                if (!set) {
+                    JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                        NbBundle.getMessage(Poi_locationinstanceEditor.class, BUNDLE_PANE_MESSAGE_SET),
+                        NbBundle.getMessage(Poi_locationinstanceEditor.class, BUNDLE_PANE_TITLE_SET),
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
             }
             return save;
         } catch (final HeadlessException ex) {
@@ -2463,6 +2487,43 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 }
             }
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   am     DOCUMENT ME!
+     * @param   durch  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean setTimestamp(final String am, final String durch) {
+        try {
+            getCidsBean().setProperty(
+                durch,
+                getCurrentUser());
+        } catch (Exception ex) {
+            LOG.warn("User not set.", ex);
+            return false;
+        }
+        try {
+            getCidsBean().setProperty(
+                am,
+                new java.sql.Date(System.currentTimeMillis()));
+        } catch (Exception ex) {
+            LOG.warn("datum not set.", ex);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getCurrentUser() {
+        return SessionManager.getSession().getUser().getName();
     }
 
     /**

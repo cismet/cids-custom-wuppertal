@@ -46,6 +46,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SortOrder;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
@@ -1456,6 +1457,8 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         } catch (final Exception ex) {
             LOG.error(ex, ex);
         }
+
+        jXTable2.setSortOrder(0, SortOrder.ASCENDING);
     }
 
     /**

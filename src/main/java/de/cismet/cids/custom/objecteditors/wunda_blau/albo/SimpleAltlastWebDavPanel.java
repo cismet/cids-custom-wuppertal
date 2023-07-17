@@ -130,6 +130,7 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
     private static final String[] imageEndings = { "jpg", "jpeg", "png" };
     private static final int FILE_LIMIT = 2 * 1024 * 1024;
     private static final String FILE_PROTOCOL_PREFIX = "file://";
+    private static File lastFolder = null;
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -353,6 +354,7 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
     protected final MappingComponent map = new MappingComponent();
     protected boolean listListenerEnabled = true;
     protected CidsBean cidsBean;
+    boolean editable = true;
 
     private final WebDavTunnelHelper webdavHelper;
     private List<ListSelectionListener> listSelectionListeners = new ArrayList<>();
@@ -382,6 +384,21 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
     }
 
     /**
+     * Creates a new WebDavPicturePanel object.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public SimpleAltlastWebDavPanel(final boolean editable) {
+        this(
+            editable,
+            "dokumente",
+            "albo_flaeche_document",
+            "dateiname",
+            AltlastenWebDavTunnelAction.TASK_NAME,
+            ConnectionContext.createDummy());
+    }
+
+    /**
      * Creates new form WebDavPicturePanel.
      *
      * @param  editable           DOCUMENT ME!
@@ -397,6 +414,7 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
             final String nameProp,
             final String tunnelAction,
             final ConnectionContext connectionContext) {
+        this.editable = editable;
         this.beanCollProp = beanCollProp;
         this.bildClassName = bildClassName;
         this.nameProp = nameProp;
@@ -442,17 +460,17 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
 
                 @Override
                 public void intervalAdded(final ListDataEvent e) {
-//                    defineButtonStatus();
+                    defineButtonStatus();
                 }
 
                 @Override
                 public void intervalRemoved(final ListDataEvent e) {
-//                    defineButtonStatus();
+                    defineButtonStatus();
                 }
 
                 @Override
                 public void contentsChanged(final ListDataEvent e) {
-//                    defineButtonStatus();
+                    defineButtonStatus();
                 }
             });
 
@@ -473,7 +491,6 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
                                     final List<File> files = (List<File>)tr.getTransferData(flavors[i]);
                                     if ((files != null) && (files.size() > 0)) {
                                         CismetConcurrency.getInstance("Altlast")
-                                                .getInstance("Altlast")
                                                 .getDefaultExecutor()
                                                 .execute(new ImageUploadWorker(files));
                                     }
@@ -512,7 +529,6 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
 
                                     if ((fileList != null) && (fileList.size() > 0)) {
                                         CismetConcurrency.getInstance("Altlast")
-                                                .getInstance("Altlast")
                                                 .getDefaultExecutor()
                                                 .execute(new ImageUploadWorker(fileList));
                                         dtde.dropComplete(true);
@@ -534,6 +550,15 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void defineButtonStatus() {
+        final boolean hasSelection = lstFotos.getSelectedValue() != null;
+
+        btnRemoveImg.setEnabled(hasSelection && editable);
+    }
 
     /**
      * DOCUMENT ME!
@@ -563,15 +588,20 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddImgActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
+        if (lastFolder != null) {
+            fileChooser.setCurrentDirectory(lastFolder);
+        }
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
             final File[] selFiles = fileChooser.getSelectedFiles();
+
             if ((selFiles != null) && (selFiles.length > 0)) {
+                lastFolder = selFiles[0].getParentFile();
                 CismetConcurrency.getInstance("Altlast")
                         .getDefaultExecutor()
                         .execute(new ImageUploadWorker(Arrays.asList(selFiles)));
             }
         }
-    }                                                              //GEN-LAST:event_btnAddImgActionPerformed
+    } //GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -583,8 +613,8 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
                     StaticSwingTools.getParentFrame(this),
-                    "Sollen die Fotos wirklich gelöscht werden?",
-                    "Fotos entfernen",
+                    "Sollen die Dokumente wirklich gelöscht werden?",
+                    "Dokumente entfernen",
                     JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
@@ -923,7 +953,7 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
                         JOptionPane.showMessageDialog(
                             StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
                             NbBundle.getMessage(
-                                SetTIMNoteAction.class,
+                                SimpleAltlastWebDavPanel.class,
                                 "SimpleAltlastWebDavPanel.ImageUploadWorker.doInBackground.fileLimitMessage"),
                             NbBundle.getMessage(
                                 SimpleAltlastWebDavPanel.class,

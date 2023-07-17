@@ -41,7 +41,7 @@ import de.cismet.tools.gui.ImageUtil;
 /**
  * DOCUMENT ME!
  *
- * @author   jruiz
+ * @author   therter
  * @version  $Revision$, $Date$
  */
 public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStore, ConnectionContextStore {
@@ -90,8 +90,9 @@ public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStor
 
         initComponents();
 
-        if (editable) {
+        if (!editable) {
             RendererTools.makeReadOnly(cbType);
+            cbType.setEditable(false);
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtBeschrei);
         }

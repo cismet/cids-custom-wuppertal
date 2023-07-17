@@ -145,8 +145,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         panCardArbeitsstandUndBemerkungen = new JPanel();
         panBemerkungen = new AlboFlaecheBemerkungenPanel(isEditable());
         panArbeitsstand = new AlboFlaecheArbeitsstandPanel(isEditable());
-        alboPicturePanel1 = new AlboPicturePanel();
-        simpleAltlastWebDavPanel1 = new SimpleAltlastWebDavPanel();
+        alboPicturePanel1 = new AlboPicturePanel(isEditable());
+        simpleAltlastWebDavPanel1 = new SimpleAltlastWebDavPanel(isEditable());
         panCardMassnahmen = new JPanel();
         panMassnahmen = new AlboFlaecheMassnahmenPanel(isEditable());
 
