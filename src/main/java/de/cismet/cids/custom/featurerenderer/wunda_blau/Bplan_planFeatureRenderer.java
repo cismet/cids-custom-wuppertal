@@ -15,18 +15,12 @@ package de.cismet.cids.custom.featurerenderer.wunda_blau;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Paint;
 import java.awt.Stroke;
 
-import java.net.URL;
-
 import java.util.Properties;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-
-import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.featurerenderer.*;
 
@@ -48,14 +42,10 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
-    ImageIcon errorimage = new javax.swing.ImageIcon(getClass().getResource(
-                "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png"));
-    /** Creates new form LSAFeatureRenderer. */
-    Properties properties = new Properties();
+    private Properties properties = new Properties();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JLabel lblImagePreview;
     // End of variables declaration//GEN-END:variables
 
@@ -83,60 +73,6 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
     @Override
     public void assign() {
         this.cidsBean = metaObject.getBean();
-        if (cidsBean != null) {
-            final String status = (String)cidsBean.getProperty("status");
-            final String nummer = (String)cidsBean.getProperty("nummer");
-
-            final Thread t = new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            try {
-                                String subpath = "bplaene/images/nicht_rechtskraeftig/";
-                                final String url = properties.getProperty("bebauungsplanurl");
-                                ImageIcon i;
-
-                                if ("rechtskraeftig".equals(status)) {
-                                    subpath = "bplaene/images/nicht_rechtskraeftig/";
-                                }
-                                if (url == null) {
-                                    i = new ImageIcon(
-                                            ClientAlkisConf.getInstance().getDownloadUrlForDocument(
-                                                subpath
-                                                        + "B"
-                                                        + nummer
-                                                        + "_TEXT.gif"));
-                                } else {
-                                    final String newUrl = url.replaceAll("<cismet::nummer>", nummer);
-                                    i = new ImageIcon(new URL(newUrl));
-                                }
-
-                                final ImageIcon icon = i;
-                                EventQueue.invokeLater(new Runnable() {
-
-                                        @Override
-                                        public void run() {
-                                            lblImagePreview.setIcon(icon);
-                                            Bplan_planFeatureRenderer.this.setPreferredSize(
-                                                new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-                                            Bplan_planFeatureRenderer.this.setSize(
-                                                new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-                                            revalidate();
-                                        }
-                                    });
-                            } catch (Exception e) {
-                                EventQueue.invokeLater(new Runnable() {
-
-                                        @Override
-                                        public void run() {
-                                            lblImagePreview.setIcon(errorimage);
-                                        }
-                                    });
-                            }
-                        }
-                    });
-            t.start();
-        }
     }
 
     @Override
@@ -189,8 +125,7 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public String getAlternativeName() {
-        final String nummer = (String)cidsBean.getProperty("nummer");
-        return nummer;
+        return (String)cidsBean.getProperty("nummer");
     }
 
     /**
@@ -199,12 +134,8 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        jProgressBar1 = new javax.swing.JProgressBar();
-        jLabel1 = new javax.swing.JLabel();
         lblImagePreview = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-
-        jLabel1.setText("jLabel1");
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setPreferredSize(new java.awt.Dimension(100, 100));
@@ -216,16 +147,12 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
         lblImagePreview.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblImagePreviewMouseClicked(evt);
+                public void mouseExited(final java.awt.event.MouseEvent evt) {
+                    lblImagePreviewMouseExited(evt);
                 }
                 @Override
                 public void mouseEntered(final java.awt.event.MouseEvent evt) {
                     lblImagePreviewMouseEntered(evt);
-                }
-                @Override
-                public void mouseExited(final java.awt.event.MouseEvent evt) {
-                    lblImagePreviewMouseExited(evt);
                 }
             });
         add(lblImagePreview, java.awt.BorderLayout.CENTER);
@@ -251,25 +178,4 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
     private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseEntered
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     }                                                                               //GEN-LAST:event_lblImagePreviewMouseEntered
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void lblImagePreviewMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseClicked
-        try {
-            final String url = properties.getProperty("luftbildschraegaufnahmenservicefull");
-            final String newUrl = null;
-//
-//            if (url==null) {
-//                newUrl="http://s10220:8098/luft/tiffer?bnr="+status+"&scale=1&format=JPG";
-//            } else{
-//                newUrl=url.replaceAll("<cismet::nummer>",status);
-//
-//            }
-//            BrowserLauncher.openURL(newUrl);
-        } catch (Exception e) {
-        }
-    }                                                                               //GEN-LAST:event_lblImagePreviewMouseClicked
 }
