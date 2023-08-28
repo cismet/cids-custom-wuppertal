@@ -1844,27 +1844,27 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                         }
                         break;
                     }
-                    case FIELD__ABGELEHNT:{
+                    case FIELD__ABGELEHNT: {
                         if (Objects.equals(getCidsBean().getProperty(FIELD__ABGELEHNT), true)) {
-                            //txtBegruendung.setEnabled(true);
+                            // txtBegruendung.setEnabled(true);
                             txtBegruendung.setText("Fällung abgelehnt");
                             chKLeistung.setSelected(true);
                         } else {
                             chKLeistung.setSelected(false);
-                            //txtBegruendung.setEnabled(false);
-                            //txtBegruendung.setText("");
+                            // txtBegruendung.setEnabled(false);
+                            // txtBegruendung.setText("");
                         }
                         break;
                     }
-                    case FIELD__BERATUNG:{
+                    case FIELD__BERATUNG: {
                         if (Objects.equals(getCidsBean().getProperty(FIELD__BERATUNG), true)) {
-                            //txtBegruendung.setEnabled(true);
+                            // txtBegruendung.setEnabled(true);
                             txtBegruendung.setText("nur Beratung");
                             chKLeistung.setSelected(true);
                         } else {
                             chKLeistung.setSelected(false);
-                            //txtBegruendung.setEnabled(false);
-                            //txtBegruendung.setText("");
+                            // txtBegruendung.setEnabled(false);
+                            // txtBegruendung.setText("");
                         }
                         break;
                     }
@@ -2012,7 +2012,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewErsatzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewErsatzActionPerformed
+    private void btnAddNewErsatzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewErsatzActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -2041,14 +2041,14 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewErsatzActionPerformed
+    } //GEN-LAST:event_btnAddNewErsatzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveErsatzActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveErsatzActionPerformed
+    private void btnRemoveErsatzActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveErsatzActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstErsatz.getSelectedValue();
@@ -2079,14 +2079,14 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveErsatzActionPerformed
+    } //GEN-LAST:event_btnRemoveErsatzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewFestActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewFestActionPerformed
+    private void btnAddNewFestActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewFestActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -2110,14 +2110,14 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewFestActionPerformed
+    } //GEN-LAST:event_btnAddNewFestActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFestActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveFestActionPerformed
+    private void btnRemoveFestActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveFestActionPerformed
         if (getBaumChildrenLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstFest.getSelectedValue();
@@ -2149,19 +2149,19 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveFestActionPerformed
+    } //GEN-LAST:event_btnRemoveFestActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstErsatzValueChanged(final ListSelectionEvent evt) {//GEN-FIRST:event_lstErsatzValueChanged
+    private void lstErsatzValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstErsatzValueChanged
         final Object oErsatz = lstErsatz.getSelectedValue();
         if (oErsatz instanceof CidsBean) {
             baumErsatzPanel.setCidsBean((CidsBean)oErsatz);
         }
-    }//GEN-LAST:event_lstErsatzValueChanged
+    }                                                                  //GEN-LAST:event_lstErsatzValueChanged
 
     /**
      * DOCUMENT ME!
