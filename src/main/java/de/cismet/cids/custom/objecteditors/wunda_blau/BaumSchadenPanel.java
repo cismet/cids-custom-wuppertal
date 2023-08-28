@@ -1814,6 +1814,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                             txtBau.setEnabled(false);
                             txtBau.setText("");
                         }
+                        break;
                     }
                     case FIELD__FK_ORDNUNG: {
                         setChangeFlag();
@@ -1831,6 +1832,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                             txtAnmerkung.setText("");
                             chFaellung.setEnabled(true);
                         }
+                        break;
                     }
                     case FIELD__KLEISTUNG: {
                         setChangeFlag();
@@ -1840,6 +1842,31 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                             txtBegruendung.setEnabled(false);
                             txtBegruendung.setText("");
                         }
+                        break;
+                    }
+                    case FIELD__ABGELEHNT: {
+                        if (Objects.equals(getCidsBean().getProperty(FIELD__ABGELEHNT), true)) {
+                            // txtBegruendung.setEnabled(true);
+                            txtBegruendung.setText("Fällung abgelehnt");
+                            chKLeistung.setSelected(true);
+                        } else {
+                            chKLeistung.setSelected(false);
+                            // txtBegruendung.setEnabled(false);
+                            // txtBegruendung.setText("");
+                        }
+                        break;
+                    }
+                    case FIELD__BERATUNG: {
+                        if (Objects.equals(getCidsBean().getProperty(FIELD__BERATUNG), true)) {
+                            // txtBegruendung.setEnabled(true);
+                            txtBegruendung.setText("nur Beratung");
+                            chKLeistung.setSelected(true);
+                        } else {
+                            chKLeistung.setSelected(false);
+                            // txtBegruendung.setEnabled(false);
+                            // txtBegruendung.setText("");
+                        }
+                        break;
                     }
                     default: {
                         setChangeFlag();
