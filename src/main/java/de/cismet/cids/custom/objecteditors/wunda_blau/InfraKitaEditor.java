@@ -63,9 +63,7 @@ import javax.swing.text.DefaultFormatter;
 
 
 //import com.vividsolutions.jts.geom.PrecisionModel;
-import de.cismet.cids.custom.objecteditors.utils.InspireUtils;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
@@ -133,6 +131,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String TABLE_NAME_VERSION = "inspire_infra_kita_version";
     
     
+    public static final String BUNDLE_NOKITA = "InfraKitaEditor.isOkForSaving().noNewKita";
     public static final String BUNDLE_NOGEOM = "InfraKitaEditor.isOkForSaving().noGeom";
     public static final String BUNDLE_WRONGGEOM = "InfraKitaEditor.isOkForSaving().wrongGeom";
     public static final String BUNDLE_PANE_PREFIX = "InfraKitaEditor.isOkForSaving().JOptionPane.message.prefix";
@@ -1323,17 +1322,26 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         boolean newVersion = false;
-
-        // georeferenz muss gefüllt sein
-        try {
-            if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
-                LOG.warn("No geom specified. Skip persisting.");
+        
+        if (cidsBean != null && cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
+           save = false;
+           LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(
                         InfraKitaEditor.class,
                         BUNDLE_NOGEOM));
+        }
+        // georeferenz muss gefüllt sein
+        try {
+            if (cidsBean.getProperty(FIELD__GEOREFERENZ) == null) {
+                save = false;
+                LOG.warn("No new Kita. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(
+                        InfraKitaEditor.class,
+                        BUNDLE_NOKITA));
             } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
+                    save = false;
                     LOG.warn("Wrong geom specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(
                             InfraKitaEditor.class,
@@ -1355,33 +1363,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             createNewVersion();
         }
 
-        // Erzeugung einer neuen eindeutigen uuid und Anlegen der ersten Version
-        try {
-            String uuid;
-            if ((this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) && chOnline.isSelected()) {
-                uuid = InspireUtils.generateUuid(getConnectionContext());
-                InspireUtils.writeUuid(uuid, cidsBean, FIELD__INSPIRE_ID, TABLE_NAME, getConnectionContext());
-                createFirstVersion(1, new Timestamp(new Date().getTime()));
-            } else {
-                if ((cidsBean.getMetaObject().getStatus() != MetaObject.NEW)
-                            && chOnline.isSelected()) {
-                    uuid = InspireUtils.generateUuid(getConnectionContext());
-                    InspireUtils.writeUuid(uuid, cidsBean, FIELD__INSPIRE_ID, TABLE_NAME, getConnectionContext());
-                    createFirstVersion(1, new Timestamp(new Date().getTime()));
-                } else {
-                    if ((cidsBean.getMetaObject().getStatus() != MetaObject.NEW)
-                                && !(chOnline.isSelected())) {
-                        LOG.warn("Offline specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(
-                                InfraKitaEditor.class,
-                                "InfraKitaEditor.prepareForSave().wrongOffline"));
-                    }
-                }
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("inspireid not given.", ex);
-            save = false;
-        }
+        
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -1403,49 +1385,11 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  versionnr  DOCUMENT ME!
-     * @param  timestamp  DOCUMENT ME!
-     */
-    private void createFirstVersion(final int versionnr, final Timestamp timestamp) {
-        final MetaClass versionMetaClass = ClassCacheMultiple.getMetaClass(
-                CidsBeanSupport.DOMAIN_NAME,
-                TABLE_NAME_VERSION,
-                getConnectionContext());
-        final CidsBean newVersionBean = versionMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-        try {
-            newVersionBean.setProperty(FIELD__VERSIONNR, versionnr);
-            newVersionBean.setProperty(FIELD__BEGINLIFESPANVERSION, timestamp);
-            final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
-            if ((geom_pos != null)
-                        && ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
-                final Coordinate geom_point = ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getCoordinate();
-                final Double point_x = geom_point.x;
-                final Double point_y = geom_point.y;
-                newVersionBean.setProperty(FIELD__POINT, point_x + " " + point_y);
-            }
-            if (cidsBean.getProperty(FIELD__URL) != null) {
-                newVersionBean.setProperty(FIELD__WEBSITE, cidsBean.getProperty(FIELD__URL).toString());
-            }
-            if (cidsBean.getProperty(FIELD__TELEFEON) != null) {
-                newVersionBean.setProperty(FIELD__TELEPHONEVOICE, cidsBean.getProperty(FIELD__TELEFEON).toString());
-            }
-
-            cidsBean = TableUtils.addBeanToCollection(cidsBean, FIELD__VERSION_KITA, newVersionBean);
-        } catch (final Exception ex) {
-            LOG.warn("inspireversion not created.", ex);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
      */
     private void createNewVersion() {
         final Timestamp timestamp = new Timestamp(new Date().getTime());
         final CidsBean versionBean = getLastVersion();
         finishVersion(versionBean, timestamp);
-        final int version = (int)versionBean.getProperty(FIELD__VERSIONNR);
-        createFirstVersion(version + 1, timestamp);
     }
 
     @Override
