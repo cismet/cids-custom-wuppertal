@@ -76,8 +76,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.BindingGroupStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.SaveVetoable;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -108,7 +107,7 @@ import java.util.MissingResourceException;
  * @version  $Revision$, $Date$
  */
 public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
-    EditorSaveListener,
+    SaveVetoable,
     BindingGroupStore,
     PropertyChangeListener,
     RequestsFullSizeComponent {
@@ -135,6 +134,13 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String TABLE_NAME = "infra_kita";
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_NAME_VERSION = "inspire_infra_kita_version";
+    
+    
+    public static final String BUNDLE_NOGEOM = "InfraKitaEditor.isOkForSaving().noGeom";
+    public static final String BUNDLE_WRONGGEOM = "InfraKitaEditor.isOkForSaving().wrongGeom";
+    public static final String BUNDLE_PANE_PREFIX = "InfraKitaEditor.isOkForSaving().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "InfraKitaEditor.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "InfraKitaEditor.isOkForSaving().JOptionPane.title";
 
     public static final Coordinate RATHAUS_POINT = new Coordinate(374420, 5681660);
 
@@ -1462,36 +1468,10 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     }
 
     @Override
-    public boolean prepareForSave() {
+    public boolean isOkForSaving() {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
         boolean newVersion = false;
-
-        // adresse vorhanden
-        try {
-            if (txtAdresse.getText().trim().isEmpty()) {
-                LOG.warn("No adress specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(
-                        InfraKitaEditor.class,
-                        "InfraKitaEditor.prepareForSave().noAdresse"));
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Adress not given.", ex);
-            save = false;
-        }
-
-        // name vorhanden
-        try {
-            if (txtName.getText().trim().isEmpty()) {
-                LOG.warn("No name specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(
-                        InfraKitaEditor.class,
-                        "InfraKitaEditor.prepareForSave().noName"));
-            }
-        } catch (final MissingResourceException ex) {
-            LOG.warn("Name not given.", ex);
-            save = false;
-        }
 
         // georeferenz muss gefüllt sein
         try {
@@ -1499,14 +1479,14 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
                 LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(
                         InfraKitaEditor.class,
-                        "InfraKitaEditor.prepareForSave().noGeom"));
+                        BUNDLE_NOGEOM));
             } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
                     LOG.warn("Wrong geom specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(
                             InfraKitaEditor.class,
-                            "InfraKitaEditor.prepareForSave().wrongGeom"));
+                            BUNDLE_WRONGGEOM));
                 } else {
                     if (!(setNotNull(cidsBean.getProperty(FIELD__GEOREFERENZ)).equals(geomAttribute))
                                 && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW)) {
@@ -1517,18 +1497,6 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         } catch (final MissingResourceException ex) {
             LOG.warn("Geom not given.", ex);
             save = false;
-        }
-
-        // Änderung der url
-        if (!(setNotNull(cidsBean.getProperty(FIELD__URL)).equals(urlAttribute))
-                    && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW)) {
-            newVersion = true;
-        }
-
-        // Änderung des Telefons
-        if (!(setNotNull(cidsBean.getProperty(FIELD__TELEFEON)).equals(telAttribute))
-                    && (cidsBean.getMetaObject().getStatus() != MetaObject.NEW)) {
-            newVersion = true;
         }
 
         // Soll eine neue Version erstellt werden?
@@ -1571,13 +1539,13 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(
                     InfraKitaEditor.class,
-                    "InfraKitaEditor.prepareForSave().JOptionPane.message.prefix")
+                    BUNDLE_PANE_PREFIX)
                         + errorMessage.toString()
                         + NbBundle.getMessage(
                             InfraKitaEditor.class,
-                            "InfraKitaEditor.prepareForSave().JOptionPane.message.suffix"),
+                            BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(InfraKitaEditor.class,
-                    "InfraKitaEditor.prepareForSave().JOptionPane.title"),
+                    BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
 
             return false;
@@ -1774,10 +1742,6 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void setTitle(final String string) {
-    }
-
-    @Override
-    public void editorClosed(final EditorClosedEvent ece) {
     }
 
     @Override
