@@ -322,6 +322,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         lblGeom = new JLabel();
         if (isEditor){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class});
         }
         lblAdresse = new JLabel();
         txtAdresse = new JTextField();
