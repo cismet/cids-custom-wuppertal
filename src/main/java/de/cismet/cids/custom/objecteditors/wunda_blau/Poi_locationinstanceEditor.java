@@ -95,9 +95,6 @@ import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
-import static de.cismet.cids.custom.objecteditors.wunda_blau.QsgebMarkerEditor.FIELD__BEARBEITUNG_BEARBEITUNG;
-import static de.cismet.cids.custom.objecteditors.wunda_blau.QsgebMarkerEditor.FIELD__BEARBEITUNG_DATUM;
-
 /**
  * DOCUMENT ME!
  *
@@ -117,6 +114,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     public static final String FIELD__KEYURL = "keyurl";             // poi_locationinstance
     public static final String FIELD__WARTUNG = "wartung";           // poi_locationinstance
     public static final String FIELD__PUBLISH = "to_publish";        // poi_locationinstance
+    public static final String FIELD__ARCHIV = "to_archiv";          // poi_locationinstance
     public static final String FIELD__KEY_PUBLISH = "key_publish";   // poi_locationinstance
     public static final String FIELD__TO_KLIMA = "to_klima";         // poi_locationinstance
     public static final String FIELD__ID = "id";                     // poi_locationinstance
@@ -187,17 +185,22 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JComboBox cbSignatur;
     private javax.swing.JComboBox cbTypes;
     private javax.swing.JComboBox cbVeranstaltungsarten;
+    private javax.swing.JCheckBox chkArchiv;
     private javax.swing.JCheckBox chkKeyPublish;
     private javax.swing.JCheckBox chkToKlima;
     private javax.swing.JCheckBox chkVeroeffentlicht;
     private javax.swing.JCheckBox chkWartung;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcWiedervorlage;
     private javax.swing.JDialog dlgAddLocationType;
     private javax.swing.JDialog dlgAddVeranstaltungsart;
     private javax.swing.JDialog dlgAddZusNamen;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblArchiv;
     private javax.swing.JLabel lblArt;
     private javax.swing.JLabel lblAuswaehlen;
     private javax.swing.JLabel lblAuswaehlen1;
@@ -236,6 +239,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JLabel lblVeroeffentlicht;
     private javax.swing.JLabel lblWartung;
     private javax.swing.JLabel lblWebsite;
+    private javax.swing.JLabel lblWiedervorlage;
     private javax.swing.JList lstLocationTypes;
     private javax.swing.JList lstVeranstaltungsarten;
     private javax.swing.JList lstZusNamen;
@@ -508,6 +512,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 getCidsBean().setProperty(FIELD__WARTUNG, false);
                 getCidsBean().setProperty(FIELD__KEY_PUBLISH, false);
                 getCidsBean().setProperty(FIELD__TO_KLIMA, false);
+                getCidsBean().setProperty(FIELD__ARCHIV, false);
             } catch (Exception e) {
                 LOG.error("Cannot set default values", e);
             }
@@ -640,20 +645,30 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 txtFarbe = new javax.swing.JFormattedTextField(new HexcolorFormatter());
                 lblVeroeffentlicht = new javax.swing.JLabel();
                 chkVeroeffentlicht = new javax.swing.JCheckBox();
+                lblWartung = new javax.swing.JLabel();
+                chkWartung = new javax.swing.JCheckBox();
+                lblArchiv = new javax.swing.JLabel();
+                chkArchiv = new javax.swing.JCheckBox();
                 lblRvrPrio = new javax.swing.JLabel();
                 cbRvrPrio = new DefaultBindableReferenceCombo(true);
                 lblRvrKat = new javax.swing.JLabel();
                 cbRvrKat = new de.cismet.cids.editors.CategorisedFastBindableReferenceCombo(false);
                 ;
                 panSpacing2 = new javax.swing.JPanel();
-                lblWartung = new javax.swing.JLabel();
-                chkWartung = new javax.swing.JCheckBox();
                 lblKeyUrl = new javax.swing.JLabel();
                 txtKeyUrl = new javax.swing.JTextField();
                 lblKeyPublish = new javax.swing.JLabel();
                 chkKeyPublish = new javax.swing.JCheckBox();
+                lblWiedervorlage = new javax.swing.JLabel();
+                dcWiedervorlage = new de.cismet.cids.editors.DefaultBindableDateChooser();
                 lblToKlima = new javax.swing.JLabel();
                 chkToKlima = new javax.swing.JCheckBox();
+                filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                        new java.awt.Dimension(0, 0),
+                        new java.awt.Dimension(32767, 0));
+                filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                        new java.awt.Dimension(0, 0),
+                        new java.awt.Dimension(32767, 0));
 
                 dlgAddLocationType.setTitle("Thema zuweisen");
                 dlgAddLocationType.setModal(true);
@@ -1474,7 +1489,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblHeader2, gridBagConstraints);
@@ -1507,7 +1522,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1548,7 +1563,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panButtons.add(btnRemoveThema, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1580,7 +1595,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1621,7 +1636,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panButtonsVeranstaltungsarten.add(btnRemoveVeranstaltungsart, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1659,13 +1674,13 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(cbMainLocationType, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 4;
         panContent2.add(filler1, gridBagConstraints);
 
@@ -1694,7 +1709,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(scpZusNamen, gridBagConstraints);
@@ -1733,7 +1748,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panButtons1.add(btnRemoveZusNamen, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1765,7 +1780,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(cbSignatur, gridBagConstraints);
@@ -1792,7 +1807,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(txtFarbe, gridBagConstraints);
@@ -1827,6 +1842,66 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(chkVeroeffentlicht, gridBagConstraints);
 
+        lblWartung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblWartung.setText("Wartung:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblWartung, gridBagConstraints);
+
+        chkWartung.setContentAreaFilled(false);
+        chkWartung.setEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.wartung}"),
+                chkWartung,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(chkWartung, gridBagConstraints);
+
+        lblArchiv.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblArchiv.setText("Archiv:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblArchiv, gridBagConstraints);
+
+        chkArchiv.setContentAreaFilled(false);
+        chkArchiv.setEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_archiv}"),
+                chkArchiv,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(chkArchiv, gridBagConstraints);
+
         lblRvrPrio.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblRvrPrio.setText("RVR-Priorität:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1849,7 +1924,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1877,7 +1952,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(cbRvrKat, gridBagConstraints);
@@ -1886,41 +1961,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panContent2.add(panSpacing2, gridBagConstraints);
-
-        lblWartung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblWartung.setText("Wartung:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent2.add(lblWartung, gridBagConstraints);
-
-        chkWartung.setContentAreaFilled(false);
-        chkWartung.setEnabled(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.wartung}"),
-                chkWartung,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent2.add(chkWartung, gridBagConstraints);
 
         lblKeyUrl.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblKeyUrl.setText("Schlüssel:");
@@ -1946,7 +1991,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(txtKeyUrl, gridBagConstraints);
@@ -1981,6 +2026,36 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(chkKeyPublish, gridBagConstraints);
 
+        lblWiedervorlage.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblWiedervorlage.setText("Wiedervorlage:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblWiedervorlage, gridBagConstraints);
+
+        dcWiedervorlage.setEnabled(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.wiedervorlage}"),
+                dcWiedervorlage,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(dcWiedervorlage.getConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(dcWiedervorlage, gridBagConstraints);
+
         lblToKlima.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblToKlima.setText("Klimarouten relevant:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2010,6 +2085,18 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(chkToKlima, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panContent2.add(filler2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panContent2.add(filler3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -2650,6 +2737,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 btnRemoveVeranstaltungsart.setEnabled(true);
                 btnRemoveZusNamen.setEnabled(true);
                 btnCreateAreaFromPoint.setEnabled(true);
+                dcWiedervorlage.setEnabled(true);
+                chkArchiv.setEnabled(true);
             } else {
                 chkWartung.setEnabled(false);
                 btnAddVeranstaltungsart.setEnabled(false);
@@ -2722,6 +2811,15 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
                 } else {
                     chkWartung.setEnabled(false);
                     chkWartung.setSelected(false);
+                }
+            } catch (Exception ex) {
+                LOG.error("propertychange", ex);
+            }
+        }
+        if (evt.getPropertyName().equals(FIELD__ARCHIV)) {
+            try {
+                if (chkArchiv.isSelected()) {
+                    chkVeroeffentlicht.setSelected(false);
                 }
             } catch (Exception ex) {
                 LOG.error("propertychange", ex);
