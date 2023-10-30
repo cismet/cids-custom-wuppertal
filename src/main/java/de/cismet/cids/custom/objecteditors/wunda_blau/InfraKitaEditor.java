@@ -1260,7 +1260,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
     private CidsBean getLastVersion() {
         CidsBean dateCidsBean = null;
         int version = 0;
-        final Object o = cidsBean.getProperty(FIELD__VERSION_KITA);
+        final Object o = getCidsBean().getProperty(FIELD__VERSION_KITA);
         if (o instanceof Collection) {
             try {
                 final Collection<CidsBean> col = (Collection)o;
@@ -1427,6 +1427,10 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             testUrlAndShowResult();
             saveFirstAttributes();
             checkInspireID();
+            if (getLastVersion().getProperty(FIELD__ENDLIFESPANVERSION) != null){
+                lblGeom.setVisible(false);
+                cbGeom.setVisible(false);
+            }
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
         }
