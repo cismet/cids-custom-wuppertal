@@ -23,12 +23,16 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
@@ -100,6 +104,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                 new java.awt.Dimension(0, 32767));
         jScrollPane4 = new javax.swing.JScrollPane();
         jXTable1 = new DroppedBeansTable();
+        jButton1 = new javax.swing.JButton();
         panRechts = new javax.swing.JPanel();
         panOrt = new javax.swing.JPanel();
         alboFlaecheOrtPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainOrtPanel(
@@ -206,13 +211,12 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jTextField9, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, "Landesregistrier-Nr.:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, "Hauptnr.:");
         jLabel9.setName("jLabel9"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -249,7 +253,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.weightx = 1.0;
         panTop.add(filler69, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, "Geodaten-ID:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, "FISAlBo-Nr.:");
         jLabel7.setName("jLabel7"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -276,7 +280,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jTextField6, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "Lfd. Nummer:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "lfd. Nr.:");
         jLabel10.setName("jLabel10"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -408,6 +412,13 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(10, 2, 2, 2);
         panTop.add(jPanel2, gridBagConstraints);
+
+        jButton1.setToolTipText("Erhebungsnummer setzen");
+        jButton1.setName("jButton1"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        panTop.add(jButton1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -707,6 +718,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     private javax.swing.Box.Filler filler58;
     private javax.swing.Box.Filler filler69;
     private javax.swing.Box.Filler filler7;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
@@ -763,6 +775,16 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     @Override
     protected void initGui() {
         initComponents();
+
+        jButton1.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
+        jButton1.setVisible(false);
+        jButton1.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                }
+            });
 
         alboFlaecheBeschreibungPanel1.setMainPanel(this);
         alboFlaecheBeschreibungPanel1.setPanSpezifisch(panSpezifisch);
@@ -854,6 +876,15 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         searchVorgaenge();
         searchBplaene();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  unlocked  DOCUMENT ME!
+     */
+    public void setLocked(final boolean unlocked) {
+        jButton1.setVisible(unlocked);
     }
 
     /**

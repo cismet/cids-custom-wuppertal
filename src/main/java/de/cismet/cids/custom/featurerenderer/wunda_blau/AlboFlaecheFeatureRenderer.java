@@ -57,6 +57,9 @@ public class AlboFlaecheFeatureRenderer extends CustomCidsFeatureRenderer {
                 case "stoffliche": {
                     return Color.getColor(color, Color.RED);
                 }
+                case "bplan_gutachten": {
+                    return Color.getColor(color, new Color(208, 201, 67));
+                }
                 case "bodenaehnlich":
                 case "abraumhalde":
                 case "baugrund":
