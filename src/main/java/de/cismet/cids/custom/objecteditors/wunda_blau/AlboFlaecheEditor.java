@@ -15,6 +15,9 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Polygon;
+
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.AutoBinding;
@@ -45,6 +48,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -71,6 +77,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMassnahmenPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboPicturePanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.SimpleAltlastWebDavPanel;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
 
@@ -80,6 +87,7 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.SaveVetoable;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -91,6 +99,7 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -109,7 +118,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     RequestsFullSizeComponent,
     EditorSaveListener,
     ConnectionContextStore,
-    PropertyChangeListener {
+    PropertyChangeListener,
+    SaveVetoable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -931,6 +941,298 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     public void propertyChange(final PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("geodaten_id")) {
             updateTitleControls();
+        }
+    }
+
+    @Override
+    public boolean isOkForSaving() {
+        Boolean prop = (Boolean)cidsBean.getProperty("entwurf");
+        final List<String> errorList = new ArrayList<String>();
+        final String zuordnung = (String)cidsBean.getProperty("fk_zuordnung.schluessel");
+
+        if (prop == null) {
+            prop = Boolean.FALSE;
+        }
+
+        if (!prop && (zuordnung != null) && !zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
+            final Object geom = cidsBean.getProperty("fk_geom.geo_field");
+
+            if (!((geom instanceof Polygon) || (geom instanceof MultiPolygon))) {
+                errorList.add("Die Geometrie muss entweder ein Polygon oder ein Multipolygon sein.");
+            }
+
+            if ((cidsBean.getProperty("laufende_nummer") == null) || (cidsBean.getProperty("geodaten_id") == null)
+                        || (cidsBean.getProperty("landesregistriernummer") == null)
+                        || cidsBean.getProperty("laufende_nummer").equals("")
+                        || cidsBean.getProperty("geodaten_id").equals("")
+                        || cidsBean.getProperty("landesregistriernummer").equals("")) {
+                errorList.add("Die Landesregistriernummer, laufende Nummer und Geodaten-ID müssen gesetzt sein.");
+            }
+
+            final String art = (String)cidsBean.getProperty("fk_art.schluessel");
+            String status = (String)cidsBean.getProperty("fk_status.schluessel");
+
+            if (status == null) {
+                status = "";
+            }
+
+            if (art == null) {
+                errorList.add("Die Art der Fläche muss gesetzt sein.");
+            } else if (art.equals("altstandort") || art.equals("betriebsstandort")) {
+                final TreeSet<CidsBean> wz = getWz();
+                boolean mbFound = false;
+
+                if (cidsBean.getProperty("massgeblicher_wirtschaftszweig") != null) {
+                    for (final CidsBean w : wz) {
+                        if (w.getProperty("id").equals(cidsBean.getProperty("massgeblicher_wirtschaftszweig.id"))) {
+                            mbFound = true;
+                        }
+                    }
+                }
+
+                final boolean isException = (zuordnung.equalsIgnoreCase("erfassung_schaedliche_bodenveraenderungen")
+                                && (status.equalsIgnoreCase("verdachtsflaeche")
+                                    || status.equalsIgnoreCase("kein_handlungsbedarf")));
+
+                if ((wz.isEmpty() || !mbFound) && !isException) {
+                    errorList.add(
+                        "Wenn die Art der Fläche \"altstandort\" oder \"betriebsstandort\" ist,\n  muss mindestens eine Branche angegeben sein und der Wert für\n  branche_massgeblich gesetzt sein.");
+                }
+            } else if (art.equalsIgnoreCase("altablagerung")) {
+                final TreeSet<CidsBean> aa = getAa();
+                boolean ueberwFound = false;
+
+                for (final CidsBean a : aa) {
+                    if ((a.getProperty("ueberwiegend") != null) && (Boolean)a.getProperty("ueberwiegend")) {
+                        ueberwFound = true;
+                    }
+                }
+
+                final boolean isException = (zuordnung.equalsIgnoreCase("erfassung_schaedliche_bodenveraenderungen")
+                                && (status.equalsIgnoreCase("verdachtsflaeche")
+                                    || status.equalsIgnoreCase("kein_handlungsbedarf")));
+
+                if ((aa.isEmpty() || !ueberwFound) && !isException) {
+                    errorList.add(
+                        "Wenn die Art der Fläche \"altablagerung\", muss mindestens\n  eine Hauptabfallart gesetzt sein und es muss die\n  überwiegende Abfallart angegeben sein.");
+                }
+            }
+
+            final String bearbeitungsstand = getBearbeitungsstand();
+
+            if ((status.equals("")) && !zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
+                // status was set to "" if it is null to avoid NPEs, so it must be checked, if status = ""
+                errorList.add(
+                    "Status der Fläche muss gesetzt sein, außer wenn es sich um eine Verzeichnisfläche handelt.");
+            } else if ((status != null) && status.equalsIgnoreCase("kein_handlungsbedarf")
+                        && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
+                            || bearbeitungsstand.equalsIgnoreCase("ga"))) {
+                errorList.add(
+                    "Wenn der Status \"kein Handlungsbedarf bei der derzeitigen Nutzung\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
+            } else if ((status != null) && status.equalsIgnoreCase("verdachtsflaeche")
+                        && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
+                            || bearbeitungsstand.equalsIgnoreCase("ga"))) {
+                errorList.add(
+                    "Wenn der Status \"altlastverdächtige Fläche / Verdachtsfläche\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
+            } else if ((status != null) && status.equalsIgnoreCase("verdacht_ausgeraeumt")
+                        && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
+                            || bearbeitungsstand.equalsIgnoreCase("ga"))) {
+                errorList.add(
+                    "Wenn der Status \"Verdacht ausgeräumt\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
+            } else if ((status != null) && status.equalsIgnoreCase("altlast")
+                        && !(bearbeitungsstand.equalsIgnoreCase("ga") || bearbeitungsstand.equalsIgnoreCase("su_sp")
+                            || bearbeitungsstand.equalsIgnoreCase("sa_laufend"))) {
+                errorList.add(
+                    "Wenn der Status \"Altlast / schädliche Bodenveränderung (sBv)\" ist,\n  muss der Bearbeitungsstand \"ga\", \"su_sp\" order \"sa_laufend\" sein.");
+            } else if ((status != null) && status.equalsIgnoreCase("altlast_mit_ueberwachung")
+                        && !(bearbeitungsstand.equalsIgnoreCase("ga") || bearbeitungsstand.equalsIgnoreCase("su_sp"))) {
+                errorList.add(
+                    "Wenn der Status \"Altlast / sBv mit dauerhafter Beschränkung / Überwachung\" ist,\n  muss der Bearbeitungsstand \"ga\" oder \"su_sp\" sein.");
+            } else if ((status != null) && status.equalsIgnoreCase("sanierte_flaeche")
+                        && !(bearbeitungsstand.equalsIgnoreCase("sa_abgeschlossen"))) {
+                errorList.add(
+                    "Wenn der Status \"sanierte Fläche (vollständig dekontaminiert)\" ist,\n  muss der Bearbeitungsstand \"sa_abgeschlossen\" sein.");
+            } else if ((status != null) && status.equalsIgnoreCase("sanierte_flaeche_fuer_bestimmte_nutzung")
+                        && !(bearbeitungsstand.equalsIgnoreCase("sa_abgeschlossen"))) {
+                errorList.add(
+                    "Wenn der Status \"sanierte Fläche (gesichert / teilweise dekontaminiert) z.B. für bestimmte Nutzung\" ist,\n  muss der Bearbeitungsstand \"sa_abgeschlossen\" sein.");
+            }
+
+            if (bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals("sa_abgeschlossen")) {
+                final CidsBean massn = (CidsBean)cidsBean.getProperty("fk_massnahmen");
+                final String[] schutzgefaehrdungen = {
+                        "ga_boden_mensch",
+                        "ga_boden_pflanze",
+                        "ga_boden_wasser",
+                        "ga_sonstiges"
+                    };
+                final String[] dekonSicherung = {
+                        "dm_aushub_deponierung",
+                        "dm_aushub_bodenbehandlung",
+                        "dm_bodenbeh_ohne_aushub",
+                        "dm_pneumatisch",
+                        "dm_pump_treat",
+                        "dm_in_situ_behandlung",
+                        "sm_sicherungsbauwerk",
+                        "ea_versiegelung",
+                        "ea_oberfl_abdicht",
+                        "sm_oberflaechenabdeckung",
+                        "sm_vertikale_abdichtung",
+                        "sm_immobilisierung",
+                        "sm_pneumatisch",
+                        "sm_pump_treat",
+                        "sm_in_situ_behandlung",
+                        "sm_sonstige"
+                    };
+                int sumSchutzgefaehrdung = 0;
+                int sumDekonSicherung = 0;
+
+                if (massn == null) {
+                    errorList.add(
+                        "Wenn der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" hat,\n  muss mindestens eine Schutzgutgefährdung gesetzt sein\n  und mindestens eine Dekontaminationsmaßnahme oder Sicherungsmaßnahme gesetzt sein.");
+                } else {
+                    for (final String schutz : schutzgefaehrdungen) {
+                        final Boolean value = (Boolean)massn.getProperty(schutz);
+
+                        if ((value != null) && value) {
+                            ++sumSchutzgefaehrdung;
+                        }
+                    }
+
+                    for (final String dekon : dekonSicherung) {
+                        final Boolean value = (Boolean)massn.getProperty(dekon);
+
+                        if ((value != null) && value) {
+                            ++sumDekonSicherung;
+                        }
+                    }
+
+                    if ((sumSchutzgefaehrdung == 0) || (sumDekonSicherung == 0)) {
+                        errorList.add(
+                            "Wenn der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" hat,\n  muss mindestens eine Schutzgutgefährdung gesetzt sein\n  und mindestens eine Dekontaminationsmaßnahme oder Sicherungsmaßnahme gesetzt sein.");
+                    }
+                }
+            }
+        }
+
+        if (errorList.size() > 0) {
+            final StringBuilder sb = new StringBuilder("Folgende Fehler wurden festgestellt:\n");
+            int i = 0;
+
+            for (final String error : errorList) {
+                sb.append(++i).append(". ").append(error).append("\n");
+            }
+
+            sb.append(
+                "Falls Sie das Objekt trotzdem speichern möchten, dann muss es als Entwurf gekennzeichnet werden.");
+
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                sb,
+                "Fehlerhafter Bearbeitungsstand",
+                JOptionPane.WARNING_MESSAGE);
+
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private TreeSet<CidsBean> getWz() {
+        final TreeSet<CidsBean> wzSet = new TreeSet<>(new CidsBeanComparator());
+        final List<CidsBean> standorte = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "n_standorte");
+
+        if (standorte != null) {
+            for (final CidsBean s : standorte) {
+                final List<CidsBean> wirtschaftszweige = CidsBeanSupport.getBeanCollectionFromProperty(
+                        s,
+                        "arr_wirtschaftszweige");
+                if (wirtschaftszweige != null) {
+                    wzSet.addAll(wirtschaftszweige);
+                }
+            }
+        }
+
+        return wzSet;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private TreeSet<CidsBean> getAa() {
+        final TreeSet<CidsBean> aaSet = new TreeSet<>(new CidsBeanComparator());
+        final List<CidsBean> herkuenfte = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "fk_altablagerung");
+
+        if (herkuenfte != null) {
+            for (final CidsBean he : herkuenfte) {
+                final List<CidsBean> aa = CidsBeanSupport.getBeanCollectionFromProperty(
+                        he,
+                        "n_altablagerung_abfallherkuenfte");
+
+                if (aa != null) {
+                    aaSet.addAll(aa);
+                }
+            }
+        }
+
+        return aaSet;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getBearbeitungsstand() {
+        final String sanierung = (String)cidsBean.getProperty("fk_arbeitsstand_sanierung.schluessel");
+        final String sanierungsplan = (String)cidsBean.getProperty("fk_arbeitsstand_sanierungsplan.schluessel");
+        final String sanierungsunter = (String)cidsBean.getProperty(
+                "fk_arbeitsstand_sanierungsuntersuchung.schluessel");
+        final String gefaehrdungsabsch = (String)cidsBean.getProperty(
+                "fk_arbeitsstand_gefaehrdungsabschaetzung.schluessel");
+
+        if ((sanierung != null) && sanierung.equalsIgnoreCase("abgeschlossen")) {
+            return "sa_abgeschlossen";
+        } else if ((sanierung != null) && sanierung.equalsIgnoreCase("laufend")) {
+            return "sa_laufend";
+        } else if ((sanierungsplan != null) || (sanierungsunter != null)) {
+            return "su_sp";
+        } else if (gefaehrdungsabsch != null) {
+            return "ga";
+        } else {
+            return "erfassung";
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class CidsBeanComparator implements Comparator<CidsBean> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public int compare(final CidsBean o1, final CidsBean o2) {
+            if ((o1 != null) && (o2 != null)) {
+                return o1.getPrimaryKeyValue().compareTo(o2.getPrimaryKeyValue());
+            } else if ((o1 == null) && (o2 == null)) {
+                return 0;
+            } else if (o1 != null) {
+                return -1;
+            } else if (o2 != null) {
+                return 1;
+            }
+
+            return 0;
         }
     }
 }
