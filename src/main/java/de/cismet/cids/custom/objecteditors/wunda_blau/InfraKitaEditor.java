@@ -61,6 +61,7 @@ import javax.swing.*;
 
 //import com.vividsolutions.jts.geom.PrecisionModel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
@@ -1328,12 +1329,12 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         final StringBuilder errorMessage = new StringBuilder();
         boolean newVersion = false;
         
-        if (cidsBean != null && cidsBean.getMetaObject().getStatus() != MetaObject.NEW){
+        if (cidsBean != null && cidsBean.getMetaObject().getStatus() == MetaObject.NEW){
            save = false;
            LOG.warn("No geom specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(
                         InfraKitaEditor.class,
-                        BUNDLE_NOGEOM));
+                        BUNDLE_NOKITA));
         }
         // georeferenz muss gefüllt sein
         try {
@@ -1342,7 +1343,7 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
                 LOG.warn("No new Kita. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(
                         InfraKitaEditor.class,
-                        BUNDLE_NOKITA));
+                        BUNDLE_NOGEOM));
             } else {
                 final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
                 if (!((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
@@ -1395,7 +1396,40 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         final Timestamp timestamp = new Timestamp(new Date().getTime());
         final CidsBean versionBean = getLastVersion();
         finishVersion(versionBean, timestamp);
+        final int version = (int)versionBean.getProperty(FIELD__VERSIONNR);
+        createFirstVersion(version + 1, timestamp);
     }
+    
+    private void createFirstVersion(final int versionnr, final Timestamp timestamp) {
+        final MetaClass versionMetaClass = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                TABLE_NAME_VERSION,
+                getConnectionContext());
+        final CidsBean newVersionBean = versionMetaClass.getEmptyInstance(getConnectionContext()).getBean();
+        try {
+            newVersionBean.setProperty(FIELD__VERSIONNR, versionnr);
+            newVersionBean.setProperty(FIELD__BEGINLIFESPANVERSION, timestamp);
+            final CidsBean geom_pos = (CidsBean)cidsBean.getProperty(FIELD__GEOREFERENZ);
+            if ((geom_pos != null)
+                        && ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getGeometryType().equals("Point")) {
+                final Coordinate geom_point = ((Geometry)geom_pos.getProperty(FIELD__GEO_FIELD)).getCoordinate();
+                final Double point_x = geom_point.x;
+                final Double point_y = geom_point.y;
+                newVersionBean.setProperty(FIELD__POINT, point_x + " " + point_y);
+            }
+            if (cidsBean.getProperty(FIELD__URL) != null) {
+                newVersionBean.setProperty(FIELD__WEBSITE, cidsBean.getProperty(FIELD__URL).toString());
+            }
+            if (cidsBean.getProperty(FIELD__TELEFEON) != null) {
+                newVersionBean.setProperty(FIELD__TELEPHONEVOICE, cidsBean.getProperty(FIELD__TELEFEON).toString());
+            }
+
+            cidsBean = TableUtils.addBeanToCollection(cidsBean, FIELD__VERSION_KITA, newVersionBean);
+        } catch (final Exception ex) {
+            LOG.warn("inspireversion not created.", ex);
+        }
+    }
+
 
     @Override
     public CidsBean getCidsBean() {
