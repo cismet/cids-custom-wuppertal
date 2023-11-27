@@ -967,6 +967,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                         || cidsBean.getProperty("geodaten_id").equals("")
                         || cidsBean.getProperty("landesregistriernummer").equals("")) {
                 errorList.add("Die Landesregistriernummer, laufende Nummer und Geodaten-ID müssen gesetzt sein.");
+            } else {
+                final String lrnr = String.valueOf(cidsBean.getProperty("landesregistriernummer"));
+                final String lfdNr = String.valueOf(cidsBean.getProperty("laufende_nummer"));
+                final String geodaten_id = String.valueOf(cidsBean.getProperty("geodaten_id"));
+
+                if (!geodaten_id.equals(lrnr.substring(1) + lfdNr.substring(1))) {
+                    errorList.add("Die FISAlBo-Nr passt nicht zur Hauptnummer und der laufenden Nummer.");
+                }
             }
 
             final String art = (String)cidsBean.getProperty("fk_art.schluessel");
@@ -1166,17 +1174,15 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      */
     private TreeSet<CidsBean> getAa() {
         final TreeSet<CidsBean> aaSet = new TreeSet<>(new CidsBeanComparator());
-        final List<CidsBean> herkuenfte = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "fk_altablagerung");
+        final CidsBean altablagerung = (CidsBean)cidsBean.getProperty("fk_altablagerung");
 
-        if (herkuenfte != null) {
-            for (final CidsBean he : herkuenfte) {
-                final List<CidsBean> aa = CidsBeanSupport.getBeanCollectionFromProperty(
-                        he,
-                        "n_altablagerung_abfallherkuenfte");
+        if (altablagerung != null) {
+            final List<CidsBean> aa = CidsBeanSupport.getBeanCollectionFromProperty(
+                    altablagerung,
+                    "n_altablagerung_abfallherkuenfte");
 
-                if (aa != null) {
-                    aaSet.addAll(aa);
-                }
+            if (aa != null) {
+                aaSet.addAll(aa);
             }
         }
 
