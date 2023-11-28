@@ -1366,7 +1366,6 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
 
         // Soll eine neue Version erstellt werden?
         if (newVersion && (versionAttribute != null)) {
-            LOG.info("test");
             createNewVersion();
         }
 
@@ -1464,7 +1463,9 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
             checkInspireID();
             if (getLastVersion().getProperty(FIELD__ENDLIFESPANVERSION) != null){
                 lblGeom.setVisible(false);
-                cbGeom.setVisible(false);
+                if(isEditor){
+                    cbGeom.setVisible(false);
+                }
             }
         } catch (final Exception ex) {
             Exceptions.printStackTrace(ex);
