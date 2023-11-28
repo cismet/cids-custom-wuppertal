@@ -1365,7 +1365,8 @@ public class InfraKitaEditor extends DefaultCustomObjectEditor implements CidsBe
         }
 
         // Soll eine neue Version erstellt werden?
-        if (newVersion && chOnline.isSelected() && (versionAttribute != null)) {
+        if (newVersion && (versionAttribute != null)) {
+            LOG.info("test");
             createNewVersion();
         }
 
