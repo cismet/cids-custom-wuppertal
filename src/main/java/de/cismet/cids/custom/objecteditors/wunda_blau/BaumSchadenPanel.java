@@ -177,6 +177,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
     public static final String FIELD__FK_SCHADEN = "fk_schaden";                               // baum_ersatz
     public static final String FIELD__SELBST = "selbststaendig";                               // baum_ersatz
     public static final String FIELD__DISPENS = "dispensbau";                                  // baum_ersatz
+    public static final String FIELD__AB = "abarbeiten";                                       // baum_ersatz
     public static final String FIELD__ID = "id";                                               // baum_schaden
     public static final String FIELD__FK_MELDUNG = "fk_meldung";                               // baum_schaden
     public static final String FIELD__MDATUM = "datum";                                        // baum_meldung
@@ -2024,6 +2025,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
                     final CidsBean beanSchaden = getCidsBean();
                     beanSchaden.getMetaObject().setStatus(MetaObject.MODIFIED);
                     beanErsatz.setProperty(FIELD__DISPENS, false);
+                    beanErsatz.setProperty(FIELD__AB, false);
                     beanErsatz.setProperty(FIELD__SELBST, false);
                     beanErsatz.setProperty(FIELD__FK_SCHADEN, beanSchaden);
 

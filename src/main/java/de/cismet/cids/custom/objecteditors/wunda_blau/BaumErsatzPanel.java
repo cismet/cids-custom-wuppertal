@@ -305,6 +305,8 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
                     hnrSearch.getRepresentationFields());
         }
         spAnzahl = new JSpinner();
+        lblAbarbeiten = new JLabel();
+        chAbarbeiten = new JCheckBox();
         panGeometrie = new JPanel();
         baumLagePanel = new BaumLagePanel();
         panKont = new JPanel();
@@ -735,7 +737,6 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         spAnzahl.setModel(new SpinnerNumberModel(0, 0, 100, 1));
         spAnzahl.setEnabled(false);
         spAnzahl.setName("spAnzahl");                // NOI18N
-        spAnzahl.setOpaque(false);
         spAnzahl.setPreferredSize(new Dimension(75, 20));
 
         binding = Bindings.createAutoBinding(
@@ -754,6 +755,42 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(spAnzahl, gridBagConstraints);
+
+        lblAbarbeiten.setFont(new Font("Tahoma", 1, 11));                                      // NOI18N
+        Mnemonics.setLocalizedText(
+            lblAbarbeiten,
+            NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblAbarbeiten.text")); // NOI18N
+        lblAbarbeiten.setName("lblAbarbeiten");                                                // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        panInhalt.add(lblAbarbeiten, gridBagConstraints);
+
+        chAbarbeiten.setContentAreaFilled(false);
+        chAbarbeiten.setEnabled(false);
+        chAbarbeiten.setName("chAbarbeiten"); // NOI18N
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.abarbeiten}"),
+                chAbarbeiten,
+                BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panInhalt.add(chAbarbeiten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1257,6 +1294,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     JComboBox cbGeomErsatz;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbStrasse;
+    JCheckBox chAbarbeiten;
     JCheckBox chDispens;
     JCheckBox chSelbst;
     DefaultBindableDateChooser dcBis;
@@ -1270,6 +1308,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     JScrollPane jScrollPaneBaum;
     JScrollPane jScrollPaneKont;
     JTabbedPane jTabbedPane;
+    JLabel lblAbarbeiten;
     JLabel lblAnzahl;
     JLabel lblBaum;
     JLabel lblBemerkung;
@@ -1472,6 +1511,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             RendererTools.makeReadOnly(dcBis);
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(chDispens);
+            RendererTools.makeReadOnly(chAbarbeiten);
             RendererTools.makeReadOnly(chSelbst);
             RendererTools.makeDoubleSpinnerWithoutButtons(spAnzahl, 0);
             RendererTools.makeReadOnly(spAnzahl);
@@ -1836,6 +1876,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         dcBis.setEnabled(edit);
         dcDatum.setEnabled(edit);
         chDispens.setEnabled(edit);
+        chAbarbeiten.setEnabled(edit);
         chSelbst.setEnabled(edit);
         spAnzahl.setEnabled(edit);
         txtFirma.setEnabled(edit);
