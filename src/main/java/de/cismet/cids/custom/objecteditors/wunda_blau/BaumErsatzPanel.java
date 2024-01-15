@@ -276,7 +276,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panInhalt = new JPanel();
         lblSelbst = new JLabel();
         chSelbst = new JCheckBox();
-        if (!isEditor()) {
+        if (!isEditor()){
             lblHNrRenderer = new JLabel();
         }
         lblDispens = new JLabel();
@@ -292,19 +292,22 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         scpBemerkung = new JScrollPane();
         taBemerkungE = new JTextArea();
         lblGeom = new JLabel();
-        if (isEditor()) {
+        if (isEditor()){
             cbGeomErsatz = new DefaultCismapGeometryComboBoxEditor();
         }
         lblStrasse = new JLabel();
         cbStrasse = new FastBindableReferenceCombo();
         lblHnr = new JLabel();
-        if (isEditor()) {
+        if (isEditor()){
             cbHNr = new FastBindableReferenceCombo(
-                    hnrSearch,
-                    hnrSearch.getRepresentationPattern(),
-                    hnrSearch.getRepresentationFields());
+                hnrSearch,
+                hnrSearch.getRepresentationPattern(),
+                hnrSearch.getRepresentationFields()
+            );
         }
         spAnzahl = new JSpinner();
+        lblAbarbeiten = new JLabel();
+        chAbarbeiten = new JCheckBox();
         panGeometrie = new JPanel();
         baumLagePanel = new BaumLagePanel();
         panKont = new JPanel();
@@ -336,7 +339,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         xtBaum = new JXTable();
         filler8 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
-        final FormListener formListener = new FormListener();
+        FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -363,11 +366,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panInhalt.setPreferredSize(new Dimension(520, 270));
         panInhalt.setLayout(new GridBagLayout());
 
-        lblSelbst.setFont(new Font("Tahoma", 1, 11));                                      // NOI18N
-        Mnemonics.setLocalizedText(
-            lblSelbst,
-            NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblSelbst.text")); // NOI18N
-        lblSelbst.setName("lblSelbst");                                                    // NOI18N
+        lblSelbst.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblSelbst, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblSelbst.text")); // NOI18N
+        lblSelbst.setName("lblSelbst"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -381,12 +382,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         chSelbst.setEnabled(false);
         chSelbst.setName("chSelbst"); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.selbststaendig}"),
-                chSelbst,
-                BeanProperty.create("selected"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.selbststaendig}"), chSelbst, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -399,22 +395,18 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(chSelbst, gridBagConstraints);
 
-        if (!isEditor()) {
+        if (!isEditor()){
             lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
             lblHNrRenderer.setEnabled(false);
-            lblHNrRenderer.setName("lblHNrRenderer");          // NOI18N
+            lblHNrRenderer.setName("lblHNrRenderer"); // NOI18N
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.fk_adresse.hausnummer}"),
-                    lblHNrRenderer,
-                    BeanProperty.create("text"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
             binding.setSourceNullValue("null");
             binding.setSourceUnreadableValue("null");
             bindingGroup.addBinding(binding);
+
         }
-        if (!isEditor()) {
+        if (!isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 0;
@@ -425,11 +417,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             panInhalt.add(lblHNrRenderer, gridBagConstraints);
         }
 
-        lblDispens.setFont(new Font("Tahoma", 1, 11));                                      // NOI18N
-        Mnemonics.setLocalizedText(
-            lblDispens,
-            NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblDispens.text")); // NOI18N
-        lblDispens.setName("lblDispens");                                                   // NOI18N
+        lblDispens.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblDispens, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblDispens.text")); // NOI18N
+        lblDispens.setName("lblDispens"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -443,12 +433,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         chDispens.setEnabled(false);
         chDispens.setName("chDispens"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.dispensbau}"),
-                chDispens,
-                BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.dispensbau}"), chDispens, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -461,9 +446,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(chDispens, gridBagConstraints);
 
-        lblBis.setFont(new Font("Tahoma", 1, 11));                                                                     // NOI18N
+        lblBis.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBis, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblBis.text")); // NOI18N
-        lblBis.setName("lblBis");                                                                                      // NOI18N
+        lblBis.setName("lblBis"); // NOI18N
         lblBis.setRequestFocusEnabled(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -476,12 +461,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         dcBis.setEnabled(false);
         dcBis.setName("dcBis"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.umsetzung_bis}"),
-                dcBis,
-                BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.umsetzung_bis}"), dcBis, BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(dcBis.getConverter());
@@ -497,7 +477,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         lblAnzahl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblAnzahl, "Anzahl:");
-        lblAnzahl.setName("lblAnzahl");               // NOI18N
+        lblAnzahl.setName("lblAnzahl"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -507,11 +487,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblAnzahl, gridBagConstraints);
 
-        lblDatum.setFont(new Font("Tahoma", 1, 11));                                      // NOI18N
-        Mnemonics.setLocalizedText(
-            lblDatum,
-            NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblDatum.text")); // NOI18N
-        lblDatum.setName("lblDatum");                                                     // NOI18N
+        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblDatum, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblDatum.text")); // NOI18N
+        lblDatum.setName("lblDatum"); // NOI18N
         lblDatum.setRequestFocusEnabled(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -524,12 +502,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         dcDatum.setEnabled(false);
         dcDatum.setName("dcDatum"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.pflanzdatum}"),
-                dcDatum,
-                BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.pflanzdatum}"), dcDatum, BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(dcDatum.getConverter());
@@ -545,7 +518,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         lblFirma.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblFirma, "Firma:");
-        lblFirma.setName("lblFirma");                // NOI18N
+        lblFirma.setName("lblFirma"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -558,12 +531,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         txtFirma.setEnabled(false);
         txtFirma.setName("txtFirma"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.firma}"),
-                txtFirma,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.firma}"), txtFirma, BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -579,7 +547,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
-        lblBemerkung.setName("lblBemerkung");            // NOI18N
+        lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -598,12 +566,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         taBemerkungE.setEnabled(false);
         taBemerkungE.setName("taBemerkungE"); // NOI18N
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.bemerkung}"),
-                taBemerkungE,
-                BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkungE, BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -623,7 +586,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblGeom, "Geometrie:");
-        lblGeom.setName("lblGeom");                 // NOI18N
+        lblGeom.setName("lblGeom"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -633,21 +596,17 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panInhalt.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()) {
+        if (isEditor()){
             cbGeomErsatz.setFont(new Font("Dialog", 0, 12)); // NOI18N
             cbGeomErsatz.setEnabled(false);
-            cbGeomErsatz.setName("cbGeomErsatz");            // NOI18N
+            cbGeomErsatz.setName("cbGeomErsatz"); // NOI18N
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.fk_geom}"),
-                    cbGeomErsatz,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeomErsatz, BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomErsatz).getConverter());
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor()) {
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 1;
@@ -658,11 +617,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             panInhalt.add(cbGeomErsatz, gridBagConstraints);
         }
 
-        lblStrasse.setFont(new Font("Tahoma", 1, 11));                                      // NOI18N
-        Mnemonics.setLocalizedText(
-            lblStrasse,
-            NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblStrasse.text")); // NOI18N
-        lblStrasse.setName("lblStrasse");                                                   // NOI18N
+        lblStrasse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblStrasse, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblStrasse.text")); // NOI18N
+        lblStrasse.setName("lblStrasse"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -678,12 +635,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         cbStrasse.setName("cbStrasse"); // NOI18N
         cbStrasse.setNullable(false);
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.fk_strasse}"),
-                cbStrasse,
-                BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -697,9 +649,9 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(cbStrasse, gridBagConstraints);
 
-        lblHnr.setFont(new Font("Tahoma", 1, 11));                                                                     // NOI18N
+        lblHnr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblHnr, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblHnr.text")); // NOI18N
-        lblHnr.setName("lblHnr");                                                                                      // NOI18N
+        lblHnr.setName("lblHnr"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -709,20 +661,16 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panInhalt.add(lblHnr, gridBagConstraints);
 
-        if (isEditor()) {
+        if (isEditor()){
             cbHNr.setMaximumRowCount(20);
             cbHNr.setEnabled(false);
             cbHNr.setName("cbHNr"); // NOI18N
 
-            binding = Bindings.createAutoBinding(
-                    AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    ELProperty.create("${cidsBean.fk_adresse}"),
-                    cbHNr,
-                    BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
+
         }
-        if (isEditor()) {
+        if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 0;
@@ -734,18 +682,13 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         spAnzahl.setFont(new Font("Dialog", 0, 12)); // NOI18N
         spAnzahl.setModel(new SpinnerNumberModel(0, 0, 100, 1));
         spAnzahl.setEnabled(false);
-        spAnzahl.setName("spAnzahl");                // NOI18N
-        spAnzahl.setOpaque(false);
+        spAnzahl.setName("spAnzahl"); // NOI18N
         spAnzahl.setPreferredSize(new Dimension(75, 20));
 
-        binding = Bindings.createAutoBinding(
-                AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                ELProperty.create("${cidsBean.anzahl}"),
-                spAnzahl,
-                BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzahl}"), spAnzahl, BeanProperty.create("value"));
         binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
+        binding.setSourceUnreadableValue(0
+        );
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -754,6 +697,35 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panInhalt.add(spAnzahl, gridBagConstraints);
+
+        lblAbarbeiten.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblAbarbeiten, NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblAbarbeiten.text")); // NOI18N
+        lblAbarbeiten.setName("lblAbarbeiten"); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        panInhalt.add(lblAbarbeiten, gridBagConstraints);
+
+        chAbarbeiten.setContentAreaFilled(false);
+        chAbarbeiten.setEnabled(false);
+        chAbarbeiten.setName("chAbarbeiten"); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.abarbeiten}"), chAbarbeiten, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panInhalt.add(chAbarbeiten, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -821,12 +793,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panKontAdd.setLayout(new GridBagLayout());
 
         btnAddKont.setBackground(new Color(0, 0, 0));
-        btnAddKont.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddKont.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddKont.setBorder(null);
         btnAddKont.setBorderPainted(false);
         btnAddKont.setContentAreaFilled(false);
-        btnAddKont.setName("btnAddKont");                                                                      // NOI18N
+        btnAddKont.setName("btnAddKont"); // NOI18N
         btnAddKont.setPreferredSize(new Dimension(45, 13));
         btnAddKont.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -836,12 +807,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panKontAdd.add(btnAddKont, gridBagConstraints);
 
         btnRemKont.setBackground(new Color(0, 0, 0));
-        btnRemKont.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemKont.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemKont.setBorder(null);
         btnRemKont.setBorderPainted(false);
         btnRemKont.setContentAreaFilled(false);
-        btnRemKont.setName("btnRemKont");                                                                         // NOI18N
+        btnRemKont.setName("btnRemKont"); // NOI18N
         btnRemKont.setPreferredSize(new Dimension(45, 13));
         btnRemKont.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -927,10 +897,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.weighty = 1.0;
         jPanelAllgemein.add(filler7, gridBagConstraints);
 
-        jTabbedPane.addTab(NbBundle.getMessage(
-                BaumErsatzPanel.class,
-                "BaumErsatzPanel.jPanelAllgemein.TabConstraints.tabTitle"),
-            jPanelAllgemein); // NOI18N
+        jTabbedPane.addTab(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.jPanelAllgemein.TabConstraints.tabTitle"), jPanelAllgemein); // NOI18N
 
         jPanelErsatzpflanzung.setName("jPanelErsatzpflanzung"); // NOI18N
         jPanelErsatzpflanzung.setOpaque(false);
@@ -975,7 +942,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
 
         lblBaum.setForeground(new Color(255, 255, 255));
         lblBaum.setText(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.lblBaum.text")); // NOI18N
-        lblBaum.setName("lblBaum");                                                                  // NOI18N
+        lblBaum.setName("lblBaum"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -993,12 +960,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panBaumAdd.setLayout(new GridBagLayout());
 
         btnAddBaum.setBackground(new Color(0, 0, 0));
-        btnAddBaum.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddBaum.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddBaum.setBorder(null);
         btnAddBaum.setBorderPainted(false);
         btnAddBaum.setContentAreaFilled(false);
-        btnAddBaum.setName("btnAddBaum");                                                                      // NOI18N
+        btnAddBaum.setName("btnAddBaum"); // NOI18N
         btnAddBaum.setPreferredSize(new Dimension(45, 13));
         btnAddBaum.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -1008,12 +974,11 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         panBaumAdd.add(btnAddBaum, gridBagConstraints);
 
         btnRemBaum.setBackground(new Color(0, 0, 0));
-        btnRemBaum.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemBaum.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemBaum.setBorder(null);
         btnRemBaum.setBorderPainted(false);
         btnRemBaum.setContentAreaFilled(false);
-        btnRemBaum.setName("btnRemBaum");                                                                         // NOI18N
+        btnRemBaum.setName("btnRemBaum"); // NOI18N
         btnRemBaum.setPreferredSize(new Dimension(45, 13));
         btnRemBaum.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
@@ -1110,10 +1075,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.weighty = 1.0;
         jPanelErsatzpflanzung.add(filler8, gridBagConstraints);
 
-        jTabbedPane.addTab(NbBundle.getMessage(
-                BaumErsatzPanel.class,
-                "BaumErsatzPanel.jPanelErsatzpflanzung.TabConstraints.tabTitle"),
-            jPanelErsatzpflanzung); // NOI18N
+        jTabbedPane.addTab(NbBundle.getMessage(BaumErsatzPanel.class, "BaumErsatzPanel.jPanelErsatzpflanzung.TabConstraints.tabTitle"), jPanelErsatzpflanzung); // NOI18N
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1132,34 +1094,28 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         bindingGroup.bind();
     }
 
-    /**
-     * Code for dispatching events from components to event handlers.
-     *
-     * @version  $Revision$, $Date$
-     */
+    // Code for dispatching events from components to event handlers.
+
     private class FormListener implements ActionListener {
-
-        /**
-         * Creates a new FormListener object.
-         */
-        FormListener() {
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent evt) {
+        FormListener() {}
+        public void actionPerformed(ActionEvent evt) {
             if (evt.getSource() == cbStrasse) {
                 BaumErsatzPanel.this.cbStrasseActionPerformed(evt);
-            } else if (evt.getSource() == btnAddKont) {
+            }
+            else if (evt.getSource() == btnAddKont) {
                 BaumErsatzPanel.this.btnAddKontActionPerformed(evt);
-            } else if (evt.getSource() == btnRemKont) {
+            }
+            else if (evt.getSource() == btnRemKont) {
                 BaumErsatzPanel.this.btnRemKontActionPerformed(evt);
-            } else if (evt.getSource() == btnAddBaum) {
+            }
+            else if (evt.getSource() == btnAddBaum) {
                 BaumErsatzPanel.this.btnAddBaumActionPerformed(evt);
-            } else if (evt.getSource() == btnRemBaum) {
+            }
+            else if (evt.getSource() == btnRemBaum) {
                 BaumErsatzPanel.this.btnRemBaumActionPerformed(evt);
             }
         }
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Getter @Setter private static Exception errorNoSave = null;
 
@@ -1257,6 +1213,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     JComboBox cbGeomErsatz;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbStrasse;
+    JCheckBox chAbarbeiten;
     JCheckBox chDispens;
     JCheckBox chSelbst;
     DefaultBindableDateChooser dcBis;
@@ -1270,6 +1227,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
     JScrollPane jScrollPaneBaum;
     JScrollPane jScrollPaneKont;
     JTabbedPane jTabbedPane;
+    JLabel lblAbarbeiten;
     JLabel lblAnzahl;
     JLabel lblBaum;
     JLabel lblBemerkung;
@@ -1350,31 +1308,31 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddKontActionPerformed
+    private void btnAddKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtKont, TABLE_NAME__KONTROLLE, getConnectionContext());
             setChangeFlag();
         }
-    }                                                               //GEN-LAST:event_btnAddKontActionPerformed
+    }//GEN-LAST:event_btnAddKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemKontActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemKontActionPerformed
+    private void btnRemKontActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemKontActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtKont);
             setChangeFlag();
         }
-    }                                                               //GEN-LAST:event_btnRemKontActionPerformed
+    }//GEN-LAST:event_btnRemKontActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
         if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE) != null)) {
             cbHNr.setSelectedItem(null);
             if (isEditor()) {
@@ -1382,32 +1340,32 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             }
             refreshHnr();
         }
-    }                                                                             //GEN-LAST:event_cbStrasseActionPerformed
+    }//GEN-LAST:event_cbStrasseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBaumActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddBaumActionPerformed
+    private void btnAddBaumActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddBaumActionPerformed
         if (getCidsBean() != null) {
             TableUtils.addObjectToTable(xtBaum, TABLE_NAME__ERSATZBAUM, getConnectionContext());
             setChangeFlag();
             getSorteCellEditor().getComboBox().setEnabled(true);
         }
-    }                                                               //GEN-LAST:event_btnAddBaumActionPerformed
+    }//GEN-LAST:event_btnAddBaumActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemBaumActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemBaumActionPerformed
+    private void btnRemBaumActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemBaumActionPerformed
         if (getCidsBean() != null) {
             TableUtils.removeObjectsFromTable(xtBaum);
             setChangeFlag();
         }
-    }                                                               //GEN-LAST:event_btnRemBaumActionPerformed
+    }//GEN-LAST:event_btnRemBaumActionPerformed
     /**
      * DOCUMENT ME!
      *
@@ -1472,6 +1430,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
             RendererTools.makeReadOnly(dcBis);
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(chDispens);
+            RendererTools.makeReadOnly(chAbarbeiten);
             RendererTools.makeReadOnly(chSelbst);
             RendererTools.makeDoubleSpinnerWithoutButtons(spAnzahl, 0);
             RendererTools.makeReadOnly(spAnzahl);
@@ -1836,6 +1795,7 @@ public class BaumErsatzPanel extends javax.swing.JPanel implements Disposable,
         dcBis.setEnabled(edit);
         dcDatum.setEnabled(edit);
         chDispens.setEnabled(edit);
+        chAbarbeiten.setEnabled(edit);
         chSelbst.setEnabled(edit);
         spAnzahl.setEnabled(edit);
         txtFirma.setEnabled(edit);
