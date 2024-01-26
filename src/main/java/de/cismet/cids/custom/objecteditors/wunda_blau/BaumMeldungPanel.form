@@ -129,9 +129,6 @@
         </Property>
         <Property name="modal" type="boolean" value="true"/>
         <Property name="name" type="java.lang.String" value="dlgCloneSchaden" noResource="true"/>
-        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[386, 200]"/>
-        </Property>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
@@ -722,6 +719,9 @@
                             <Property name="fixedCellWidth" type="int" value="75"/>
                             <Property name="name" type="java.lang.String" value="lstOrtstermine" noResource="true"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstOrtstermineMouseEntered"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                           </AuxValues>
@@ -933,6 +933,9 @@
                             <Property name="name" type="java.lang.String" value="lstSchaeden" noResource="true"/>
                             <Property name="visibleRowCount" type="int" value="2"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstSchaedenMouseEntered"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                           </AuxValues>
