@@ -50,6 +50,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
@@ -1131,6 +1132,13 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
         lstMeldungen.setModel(new DefaultListModel<>());
         lstMeldungen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstMeldungen.setFixedCellWidth(75);
+        lstMeldungen.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseEntered(final MouseEvent evt) {
+                    lstMeldungenMouseEntered(evt);
+                }
+            });
         scpLaufendeMeldungen.setViewportView(lstMeldungen);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1654,6 +1662,15 @@ public class BaumGebietEditor extends DefaultCustomObjectEditor implements CidsB
     private void lstFotosValueChanged(final ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
         showFoto();
     }                                                                 //GEN-LAST:event_lstFotosValueChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstMeldungenMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstMeldungenMouseEntered
+        baumMeldungPanel.taBemerkung.requestFocus();
+    }                                                                            //GEN-LAST:event_lstMeldungenMouseEntered
 
     @Override
     public boolean isEditor() {
