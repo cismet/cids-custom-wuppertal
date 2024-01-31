@@ -155,6 +155,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__GEO_FIELD = "geo_field";
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";
     public static final String FIELD__HNR = "fk_adresse";
+    public static final String FIELD__HNR_GEOM = "umschreibendes_rechteck";                //adresse
     public static final String TABLE_NAME = "ua_einsatz";
     public static final String TABLE_GEOM = "geom";
 
@@ -163,7 +164,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_PANE_PREFIX = "UaEinsatzEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "UaEinsatzEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "UaEinsatzEditor.isOkForSaving().JOptionPane.title";
-
+    public static final String BUNDLE_GEOMQUESTION = "UaEinsatzEditor.btnCreateGeometrieActionPerformed().geom_question";
+    public static final String BUNDLE_GEOMWRITE = "UaEinsatzEditor.btnCreateGeometrieActionPerformed().geom_write";
+    public static final String BUNDLE_NOGEOMCREATE = "UaEinsatzEditor.btnCreateGeometrieActionPerformed().no_geom_create";
+    
+    
     private static final String TITLE_NEW_EINSATZ = "einen neuen Einsatz anlegen...";
 
     @Override
@@ -1226,9 +1231,40 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     }//GEN-LAST:event_cbStrasseActionPerformed
 
     private void btnCreateGeometrieActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnCreateGeometrieActionPerformed
-        if (getCidsBean() != null) {
-            
-        }
+        if (getCidsBean() != null && getCidsBean().getProperty(FIELD__HNR) != null) {
+            CidsBean beanHnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR);
+            if (getCidsBean().getProperty(FIELD__GEOM) != null) {
+                final Object[] options = { "Ja, Geom überschreiben", "Abbrechen" };
+                final int result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
+                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_GEOMQUESTION),
+                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_GEOMWRITE),
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.WARNING_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                if ((result == JOptionPane.CLOSED_OPTION) || (result == 1)) {
+                    return;
+                } else {
+                    CidsBean beanAdresse = (CidsBean)beanHnr.getProperty(FIELD__HNR_GEOM);
+                    final CidsBean beanNewGeometrie = CidsBeanSupport.cloneBean(
+                        beanAdresse,
+                        getConnectionContext(),
+                        TABLE_GEOM);
+                    try {
+                        this.getCidsBean().setProperty(FIELD__GEOM, beanNewGeometrie);
+                    } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+            } 
+        } else {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOGEOMCREATE)
+                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        } 
     }//GEN-LAST:event_btnCreateGeometrieActionPerformed
 
     private void lstFotosValueChanged(ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
