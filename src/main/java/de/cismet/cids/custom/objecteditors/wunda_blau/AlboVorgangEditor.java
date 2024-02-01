@@ -29,10 +29,15 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import org.jfree.util.Log;
+
+import org.openide.util.Exceptions;
+
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1079,6 +1084,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         final CidsBean flaecheBean = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBean(
                 jXTable1.getRowSorter().convertRowIndexToModel(jXTable1.getSelectedRow()));
         ((VorgangFlaecheTableModel)jXTable1.getModel()).remove(flaecheBean);
+        cidsBean.setArtificialChangeFlag(true);
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -1134,9 +1140,10 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             final CidsBean flaecheBean = (CidsBean)selectedItem;
             final List<CidsBean> beans = ((VorgangFlaecheTableModel)jXTable1.getModel()).getCidsBeans();
 
-            if ((beans == null) || !beans.contains(selectedItem)) {
+            if ((beans == null) || !beans.contains(flaecheBean)) {
                 ((VorgangFlaecheTableModel)jXTable1.getModel()).add(flaecheBean);
-            } else if (beans.contains(selectedItem)) {
+                cidsBean.setArtificialChangeFlag(true);
+            } else if (beans.contains(flaecheBean)) {
                 JOptionPane.showMessageDialog(
                     StaticSwingTools.getParentFrame(this),
                     "Diese Fläche wurde bereits zugewiesen",
@@ -1600,7 +1607,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             }
         }
 
-        for (final CidsBean bean : origBeans) {
+        for (final CidsBean bean : new ArrayList<>(origBeans)) {
             if (!arrFlaechen.contains(bean)
                         && ((bean.getProperty("loeschen") == null) || !(Boolean)bean.getProperty("loeschen"))) {
                 origBeans.remove(bean);
@@ -1693,7 +1700,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
         //~ Instance fields ----------------------------------------------------
 
-        private final JXDatePicker datePicker;
+        private JXDatePicker datePicker;
         private boolean useSqlDate = true;
 
         //~ Constructors -------------------------------------------------------
@@ -1702,7 +1709,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
          * Creates a new DateCellEditor object.
          */
         public DateCellEditor() {
-            datePicker = new JXDatePicker();
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1722,6 +1728,8 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 final boolean isSelected,
                 final int row,
                 final int column) {
+            datePicker = new JXDatePicker();
+
             if (value instanceof Date) {
                 useSqlDate = false;
                 datePicker.setDate((Date)value);
@@ -1734,6 +1742,16 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
             }
 
             return datePicker;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            try {
+                datePicker.commitEdit();
+            } catch (ParseException ex) {
+                Log.warn("Parse exception", ex);
+            }
+            return super.stopCellEditing(); // To change body of generated methods, choose Tools | Templates.
         }
     }
 
