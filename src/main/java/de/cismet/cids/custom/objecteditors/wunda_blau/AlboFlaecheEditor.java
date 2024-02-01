@@ -79,7 +79,9 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboPicturePanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.SimpleAltlastWebDavPanel;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheErhebungsnummerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheNummerUniqueSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -955,6 +957,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         }
 
         if (!prop && (zuordnung != null) && !zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
+            final String erhebungsnummer = (String)cidsBean.getProperty("erhebungsnummer");
+
+            if ((erhebungsnummer == null) || erhebungsnummer.equals("")) {
+                errorList.add("Die Erhebungsnummer muss gesetzt sein.");
+            } else {
+                checkErhebungsnummer(errorList, erhebungsnummer);
+            }
+
             final Object geom = cidsBean.getProperty("fk_geom.geo_field");
 
             if (!((geom instanceof Polygon) || (geom instanceof MultiPolygon))) {
@@ -966,7 +976,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                         || cidsBean.getProperty("laufende_nummer").equals("")
                         || cidsBean.getProperty("geodaten_id").equals("")
                         || cidsBean.getProperty("landesregistriernummer").equals("")) {
-                errorList.add("Die Landesregistriernummer, laufende Nummer und Geodaten-ID müssen gesetzt sein.");
+                errorList.add("Die Hauptnummer, laufende Nummer und FISAlBo-Nr müssen gesetzt sein.");
             } else {
                 final String lrnr = String.valueOf(cidsBean.getProperty("landesregistriernummer"));
                 final String lfdNr = String.valueOf(cidsBean.getProperty("laufende_nummer"));
@@ -974,6 +984,24 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
                 if (!geodaten_id.equals(lrnr.substring(1) + lfdNr.substring(1))) {
                     errorList.add("Die FISAlBo-Nr passt nicht zur Hauptnummer und der laufenden Nummer.");
+                } else {
+                    try {
+                        final AlboFlaecheNummerUniqueSearch search = new AlboFlaecheNummerUniqueSearch(
+                                geodaten_id,
+                                cidsBean.getMetaObject().getId(),
+                                false);
+
+                        final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            search,
+                                            getConnectionContext());
+
+                        if ((result != null) && (result.size() > 0)) {
+                            errorList.add("Die FISAlBo-Nr ist nicht eindeutig.");
+                        }
+                    } catch (Exception e) {
+                        LOG.error("Error while checking erhebungsnummer", e);
+                    }
                 }
             }
 
@@ -1032,35 +1060,35 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 // status was set to "" if it is null to avoid NPEs, so it must be checked, if status = ""
                 errorList.add(
                     "Status der Fläche muss gesetzt sein, außer wenn es sich um eine Verzeichnisfläche handelt.");
-            } else if ((status != null) && status.equalsIgnoreCase("kein_handlungsbedarf")
+            } else if (status.equalsIgnoreCase("kein_handlungsbedarf")
                         && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
                             || bearbeitungsstand.equalsIgnoreCase("ga"))) {
                 errorList.add(
                     "Wenn der Status \"kein Handlungsbedarf bei der derzeitigen Nutzung\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("verdachtsflaeche")
+            } else if (status.equalsIgnoreCase("verdachtsflaeche")
                         && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
                             || bearbeitungsstand.equalsIgnoreCase("ga"))) {
                 errorList.add(
                     "Wenn der Status \"altlastverdächtige Fläche / Verdachtsfläche\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("verdacht_ausgeraeumt")
+            } else if (status.equalsIgnoreCase("verdacht_ausgeraeumt")
                         && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
                             || bearbeitungsstand.equalsIgnoreCase("ga"))) {
                 errorList.add(
                     "Wenn der Status \"Verdacht ausgeräumt\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("altlast")
+            } else if (status.equalsIgnoreCase("altlast")
                         && !(bearbeitungsstand.equalsIgnoreCase("ga") || bearbeitungsstand.equalsIgnoreCase("su_sp")
                             || bearbeitungsstand.equalsIgnoreCase("sa_laufend"))) {
                 errorList.add(
                     "Wenn der Status \"Altlast / schädliche Bodenveränderung (sBv)\" ist,\n  muss der Bearbeitungsstand \"ga\", \"su_sp\" order \"sa_laufend\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("altlast_mit_ueberwachung")
+            } else if (status.equalsIgnoreCase("altlast_mit_ueberwachung")
                         && !(bearbeitungsstand.equalsIgnoreCase("ga") || bearbeitungsstand.equalsIgnoreCase("su_sp"))) {
                 errorList.add(
                     "Wenn der Status \"Altlast / sBv mit dauerhafter Beschränkung / Überwachung\" ist,\n  muss der Bearbeitungsstand \"ga\" oder \"su_sp\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("sanierte_flaeche")
+            } else if (status.equalsIgnoreCase("sanierte_flaeche")
                         && !(bearbeitungsstand.equalsIgnoreCase("sa_abgeschlossen"))) {
                 errorList.add(
                     "Wenn der Status \"sanierte Fläche (vollständig dekontaminiert)\" ist,\n  muss der Bearbeitungsstand \"sa_abgeschlossen\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("sanierte_flaeche_fuer_bestimmte_nutzung")
+            } else if (status.equalsIgnoreCase("sanierte_flaeche_fuer_bestimmte_nutzung")
                         && !(bearbeitungsstand.equalsIgnoreCase("sa_abgeschlossen"))) {
                 errorList.add(
                     "Wenn der Status \"sanierte Fläche (gesichert / teilweise dekontaminiert) z.B. für bestimmte Nutzung\" ist,\n  muss der Bearbeitungsstand \"sa_abgeschlossen\" sein.");
@@ -1121,6 +1149,39 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                     }
                 }
             }
+        } else if ((zuordnung != null) && zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
+            if (((cidsBean.getProperty("laufende_nummer") != null)
+                            && !cidsBean.getProperty("laufende_nummer").equals(""))
+                        || ((cidsBean.getProperty("geodaten_id") != null)
+                            && !cidsBean.getProperty("geodaten_id").equals(""))
+                        || ((cidsBean.getProperty("landesregistriernummer") != null)
+                            && !cidsBean.getProperty("landesregistriernummer").equals(""))) {
+                final int ans = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
+                        "Wenn es sich um eine Verzeichnisfläche handelt, dann müssen die Hauptnummer, laufende Nummer und FISAlBo-Nr gesetzt sein.\nSollen diese Nummern automatisch entfernt werden?",
+                        "Fehlerhafter Bearbeitungsstand",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (ans == JOptionPane.YES_OPTION) {
+                    try {
+                        cidsBean.setProperty("laufende_nummer", null);
+                        cidsBean.setProperty("geodaten_id", null);
+                        cidsBean.setProperty("landesregistriernummer", null);
+                    } catch (Exception e) {
+                        LOG.error("Cannot set laufende_nummer, geodaten_id or landesregistriernummer", e);
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+
+            final String erhebungsnummer = (String)cidsBean.getProperty("erhebungsnummer");
+
+            if ((erhebungsnummer == null) || erhebungsnummer.equals("")) {
+                errorList.add("Die Erhebungsnummer muss gesetzt sein.");
+            } else {
+                checkErhebungsnummer(errorList, erhebungsnummer);
+            }
         }
 
         if (errorList.size() > 0) {
@@ -1132,7 +1193,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
             }
 
             sb.append(
-                "Falls Sie das Objekt trotzdem speichern möchten, dann muss es als Entwurf gekennzeichnet werden.");
+                "\nFalls Sie das Objekt trotzdem speichern möchten, dann muss es als Entwurf gekennzeichnet werden.");
 
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 sb,
@@ -1142,6 +1203,32 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
             return false;
         }
         return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  errorList        DOCUMENT ME!
+     * @param  erhebungsnummer  DOCUMENT ME!
+     */
+    private void checkErhebungsnummer(final List<String> errorList, final String erhebungsnummer) {
+        try {
+            final AlboFlaecheNummerUniqueSearch search = new AlboFlaecheNummerUniqueSearch(
+                    erhebungsnummer,
+                    cidsBean.getMetaObject().getId(),
+                    true);
+
+            final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                                search,
+                                getConnectionContext());
+
+            if ((result != null) && (result.size() > 0)) {
+                errorList.add("Diese Erhebungsnummer existiert bereits.");
+            }
+        } catch (Exception e) {
+            LOG.error("Error while checking erhebungsnummer", e);
+        }
     }
 
     /**
