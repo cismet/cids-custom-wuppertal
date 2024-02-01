@@ -685,14 +685,14 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
      * @param  evt  DOCUMENT ME!
      */
     private void ckProp1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_ckProp1ActionPerformed
-        if (ckProp1.isSelected() && (jComboBox5.getSelectedIndex() != -1)) {
+        if (ckProp1.isSelected() && (jComboBox5.getSelectedIndex() == -1)) {
             final ComboBoxModel<String> model = jComboBox5.getModel();
             final String currentUser = SessionManager.getSession().getUser().getName();
 
             for (int i = 0; i < model.getSize(); ++i) {
                 final String name = model.getElementAt(i);
 
-                if (currentUser.contains(name) || name.contains(currentUser)) {
+                if (currentUser.toLowerCase().contains(name) || name.toLowerCase().contains(currentUser)) {
                     jComboBox5.setSelectedItem(name);
                     break;
                 }
