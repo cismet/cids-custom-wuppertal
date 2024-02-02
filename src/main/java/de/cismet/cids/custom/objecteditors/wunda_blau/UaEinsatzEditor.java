@@ -212,15 +212,22 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpBeteiligte;
+    private DefaultBindableLabelsPanel blpBeteiligteFolge;
+    private DefaultBindableLabelsPanel blpLeistungen;
+    private DefaultBindableLabelsPanel blpSchadstoffarten;
+    private DefaultBindableLabelsPanel blpUnfallarten;
+    private DefaultBindableLabelsPanel blpVerunreinigungen;
     private JButton btnCreateGeometrie;
     private FastBindableReferenceCombo cbBereitschaft;
     private JComboBox cbGeom;
+    FastBindableReferenceCombo cbGewaesser;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbMelder;
     FastBindableReferenceCombo cbStrasse;
     private DefaultBindableDateChooser dcDatum;
     private Box.Filler filler3;
     private Box.Filler filler4;
+    private Box.Filler filler5;
     private JLabel jLabel2;
     private JPanel jPanel1;
     private JPanel jPanel2;
@@ -237,12 +244,18 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblAnleger;
     private JLabel lblBeginn;
     private JLabel lblBeginnTrenner;
+    private JLabel lblBemerkung;
     private JLabel lblBereitschaft;
     private JLabel lblBeteiligte;
+    private JLabel lblBeteiligteFolge;
     private JLabel lblDatum;
     private JLabel lblEnde;
     private JLabel lblEndeTrenner;
+    private JLabel lblFeststellungen;
+    private JLabel lblFirma;
+    private JLabel lblFolge;
     private JLabel lblGeom;
+    private JLabel lblGewaesser;
     private JLabel lblHNrRenderer;
     private JLabel lblHeaderDocument;
     private JLabel lblHeaderListe;
@@ -251,19 +264,34 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblHnr;
     private JLabel lblKarte;
     private JLabel lblKeineFotos;
+    private JLabel lblLeistungen;
     private JLabel lblMelder;
+    private JLabel lblMenge;
+    private JLabel lblMengeEinheit;
     private JLabel lblOrt;
+    private JLabel lblSchadstoffarten;
+    private JLabel lblSofort;
     private JLabel lblStrasse;
+    private JLabel lblUnfallarten;
+    private JLabel lblVerunreinigungen;
+    private JLabel lblVerursacher;
     private JList lstDok;
     private JList lstFotos;
     private JList lstPages;
+    private JPanel panBemerkung;
     private JPanel panContent;
     private JPanel panDaten;
+    private JPanel panDetails;
     private JPanel panEinsatz;
+    private JPanel panFeststellungen;
     private JPanel panFiller;
+    private JPanel panFiller1;
+    private JPanel panFirma;
+    private JPanel panFolge;
     private JPanel panGeometrie;
     private JPanel panOrt;
     private DefaultPreviewMapPanel panPreviewMap;
+    private JPanel panSofort;
     private JPanel pnlBild;
     private JPanel pnlCard1;
     private RoundedPanel pnlDocument;
@@ -277,16 +305,27 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanelDok;
     private RoundedPanel rpKarte;
+    private JScrollPane scpBemerkung;
     private JScrollPane scpDok;
+    private JScrollPane scpFeststellungen;
+    private JScrollPane scpFirma;
+    private JScrollPane scpFolge;
     private JScrollPane scpFotos;
     private JScrollPane scpOrt;
     private JScrollPane scpPages;
+    private JScrollPane scpSofort;
     private SemiRoundedPanel semiRoundedPanel7;
     JSpinner spBMinute;
     JSpinner spBStunde;
     JSpinner spEMinute;
     JSpinner spEStunde;
+    JSpinner spMenge;
+    private JTextArea taBemerkung;
+    private JTextArea taFeststellungen;
+    private JTextArea taFirma;
+    private JTextArea taFolge;
     private JTextArea taOrt;
+    private JTextArea taSofort;
     private JTextField txtAktenzeichen;
     private JTextField txtAnleger;
     private BindingGroup bindingGroup;
@@ -317,7 +356,13 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         super.initWithConnectionContext(connectionContext);
         initProperties();
         initComponents();
-        for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpBeteiligte)) {
+        for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(
+                blpBeteiligte, 
+                blpBeteiligteFolge, 
+                blpLeistungen, 
+                blpSchadstoffarten,
+                blpUnfallarten,
+                blpVerunreinigungen)) {
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
         setReadOnly();
@@ -395,6 +440,45 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBeteiligte = new JLabel();
         blpBeteiligte = new DefaultBindableLabelsPanel(isEditor(), "Beteiligte:", SORTING_OPTION);
         jPanelDetails = new JPanel();
+        panDetails = new JPanel();
+        lblUnfallarten = new JLabel();
+        blpUnfallarten = new DefaultBindableLabelsPanel(isEditor(), "Unfallarten:", SORTING_OPTION);
+        lblSchadstoffarten = new JLabel();
+        blpSchadstoffarten = new DefaultBindableLabelsPanel(isEditor(), "Schadstoffarten:", SORTING_OPTION);
+        lblGewaesser = new JLabel();
+        cbGewaesser = new FastBindableReferenceCombo();
+        lblMenge = new JLabel();
+        spMenge = new JSpinner();
+        lblMengeEinheit = new JLabel();
+        lblVerunreinigungen = new JLabel();
+        blpVerunreinigungen = new DefaultBindableLabelsPanel(isEditor(), "Verunreinigungen:", SORTING_OPTION);
+        lblFeststellungen = new JLabel();
+        panFeststellungen = new JPanel();
+        scpFeststellungen = new JScrollPane();
+        taFeststellungen = new JTextArea();
+        lblSofort = new JLabel();
+        panSofort = new JPanel();
+        scpSofort = new JScrollPane();
+        taSofort = new JTextArea();
+        lblFolge = new JLabel();
+        panFolge = new JPanel();
+        scpFolge = new JScrollPane();
+        taFolge = new JTextArea();
+        lblBeteiligteFolge = new JLabel();
+        blpBeteiligteFolge = new DefaultBindableLabelsPanel(isEditor(), "Beteiligte:", SORTING_OPTION);
+        lblLeistungen = new JLabel();
+        blpLeistungen = new DefaultBindableLabelsPanel(isEditor(), "Leistungen:", SORTING_OPTION);
+        lblFirma = new JLabel();
+        panFirma = new JPanel();
+        scpFirma = new JScrollPane();
+        taFirma = new JTextArea();
+        lblBemerkung = new JLabel();
+        panBemerkung = new JPanel();
+        scpBemerkung = new JScrollPane();
+        taBemerkung = new JTextArea();
+        filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        panFiller1 = new JPanel();
+        lblVerursacher = new JLabel();
         jPanelDokumente = new JPanel();
         pnlListeDok = new RoundedPanel();
         pnlHeaderListeDok = new SemiRoundedPanel();
@@ -994,6 +1078,487 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         jPanelDetails.setOpaque(false);
         jPanelDetails.setLayout(new GridBagLayout());
+
+        panDetails.setOpaque(false);
+        panDetails.setLayout(new GridBagLayout());
+
+        lblUnfallarten.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblUnfallarten.setText("Unfallarten:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblUnfallarten, gridBagConstraints);
+
+        blpUnfallarten.setOpaque(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_unfallarten}"), blpUnfallarten, BeanProperty.create("selectedElements"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(blpUnfallarten, gridBagConstraints);
+
+        lblSchadstoffarten.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblSchadstoffarten.setText("Schadstoffarten:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblSchadstoffarten, gridBagConstraints);
+
+        blpSchadstoffarten.setOpaque(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_schadstoffarten}"), blpSchadstoffarten, BeanProperty.create("selectedElements"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(blpSchadstoffarten, gridBagConstraints);
+
+        lblGewaesser.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblGewaesser.setText("Gewässer:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblGewaesser, gridBagConstraints);
+
+        cbGewaesser.setMaximumRowCount(20);
+        cbGewaesser.setModel(new LoadModelCb());
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_gewaesser}"), cbGewaesser, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cbGewaesser.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                cbGewaesserActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(cbGewaesser, gridBagConstraints);
+
+        lblMenge.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblMenge.setText("Menge:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblMenge, gridBagConstraints);
+
+        spMenge.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spMenge.setModel(new SpinnerNumberModel(0, 0, 1000000, 1));
+        spMenge.setPreferredSize(new Dimension(75, 20));
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.menge}"), spMenge, BeanProperty.create("value"));
+        binding.setSourceNullValue(0);
+        binding.setSourceUnreadableValue(0);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(spMenge, gridBagConstraints);
+
+        lblMengeEinheit.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblMengeEinheit.setText("Liter");
+        lblMengeEinheit.setToolTipText("");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        panDetails.add(lblMengeEinheit, gridBagConstraints);
+
+        lblVerunreinigungen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVerunreinigungen.setText("Verunreinigungen:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblVerunreinigungen, gridBagConstraints);
+
+        blpVerunreinigungen.setOpaque(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_verunreinigungen}"), blpVerunreinigungen, BeanProperty.create("selectedElements"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(blpVerunreinigungen, gridBagConstraints);
+
+        lblFeststellungen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFeststellungen.setText("Feststellungen:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblFeststellungen, gridBagConstraints);
+
+        panFeststellungen.setOpaque(false);
+        panFeststellungen.setLayout(new GridBagLayout());
+
+        taFeststellungen.setColumns(20);
+        taFeststellungen.setLineWrap(true);
+        taFeststellungen.setRows(3);
+        taFeststellungen.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.feststellungen}"), taFeststellungen, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpFeststellungen.setViewportView(taFeststellungen);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFeststellungen.add(scpFeststellungen, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(panFeststellungen, gridBagConstraints);
+
+        lblSofort.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblSofort.setText("Sofortmaßnahmen:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblSofort, gridBagConstraints);
+
+        panSofort.setOpaque(false);
+        panSofort.setLayout(new GridBagLayout());
+
+        taSofort.setColumns(20);
+        taSofort.setLineWrap(true);
+        taSofort.setRows(3);
+        taSofort.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.sofort}"), taSofort, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpSofort.setViewportView(taSofort);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panSofort.add(scpSofort, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(panSofort, gridBagConstraints);
+
+        lblFolge.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFolge.setText("Folgemaßnahmen:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblFolge, gridBagConstraints);
+
+        panFolge.setOpaque(false);
+        panFolge.setLayout(new GridBagLayout());
+
+        taFolge.setColumns(20);
+        taFolge.setLineWrap(true);
+        taFolge.setRows(3);
+        taFolge.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.folge}"), taFolge, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpFolge.setViewportView(taFolge);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFolge.add(scpFolge, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(panFolge, gridBagConstraints);
+
+        lblBeteiligteFolge.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBeteiligteFolge.setText("Beteiligte-Folge:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblBeteiligteFolge, gridBagConstraints);
+
+        blpBeteiligteFolge.setOpaque(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_beteiligte_folge}"), blpBeteiligteFolge, BeanProperty.create("selectedElements"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(blpBeteiligteFolge, gridBagConstraints);
+
+        lblLeistungen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLeistungen.setText("Leistungen:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblLeistungen, gridBagConstraints);
+
+        blpLeistungen.setOpaque(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_leistungen}"), blpLeistungen, BeanProperty.create("selectedElements"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(blpLeistungen, gridBagConstraints);
+
+        lblFirma.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFirma.setText("Firma:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblFirma, gridBagConstraints);
+
+        panFirma.setOpaque(false);
+        panFirma.setLayout(new GridBagLayout());
+
+        taFirma.setColumns(20);
+        taFirma.setLineWrap(true);
+        taFirma.setRows(3);
+        taFirma.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.firma}"), taFirma, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpFirma.setViewportView(taFirma);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFirma.add(scpFirma, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(panFirma, gridBagConstraints);
+
+        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBemerkung.setText("Bemerkung:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblBemerkung, gridBagConstraints);
+
+        panBemerkung.setOpaque(false);
+        panBemerkung.setLayout(new GridBagLayout());
+
+        taBemerkung.setColumns(20);
+        taBemerkung.setLineWrap(true);
+        taBemerkung.setRows(3);
+        taBemerkung.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpBemerkung.setViewportView(taBemerkung);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panBemerkung.add(scpBemerkung, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(panBemerkung, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panDetails.add(filler5, gridBagConstraints);
+
+        panFiller1.setMinimumSize(new Dimension(20, 0));
+        panFiller1.setOpaque(false);
+
+        GroupLayout panFiller1Layout = new GroupLayout(panFiller1);
+        panFiller1.setLayout(panFiller1Layout);
+        panFiller1Layout.setHorizontalGroup(panFiller1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        panFiller1Layout.setVerticalGroup(panFiller1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 1.0;
+        panDetails.add(panFiller1, gridBagConstraints);
+
+        lblVerursacher.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVerursacher.setText("Verursacher:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblVerursacher, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        jPanelDetails.add(panDetails, gridBagConstraints);
+
         jTabbedPane.addTab("Details", jPanelDetails);
 
         jPanelDokumente.setOpaque(false);
@@ -1275,6 +1840,10 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         // TODO add your handling code here:
     }//GEN-LAST:event_cbMelderActionPerformed
 
+    private void cbGewaesserActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbGewaesserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbGewaesserActionPerformed
+
     /**
      * DOCUMENT ME!
      *
@@ -1324,6 +1893,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             setTitle(getTitle());
             if (getCidsBean() != null){
                 labelsPanels.addAll(Arrays.asList(blpBeteiligte));
+                labelsPanels.addAll(Arrays.asList(blpBeteiligteFolge));
+                labelsPanels.addAll(Arrays.asList(blpLeistungen));
+                labelsPanels.addAll(Arrays.asList(blpSchadstoffarten));
+                labelsPanels.addAll(Arrays.asList(blpUnfallarten));
+                labelsPanels.addAll(Arrays.asList(blpVerunreinigungen));
             }       
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
                 try {
