@@ -118,6 +118,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     //~ Static fields/initializers ---------------------------------------------
     private static DefaultBindableReferenceCombo.Option SORTING_OPTION =
         new DefaultBindableReferenceCombo.SortingColumnOption("name");
+    private static DefaultBindableReferenceCombo.Option NULLABLE_OPTION =
+        new DefaultBindableReferenceCombo.NullableOption(null, "-");
+    private static DefaultBindableReferenceCombo.Option SORTING_OPTION_MELDER =
+        new DefaultBindableReferenceCombo.SortingColumnOption("sortierung");
+    private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION = null;
     
     private static final MetaClass MC__XXX;
 
@@ -222,7 +227,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JComboBox cbGeom;
     FastBindableReferenceCombo cbGewaesser;
     private FastBindableReferenceCombo cbHNr;
-    FastBindableReferenceCombo cbMelder;
+    private DefaultBindableReferenceCombo cbMelder;
     FastBindableReferenceCombo cbStrasse;
     private DefaultBindableDateChooser dcDatum;
     private Box.Filler filler3;
@@ -365,6 +370,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 blpVerunreinigungen)) {
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
+        
+        cbMelder.setNullable(false);
         setReadOnly();
     }
 
@@ -436,7 +443,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 bereitSearch.getRepresentationFields() );
         }
         lblMelder = new JLabel();
-        cbMelder = new FastBindableReferenceCombo();
+        cbMelder = new DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION_MELDER);
         lblBeteiligte = new JLabel();
         blpBeteiligte = new DefaultBindableLabelsPanel(isEditor(), "Beteiligte:", SORTING_OPTION);
         jPanelDetails = new JPanel();
@@ -1020,17 +1027,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblMelder, gridBagConstraints);
 
-        cbMelder.setMaximumRowCount(20);
-        cbMelder.setModel(new LoadModelCb());
+        cbMelder.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_beteiligte_melder}"), cbMelder, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_melder}"), cbMelder, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbMelder.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbMelderActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 7;
@@ -1149,11 +1150,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_gewaesser}"), cbGewaesser, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbGewaesser.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbGewaesserActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -1835,14 +1831,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private void lstFotosValueChanged(ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
         
     }//GEN-LAST:event_lstFotosValueChanged
-
-    private void cbMelderActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbMelderActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbMelderActionPerformed
-
-    private void cbGewaesserActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbGewaesserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbGewaesserActionPerformed
 
     /**
      * DOCUMENT ME!

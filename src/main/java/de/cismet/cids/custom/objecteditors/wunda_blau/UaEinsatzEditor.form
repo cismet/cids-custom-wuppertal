@@ -759,21 +759,17 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbMelder">
+                            <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="cbMelder">
                               <Properties>
-                                <Property name="maximumRowCount" type="int" value="20"/>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                  <Connection code="new LoadModelCb()" type="code"/>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Dialog" size="12" style="0"/>
                                 </Property>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_beteiligte_melder}" target="cbMelder" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_melder}" target="cbMelder" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
-                              <Events>
-                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbMelderActionPerformed"/>
-                              </Events>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION_MELDER);"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -927,9 +923,6 @@
                               <BindingProperties>
                                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_gewaesser}" target="cbGewaesser" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
-                              <Events>
-                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbGewaesserActionPerformed"/>
-                              </Events>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                               </AuxValues>
