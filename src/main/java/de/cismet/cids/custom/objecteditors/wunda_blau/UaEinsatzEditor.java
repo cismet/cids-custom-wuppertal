@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+import Sirius.server.middleware.types.LightweightMetaObject;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -88,6 +89,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -152,6 +154,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__ID = "id";
     public static final String FIELD__AZ = "aktenzeichen";
     public static final String FIELD__DATUM = "datum";
+    public static final String FIELD__GEW_NAME = "name";                            //ua_gewaesser
+    public static final String FIELD__GEW_WV = "wv";                                //ua_gewaesser
     public static final String FIELD__ANLEGER = "anleger";
     public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel";
     public static final String FIELD__STRASSE_NAME = "name";                                // strasse
@@ -214,6 +218,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             ADRESSE_TOSTRING_TEMPLATE,
             ADRESSE_TOSTRING_FIELDS);
     private CidsBean beanHNr;
+    
+    private final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpBeteiligte;
@@ -370,7 +376,46 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 blpVerunreinigungen)) {
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
-        
+        cbGewaesser.setRenderer(new GewaesserRenderer(cbGewaesser.getRenderer()));
+        /*cbGewaesser.setRenderer(new ListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+                    Boolean wv = false;
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        
+                        String gewaesser = String.valueOf(bean.getProperty(FIELD__GEW_NAME));
+                        if (Boolean.TRUE.equals(bean.getProperty(FIELD__GEW_WV))) {
+                            newValue = String.format(
+                                "%s - WV",
+                                gewaesser);
+                            setBackground(Color.red);
+                            wv = true;
+                        } else {
+                            newValue = gewaesser;
+                        }
+                    }
+                    final JLabel l = (JLabel)dlcr.getListCellRendererComponent(
+                            list,
+                            newValue,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    if (wv) {
+                        l.setForeground(Color.black);
+                        l.setText("hh");
+                    } else {
+                        l.setForeground(Color.blue);
+                    }
+                    return l;
+                }
+            });*/
         cbMelder.setNullable(false);
         setReadOnly();
     }
@@ -1146,6 +1191,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         cbGewaesser.setMaximumRowCount(20);
         cbGewaesser.setModel(new LoadModelCb());
+        cbGewaesser.setRepresentationFields(new String[] {"name"});
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_gewaesser}"), cbGewaesser, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -1929,6 +1975,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                         });
                 }
                 searchBereitschaft();
+                
+        
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
         } catch (Exception ex) {
@@ -2220,4 +2268,66 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }
 
+    private class GewaesserRenderer implements ListCellRenderer {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private ListCellRenderer originalRenderer;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new GewaesserRenderer object.
+         *
+         * @param  originalRenderer  DOCUMENT ME!
+         */
+        public GewaesserRenderer(final ListCellRenderer originalRenderer) {
+            this.originalRenderer = originalRenderer;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final Component result = originalRenderer.getListCellRendererComponent(
+                    list,
+                    value,
+                    index,
+                    isSelected,
+                    cellHasFocus);
+
+            if (isSelected) {
+                result.setBackground(list.getSelectionBackground());
+                result.setForeground(list.getSelectionForeground());
+            } else {
+                result.setBackground(list.getBackground());
+                result.setForeground(list.getForeground());
+                if (value instanceof LightweightMetaObject) {
+                    final LightweightMetaObject mo = (LightweightMetaObject)value;
+                    final CidsBean gewaesser = mo.getBean();
+                    if (Boolean.TRUE.equals(gewaesser.getProperty(FIELD__GEW_WV))) {
+                        result.setForeground(Color.blue);
+                    } else {
+                        result.setForeground(Color.black);
+                    }
+                }
+            }
+            return result;
+        }
+    }
 }
