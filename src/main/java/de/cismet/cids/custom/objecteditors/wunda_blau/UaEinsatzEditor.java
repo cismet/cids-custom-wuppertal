@@ -19,6 +19,7 @@ import Sirius.server.middleware.types.LightweightMetaObject;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
@@ -58,6 +59,7 @@ import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.NextNumberSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.UaBereitschaftLightweightSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.UaVerursacherLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
@@ -68,6 +70,7 @@ import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.AfterSavingHook;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -91,6 +94,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -104,6 +108,8 @@ import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.ComboPopup;
+import lombok.Getter;
+import lombok.Setter;
 import org.jdesktop.swingx.JXBusyLabel;
 /**
  * DOCUMENT ME!
@@ -113,6 +119,7 @@ import org.jdesktop.swingx.JXBusyLabel;
  */
 public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBeanRenderer,
     SaveVetoable,
+    AfterSavingHook,
     RequestsFullSizeComponent,
     PropertyChangeListener,
     RasterfariDocumentLoaderPanel.Listener {
@@ -126,16 +133,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         new DefaultBindableReferenceCombo.SortingColumnOption("sortierung");
     private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION = null;
     
-    private static final MetaClass MC__XXX;
+    private static final String VERURSACHER_TOSTRING_TEMPLATE = "%s";
+    private static final String[] VERURSACHER_TOSTRING_FIELDS = { "id" };
+    
+    private final UaVerursacherLightweightSearch searchVerursacher = new UaVerursacherLightweightSearch(
+                VERURSACHER_TOSTRING_TEMPLATE,
+                VERURSACHER_TOSTRING_FIELDS);
 
-    static {
-        final ConnectionContext connectionContext = ConnectionContext.create(ConnectionContext.Category.STATIC,
-                UaEinsatzEditor.class.getSimpleName());
-        MC__XXX = ClassCacheMultiple.getMetaClass(
-                "WUNDA_BLAU",
-                "",
-                connectionContext);
-    }
+    
 
     private static String MAPURL;
     private static Double BUFFER;
@@ -165,8 +170,10 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";
     public static final String FIELD__HNR = "fk_adresse";
     public static final String FIELD__HNR_GEOM = "umschreibendes_rechteck";                //adresse
+    public static final String FIELD__FK_EINSATZ= "fk_einsatz";                //ua_verursacher
     public static final String TABLE_NAME = "ua_einsatz";
     public static final String TABLE_GEOM = "geom";
+    public static final String TABLE_VERURSACHER = "ua_verursacher";
 
     public static final String BUNDLE_NO = "UaEinsatzEditor.isOkForSaving().noCity";
     public static final String BUNDLE_NOGEOM = "UaEinsatzEditor.isOkForSaving().noGeom";
@@ -176,6 +183,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_GEOMQUESTION = "UaEinsatzEditor.btnCreateGeometrieActionPerformed().geom_question";
     public static final String BUNDLE_GEOMWRITE = "UaEinsatzEditor.btnCreateGeometrieActionPerformed().geom_write";
     public static final String BUNDLE_NOGEOMCREATE = "UaEinsatzEditor.btnCreateGeometrieActionPerformed().no_geom_create";
+    
+    public static final String BUNDLE_PANE_TITLE_PERSIST = "UaEinsatzEditor.editorClose().JOptionPane.title";
+    public static final String BUNDLE_PANE_PREFIX_VERURSACHER = "UaEinsatzEditor.editorClose().JOptionPane.errorVerursacher";
+    public static final String BUNDLE_PANE_KONTROLLE = "UaEinsatzEditor.editorClose().JOptionPane.kontrolle";
+    public static final String BUNDLE_PANE_ADMIN = "UaEinsatzEditor.editorClose().JOptionPane.admin";
     
     
     private static final String TITLE_NEW_EINSATZ = "einen neuen Einsatz anlegen...";
@@ -220,6 +232,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private CidsBean beanHNr;
     
     private final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+    
+    @Getter @Setter private CidsBean beanVerursacher;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpBeteiligte;
@@ -228,6 +242,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private DefaultBindableLabelsPanel blpSchadstoffarten;
     private DefaultBindableLabelsPanel blpUnfallarten;
     private DefaultBindableLabelsPanel blpVerunreinigungen;
+    private JButton btnAddNewVerursacher;
     private JButton btnCreateGeometrie;
     private FastBindableReferenceCombo cbBereitschaft;
     private JComboBox cbGeom;
@@ -339,6 +354,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JTextArea taSofort;
     private JTextField txtAktenzeichen;
     private JTextField txtAnleger;
+    private UaVerursacherPanel uaVerursacherPanel;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -377,47 +393,39 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
         cbGewaesser.setRenderer(new GewaesserRenderer(cbGewaesser.getRenderer()));
-        /*cbGewaesser.setRenderer(new ListCellRenderer() {
-
-                @Override
-                public Component getListCellRendererComponent(final JList list,
-                        final Object value,
-                        final int index,
-                        final boolean isSelected,
-                        final boolean cellHasFocus) {
-                    Object newValue = value;
-                    Boolean wv = false;
-                    if (value instanceof CidsBean) {
-                        final CidsBean bean = (CidsBean)value;
-                        
-                        String gewaesser = String.valueOf(bean.getProperty(FIELD__GEW_NAME));
-                        if (Boolean.TRUE.equals(bean.getProperty(FIELD__GEW_WV))) {
-                            newValue = String.format(
-                                "%s - WV",
-                                gewaesser);
-                            setBackground(Color.red);
-                            wv = true;
-                        } else {
-                            newValue = gewaesser;
-                        }
-                    }
-                    final JLabel l = (JLabel)dlcr.getListCellRendererComponent(
-                            list,
-                            newValue,
-                            index,
-                            isSelected,
-                            cellHasFocus);
-                    if (wv) {
-                        l.setForeground(Color.black);
-                        l.setText("hh");
-                    } else {
-                        l.setForeground(Color.blue);
-                    }
-                    return l;
-                }
-            });*/
         cbMelder.setNullable(false);
         setReadOnly();
+           
+    }
+    
+    private void showVerursacher(){
+        //hier Rechteprüfung
+        final Collection<MetaObjectNode> mons;
+        try {
+            mons = SessionManager.getProxy().customServerSearch(
+                    searchVerursacher,
+                    getConnectionContext());
+            final List<CidsBean> beansVerursacher = new ArrayList<>();
+            if (!mons.isEmpty()) {
+                for (final MetaObjectNode mon : mons) {
+                    beansVerursacher.add(SessionManager.getProxy().getMetaObject(
+                            mon.getObjectId(),
+                            mon.getClassId(),
+                            "WUNDA_BLAU",
+                            getConnectionContext()).getBean());
+                }
+                setBeanVerursacher(beansVerursacher.get(0));
+                uaVerursacherPanel.setCidsBean(getBeanVerursacher());
+                btnAddNewVerursacher.setVisible(false);
+            } else {
+                uaVerursacherPanel.setVisible(false);
+                btnAddNewVerursacher.setVisible(true);
+                uaVerursacherPanel.setCidsBean(null);
+            }
+            
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 
     /**
@@ -524,13 +532,15 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         panFirma = new JPanel();
         scpFirma = new JScrollPane();
         taFirma = new JTextArea();
+        lblVerursacher = new JLabel();
+        btnAddNewVerursacher = new JButton();
+        uaVerursacherPanel = new UaVerursacherPanel();
         lblBemerkung = new JLabel();
         panBemerkung = new JPanel();
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         panFiller1 = new JPanel();
-        lblVerursacher = new JLabel();
         jPanelDokumente = new JPanel();
         pnlListeDok = new RoundedPanel();
         pnlHeaderListeDok = new SemiRoundedPanel();
@@ -1507,6 +1517,39 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(panFirma, gridBagConstraints);
 
+        lblVerursacher.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVerursacher.setText("Verursacher:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblVerursacher, gridBagConstraints);
+
+        btnAddNewVerursacher.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewVerursacher.setMaximumSize(new Dimension(39, 20));
+        btnAddNewVerursacher.setMinimumSize(new Dimension(39, 20));
+        btnAddNewVerursacher.setPreferredSize(new Dimension(25, 20));
+        btnAddNewVerursacher.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnAddNewVerursacherActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panDetails.add(btnAddNewVerursacher, gridBagConstraints);
+
+        uaVerursacherPanel.setOpaque(false);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        panDetails.add(uaVerursacherPanel, gridBagConstraints);
+
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
@@ -1579,17 +1622,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 1.0;
         panDetails.add(panFiller1, gridBagConstraints);
-
-        lblVerursacher.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblVerursacher.setText("Verursacher:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDetails.add(lblVerursacher, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1843,8 +1875,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             if (getCidsBean().getProperty(FIELD__GEOM) != null) {
                 final Object[] options = { "Ja, Geom überschreiben", "Abbrechen" };
                 final int result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
-                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_GEOMQUESTION),
-                        NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_GEOMWRITE),
+                        NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_GEOMQUESTION),
+                        NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_GEOMWRITE),
                         JOptionPane.DEFAULT_OPTION,
                         JOptionPane.WARNING_MESSAGE,
                         null,
@@ -1877,6 +1909,30 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private void lstFotosValueChanged(ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
         
     }//GEN-LAST:event_lstFotosValueChanged
+
+    private void btnAddNewVerursacherActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewVerursacherActionPerformed
+        try {
+            if (getCidsBean() != null) {
+                if (beanVerursacher == null){
+                    // verursacherBean erzeugen:
+                    beanVerursacher  = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            TABLE_VERURSACHER,
+                            getConnectionContext());
+                    final CidsBean beanEinsatz = getCidsBean();
+                    beanEinsatz.getMetaObject().setStatus(MetaObject.MODIFIED);
+                    beanVerursacher.setProperty(FIELD__FK_EINSATZ, beanEinsatz);
+
+                    getCidsBean().setArtificialChangeFlag(true);
+                    btnAddNewVerursacher.setVisible(false);
+                    uaVerursacherPanel.setVisible(true);
+                    uaVerursacherPanel.setCidsBean(beanVerursacher);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Cannot add new uaVerursacher object", e);
+        }
+    }//GEN-LAST:event_btnAddNewVerursacherActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1979,6 +2035,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
+            showVerursacher(); 
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
@@ -2128,6 +2185,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     @Override
     public void dispose() {
         panPreviewMap.dispose();
+        uaVerursacherPanel.dispose();
 
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
@@ -2169,8 +2227,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     @Override
     public boolean isOkForSaving() {
         boolean save = true;
+        boolean noErrorOccured = true;
         final StringBuilder errorMessage = new StringBuilder();
-
+        try {
+            noErrorOccured = uaVerursacherPanel.isOkForSaving(beanVerursacher);
+        } catch (final Exception ex) {
+            noErrorOccured = false;
+            LOG.error("Fehler beim Speicher-Check des Verursachers.", ex);
+        }
         // 
         /*try {
             if (getCidsBean().getProperty(FIELD__) == null) {
@@ -2206,7 +2270,35 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 createAktenzeichen();
             }
         }
-        return save;
+        return save && noErrorOccured;
+    }
+    
+    @Override
+    public void afterSaving(final AfterSavingHook.Event event) {
+        try {
+            if (AfterSavingHook.Status.SAVE_SUCCESS == event.getStatus()) {
+                try {
+                    beanVerursacher.setProperty(FIELD__FK_EINSATZ, event.getPersistedBean());
+                    try {
+                        beanVerursacher = beanVerursacher.persist(getConnectionContext());
+                    } catch (final Exception ex) {
+                        LOG.error("Fehler bei der Speicher-Vorbereitung des Verursachers.", ex);
+                        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_PREFIX_VERURSACHER)
+                                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_KONTROLLE)
+                                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_ADMIN)
+                                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_SUFFIX),
+                                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                JOptionPane.ERROR_MESSAGE);
+                    }   
+
+                } catch (HeadlessException | MissingResourceException ex) {
+                    LOG.warn("problem in persist verursacher.", ex);
+                }
+            }
+        } catch (final Exception ex) {
+            LOG.warn("problem in afterSaving.", ex);
+        }
     }
     
     public void createAktenzeichen(){
