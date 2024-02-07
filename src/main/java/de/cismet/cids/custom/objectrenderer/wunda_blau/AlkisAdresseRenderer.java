@@ -25,7 +25,7 @@ import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import de.aedsicad.aaaweb.service.util.Buchungsblatt;
+import de.aedsicad.aaaweb.rest.model.Buchungsblatt;
 
 import java.util.Collection;
 import java.util.List;

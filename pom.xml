@@ -60,6 +60,34 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
+                <version>8.0</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>de.cismet.commons</groupId>
+                <artifactId>cismet-commons</artifactId>
+                <version>8.0</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>de.cismet.commons</groupId>
+                <artifactId>cismet-gui-commons</artifactId>
+                <version>8.1.1</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>de.cismet.commons</groupId>
+                <artifactId>cismet-gui-commons</artifactId>
+                <version>8.1.1</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>de.cismet.commons</groupId>
+                <artifactId>cismap-commons</artifactId>
                 <version>8.0.1</version>
                 <type>jar</type>
             </dependency>
@@ -116,21 +144,21 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>8.2.5</version>
+                <version>8.2.5-alkis-rest-prerelease-2</version>
                 <type>jar</type>
             </dependency>
             
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>8.1</version>
+                <version>8.1.2</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>8.1</version>
+                <version>8.1.2</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -451,11 +479,16 @@
             <scope>compile</scope>
             <type>jar</type>
         </dependency>      
-        <dependency>
+        <!--<dependency>
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-soap-connector</artifactId>
             <version>6.4.7.1-2</version>
-        </dependency>        
+        </dependency>-->
+        <dependency>
+            <groupId>de.aedsicad</groupId>
+            <artifactId>aaaweb-rest-connector</artifactId>
+            <version>7.0.8.2-prerelease-1</version>
+        </dependency>
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jcommon</artifactId>
@@ -493,7 +526,6 @@
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>                    
         </dependency>        
         <!-- END: unmanaged dependencies -->
        

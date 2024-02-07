@@ -36,7 +36,7 @@ public final class ClientAlkisProducts extends AlkisProducts {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new ServerAlkisProducts object.
+     * Creates a new ClientAlkisProducts object.
      *
      * @param   alkisConf               DOCUMENT ME!
      * @param   productProperties       DOCUMENT ME!
