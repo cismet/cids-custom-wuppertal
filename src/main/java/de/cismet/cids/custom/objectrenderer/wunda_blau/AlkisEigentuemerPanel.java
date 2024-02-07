@@ -247,7 +247,7 @@ public class AlkisEigentuemerPanel extends javax.swing.JPanel implements Connect
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBuchungsblaetterMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstBuchungsblaetterMouseClicked
+    private void lstBuchungsblaetterMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstBuchungsblaetterMouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = lstBuchungsblaetter.getSelectedValue();
             if (selObject instanceof CidsBean) {
@@ -255,14 +255,14 @@ public class AlkisEigentuemerPanel extends javax.swing.JPanel implements Connect
                 ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selBean.getMetaObject(), "");
             }
         }
-    }//GEN-LAST:event_lstBuchungsblaetterMouseClicked
+    }                                                                                   //GEN-LAST:event_lstBuchungsblaetterMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBuchungsblaetterValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstBuchungsblaetterValueChanged
+    private void lstBuchungsblaetterValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBuchungsblaetterValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object[] selectedObjs = lstBuchungsblaetter.getSelectedValues();
             if ((selectedObjs != null) && (selectedObjs.length > 0)) {
@@ -289,7 +289,7 @@ public class AlkisEigentuemerPanel extends javax.swing.JPanel implements Connect
                 lstBuchungsblattFlurstuecke.setModel(model);
             }
         }
-    }//GEN-LAST:event_lstBuchungsblaetterValueChanged
+    } //GEN-LAST:event_lstBuchungsblaetterValueChanged
 
     @Override
     public ConnectionContext getConnectionContext() {
