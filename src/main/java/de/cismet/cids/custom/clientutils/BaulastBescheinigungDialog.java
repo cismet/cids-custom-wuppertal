@@ -460,7 +460,7 @@ public class BaulastBescheinigungDialog extends javax.swing.JDialog implements C
                             new ClientBaulastBescheinigungHelper(getConnectionContext()).calculateDownloadInfo(
                                 hasBilling ? null : jTextField2.getText(),
                                 hasBilling ? null : jTextField1.getText(),
-                                AlkisUtils.getInstance().createBaulastenFertigungsVermerk(
+                                AlkisUtils.createBaulastenFertigungsVermerk(
                                     SessionManager.getSession().getUser(),
                                     getConnectionContext()),
                                 flurstuecke,
