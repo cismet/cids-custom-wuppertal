@@ -54,6 +54,7 @@ import javax.swing.*;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.UaConfProperties;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
@@ -145,6 +146,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private static String MAPURL;
     private static Double BUFFER;
     private static String RASTERFARI;
+    private static String THEMA;
+    private static String DOKUMENTE;
+    private static String FOTOS;
     
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
@@ -2162,10 +2166,13 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
      */
     private void initProperties() {
         try {
-            BUFFER = 50.0;//UaConfProperties.getInstance().getBufferMeter();
-            MAPURL = "xxx";//UaProperties.getInstance().getUrlMap();
+            BUFFER = UaConfProperties.getInstance().getBufferMeter();
+            MAPURL = UaConfProperties.getInstance().getUrl();
             
-            RASTERFARI = "";//UaProperties.getInstance().getUrlRasterfari();
+            RASTERFARI = UaConfProperties.getInstance().getUrlRasterfari();
+            THEMA = UaConfProperties.getInstance().getOrdnerThema();
+            DOKUMENTE = UaConfProperties.getInstance().getOrdnerDokumente();
+            FOTOS = UaConfProperties.getInstance().getOrdnerFotos();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
