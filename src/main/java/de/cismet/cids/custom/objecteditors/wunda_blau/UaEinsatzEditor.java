@@ -153,6 +153,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String NEXT_TOSTRING_TEMPLATE = "%s";
     public static final String[] NEXT_TOSTRING_FIELDS = { "aktenzeichen", "id", "split_part( aktenzeichen,'-',3) AS nummer" };
     public static final String NEXT_TABLE = "ua_einsatz";
+    public static final String CONF_VERURSACHER = "darfUaVerursacher";
 
     private static final Logger LOG = Logger.getLogger(UaEinsatzEditor.class);
 
@@ -399,24 +400,44 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     }
     
     private void showVerursacher(){
-        //hier Rechteprüfung
+        final String aktBenutzer;
+        final String confAttrVerursacher;
+        
         final Collection<MetaObjectNode> mons;
         try {
+            searchVerursacher.setEinsatzId(getCidsBean().getPrimaryKeyValue());
             mons = SessionManager.getProxy().customServerSearch(
                     searchVerursacher,
                     getConnectionContext());
             final List<CidsBean> beansVerursacher = new ArrayList<>();
             if (!mons.isEmpty()) {
-                for (final MetaObjectNode mon : mons) {
-                    beansVerursacher.add(SessionManager.getProxy().getMetaObject(
-                            mon.getObjectId(),
-                            mon.getClassId(),
-                            "WUNDA_BLAU",
-                            getConnectionContext()).getBean());
+                try {
+                    confAttrVerursacher = SessionManager.getConnection()
+                            .getConfigAttr(SessionManager.getSession().getUser(),
+                                    CONF_VERURSACHER,
+                                    getConnectionContext());
+                    aktBenutzer = getCurrentUser();
+                    if ((aktBenutzer.equals(getCidsBean().getProperty(FIELD__ANLEGER).toString())) 
+                            || ((confAttrVerursacher != null) && confAttrVerursacher.equals("true"))) {
+                        for (final MetaObjectNode mon : mons) {
+                            beansVerursacher.add(SessionManager.getProxy().getMetaObject(
+                                    mon.getObjectId(),
+                                    mon.getClassId(),
+                                    "WUNDA_BLAU",
+                                    getConnectionContext()).getBean());
+                        }
+                        setBeanVerursacher(beansVerursacher.get(0));
+                        uaVerursacherPanel.setCidsBean(getBeanVerursacher());
+                        btnAddNewVerursacher.setVisible(false);    
+                    } else {
+                        uaVerursacherPanel.setVisible(false);
+                        btnAddNewVerursacher.setVisible (false);
+                        lblVerursacher.setVisible(false);
+                    }
+                    } catch (ConnectionException ex) {
+                    Exceptions.printStackTrace(ex);
                 }
-                setBeanVerursacher(beansVerursacher.get(0));
-                uaVerursacherPanel.setCidsBean(getBeanVerursacher());
-                btnAddNewVerursacher.setVisible(false);
+                
             } else {
                 uaVerursacherPanel.setVisible(false);
                 btnAddNewVerursacher.setVisible(true);
