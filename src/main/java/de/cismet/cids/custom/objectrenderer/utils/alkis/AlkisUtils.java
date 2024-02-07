@@ -19,29 +19,15 @@ import Sirius.server.newuser.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.aedsicad.aaaweb.service.util.Buchungsblatt;
-import de.aedsicad.aaaweb.service.util.Buchungsstelle;
-import de.aedsicad.aaaweb.service.util.LandParcel;
-import de.aedsicad.aaaweb.service.util.Point;
-
-import org.apache.commons.lang.ArrayUtils;
-
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ClientBillingUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer.Buchungsblattbezirke;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
-import de.cismet.cids.custom.wunda_blau.search.actions.ServerAlkisSoapAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
-import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.AbstractConnectionContext.Category;
 
@@ -208,47 +194,6 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   buchungsstelle  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static LandParcel[] getLandparcelFromBuchungsstelle(final Buchungsstelle buchungsstelle) {
-        if ((buchungsstelle.getBuchungsstellen() == null) && (buchungsstelle.getLandParcel() == null)) {
-            LOG.warn("getLandparcelFromBuchungsstelle returns null. Problem on landparcel with number:"
-                        + buchungsstelle.getSequentialNumber());
-            return new LandParcel[0];
-        } else if (buchungsstelle.getBuchungsstellen() == null) {
-            return buchungsstelle.getLandParcel();
-        } else {
-            LandParcel[] result = buchungsstelle.getLandParcel();
-            for (final Buchungsstelle b : buchungsstelle.getBuchungsstellen()) {
-                result = concatArrays(result, getLandparcelFromBuchungsstelle(b));
-            }
-            return result;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   a  DOCUMENT ME!
-     * @param   b  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static LandParcel[] concatArrays(LandParcel[] a, LandParcel[] b) {
-        if (a == null) {
-            a = new LandParcel[0];
-        }
-        if (b == null) {
-            b = new LandParcel[0];
-        }
-        return (LandParcel[])ArrayUtils.addAll(a, b);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   land       DOCUMENT ME!
      * @param   gemarkung  DOCUMENT ME!
      * @param   flur       DOCUMENT ME!
@@ -303,79 +248,6 @@ public class AlkisUtils {
                 }
             }
             return result.toString();
-        }
-        return "";
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   blatt  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String getBuchungsartFromBuchungsblatt(final Buchungsblatt blatt) {
-        final Buchungsstelle[] buchungsstellen = blatt.getBuchungsstellen();
-        if ((buchungsstellen != null) && (buchungsstellen.length > 0)) {
-            final ArrayList<Buchungsstelle> alleStellen = new ArrayList<Buchungsstelle>();
-            alleStellen.addAll(Arrays.asList(buchungsstellen));
-            if (isListOfSameBuchungsart(alleStellen)) {
-                return alleStellen.get(0).getBuchungsart();
-            } else {
-                return "diverse";
-            }
-        }
-        return "";
-    }
-
-    /**
-     * Check if in list of Buchungsstellen, all Buchungsstellen have the same Buchungsart. Return true if all have the
-     * same Buchungsart, false otherwise. The check is realized with adding the buchungsart to a set. As soon the set
-     * contains a second buchungsart, false can be returned.
-     *
-     * @param   buchungsstellen  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static boolean isListOfSameBuchungsart(final List<Buchungsstelle> buchungsstellen) {
-        final Set<String> set = new HashSet<String>();
-        for (final Buchungsstelle o : buchungsstellen) {
-            if (set.isEmpty()) {
-                set.add(o.getBuchungsart());
-            } else {
-                if (set.add(o.getBuchungsart())) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   aufteilungsnummer  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String prettyPrintAufteilungsnummer(final String aufteilungsnummer) {
-        if (aufteilungsnummer != null) {
-            return "ATP Nr. " + aufteilungsnummer;
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   fraction  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String prettyPrintFraction(final String fraction) {
-        if (fraction != null) {
-            return "Anteil " + fraction;
         }
         return "";
     }
@@ -459,60 +331,6 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   pointCode          DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public Point getPointFromAlkisSOAPServerAction(final String pointCode,
-            final ConnectionContext connectionContext) throws Exception {
-        final ServerActionParameter pointCodeSAP = new ServerActionParameter<String>(
-                ServerAlkisSoapAction.RETURN_VALUE.POINT.toString(),
-                pointCode);
-        final Object body = ServerAlkisSoapAction.RETURN_VALUE.POINT;
-
-        final Point result = (Point)SessionManager.getProxy()
-                    .executeTask(
-                            ServerAlkisSoapAction.TASKNAME,
-                            "WUNDA_BLAU",
-                            body,
-                            connectionContext,
-                            pointCodeSAP);
-        return result;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   buchungsblattCode  DOCUMENT ME!
-     * @param   connectionContext  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode,
-            final ConnectionContext connectionContext) throws Exception {
-        final ServerActionParameter buchungsblattCodeSAP = new ServerActionParameter<>(
-                ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT.toString(),
-                buchungsblattCode);
-        final Object body = ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT;
-
-        final Buchungsblatt result = (Buchungsblatt)SessionManager.getProxy()
-                    .executeTask(
-                            ServerAlkisSoapAction.TASKNAME,
-                            "WUNDA_BLAU",
-                            body,
-                            connectionContext,
-                            buchungsblattCodeSAP);
-        return result;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   user               DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
@@ -536,28 +354,5 @@ public class AlkisUtils {
             }
             return null;
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static AlkisUtils getInstance() {
-        return LazyInitialiser.INSTANCE;
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private static final class LazyInitialiser {
-
-        //~ Static fields/initializers -----------------------------------------
-
-        private static final AlkisUtils INSTANCE = new AlkisUtils();
     }
 }
