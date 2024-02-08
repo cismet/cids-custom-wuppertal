@@ -907,9 +907,22 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
 
         try {
             if (!erhebungsnummer.equals("")) {
+                Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
+                String art = (String)getCidsBean().getProperty("fk_art.schluessel");
+                String geomText = null;
+
+                if ((geom != null)) {
+                    geom = CrsTransformer.transformToDefaultCrs(geom);
+                    geomText = geom.toText();
+                }
+
+                if ((art != null) && art.equals("")) {
+                    art = null;
+                }
+
                 final AlboFlaecheErhebungsnummerSearch search = new AlboFlaecheErhebungsnummerSearch(
-                        null,
-                        null,
+                        geomText,
+                        art,
                         erhebungsnummer);
 
                 final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
