@@ -1094,60 +1094,150 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                     "Wenn der Status \"sanierte Fläche (gesichert / teilweise dekontaminiert) z.B. für bestimmte Nutzung\" ist,\n  muss der Bearbeitungsstand \"sa_abgeschlossen\" sein.");
             }
 
-            if (bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals("sa_abgeschlossen")) {
-                final CidsBean massn = (CidsBean)cidsBean.getProperty("fk_massnahmen");
-                final String[] schutzgefaehrdungen = {
-                        "ga_boden_mensch",
-                        "ga_boden_pflanze",
-                        "ga_boden_wasser",
-                        "ga_sonstiges"
-                    };
-                final String[] dekonSicherung = {
-                        "dm_aushub_deponierung",
-                        "dm_aushub_bodenbehandlung",
-                        "dm_bodenbeh_ohne_aushub",
-                        "dm_pneumatisch",
-                        "dm_pump_treat",
-                        "dm_in_situ_behandlung",
-                        "sm_sicherungsbauwerk",
-                        "ea_versiegelung",
-                        "ea_oberfl_abdicht",
-                        "sm_oberflaechenabdeckung",
-                        "sm_vertikale_abdichtung",
-                        "sm_immobilisierung",
-                        "sm_pneumatisch",
-                        "sm_pump_treat",
-                        "sm_in_situ_behandlung",
-                        "sm_sonstige"
-                    };
-                int sumSchutzgefaehrdung = 0;
-                int sumDekonSicherung = 0;
+            final CidsBean massn = (CidsBean)cidsBean.getProperty("fk_massnahmen");
+            final String[] schutzgefaehrdungen = {
+                    "ga_boden_mensch",
+                    "ga_boden_pflanze",
+                    "ga_boden_wasser",
+                    "ga_sonstiges"
+                };
+            final String[] dekonSicherung = {
+                    "dm_aushub_deponierung",
+                    "dm_aushub_bodenbehandlung",
+                    "dm_bodenbeh_ohne_aushub",
+                    "dm_pneumatisch",
+                    "dm_pump_treat",
+                    "dm_in_situ_behandlung",
+                    "sm_sicherungsbauwerk",
+                    "ea_versiegelung",
+                    "ea_oberfl_abdicht",
+                    "sm_oberflaechenabdeckung",
+                    "sm_vertikale_abdichtung",
+                    "sm_immobilisierung",
+                    "sm_pneumatisch",
+                    "sm_pump_treat",
+                    "sm_in_situ_behandlung",
+                    "sm_sonstige"
+                };
+            final String[] sicherung = {
+                    "sm_sicherungsbauwerk",
+                    "ea_versiegelung",
+                    "ea_oberfl_abdicht",
+                    "sm_oberflaechenabdeckung",
+                    "sm_vertikale_abdichtung",
+                    "sm_immobilisierung",
+                    "sm_pneumatisch",
+                    "sm_pump_treat",
+                    "sm_in_situ_behandlung",
+                    "sm_sonstige"
+                };
+            final String[] dekon = {
+                    "dm_aushub_deponierung",
+                    "dm_aushub_bodenbehandlung",
+                    "dm_bodenbeh_ohne_aushub",
+                    "dm_pneumatisch",
+                    "dm_pump_treat",
+                    "dm_in_situ_behandlung"
+                };
+            int sumSchutzgefaehrdung = 0;
+            int sumDekonSicherung = 0;
+            int sumSicherung = 0;
+            int sumDekon = 0;
+            Boolean ueberwachungsMassnahmen = ((massn != null) ? (Boolean)massn.getProperty("ueberwachungs_massnahmen")
+                                                               : null);
+            Boolean schutzBeschrMassnahmen = ((massn != null) ? (Boolean)massn.getProperty("schutz_beschr_massnahmen")
+                                                              : null);
 
+            if (ueberwachungsMassnahmen == null) {
+                ueberwachungsMassnahmen = Boolean.FALSE;
+            }
+            if (schutzBeschrMassnahmen == null) {
+                schutzBeschrMassnahmen = Boolean.FALSE;
+            }
+
+            if (massn != null) {
+                for (final String schutz : schutzgefaehrdungen) {
+                    final Boolean value = (Boolean)massn.getProperty(schutz);
+
+                    if ((value != null) && value) {
+                        ++sumSchutzgefaehrdung;
+                    }
+                }
+
+                for (final String dekonV : dekonSicherung) {
+                    final Boolean value = (Boolean)massn.getProperty(dekonV);
+
+                    if ((value != null) && value) {
+                        ++sumDekonSicherung;
+                    }
+                }
+
+                for (final String sich : sicherung) {
+                    final Boolean value = (Boolean)massn.getProperty(sich);
+
+                    if ((value != null) && value) {
+                        ++sumSicherung;
+                    }
+                }
+
+                for (final String dekonV : dekon) {
+                    final Boolean value = (Boolean)massn.getProperty(dekonV);
+
+                    if ((value != null) && value) {
+                        ++sumDekon;
+                    }
+                }
+            }
+
+            if (bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals("sa_abgeschlossen")) {
                 if (massn == null) {
                     errorList.add(
                         "Wenn der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" hat,\n  muss mindestens eine Schutzgutgefährdung gesetzt sein\n  und mindestens eine Dekontaminationsmaßnahme oder Sicherungsmaßnahme gesetzt sein.");
                 } else {
-                    for (final String schutz : schutzgefaehrdungen) {
-                        final Boolean value = (Boolean)massn.getProperty(schutz);
-
-                        if ((value != null) && value) {
-                            ++sumSchutzgefaehrdung;
-                        }
-                    }
-
-                    for (final String dekon : dekonSicherung) {
-                        final Boolean value = (Boolean)massn.getProperty(dekon);
-
-                        if ((value != null) && value) {
-                            ++sumDekonSicherung;
-                        }
-                    }
-
-                    if ((sumSchutzgefaehrdung == 0) || (sumDekonSicherung == 0)) {
+                    if (sumSchutzgefaehrdung == 0) {
+                        errorList.add(
+                            "Es muss mindestens eine Gefährdungsannahme gesetzt sein wenn die Fläche den Bearbeitungsstand \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" hat.");
+                    } else if (sumDekonSicherung == 0) {
+                        errorList.add(
+                            "Es muss mindestens eine Maßnahme zur Dekontaminierung oder Sicherung gesetzt sein wenn die Fläche den Bearbeitungsstand \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" hat.");
+                    } else if ((sumSchutzgefaehrdung == 0) || (sumDekonSicherung == 0)) {
                         errorList.add(
                             "Wenn der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" hat,\n  muss mindestens eine Schutzgutgefährdung gesetzt sein\n  und mindestens eine Dekontaminationsmaßnahme oder Sicherungsmaßnahme gesetzt sein.");
                     }
                 }
+            } else if (sumDekon > 0) {
+                errorList.add(
+                    "Wenn eine Dekontaminationsmaßnahme gesetzt ist, muss der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" haben.");
+            }
+
+            if ((sumSicherung > 0)
+                        && !(bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals("sa_abgeschlossen"))) {
+                errorList.add(
+                    "Wenn eine Sicherungsmaßnahme gesetzt ist, muss der Bearbeitungsstand \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" sein.");
+            }
+
+            if (status.equalsIgnoreCase("altlast") && bearbeitungsstand.equals("su_sp")
+                        && (sumSchutzgefaehrdung == 0)) {
+                errorList.add(
+                    "Es muss mindestens eine Gefährdungsannahme gesetzt sein, wenn die Fläche den Bearbeitungsstand \"su_sp\" hat und es sich um eine Altlast handelt.");
+            }
+
+            if ((sumSchutzgefaehrdung > 0)
+                        && !(bearbeitungsstand.equals("ga") || bearbeitungsstand.equals("su_sp")
+                            || bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals(
+                                "sa_abgeschlossen"))) {
+                errorList.add(
+                    "Wenn eine Schutzgutgefährdung ermittelt wurde, muss der Bearbeitungsstand \"Gefährdungsabschätzung\", \"Sanierungsuntersuchung / -planung\", \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" sein.");
+            }
+
+            if (status.equalsIgnoreCase("altlast_mit_ueberwachung") && !ueberwachungsMassnahmen) {
+                errorList.add(
+                    "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist, müssen Überwachungsmaßnahmen ausgewählt sein.");
+            }
+
+            if (status.equalsIgnoreCase("altlast_mit_ueberwachung") && !schutzBeschrMassnahmen) {
+                errorList.add(
+                    "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist, müssen Schutz- und Beschränkungsmaßnahmen ausgewählt sein.");
             }
         } else if ((zuordnung != null) && zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
             if (((cidsBean.getProperty("laufende_nummer") != null)
