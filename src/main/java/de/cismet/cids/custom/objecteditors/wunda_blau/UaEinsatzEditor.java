@@ -510,6 +510,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblGeom = new JLabel();
         if (isEditor()){
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class});
         }
         btnCreateGeometrie = new JButton();
         panFiller = new JPanel();
@@ -1567,8 +1568,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.gridy = 18;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panDetails.add(btnAddNewVerursacher, gridBagConstraints);
-
-        uaVerursacherPanel.setOpaque(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 18;
