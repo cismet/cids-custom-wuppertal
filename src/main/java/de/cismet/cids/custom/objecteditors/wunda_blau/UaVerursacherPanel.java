@@ -50,6 +50,7 @@ import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.util.MissingResourceException;
 import lombok.Getter;
 import org.jdom.Text;
 /**
@@ -409,6 +410,18 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
+        // Melder
+        try {
+            if (saveVerursacherBean.getProperty(FIELD__NAME) == null) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NONAME));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("name not given.", ex);
+            save = false;
+        }
+        
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(UaVerursacherPanel.class, BUNDLE_PANE_PREFIX)

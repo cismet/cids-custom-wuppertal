@@ -98,8 +98,6 @@ import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -161,9 +159,15 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
     private static final Logger LOG = Logger.getLogger(UaEinsatzEditor.class);
 
-    public static final String FIELD__ID = "id";
+    public static final String FIELD__ID = "id"; 
     public static final String FIELD__AZ = "aktenzeichen";
     public static final String FIELD__DATUM = "datum";
+    public static final String FIELD__BEREIT = "fk_bereitschaft";
+    public static final String FIELD__MELDER = "fk_melder";
+    public static final String FIELD__BETEILIGTE_E_ARR = "arr_beteiligte_einsatz";
+    public static final String FIELD__BETEILIGTE_F_ARR = "arr_beteiligte_folge";
+    public static final String FIELD__ARTEN_ARR = "arr_unfallarten";
+    public static final String FIELD__BET_SCHLUESSEL = "schluessel";           //ua_beteiligte
     public static final String FIELD__GEW_NAME = "name";                            //ua_gewaesser
     public static final String FIELD__GEW_WV = "wv";                                //ua_gewaesser
     public static final String FIELD__ANLEGER = "anleger";
@@ -180,8 +184,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_VERURSACHER = "ua_verursacher";
 
-    public static final String BUNDLE_NO = "UaEinsatzEditor.isOkForSaving().noCity";
+    public static final String BUNDLE_NOBEREIT = "UaEinsatzEditor.isOkForSaving().noBereitschaft";
+    public static final String BUNDLE_NOMELDER = "UaEinsatzEditor.isOkForSaving().noMelder";
+    public static final String BUNDLE_NODATE = "UaEinsatzEditor.isOkForSaving().noDate";
     public static final String BUNDLE_NOGEOM = "UaEinsatzEditor.isOkForSaving().noGeom";
+    public static final String BUNDLE_NOBETE = "UaEinsatzEditor.isOkForSaving().noBeteiligteEinsatz";
+    public static final String BUNDLE_NOARTEN = "UaEinsatzEditor.isOkForSaving().noArten";
+    public static final String BUNDLE_BETKEINER = "UaEinsatzEditor.isOkForSaving().beteiligteKeiner";
+    public static final String BUNDLE_BETKEINER_FOLGE = "UaEinsatzEditor.isOkForSaving().beteiligteKeinerFolge";
     public static final String BUNDLE_PANE_PREFIX = "UaEinsatzEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "UaEinsatzEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "UaEinsatzEditor.isOkForSaving().JOptionPane.title";
@@ -194,7 +204,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_PANE_KONTROLLE = "UaEinsatzEditor.editorClose().JOptionPane.kontrolle";
     public static final String BUNDLE_PANE_ADMIN = "UaEinsatzEditor.editorClose().JOptionPane.admin";
     
-    
+    public static final String BET_KEINER = "keiner";
     private static final String TITLE_NEW_EINSATZ = "einen neuen Einsatz anlegen...";
 
     @Override
@@ -1923,8 +1933,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             } 
         } else {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOGEOMCREATE)
-                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_SUFFIX),
+                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOGEOMCREATE),
                 NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
         } 
@@ -2022,6 +2031,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 } catch (Exception e) {
                     LOG.error("Cannot set user", e);
                 }
+                searchBereitschaft();
+            } else {
+                RendererTools.makeReadOnly(cbBereitschaft);
             }
             if (isEditor()){
                 if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
@@ -2053,9 +2065,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                                 txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
                             }
                         });
-                }
-                searchBereitschaft();
-                
+                }               
         
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
@@ -2262,18 +2272,104 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             noErrorOccured = false;
             LOG.error("Fehler beim Speicher-Check des Verursachers.", ex);
         }
-        // 
-        /*try {
-            if (getCidsBean().getProperty(FIELD__) == null) {
-                LOG.warn("No citybereich specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NO));
+        // Datum muss angegeben werden
+            try {
+                if (getCidsBean().getProperty(FIELD__DATUM) == null) {
+                    LOG.warn("No datum specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NODATE));
+                    save = false;
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("Datum not given.", ex);
+                save = false;
+            }
+            
+        // Bereitschaft
+        try {
+            if (getCidsBean().getProperty(FIELD__BEREIT) == null) {
+                LOG.warn("No bereitschaft specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOBEREIT));
                 save = false;
             }
         } catch (final MissingResourceException ex) {
-            LOG.warn("xxx not given.", ex);
+            LOG.warn("bereitschaft not given.", ex);
             save = false;
-        }*/
+        }
 
+        // Melder
+        try {
+            if (getCidsBean().getProperty(FIELD__MELDER) == null) {
+                LOG.warn("No melder specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOMELDER));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("melder not given.", ex);
+            save = false;
+        }
+        
+        // Beteiligte Einsatz
+        try {
+            final Collection<CidsBean> collectionBeteiligteE = getCidsBean().getBeanCollectionProperty(
+                    FIELD__BETEILIGTE_E_ARR);
+            if ((collectionBeteiligteE == null) || collectionBeteiligteE.isEmpty()) {
+                LOG.warn("No beteiligte einsatz specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOBETE));
+                save = false;
+            } else {
+                Boolean keiner = false;
+                for (final CidsBean betBean:collectionBeteiligteE){
+                    if ((betBean.getProperty(FIELD__BET_SCHLUESSEL)).toString().equals(BET_KEINER)){
+                        keiner = true;
+                    }
+                }
+                if (keiner && collectionBeteiligteE.size() > 1) {
+                    LOG.warn("keiner + specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_BETKEINER));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("beteiligte einsatz not given.", ex);
+            save = false;
+        }
+        
+        // Unfallarten
+        try {
+            final Collection<CidsBean> collectionArten = getCidsBean().getBeanCollectionProperty(
+                    FIELD__ARTEN_ARR);
+            if ((collectionArten == null) || collectionArten.isEmpty()) {
+                LOG.warn("No unfallarten specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOARTEN));
+                save = false;
+            } 
+        } catch (final MissingResourceException ex) {
+            LOG.warn("unfallarten not given.", ex);
+            save = false;
+        }
+        
+        // Beteiligte Folge
+        try {
+            final Collection<CidsBean> collectionBeteiligteF = getCidsBean().getBeanCollectionProperty(
+                    FIELD__BETEILIGTE_F_ARR);
+            if ((collectionBeteiligteF != null) && !collectionBeteiligteF.isEmpty()) {
+                Boolean keiner = false;
+                for (final CidsBean betBean:collectionBeteiligteF){
+                    if ((betBean.getProperty(FIELD__BET_SCHLUESSEL)).toString().equals(BET_KEINER)){
+                        keiner = true;
+                    }
+                }
+                if (keiner && collectionBeteiligteF.size() > 1) {
+                    LOG.warn("keiner + specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_BETKEINER_FOLGE));
+                    save = false;
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("beteiligte folge not given.", ex);
+            save = false;
+        }
+        
         // georeferenz muss gefüllt sein
         try {
             if (getCidsBean().getProperty(FIELD__GEOM) == null) {
