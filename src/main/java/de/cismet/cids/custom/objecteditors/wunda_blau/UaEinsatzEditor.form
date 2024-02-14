@@ -175,9 +175,6 @@
                               </Constraints>
                             </Component>
                             <Component class="javax.swing.JTextField" name="txtAktenzeichen">
-                              <Properties>
-                                <Property name="enabled" type="boolean" value="false"/>
-                              </Properties>
                               <BindingProperties>
                                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.aktenzeichen}" target="txtAktenzeichen" targetPath="text" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
@@ -423,7 +420,6 @@
                             </Component>
                             <Component class="javax.swing.JTextField" name="txtAnleger">
                               <Properties>
-                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[10, 24]"/>
                                 </Property>
@@ -591,7 +587,10 @@
                                 </Property>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse}" target="lblHNrRenderer" targetPath="text" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse.hausnummer}" target="lblHNrRenderer" targetPath="text" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="java.lang.String" value="----"/>
+                                  <Property name="incompletePathValue" type="java.lang.String" value="----"/>
+                                </BindingProperty>
                               </BindingProperties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>

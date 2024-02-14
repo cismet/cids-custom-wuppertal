@@ -355,7 +355,14 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
                     getConnectionContext());
             }
             bindingGroup.bind();
-            this.getCidsBean().setProperty(FIELD__AKTIV, false);
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    this.getCidsBean().setProperty(FIELD__AKTIV, false);
+ 
+                } catch (Exception e) {
+                    LOG.error("Cannot set wv", e);
+                }
+            }
         } catch (final Exception ex) {
             LOG.warn("Error setCidsBean.", ex);
         }

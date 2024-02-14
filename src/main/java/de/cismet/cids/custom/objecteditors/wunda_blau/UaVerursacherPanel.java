@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 
 import org.apache.log4j.Logger;
@@ -376,6 +377,9 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
      */
     private void setReadOnly() {
         if (!(isEditor())) {
+            RendererTools.makeReadOnly(txtVName);
+            RendererTools.makeReadOnly(txtVAdresse);
+            RendererTools.makeReadOnly(taVBemerkung);
         }
     }
 

@@ -360,7 +360,14 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
                     getConnectionContext());
             }
             bindingGroup.bind();
-            this.getCidsBean().setProperty(FIELD__WV, false);
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    this.getCidsBean().setProperty(FIELD__WV, false);
+ 
+                } catch (Exception e) {
+                    LOG.error("Cannot set wv", e);
+                }
+            }
         } catch (final Exception ex) {
             LOG.warn("Error setCidsBean.", ex);
         }
