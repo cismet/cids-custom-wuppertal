@@ -2253,8 +2253,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
             return TITLE_NEW_EINSATZ;
         } else {
-            final String id = getCidsBean().getPrimaryKeyValue().toString();
-            return id;
+            return getCidsBean().toString();
         }
     }
 
