@@ -95,15 +95,23 @@ import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.ComboPopup;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.DefaultFormatterFactory;
 import lombok.Getter;
 import lombok.Setter;
 import org.jdesktop.swingx.JXBusyLabel;
@@ -159,6 +167,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__ID = "id"; 
     public static final String FIELD__AZ = "aktenzeichen";
     public static final String FIELD__DATUM = "datum";
+    public static final String FIELD__BEGINN = "zeit_beginn";
+    public static final String FIELD__ENDE = "zeit_ende";
     public static final String FIELD__BEREIT = "fk_bereitschaft";
     public static final String FIELD__MELDER = "fk_melder";
     public static final String FIELD__BETEILIGTE_E_ARR = "arr_beteiligte_einsatz";
@@ -189,6 +199,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_NOARTEN = "UaEinsatzEditor.isOkForSaving().noArten";
     public static final String BUNDLE_BETKEINER = "UaEinsatzEditor.isOkForSaving().beteiligteKeiner";
     public static final String BUNDLE_BETKEINER_FOLGE = "UaEinsatzEditor.isOkForSaving().beteiligteKeinerFolge";
+    public static final String BUNDLE_NODATEB = "UaEinsatzEditor.isOkForSaving().noDatumBeginn";
+    public static final String BUNDLE_NOTIMEB = "UaEinsatzEditor.isOkForSaving().noZeitBeginn";
+    public static final String BUNDLE_NODATEE = "UaEinsatzEditor.isOkForSaving().noDatumEnde";
+    public static final String BUNDLE_NOTIMEE = "UaEinsatzEditor.isOkForSaving().noZeitEnde";
+    public static final String BUNDLE_WRONGTIME = "UaEinsatzEditor.isOkForSaving().wrongZeit";
     public static final String BUNDLE_PANE_PREFIX = "UaEinsatzEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "UaEinsatzEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "UaEinsatzEditor.isOkForSaving().JOptionPane.title";
@@ -226,6 +241,13 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         //~ Enum constants -----------------------------------------------------
 
         BUSY, DOCUMENT, NO_DOCUMENT, ERROR
+    }
+    
+    private static enum StartFinish {
+
+        //~ Enum constants -----------------------------------------------------
+
+        beginn, ende
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -267,6 +289,13 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
     
     @Getter @Setter private CidsBean beanVerursacher;
+    
+    
+    @Getter @Setter private String uhrzeitBeginn;
+    @Getter @Setter private java.util.Date datumBeginn;
+    @Getter @Setter private String uhrzeitEnde;
+    @Getter @Setter private java.util.Date datumEnde;
+    @Getter @Setter private Long dauer;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpBeteiligte;
@@ -283,10 +312,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private FastBindableReferenceCombo cbHNr;
     private DefaultBindableReferenceCombo cbMelder;
     FastBindableReferenceCombo cbStrasse;
+    private DefaultBindableDateChooser dcBeginn;
     private DefaultBindableDateChooser dcDatum;
+    private DefaultBindableDateChooser dcEnde;
     private Box.Filler filler3;
     private Box.Filler filler4;
     private Box.Filler filler5;
+    JFormattedTextField ftZeitBeginn;
+    JFormattedTextField ftZeitEnde;
     private JLabel jLabel2;
     private JPanel jPanel1;
     private JPanel jPanel2;
@@ -308,6 +341,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblBeteiligte;
     private JLabel lblBeteiligteFolge;
     private JLabel lblDatum;
+    private JLabel lblDauer;
     private JLabel lblEnde;
     private JLabel lblEndeTrenner;
     private JLabel lblFeststellungen;
@@ -387,6 +421,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JTextArea taSofort;
     private JTextField txtAktenzeichen;
     private JTextField txtAnleger;
+    private JTextField txtDauer;
     private UaVerursacherPanel uaVerursacherPanel;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -508,8 +543,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten = new JPanel();
         lblAktenzeichen = new JLabel();
         txtAktenzeichen = new JTextField();
-        lblDatum = new JLabel();
-        dcDatum = new DefaultBindableDateChooser();
+        lblAnleger = new JLabel();
+        txtAnleger = new JTextField();
         lblBeginn = new JLabel();
         spBStunde = new JSpinner();
         lblBeginnTrenner = new JLabel();
@@ -519,8 +554,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         spEStunde = new JSpinner();
         lblEndeTrenner = new JLabel();
         spEMinute = new JSpinner();
-        lblAnleger = new JLabel();
-        txtAnleger = new JTextField();
+        lblDatum = new JLabel();
+        dcDatum = new DefaultBindableDateChooser();
+        dcBeginn = new DefaultBindableDateChooser();
+        ftZeitBeginn = new JFormattedTextField();
+        dcEnde = new DefaultBindableDateChooser();
+        ftZeitEnde = new JFormattedTextField();
+        lblDauer = new JLabel();
+        txtDauer = new JTextField();
         lblOrt = new JLabel();
         panOrt = new JPanel();
         scpOrt = new JScrollPane();
@@ -727,8 +768,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtAktenzeichen, gridBagConstraints);
 
-        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblDatum.setText("Datum:");
+        lblAnleger.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblAnleger.setText("Anleger:");
+        lblAnleger.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
@@ -736,21 +778,22 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblDatum, gridBagConstraints);
+        panDaten.add(lblAnleger, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
-        binding.setConverter(dcDatum.getConverter());
+        txtAnleger.setMinimumSize(new Dimension(10, 24));
+        txtAnleger.setPreferredSize(new Dimension(10, 24));
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anleger}"), txtAnleger, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(dcDatum, gridBagConstraints);
+        panDaten.add(txtAnleger, gridBagConstraints);
 
         lblBeginn.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBeginn.setText("Beginn:");
@@ -870,9 +913,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(spEMinute, gridBagConstraints);
 
-        lblAnleger.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblAnleger.setText("Anleger:");
-        lblAnleger.setToolTipText("");
+        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDatum.setText("Datum:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 1;
@@ -880,28 +922,83 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblAnleger, gridBagConstraints);
+        panDaten.add(lblDatum, gridBagConstraints);
 
-        txtAnleger.setMinimumSize(new Dimension(10, 24));
-        txtAnleger.setPreferredSize(new Dimension(10, 24));
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anleger}"), txtAnleger, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(dcDatum.getConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(dcDatum, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(dcBeginn, gridBagConstraints);
+
+        ftZeitBeginn.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(DateFormat.getTimeInstance(DateFormat.SHORT))));
+        ftZeitBeginn.setMinimumSize(new Dimension(80, 28));
+        ftZeitBeginn.setName("ftZeitBeginn"); // NOI18N
+        ftZeitBeginn.setPreferredSize(new Dimension(80, 28));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(ftZeitBeginn, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(dcEnde, gridBagConstraints);
+
+        ftZeitEnde.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(DateFormat.getTimeInstance(DateFormat.SHORT))));
+        ftZeitEnde.setMinimumSize(new Dimension(80, 28));
+        ftZeitEnde.setName("ftZeitEnde"); // NOI18N
+        ftZeitEnde.setPreferredSize(new Dimension(80, 28));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(ftZeitEnde, gridBagConstraints);
+
+        lblDauer.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDauer.setText("Dauer:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblDauer, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(txtAnleger, gridBagConstraints);
+        panDaten.add(txtDauer, gridBagConstraints);
 
         lblOrt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblOrt.setText("Ortsbeschreibung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -934,7 +1031,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -948,7 +1045,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblStrasse.setText("Straße:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -968,7 +1065,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -977,7 +1074,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten.add(cbStrasse, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDaten.add(filler3, gridBagConstraints);
@@ -986,7 +1083,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblHnr.setText("Hausnummer:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1006,7 +1103,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 11;
-            gridBagConstraints.gridy = 5;
+            gridBagConstraints.gridy = 6;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             panDaten.add(cbHNr, gridBagConstraints);
@@ -1024,7 +1121,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (!isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 11;
-            gridBagConstraints.gridy = 5;
+            gridBagConstraints.gridy = 6;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.ipady = 10;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1036,7 +1133,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1054,7 +1151,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 6;
+            gridBagConstraints.gridy = 7;
             gridBagConstraints.gridwidth = 8;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1075,7 +1172,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(btnCreateGeometrie, gridBagConstraints);
@@ -1095,14 +1192,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         panDaten.add(panFiller, gridBagConstraints);
 
         lblBereitschaft.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBereitschaft.setText("Bereitschaft:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1121,7 +1218,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 7;
+            gridBagConstraints.gridy = 8;
             gridBagConstraints.gridwidth = 8;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1132,7 +1229,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMelder.setText("Melder:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1146,7 +1243,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1157,7 +1254,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBeteiligte.setText("Beteiligte:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1171,7 +1268,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -2044,7 +2141,17 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 labelsPanels.addAll(Arrays.asList(blpSchadstoffarten));
                 labelsPanels.addAll(Arrays.asList(blpUnfallarten));
                 labelsPanels.addAll(Arrays.asList(blpVerunreinigungen));
-            }       
+            }
+            
+            final DateTimeFormListener dtflBeginn = new DateTimeFormListener(
+                    FIELD__BEGINN, ftZeitBeginn, dcBeginn, StartFinish.beginn);
+            ftZeitBeginn.addPropertyChangeListener(dtflBeginn);
+            dcBeginn.addPropertyChangeListener(dtflBeginn);
+            final DateTimeFormListener dtflEnde = new DateTimeFormListener(
+                    FIELD__ENDE, ftZeitEnde, dcEnde, StartFinish.ende);
+            dcEnde.addPropertyChangeListener(dtflEnde);
+            
+            ftZeitEnde.addPropertyChangeListener(dtflEnde);
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
                 try {
                     getCidsBean().setProperty(
@@ -2078,9 +2185,119 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
-            showVerursacher(); 
+            showVerursacher();
+            loadDateTime(FIELD__BEGINN, ftZeitBeginn, dcBeginn, StartFinish.beginn);
+            loadDateTime(FIELD__ENDE, ftZeitEnde, dcEnde, StartFinish.ende);
+            showDauer();
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
+        }
+    }
+    
+    public void showDauer(){
+        final LocalDate ldBeginn;
+        final LocalDate ldEnde;
+        if ((getCidsBean() != null) 
+                && (getCidsBean().getProperty(FIELD__BEGINN) != null) 
+                && (getCidsBean().getProperty(FIELD__ENDE) != null)) {
+            final Calendar calDatumZeit = Calendar.getInstance();
+            calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__BEGINN));
+            datumBeginn = calDatumZeit.getTime();
+            ldBeginn = datumBeginn.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ENDE));
+            datumEnde = calDatumZeit.getTime();
+            ldEnde = datumEnde.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            setDauer(datumEnde.getTime() - datumBeginn.getTime());
+            int days = (int)(getDauer() / (1000 * 60 * 60) / 24);
+            int hours = (int)(getDauer() / (1000 * 60 * 60) % 24);
+            int minutes = (int)(getDauer() / (1000 * 60) % 60);
+            DecimalFormat df = new DecimalFormat("00");
+            String dauerText = String.format ("%d:%s:%s",days,df.format(hours),df.format(minutes));
+            if (getDauer() > 0 && (!(ldBeginn.isAfter(ldEnde)))) {
+                txtDauer.setText(dauerText);
+            } else {
+                txtDauer.setText("---");
+            }
+        } else {
+            setDauer(0L);
+            txtDauer.setText("---");
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     * @param field
+     * @param ftxt
+     * @param dc
+     * @param wann
+     */
+    private void loadDateTime(final String field, 
+            final JFormattedTextField ftxt, 
+            final DefaultBindableDateChooser dc, 
+            final StartFinish wann) {
+        
+        final String uhrzeit;
+        final java.util.Date datum;
+        if ((getCidsBean() != null) && (getCidsBean().getProperty(field) != null)) {
+            final Calendar calDatumZeit = Calendar.getInstance();
+            calDatumZeit.setTime((Date)getCidsBean().getProperty(field));
+            datum = calDatumZeit.getTime();
+            if (wann.equals(StartFinish.beginn)){
+                setDatumBeginn(datum);
+            }else {
+                setDatumEnde(datum);
+            }
+            
+            dc.setDate(datum);
+            
+            final SimpleDateFormat sdfZeit = new SimpleDateFormat("HH:mm");
+            uhrzeit = sdfZeit.format(calDatumZeit.getTime());
+            if (wann.equals(StartFinish.beginn)){
+                setUhrzeitBeginn(uhrzeit);
+            }else {
+                setUhrzeitEnde(uhrzeit);
+            }
+            ftxt.setText("" + uhrzeit);
+        }
+    }
+    
+    /**
+     * DOCUMENT ME!
+     * @param field
+     * @param ftxt
+     * @param dc
+     */
+    public void writeDateTime(final String field, final JFormattedTextField ftxt, final DefaultBindableDateChooser dc) {
+        java.util.Date givenDate = null;
+        if (dc.getDate() != null) {
+            givenDate = dc.getDate();
+        } else {
+            if ((getCidsBean() != null)
+                        && (getCidsBean().getProperty(field) != null)) {
+                final Calendar calDatumZeit = Calendar.getInstance();
+                calDatumZeit.setTime((Date)getCidsBean().getProperty(field));
+                givenDate = calDatumZeit.getTime();
+            }
+        }
+        if (givenDate != null) {
+            final Calendar dateTime = Calendar.getInstance();
+            dateTime.setTime(givenDate);
+            if (ftxt.getValue() != null) {
+                final Calendar zeit = GregorianCalendar.getInstance();
+                final java.util.Date givenTime = (java.util.Date)ftxt.getValue();
+                zeit.setTime(givenTime);
+
+                dateTime.set(Calendar.HOUR_OF_DAY, zeit.get(Calendar.HOUR_OF_DAY));
+                dateTime.set(Calendar.MINUTE, zeit.get(Calendar.MINUTE));
+                dateTime.set(Calendar.SECOND, 0);
+                dateTime.set(Calendar.MILLISECOND, 0);
+
+                try {
+                    getCidsBean().setProperty(field, new java.sql.Timestamp(dateTime.getTime().getTime()));
+                } catch (Exception ex) {
+                    LOG.warn("No date saved. Skip persisting.", ex);
+                }
+            }
         }
     }
 
@@ -2099,6 +2316,10 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             RendererTools.makeReadOnly(spEStunde);
             RendererTools.makeDoubleSpinnerWithoutButtons(spEMinute, 0);
             RendererTools.makeReadOnly(spEMinute);
+            RendererTools.makeReadOnly(ftZeitBeginn);
+            RendererTools.makeReadOnly(dcBeginn);
+            RendererTools.makeReadOnly(ftZeitEnde);
+            RendererTools.makeReadOnly(dcEnde);
             RendererTools.makeReadOnly(taOrt);
             RendererTools.makeReadOnly(cbStrasse);
             //lblHNrRenderer.setVisible(true);
@@ -2122,6 +2343,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         } 
         RendererTools.makeReadOnly(txtAktenzeichen);
         RendererTools.makeReadOnly(txtAnleger);
+        RendererTools.makeReadOnly(txtDauer);
     }
 
     /**
@@ -2261,6 +2483,10 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public void dispose() {
         panPreviewMap.dispose();
         uaVerursacherPanel.dispose();
+        ftZeitEnde.removeAll();
+        ftZeitBeginn.removeAll();
+        dcBeginn.removeAll();
+        dcEnde.removeAll();
 
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
@@ -2324,6 +2550,75 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 save = false;
             }
             
+        // dateTime Beginn vorhanden
+        try {
+            if (getCidsBean().getProperty(FIELD__BEGINN) == null) {
+                LOG.warn("No beginn specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NODATEB));
+                save = false;
+            } else {
+                final Calendar calDatumZeit = Calendar.getInstance();
+                calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__BEGINN));
+                datumBeginn = calDatumZeit.getTime();
+                if (datumBeginn == null) {
+                    LOG.warn("No datum beginn specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NODATEB));
+                    save = false;
+                }
+                final SimpleDateFormat sdfZeit = new SimpleDateFormat("HH:mm");
+                uhrzeitBeginn = sdfZeit.format(calDatumZeit.getTime().getTime());
+                if (uhrzeitBeginn == null) {
+                    LOG.warn("No time beginn specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOTIMEB));
+                    save = false;
+                } 
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Beginn not given.", ex);
+            save = false;
+        }
+        
+            
+        // dateTime Ende vorhanden
+        try {
+            if (getCidsBean().getProperty(FIELD__ENDE) == null) {
+                LOG.warn("No ende specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NODATEE));
+                save = false;
+            } else {
+                final Calendar calDatumZeit = Calendar.getInstance();
+                calDatumZeit.setTime((Date)getCidsBean().getProperty(FIELD__ENDE));
+                datumEnde = calDatumZeit.getTime();
+                if (datumEnde == null) {
+                    LOG.warn("No ende specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NODATEE));
+                    save = false;
+                }
+                final SimpleDateFormat sdfZeit = new SimpleDateFormat("HH:mm");
+                uhrzeitEnde = sdfZeit.format(calDatumZeit.getTime().getTime());
+                if (uhrzeitEnde == null) {
+                    LOG.warn("No time ende specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOTIMEE));
+                    save = false;
+                } 
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Beginn not given.", ex);
+            save = false;
+        }
+        
+        //dauer
+        try {
+            if (!(getDauer() > 0)){
+                LOG.warn("Wron dauer specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_WRONGTIME));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Dauer not .", ex);
+            save = false;
+        }
+            
         // Bereitschaft
         try {
             if (getCidsBean().getProperty(FIELD__BEREIT) == null) {
@@ -2375,7 +2670,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         }
         
         // Unfallarten
-        try {
+     /*   try {
             final Collection<CidsBean> collectionArten = getCidsBean().getBeanCollectionProperty(
                     FIELD__ARTEN_ARR);
             if ((collectionArten == null) || collectionArten.isEmpty()) {
@@ -2386,7 +2681,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         } catch (final MissingResourceException ex) {
             LOG.warn("unfallarten not given.", ex);
             save = false;
-        }
+        }*/
         
         // Beteiligte Folge
         try {
@@ -2583,6 +2878,84 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 }
             }
             return result;
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DateTimeFormListener implements ActionListener, PropertyChangeListener {
+
+        //~ Instance fields ----------------------------------------------------
+        final JFormattedTextField ftxt;
+        final DefaultBindableDateChooser dc;
+        final String field;
+        final StartFinish wann;
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DateTimeFormListener object.
+         */
+        DateTimeFormListener(final String field, 
+                final JFormattedTextField ftxt, 
+                final DefaultBindableDateChooser dc,
+                final StartFinish wann) {
+            this.ftxt = ftxt;
+            this.dc = dc;
+            this.field = field;
+            this.wann = wann;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void propertyChange(final PropertyChangeEvent evt) {
+            final java.util.Date datum;
+            final String uhrzeit;
+            if (wann.equals(StartFinish.beginn)){
+                uhrzeit = getUhrzeitBeginn();
+                datum = getDatumBeginn();
+            }else {
+                uhrzeit = getUhrzeitEnde();
+                datum = getDatumEnde();
+            }
+            if (evt.getSource() == ftxt) {
+                if (uhrzeit != null) {
+                    if (!uhrzeit.equals(ftxt.getText())) {
+                        getCidsBean().setArtificialChangeFlag(true);
+                        writeDateTime(field, ftxt, dc);
+                        showDauer();
+                    }
+                } else {
+                    if (ftxt.getValue() != null) {
+                        getCidsBean().setArtificialChangeFlag(true);
+                        writeDateTime(field, ftxt, dc);
+                        showDauer();
+                    }
+                }
+            } else if (evt.getSource() == dc) {
+                final SimpleDateFormat formatTag = new SimpleDateFormat("dd.MM.yy");
+                if (datum != null) {
+                    if (!(formatTag.format(datum).equals(formatTag.format(dc.getDate())))) {
+                        getCidsBean().setArtificialChangeFlag(true);
+                        //ftxt.setValue(null);
+                        writeDateTime(field, ftxt, dc);
+                        showDauer();
+                    }
+                } else {
+                    if (dc.getDate() != null) {
+                        getCidsBean().setArtificialChangeFlag(true);
+                        //ftxt.setValue(null);
+                        writeDateTime(field, ftxt, dc);
+                        showDauer();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
         }
     }
 }
