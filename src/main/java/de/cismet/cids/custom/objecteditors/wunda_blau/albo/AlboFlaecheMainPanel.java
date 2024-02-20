@@ -923,7 +923,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                 final AlboFlaecheErhebungsnummerSearch search = new AlboFlaecheErhebungsnummerSearch(
                         geomText,
                         art,
-                        erhebungsnummer);
+                        erhebungsnummer,
+                        getCidsBean().getMetaObject().getId());
 
                 final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
                             .customServerSearch(SessionManager.getSession().getUser(),
@@ -946,7 +947,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     geom = CrsTransformer.transformToDefaultCrs(geom);
                     final AlboFlaecheErhebungsnummerSearch search = new AlboFlaecheErhebungsnummerSearch(geom.toText(),
                             art,
-                            erhebungsnummer);
+                            erhebungsnummer,
+                            getCidsBean().getMetaObject().getId());
 
                     final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
                                 .customServerSearch(SessionManager.getSession().getUser(),

@@ -656,35 +656,35 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFlaechenartActionPerformed
+    private void cbFlaechenartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFlaechenartActionPerformed
         updateArtFk();
         updateDetailsPanel();
-    }//GEN-LAST:event_cbFlaechenartActionPerformed
+    }                                                                                 //GEN-LAST:event_cbFlaechenartActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
         txtJahrVon.setValue(null);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
         txtJahrBis.setValue(null);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void ckProp1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckProp1ActionPerformed
+    private void ckProp1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_ckProp1ActionPerformed
         if (ckProp1.isSelected() && (jComboBox5.getSelectedIndex() == -1)) {
             final ComboBoxModel<String> model = jComboBox5.getModel();
             final String currentUser = SessionManager.getSession().getUser().getName();
@@ -703,7 +703,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                 }
             }
         }
-    }//GEN-LAST:event_ckProp1ActionPerformed
+    } //GEN-LAST:event_ckProp1ActionPerformed
 
     @Override
     protected void initGui() {
