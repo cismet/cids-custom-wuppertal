@@ -72,8 +72,8 @@ public class AlLuftbildRenderer extends JPanel implements CidsBeanRenderer,
         if (name != null) {
             try {
                 String path;
-                path = "lanuv/Wuppertal_GeoRef";
-                final String document = path + "/" + name;
+                path = "lanuv/Wuppertal_Tif";
+                final String document = name.replace("lanuvGeo", "lanuv");//path + "/" + name;
                 rasterfariDocumentLoaderPanel1.setDocument(document);
                 final URL url = rasterfariDocumentLoaderPanel1.getDocumentUrl();
             } catch (Exception ex) {
