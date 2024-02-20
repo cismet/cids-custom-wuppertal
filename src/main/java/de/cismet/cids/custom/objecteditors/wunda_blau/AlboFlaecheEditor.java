@@ -48,6 +48,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
@@ -79,13 +80,16 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboPicturePanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.albo.SimpleAltlastWebDavPanel;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
-import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheErhebungsnummerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheNummerUniqueSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
+import de.cismet.cids.editors.BeanInitializer;
+import de.cismet.cids.editors.BeanInitializerForcePaste;
+import de.cismet.cids.editors.BeanInitializerProvider;
+import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -121,7 +125,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     EditorSaveListener,
     ConnectionContextStore,
     PropertyChangeListener,
-    SaveVetoable {
+    SaveVetoable,
+    BeanInitializerProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -1230,14 +1235,10 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                     "Wenn eine Schutzgutgefährdung ermittelt wurde, muss der Bearbeitungsstand \"Gefährdungsabschätzung\", \"Sanierungsuntersuchung / -planung\", \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" sein.");
             }
 
-            if (status.equalsIgnoreCase("altlast_mit_ueberwachung") && !ueberwachungsMassnahmen) {
+            if (status.equalsIgnoreCase("altlast_mit_ueberwachung") && !ueberwachungsMassnahmen
+                        && !schutzBeschrMassnahmen) {
                 errorList.add(
-                    "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist, müssen Überwachungsmaßnahmen ausgewählt sein.");
-            }
-
-            if (status.equalsIgnoreCase("altlast_mit_ueberwachung") && !schutzBeschrMassnahmen) {
-                errorList.add(
-                    "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist, müssen Schutz- und Beschränkungsmaßnahmen ausgewählt sein.");
+                    "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist, müssen Überwachungsmaßnahmen/Schutz- und Beschränkungsmaßnahmen ausgewählt sein.");
             }
         } else if ((zuordnung != null) && zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
             if (((cidsBean.getProperty("laufende_nummer") != null)
@@ -1392,7 +1393,89 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         }
     }
 
+    @Override
+    public BeanInitializer getBeanInitializer() {
+        return new AlboFlaecheInitializer(cidsBean);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class AlboFlaecheInitializer extends DefaultBeanInitializer {
+
+        //~ Constructors -------------------------------------------------------
+
+        // implements BeanInitializerForcePaste //this would allow to use the paste function not only on new object, but
+        // also on alreadys existing ones
+
+        /**
+         * Creates a new KartierabschnittInitializer object.
+         *
+         * @param  cidsBean  DOCUMENT ME!
+         */
+        public AlboFlaecheInitializer(final CidsBean cidsBean) {
+            super(cidsBean);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void initializeBean(final CidsBean beanToInit) throws Exception {
+            super.initializeBean(beanToInit);
+
+//            if (lastInstance != null) {
+//                lastInstance.setCidsBean(beanToInit);
+//            }
+        }
+
+        @Override
+        protected void processSimpleProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Object simpleValueToProcess) throws Exception {
+            super.processSimpleProperty(beanToInit, propertyName, simpleValueToProcess);
+        }
+
+        @Override
+        protected void processArrayProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Collection<CidsBean> arrayValueToProcess) throws Exception {
+            final List<CidsBean> beans = CidsBeanSupport.getBeanCollectionFromProperty(
+                    beanToInit,
+                    propertyName);
+            beans.clear();
+
+            if (propertyName.equalsIgnoreCase("n_standorte")) {
+                for (final CidsBean tmp : arrayValueToProcess) {
+                    beans.add(CidsBeanSupport.cloneBean(tmp, connectionContext));
+                }
+            } else if (propertyName.equalsIgnoreCase("dokumente")) {
+                for (final CidsBean tmp : arrayValueToProcess) {
+                    beans.add(CidsBeanSupport.cloneBean(tmp, connectionContext));
+                }
+            }
+        }
+
+        @Override
+        protected void processComplexProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final CidsBean complexValueToProcess) throws Exception {
+            if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(GEOM_TABLE_NAME)) {
+                final CidsBean geomBean = complexValueToProcess.getMetaObject()
+                            .getMetaClass()
+                            .getEmptyInstance(getConnectionContext())
+                            .getBean();
+                geomBean.setProperty(GEOM_FIELD_NAME, complexValueToProcess.getProperty(GEOM_FIELD_NAME));
+                beanToInit.setProperty(propertyName, geomBean);
+            }
+
+            // flat copy
+            beanToInit.setProperty(propertyName, complexValueToProcess);
+        }
+    }
 
     /**
      * DOCUMENT ME!
