@@ -99,7 +99,23 @@ public final class CidsBeanSupport {
     }
 
     /**
-     * Die Datentypen sollten bei Verwendung vorher getestet werden.
+     * This method makes a deep copy of geometries and shallow copies of all other objects.
+     *
+     * @param   bean    DOCUMENT ME!
+     * @param   conCon  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static CidsBean cloneBean(final CidsBean bean, final ConnectionContext conCon) {
+        if (bean == null) {
+            return null;
+        } else {
+            return cloneBean(bean, conCon, bean.getMetaObject().getMetaClass().getTableName());
+        }
+    }
+
+    /**
+     * This method makes a deep copy of geometries and shallow copies of all other objects.
      *
      * @param   bean    DOCUMENT ME!
      * @param   conCon  DOCUMENT ME!
@@ -118,6 +134,13 @@ public final class CidsBeanSupport {
                 if (!propertyName.toLowerCase().equals("id")) {
                     final Object obj = bean.getProperty(propertyName);
                     if (obj != null) {
+                        if (
+                            beanClone.getMetaObject().getAttributeByFieldName(propertyName).getMai()
+                                    .getForeignKeyClassId()
+                                    < 0) {
+                            // to avoid a endless loop and prevent the execution of the else part
+                            continue;
+                        }
                         if (obj instanceof CidsBean) {
                             if (obj.getClass().getSimpleName().equals(TABLE__GEOM)) {
                                 final CidsBean beanGeom = CidsBeanSupport.cloneBean((CidsBean)obj,
