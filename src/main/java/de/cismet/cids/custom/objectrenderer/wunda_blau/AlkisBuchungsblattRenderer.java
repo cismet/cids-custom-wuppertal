@@ -30,10 +30,10 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import de.aedsicad.aaaweb.service.util.Buchungsblatt;
-import de.aedsicad.aaaweb.service.util.Buchungsstelle;
-import de.aedsicad.aaaweb.service.util.LandParcel;
-import de.aedsicad.aaaweb.service.util.Offices;
+import de.aedsicad.aaaweb.rest.model.Buchungsblatt;
+import de.aedsicad.aaaweb.rest.model.Buchungsstelle;
+import de.aedsicad.aaaweb.rest.model.LandParcel;
+import de.aedsicad.aaaweb.rest.model.Offices;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
@@ -92,10 +92,9 @@ import de.cismet.cids.custom.clientutils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSoapUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisRestUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
@@ -1718,20 +1717,19 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     private String getCompleteLaufendeNrCode() {
         if (buchungsblatt != null) {
-            final Buchungsstelle[] stellen = buchungsblatt.getBuchungsstellen();
-            if ((stellen != null) && (stellen.length > 0)) {
-                if (stellen.length == 1) {
-                    final Buchungsstelle first = stellen[0];
+            final List<Buchungsstelle> stellen = buchungsblatt.getBuchungsstellen();
+            if ((stellen != null) && !stellen.isEmpty()) {
+                if (stellen.size() == 1) {
+                    final Buchungsstelle first = stellen.iterator().next();
                     if (first != null) {
                         return fixLaufendeNrCode(first.getSequentialNumber());
                     }
                 } else {
                     // mehr als eins deswegen nachfragen
-                    final HashMap<String, Buchungsstelle> stellenLookup = new HashMap<String, Buchungsstelle>(
-                            stellen.length);
+                    final HashMap<String, Buchungsstelle> stellenLookup = new HashMap<>(stellen.size());
                     for (final Buchungsstelle b : stellen) {
                         // gehe davon aus dass hier immer nur ein flurstueck drin sein kann #bugrisk
-                        if ((b.getLandParcel() != null) && (b.getLandParcel().length > 0)) {
+                        if ((b.getLandParcel() != null) && !b.getLandParcel().isEmpty()) {
                             for (final LandParcel lp : b.getLandParcel()) {
                                 final String code = lp.getLandParcelCode();
                                 stellenLookup.put(code, b);
@@ -1973,8 +1971,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 lblGrundbuchbezirk.setText(bezirk);
             }
             if (offices != null) {
-                lblAmtgericht.setText(surroundWithHTMLTags(
-                        AlkisProducts.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
+                lblAmtgericht.setText(surroundWithHTMLTags(String.join("<br>", offices.getDistrictCourtName())));
             }
             lblBlattart.setText(buchungsblatt.getBlattart());
             lblBuchungsart.setText(AlkisProducts.getBuchungsartFromBuchungsblatt(buchungsblatt));
@@ -2205,10 +2202,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         @Override
         protected Buchungsblatt doInBackground() throws Exception {
             final Buchungsblatt buchungsblatt;
-            buchungsblatt = AlkisUtils.getInstance()
-                        .getBuchungsblattFromAlkisSOAPServerAction(AlkisProducts.fixBuchungslattCode(
-                                    String.valueOf(bean.getProperty("buchungsblattcode"))),
-                                getConnectionContext());
+            buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisProducts.fixBuchungslattCode(
+                        String.valueOf(bean.getProperty("buchungsblattcode"))),
+                    getConnectionContext());
             if (buchungsblatt != null) {
                 generateLightweightLandParcel3A(buchungsblatt);
             }
@@ -2225,7 +2221,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     buchungsblatt = get();
                     if (buchungsblatt != null) {
                         displayBuchungsblattInfos(buchungsblatt);
-                        epOwner.setText(AlkisSoapUtils.buchungsblattOwnersToHtml(buchungsblatt));
+                        epOwner.setText(AlkisProducts.buchungsblattOwnersToHtml(buchungsblatt));
                         // enable products that depend on soap info
                         hlGrundstuecksnachweisNrwPdf.setEnabled(true);
                         hlGrundstuecksnachweisNrwHtml.setEnabled(true);
@@ -2258,7 +2254,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
          * @throws  ConnectionException  DOCUMENT ME!
          */
         private void generateLightweightLandParcel3A(final Buchungsblatt buchungsblatt) throws ConnectionException {
-            final Buchungsstelle[] buchungsstellen = buchungsblatt.getBuchungsstellen();
+            final List<Buchungsstelle> buchungsstellen = new ArrayList<>(buchungsblatt.getBuchungsstellen());
             for (final Buchungsstelle buchungsstelle : buchungsstellen) {
                 final String buchungsart = buchungsstelle.getBuchungsart();
                 final String lfn = buchungsstelle.getSequentialNumber();

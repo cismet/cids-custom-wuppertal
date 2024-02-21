@@ -20,8 +20,8 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import de.aedsicad.aaaweb.service.util.Point;
-import de.aedsicad.aaaweb.service.util.PointLocation;
+import de.aedsicad.aaaweb.rest.model.Point;
+import de.aedsicad.aaaweb.rest.model.PointLocation;
 
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -48,7 +48,7 @@ import java.io.StringReader;
 
 import java.net.URL;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -75,9 +75,9 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisRestUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.billing.BillingProductGroupAmount;
@@ -2469,7 +2469,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
          */
         @Override
         protected Point doInBackground() throws Exception {
-            return AlkisUtils.getInstance().getPointFromAlkisSOAPServerAction(pointCode, getConnectionContext());
+            return ClientAlkisRestUtils.getPoint(pointCode, getConnectionContext());
         }
 
         /**
@@ -2490,10 +2490,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                     final Point point = get();
                     if (point != null) {
                         AlkisPointRenderer.this.setPoint(point);
-                        final PointLocation[] pointlocArr = point.getPointLocations();
+                        final List<PointLocation> pointlocArr = point.getPointLocations();
                         if (pointlocArr != null) {
-                            Arrays.sort(pointlocArr, POINTLOCATION_COMPARATOR);
-                            AlkisPointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
+                            final List<PointLocation> sortedPointlocArr = new ArrayList<>(pointlocArr);
+                            sortedPointlocArr.sort(POINTLOCATION_COMPARATOR);
+                            AlkisPointRenderer.this.setPointLocations(sortedPointlocArr);
                         }
                         AlkisPointRenderer.this.bindingGroup.unbind();
                         AlkisPointRenderer.this.bindingGroup.bind();

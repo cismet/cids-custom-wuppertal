@@ -21,7 +21,7 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import de.aedsicad.aaaweb.service.util.LandParcel;
+import de.aedsicad.aaaweb.rest.model.LandParcel;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
@@ -64,7 +64,6 @@ import de.cismet.cids.custom.clientutils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSoapUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisProducts;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
@@ -1702,7 +1701,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (title == null) {
             title = "<Error>";
         } else {
-            title = AlkisSoapUtils.prettyPrintLandparcelCode(title);
+            title = AlkisProducts.prettyPrintLandparcelCode(title);
         }
         this.title = title;
         lblTitle.setText(this.title);
