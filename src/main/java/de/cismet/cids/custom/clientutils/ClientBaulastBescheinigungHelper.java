@@ -17,13 +17,13 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import de.aedsicad.aaaweb.service.util.Buchungsblatt;
+import de.aedsicad.aaaweb.rest.model.Buchungsblatt;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisRestUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.BaulastBescheinigungHelper;
 
@@ -92,10 +92,9 @@ public class ClientBaulastBescheinigungHelper extends BaulastBescheinigungHelper
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    buchungsblatt = AlkisUtils.getInstance()
-                                .getBuchungsblattFromAlkisSOAPServerAction(AlkisProducts.fixBuchungslattCode(
-                                            buchungsblattcode),
-                                        getConnectionContext());
+                    buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisProducts.fixBuchungslattCode(
+                                buchungsblattcode),
+                            getConnectionContext());
                     BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);
                 }
             }

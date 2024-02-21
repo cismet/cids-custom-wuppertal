@@ -14,13 +14,14 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.ComponentRegistry;
 
-import de.aedsicad.aaaweb.service.util.Buchungsblatt;
-import de.aedsicad.aaaweb.service.util.Buchungsstelle;
-import de.aedsicad.aaaweb.service.util.Owner;
+import de.aedsicad.aaaweb.rest.model.Buchungsblatt;
+import de.aedsicad.aaaweb.rest.model.Buchungsstelle;
+import de.aedsicad.aaaweb.rest.model.Owner;
 
 import java.awt.Font;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,8 +41,7 @@ import javax.swing.text.html.StyleSheet;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSoapUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisRestUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 
@@ -490,10 +490,9 @@ public class AlkisEigentuemerPanel extends javax.swing.JPanel implements Connect
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
                     if (!demoMode) {
-                        buchungsblatt = AlkisUtils.getInstance()
-                                    .getBuchungsblattFromAlkisSOAPServerAction(AlkisProducts.fixBuchungslattCode(
-                                                buchungsblattcode),
-                                            getConnectionContext());
+                        buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisProducts.fixBuchungslattCode(
+                                    buchungsblattcode),
+                                getConnectionContext());
                     } else {
                         final Owner o = new Owner();
                         o.setForeName("***");
@@ -502,11 +501,11 @@ public class AlkisEigentuemerPanel extends javax.swing.JPanel implements Connect
                         buchungsblatt.setBlattart("****");
                         buchungsblatt.setBlattartCode("****");
                         buchungsblatt.setBuchungsblattCode("****");
-                        buchungsblatt.setBuchungsstellen(new Buchungsstelle[0]);
-                        buchungsblatt.setDescriptionOfRechtsgemeinschaft(new String[] { "****" });
+                        buchungsblatt.setBuchungsstellen(new ArrayList<>());
+                        buchungsblatt.setDescriptionOfRechtsgemeinschaft(Arrays.asList("****"));
                         buchungsblatt.setId("****");
                         buchungsblatt.setOffices(null);
-                        buchungsblatt.setOwners(new Owner[] { o });
+                        buchungsblatt.setOwners(Arrays.asList(o));
                         buchungsblatt.setBuchungsblattCode(buchungsblattcode);
                     }
 
@@ -594,7 +593,7 @@ public class AlkisEigentuemerPanel extends javax.swing.JPanel implements Connect
                             stelle.getFraction();
                         }
                     }
-                    currentInfoText.append(AlkisSoapUtils.buchungsblattToHtml(
+                    currentInfoText.append(AlkisProducts.buchungsblattToHtml(
                             buchungsblaetterToFlurstuecke.get(buchungsblattBean).iterator().next(),
                             buchungsblatt,
                             buchungsblattBean));

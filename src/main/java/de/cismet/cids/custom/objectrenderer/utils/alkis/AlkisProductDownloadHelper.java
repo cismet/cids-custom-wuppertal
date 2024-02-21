@@ -35,7 +35,6 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportDownloadHelper;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
@@ -151,7 +150,7 @@ public class AlkisProductDownloadHelper {
                 continue;
             }
 
-            final String queryID = AlkisSoapUtils.escapeHtmlSpaces(buchungsblattCode);
+            final String queryID = AlkisProducts.escapeHtmlSpaces(buchungsblattCode);
 
             try {
                 final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
@@ -221,7 +220,7 @@ public class AlkisProductDownloadHelper {
 
         try {
             if (completeBuchungsblattCode.length() > 0) {
-                final String alkisCode = AlkisSoapUtils.escapeHtmlSpaces(completeBuchungsblattCode);
+                final String alkisCode = AlkisProducts.escapeHtmlSpaces(completeBuchungsblattCode);
 
                 final String fertigungsVermerk = AlkisUtils.getFertigungsVermerk("WV ein", connectionContext);
                 final String directory = DownloadManagerDialog.getInstance().getJobName();
