@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
@@ -1468,12 +1469,18 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                             .getMetaClass()
                             .getEmptyInstance(getConnectionContext())
                             .getBean();
-                geomBean.setProperty(GEOM_FIELD_NAME, complexValueToProcess.getProperty(GEOM_FIELD_NAME));
-                beanToInit.setProperty(propertyName, geomBean);
-            }
+                Geometry g = (Geometry)complexValueToProcess.getProperty(GEOM_FIELD_NAME);
 
-            // flat copy
-            beanToInit.setProperty(propertyName, complexValueToProcess);
+                if (g != null) {
+                    g = (Geometry)g.clone();
+                }
+
+                geomBean.setProperty(GEOM_FIELD_NAME, g);
+                beanToInit.setProperty(propertyName, geomBean);
+            } else {
+                // flat copy
+                beanToInit.setProperty(propertyName, complexValueToProcess);
+            }
         }
     }
 

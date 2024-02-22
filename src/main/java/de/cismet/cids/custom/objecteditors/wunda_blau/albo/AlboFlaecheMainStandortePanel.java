@@ -342,36 +342,36 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         getCidsBean().getBeanCollectionProperty("n_standorte")
                 .add(mcStandort.getEmptyInstance(getConnectionContext()).getBean());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         getCidsBean().getBeanCollectionProperty("n_standorte").remove(jList1.getSelectedValue());
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+    private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
         ((CardLayout)jPanel10.getLayout()).show(jPanel10, (jList1.getSelectedValue() == null) ? "null" : "standort");
         deActivateCopyPasteButton();
-    }//GEN-LAST:event_jList1ValueChanged
+    }                                                                                 //GEN-LAST:event_jList1ValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void butCopyPasteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butCopyPasteActionPerformed
+    private void butCopyPasteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_butCopyPasteActionPerformed
         if (isEditable()) {
             final List<CidsBean> stList = CidsBeanSupport.getBeanCollectionFromProperty(getCidsBean(), "n_standorte");
 
@@ -385,7 +385,7 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
         }
 
         deActivateCopyPasteButton();
-    }//GEN-LAST:event_butCopyPasteActionPerformed
+    } //GEN-LAST:event_butCopyPasteActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
