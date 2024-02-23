@@ -183,6 +183,7 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Innerhalb:"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -193,6 +194,7 @@
             <Component class="javax.swing.JCheckBox" name="chInnerhalb">
               <Properties>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <BindingProperties>
                 <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.innerhalb}" target="chInnerhalb" targetPath="selected" updateStrategy="0" immediately="false">

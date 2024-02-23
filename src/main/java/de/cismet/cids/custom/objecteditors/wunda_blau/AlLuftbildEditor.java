@@ -333,6 +333,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         lblInnerhalb.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblInnerhalb.setText("Innerhalb:");
         lblInnerhalb.setToolTipText("");
+        lblInnerhalb.setEnabled(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -343,6 +344,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         panName.add(lblInnerhalb, gridBagConstraints);
 
         chInnerhalb.setContentAreaFilled(false);
+        chInnerhalb.setEnabled(false);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.innerhalb}"), chInnerhalb, BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
