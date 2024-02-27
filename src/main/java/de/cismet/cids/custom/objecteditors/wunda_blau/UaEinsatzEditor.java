@@ -633,7 +633,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         taFirma = new JTextArea();
         lblVerursacher = new JLabel();
         btnAddNewVerursacher = new JButton();
-        uaVerursacherPanel = new UaVerursacherPanel();
+        uaVerursacherPanel = new UaVerursacherPanel(this);
         lblBemerkung = new JLabel();
         panBemerkung = new JPanel();
         scpBemerkung = new JScrollPane();

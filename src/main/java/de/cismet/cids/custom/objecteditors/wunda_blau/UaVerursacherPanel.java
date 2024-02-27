@@ -367,6 +367,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
                                 
         
             }
+            setReadOnly();
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
