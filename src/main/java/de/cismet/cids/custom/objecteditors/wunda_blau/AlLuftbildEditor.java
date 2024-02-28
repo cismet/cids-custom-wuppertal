@@ -25,7 +25,6 @@ import javax.swing.*;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
@@ -120,7 +119,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panName;
     private DefaultPreviewMapPanel panPreviewMap;
     private JPanel pnlBild;
-    private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
+    private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel;
     private RoundedPanel rpBild;
     private RoundedPanel rpKarte;
     private JScrollPane scpBemerkung;
@@ -198,7 +197,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         rpBild = new RoundedPanel();
         semiRoundedPanel8 = new SemiRoundedPanel();
         lblBild = new JLabel();
-        rasterfariDocumentLoaderPanel1 = new RasterfariDocumentLoaderPanel(
+        rasterfariDocumentLoaderPanel = new RasterfariDocumentLoaderPanel(
             AlConfProperties.getInstance().getRasterfariUrl(),
             this,
             connectionContext
@@ -499,17 +498,17 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 0, 0);
         rpBild.add(semiRoundedPanel8, gridBagConstraints);
 
-        rasterfariDocumentLoaderPanel1.setMinimumSize(new Dimension(0, 500));
-        rasterfariDocumentLoaderPanel1.setPreferredSize(new Dimension(0, 500));
+        rasterfariDocumentLoaderPanel.setMinimumSize(new Dimension(0, 500));
+        rasterfariDocumentLoaderPanel.setPreferredSize(new Dimension(0, 500));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        rpBild.add(rasterfariDocumentLoaderPanel1, gridBagConstraints);
+        rpBild.add(rasterfariDocumentLoaderPanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -581,9 +580,9 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
             try {
                 String path;
                 path = "lanuv/Wuppertal_Tif";
-                final String document = name.replace("lanuvGeo", "lanuv");//path + "/" + name;
-                rasterfariDocumentLoaderPanel1.setDocument(document);
-                final URL url = rasterfariDocumentLoaderPanel1.getDocumentUrl();
+                final String document = path + "/" + name;
+                rasterfariDocumentLoaderPanel.setDocument(document);
+                final URL url = rasterfariDocumentLoaderPanel.getDocumentUrl();
             } catch (Exception ex) {
                 LOG.error(ex, ex);
             }
