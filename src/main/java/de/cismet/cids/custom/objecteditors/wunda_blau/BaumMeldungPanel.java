@@ -47,6 +47,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -313,7 +315,6 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         dlgCloneSchaden.setTitle(NbBundle.getMessage(BaumMeldungPanel.class, "BaumMeldungPanel.dlgCloneSchaden.title")); // NOI18N
         dlgCloneSchaden.setModal(true);
         dlgCloneSchaden.setName("dlgCloneSchaden");                                                                      // NOI18N
-        dlgCloneSchaden.setPreferredSize(new Dimension(386, 200));
 
         panCloneSchaden.setName("panCloneSchaden"); // NOI18N
         panCloneSchaden.setLayout(new GridBagLayout());
@@ -682,6 +683,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         lstOrtstermine.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstOrtstermine.setFixedCellWidth(75);
         lstOrtstermine.setName("lstOrtstermine"); // NOI18N
+        lstOrtstermine.addMouseListener(formListener);
         scpLaufendeOrtstermine.setViewportView(lstOrtstermine);
 
         gridBagConstraints = new GridBagConstraints();
@@ -809,6 +811,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
         lstSchaeden.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstSchaeden.setName("lstSchaeden"); // NOI18N
         lstSchaeden.setVisibleRowCount(2);
+        lstSchaeden.addMouseListener(formListener);
         scpLaufendeSchaeden.setViewportView(lstSchaeden);
 
         gridBagConstraints = new GridBagConstraints();
@@ -945,7 +948,7 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
      *
      * @version  $Revision$, $Date$
      */
-    private class FormListener implements ActionListener, ChangeListener {
+    private class FormListener implements ActionListener, MouseListener, ChangeListener {
 
         /**
          * Creates a new FormListener object.
@@ -980,6 +983,31 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             } else if (evt.getSource() == btnMenOkCloneSchaden) {
                 BaumMeldungPanel.this.btnMenOkCloneSchadenActionPerformed(evt);
             }
+        }
+
+        @Override
+        public void mouseClicked(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mouseEntered(final MouseEvent evt) {
+            if (evt.getSource() == lstSchaeden) {
+                BaumMeldungPanel.this.lstSchaedenMouseEntered(evt);
+            } else if (evt.getSource() == lstOrtstermine) {
+                BaumMeldungPanel.this.lstOrtstermineMouseEntered(evt);
+            }
+        }
+
+        @Override
+        public void mouseExited(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mousePressed(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mouseReleased(final MouseEvent evt) {
         }
 
         @Override
@@ -1480,6 +1508,24 @@ public class BaumMeldungPanel extends javax.swing.JPanel implements Disposable,
             dlgCloneSchaden.setVisible(false);
         }
     } //GEN-LAST:event_btnMenOkCloneSchadenActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstSchaedenMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstSchaedenMouseEntered
+        baumSchadenPanel.taBemerkung.requestFocus();
+    }                                                            //GEN-LAST:event_lstSchaedenMouseEntered
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstOrtstermineMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstOrtstermineMouseEntered
+        baumOrtsterminPanel.taBemerkungOrt.requestFocus();
+    }                                                               //GEN-LAST:event_lstOrtstermineMouseEntered
 
     @Override
     public ConnectionContext getConnectionContext() {

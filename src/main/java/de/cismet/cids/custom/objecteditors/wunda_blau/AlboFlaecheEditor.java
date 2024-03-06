@@ -15,6 +15,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
@@ -48,6 +49,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
@@ -80,10 +82,15 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.albo.SimpleAltlastWebDavPa
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheNummerUniqueSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
+import de.cismet.cids.editors.BeanInitializer;
+import de.cismet.cids.editors.BeanInitializerForcePaste;
+import de.cismet.cids.editors.BeanInitializerProvider;
+import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -119,7 +126,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     EditorSaveListener,
     ConnectionContextStore,
     PropertyChangeListener,
-    SaveVetoable {
+    SaveVetoable,
+    BeanInitializerProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -955,6 +963,14 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         }
 
         if (!prop && (zuordnung != null) && !zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
+            final String erhebungsnummer = (String)cidsBean.getProperty("erhebungsnummer");
+
+            if ((erhebungsnummer == null) || erhebungsnummer.equals("")) {
+                errorList.add("Die Erhebungsnummer muss gesetzt sein.");
+            } else {
+                checkErhebungsnummer(errorList, erhebungsnummer);
+            }
+
             final Object geom = cidsBean.getProperty("fk_geom.geo_field");
 
             if (!((geom instanceof Polygon) || (geom instanceof MultiPolygon))) {
@@ -966,7 +982,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                         || cidsBean.getProperty("laufende_nummer").equals("")
                         || cidsBean.getProperty("geodaten_id").equals("")
                         || cidsBean.getProperty("landesregistriernummer").equals("")) {
-                errorList.add("Die Landesregistriernummer, laufende Nummer und Geodaten-ID müssen gesetzt sein.");
+                errorList.add("Die Hauptnummer, laufende Nummer und FISAlBo-Nr müssen gesetzt sein.");
             } else {
                 final String lrnr = String.valueOf(cidsBean.getProperty("landesregistriernummer"));
                 final String lfdNr = String.valueOf(cidsBean.getProperty("laufende_nummer"));
@@ -974,6 +990,24 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
                 if (!geodaten_id.equals(lrnr.substring(1) + lfdNr.substring(1))) {
                     errorList.add("Die FISAlBo-Nr passt nicht zur Hauptnummer und der laufenden Nummer.");
+                } else {
+                    try {
+                        final AlboFlaecheNummerUniqueSearch search = new AlboFlaecheNummerUniqueSearch(
+                                geodaten_id,
+                                cidsBean.getMetaObject().getId(),
+                                false);
+
+                        final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            search,
+                                            getConnectionContext());
+
+                        if ((result != null) && (result.size() > 0)) {
+                            errorList.add("Die FISAlBo-Nr ist nicht eindeutig.");
+                        }
+                    } catch (Exception e) {
+                        LOG.error("Error while checking erhebungsnummer", e);
+                    }
                 }
             }
 
@@ -1032,94 +1066,213 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 // status was set to "" if it is null to avoid NPEs, so it must be checked, if status = ""
                 errorList.add(
                     "Status der Fläche muss gesetzt sein, außer wenn es sich um eine Verzeichnisfläche handelt.");
-            } else if ((status != null) && status.equalsIgnoreCase("kein_handlungsbedarf")
+            } else if (status.equalsIgnoreCase("kein_handlungsbedarf")
                         && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
                             || bearbeitungsstand.equalsIgnoreCase("ga"))) {
                 errorList.add(
                     "Wenn der Status \"kein Handlungsbedarf bei der derzeitigen Nutzung\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("verdachtsflaeche")
+            } else if (status.equalsIgnoreCase("verdachtsflaeche")
                         && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
                             || bearbeitungsstand.equalsIgnoreCase("ga"))) {
                 errorList.add(
                     "Wenn der Status \"altlastverdächtige Fläche / Verdachtsfläche\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("verdacht_ausgeraeumt")
+            } else if (status.equalsIgnoreCase("verdacht_ausgeraeumt")
                         && !(bearbeitungsstand.equalsIgnoreCase("erfassung")
                             || bearbeitungsstand.equalsIgnoreCase("ga"))) {
                 errorList.add(
                     "Wenn der Status \"Verdacht ausgeräumt\" ist,\n  muss der Bearbeitungsstand \"erfassung\" oder \"ga\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("altlast")
+            } else if (status.equalsIgnoreCase("altlast")
                         && !(bearbeitungsstand.equalsIgnoreCase("ga") || bearbeitungsstand.equalsIgnoreCase("su_sp")
                             || bearbeitungsstand.equalsIgnoreCase("sa_laufend"))) {
                 errorList.add(
                     "Wenn der Status \"Altlast / schädliche Bodenveränderung (sBv)\" ist,\n  muss der Bearbeitungsstand \"ga\", \"su_sp\" order \"sa_laufend\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("altlast_mit_ueberwachung")
+            } else if (status.equalsIgnoreCase("altlast_mit_ueberwachung")
                         && !(bearbeitungsstand.equalsIgnoreCase("ga") || bearbeitungsstand.equalsIgnoreCase("su_sp"))) {
                 errorList.add(
                     "Wenn der Status \"Altlast / sBv mit dauerhafter Beschränkung / Überwachung\" ist,\n  muss der Bearbeitungsstand \"ga\" oder \"su_sp\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("sanierte_flaeche")
+            } else if (status.equalsIgnoreCase("sanierte_flaeche")
                         && !(bearbeitungsstand.equalsIgnoreCase("sa_abgeschlossen"))) {
                 errorList.add(
                     "Wenn der Status \"sanierte Fläche (vollständig dekontaminiert)\" ist,\n  muss der Bearbeitungsstand \"sa_abgeschlossen\" sein.");
-            } else if ((status != null) && status.equalsIgnoreCase("sanierte_flaeche_fuer_bestimmte_nutzung")
+            } else if (status.equalsIgnoreCase("sanierte_flaeche_fuer_bestimmte_nutzung")
                         && !(bearbeitungsstand.equalsIgnoreCase("sa_abgeschlossen"))) {
                 errorList.add(
                     "Wenn der Status \"sanierte Fläche (gesichert / teilweise dekontaminiert) z.B. für bestimmte Nutzung\" ist,\n  muss der Bearbeitungsstand \"sa_abgeschlossen\" sein.");
             }
 
-            if (bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals("sa_abgeschlossen")) {
-                final CidsBean massn = (CidsBean)cidsBean.getProperty("fk_massnahmen");
-                final String[] schutzgefaehrdungen = {
-                        "ga_boden_mensch",
-                        "ga_boden_pflanze",
-                        "ga_boden_wasser",
-                        "ga_sonstiges"
-                    };
-                final String[] dekonSicherung = {
-                        "dm_aushub_deponierung",
-                        "dm_aushub_bodenbehandlung",
-                        "dm_bodenbeh_ohne_aushub",
-                        "dm_pneumatisch",
-                        "dm_pump_treat",
-                        "dm_in_situ_behandlung",
-                        "sm_sicherungsbauwerk",
-                        "ea_versiegelung",
-                        "ea_oberfl_abdicht",
-                        "sm_oberflaechenabdeckung",
-                        "sm_vertikale_abdichtung",
-                        "sm_immobilisierung",
-                        "sm_pneumatisch",
-                        "sm_pump_treat",
-                        "sm_in_situ_behandlung",
-                        "sm_sonstige"
-                    };
-                int sumSchutzgefaehrdung = 0;
-                int sumDekonSicherung = 0;
+            final CidsBean massn = (CidsBean)cidsBean.getProperty("fk_massnahmen");
+            final String[] schutzgefaehrdungen = {
+                    "ga_boden_mensch",
+                    "ga_boden_pflanze",
+                    "ga_boden_wasser",
+                    "ga_sonstiges"
+                };
+            final String[] dekonSicherung = {
+                    "dm_aushub_deponierung",
+                    "dm_aushub_bodenbehandlung",
+                    "dm_bodenbeh_ohne_aushub",
+                    "dm_pneumatisch",
+                    "dm_pump_treat",
+                    "dm_in_situ_behandlung",
+                    "sm_sicherungsbauwerk",
+                    "ea_versiegelung",
+                    "ea_oberfl_abdicht",
+                    "sm_oberflaechenabdeckung",
+                    "sm_vertikale_abdichtung",
+                    "sm_immobilisierung",
+                    "sm_pneumatisch",
+                    "sm_pump_treat",
+                    "sm_in_situ_behandlung",
+                    "sm_sonstige"
+                };
+            final String[] sicherung = {
+                    "sm_sicherungsbauwerk",
+                    "ea_versiegelung",
+                    "ea_oberfl_abdicht",
+                    "sm_oberflaechenabdeckung",
+                    "sm_vertikale_abdichtung",
+                    "sm_immobilisierung",
+                    "sm_pneumatisch",
+                    "sm_pump_treat",
+                    "sm_in_situ_behandlung",
+                    "sm_sonstige"
+                };
+            final String[] dekon = {
+                    "dm_aushub_deponierung",
+                    "dm_aushub_bodenbehandlung",
+                    "dm_bodenbeh_ohne_aushub",
+                    "dm_pneumatisch",
+                    "dm_pump_treat",
+                    "dm_in_situ_behandlung"
+                };
+            int sumSchutzgefaehrdung = 0;
+            int sumDekonSicherung = 0;
+            int sumSicherung = 0;
+            int sumDekon = 0;
+            Boolean ueberwachungsMassnahmen = ((massn != null) ? (Boolean)massn.getProperty("ueberwachungs_massnahmen")
+                                                               : null);
+            Boolean schutzBeschrMassnahmen = ((massn != null) ? (Boolean)massn.getProperty("schutz_beschr_massnahmen")
+                                                              : null);
 
+            if (ueberwachungsMassnahmen == null) {
+                ueberwachungsMassnahmen = Boolean.FALSE;
+            }
+            if (schutzBeschrMassnahmen == null) {
+                schutzBeschrMassnahmen = Boolean.FALSE;
+            }
+
+            if (massn != null) {
+                for (final String schutz : schutzgefaehrdungen) {
+                    final Boolean value = (Boolean)massn.getProperty(schutz);
+
+                    if ((value != null) && value) {
+                        ++sumSchutzgefaehrdung;
+                    }
+                }
+
+                for (final String dekonV : dekonSicherung) {
+                    final Boolean value = (Boolean)massn.getProperty(dekonV);
+
+                    if ((value != null) && value) {
+                        ++sumDekonSicherung;
+                    }
+                }
+
+                for (final String sich : sicherung) {
+                    final Boolean value = (Boolean)massn.getProperty(sich);
+
+                    if ((value != null) && value) {
+                        ++sumSicherung;
+                    }
+                }
+
+                for (final String dekonV : dekon) {
+                    final Boolean value = (Boolean)massn.getProperty(dekonV);
+
+                    if ((value != null) && value) {
+                        ++sumDekon;
+                    }
+                }
+            }
+
+            if (bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals("sa_abgeschlossen")) {
                 if (massn == null) {
                     errorList.add(
                         "Wenn der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" hat,\n  muss mindestens eine Schutzgutgefährdung gesetzt sein\n  und mindestens eine Dekontaminationsmaßnahme oder Sicherungsmaßnahme gesetzt sein.");
                 } else {
-                    for (final String schutz : schutzgefaehrdungen) {
-                        final Boolean value = (Boolean)massn.getProperty(schutz);
-
-                        if ((value != null) && value) {
-                            ++sumSchutzgefaehrdung;
-                        }
-                    }
-
-                    for (final String dekon : dekonSicherung) {
-                        final Boolean value = (Boolean)massn.getProperty(dekon);
-
-                        if ((value != null) && value) {
-                            ++sumDekonSicherung;
-                        }
-                    }
-
-                    if ((sumSchutzgefaehrdung == 0) || (sumDekonSicherung == 0)) {
+                    if (sumSchutzgefaehrdung == 0) {
+                        errorList.add(
+                            "Es muss mindestens eine Gefährdungsannahme gesetzt sein wenn die Fläche den Bearbeitungsstand \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" hat.");
+                    } else if (sumDekonSicherung == 0) {
+                        errorList.add(
+                            "Es muss mindestens eine Maßnahme zur Dekontaminierung oder Sicherung gesetzt sein wenn die Fläche den Bearbeitungsstand \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" hat.");
+                    } else if ((sumSchutzgefaehrdung == 0) || (sumDekonSicherung == 0)) {
                         errorList.add(
                             "Wenn der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" hat,\n  muss mindestens eine Schutzgutgefährdung gesetzt sein\n  und mindestens eine Dekontaminationsmaßnahme oder Sicherungsmaßnahme gesetzt sein.");
                     }
                 }
+            } else if (sumDekon > 0) {
+                errorList.add(
+                    "Wenn eine Dekontaminationsmaßnahme gesetzt ist, muss der Bearbeitungsstand den Wert \"sa_laufend\" oder \"sa_abgeschlossen\" haben.");
+            }
+
+            if ((sumSicherung > 0)
+                        && !(bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals("sa_abgeschlossen"))) {
+                errorList.add(
+                    "Wenn eine Sicherungsmaßnahme gesetzt ist, muss der Bearbeitungsstand \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" sein.");
+            }
+
+            if (status.equalsIgnoreCase("altlast") && bearbeitungsstand.equals("su_sp")
+                        && (sumSchutzgefaehrdung == 0)) {
+                errorList.add(
+                    "Es muss mindestens eine Gefährdungsannahme gesetzt sein, wenn die Fläche den Bearbeitungsstand \"su_sp\" hat und es sich um eine Altlast handelt.");
+            }
+
+            if ((sumSchutzgefaehrdung > 0)
+                        && !(bearbeitungsstand.equals("ga") || bearbeitungsstand.equals("su_sp")
+                            || bearbeitungsstand.equals("sa_laufend") || bearbeitungsstand.equals(
+                                "sa_abgeschlossen"))) {
+                errorList.add(
+                    "Wenn eine Schutzgutgefährdung ermittelt wurde, muss der Bearbeitungsstand \"Gefährdungsabschätzung\", \"Sanierungsuntersuchung / -planung\", \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" sein.");
+            }
+
+            if (status.equalsIgnoreCase("altlast_mit_ueberwachung") && !ueberwachungsMassnahmen
+                        && !schutzBeschrMassnahmen) {
+                errorList.add(
+                    "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist, müssen Überwachungsmaßnahmen/Schutz- und Beschränkungsmaßnahmen ausgewählt sein.");
+            }
+        } else if ((zuordnung != null) && zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
+            if (((cidsBean.getProperty("laufende_nummer") != null)
+                            && !cidsBean.getProperty("laufende_nummer").equals(""))
+                        || ((cidsBean.getProperty("geodaten_id") != null)
+                            && !cidsBean.getProperty("geodaten_id").equals(""))
+                        || ((cidsBean.getProperty("landesregistriernummer") != null)
+                            && !cidsBean.getProperty("landesregistriernummer").equals(""))) {
+                final int ans = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
+                        "Wenn es sich um eine Verzeichnisfläche handelt, dann müssen die Hauptnummer, laufende Nummer und FISAlBo-Nr gesetzt sein.\nSollen diese Nummern automatisch entfernt werden?",
+                        "Fehlerhafter Bearbeitungsstand",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (ans == JOptionPane.YES_OPTION) {
+                    try {
+                        cidsBean.setProperty("laufende_nummer", null);
+                        cidsBean.setProperty("geodaten_id", null);
+                        cidsBean.setProperty("landesregistriernummer", null);
+                    } catch (Exception e) {
+                        LOG.error("Cannot set laufende_nummer, geodaten_id or landesregistriernummer", e);
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+
+            final String erhebungsnummer = (String)cidsBean.getProperty("erhebungsnummer");
+
+            if ((erhebungsnummer == null) || erhebungsnummer.equals("")) {
+                errorList.add("Die Erhebungsnummer muss gesetzt sein.");
+            } else {
+                checkErhebungsnummer(errorList, erhebungsnummer);
             }
         }
 
@@ -1132,7 +1285,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
             }
 
             sb.append(
-                "Falls Sie das Objekt trotzdem speichern möchten, dann muss es als Entwurf gekennzeichnet werden.");
+                "\nFalls Sie das Objekt trotzdem speichern möchten, dann muss es als Entwurf gekennzeichnet werden.");
 
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 sb,
@@ -1142,6 +1295,32 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
             return false;
         }
         return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  errorList        DOCUMENT ME!
+     * @param  erhebungsnummer  DOCUMENT ME!
+     */
+    private void checkErhebungsnummer(final List<String> errorList, final String erhebungsnummer) {
+        try {
+            final AlboFlaecheNummerUniqueSearch search = new AlboFlaecheNummerUniqueSearch(
+                    erhebungsnummer,
+                    cidsBean.getMetaObject().getId(),
+                    true);
+
+            final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
+                        .customServerSearch(SessionManager.getSession().getUser(),
+                                search,
+                                getConnectionContext());
+
+            if ((result != null) && (result.size() > 0)) {
+                errorList.add("Diese Erhebungsnummer existiert bereits.");
+            }
+        } catch (Exception e) {
+            LOG.error("Error while checking erhebungsnummer", e);
+        }
     }
 
     /**
@@ -1215,7 +1394,95 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         }
     }
 
+    @Override
+    public BeanInitializer getBeanInitializer() {
+        return new AlboFlaecheInitializer(cidsBean);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class AlboFlaecheInitializer extends DefaultBeanInitializer {
+
+        //~ Constructors -------------------------------------------------------
+
+        // implements BeanInitializerForcePaste //this would allow to use the paste function not only on new object, but
+        // also on alreadys existing ones
+
+        /**
+         * Creates a new KartierabschnittInitializer object.
+         *
+         * @param  cidsBean  DOCUMENT ME!
+         */
+        public AlboFlaecheInitializer(final CidsBean cidsBean) {
+            super(cidsBean);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void initializeBean(final CidsBean beanToInit) throws Exception {
+            super.initializeBean(beanToInit);
+
+//            if (lastInstance != null) {
+//                lastInstance.setCidsBean(beanToInit);
+//            }
+        }
+
+        @Override
+        protected void processSimpleProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Object simpleValueToProcess) throws Exception {
+            super.processSimpleProperty(beanToInit, propertyName, simpleValueToProcess);
+        }
+
+        @Override
+        protected void processArrayProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Collection<CidsBean> arrayValueToProcess) throws Exception {
+            final List<CidsBean> beans = CidsBeanSupport.getBeanCollectionFromProperty(
+                    beanToInit,
+                    propertyName);
+            beans.clear();
+
+            if (propertyName.equalsIgnoreCase("n_standorte")) {
+                for (final CidsBean tmp : arrayValueToProcess) {
+                    beans.add(CidsBeanSupport.cloneBean(tmp, connectionContext));
+                }
+            } else if (propertyName.equalsIgnoreCase("dokumente")) {
+                for (final CidsBean tmp : arrayValueToProcess) {
+                    beans.add(CidsBeanSupport.cloneBean(tmp, connectionContext));
+                }
+            }
+        }
+
+        @Override
+        protected void processComplexProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final CidsBean complexValueToProcess) throws Exception {
+            if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(GEOM_TABLE_NAME)) {
+                final CidsBean geomBean = complexValueToProcess.getMetaObject()
+                            .getMetaClass()
+                            .getEmptyInstance(getConnectionContext())
+                            .getBean();
+                Geometry g = (Geometry)complexValueToProcess.getProperty(GEOM_FIELD_NAME);
+
+                if (g != null) {
+                    g = (Geometry)g.clone();
+                }
+
+                geomBean.setProperty(GEOM_FIELD_NAME, g);
+                beanToInit.setProperty(propertyName, geomBean);
+            } else {
+                // flat copy
+                beanToInit.setProperty(propertyName, complexValueToProcess);
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!

@@ -43,6 +43,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -1438,6 +1440,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         lstErsatz.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstErsatz.setFixedCellWidth(75);
         lstErsatz.setName("lstErsatz"); // NOI18N
+        lstErsatz.addMouseListener(formListener);
         lstErsatz.addListSelectionListener(formListener);
         scpLaufendeErsatz.setViewportView(lstErsatz);
 
@@ -1662,6 +1665,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
         lstFest.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstFest.setFixedCellWidth(75);
         lstFest.setName("lstFest"); // NOI18N
+        lstFest.addMouseListener(formListener);
         scpLaufendeFest.setViewportView(lstFest);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1747,7 +1751,7 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
      *
      * @version  $Revision$, $Date$
      */
-    private class FormListener implements ActionListener, ListSelectionListener {
+    private class FormListener implements ActionListener, MouseListener, ListSelectionListener {
 
         /**
          * Creates a new FormListener object.
@@ -1766,6 +1770,31 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             } else if (evt.getSource() == btnRemoveFest) {
                 BaumSchadenPanel.this.btnRemoveFestActionPerformed(evt);
             }
+        }
+
+        @Override
+        public void mouseClicked(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mouseEntered(final MouseEvent evt) {
+            if (evt.getSource() == lstErsatz) {
+                BaumSchadenPanel.this.lstErsatzMouseEntered(evt);
+            } else if (evt.getSource() == lstFest) {
+                BaumSchadenPanel.this.lstFestMouseEntered(evt);
+            }
+        }
+
+        @Override
+        public void mouseExited(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mousePressed(final MouseEvent evt) {
+        }
+
+        @Override
+        public void mouseReleased(final MouseEvent evt) {
         }
 
         @Override
@@ -2164,6 +2193,24 @@ public final class BaumSchadenPanel extends javax.swing.JPanel implements Dispos
             baumErsatzPanel.setCidsBean((CidsBean)oErsatz);
         }
     }                                                                  //GEN-LAST:event_lstErsatzValueChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstErsatzMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstErsatzMouseEntered
+        baumErsatzPanel.taBemerkungE.requestFocus();
+    }                                                          //GEN-LAST:event_lstErsatzMouseEntered
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFestMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstFestMouseEntered
+        baumFestsetzungPanel.taBemerkungF.requestFocus();
+    }                                                        //GEN-LAST:event_lstFestMouseEntered
 
     /**
      * DOCUMENT ME!
