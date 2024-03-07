@@ -8,7 +8,7 @@
 /*
  * AlLuftbildFeatureRenderer.java
  *
- * 
+ *
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
@@ -16,6 +16,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
 import java.awt.Stroke;
+
+import java.io.IOException;
 
 import java.util.Properties;
 
@@ -25,7 +27,6 @@ import de.cismet.cids.featurerenderer.*;
 
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.gui.piccolo.CustomFixedWidthStroke;
-import java.io.IOException;
 
 /**
  * DOCUMENT ME!
@@ -37,12 +38,9 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlLuftbildFeatureRenderer.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            AlLuftbildFeatureRenderer.class);
     public static final String FIELD__KAT__KEY = "fk_kategorie.schluessel";
-        
-    //~ Instance fields --------------------------------------------------------
-
-    private Properties properties = new Properties();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel12;
@@ -61,11 +59,6 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
         initComponents();
         setOpaque(false);
         setPreferredSize(new Dimension(150, 150));
-        try {
-            properties.load(getClass().getResourceAsStream("/renderer.properties"));
-        } catch (IOException e) {
-            LOG.warn("Fehler beim Laden der Properties", e);
-        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -107,7 +100,7 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
         if (kategorie == null) {
             return new Color(0, 0, 0, 255);
         } else {
-            switch (kategorie){
+            switch (kategorie) {
                 case "gut": {
                     return new Color(0, 255, 0, 50);
                 }
@@ -123,7 +116,7 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
                 default: {
                     return new Color(255, 255, 255, 50);
                 }
-            }            
+            }
         }
     }
 
@@ -144,7 +137,6 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         lblImagePreview = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
@@ -153,36 +145,40 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
         setLayout(new java.awt.BorderLayout());
 
         lblImagePreview.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImagePreview.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/tools/metaobjectrenderer/examples/load.png"))); // NOI18N
+        lblImagePreview.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/tools/metaobjectrenderer/examples/load.png"))); // NOI18N
         lblImagePreview.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lblImagePreviewMouseExited(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lblImagePreviewMouseEntered(evt);
-            }
-        });
+
+                @Override
+                public void mouseExited(final java.awt.event.MouseEvent evt) {
+                    lblImagePreviewMouseExited(evt);
+                }
+                @Override
+                public void mouseEntered(final java.awt.event.MouseEvent evt) {
+                    lblImagePreviewMouseEntered(evt);
+                }
+            });
         add(lblImagePreview, java.awt.BorderLayout.CENTER);
 
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Höhere Auflösung durch Mausklick.");
         add(jLabel12, java.awt.BorderLayout.PAGE_END);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseExited
+    private void lblImagePreviewMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseExited
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_lblImagePreviewMouseExited
+    }                                                                              //GEN-LAST:event_lblImagePreviewMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseEntered
+    private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseEntered
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_lblImagePreviewMouseEntered
+    }                                                                               //GEN-LAST:event_lblImagePreviewMouseEntered
 }

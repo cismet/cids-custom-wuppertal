@@ -13,27 +13,51 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import Sirius.server.middleware.types.MetaClass;
+
 import com.vividsolutions.jts.geom.Point;
-import de.cismet.cids.custom.objecteditors.utils.AlConfProperties;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+import org.jdesktop.swingx.JXBusyLabel;
+
+import org.openide.util.Exceptions;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import java.net.URL;
 
 import javax.swing.*;
 
+import de.cismet.cids.custom.objecteditors.utils.AlConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
 
+import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
@@ -44,23 +68,6 @@ import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.net.URL;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
-import org.jdesktop.swingx.JXBusyLabel;
-import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -77,20 +84,29 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
 
     private static final Logger LOG = Logger.getLogger(AlLuftbildEditor.class);
 
-    public static final String FIELD__NAME = "dateiname";                      
-    public static final String FIELD__GEOREFERENZ = "fk_geom";                      
+    public static final String FIELD__NAME = "dateiname";
+    public static final String FIELD__GEOREFERENZ = "fk_geom";
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // al_luftbild_geom
     public static final String TABLE_NAME = "al_luftbild";
     public static final String TABLE_GEOM = "geom";
 
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     private enum DocumentCard {
 
         //~ Enum constants -----------------------------------------------------
 
         BUSY, DOCUMENT, NO_DOCUMENT, ERROR
     }
+
     //~ Instance fields --------------------------------------------------------
+
     private ConnectionContext connectionContext;
     private final boolean editor;
 
@@ -152,7 +168,6 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Methods ----------------------------------------------------------------
 
-   
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
@@ -178,7 +193,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         lblFlug = new JLabel();
         txtFlug = new JTextField();
         lblDatum = new JLabel();
-        cbKategorie = new DefaultBindableReferenceCombo() ;
+        cbKategorie = new DefaultBindableReferenceCombo();
         txtBildname = new JTextField();
         lblKategorie = new JLabel();
         lblInnerhalb = new JLabel();
@@ -199,12 +214,11 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanel8 = new SemiRoundedPanel();
         lblBild = new JLabel();
         rasterfariDocumentLoaderPanel = new RasterfariDocumentLoaderPanel(
-            AlConfProperties.getInstance().getRasterfariUrl(),
-            this,
-            connectionContext
-        );
+                AlConfProperties.getInstance().getRasterfariUrl(),
+                this,
+                connectionContext);
         jPanel2 = new JPanel();
-        jxLBusy = new JXBusyLabel(new Dimension(64,64));
+        jxLBusy = new JXBusyLabel(new Dimension(64, 64));
         jPanel3 = new JPanel();
         lblKeineFotos = new JLabel();
         jPanel4 = new JPanel();
@@ -217,14 +231,12 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -269,7 +281,12 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblFlug, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.flugnummer}"), txtFlug, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.flugnummer}"),
+                txtFlug,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -295,7 +312,12 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         cbKategorie.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbKategorie.setMaximumRowCount(20);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_kategorie}"), cbKategorie, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_kategorie}"),
+                cbKategorie,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -307,7 +329,12 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(cbKategorie, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.dateiname}"), txtBildname, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.dateiname}"),
+                txtBildname,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -346,7 +373,12 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         chInnerhalb.setContentAreaFilled(false);
         chInnerhalb.setEnabled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.innerhalb}"), chInnerhalb, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.innerhalb}"),
+                chInnerhalb,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -377,7 +409,12 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -392,7 +429,12 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 0, 2);
         panName.add(scpBemerkung, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum}"),
+                dcDatum,
+                BeanProperty.create("date"));
         binding.setConverter(dcDatum.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -568,18 +610,21 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     */
     private void loadTheImage() {
-        final String name =  (String)getCidsBean().getProperty(FIELD__NAME);
+        final String name = (String)getCidsBean().getProperty(FIELD__NAME);
         if (name != null) {
             try {
-                String path;
+                final String path;
                 path = "lanuv/Wuppertal_Tif";
                 final String document = path + "/" + name;
                 rasterfariDocumentLoaderPanel.setDocument(document);
@@ -617,7 +662,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
     private boolean isEditor() {
         return this.editor;
     }
-    
+
     /**
      * DOCUMENT ME!
      */
@@ -677,7 +722,6 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         showDocumentCard(DocumentCard.BUSY);
     }
 
-    
     /**
      * DOCUMENT ME!
      *
@@ -686,7 +730,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
     private void showDocumentCard(final DocumentCard card) {
         ((CardLayout)pnlBild.getLayout()).show(pnlBild, card.toString());
     }
-    
+
     @Override
     public void showMeasurePanel() {
         showDocumentCard(DocumentCard.DOCUMENT);
