@@ -77,6 +77,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
 
     private static final Logger LOG = Logger.getLogger(AlLuftbildEditor.class);
 
+    public static final String FIELD__NAME = "dateiname";                      
     public static final String FIELD__GEOREFERENZ = "fk_geom";                      
     public static final String FIELD__GEO_FIELD = "geo_field";                      // geom
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field"; // al_luftbild_geom
@@ -575,7 +576,7 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
     }
     
     private void loadTheImage() {
-        final String name =  (String)cidsBean.getProperty("dateiname");//"_testbild_249.jp2";
+        final String name =  (String)getCidsBean().getProperty(FIELD__NAME);
         if (name != null) {
             try {
                 String path;
