@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
@@ -26,6 +25,7 @@ import de.cismet.cids.featurerenderer.*;
 
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.gui.piccolo.CustomFixedWidthStroke;
+import java.io.IOException;
 
 /**
  * DOCUMENT ME!
@@ -38,7 +38,8 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AlLuftbildFeatureRenderer.class);
-
+    public static final String FIELD__KAT__KEY = "fk_kategorie.schluessel";
+        
     //~ Instance fields --------------------------------------------------------
 
     private Properties properties = new Properties();
@@ -62,7 +63,7 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
         setPreferredSize(new Dimension(150, 150));
         try {
             properties.load(getClass().getResourceAsStream("/renderer.properties"));
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.warn("Fehler beim Laden der Properties", e);
         }
     }
@@ -86,33 +87,43 @@ public class AlLuftbildFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Stroke getLineStyle() {
-        final String kategorie = (String)cidsBean.getProperty("fk_kategorie");
+        final String kategorie = (String)cidsBean.getProperty(FIELD__KAT__KEY);
         if (LOG.isDebugEnabled()) {
             LOG.debug("AlLuftbildFeatureRenderer GetLineStyle " + kategorie);
         }
-        if (kategorie == null) {
-            return new BasicStroke(20.0f);
+        if ("ohne".equals(kategorie)) {
+            return new CustomFixedWidthStroke(5.0f);
         } else {
-            //if (kategorie.equals("geprüft")) {
-            //    return new CustomFixedWidthStroke(5.0f);
-            //}
             return new CustomFixedWidthStroke(10.0f);
         }
     }
 
     @Override
     public Paint getLinePaint() {
-        final String kategorie = (String)cidsBean.getProperty("fk_kategorie");
+        final String kategorie = (String)cidsBean.getProperty(FIELD__KAT__KEY);
         if (LOG.isDebugEnabled()) {
             LOG.debug("AlLuftbildFeatureRenderer GetLinePaint " + kategorie);
         }
         if (kategorie == null) {
             return new Color(0, 0, 0, 255);
         } else {
-            //if ("rechtskräftig".equals(kategorie)) {
-            //    return new Color(0, 255, 0, 50);
-            //}
-            return new Color(255, 0, 0, 50);
+            switch (kategorie){
+                case "gut": {
+                    return new Color(0, 255, 0, 50);
+                }
+                case "mittel": {
+                    return new Color(255, 136, 0, 50);
+                }
+                case "schlecht": {
+                    return new Color(255, 0, 0, 50);
+                }
+                case "ohne": {
+                    return new Color(0, 0, 255, 50);
+                }
+                default: {
+                    return new Color(255, 255, 255, 50);
+                }
+            }            
         }
     }
 
