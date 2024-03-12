@@ -43,15 +43,19 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
-
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.MissingResourceException;
+import java.util.regex.Pattern;
+import javax.swing.text.DefaultFormatter;
 import lombok.Getter;
 import org.jdom.Text;
 /**
@@ -72,7 +76,9 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     public static final String FIELD__ID = "id";
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ADRESSE = "adresse";
-    public static final String FIELD__BEMERKUNG = "bemerkung";                            
+    public static final String FIELD__BEMERKUNG = "bemerkung";
+    public static final String FIELD__MAIL = "mail";
+    public static final String FIELD__TEL = "telefon";                            
     
     public static final String TABLE_NAME = "ua_verursacher";
 
@@ -81,7 +87,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     public static final String BUNDLE_PANE_SUFFIX = "UaVerursacherPanel.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "UaVerursacherPanel.isOkForSaving().JOptionPane.title";
    
-
+    public static final Pattern TEL_FILLING_PATTERN = Pattern.compile("(|\\+(-|[0-9])*)");
+    public static final Pattern TEL_MATCHING_PATTERN = Pattern.compile("\\+[0-9]{1,3}(-[0-9]+){1,}");
     //~ Enums ------------------------------------------------------------------
 
     //~ Instance fields --------------------------------------------------------
@@ -91,6 +98,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     private Text saveName;
     private Text saveAdresse;
     private Text saveBem;
+    private Text saveTel;
+    private Text saveMail;
     @Getter private final UaEinsatzEditor ueeInstance;
     private final PropertyChangeListener changeListener = new PropertyChangeListener() {
 
@@ -115,6 +124,18 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
                         }
                         break;
                     }
+                    case FIELD__MAIL: {
+                        if (evt.getNewValue() != saveMail) {
+                            setChangeFlag();
+                        }
+                        break;
+                    }
+                    case FIELD__TEL: {
+                        if (evt.getNewValue() != saveTel) {
+                            setChangeFlag();
+                        }
+                        break;
+                    }
                     
                     default: {
                         setChangeFlag();
@@ -122,18 +143,26 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
                 }
             }
         };
+    
+    private final RegexPatternFormatter telPatternFormatter = new RegexPatternFormatter(
+            TEL_FILLING_PATTERN,
+            TEL_MATCHING_PATTERN);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Box.Filler filler1;
+    private JFormattedTextField ftxtVTelefon;
     private JLabel lblVAdresse;
     private JLabel lblVBemerkung;
+    private JLabel lblVMail;
     private JLabel lblVName;
+    private JLabel lblVTelefon;
     private JPanel panContent;
     private JPanel panVBemerkung;
     private JPanel panVerursacher;
     private JScrollPane scpVBemerkung;
     private JTextArea taVBemerkung;
     private JTextField txtVAdresse;
+    private JTextField txtVMail;
     private JTextField txtVName;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -184,6 +213,10 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         txtVName = new JTextField();
         lblVAdresse = new JLabel();
         txtVAdresse = new JTextField();
+        lblVTelefon = new JLabel();
+        ftxtVTelefon = new JFormattedTextField(telPatternFormatter);
+        lblVMail = new JLabel();
+        txtVMail = new JTextField();
         panVBemerkung = new JPanel();
         scpVBemerkung = new JScrollPane();
         taVBemerkung = new JTextArea();
@@ -241,6 +274,63 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panVerursacher.add(txtVAdresse, gridBagConstraints);
 
+        lblVTelefon.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVTelefon.setText("Telefon:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panVerursacher.add(lblVTelefon, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtVTelefon, BeanProperty.create("value"));
+        bindingGroup.addBinding(binding);
+
+        ftxtVTelefon.addFocusListener(new FocusAdapter() {
+            public void focusLost(FocusEvent evt) {
+                ftxtVTelefonFocusLost(evt);
+            }
+        });
+        ftxtVTelefon.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                ftxtVTelefonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.3;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panVerursacher.add(ftxtVTelefon, gridBagConstraints);
+
+        lblVMail.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVMail.setText("Mail:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panVerursacher.add(lblVMail, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.mail}"), txtVMail, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panVerursacher.add(txtVMail, gridBagConstraints);
+
         panVBemerkung.setOpaque(false);
         panVBemerkung.setLayout(new GridBagLayout());
 
@@ -267,7 +357,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -281,7 +371,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         lblVBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -316,6 +406,31 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ftxtVTelefonFocusLost(FocusEvent evt) {//GEN-FIRST:event_ftxtVTelefonFocusLost
+        refreshValidTel();
+    }//GEN-LAST:event_ftxtVTelefonFocusLost
+
+    private void ftxtVTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtVTelefonActionPerformed
+        refreshValidTel();
+    }//GEN-LAST:event_ftxtVTelefonActionPerformed
+
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshValidTel() {
+        ftxtVTelefon.setValue(telPatternFormatter.getLastValid());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  okValue  DOCUMENT ME!
+     */
+    private void saveValidTel(final Object okValue) {
+        telPatternFormatter.setLastValid(okValue);
+    }
+    
     /**
      * DOCUMENT ME!
      *
@@ -368,6 +483,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         
             }
             setReadOnly();
+            saveValidTel(String.valueOf(cidsBean.getProperty(FIELD__TEL)));
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
@@ -390,10 +506,14 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     private void setSaveValues() {
         saveName = (getCidsBean().getProperty(FIELD__NAME) != null)
             ? ((Text)getCidsBean().getProperty(FIELD__NAME)) : null;
-        saveAdresse= (getCidsBean().getProperty(FIELD__ADRESSE) != null)
+        saveAdresse= (getCidsBean().getProperty(FIELD__NAME) != null)
             ? ((Text)getCidsBean().getProperty(FIELD__ADRESSE)) : null;
         saveBem = (getCidsBean().getProperty(FIELD__NAME) != null)
             ? (Text)getCidsBean().getProperty(FIELD__BEMERKUNG) : null;
+        saveTel = (getCidsBean().getProperty(FIELD__NAME) != null)
+            ? (Text)getCidsBean().getProperty(FIELD__TEL) : null;
+        saveBem = (getCidsBean().getProperty(FIELD__NAME) != null)
+            ? (Text)getCidsBean().getProperty(FIELD__MAIL) : null;
     }
     
     
@@ -459,6 +579,71 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
             super(new String[] { "Die Daten werden geladen......" });
         }
     }
+    
+    class RegexPatternFormatter extends DefaultFormatter {
 
+        //~ Instance fields ----------------------------------------------------
+
+        protected java.util.regex.Matcher fillingMatcher;
+        protected java.util.regex.Matcher matchingMatcher;
+        private Object lastValid = null;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new RegexPatternFormatter object.
+         *
+         * @param  fillingRegex   DOCUMENT ME!
+         * @param  matchingRegex  DOCUMENT ME!
+         */
+        public RegexPatternFormatter(final Pattern fillingRegex, final Pattern matchingRegex) {
+            setOverwriteMode(false);
+            fillingMatcher = fillingRegex.matcher("");
+            matchingMatcher = matchingRegex.matcher("");
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Object stringToValue(final String string) throws java.text.ParseException {
+            if ((string == null) || string.isEmpty()) {
+                lastValid = null;
+                return null;
+            }
+            fillingMatcher.reset(string);
+
+            if (!fillingMatcher.matches()) {
+                throw new java.text.ParseException("does not match regex", 0);
+            }
+
+            final Object value = (String)super.stringToValue(string);
+
+            matchingMatcher.reset(string);
+            if (matchingMatcher.matches()) {
+                lastValid = value;
+            }
+            return value;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Object getLastValid() {
+            return lastValid;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  okValue  DOCUMENT ME!
+         */
+        public void setLastValid(final Object okValue) {
+            if (lastValid == null) {
+                lastValid = okValue;
+            }
+        }
+    }
     
 }
