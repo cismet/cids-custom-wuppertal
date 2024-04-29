@@ -235,7 +235,12 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
 
         lblVName.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblVName.setText("Name:");
-        panVerursacher.add(lblVName, new GridBagConstraints());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panVerursacher.add(lblVName, gridBagConstraints);
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtVName, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -497,6 +502,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
             RendererTools.makeReadOnly(txtVName);
             RendererTools.makeReadOnly(txtVAdresse);
             RendererTools.makeReadOnly(taVBemerkung);
+            RendererTools.makeReadOnly(txtVMail);
+            RendererTools.makeReadOnly(ftxtVTelefon);
         }
     }
 
