@@ -166,7 +166,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
     public static final String FIELD__ID = "id"; 
     public static final String FIELD__AZ = "aktenzeichen";
-    public static final String FIELD__DATUM = "datum";
     public static final String FIELD__BEGINN = "zeit_beginn";
     public static final String FIELD__ENDE = "zeit_ende";
     public static final String FIELD__BEREIT = "fk_bereitschaft";
@@ -313,7 +312,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private DefaultBindableReferenceCombo cbMelder;
     FastBindableReferenceCombo cbStrasse;
     private DefaultBindableDateChooser dcBeginn;
-    private DefaultBindableDateChooser dcDatum;
     private DefaultBindableDateChooser dcEnde;
     private Box.Filler filler3;
     private Box.Filler filler4;
@@ -335,15 +333,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblAktenzeichen;
     private JLabel lblAnleger;
     private JLabel lblBeginn;
-    private JLabel lblBeginnTrenner;
     private JLabel lblBemerkung;
     private JLabel lblBereitschaft;
     private JLabel lblBeteiligte;
     private JLabel lblBeteiligteFolge;
-    private JLabel lblDatum;
     private JLabel lblDauer;
     private JLabel lblEnde;
-    private JLabel lblEndeTrenner;
     private JLabel lblFeststellungen;
     private JLabel lblFirma;
     private JLabel lblFolge;
@@ -408,10 +403,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JScrollPane scpPages;
     private JScrollPane scpSofort;
     private SemiRoundedPanel semiRoundedPanel7;
-    JSpinner spBMinute;
-    JSpinner spBStunde;
-    JSpinner spEMinute;
-    JSpinner spEStunde;
     JSpinner spMenge;
     private JTextArea taBemerkung;
     private JTextArea taFeststellungen;
@@ -546,16 +537,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblAnleger = new JLabel();
         txtAnleger = new JTextField();
         lblBeginn = new JLabel();
-        spBStunde = new JSpinner();
-        lblBeginnTrenner = new JLabel();
-        spBMinute = new JSpinner();
         filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblEnde = new JLabel();
-        spEStunde = new JSpinner();
-        lblEndeTrenner = new JLabel();
-        spEMinute = new JSpinner();
-        lblDatum = new JLabel();
-        dcDatum = new DefaultBindableDateChooser();
         dcBeginn = new DefaultBindableDateChooser();
         ftZeitBeginn = new JFormattedTextField();
         dcEnde = new DefaultBindableDateChooser();
@@ -805,51 +788,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblBeginn, gridBagConstraints);
-
-        spBStunde.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spBStunde.setModel(new SpinnerNumberModel(0, 0, 23, 1));
-        spBStunde.setPreferredSize(new Dimension(50, 20));
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beginn_stunde}"), spBStunde, BeanProperty.create("value"));
-        binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(spBStunde, gridBagConstraints);
-
-        lblBeginnTrenner.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBeginnTrenner.setText(":");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblBeginnTrenner, gridBagConstraints);
-
-        spBMinute.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spBMinute.setModel(new SpinnerNumberModel(0, 0, 59, 1));
-        spBMinute.setPreferredSize(new Dimension(50, 20));
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beginn_minute}"), spBMinute, BeanProperty.create("value"));
-        binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(spBMinute, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -867,79 +805,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblEnde, gridBagConstraints);
-
-        spEStunde.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spEStunde.setModel(new SpinnerNumberModel(0, 0, 23, 1));
-        spEStunde.setPreferredSize(new Dimension(50, 20));
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ende_stunde}"), spEStunde, BeanProperty.create("value"));
-        binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(spEStunde, gridBagConstraints);
-
-        lblEndeTrenner.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblEndeTrenner.setText(":");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblEndeTrenner, gridBagConstraints);
-
-        spEMinute.setFont(new Font("Dialog", 0, 12)); // NOI18N
-        spEMinute.setModel(new SpinnerNumberModel(0, 0, 59, 1));
-        spEMinute.setPreferredSize(new Dimension(50, 20));
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ende_minute}"), spEMinute, BeanProperty.create("value"));
-        binding.setSourceNullValue(0);
-        binding.setSourceUnreadableValue(0);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(spEMinute, gridBagConstraints);
-
-        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblDatum.setText("Datum:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblDatum, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
-        binding.setConverter(dcDatum.getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(dcDatum, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -951,13 +819,13 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         ftZeitBeginn.setPreferredSize(new Dimension(80, 28));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(ftZeitBeginn, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -970,7 +838,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         ftZeitEnde.setPreferredSize(new Dimension(80, 28));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(ftZeitEnde, gridBagConstraints);
@@ -979,7 +847,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblDauer.setText("Dauer:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -987,7 +855,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten.add(lblDauer, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -998,7 +866,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblOrt.setText("Ortsbeschreibung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1031,7 +899,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -1045,7 +913,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblStrasse.setText("Straße:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1065,7 +933,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1074,7 +942,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         panDaten.add(cbStrasse, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDaten.add(filler3, gridBagConstraints);
@@ -1083,7 +951,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblHnr.setText("Hausnummer:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1103,7 +971,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 11;
-            gridBagConstraints.gridy = 6;
+            gridBagConstraints.gridy = 5;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             panDaten.add(cbHNr, gridBagConstraints);
@@ -1121,7 +989,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (!isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 11;
-            gridBagConstraints.gridy = 6;
+            gridBagConstraints.gridy = 5;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.ipady = 10;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1133,7 +1001,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1151,7 +1019,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 7;
+            gridBagConstraints.gridy = 6;
             gridBagConstraints.gridwidth = 8;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1172,7 +1040,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(btnCreateGeometrie, gridBagConstraints);
@@ -1192,14 +1060,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         panDaten.add(panFiller, gridBagConstraints);
 
         lblBereitschaft.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBereitschaft.setText("Bereitschaft:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1218,7 +1086,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 8;
+            gridBagConstraints.gridy = 7;
             gridBagConstraints.gridwidth = 8;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1229,7 +1097,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMelder.setText("Melder:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1243,7 +1111,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1254,7 +1122,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBeteiligte.setText("Beteiligte:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1268,7 +1136,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -2307,15 +2175,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private void setReadOnly() {
         if (!(isEditor())) {
             lblGeom.setVisible(isEditor());
-            RendererTools.makeReadOnly(dcDatum);
-            RendererTools.makeDoubleSpinnerWithoutButtons(spBStunde, 0);
-            RendererTools.makeReadOnly(spBStunde);
-            RendererTools.makeDoubleSpinnerWithoutButtons(spBMinute, 0);
-            RendererTools.makeReadOnly(spBMinute);
-            RendererTools.makeDoubleSpinnerWithoutButtons(spEStunde, 0);
-            RendererTools.makeReadOnly(spEStunde);
-            RendererTools.makeDoubleSpinnerWithoutButtons(spEMinute, 0);
-            RendererTools.makeReadOnly(spEMinute);
             RendererTools.makeReadOnly(ftZeitBeginn);
             RendererTools.makeReadOnly(dcBeginn);
             RendererTools.makeReadOnly(ftZeitEnde);
@@ -2533,22 +2392,13 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         boolean noErrorOccured = true;
         final StringBuilder errorMessage = new StringBuilder();
         try {
-            noErrorOccured = uaVerursacherPanel.isOkForSaving(beanVerursacher);
+            if (beanVerursacher!= null){
+                noErrorOccured = uaVerursacherPanel.isOkForSaving(beanVerursacher);
+            }
         } catch (final Exception ex) {
             noErrorOccured = false;
             LOG.error("Fehler beim Speicher-Check des Verursachers.", ex);
         }
-        // Datum muss angegeben werden
-            try {
-                if (getCidsBean().getProperty(FIELD__DATUM) == null) {
-                    LOG.warn("No datum specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NODATE));
-                    save = false;
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("Datum not given.", ex);
-                save = false;
-            }
             
         // dateTime Beginn vorhanden
         try {
@@ -2768,7 +2618,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 null,
                 NEXT_TABLE);
         final Collection<String> conditions = new ArrayList<>();
-        final LocalDate ld = dcDatum.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        final LocalDate ld = dcBeginn.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         conditions.add(" split_part(" + FIELD__AZ + ",'-',4) ilike '" + ld.getYear() + "'");
         yearSearch.setWhere(conditions);
         try {
