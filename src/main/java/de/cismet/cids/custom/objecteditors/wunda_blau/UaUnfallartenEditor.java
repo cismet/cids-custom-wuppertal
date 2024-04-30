@@ -398,6 +398,7 @@ public class UaUnfallartenEditor extends DefaultCustomObjectEditor implements Ci
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(taBemerkung);
         }
     }
 
