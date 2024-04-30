@@ -303,10 +303,10 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpBeteiligte;
     private DefaultBindableLabelsPanel blpBeteiligteFolge;
+    private DefaultBindableLabelsPanel blpFolgen;
     private DefaultBindableLabelsPanel blpLeistungen;
     private DefaultBindableLabelsPanel blpSchadstoffarten;
     private DefaultBindableLabelsPanel blpUnfallarten;
-    private DefaultBindableLabelsPanel blpVerunreinigungen;
     private JButton btnAddNewVerursacher;
     private JButton btnCreateGeometrie;
     private FastBindableReferenceCombo cbBereitschaft;
@@ -346,6 +346,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblFeststellungen;
     private JLabel lblFirma;
     private JLabel lblFolge;
+    private JLabel lblFolgen;
     private JLabel lblGeom;
     private JLabel lblGewaesser;
     private JLabel lblHNrRenderer;
@@ -365,7 +366,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblSofort;
     private JLabel lblStrasse;
     private JLabel lblUnfallarten;
-    private JLabel lblVerunreinigungen;
     private JLabel lblVerursacher;
     private JLabel lblVerursacherText;
     private JList lstDok;
@@ -447,13 +447,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         super.initWithConnectionContext(connectionContext);
         initProperties();
         initComponents();
-        for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(
-                blpBeteiligte, 
+        for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpBeteiligte, 
                 blpBeteiligteFolge, 
                 blpLeistungen, 
                 blpSchadstoffarten,
                 blpUnfallarten,
-                blpVerunreinigungen)) {
+                blpFolgen)) {
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
         cbGewaesser.setRenderer(new GewaesserRenderer(cbGewaesser.getRenderer()));
@@ -606,8 +605,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMenge = new JLabel();
         spMenge = new JSpinner();
         lblMengeEinheit = new JLabel();
-        lblVerunreinigungen = new JLabel();
-        blpVerunreinigungen = new DefaultBindableLabelsPanel(isEditor(), "Verunreinigungen:", SORTING_OPTION);
+        lblFolgen = new JLabel();
+        blpFolgen = new DefaultBindableLabelsPanel(isEditor(), "Unfallfolgen:", SORTING_OPTION);
         lblFeststellungen = new JLabel();
         panFeststellungen = new JPanel();
         scpFeststellungen = new JScrollPane();
@@ -1204,7 +1203,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblSchadstoffarten.setText("Schadstoffarten:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1218,7 +1217,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -1229,7 +1228,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblGewaesser.setText("Gewässer:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1245,7 +1244,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1256,7 +1255,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMenge.setText("Menge:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1274,7 +1273,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(spMenge, gridBagConstraints);
@@ -1284,37 +1283,37 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMengeEinheit.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panDetails.add(lblMengeEinheit, gridBagConstraints);
 
-        lblVerunreinigungen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblVerunreinigungen.setText("Verunreinigungen:");
+        lblFolgen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFolgen.setText("Unfallfolgen:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDetails.add(lblVerunreinigungen, gridBagConstraints);
+        panDetails.add(lblFolgen, gridBagConstraints);
 
-        blpVerunreinigungen.setOpaque(false);
+        blpFolgen.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_verunreinigungen}"), blpVerunreinigungen, BeanProperty.create("selectedElements"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_unfallfolgen}"), blpFolgen, BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDetails.add(blpVerunreinigungen, gridBagConstraints);
+        panDetails.add(blpFolgen, gridBagConstraints);
 
         lblFeststellungen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblFeststellungen.setText("Feststellungen:");
@@ -2034,7 +2033,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 labelsPanels.addAll(Arrays.asList(blpLeistungen));
                 labelsPanels.addAll(Arrays.asList(blpSchadstoffarten));
                 labelsPanels.addAll(Arrays.asList(blpUnfallarten));
-                labelsPanels.addAll(Arrays.asList(blpVerunreinigungen));
+                labelsPanels.addAll(Arrays.asList(blpFolgen));
             }
             
             final DateTimeFormListener dtflBeginn = new DateTimeFormListener(
@@ -2217,7 +2216,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             RendererTools.makeReadOnly(cbGewaesser);
             RendererTools.makeDoubleSpinnerWithoutButtons(spMenge, 0);
             RendererTools.makeReadOnly(spMenge);
-            RendererTools.makeReadOnly(blpVerunreinigungen);
+            RendererTools.makeReadOnly(blpFolgen);
             RendererTools.makeReadOnly(taFeststellungen);
             RendererTools.makeReadOnly(taSofort);
             RendererTools.makeReadOnly(taFolge);
