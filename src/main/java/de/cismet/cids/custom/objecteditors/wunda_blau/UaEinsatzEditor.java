@@ -161,6 +161,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String[] NEXT_TOSTRING_FIELDS = { "aktenzeichen", "id", "split_part( aktenzeichen,'-',3) AS nummer" };
     public static final String NEXT_TABLE = "ua_einsatz";
     public static final String CONF_VERURSACHER = "darfUaVerursacher";
+    public static final String KEINE_RECHTE = "Sie haben keine Rechte den Verursacher zu sehen.";
+    public static final String KEIN_VERURSACHER = "Es wurde (noch) kein Verursacher angegeben.";
+    
 
     private static final Logger LOG = Logger.getLogger(UaEinsatzEditor.class);
 
@@ -169,6 +172,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__BEGINN = "zeit_beginn";
     public static final String FIELD__ENDE = "zeit_ende";
     public static final String FIELD__BEREIT = "fk_bereitschaft";
+    public static final String FIELD__BEREIT_BENUTZER = "fk_bereitschaft.benutzername";
     public static final String FIELD__MELDER = "fk_melder";
     public static final String FIELD__BETEILIGTE_E_ARR = "arr_beteiligte_einsatz";
     public static final String FIELD__BETEILIGTE_F_ARR = "arr_beteiligte_folge";
@@ -363,6 +367,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblUnfallarten;
     private JLabel lblVerunreinigungen;
     private JLabel lblVerursacher;
+    private JLabel lblVerursacherText;
     private JList lstDok;
     private JList lstFotos;
     private JList lstPages;
@@ -460,9 +465,21 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private void showVerursacher(){
         final String aktBenutzer;
         final String confAttrVerursacher;
+        Boolean rechte = false;
         
         final Collection<MetaObjectNode> mons;
         try {
+            confAttrVerursacher = SessionManager.getConnection()
+                    .getConfigAttr(SessionManager.getSession().getUser(),
+                            CONF_VERURSACHER,
+                            getConnectionContext());
+            aktBenutzer = getCurrentUser();
+            if ((aktBenutzer.equals(getCidsBean().getProperty(FIELD__ANLEGER).toString())) 
+                    || ((getCidsBean().getProperty(FIELD__BEREIT) != null)
+                        && (aktBenutzer.equals(getCidsBean().getProperty(FIELD__BEREIT).toString())))
+                    || ((confAttrVerursacher != null) && confAttrVerursacher.equals("true"))) {
+                rechte = true;
+            }
             searchVerursacher.setEinsatzId(getCidsBean().getPrimaryKeyValue());
             mons = SessionManager.getProxy().customServerSearch(
                     searchVerursacher,
@@ -470,13 +487,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             final List<CidsBean> beansVerursacher = new ArrayList<>();
             if (!mons.isEmpty()) {
                 try {
-                    confAttrVerursacher = SessionManager.getConnection()
-                            .getConfigAttr(SessionManager.getSession().getUser(),
-                                    CONF_VERURSACHER,
-                                    getConnectionContext());
-                    aktBenutzer = getCurrentUser();
-                    if ((aktBenutzer.equals(getCidsBean().getProperty(FIELD__ANLEGER).toString())) 
-                            || ((confAttrVerursacher != null) && confAttrVerursacher.equals("true"))) {
+                    if (rechte) {
                         for (final MetaObjectNode mon : mons) {
                             beansVerursacher.add(SessionManager.getProxy().getMetaObject(
                                     mon.getObjectId(),
@@ -486,11 +497,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                         }
                         setBeanVerursacher(beansVerursacher.get(0));
                         uaVerursacherPanel.setCidsBean(getBeanVerursacher());
-                        btnAddNewVerursacher.setVisible(false);    
+                        btnAddNewVerursacher.setVisible(false); 
+                        lblVerursacherText.setVisible(false);
                     } else {
                         uaVerursacherPanel.setVisible(false);
                         btnAddNewVerursacher.setVisible (false);
-                        lblVerursacher.setVisible(false);
+                        lblVerursacherText.setText(KEINE_RECHTE);
                     }
                     } catch (ConnectionException ex) {
                     Exceptions.printStackTrace(ex);
@@ -500,9 +512,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 uaVerursacherPanel.setVisible(false);
                 uaVerursacherPanel.setCidsBean(null);
                 if (isEditor()){
-                    btnAddNewVerursacher.setVisible(true);  
+                    btnAddNewVerursacher.setVisible(true); 
+                    lblVerursacherText.setVisible(false);
                 } else {
                     btnAddNewVerursacher.setVisible(false);
+                    lblVerursacherText.setText(KEIN_VERURSACHER);
                 }
             }
             
@@ -615,6 +629,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         scpFirma = new JScrollPane();
         taFirma = new JTextArea();
         lblVerursacher = new JLabel();
+        lblVerursacherText = new JLabel();
         btnAddNewVerursacher = new JButton();
         uaVerursacherPanel = new UaVerursacherPanel(this);
         lblBemerkung = new JLabel();
@@ -1549,6 +1564,17 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDetails.add(lblVerursacher, gridBagConstraints);
+
+        lblVerursacherText.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVerursacherText.setText("Verursacher:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblVerursacherText, gridBagConstraints);
 
         btnAddNewVerursacher.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewVerursacher.setMaximumSize(new Dimension(39, 20));

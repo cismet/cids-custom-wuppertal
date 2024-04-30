@@ -80,6 +80,7 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
 
     public static final String BUNDLE_NONAME = "UaBereitschaftEditor.isOkForSaving().noName";
     public static final String BUNDLE_DUPLICATENAME = "UaBereitschaftEditor.isOkForSaving().duplicateName";
+    public static final String BUNDLE_NOBENUTZER = "UaBereitschaftEditor.isOkForSaving().noBenutzer";
     public static final String BUNDLE_PANE_PREFIX = "UaBereitschaftEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "UaBereitschaftEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "UaBereitschaftEditor.isOkForSaving().JOptionPane.title";
@@ -94,11 +95,13 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JCheckBox chAktiv;
     private JLabel lblAktiv;
+    private JLabel lblBenutzer;
     private JLabel lblName;
     private JPanel panContent;
     private JPanel panFillerUnten;
     private JPanel panFillerUnten1;
     private JPanel panName;
+    private JTextField txtBenutzer;
     private JTextField txtName;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -164,6 +167,18 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
                     save = false;
                 }
             }
+            
+            if (txtBenutzer.getText().trim().isEmpty()) {
+                LOG.warn("No benutzername specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(UaBereitschaftEditor.class, BUNDLE_NOBENUTZER));
+                save = false;
+            } else {
+                if (redundantName) {
+                    LOG.warn("Duplicate name specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaBereitschaftEditor.class, BUNDLE_DUPLICATENAME));
+                    save = false;
+                }
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("Name not given.", ex);
             save = false;
@@ -209,6 +224,8 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
         txtName = new JTextField();
         lblAktiv = new JLabel();
         chAktiv = new JCheckBox();
+        lblBenutzer = new JLabel();
+        txtBenutzer = new JTextField();
         panFillerUnten1 = new JPanel();
 
         setAutoscrolls(true);
@@ -274,7 +291,7 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
         lblAktiv.setText("Aktiv:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -290,11 +307,33 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(chAktiv, gridBagConstraints);
+
+        lblBenutzer.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBenutzer.setText("Benutzer:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panName.add(lblBenutzer, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.benutzername}"), txtBenutzer, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panName.add(txtBenutzer, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -383,6 +422,7 @@ public class UaBereitschaftEditor extends DefaultCustomObjectEditor implements C
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtBenutzer);
             RendererTools.makeReadOnly(chAktiv);
         }
     }
