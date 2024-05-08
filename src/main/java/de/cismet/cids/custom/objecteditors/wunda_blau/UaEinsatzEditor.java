@@ -50,8 +50,10 @@ import java.util.MissingResourceException;
 import javax.swing.*;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
+import de.cismet.cids.custom.commons.gui.ScrollablePanel;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objecteditors.utils.TableUtils;
 import de.cismet.cids.custom.objecteditors.utils.UaConfProperties;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
@@ -92,6 +94,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -174,6 +177,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__BEREIT = "fk_bereitschaft";
     public static final String FIELD__BEREIT_BENUTZER = "fk_bereitschaft.benutzername";
     public static final String FIELD__MELDER = "fk_melder";
+    public static final String FIELD__FIRMA = "n_firma_leistungen";
+    public static final String FIELD__EINSATZ = "fk_einsatz";
     public static final String FIELD__BETEILIGTE_E_ARR = "arr_beteiligte_einsatz";
     public static final String FIELD__BETEILIGTE_F_ARR = "arr_beteiligte_folge";
     public static final String FIELD__ARTEN_ARR = "arr_unfallarten";
@@ -189,10 +194,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";
     public static final String FIELD__HNR = "fk_adresse";
     public static final String FIELD__HNR_GEOM = "umschreibendes_rechteck";                //adresse
-    public static final String FIELD__FK_EINSATZ= "fk_einsatz";                //ua_verursacher
+    public static final String FIELD__FK_EINSATZ = "fk_einsatz";                //ua_verursacher
+    public static final String FIELD__EINSATZ_REF = "ua_einsatz_reference";                //ua_firma_leistungen
     public static final String TABLE_NAME = "ua_einsatz";
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_VERURSACHER = "ua_verursacher";
+    public static final String TABLE_FIRMA = "ua_einsatz_firma_leistungen";
 
     public static final String BUNDLE_NOBEREIT = "UaEinsatzEditor.isOkForSaving().noBereitschaft";
     public static final String BUNDLE_NOMELDER = "UaEinsatzEditor.isOkForSaving().noMelder";
@@ -257,6 +264,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
     private final boolean editor;
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
+    @Getter @Setter private final List<CidsBean> deletedFirmaBeans = new ArrayList<>();
+    boolean refreshingFirmaPanels = false;
+    @Getter @Setter private List<CidsBean> firmaBeans;
     
     private final UaBereitschaftLightweightSearch bereitSearch = new UaBereitschaftLightweightSearch(
             UaBereitschaftLightweightSearch.Subject.NAME,
@@ -304,9 +314,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private DefaultBindableLabelsPanel blpBeteiligte;
     private DefaultBindableLabelsPanel blpBeteiligteFolge;
     private DefaultBindableLabelsPanel blpFolgen;
-    private DefaultBindableLabelsPanel blpLeistungen;
     private DefaultBindableLabelsPanel blpSchadstoffarten;
     private DefaultBindableLabelsPanel blpUnfallarten;
+    JButton btnAddNewFirma;
     private JButton btnAddNewVerursacher;
     private JButton btnCreateGeometrie;
     private FastBindableReferenceCombo cbBereitschaft;
@@ -357,7 +367,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblHnr;
     private JLabel lblKarte;
     private JLabel lblKeineFotos;
-    private JLabel lblLeistungen;
     private JLabel lblMelder;
     private JLabel lblMenge;
     private JLabel lblMengeEinheit;
@@ -380,6 +389,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JPanel panFiller;
     private JPanel panFiller1;
     private JPanel panFirma;
+    private JPanel panFirmen;
     private JPanel panFolge;
     private JPanel panGeometrie;
     private JPanel panOrt;
@@ -397,6 +407,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private RoundedPanel pnlPages;
     private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanel1;
     private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanelDok;
+    private RoundedPanel rpFirma;
     private RoundedPanel rpKarte;
     private JScrollPane scpBemerkung;
     private JScrollPane scpDok;
@@ -408,10 +419,10 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JScrollPane scpPages;
     private JScrollPane scpSofort;
     private SemiRoundedPanel semiRoundedPanel7;
+    private SemiRoundedPanel semiRoundedPanel8;
     JSpinner spMenge;
     private JTextArea taBemerkung;
     private JTextArea taFeststellungen;
-    private JTextArea taFirma;
     private JTextArea taFolge;
     private JTextArea taOrt;
     private JTextArea taSofort;
@@ -429,6 +440,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
      */
     public UaEinsatzEditor() {
         this(true);
+        this.firmaBeans = new ArrayList<>();
     }
 
     /**
@@ -437,6 +449,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
      * @param  boolEditor  DOCUMENT ME!
      */
     public UaEinsatzEditor(final boolean boolEditor) {
+        this.firmaBeans = new ArrayList<>();
         this.editor = boolEditor;
     }
 
@@ -449,7 +462,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         initComponents();
         for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpBeteiligte, 
                 blpBeteiligteFolge, 
-                blpLeistungen, 
                 blpSchadstoffarten,
                 blpUnfallarten,
                 blpFolgen)) {
@@ -621,12 +633,15 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         taFolge = new JTextArea();
         lblBeteiligteFolge = new JLabel();
         blpBeteiligteFolge = new DefaultBindableLabelsPanel(isEditor(), "Beteiligte:", SORTING_OPTION);
-        lblLeistungen = new JLabel();
-        blpLeistungen = new DefaultBindableLabelsPanel(isEditor(), "Leistungen:", SORTING_OPTION);
-        lblFirma = new JLabel();
         panFirma = new JPanel();
+        rpFirma = new RoundedPanel();
+        semiRoundedPanel8 = new SemiRoundedPanel();
+        lblFirma = new JLabel();
+        if (isEditor()){
+            btnAddNewFirma = new JButton();
+        }
         scpFirma = new JScrollPane();
-        taFirma = new JTextArea();
+        panFirmen = new ScrollablePanel(new GridLayout(0, 1, 0, 10));
         lblVerursacher = new JLabel();
         lblVerursacherText = new JLabel();
         btnAddNewVerursacher = new JButton();
@@ -1481,69 +1496,83 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(blpBeteiligteFolge, gridBagConstraints);
 
-        lblLeistungen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblLeistungen.setText("Leistungen:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDetails.add(lblLeistungen, gridBagConstraints);
-
-        blpLeistungen.setOpaque(false);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_leistungen}"), blpLeistungen, BeanProperty.create("selectedElements"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDetails.add(blpLeistungen, gridBagConstraints);
-
-        lblFirma.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblFirma.setText("Firma:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDetails.add(lblFirma, gridBagConstraints);
-
+        panFirma.setMinimumSize(new Dimension(134, 150));
         panFirma.setOpaque(false);
+        panFirma.setPreferredSize(new Dimension(134, 150));
         panFirma.setLayout(new GridBagLayout());
 
-        taFirma.setColumns(20);
-        taFirma.setLineWrap(true);
-        taFirma.setRows(3);
-        taFirma.setWrapStyleWord(true);
+        rpFirma.setName(""); // NOI18N
+        rpFirma.setLayout(new GridBagLayout());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.firma}"), taFirma, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        semiRoundedPanel8.setBackground(Color.darkGray);
+        semiRoundedPanel8.setLayout(new GridBagLayout());
 
-        scpFirma.setViewportView(taFirma);
+        lblFirma.setForeground(new Color(255, 255, 255));
+        lblFirma.setText("Firma - Leistungen");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(5, 10, 5, 5);
+        semiRoundedPanel8.add(lblFirma, gridBagConstraints);
+
+        if (isEditor()){
+            btnAddNewFirma.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+            btnAddNewFirma.setMaximumSize(new Dimension(39, 20));
+            btnAddNewFirma.setMinimumSize(new Dimension(39, 20));
+            btnAddNewFirma.setPreferredSize(new Dimension(25, 20));
+            btnAddNewFirma.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    btnAddNewFirmaActionPerformed(evt);
+                }
+            });
+        }
+        if (isEditor()){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.anchor = GridBagConstraints.EAST;
+            gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+            semiRoundedPanel8.add(btnAddNewFirma, gridBagConstraints);
+        }
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        rpFirma.add(semiRoundedPanel8, gridBagConstraints);
+
+        scpFirma.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scpFirma.setOpaque(false);
+        scpFirma.getViewport().setOpaque(false);
+
+        ((ScrollablePanel)panFirmen).setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
+        ((ScrollablePanel)panFirmen).setScrollableBlockIncrement(ScrollablePanel.VERTICAL, ScrollablePanel.IncrementType.PERCENT, 100);
+        panFirmen.setOpaque(false);
+        panFirmen.setLayout(new GridBagLayout());
+        scpFirma.setViewportView(panFirmen);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panFirma.add(scpFirma, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(5, 0, 0, 0);
+        rpFirma.add(scpFirma, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFirma.add(rpFirma, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1557,7 +1586,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblVerursacher.setText("Verursacher:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1568,7 +1597,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblVerursacherText.setText("Verursacher:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1586,12 +1615,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panDetails.add(btnAddNewVerursacher, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panDetails.add(uaVerursacherPanel, gridBagConstraints);
 
@@ -1599,7 +1628,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 18;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1632,7 +1661,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 18;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1643,7 +1672,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         panDetails.add(panBemerkung, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
@@ -1663,7 +1692,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 1.0;
         panDetails.add(panFiller1, gridBagConstraints);
@@ -1978,6 +2007,117 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }//GEN-LAST:event_btnAddNewVerursacherActionPerformed
 
+    private void btnAddNewFirmaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewFirmaActionPerformed
+        try {
+            addFirmaPanel(null);
+        } catch (Exception e) {
+            LOG.error("Cannot add new Firma Leistung object", e);
+        }
+    }//GEN-LAST:event_btnAddNewFirmaActionPerformed
+
+     public void removeFirmaPanel(final UaFirmaLeistungenPanel panel) {
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    final CidsBean panelBean = panel.getCidsBean();
+                    try {
+                        //panelBean.setProperty(FIELD__EINSATZ_REF, null);
+                        //deletedFirmaBeans.add(panelBean);
+                        cidsBean = TableUtils.deleteItemFromList(getCidsBean(), FIELD__FIRMA, panelBean, false);
+                        firmaBeans.remove(panelBean);
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                    cidsBean.setArtificialChangeFlag(true);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    refreshFirmaPanels();
+                }
+            }.execute();
+    }
+    
+    public void addFirmaPanel(final UaFirmaLeistungenPanel panFirma) {
+        getCidsBean().setArtificialChangeFlag(true);
+        new SwingWorker<List<CidsBean>, Void>() {
+
+                @Override
+                protected List<CidsBean> doInBackground() throws Exception {
+                    final CidsBean newFirmaBean = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            TABLE_FIRMA,
+                            getConnectionContext());
+//                    newFirmaBean.setProperty(FIELD__EINSATZ, getCidsBean());
+
+                    //firmaBeans.add(newFirmaBean);
+                    try {
+                        cidsBean = TableUtils.addBeanToCollection(
+                            getCidsBean(),
+                            FIELD__FIRMA,
+                            newFirmaBean);
+                    } catch (Exception ex) {
+                        LOG.error("Fehler beim Hinzufuegen der Firma-Leistungen.", ex);
+                    } finally {
+                        getCidsBean().setArtificialChangeFlag(true);
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    refreshFirmaPanels();
+                    try {
+                    } catch (final Exception ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }.execute();
+    }
+    
+     public void refreshFirmaPanels() {
+        try {
+            GridBagConstraints gridBagConstraints;
+            Integer zaehlerY = 0;
+            refreshingFirmaPanels = true;
+            for (final Component component : panFirmen.getComponents()) {
+                if (component instanceof UaFirmaLeistungenPanel) {
+                    ((UaFirmaLeistungenPanel)component).dispose();
+                }
+            }
+            panFirmen.removeAll();
+
+            
+
+            UaFirmaLeistungenPanel selectedFirmaPanel = null;
+            for (final CidsBean firmaBean : firmaBeans) {
+                final UaFirmaLeistungenPanel firmaPanel = new UaFirmaLeistungenPanel(
+                        UaEinsatzEditor.this,
+                        isEditor());
+                firmaPanel.initWithConnectionContext(getConnectionContext());
+                firmaPanel.setCidsBean(firmaBean);
+                firmaPanel.setOpaque(false);
+                gridBagConstraints = new GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = zaehlerY;
+                gridBagConstraints.fill = GridBagConstraints.BOTH;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.weighty = 1.0;
+                panFirmen.add(firmaPanel,gridBagConstraints);
+                zaehlerY++;
+            }
+            if (selectedFirmaPanel != null) {
+                final UaFirmaLeistungenPanel component = selectedFirmaPanel;
+                //component.setSelected(true);
+
+                scpFirma.scrollRectToVisible(component.getBounds());
+            }
+        } finally {
+            refreshingFirmaPanels = false;
+        }
+    }
     /**
      * DOCUMENT ME!
      *
@@ -2030,7 +2170,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             if (getCidsBean() != null){
                 labelsPanels.addAll(Arrays.asList(blpBeteiligte));
                 labelsPanels.addAll(Arrays.asList(blpBeteiligteFolge));
-                labelsPanels.addAll(Arrays.asList(blpLeistungen));
                 labelsPanels.addAll(Arrays.asList(blpSchadstoffarten));
                 labelsPanels.addAll(Arrays.asList(blpUnfallarten));
                 labelsPanels.addAll(Arrays.asList(blpFolgen));
@@ -2082,6 +2221,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             loadDateTime(FIELD__BEGINN, ftZeitBeginn, dcBeginn, StartFinish.beginn);
             loadDateTime(FIELD__ENDE, ftZeitEnde, dcEnde, StartFinish.ende);
             showDauer();
+            //firma leistungen
+            if (getCidsBean().getBeanCollectionProperty(FIELD__FIRMA) != null){
+                firmaBeans = getCidsBean().getBeanCollectionProperty(FIELD__FIRMA);
+                refreshFirmaPanels();
+            }
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
@@ -2221,8 +2365,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             RendererTools.makeReadOnly(taSofort);
             RendererTools.makeReadOnly(taFolge);
             RendererTools.makeReadOnly(blpBeteiligteFolge);
-            RendererTools.makeReadOnly(blpLeistungen);
-            RendererTools.makeReadOnly(taFirma);
             RendererTools.makeReadOnly(taBemerkung);
         } 
         RendererTools.makeReadOnly(txtAktenzeichen);
@@ -2393,6 +2535,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lstDok.removeAll();
         rasterfariDocumentLoaderPanel1.dispose();
         rasterfariDocumentLoaderPanelDok.dispose();
+        deletedFirmaBeans.clear();
+        refreshFirmaPanels();
         bindingGroup.unbind();
         super.dispose();
     }
@@ -2415,6 +2559,18 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public boolean isOkForSaving() {
         boolean save = true;
         boolean noErrorOccured = true;
+        boolean errorFirmaOccured = false;
+        for (final CidsBean firmaBean : getFirmaBeans()) {
+            try {
+                //prüfen
+            } catch (final Exception ex) {
+                errorFirmaOccured = true;
+                LOG.error(ex, ex);
+            }
+        }
+        if (errorFirmaOccured) {
+            return false;
+        }
         final StringBuilder errorMessage = new StringBuilder();
         try {
             if (beanVerursacher!= null){
@@ -2611,20 +2767,38 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         try {
             if (AfterSavingHook.Status.SAVE_SUCCESS == event.getStatus()) {
                 try {
-                    beanVerursacher.setProperty(FIELD__FK_EINSATZ, event.getPersistedBean());
-                    try {
-                        beanVerursacher = beanVerursacher.persist(getConnectionContext());
-                    } catch (final Exception ex) {
-                        LOG.error("Fehler bei der Speicher-Vorbereitung des Verursachers.", ex);
-                        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_PREFIX_VERURSACHER)
-                                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_KONTROLLE)
-                                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_ADMIN)
-                                        + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_SUFFIX),
-                                NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_TITLE_PERSIST),
-                                JOptionPane.ERROR_MESSAGE);
-                    }   
+                    if (beanVerursacher != null){
+                        beanVerursacher.setProperty(FIELD__FK_EINSATZ, event.getPersistedBean());
+                        try {
+                            beanVerursacher = beanVerursacher.persist(getConnectionContext());
+                        } catch (final Exception ex) {
+                            LOG.error("Fehler bei der Speicher-Vorbereitung des Verursachers.", ex);
+                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                    NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_PREFIX_VERURSACHER)
+                                            + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_KONTROLLE)
+                                            + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_ADMIN)
+                                            + NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_SUFFIX),
+                                    NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                    JOptionPane.ERROR_MESSAGE);
+                        }   
+                    }
+                    /*
+                    for (final CidsBean firmaBean : getFirmaBeans()) {
+                        try {
+                            firmaBean.persist(getConnectionContext());
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                    }
 
+                    for (final CidsBean firmaBean : getDeletedFirmaBeans()) {
+                        try {
+                            firmaBean.delete();
+                            firmaBean.persist(getConnectionContext());
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                    }*/
                 } catch (HeadlessException | MissingResourceException ex) {
                     LOG.warn("problem in persist verursacher.", ex);
                 }
