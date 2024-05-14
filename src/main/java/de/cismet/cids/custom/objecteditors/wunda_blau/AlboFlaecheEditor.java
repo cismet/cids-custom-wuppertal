@@ -1222,10 +1222,11 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                     "Wenn eine Sicherungsmaßnahme gesetzt ist, muss der Bearbeitungsstand \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" sein.");
             }
 
-            if (status.equalsIgnoreCase("altlast") && bearbeitungsstand.equals("su_sp")
+            if ((status.equalsIgnoreCase("altlast") || status.equalsIgnoreCase("altlast_mit_ueberwachung"))
+                        && (bearbeitungsstand.equals("su_sp") || bearbeitungsstand.equals("ga"))
                         && (sumSchutzgefaehrdung == 0)) {
                 errorList.add(
-                    "Es muss mindestens eine Gefährdungsannahme gesetzt sein, wenn die Fläche den Bearbeitungsstand \"su_sp\" hat und es sich um eine Altlast handelt.");
+                    "Es muss mindestens eine Gefährdungsannahme gesetzt sein, wenn die Fläche den Bearbeitungsstand \"su_sp\" oder \"ga\" hat\nund es sich um eine Altlast oder Altlast mit Überwachung handelt.");
             }
 
             if ((sumSchutzgefaehrdung > 0)
@@ -1236,10 +1237,25 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                     "Wenn eine Schutzgutgefährdung ermittelt wurde, muss der Bearbeitungsstand \"Gefährdungsabschätzung\", \"Sanierungsuntersuchung / -planung\", \"Sanierung laufend\" oder \"Sanierung abgeschlossen\" sein.");
             }
 
-            if (status.equalsIgnoreCase("altlast_mit_ueberwachung") && !ueberwachungsMassnahmen
-                        && !schutzBeschrMassnahmen) {
-                errorList.add(
-                    "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist, müssen Überwachungsmaßnahmen/Schutz- und Beschränkungsmaßnahmen ausgewählt sein.");
+            if (status.equalsIgnoreCase("altlast_mit_ueberwachung")) {
+                final String arbeitsstandUeberwachung = (String)cidsBean.getProperty(
+                        "fk_arbeitsstand_ueberwachung.schluessel");
+                final String arbeitsstandBegrenzung = (String)cidsBean.getProperty(
+                        "fk_arbeitsstand_schutzundbegrenzung.schluessel");
+
+                if (arbeitsstandUeberwachung.equalsIgnoreCase("laufend")
+                            && ((arbeitsstandBegrenzung == null)
+                                || !arbeitsstandBegrenzung.equalsIgnoreCase("laufend"))) {
+                    if (!ueberwachungsMassnahmen) {
+                        errorList.add(
+                            "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist und Überwachung ausgewählt ist, muss Überwachung aktiv sein.");
+                    }
+                } else if ((arbeitsstandBegrenzung != null) && arbeitsstandBegrenzung.equalsIgnoreCase("laufend")) {
+                    if (!schutzBeschrMassnahmen && !ueberwachungsMassnahmen) {
+                        errorList.add(
+                            "Wenn der Status der Fläche \"Altlast mit Überwachung\" ist und Beschränkungsmaßnahmen gesetzt sind, müssen Überwachung und Schutz- und Beschränkungsmaßnahmen aktiv sein.");
+                    }
+                }
             }
         } else if ((zuordnung != null) && zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
             if (((cidsBean.getProperty("laufende_nummer") != null)
