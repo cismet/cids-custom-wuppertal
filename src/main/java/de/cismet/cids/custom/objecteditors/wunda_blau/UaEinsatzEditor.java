@@ -1062,8 +1062,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             panDaten.add(cbGeom, gridBagConstraints);
         }
 
-        btnCreateGeometrie.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/textblatt.png"))); // NOI18N
-        btnCreateGeometrie.setToolTipText("Aktenzeichen automatisch generieren");
+        btnCreateGeometrie.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
+        btnCreateGeometrie.setToolTipText("Geometrie aus Adresse generieren");
         btnCreateGeometrie.setMaximumSize(new Dimension(66, 50));
         btnCreateGeometrie.setMinimumSize(new Dimension(20, 19));
         btnCreateGeometrie.setPreferredSize(new Dimension(33, 24));

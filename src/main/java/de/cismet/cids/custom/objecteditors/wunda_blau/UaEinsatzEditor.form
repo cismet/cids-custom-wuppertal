@@ -552,9 +552,9 @@
                             <Component class="javax.swing.JButton" name="btnCreateGeometrie">
                               <Properties>
                                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                                  <Image iconType="3" name="/de/cismet/cids/custom/wunda_blau/res/textblatt.png"/>
+                                  <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"/>
                                 </Property>
-                                <Property name="toolTipText" type="java.lang.String" value="Aktenzeichen automatisch generieren"/>
+                                <Property name="toolTipText" type="java.lang.String" value="Geometrie aus Adresse generieren"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[66, 50]"/>
                                 </Property>
