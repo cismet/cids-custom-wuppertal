@@ -192,6 +192,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__GEOM = "fk_geom";
     public static final String FIELD__GEO_FIELD = "geo_field";
     public static final String FIELD__GEOREFERENZ__GEO_FIELD = "fk_geom.geo_field";
+    public static final String FIELD__FK_FIRMA = "fk_firma";        //ua_einsatz_firma_leistungen
+    public static final String FIELD__LEISTUNGEN = "arr_leistungen";//ua_einsatz_firma_leistungen
     public static final String FIELD__HNR = "fk_adresse";
     public static final String FIELD__HNR_GEOM = "umschreibendes_rechteck";                //adresse
     public static final String FIELD__FK_EINSATZ = "fk_einsatz";                //ua_verursacher
@@ -209,6 +211,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_NOARTEN = "UaEinsatzEditor.isOkForSaving().noArten";
     public static final String BUNDLE_BETKEINER = "UaEinsatzEditor.isOkForSaving().beteiligteKeiner";
     public static final String BUNDLE_BETKEINER_FOLGE = "UaEinsatzEditor.isOkForSaving().beteiligteKeinerFolge";
+    public static final String BUNDLE_NOFIRMA = "UaEinsatzEditor.isOkForSaving().noFirma";
+    public static final String BUNDLE_REDUNDANT_FIRMA = "UaEinsatzEditor.isOkForSaving().reundantFirma";
+    public static final String BUNDLE_NOLEISTUNG = "UaEinsatzEditor.isOkForSaving().noLeistung";
     public static final String BUNDLE_NODATEB = "UaEinsatzEditor.isOkForSaving().noDatumBeginn";
     public static final String BUNDLE_NOTIMEB = "UaEinsatzEditor.isOkForSaving().noZeitBeginn";
     public static final String BUNDLE_NODATEE = "UaEinsatzEditor.isOkForSaving().noDatumEnde";
@@ -2559,19 +2564,49 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public boolean isOkForSaving() {
         boolean save = true;
         boolean noErrorOccured = true;
-        boolean errorFirmaOccured = false;
-        for (final CidsBean firmaBean : getFirmaBeans()) {
-            try {
-                //prüfen
-            } catch (final Exception ex) {
-                errorFirmaOccured = true;
-                LOG.error(ex, ex);
-            }
-        }
-        if (errorFirmaOccured) {
-            return false;
-        }
+        boolean errorFirma= true;
         final StringBuilder errorMessage = new StringBuilder();
+        
+        
+        try {
+            for (final CidsBean firmaBean : getFirmaBeans()) {    
+                if (firmaBean.getProperty(FIELD__FK_FIRMA) == null){
+                    LOG.warn("No firma specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOFIRMA));
+                    save = false;
+                } else {
+                    final Collection<CidsBean> collectionLeistungen = 
+                            firmaBean.getBeanCollectionProperty(FIELD__LEISTUNGEN);
+                    if ((collectionLeistungen== null) || collectionLeistungen.isEmpty()) {
+                        LOG.warn("No leistungen specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOLEISTUNG));
+                        save = false;
+                    } else{
+                        errorFirma = false;
+                    }
+                }
+            }
+            if (errorFirma == false){
+                //redundant
+                for (int i = 0; i < getFirmaBeans().size(); i++) {
+                    if (getFirmaBeans().size() > (i + 1)) {
+                        for (int j = i + 1; j < getFirmaBeans().size(); j++) {
+                            if (getFirmaBeans().get(i).getProperty(FIELD__FK_FIRMA).equals(
+                                            getFirmaBeans().get(j).getProperty(FIELD__FK_FIRMA))) {
+                                LOG.warn("No redundant firma specified. Skip persisting.");
+                                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_REDUNDANT_FIRMA));
+                                save = false;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (final MissingResourceException ex) {
+            errorFirma = true;
+            LOG.error(ex, ex);
+        }
+        
+        
         try {
             if (beanVerursacher!= null){
                 noErrorOccured = uaVerursacherPanel.isOkForSaving(beanVerursacher);
