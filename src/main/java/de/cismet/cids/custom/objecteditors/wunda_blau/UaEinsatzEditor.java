@@ -197,6 +197,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__HNR = "fk_adresse";
     public static final String FIELD__HNR_GEOM = "umschreibendes_rechteck";                //adresse
     public static final String FIELD__FK_EINSATZ = "fk_einsatz";                //ua_verursacher
+    public static final String FIELD__KENNE = "kenne_verursacher";                
     public static final String FIELD__EINSATZ_REF = "ua_einsatz_reference";                //ua_firma_leistungen
     public static final String TABLE_NAME = "ua_einsatz";
     public static final String TABLE_GEOM = "geom";
@@ -480,6 +481,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     
     private void showVerursacher(){
         final String aktBenutzer;
+        final String verursacherBenutzer;
         final String confAttrVerursacher;
         Boolean rechte = false;
         
@@ -490,7 +492,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                             CONF_VERURSACHER,
                             getConnectionContext());
             aktBenutzer = getCurrentUser();
-            if ((aktBenutzer.equals(getCidsBean().getProperty(FIELD__ANLEGER).toString())) 
+            if(getCidsBean().getProperty(FIELD__KENNE) == null) {
+                verursacherBenutzer = getCidsBean().getProperty(FIELD__ANLEGER).toString();
+            } else {
+                verursacherBenutzer =getCidsBean().getProperty(FIELD__KENNE).toString();
+            }
+            if ((aktBenutzer.equals(verursacherBenutzer)) 
                     || ((getCidsBean().getProperty(FIELD__BEREIT) != null)
                         && (aktBenutzer.equals(getCidsBean().getProperty(FIELD__BEREIT).toString())))
                     || ((confAttrVerursacher != null) && confAttrVerursacher.equals("true"))) {
@@ -2002,6 +2009,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                     beanVerursacher.setProperty(FIELD__FK_EINSATZ, beanEinsatz);
 
                     getCidsBean().setArtificialChangeFlag(true);
+                    try{
+                        getCidsBean().setProperty(FIELD__KENNE, getCurrentUser());
+                    } catch (Exception e) {
+                    LOG.error("Cannot set user for verursacher", e);
+                }
                     btnAddNewVerursacher.setVisible(false);
                     uaVerursacherPanel.setVisible(true);
                     uaVerursacherPanel.setCidsBean(beanVerursacher);
