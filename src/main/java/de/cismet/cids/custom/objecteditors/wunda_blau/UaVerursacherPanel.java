@@ -647,7 +647,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
          * @param  okValue  DOCUMENT ME!
          */
         public void setLastValid(final Object okValue) {
-            if (lastValid == null) {
+            if (lastValid == null && !(okValue.equals("null"))) {
                 lastValid = okValue;
             }
         }
