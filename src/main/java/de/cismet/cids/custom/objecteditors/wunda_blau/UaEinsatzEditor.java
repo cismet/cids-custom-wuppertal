@@ -182,6 +182,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__BETEILIGTE_E_ARR = "arr_beteiligte_einsatz";
     public static final String FIELD__BETEILIGTE_F_ARR = "arr_beteiligte_folge";
     public static final String FIELD__ARTEN_ARR = "arr_unfallarten";
+    public static final String FIELD__ART_SCHLUESSEL = "schluessel";            //ua_unfallarten
     public static final String FIELD__BET_SCHLUESSEL = "schluessel";           //ua_beteiligte
     public static final String FIELD__GEW_NAME = "name";                            //ua_gewaesser
     public static final String FIELD__GEW_WV = "wv";                                //ua_gewaesser
@@ -210,6 +211,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_NOGEOM = "UaEinsatzEditor.isOkForSaving().noGeom";
     public static final String BUNDLE_NOBETE = "UaEinsatzEditor.isOkForSaving().noBeteiligteEinsatz";
     public static final String BUNDLE_NOARTEN = "UaEinsatzEditor.isOkForSaving().noArten";
+    public static final String BUNDLE_FEHL = "UaEinsatzEditor.isOkForSaving().fehlalarm";
+    public static final String BUNDLE_NOART = "UaEinsatzEditor.isOkForSaving().noArt";
     public static final String BUNDLE_BETKEINER = "UaEinsatzEditor.isOkForSaving().beteiligteKeiner";
     public static final String BUNDLE_BETKEINER_FOLGE = "UaEinsatzEditor.isOkForSaving().beteiligteKeinerFolge";
     public static final String BUNDLE_NOFIRMA = "UaEinsatzEditor.isOkForSaving().noFirma";
@@ -233,16 +236,15 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String BUNDLE_PANE_ADMIN = "UaEinsatzEditor.editorClose().JOptionPane.admin";
     
     public static final String BET_KEINER = "keiner";
+    public static final String FEHL = "fehlalarm";
     private static final String TITLE_NEW_EINSATZ = "einen neuen Einsatz anlegen...";
 
     @Override
     public void showMeasureIsLoading() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void showMeasurePanel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     //~ Enums ------------------------------------------------------------------
@@ -2589,7 +2591,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 } else {
                     final Collection<CidsBean> collectionLeistungen = 
                             firmaBean.getBeanCollectionProperty(FIELD__LEISTUNGEN);
-                    if ((collectionLeistungen== null) || collectionLeistungen.isEmpty()) {
+                    if ((collectionLeistungen == null) || collectionLeistungen.isEmpty()) {
                         LOG.warn("No leistungen specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOLEISTUNG));
                         save = false;
@@ -2748,18 +2750,30 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         }
         
         // Unfallarten
-     /*   try {
+        try {
             final Collection<CidsBean> collectionArten = getCidsBean().getBeanCollectionProperty(
                     FIELD__ARTEN_ARR);
             if ((collectionArten == null) || collectionArten.isEmpty()) {
                 LOG.warn("No unfallarten specified. Skip persisting.");
-                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOARTEN));
+                errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOART));
                 save = false;
-            } 
+            } else {
+                Boolean fehlalarm = false;
+                for (final CidsBean betBean:collectionArten){
+                    if ((betBean.getProperty(FIELD__ART_SCHLUESSEL)).toString().equals(FEHL)){
+                        fehlalarm = true;
+                    }
+                }
+                if (fehlalarm && collectionArten.size() > 1) {
+                    LOG.warn("fehlalarm + specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_FEHL));
+                    save = false;
+                }
+            }
         } catch (final MissingResourceException ex) {
             LOG.warn("unfallarten not given.", ex);
             save = false;
-        }*/
+        }
         
         // Beteiligte Folge
         try {
