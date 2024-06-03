@@ -1247,7 +1247,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1284,7 +1283,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMenge.setText("Menge:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1302,7 +1301,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.VERTICAL;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(spMenge, gridBagConstraints);
@@ -1312,7 +1311,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMengeEinheit.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1510,9 +1509,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(blpBeteiligteFolge, gridBagConstraints);
 
-        panFirma.setMinimumSize(new Dimension(134, 150));
+        panFirma.setMinimumSize(new Dimension(134, 110));
         panFirma.setOpaque(false);
-        panFirma.setPreferredSize(new Dimension(134, 150));
+        panFirma.setPreferredSize(new Dimension(134, 110));
         panFirma.setLayout(new GridBagLayout());
 
         rpFirma.setName(""); // NOI18N
@@ -1612,6 +1611,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;

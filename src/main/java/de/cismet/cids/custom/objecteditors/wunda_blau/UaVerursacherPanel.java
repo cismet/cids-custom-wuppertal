@@ -150,6 +150,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Box.Filler filler1;
+    private Box.Filler filler2;
     private JFormattedTextField ftxtVTelefon;
     private JLabel lblVAdresse;
     private JLabel lblVBemerkung;
@@ -221,6 +222,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         scpVBemerkung = new JScrollPane();
         taVBemerkung = new JTextArea();
         lblVBemerkung = new JLabel();
+        filler2 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
         setOpaque(false);
@@ -248,7 +250,6 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -258,8 +259,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         lblVAdresse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblVAdresse.setText("Adresse:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -270,9 +271,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -283,7 +283,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         lblVTelefon.setText("Telefon:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -305,7 +305,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.3;
@@ -315,8 +315,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         lblVMail.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblVMail.setText("Mail:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -327,9 +327,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -362,8 +361,8 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -376,12 +375,16 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         lblVBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panVerursacher.add(lblVBemerkung, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        panVerursacher.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;

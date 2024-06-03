@@ -171,7 +171,7 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(4, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panFL.add(blpLeistungen, gridBagConstraints);
 
         btnFirma.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/icon-explorerwindow.png"))); // NOI18N
@@ -190,9 +190,7 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         cbFirma.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbFirma.setMaximumRowCount(15);
         cbFirma.setAutoscrolls(true);
-        cbFirma.setMaximumSize(new Dimension(100, 25));
         cbFirma.setName("cbFirma"); // NOI18N
-        cbFirma.setPreferredSize(new Dimension(100, 24));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_firma}"), cbFirma, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -200,11 +198,10 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(4, 2, 2, 2);
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panFL.add(cbFirma, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
