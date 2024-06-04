@@ -357,6 +357,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblBeginn;
     private JLabel lblBemerkung;
     private JLabel lblBereitschaft;
+    private JLabel lblBereitschaftRenderer;
     private JLabel lblBeteiligte;
     private JLabel lblBeteiligteFolge;
     private JLabel lblDauer;
@@ -616,6 +617,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 bereitSearch.getRepresentationPattern(),
                 bereitSearch.getRepresentationFields() );
         }
+        lblBereitschaftRenderer = new JLabel();
         lblMelder = new JLabel();
         cbMelder = new DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION_MELDER);
         lblBeteiligte = new JLabel();
@@ -1135,6 +1137,21 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             panDaten.add(cbBereitschaft, gridBagConstraints);
         }
+
+        lblBereitschaftRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_bereitschaft.name}"), lblBereitschaftRenderer, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 5);
+        panDaten.add(lblBereitschaftRenderer, gridBagConstraints);
 
         lblMelder.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblMelder.setText("Melder:");
@@ -2233,8 +2250,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                     final JTextField txt = (JTextField)cbBereitschaft.getEditor().getEditorComponent();
                     cbBereitschaft.addActionListener(bereitActionListener);
                 }               
-        
-            }
+                lblBereitschaftRenderer.setVisible(false);
+            } 
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
             showVerursacher();
             loadDateTime(FIELD__BEGINN, ftZeitBeginn, dcBeginn, StartFinish.beginn);
