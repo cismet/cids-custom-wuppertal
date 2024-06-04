@@ -170,7 +170,7 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 2;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weightx = 10.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panFL.add(blpLeistungen, gridBagConstraints);
 
@@ -191,6 +191,7 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         cbFirma.setMaximumRowCount(15);
         cbFirma.setAutoscrolls(true);
         cbFirma.setName("cbFirma"); // NOI18N
+        cbFirma.setPreferredSize(new Dimension(150, 25));
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_firma}"), cbFirma, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -200,7 +201,6 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panFL.add(cbFirma, gridBagConstraints);
 
