@@ -1977,9 +1977,10 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private void btnCreateGeometrieActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnCreateGeometrieActionPerformed
         if (getCidsBean() != null && getCidsBean().getProperty(FIELD__HNR) != null) {
             CidsBean beanHnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR);
+            int result = JOptionPane.OK_OPTION;
             if (getCidsBean().getProperty(FIELD__GEOM) != null) {
                 final Object[] options = { "Ja, Geom überschreiben", "Abbrechen" };
-                final int result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
+                result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
                         NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_GEOMQUESTION),
                         NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_GEOMWRITE),
                         JOptionPane.DEFAULT_OPTION,
@@ -1987,21 +1988,21 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                         null,
                         options,
                         options[1]);
-                if ((result == JOptionPane.CLOSED_OPTION) || (result == 1)) {
-                    return;
-                } else {
-                    CidsBean beanAdresse = (CidsBean)beanHnr.getProperty(FIELD__HNR_GEOM);
-                    final CidsBean beanNewGeometrie = CidsBeanSupport.cloneBean(
-                        beanAdresse,
-                        getConnectionContext(),
-                        TABLE_GEOM);
-                    try {
-                        this.getCidsBean().setProperty(FIELD__GEOM, beanNewGeometrie);
-                    } catch (Exception ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
+            }
+            if ((result == JOptionPane.CLOSED_OPTION) || (result == 1)) {
+                return;
+            } else {
+                CidsBean beanAdresse = (CidsBean)beanHnr.getProperty(FIELD__HNR_GEOM);
+                final CidsBean beanNewGeometrie = CidsBeanSupport.cloneBean(
+                    beanAdresse,
+                    getConnectionContext(),
+                    TABLE_GEOM);
+                try {
+                    this.getCidsBean().setProperty(FIELD__GEOM, beanNewGeometrie);
+                } catch (Exception ex) {
+                    Exceptions.printStackTrace(ex);
                 }
-            } 
+            }
         } else {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_NOGEOMCREATE),
