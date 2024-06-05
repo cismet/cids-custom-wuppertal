@@ -108,7 +108,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -2341,7 +2340,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
      * @param ftxt
      * @param dc
      */
-    public void writeDateTime(final String field, final JFormattedTextField ftxt, final DefaultBindableDateChooser dc) {
+    public void writeDateTime(final String field, 
+            final JFormattedTextField ftxt, 
+            final DefaultBindableDateChooser dc) {
         java.util.Date givenDate = null;
         if (dc.getDate() != null) {
             givenDate = dc.getDate();
@@ -2356,13 +2357,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         if (givenDate != null) {
             final Calendar dateTime = Calendar.getInstance();
             dateTime.setTime(givenDate);
-            if (ftxt.getValue() != null) {
-                final Calendar zeit = GregorianCalendar.getInstance();
-                final java.util.Date givenTime = (java.util.Date)ftxt.getValue();
-                zeit.setTime(givenTime);
-
-                dateTime.set(Calendar.HOUR_OF_DAY, zeit.get(Calendar.HOUR_OF_DAY));
-                dateTime.set(Calendar.MINUTE, zeit.get(Calendar.MINUTE));
+            if (ftxt.getText() != null) {
+                final String [] zeit = ftxt.getText().split(":");
+                final int stunde = Integer.valueOf(zeit[0]);
+                final int minute = Integer.valueOf(zeit[1]);
+                dateTime.set(Calendar.HOUR_OF_DAY, stunde);
+                dateTime.set(Calendar.MINUTE, minute);
                 dateTime.set(Calendar.SECOND, 0);
                 dateTime.set(Calendar.MILLISECOND, 0);
 
@@ -2707,8 +2707,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         
         //dauer
         try {
-            if (!(getDauer() > 0)){
-                LOG.warn("Wron dauer specified. Skip persisting.");
+            if (!(getDauer() > 0) || ((getDauer()/3600000 )> 48)){
+                LOG.warn("Wrong dauer specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(UaEinsatzEditor.class, BUNDLE_WRONGTIME));
                 save = false;
             }
@@ -3040,17 +3040,26 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         @Override
         public void propertyChange(final PropertyChangeEvent evt) {
             final java.util.Date datum;
-            final String uhrzeit;
+            final String zeit;
+            //final Calendar uhrzeit = GregorianCalendar.getInstance();
             if (wann.equals(StartFinish.beginn)){
-                uhrzeit = getUhrzeitBeginn();
-                datum = getDatumBeginn();
+               /*if (ftZeitBeginn.getValue() != null) {
+                    final java.util.Date givenTime = (java.util.Date)ftZeitBeginn.getValue();
+                    uhrzeit.setTime(givenTime);
+               }*/
+                zeit = getUhrzeitBeginn();
+                datum = getDatumBeginn();//dcBeginn.getDate();
             }else {
-                uhrzeit = getUhrzeitEnde();
-                datum = getDatumEnde();
+                zeit = getUhrzeitEnde();
+                /*if (ftZeitEnde.getValue() != null) {
+                    final java.util.Date givenTime = (java.util.Date)ftZeitEnde.getValue();
+                    uhrzeit.setTime(givenTime);
+               }*/
+                datum = getDatumEnde();//dcEnde.getDate();
             }
             if (evt.getSource() == ftxt) {
-                if (uhrzeit != null) {
-                    if (!uhrzeit.equals(ftxt.getText())) {
+                if (zeit != null) {
+                    if (!zeit.equals(ftxt.getText())) {
                         getCidsBean().setArtificialChangeFlag(true);
                         writeDateTime(field, ftxt, dc);
                         showDauer();
