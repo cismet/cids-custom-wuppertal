@@ -88,6 +88,16 @@ public abstract class ReportBeanWithMapAndTwoWebDavImages extends AbstractReport
             final String url1 = (imageBeans.size() > 1) ? getDavFile(imageBeans.get(1)) : null;
             setImgState0((url0 != null) ? loadImage(url0, webDavHelper, webDavDirectory, true) : null);
             setImgState1((url1 != null) ? loadImage(url1, webDavHelper, webDavDirectory, false) : null);
+
+            // set the image ready state to true, if no image exists. Otherwise the method isReadyToProceed() will
+            // return false forever
+            if (url0 == null) {
+                setImg0Ready(true);
+            }
+
+            if (url1 == null) {
+                setImg1Ready(true);
+            }
         }
     }
 

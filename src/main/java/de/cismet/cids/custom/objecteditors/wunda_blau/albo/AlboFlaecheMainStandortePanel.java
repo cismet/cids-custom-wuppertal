@@ -12,6 +12,10 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
+import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.navigator.ui.DescriptionPane;
+import Sirius.navigator.ui.attributes.editor.AttributeEditor;
+
 import Sirius.server.middleware.types.MetaClass;
 
 import org.jdesktop.beansbinding.BindingGroup;
@@ -19,14 +23,19 @@ import org.jdesktop.beansbinding.BindingGroup;
 import java.awt.CardLayout;
 import java.awt.Component;
 
+import java.util.List;
+
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.NavigatorAttributeEditorGui;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -38,7 +47,10 @@ import de.cismet.connectioncontext.ConnectionContext;
  */
 public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
 
-    //~ Methods ----------------------------------------------------------------
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static CidsBean copiedBean = null;
+    private static AlboFlaecheMainStandortePanel lastEditInstance = null;
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -52,9 +64,7 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
 
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        butCopyPaste = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -77,19 +87,30 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
                 getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/add.png"))); // NOI18N
         jButton1.setName("jButton1");                                                                // NOI18N
         jButton1.addActionListener(formListener);
-        jPanel1.add(jButton1, new java.awt.GridBagConstraints());
-
-        filler1.setName("filler1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(filler1, gridBagConstraints);
+        jPanel1.add(jButton1, gridBagConstraints);
+        jButton1.setVisible(isEditable());
+
+        butCopyPaste.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/copy1.png"))); // NOI18N
+        butCopyPaste.setToolTipText("kopiere Standort");
+        butCopyPaste.setName("butCopyPaste");                                                          // NOI18N
+        butCopyPaste.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(butCopyPaste, gridBagConstraints);
 
         jButton2.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/optionspanels/wunda_blau/remove.png"))); // NOI18N
         jButton2.setName("jButton2");                                                                   // NOI18N
         jButton2.addActionListener(formListener);
-        jPanel1.add(jButton2, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(jButton2, gridBagConstraints);
+        jButton2.setVisible(isEditable());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -97,7 +118,6 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         add(jPanel1, gridBagConstraints);
-        jPanel1.setVisible(isEditable());
 
         jScrollPane3.setMinimumSize(new java.awt.Dimension(100, 26));
         jScrollPane3.setName("jScrollPane3"); // NOI18N
@@ -189,6 +209,8 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
         public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == jButton1) {
                 AlboFlaecheMainStandortePanel.this.jButton1ActionPerformed(evt);
+            } else if (evt.getSource() == butCopyPaste) {
+                AlboFlaecheMainStandortePanel.this.butCopyPasteActionPerformed(evt);
             } else if (evt.getSource() == jButton2) {
                 AlboFlaecheMainStandortePanel.this.jButton2ActionPerformed(evt);
             }
@@ -209,7 +231,7 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStandortPanel
         alboFlaecheMainStandortPanel1;
-    private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton butCopyPaste;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JList<CidsBean> jList1;
@@ -257,6 +279,18 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
 
         initComponents();
 
+        if (isEditable()) {
+            butCopyPaste.setIcon(new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/copy-paste.png"))); // NOI18N
+            butCopyPaste.setToolTipText("füge kopierten Standort hinzu");
+            lastEditInstance = this;
+        } else {
+            butCopyPaste.setIcon(new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/copy1.png")));      // NOI18N
+            butCopyPaste.setToolTipText("kopiere Standort");
+        }
+
+        deActivateCopyPasteButton();
         setListCellRenderer();
     }
 
@@ -329,7 +363,29 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
      */
     private void jList1ValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_jList1ValueChanged
         ((CardLayout)jPanel10.getLayout()).show(jPanel10, (jList1.getSelectedValue() == null) ? "null" : "standort");
+        deActivateCopyPasteButton();
     }                                                                                 //GEN-LAST:event_jList1ValueChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void butCopyPasteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_butCopyPasteActionPerformed
+        if (isEditable()) {
+            final List<CidsBean> stList = CidsBeanSupport.getBeanCollectionFromProperty(getCidsBean(), "n_standorte");
+
+            if ((stList != null) && (copiedBean != null)) {
+                final CidsBean bean = CidsBeanSupport.cloneBean(copiedBean, getConnectionContext());
+                stList.add(bean);
+            }
+        } else {
+            final CidsBean bean = jList1.getSelectedValue();
+            copiedBean = bean;
+        }
+
+        deActivateCopyPasteButton();
+    } //GEN-LAST:event_butCopyPasteActionPerformed
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
@@ -339,6 +395,25 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
             // RendererTools.makeReadOnly from the super method will removes the cell renderer. So it should be added
             // again
             setListCellRenderer();
+        }
+
+        deActivateCopyPasteButton();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void deActivateCopyPasteButton() {
+        final DescriptionPane dp = ComponentRegistry.getRegistry().getDescriptionPane();
+
+        if (lastEditInstance != null) {
+            lastEditInstance.butCopyPaste.setEnabled(((copiedBean != null) && lastEditInstance.isEditable())
+                        || ((lastEditInstance.jList1.getSelectedIndex() != -1) && !lastEditInstance.isEditable()));
+        }
+
+        if (lastEditInstance != this) {
+            butCopyPaste.setEnabled(((copiedBean != null) && isEditable())
+                        || ((jList1.getSelectedIndex() != -1) && !isEditable()));
         }
     }
 
@@ -354,6 +429,10 @@ public class AlboFlaecheMainStandortePanel extends AbstractAlboFlaechePanel {
         super.editorClosed(event);
 
         alboFlaecheMainStandortPanel1.editorClosed(event);
+
+        if (lastEditInstance == this) {
+            lastEditInstance = null;
+        }
     }
 
     @Override

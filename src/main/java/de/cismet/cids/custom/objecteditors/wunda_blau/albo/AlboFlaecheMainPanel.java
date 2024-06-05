@@ -23,6 +23,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,11 +34,13 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheErhebungsnummerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboVorgangSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BplaeneMonSearch;
@@ -50,8 +53,12 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.cismap.commons.CrsTransformer;
+
 import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -776,16 +783,21 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     protected void initGui() {
         initComponents();
 
-        jButton1.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
+        if (isEditable()) {
+            jButton1.setIcon(new ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
+            jButton1.setMaximumSize(new Dimension(20, 20));
+            jButton1.setPreferredSize(new Dimension(20, 20));
+            jButton1.setVisible(true);
+            jButton1.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        determineErhebungsnummer();
+                    }
+                });
+        }
         jButton1.setVisible(false);
-        jButton1.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                }
-            });
-
         alboFlaecheBeschreibungPanel1.setMainPanel(this);
         alboFlaecheBeschreibungPanel1.setPanSpezifisch(panSpezifisch);
 
@@ -890,6 +902,83 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     /**
      * DOCUMENT ME!
      */
+    private void determineErhebungsnummer() {
+        final String erhebungsnummer = jTextField9.getText();
+
+        try {
+            if (!erhebungsnummer.equals("")) {
+                Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
+                String art = (String)getCidsBean().getProperty("fk_art.schluessel");
+                String geomText = null;
+
+                if ((geom != null)) {
+                    geom = CrsTransformer.transformToDefaultCrs(geom);
+                    geomText = geom.toText();
+                }
+
+                if ((art != null) && art.equals("")) {
+                    art = null;
+                }
+
+                final AlboFlaecheErhebungsnummerSearch search = new AlboFlaecheErhebungsnummerSearch(
+                        geomText,
+                        art,
+                        erhebungsnummer,
+                        getCidsBean().getMetaObject().getId());
+
+                final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
+                            .customServerSearch(SessionManager.getSession().getUser(),
+                                    search,
+                                    getConnectionContext());
+
+                if ((result.size() > 0) && (result.get(0).size() > 0)) {
+                    jTextField9.setText((String)result.get(0).get(0));
+                } else {
+                    JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                        "Es konnte keine Erhebungsnummer generiert werden.",
+                        "Erhebungsnummer",
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                Geometry geom = (Geometry)getCidsBean().getProperty("fk_geom.geo_field");
+                final String art = (String)getCidsBean().getProperty("fk_art.schluessel");
+
+                if ((art != null) && (geom != null)) {
+                    geom = CrsTransformer.transformToDefaultCrs(geom);
+                    final AlboFlaecheErhebungsnummerSearch search = new AlboFlaecheErhebungsnummerSearch(geom.toText(),
+                            art,
+                            erhebungsnummer,
+                            getCidsBean().getMetaObject().getId());
+
+                    final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                        search,
+                                        getConnectionContext());
+
+                    if ((result.size() > 0) && (result.get(0).size() > 0) && (result.get(0).get(0) != null)
+                                && !result.get(0).get(0).equals("")) {
+                        jTextField9.setText((String)result.get(0).get(0));
+                    } else {
+                        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                            "Es konnte keine Erhebungsnummer generiert werden.",
+                            "Erhebungsnummer",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                        "Um eine Erhebungsnummer zu generieren, muss entweder eine Geometrie und eine Flächenart\noder der Beginn der Erhebungsnummer angegeben sein.",
+                        "Erhebungsnummer",
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error("Error during AlboFlaecheErhebungsnummerSearch", ex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     public void updateCidsBeanOfFkPanels() {
         final CidsBean cidsBean = getCidsBean();
         if (cidsBean != null) {
@@ -917,6 +1006,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     public void setUnlocked(final boolean unlocked) {
         this.unlocked = isEditable() ? unlocked : false;
         alboFlaecheBeschreibungPanel1.setUnlocked(unlocked);
+        jButton1.setVisible(unlocked);
         updateLockedFields();
     }
 
