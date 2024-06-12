@@ -1041,7 +1041,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                         "Wenn die Art der Fläche \"altstandort\" oder \"betriebsstandort\" ist,\n  muss mindestens eine Branche angegeben sein und der Wert für\n  branche_massgeblich gesetzt sein.");
                 }
             } else if (art.equalsIgnoreCase("altablagerung")) {
-                final TreeSet<CidsBean> aa = getAa();
+                final List<CidsBean> aa = getAa();
                 boolean ueberwFound = false;
 
                 for (final CidsBean a : aa) {
@@ -1056,7 +1056,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
                 if ((aa.isEmpty() || !ueberwFound) && !isException) {
                     errorList.add(
-                        "Wenn die Art der Fläche \"altablagerung\", muss mindestens\n  eine Hauptabfallart gesetzt sein und es muss die\n  überwiegende Abfallart angegeben sein.");
+                        "Wenn die Art der Fläche \"altablagerung\" ist, muss mindestens\n  eine Hauptabfallart gesetzt sein und es muss die\n  überwiegende Abfallart angegeben sein.");
                 }
             }
 
@@ -1243,7 +1243,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 final String arbeitsstandBegrenzung = (String)cidsBean.getProperty(
                         "fk_arbeitsstand_schutzundbegrenzung.schluessel");
 
-                if (arbeitsstandUeberwachung.equalsIgnoreCase("laufend")
+                if (((arbeitsstandUeberwachung != null) && arbeitsstandUeberwachung.equalsIgnoreCase("laufend"))
                             && ((arbeitsstandBegrenzung == null)
                                 || !arbeitsstandBegrenzung.equalsIgnoreCase("laufend"))) {
                     if (!ueberwachungsMassnahmen) {
@@ -1367,8 +1367,8 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      *
      * @return  DOCUMENT ME!
      */
-    private TreeSet<CidsBean> getAa() {
-        final TreeSet<CidsBean> aaSet = new TreeSet<>(new CidsBeanComparator());
+    private List<CidsBean> getAa() {
+        final List<CidsBean> aaList = new ArrayList<>();
         final CidsBean altablagerung = (CidsBean)cidsBean.getProperty("fk_altablagerung");
 
         if (altablagerung != null) {
@@ -1377,11 +1377,11 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                     "n_altablagerung_abfallherkuenfte");
 
             if (aa != null) {
-                aaSet.addAll(aa);
+                aaList.addAll(aa);
             }
         }
 
-        return aaSet;
+        return aaList;
     }
 
     /**
