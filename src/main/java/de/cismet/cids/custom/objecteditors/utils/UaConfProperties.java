@@ -45,12 +45,15 @@ public class UaConfProperties {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Double bufferMeter;
-    private final String url;
-    private final String urlRasterfari;
-    private final String ordnerDokumente;
-    private final String ordnerFotos;
-    private final String ordnerThema;
+    private final Double  bufferMeter;
+    private final String  url;
+    private final String  urlRasterfari;
+    private final String  filesDokumente;
+    private final String  filesFotos;
+    private final String  kompFotos;
+    private final String  showFotos;
+    private final Integer fileLimit;
+    private final String  ordnerThema;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -63,9 +66,12 @@ public class UaConfProperties {
         bufferMeter = Double.valueOf(readProperty(properties, "BUFFER_METER", null));
         url = String.valueOf(readProperty(properties, "MAP_CALL_STRING", null));
         urlRasterfari = String.valueOf(readProperty(properties, "RASTERFARI_URL", null));
-        ordnerDokumente = String.valueOf(readProperty(properties, "ORDNER_DOKUMENTE", null));
-        ordnerFotos = String.valueOf(readProperty(properties, "ORDNER_FOTOS", null));
+        filesDokumente = String.valueOf(readProperty(properties, "FILES_DOKUMENTE", null));
+        filesFotos = String.valueOf(readProperty(properties, "FILES_FOTOS", null));
         ordnerThema = String.valueOf(readProperty(properties, "ORDNER_THEMA", null));
+        kompFotos = String.valueOf(readProperty(properties, "KOMP_FOTOS", null));
+        showFotos = String.valueOf(readProperty(properties, "SHOW_FOTOS", null));
+        fileLimit = Integer.valueOf(readProperty(properties, "FILE_LIMIT", null));
     }
 
     //~ Methods ----------------------------------------------------------------
