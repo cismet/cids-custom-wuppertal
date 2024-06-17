@@ -548,7 +548,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 
             } else {
                 uaVerursacherPanel.setVisible(false);
-                uaVerursacherPanel.setCidsBean(null);
+                //uaVerursacherPanel.setCidsBean(null);
                 if (isEditor()){
                     btnAddNewVerursacher.setVisible(true); 
                     lblVerursacherText.setVisible(false);
