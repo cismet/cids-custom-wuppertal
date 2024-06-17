@@ -66,6 +66,8 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
     private ConnectionContext cc;
     private final boolean editor;
     private WebDavTunnelHelper webDavHelper;
+    
+    private SwingWorker worker_foto;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblBeschreibung;
@@ -234,7 +236,7 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
                     final SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
 
                             @Override
-                            protected ImageIcon doInBackground() throws Exception {
+                            /*protected ImageIcon doInBackground() throws Exception {
                                 final InputStream is = webDavHelper.getFileFromWebDAV((String)cidsBean.getProperty(
                                             FIELD__NAME),
                                         getConnectionContext());
@@ -250,22 +252,61 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
                                 } else {
                                     return new ImageIcon(image);
                                 }
+                            }*/
+                            protected ImageIcon doInBackground() throws Exception {
+                                final InputStream is = webDavHelper.getFileFromWebDAV((String)cidsBean.getProperty(
+                                            FIELD__NAME),
+                                        getConnectionContext());
+                                final BufferedImage image = ImageIO.read(is);
+
+                                if (isCancelled()) {
+                                    return null;
+                                }
+
+                                ImageIcon icon;
+
+                                if ((lblPreview.getWidth() > 40) && (lblPreview.getHeight() > 40)) {
+                                    icon = new ImageIcon(ImageUtil.adjustScale(image,
+                                                lblPreview.getWidth(),
+                                                lblPreview.getHeight()
+                                                        - 10,
+                                                0,
+                                                20));
+                                } else {
+                                    icon = new ImageIcon(image);
+                                }
+
+                                if (isCancelled()) {
+                                    return null;
+                                }
+                                return icon;
                             }
+
 
                             @Override
                             protected void done() {
                                 try {
-                                    lblPreview.setIcon(null);
-                                    lblPreview.setText("");
-                                    final ImageIcon ii = get();
-                                    lblPreview.setIcon(ii);
+                                    //final ImageIcon icon = get();
+                                    if (!isCancelled()) {
+                                        final ImageIcon icon = get();
+                                        if (icon != null){
+                                            lblPreview.setIcon(null);
+                                            lblPreview.setText("");
+                                            final ImageIcon ii = icon;
+                                            lblPreview.setIcon(ii);
+                                        }
+                                    }
                                 } catch (InterruptedException | ExecutionException ex) {
                                     LOG.error(ex);
                                 }
                             }
-                        };
-
-                    worker.execute();
+                    };
+                    if (worker_foto != null) {
+                        worker_foto.cancel(true);
+                    }
+                    worker_foto = worker;
+                    worker_foto.execute();
+                    //worker.execute();
                 } else {
                     lblPreview.setIcon(null);
                     lblPreview.setText(KEINE_VORSCHAU);
