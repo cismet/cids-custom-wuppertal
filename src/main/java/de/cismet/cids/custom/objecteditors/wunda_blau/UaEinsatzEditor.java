@@ -183,6 +183,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__MELDER = "fk_melder";
     public static final String FIELD__FIRMA = "n_firma_leistungen";
     public static final String FIELD__EINSATZ = "fk_einsatz";
+    public static final String FIELD__AHNUNG = "keine_ahnung";
     public static final String FIELD__BETEILIGTE_E_ARR = "arr_beteiligte_einsatz";
     public static final String FIELD__BETEILIGTE_F_ARR = "arr_beteiligte_folge";
     public static final String FIELD__ARTEN_ARR = "arr_unfallarten";
@@ -347,6 +348,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private FastBindableReferenceCombo cbHNr;
     private DefaultBindableReferenceCombo cbMelder;
     FastBindableReferenceCombo cbStrasse;
+    JCheckBox chAhnung;
     private DefaultBindableDateChooser dcBeginn;
     private DefaultBindableDateChooser dcEnde;
     private Box.Filler filler3;
@@ -360,6 +362,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JPanel jPanelFotoAuswahl;
     private JPanel jPanelFotos;
     JTabbedPane jTabbedPane;
+    private JLabel lblAhnung;
     private JLabel lblAktenzeichen;
     private JLabel lblAnleger;
     private JLabel lblBeginn;
@@ -642,6 +645,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         lblMenge = new JLabel();
         spMenge = new JSpinner();
         lblMengeEinheit = new JLabel();
+        lblAhnung = new JLabel();
+        chAhnung = new JCheckBox();
         lblFolgen = new JLabel();
         blpFolgen = new DefaultBindableLabelsPanel(isEditor(), "Unfallfolgen:", SORTING_OPTION);
         lblFeststellungen = new JLabel();
@@ -1328,6 +1333,33 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panDetails.add(lblMengeEinheit, gridBagConstraints);
+
+        lblAhnung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblAhnung.setText("keine Ahnung:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblAhnung, gridBagConstraints);
+
+        chAhnung.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.keine_ahnung}"), chAhnung, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(chAhnung, gridBagConstraints);
 
         lblFolgen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblFolgen.setText("Unfallfolgen:");
@@ -2100,9 +2132,22 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 } catch (Exception e) {
                     LOG.error("Cannot set user", e);
                 }
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__AHNUNG,
+                        true);
+ 
+                } catch (Exception e) {
+                    LOG.error("Cannot set keine Ahnung", e);
+                }
                 searchBereitschaft();
             } else {
                 RendererTools.makeReadOnly(cbBereitschaft);
+                if (getCidsBean().getProperty(FIELD__AHNUNG).toString().equals("true")){
+                    spMenge.setEnabled(false);
+                }else{
+                    spMenge.setEnabled(true);
+                }
             }
             if (isEditor()){
                 if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
@@ -2270,6 +2315,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             RendererTools.makeReadOnly(cbGewaesser);
             RendererTools.makeDoubleSpinnerWithoutButtons(spMenge, 0);
             RendererTools.makeReadOnly(spMenge);
+            RendererTools.makeReadOnly(chAhnung);
             RendererTools.makeReadOnly(blpFolgen);
             RendererTools.makeReadOnly(taFeststellungen);
             RendererTools.makeReadOnly(taSofort);
@@ -2465,6 +2511,14 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public void propertyChange(final PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(FIELD__GEOM)) {
             setMapWindow();
+        }
+        if (evt.getPropertyName().equals(FIELD__AHNUNG)) {
+            if (getCidsBean().getProperty(FIELD__AHNUNG).toString().equals("true")){
+                spMenge.setEnabled(false);
+                spMenge.setValue(0);
+            }else{
+                spMenge.setEnabled(true);
+            }
         }
     }
 
