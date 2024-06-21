@@ -159,6 +159,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private static String KOMP_FOTOS;
     private static String SHOW_FOTOS;
     private static Integer FILE_LIMIT;
+    private static Integer FILE_LIMIT_DOK;
     
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
@@ -259,6 +260,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     @Override
     public void afterClosing(final AfterClosingHook.Event event) {
         simpleDocumentWebDavPanel.afterClosing(event);
+        simpleDocumentWebDavPanel_Dok.afterClosing(event);
     }
 
     //~ Enums ------------------------------------------------------------------
@@ -286,6 +288,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
     private final boolean editor;
     protected final JFileChooser fileChooserFotos = new JFileChooser();
+    protected final JFileChooser fileChooserDokumente = new JFileChooser();
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
     @Getter @Setter private final List<CidsBean> deletedFirmaBeans = new ArrayList<>();
     boolean refreshingFirmaPanels = false;
@@ -358,6 +361,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     JFormattedTextField ftZeitEnde;
     private JPanel jPanelAllgemein;
     private JPanel jPanelDetails;
+    private JPanel jPanelDokAuswahl;
     private JPanel jPanelDokumente;
     private JPanel jPanelFotoAuswahl;
     private JPanel jPanelFotos;
@@ -380,7 +384,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblGeom;
     private JLabel lblGewaesser;
     private JLabel lblHNrRenderer;
-    private JLabel lblHeaderListeDok;
     private JLabel lblHnr;
     private JLabel lblKarte;
     private JLabel lblMelder;
@@ -393,7 +396,6 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblUnfallarten;
     private JLabel lblVerursacher;
     private JLabel lblVerursacherText;
-    private JList lstDok;
     private JPanel panBemerkung;
     private JPanel panContent;
     private JPanel panDaten;
@@ -410,13 +412,9 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private DefaultPreviewMapPanel panPreviewMap;
     private JPanel panSofort;
     private JPanel pnlCard1;
-    private SemiRoundedPanel pnlHeaderListeDok;
-    private RoundedPanel pnlListeDok;
-    private RasterfariDocumentLoaderPanel rasterfariDocumentLoaderPanelDok;
     private RoundedPanel rpFirma;
     private RoundedPanel rpKarte;
     private JScrollPane scpBemerkung;
-    private JScrollPane scpDok;
     private JScrollPane scpFeststellungen;
     private JScrollPane scpFirma;
     private JScrollPane scpFolge;
@@ -425,6 +423,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     private SemiRoundedPanel semiRoundedPanel7;
     private SemiRoundedPanel semiRoundedPanel8;
     private SimpleDocumentWebDavPanel simpleDocumentWebDavPanel;
+    private SimpleDocumentWebDavPanel simpleDocumentWebDavPanel_Dok;
     JSpinner spMenge;
     private JTextArea taBemerkung;
     private JTextArea taFeststellungen;
@@ -468,8 +467,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         final String[] endingFotos = FILES_FOTOS.split(",");
         FileFilter filterFotos = new FileNameExtensionFilter("Fotos", endingFotos);
         fileChooserFotos.setFileFilter(filterFotos);
+        final String[] endingDokumente = FILES_DOKUMENTE.split(",");
+        FileFilter filterDokumente = new FileNameExtensionFilter("Dokumente", endingDokumente);
+        fileChooserDokumente.setFileFilter(filterDokumente);
         initComponents();
-        simpleDocumentWebDavPanel.lstFotos.setPreferredSize(new Dimension(110, 130));
+        simpleDocumentWebDavPanel.lstDateien.setPreferredSize(new Dimension(110, 130));
         for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpBeteiligte, 
                 blpBeteiligteFolge, 
                 blpSchadstoffarten,
@@ -683,16 +685,16 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         panFiller1 = new JPanel();
         jPanelDokumente = new JPanel();
-        pnlListeDok = new RoundedPanel();
-        pnlHeaderListeDok = new SemiRoundedPanel();
-        lblHeaderListeDok = new JLabel();
-        scpDok = new JScrollPane();
-        lstDok = new JList();
-        rasterfariDocumentLoaderPanelDok = new RasterfariDocumentLoaderPanel(
-            RASTERFARI,
-            this,
-            getConnectionContext()
-        );
+        jPanelDokAuswahl = new JPanel();
+        simpleDocumentWebDavPanel_Dok = new SimpleDocumentWebDavPanel(isEditor(),
+            "n_dokumente",
+            "ua_einsatz_dokumente",
+            "dateiname",
+            "UaWebDavTunnelAction",
+            getConnectionContext(),
+            fileChooserDokumente,
+            KOMP_FOTOS.split(","),
+            FILE_LIMIT_DOK);
         jPanelFotos = new JPanel();
         jPanelFotoAuswahl = new JPanel();
         uaEinsatzPicturePanel = new UaEinsatzPicturePanel(isEditor(),
@@ -1769,36 +1771,25 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         jPanelDokumente.setOpaque(false);
         jPanelDokumente.setLayout(new GridBagLayout());
 
-        pnlListeDok.setMinimumSize(new Dimension(200, 49));
-
-        pnlHeaderListeDok.setBackground(new Color(51, 51, 51));
-        pnlHeaderListeDok.setLayout(new FlowLayout());
-
-        lblHeaderListeDok.setForeground(new Color(255, 255, 255));
-        lblHeaderListeDok.setText("Dokumentliste");
-        pnlHeaderListeDok.add(lblHeaderListeDok);
-
-        pnlListeDok.add(pnlHeaderListeDok, BorderLayout.NORTH);
-
-        scpDok.setPreferredSize(new Dimension(80, 130));
-
-        lstDok.setModel(new DefaultListModel<>());
-        lstDok.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lstDok.setFixedCellWidth(75);
-        scpDok.setViewportView(lstDok);
-
-        pnlListeDok.add(scpDok, BorderLayout.CENTER);
+        jPanelDokAuswahl.setOpaque(false);
+        jPanelDokAuswahl.setLayout(new GridBagLayout());
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(13, 2, 0, 0);
+        jPanelDokAuswahl.add(simpleDocumentWebDavPanel_Dok, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 0.3;
-        gridBagConstraints.weighty = 0.9;
-        gridBagConstraints.insets = new Insets(10, 5, 5, 10);
-        jPanelDokumente.add(pnlListeDok, gridBagConstraints);
-        jPanelDokumente.add(rasterfariDocumentLoaderPanelDok, new GridBagConstraints());
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        jPanelDokumente.add(jPanelDokAuswahl, gridBagConstraints);
 
         jTabbedPane.addTab("Dokumente", jPanelDokumente);
 
@@ -1836,6 +1827,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         jTabbedPane.addTab("Fotos", jPanelFotos);
 
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -2183,6 +2176,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         }
         
         simpleDocumentWebDavPanel.setCidsBean(cidsBean);
+        simpleDocumentWebDavPanel_Dok.setCidsBean(cidsBean);
     }
     
     public void showDauer(){
@@ -2428,6 +2422,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             KOMP_FOTOS = UaConfProperties.getInstance().getKompFotos();
             SHOW_FOTOS = UaConfProperties.getInstance().getShowFotos();
             FILE_LIMIT = UaConfProperties.getInstance().getFileLimit();
+            FILE_LIMIT_DOK = UaConfProperties.getInstance().getFileLimitDok();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
@@ -2496,6 +2491,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         
         uaEinsatzPicturePanel.dispose();
         simpleDocumentWebDavPanel.dispose();
+        simpleDocumentWebDavPanel_Dok.dispose();
         bindingGroup.unbind();
         super.dispose();
     }

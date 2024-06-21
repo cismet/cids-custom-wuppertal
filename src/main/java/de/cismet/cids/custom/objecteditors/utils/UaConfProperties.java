@@ -53,6 +53,7 @@ public class UaConfProperties {
     private final String  kompFotos;
     private final String  showFotos;
     private final Integer fileLimit;
+    private final Integer fileLimitDok;
     private final String  ordnerThema;
 
     //~ Constructors -----------------------------------------------------------
@@ -72,6 +73,7 @@ public class UaConfProperties {
         kompFotos = String.valueOf(readProperty(properties, "KOMP_FOTOS", null));
         showFotos = String.valueOf(readProperty(properties, "SHOW_FOTOS", null));
         fileLimit = Integer.valueOf(readProperty(properties, "FILE_LIMIT", null));
+        fileLimitDok = Integer.valueOf(readProperty(properties, "FILE_LIMIT_DOK", null));
     }
 
     //~ Methods ----------------------------------------------------------------
