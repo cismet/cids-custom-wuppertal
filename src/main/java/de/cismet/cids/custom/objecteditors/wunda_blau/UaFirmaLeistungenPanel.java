@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 
+import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.ui.DescriptionPaneFS;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
@@ -200,7 +201,6 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panFL.add(cbFirma, gridBagConstraints);
 
@@ -382,6 +382,7 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        MetaObjectCache.getInstance().clearCache(MC__FIRMA);
         for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpLeistungen)) {
             labelsPanel.initWithConnectionContext(parentEditor.getConnectionContext());
         }
