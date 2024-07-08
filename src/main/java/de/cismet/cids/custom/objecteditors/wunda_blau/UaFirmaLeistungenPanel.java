@@ -387,6 +387,12 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
             labelsPanel.initWithConnectionContext(parentEditor.getConnectionContext());
         }
         bindingGroup.unbind();
+        if (labelsPanels != null) {
+            for (final DefaultBindableLabelsPanel panel : labelsPanels) {
+                panel.dispose();
+            }
+        }
+        labelsPanels.clear();
         this.cidsBean = cidsBean;
         // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
@@ -398,6 +404,11 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         if (getCidsBean() != null){
             labelsPanels.addAll(Arrays.asList(blpLeistungen));
         }
+        for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
+            if (labelsPanel != null) {
+               labelsPanel.reload(true);
+           }
+        }
     }
 
 
@@ -405,7 +416,12 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
     @Override
     public void dispose() {
         bindingGroup.unbind();
-
+        if (labelsPanels != null) {
+            for (final DefaultBindableLabelsPanel panel : labelsPanels) {
+                panel.dispose();
+            }
+        }
+        labelsPanels.clear();
         //this.parentEditor = null;
         this.cidsBean = null;
     }

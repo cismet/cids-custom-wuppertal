@@ -14,6 +14,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.LightweightMetaObject;
 
@@ -91,9 +92,7 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -462,6 +461,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
 
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
+        labelsPanels.clear();
         super.initWithConnectionContext(connectionContext);
         initProperties();
         final String[] endingFotos = FILES_FOTOS.split(",");
@@ -472,11 +472,13 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         fileChooserDokumente.setFileFilter(filterDokumente);
         initComponents();
         simpleDocumentWebDavPanel.lstDateien.setPreferredSize(new Dimension(110, 130));
-        for (final DefaultBindableLabelsPanel labelsPanel : Arrays.asList(blpBeteiligte, 
+        labelsPanels.addAll(Arrays.asList(blpBeteiligte, 
                 blpBeteiligteFolge, 
                 blpSchadstoffarten,
                 blpUnfallarten,
-                blpFolgen)) {
+                blpFolgen));
+        for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
+            MetaObjectCache.getInstance().clearCache(labelsPanel.getMetaClass());
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
         cbGewaesser.setRenderer(new GewaesserRenderer(cbGewaesser.getRenderer()));
@@ -2082,6 +2084,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 cbHNr.removeActionListener(hnrActionListener);
                 cbBereitschaft.removeActionListener(bereitActionListener);
             }
+            for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
+                 if (labelsPanel != null) {
+                    labelsPanel.setMetaClass(labelsPanel.getMetaClass());
+                }
+            }
             labelsPanels.clear();
             blpBeteiligte.clear();
             bindingGroup.unbind();
@@ -2096,6 +2103,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 bindingGroup,
                 cb,
                 getConnectionContext());
+            
             setMapWindow();
             bindingGroup.bind();
             setTitle(getTitle());
@@ -2106,7 +2114,11 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 labelsPanels.addAll(Arrays.asList(blpUnfallarten));
                 labelsPanels.addAll(Arrays.asList(blpFolgen));
             }
-            
+            for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
+                 if (labelsPanel != null) {
+                    labelsPanel.reload(true);
+                }
+            }
             final DateTimeFormListener dtflBeginn = new DateTimeFormListener(
                     FIELD__BEGINN, ftZeitBeginn, dcBeginn, StartFinish.beginn);
             ftZeitBeginn.addPropertyChangeListener(dtflBeginn);
@@ -2479,7 +2491,8 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 getCidsBean().removePropertyChangeListener(this);
             }
         }
-        bindingGroup.unbind();if (labelsPanels != null) {
+        bindingGroup.unbind();
+        if (labelsPanels != null) {
             for (final DefaultBindableLabelsPanel panel : labelsPanels) {
                 panel.dispose();
             }

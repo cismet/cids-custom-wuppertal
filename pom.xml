@@ -123,7 +123,7 @@
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>8.1.4</version>
+                <version>8.1.5</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
