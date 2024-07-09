@@ -1781,7 +1781,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(13, 2, 0, 0);
+        gridBagConstraints.insets = new Insets(13, 2, 0, 7);
         jPanelDokAuswahl.add(simpleDocumentWebDavPanel_Dok, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
