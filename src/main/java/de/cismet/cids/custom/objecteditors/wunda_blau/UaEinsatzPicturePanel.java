@@ -37,6 +37,9 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.ImageUtil;
+import java.awt.Graphics2D;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
@@ -70,6 +73,7 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
     private SwingWorker worker_foto;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JButton btnRotate;
     private javax.swing.JLabel lblBeschreibung;
     private javax.swing.JLabel lblPreview;
     private javax.swing.JLabel lblVorschau;
@@ -108,6 +112,7 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
 
         if (!isEditor()) {
             RendererTools.makeReadOnly(taBeschreibung);
+            btnRotate.setEnabled(false);
         }
     }
 
@@ -135,9 +140,12 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         panPreview = new javax.swing.JPanel();
         lblBeschreibung = new javax.swing.JLabel();
         lblPreview = new javax.swing.JLabel();
+        btnRotate = new javax.swing.JButton();
         scBeschreibung = new javax.swing.JScrollPane();
         taBeschreibung = new javax.swing.JTextArea();
         lblVorschau = new javax.swing.JLabel();
+
+        FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -162,12 +170,25 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         lblPreview.setName("lblPreview"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 5);
         panPreview.add(lblPreview, gridBagConstraints);
+
+        btnRotate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/virtualcitymap/turn.png"))); // NOI18N
+        btnRotate.setBorderPainted(false);
+        btnRotate.setContentAreaFilled(false);
+        btnRotate.setFocusPainted(false);
+        btnRotate.setName("btnRotate"); // NOI18N
+        btnRotate.addActionListener(formListener);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        panPreview.add(btnRotate, gridBagConstraints);
 
         scBeschreibung.setName("scBeschreibung"); // NOI18N
 
@@ -192,7 +213,7 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         lblVorschau.setName("lblVorschau"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panPreview.add(lblVorschau, gridBagConstraints);
@@ -207,8 +228,39 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         add(panPreview, gridBagConstraints);
 
         bindingGroup.bind();
+    }
+
+    // Code for dispatching events from components to event handlers.
+
+    private class FormListener implements java.awt.event.ActionListener {
+        FormListener() {}
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            if (evt.getSource() == btnRotate) {
+                UaEinsatzPicturePanel.this.btnRotateActionPerformed(evt);
+            }
+        }
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnRotateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateActionPerformed
+        showImage(90.0);
+    }//GEN-LAST:event_btnRotateActionPerformed
+
+    public static BufferedImage rotate(BufferedImage bimg, Double angle) { 
+        double sin = Math.abs(Math.sin(Math.toRadians(angle))), 
+        cos = Math.abs(Math.cos(Math.toRadians(angle))); 
+        int w = bimg.getWidth(); 
+        int h = bimg.getHeight(); 
+        int neww = (int) Math.floor(w*cos + h*sin), 
+        newh = (int) Math.floor(h*cos + w*sin); 
+        BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType()); 
+        Graphics2D graphic = rotated.createGraphics(); 
+        graphic.translate((neww-w)/2, (newh-h)/2); 
+        graphic.rotate(Math.toRadians(angle), w/2, h/2); 
+        graphic.drawRenderedImage(bimg, null); 
+        graphic.dispose(); 
+        return rotated; 
+        } 
+    
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         try {
@@ -223,99 +275,110 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
                 getConnectionContext());
             this.cidsBean = cidsBean;
             bindingGroup.bind();
+            showImage(0.0);
+        }
+        
+    }
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the webdavHelper
+     */
+    public WebDavTunnelHelper getWebdavHelper() {
+        return this.webDavHelper;
+    }
+    
+    public void showImage(final Double arc){
+        if ((cidsBean.getProperty(FIELD__NAME) instanceof String) && (getWebdavHelper() != null)) {
+            final String filename = (String)cidsBean.getProperty(FIELD__NAME);
+            panPreview.setBorder(javax.swing.BorderFactory.createTitledBorder(filename));
+            lblPreview.setPreferredSize(lblPreview.getPreferredSize());
+            lblPreview.setIcon(null);
+            lblPreview.setText(LADEN);
+            final String []datei = filename.split("\\.");
+            boolean test = Arrays.stream(FOTO_TYP).anyMatch(datei[1]::equals);
+            if (test){
+                final SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
 
-            if ((cidsBean.getProperty(FIELD__NAME) instanceof String) && (webDavHelper != null)) {
-                final String filename = (String)cidsBean.getProperty(FIELD__NAME);
-                panPreview.setBorder(javax.swing.BorderFactory.createTitledBorder(filename));
-                lblPreview.setPreferredSize(lblPreview.getPreferredSize());
-                lblPreview.setIcon(null);
-                lblPreview.setText(LADEN);
-                final String []datei = filename.split("\\.");
-                boolean test = Arrays.stream(FOTO_TYP).anyMatch(datei[1]::equals);
-                if (test){
-                    final SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
+                        @Override
+                        protected ImageIcon doInBackground() throws Exception {
+                            final String filename = (String)cidsBean.getProperty(FIELD__NAME);
+                            final String fileEnding = filename.toLowerCase()
+                                .substring(filename.toLowerCase().lastIndexOf(".") + 1);
+                            final InputStream is = getWebdavHelper().getFileFromWebDAV(filename,
+                                    getConnectionContext());
+                            final BufferedImage image = ImageIO.read(is);
 
-                            @Override
-                            /*protected ImageIcon doInBackground() throws Exception {
-                                final InputStream is = webDavHelper.getFileFromWebDAV((String)cidsBean.getProperty(
-                                            FIELD__NAME),
+                            if (isCancelled()) {
+                                return null;
+                            }
+                            
+                            final BufferedImage rotatedImage = rotate(image, arc);
+                            if (arc != 0.0){
+                                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                                ImageIO.write(rotatedImage, fileEnding, os); // Passing: ​(RenderedImage im, String formatName, OutputStream output)
+                                InputStream inputs = new ByteArrayInputStream(os.toByteArray());
+                                getWebdavHelper().deleteFileFromWebDAV(filename, getConnectionContext());
+                                getWebdavHelper().uploadFileToWebDAV(filename,
+                                        inputs,
+                                        UaEinsatzPicturePanel.this,
                                         getConnectionContext());
-                                final BufferedImage image = ImageIO.read(is);
-
-                                if ((lblPreview.getWidth() > 40) && (lblPreview.getHeight() > 40)) {
-                                    return new ImageIcon(ImageUtil.adjustScale(image,
-                                                lblPreview.getWidth(),
-                                                lblPreview.getHeight()
-                                                        - 10,
-                                                0,
-                                                20));
-                                } else {
-                                    return new ImageIcon(image);
-                                }
-                            }*/
-                            protected ImageIcon doInBackground() throws Exception {
-                                final InputStream is = webDavHelper.getFileFromWebDAV((String)cidsBean.getProperty(
-                                            FIELD__NAME),
-                                        getConnectionContext());
-                                final BufferedImage image = ImageIO.read(is);
-
-                                if (isCancelled()) {
-                                    return null;
-                                }
-
-                                ImageIcon icon;
-
-                                if ((lblPreview.getWidth() > 40) && (lblPreview.getHeight() > 40)) {
-                                    icon = new ImageIcon(ImageUtil.adjustScale(image,
-                                                lblPreview.getWidth(),
-                                                lblPreview.getHeight()
-                                                        - 10,
-                                                0,
-                                                20));
-                                } else {
-                                    icon = new ImageIcon(image);
-                                }
-
-                                if (isCancelled()) {
-                                    return null;
-                                }
-                                return icon;
                             }
 
+                            ImageIcon icon;
 
-                            @Override
-                            protected void done() {
-                                try {
-                                    //final ImageIcon icon = get();
-                                    if (!isCancelled()) {
-                                        final ImageIcon icon = get();
-                                        if (icon != null){
-                                            lblPreview.setIcon(null);
-                                            lblPreview.setText("");
-                                            final ImageIcon ii = icon;
-                                            lblPreview.setIcon(ii);
-                                        }
+                            if ((lblPreview.getWidth() > 40) && (lblPreview.getHeight() > 40)) {
+                                icon = new ImageIcon(ImageUtil.adjustScale(rotatedImage,
+                                            lblPreview.getWidth(),
+                                            lblPreview.getHeight()
+                                                    - 10,
+                                            0,
+                                            20));
+                            } else {
+                                icon = new ImageIcon(rotatedImage);
+                            }
+
+                            if (isCancelled()) {
+                                return null;
+                            }
+                            return icon;
+                        }
+
+
+                        @Override
+                        protected void done() {
+                            try {
+                                //final ImageIcon icon = get();
+                                if (!isCancelled()) {
+                                    final ImageIcon icon = get();
+                                    if (icon != null){
+                                        lblPreview.setIcon(null);
+                                        lblPreview.setText("");
+                                        final ImageIcon ii = icon;
+                                        lblPreview.setIcon(ii);
                                     }
-                                } catch (InterruptedException | ExecutionException ex) {
-                                    LOG.error(ex);
                                 }
+                            } catch (InterruptedException | ExecutionException ex) {
+                                LOG.error(ex);
                             }
-                    };
-                    if (worker_foto != null) {
-                        worker_foto.cancel(true);
-                    }
-                    worker_foto = worker;
-                    worker_foto.execute();
-                    //worker.execute();
-                } else {
-                    lblPreview.setIcon(null);
-                    lblPreview.setText(KEINE_VORSCHAU);
+                        }
+                };
+                if (worker_foto != null) {
+                    worker_foto.cancel(true);
                 }
+                worker_foto = worker;
+                worker_foto.execute();
+                //worker.execute();
             } else {
                 lblPreview.setIcon(null);
-                lblPreview.setText(KEIN_LADEN);
+                lblPreview.setText(KEINE_VORSCHAU);
             }
+        } else {
+            lblPreview.setIcon(null);
+            lblPreview.setText(KEIN_LADEN);
         }
+        
     }
 
     @Override
