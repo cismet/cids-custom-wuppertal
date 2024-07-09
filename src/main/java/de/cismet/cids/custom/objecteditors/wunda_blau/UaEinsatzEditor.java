@@ -2148,10 +2148,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                 searchBereitschaft();
             } else {
                 RendererTools.makeReadOnly(cbBereitschaft);
-                if (getCidsBean().getProperty(FIELD__AHNUNG).toString().equals("true")){
-                    spMenge.setEnabled(false);
-                }else{
-                    spMenge.setEnabled(true);
+                if (isEditor()){
+                    if (getCidsBean().getProperty(FIELD__AHNUNG).toString().equals("true")){
+                        spMenge.setEnabled(false);
+                    }else{
+                        spMenge.setEnabled(true);
+                    }
                 }
             }
             if (isEditor()){
@@ -2321,6 +2323,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             RendererTools.makeReadOnly(cbGewaesser);
             RendererTools.makeDoubleSpinnerWithoutButtons(spMenge, 0);
             RendererTools.makeReadOnly(spMenge);
+            spMenge.setEnabled(false);
             RendererTools.makeReadOnly(chAhnung);
             RendererTools.makeReadOnly(blpFolgen);
             RendererTools.makeReadOnly(taFeststellungen);
