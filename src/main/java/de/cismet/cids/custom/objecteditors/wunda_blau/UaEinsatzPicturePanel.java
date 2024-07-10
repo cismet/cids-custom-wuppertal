@@ -192,6 +192,7 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
 
         scBeschreibung.setName("scBeschreibung"); // NOI18N
 
+        taBeschreibung.setEditable(false);
         taBeschreibung.setColumns(20);
         taBeschreibung.setRows(5);
         taBeschreibung.setName("taBeschreibung"); // NOI18N
@@ -276,6 +277,12 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
             this.cidsBean = cidsBean;
             bindingGroup.bind();
             showImage(0.0);
+            taBeschreibung.setEditable(true);
+        } else {
+            taBeschreibung.setEditable(false);
+            taBeschreibung.setText("");
+            lblPreview.setIcon(null);
+            panPreview.setBorder(javax.swing.BorderFactory.createTitledBorder("Foto"));
         }
         
     }

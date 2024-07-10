@@ -184,6 +184,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String FIELD__FIRMA = "n_firma_leistungen";
     public static final String FIELD__EINSATZ = "fk_einsatz";
     public static final String FIELD__AHNUNG = "keine_ahnung";
+    public static final String FIELD__FOTOS = "n_fotos";
     public static final String FIELD__BETEILIGTE_E_ARR = "arr_beteiligte_einsatz";
     public static final String FIELD__BETEILIGTE_F_ARR = "arr_beteiligte_folge";
     public static final String FIELD__ARTEN_ARR = "arr_unfallarten";
@@ -495,7 +496,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
                         uaEinsatzPicturePanel.setCidsBean((CidsBean)selectedObject);
                     }
                 }
-            });   
+            });  
     }
     
     private void showVerursacher(){
@@ -2523,6 +2524,12 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
     public void propertyChange(final PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(FIELD__GEOM)) {
             setMapWindow();
+        }
+        if (evt.getPropertyName().equals(FIELD__FOTOS)) {
+            List<ArrayList> fotoList = (List<ArrayList>) evt.getNewValue();
+            if (fotoList.isEmpty()){
+                uaEinsatzPicturePanel.setCidsBean(null);
+            }
         }
         if (evt.getPropertyName().equals(FIELD__AHNUNG)) {
             if (getCidsBean().getProperty(FIELD__AHNUNG).toString().equals("true")){
