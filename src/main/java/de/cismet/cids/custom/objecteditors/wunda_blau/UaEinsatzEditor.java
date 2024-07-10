@@ -519,7 +519,7 @@ public class UaEinsatzEditor extends DefaultCustomObjectEditor implements CidsBe
             }
             if ((aktBenutzer.equals(verursacherBenutzer)) 
                     || ((getCidsBean().getProperty(FIELD__BEREIT) != null)
-                        && (aktBenutzer.equals(getCidsBean().getProperty(FIELD__BEREIT).toString())))
+                        && (aktBenutzer.equals(getCidsBean().getProperty(FIELD__BEREIT_BENUTZER).toString())))
                     || ((confAttrVerursacher != null) && confAttrVerursacher.equals("true"))) {
                 rechte = true;
             }
