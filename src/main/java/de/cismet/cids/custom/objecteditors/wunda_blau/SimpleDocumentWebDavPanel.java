@@ -852,7 +852,6 @@ public class SimpleDocumentWebDavPanel extends javax.swing.JPanel implements Cid
             return filename.substring(0, filename.lastIndexOf(".")) + new Long(System.currentTimeMillis()).hashCode()
                         + filename.substring(filename.lastIndexOf("."));
         } else {
-            final Long l;
             return filename + new Long(System.currentTimeMillis()).hashCode();
         }
     }
@@ -868,7 +867,6 @@ public class SimpleDocumentWebDavPanel extends javax.swing.JPanel implements Cid
         if (filename.contains(".")) {
             return filename.substring(0, filename.lastIndexOf("."));
         } else {
-            final Long l;
             return filename;
         }
     }
