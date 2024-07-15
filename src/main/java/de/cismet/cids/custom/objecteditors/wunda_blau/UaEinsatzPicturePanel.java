@@ -14,9 +14,16 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import org.apache.log4j.Logger;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
 
 import javax.imageio.ImageIO;
 
@@ -37,11 +44,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.tools.gui.ImageUtil;
-import java.awt.Graphics2D;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 
 /**
  * DOCUMENT ME!
@@ -49,83 +51,18 @@ import java.util.concurrent.ExecutionException;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBeanStore, 
-        ConnectionContextStore, 
-        Disposable {
+public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBeanStore,
+    ConnectionContextStore,
+    Disposable {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(UaEinsatzPicturePanel.class);
-    
+
     public static final String FIELD__NAME = "dateiname";
     public static final String KEINE_VORSCHAU = "Für diesen Datentyp ist keine Vorschau verfügbar";
     public static final String KEIN_LADEN = "Vorschau kann nicht geladen werden";
     public static final String LADEN = "wird geladen";
-    public final String[] FOTO_TYP;
-
-    //~ Instance fields --------------------------------------------------------
-
-    private CidsBean cidsBean;
-    private ConnectionContext cc;
-    private final boolean editor;
-    private WebDavTunnelHelper webDavHelper;
-    
-    private SwingWorker worker_foto;
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JButton btnRotate;
-    private javax.swing.JLabel lblBeschreibung;
-    private javax.swing.JLabel lblPreview;
-    private javax.swing.JLabel lblVorschau;
-    private javax.swing.JPanel panPreview;
-    private javax.swing.JScrollPane scBeschreibung;
-    private javax.swing.JTextArea taBeschreibung;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
-
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new UaEinsatzPicturePanel object.
-     */
-    public UaEinsatzPicturePanel() {
-        //initComponents();
-        //this.editor = true;
-        this(false, new String [] {"jpg","png"});
-    }
-    
-
- 
-    public boolean isEditor() {
-        return this.editor;
-    }
-    /**
-     * Creates a new UaEinsatzPicturePanel object.
-     *
-     * @param  editable  DOCUMENT ME!
-     * @param typen
-     */
-    public UaEinsatzPicturePanel(final boolean editable, final String [] typen) {
-        this.editor = editable;
-        this.FOTO_TYP = typen;
-        initComponents();
-
-        if (!isEditor()) {
-            RendererTools.makeReadOnly(taBeschreibung);
-            btnRotate.setEnabled(false);
-        }
-    }
-
-    //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  webDavHelper  the webDavHelper to set
-     */
-    public void setWebDavHelper(final WebDavTunnelHelper webDavHelper) {
-        this.webDavHelper = webDavHelper;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -145,7 +82,7 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         taBeschreibung = new javax.swing.JTextArea();
         lblVorschau = new javax.swing.JLabel();
 
-        FormListener formListener = new FormListener();
+        final FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -178,11 +115,12 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 5);
         panPreview.add(lblPreview, gridBagConstraints);
 
-        btnRotate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/virtualcitymap/turn.png"))); // NOI18N
+        btnRotate.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/virtualcitymap/turn.png"))); // NOI18N
         btnRotate.setBorderPainted(false);
         btnRotate.setContentAreaFilled(false);
         btnRotate.setFocusPainted(false);
-        btnRotate.setName("btnRotate"); // NOI18N
+        btnRotate.setName("btnRotate");                                                     // NOI18N
         btnRotate.addActionListener(formListener);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -197,7 +135,12 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         taBeschreibung.setRows(5);
         taBeschreibung.setName("taBeschreibung"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scBeschreibung.setViewportView(taBeschreibung);
@@ -231,37 +174,129 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
         bindingGroup.bind();
     }
 
-    // Code for dispatching events from components to event handlers.
-
+    /**
+     * Code for dispatching events from components to event handlers.
+     *
+     * @version  $Revision$, $Date$
+     */
     private class FormListener implements java.awt.event.ActionListener {
-        FormListener() {}
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+        /**
+         * Creates a new FormListener object.
+         */
+        FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final java.awt.event.ActionEvent evt) {
             if (evt.getSource() == btnRotate) {
                 UaEinsatzPicturePanel.this.btnRotateActionPerformed(evt);
             }
         }
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnRotateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateActionPerformed
+    //~ Instance fields --------------------------------------------------------
+
+    public final String[] FOTO_TYP;
+
+    private CidsBean cidsBean;
+    private ConnectionContext cc;
+    private final boolean editor;
+    private WebDavTunnelHelper webDavHelper;
+
+    private SwingWorker worker_foto;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JButton btnRotate;
+    private javax.swing.JLabel lblBeschreibung;
+    private javax.swing.JLabel lblPreview;
+    private javax.swing.JLabel lblVorschau;
+    private javax.swing.JPanel panPreview;
+    private javax.swing.JScrollPane scBeschreibung;
+    private javax.swing.JTextArea taBeschreibung;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new UaEinsatzPicturePanel object.
+     */
+    public UaEinsatzPicturePanel() {
+        // initComponents();
+        // this.editor = true;
+        this(false, new String[] { "jpg", "png" });
+    }
+    /**
+     * Creates a new UaEinsatzPicturePanel object.
+     *
+     * @param  editable  DOCUMENT ME!
+     * @param  typen     DOCUMENT ME!
+     */
+    public UaEinsatzPicturePanel(final boolean editable, final String[] typen) {
+        this.editor = editable;
+        this.FOTO_TYP = typen;
+        initComponents();
+
+        if (!isEditor()) {
+            RendererTools.makeReadOnly(taBeschreibung);
+            btnRotate.setEnabled(false);
+        }
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isEditor() {
+        return this.editor;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  webDavHelper  the webDavHelper to set
+     */
+    public void setWebDavHelper(final WebDavTunnelHelper webDavHelper) {
+        this.webDavHelper = webDavHelper;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRotateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRotateActionPerformed
         showImage(90.0);
-    }//GEN-LAST:event_btnRotateActionPerformed
+    }                                                                             //GEN-LAST:event_btnRotateActionPerformed
 
-    public static BufferedImage rotate(BufferedImage bimg, Double angle) { 
-        double sin = Math.abs(Math.sin(Math.toRadians(angle))), 
-        cos = Math.abs(Math.cos(Math.toRadians(angle))); 
-        int w = bimg.getWidth(); 
-        int h = bimg.getHeight(); 
-        int neww = (int) Math.floor(w*cos + h*sin), 
-        newh = (int) Math.floor(h*cos + w*sin); 
-        BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType()); 
-        Graphics2D graphic = rotated.createGraphics(); 
-        graphic.translate((neww-w)/2, (newh-h)/2); 
-        graphic.rotate(Math.toRadians(angle), w/2, h/2); 
-        graphic.drawRenderedImage(bimg, null); 
-        graphic.dispose(); 
-        return rotated; 
-        } 
-    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bimg   DOCUMENT ME!
+     * @param   angle  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static BufferedImage rotate(final BufferedImage bimg, final Double angle) {
+        final double sin = Math.abs(Math.sin(Math.toRadians(angle)));
+        final double cos = Math.abs(Math.cos(Math.toRadians(angle)));
+        final int w = bimg.getWidth();
+        final int h = bimg.getHeight();
+        final int neww = (int)Math.floor((w * cos) + (h * sin));
+        final int newh = (int)Math.floor((h * cos) + (w * sin));
+        final BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
+        final Graphics2D graphic = rotated.createGraphics();
+        graphic.translate((neww - w) / 2, (newh - h) / 2);
+        graphic.rotate(Math.toRadians(angle), w / 2, h / 2);
+        graphic.drawRenderedImage(bimg, null);
+        graphic.dispose();
+        return rotated;
+    }
+
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         try {
@@ -284,9 +319,8 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
             lblPreview.setIcon(null);
             panPreview.setBorder(javax.swing.BorderFactory.createTitledBorder("Foto"));
         }
-        
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -295,48 +329,66 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
     public WebDavTunnelHelper getWebdavHelper() {
         return this.webDavHelper;
     }
-    
-    public void showImage(final Double arc){
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  arc  DOCUMENT ME!
+     */
+    public void showImage(final Double arc) {
         if ((cidsBean.getProperty(FIELD__NAME) instanceof String) && (getWebdavHelper() != null)) {
             final String filename = (String)cidsBean.getProperty(FIELD__NAME);
             panPreview.setBorder(javax.swing.BorderFactory.createTitledBorder(filename));
             lblPreview.setPreferredSize(lblPreview.getPreferredSize());
             lblPreview.setIcon(null);
             lblPreview.setText(LADEN);
-            final String []datei = filename.split("\\.");
-            boolean test = Arrays.stream(FOTO_TYP).anyMatch(datei[1]::equals);
-            if (test){
+            final String[] datei = filename.split("\\.");
+            // jalopy cannot understand the syntax datei[1]::equals
+            final boolean test = Arrays.stream(FOTO_TYP).anyMatch(new Predicate<String>() {
+
+                        @Override
+                        public boolean test(final String t) {
+                            return datei[1].equals(t);
+                        }
+                    });
+//            final boolean test = Arrays.stream(FOTO_TYP).anyMatch(datei[1]::equals);
+
+            if (test) {
                 final SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
 
                         @Override
                         protected ImageIcon doInBackground() throws Exception {
                             final String filename = (String)cidsBean.getProperty(FIELD__NAME);
                             final String fileEnding = filename.toLowerCase()
-                                .substring(filename.toLowerCase().lastIndexOf(".") + 1);
-                            final InputStream is = getWebdavHelper().getFileFromWebDAV(filename,
+                                        .substring(filename.toLowerCase().lastIndexOf(".") + 1);
+                            final InputStream is = getWebdavHelper().getFileFromWebDAV(
+                                    filename,
                                     getConnectionContext());
                             final BufferedImage image = ImageIO.read(is);
 
                             if (isCancelled()) {
                                 return null;
                             }
-                            
+
                             final BufferedImage rotatedImage = rotate(image, arc);
-                            if (arc != 0.0){
-                                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                                ImageIO.write(rotatedImage, fileEnding, os); // Passing: ​(RenderedImage im, String formatName, OutputStream output)
-                                InputStream inputs = new ByteArrayInputStream(os.toByteArray());
+                            if (arc != 0.0) {
+                                final ByteArrayOutputStream os = new ByteArrayOutputStream();
+                                ImageIO.write(rotatedImage, fileEnding, os); // Passing: ​(RenderedImage im, String
+                                                                             // formatName, OutputStream output)
+                                final InputStream inputs = new ByteArrayInputStream(os.toByteArray());
                                 getWebdavHelper().deleteFileFromWebDAV(filename, getConnectionContext());
-                                getWebdavHelper().uploadFileToWebDAV(filename,
-                                        inputs,
-                                        UaEinsatzPicturePanel.this,
-                                        getConnectionContext());
+                                getWebdavHelper().uploadFileToWebDAV(
+                                    filename,
+                                    inputs,
+                                    UaEinsatzPicturePanel.this,
+                                    getConnectionContext());
                             }
 
                             ImageIcon icon;
 
                             if ((lblPreview.getWidth() > 40) && (lblPreview.getHeight() > 40)) {
-                                icon = new ImageIcon(ImageUtil.adjustScale(rotatedImage,
+                                icon = new ImageIcon(ImageUtil.adjustScale(
+                                            rotatedImage,
                                             lblPreview.getWidth(),
                                             lblPreview.getHeight()
                                                     - 10,
@@ -352,14 +404,13 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
                             return icon;
                         }
 
-
                         @Override
                         protected void done() {
                             try {
-                                //final ImageIcon icon = get();
+                                // final ImageIcon icon = get();
                                 if (!isCancelled()) {
                                     final ImageIcon icon = get();
-                                    if (icon != null){
+                                    if (icon != null) {
                                         lblPreview.setIcon(null);
                                         lblPreview.setText("");
                                         final ImageIcon ii = icon;
@@ -370,13 +421,13 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
                                 LOG.error(ex);
                             }
                         }
-                };
+                    };
                 if (worker_foto != null) {
                     worker_foto.cancel(true);
                 }
                 worker_foto = worker;
                 worker_foto.execute();
-                //worker.execute();
+                // worker.execute();
             } else {
                 lblPreview.setIcon(null);
                 lblPreview.setText(KEINE_VORSCHAU);
@@ -385,7 +436,6 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
             lblPreview.setIcon(null);
             lblPreview.setText(KEIN_LADEN);
         }
-        
     }
 
     @Override
@@ -402,8 +452,6 @@ public class UaEinsatzPicturePanel extends javax.swing.JPanel implements CidsBea
     public ConnectionContext getConnectionContext() {
         return cc;
     }
-
-   
 
     @Override
     public void dispose() {

@@ -12,12 +12,14 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-
 import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.ui.DescriptionPaneFS;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
+import lombok.Getter;
+
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.AutoBinding;
@@ -30,41 +32,47 @@ import org.jdesktop.beansbinding.ELProperty;
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
+
 import de.cismet.cids.editors.DefaultBindableLabelsPanel;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
-import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.BorderLayout;
 
-import java.awt.Font;
-import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import lombok.Getter;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -73,11 +81,11 @@ import lombok.Getter;
  * @version  $Revision$, $Date$
  */
 public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements ConnectionContextStore,
-        CidsBeanStore, 
-        Disposable {
+    CidsBeanStore,
+    Disposable {
 
     //~ Static fields/initializers ---------------------------------------------
-   
+
     private static DefaultBindableReferenceCombo.Option SORTING_OPTION =
         new DefaultBindableReferenceCombo.SortingColumnOption("name");
     private static DefaultBindableReferenceCombo.Option NULLABLE_OPTION =
@@ -92,6 +100,7 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         "UaFirmaLeistungenPanel.btnFirmaActionPerformed().JOptionPane.title";
     public static final String BUNDLE_PANE_SELECTION =
         "UaFirmaLeistungenPanel.btnFirmaActionPerformed().JOptionPane.message";
+
     static {
         final ConnectionContext connectionContext = ConnectionContext.create(
                 ConnectionContext.Category.STATIC,
@@ -112,21 +121,21 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
-        JPanel panFL = new JPanel();
-        JLabel lblFirma = new JLabel();
-        JLabel lblLeistungen = new JLabel();
+        final JPanel panFL = new JPanel();
+        final JLabel lblFirma = new JLabel();
+        final JLabel lblLeistungen = new JLabel();
         blpLeistungen = new DefaultBindableLabelsPanel(isEditor(), "Leistungen:", SORTING_OPTION);
         btnFirma = new JButton();
         cbFirma = new DefaultBindableScrollableComboBox(MC__FIRMA);
-        JPanel jPanel3 = new JPanel();
-        Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        if (isEditor()){
+        final JPanel jPanel3 = new JPanel();
+        final Box.Filler filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        if (isEditor()) {
             btnRemoveFirma = new JButton();
         }
-        JSeparator jSeparator1 = new JSeparator();
-        Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
+        final JSeparator jSeparator1 = new JSeparator();
+        final Box.Filler filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
 
-        FormListener formListener = new FormListener();
+        final FormListener formListener = new FormListener();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -136,9 +145,11 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         panFL.setOpaque(false);
         panFL.setLayout(new GridBagLayout());
 
-        lblFirma.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblFirma, NbBundle.getMessage(UaFirmaLeistungenPanel.class, "UaFirmaLeistungenPanel.lblFirma.text")); // NOI18N
-        lblFirma.setName("lblFirma"); // NOI18N
+        lblFirma.setFont(new Font("Tahoma", 1, 11));                                                    // NOI18N
+        Mnemonics.setLocalizedText(
+            lblFirma,
+            NbBundle.getMessage(UaFirmaLeistungenPanel.class, "UaFirmaLeistungenPanel.lblFirma.text")); // NOI18N
+        lblFirma.setName("lblFirma");                                                                   // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -148,9 +159,11 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panFL.add(lblFirma, gridBagConstraints);
 
-        lblLeistungen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblLeistungen, NbBundle.getMessage(UaFirmaLeistungenPanel.class, "UaFirmaLeistungenPanel.lblLeistungen.text")); // NOI18N
-        lblLeistungen.setName("lblLeistungen"); // NOI18N
+        lblLeistungen.setFont(new Font("Tahoma", 1, 11));                                                    // NOI18N
+        Mnemonics.setLocalizedText(
+            lblLeistungen,
+            NbBundle.getMessage(UaFirmaLeistungenPanel.class, "UaFirmaLeistungenPanel.lblLeistungen.text")); // NOI18N
+        lblLeistungen.setName("lblLeistungen");                                                              // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -163,7 +176,12 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         blpLeistungen.setName("blpLeistungen"); // NOI18N
         blpLeistungen.setOpaque(false);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_leistungen}"), blpLeistungen, BeanProperty.create("selectedElements"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.arr_leistungen}"),
+                blpLeistungen,
+                BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -175,11 +193,12 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panFL.add(blpLeistungen, gridBagConstraints);
 
-        btnFirma.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/icon-explorerwindow.png"))); // NOI18N
+        btnFirma.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/icon-explorerwindow.png"))); // NOI18N
         btnFirma.setBorderPainted(false);
         btnFirma.setContentAreaFilled(false);
         btnFirma.setFocusPainted(false);
-        btnFirma.setName("btnFirma"); // NOI18N
+        btnFirma.setName("btnFirma");                                                                                // NOI18N
         btnFirma.addActionListener(formListener);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -191,10 +210,15 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         cbFirma.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbFirma.setMaximumRowCount(15);
         cbFirma.setAutoscrolls(true);
-        cbFirma.setName("cbFirma"); // NOI18N
+        cbFirma.setName("cbFirma");                 // NOI18N
         cbFirma.setPreferredSize(new Dimension(150, 25));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_firma}"), cbFirma, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_firma}"),
+                cbFirma,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -226,14 +250,15 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(filler4, gridBagConstraints);
 
-        if (isEditor()){
-            btnRemoveFirma.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        if (isEditor()) {
+            btnRemoveFirma.setIcon(new ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
             btnRemoveFirma.setBorderPainted(false);
             btnRemoveFirma.setContentAreaFilled(false);
-            btnRemoveFirma.setName("btnRemoveFirma"); // NOI18N
+            btnRemoveFirma.setName("btnRemoveFirma");                                                                 // NOI18N
             btnRemoveFirma.addActionListener(formListener);
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 2;
@@ -269,29 +294,39 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         bindingGroup.bind();
     }
 
-    // Code for dispatching events from components to event handlers.
-
+    /**
+     * Code for dispatching events from components to event handlers.
+     *
+     * @version  $Revision$, $Date$
+     */
     private class FormListener implements ActionListener {
-        FormListener() {}
-        public void actionPerformed(ActionEvent evt) {
+
+        /**
+         * Creates a new FormListener object.
+         */
+        FormListener() {
+        }
+
+        @Override
+        public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnFirma) {
                 UaFirmaLeistungenPanel.this.btnFirmaActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnRemoveFirma) {
+            } else if (evt.getSource() == btnRemoveFirma) {
                 UaFirmaLeistungenPanel.this.btnRemoveFirmaActionPerformed(evt);
             }
         }
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
+
+    private static final MetaClass MC__FIRMA;
 
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
     private ConnectionContext connectionContext;
-    //private CidsBean firmaBean;
+    // private CidsBean firmaBean;
     private final UaEinsatzEditor parentEditor;
     @Getter private final boolean editor;
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
-    private static final MetaClass MC__FIRMA;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     DefaultBindableLabelsPanel blpLeistungen;
@@ -318,19 +353,18 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
     public UaFirmaLeistungenPanel(final boolean editable) {
         this(null, editable);
     }
-    
-    
+
     /**
      * Creates new form UaFirmaLeistungenPanel.
      *
-     * @param editor
+     * @param  editor    DOCUMENT ME!
      * @param  editable  DOCUMENT ME!
      */
     public UaFirmaLeistungenPanel(final UaEinsatzEditor editor, final boolean editable) {
         this.parentEditor = editor;
         this.editor = editable;
 
-        //btnRemoveFirma.setVisible(editable);
+        // btnRemoveFirma.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -340,20 +374,25 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFirmaActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveFirmaActionPerformed
-        //parentEditor.getFirmaBeans().remove(cidsBean);
-        //parentEditor.remove(this);
+    private void btnRemoveFirmaActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveFirmaActionPerformed
+        // parentEditor.getFirmaBeans().remove(cidsBean);
+        // parentEditor.remove(this);
         parentEditor.removeFirmaPanel(this);
-    }//GEN-LAST:event_btnRemoveFirmaActionPerformed
+    } //GEN-LAST:event_btnRemoveFirmaActionPerformed
 
-    private void btnFirmaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnFirmaActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnFirmaActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnFirmaActionPerformed
         final JDialog dialog = new JDialog((Frame)null,
-            "Firma",
-            true);
+                "Firma",
+                true);
         final Collection<MetaObjectNode> mons = new ArrayList<>();
 
         if (getCidsBean() != null) {
-            final MetaObjectNode metaObjectNode = new MetaObjectNode((CidsBean) getCidsBean().getProperty(FIELD__FIRMA));
+            final MetaObjectNode metaObjectNode = new MetaObjectNode((CidsBean)getCidsBean().getProperty(FIELD__FIRMA));
             mons.add(metaObjectNode);
             dialog.setContentPane(new DescriptionPaneDialogWrapperPanel(mons));
             dialog.setSize(1200, 800);
@@ -361,18 +400,21 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         } else {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(UaFirmaLeistungenPanel.class, BUNDLE_PANE_PREFIX_SELECTION)
-                + NbBundle.getMessage(UaFirmaLeistungenPanel.class, BUNDLE_PANE_SELECTION)
-                + NbBundle.getMessage(UaFirmaLeistungenPanel.class, BUNDLE_PANE_SUFFIX_SELECTION),
+                        + NbBundle.getMessage(UaFirmaLeistungenPanel.class, BUNDLE_PANE_SELECTION)
+                        + NbBundle.getMessage(UaFirmaLeistungenPanel.class, BUNDLE_PANE_SUFFIX_SELECTION),
                 NbBundle.getMessage(UaFirmaLeistungenPanel.class, BUNDLE_PANE_TITLE_SELECTION),
                 JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_btnFirmaActionPerformed
+    } //GEN-LAST:event_btnFirmaActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(cbFirma);
@@ -389,23 +431,21 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
         bindingGroup.unbind();
         this.cidsBean = cidsBean;
         // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
-            // evtl. kann dies verbessert werden.
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cidsBean,
-                getConnectionContext());
+        // evtl. kann dies verbessert werden.
+        DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+            bindingGroup,
+            cidsBean,
+            getConnectionContext());
         bindingGroup.bind();
-        if (getCidsBean() != null){
+        if (getCidsBean() != null) {
             labelsPanels.addAll(Arrays.asList(blpLeistungen));
         }
         for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
             if (labelsPanel != null) {
-               MetaObjectCache.getInstance().clearCache(labelsPanel.getMetaClass());
-           }
+                MetaObjectCache.getInstance().clearCache(labelsPanel.getMetaClass());
+            }
         }
     }
-
-
 
     @Override
     public void dispose() {
@@ -416,14 +456,14 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
             }
         }
         labelsPanels.clear();
-        //this.parentEditor = null;
+        // this.parentEditor = null;
         this.cidsBean = null;
     }
 
     @Override
-    public void initWithConnectionContext(ConnectionContext cc) {
+    public void initWithConnectionContext(final ConnectionContext cc) {
         this.connectionContext = cc;
-        
+
         initComponents();
         setReadOnly();
     }
@@ -432,6 +472,9 @@ public class UaFirmaLeistungenPanel extends javax.swing.JPanel implements Connec
     public ConnectionContext getConnectionContext() {
         return this.connectionContext;
     }
+
+    //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
