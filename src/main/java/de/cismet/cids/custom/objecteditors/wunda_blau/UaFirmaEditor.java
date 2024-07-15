@@ -20,13 +20,32 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+
 import org.openide.util.NbBundle;
+
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.MissingResourceException;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.text.DefaultFormatter;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.wunda_blau.search.server.RedundantObjectSearch;
@@ -43,23 +62,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.regex.Pattern;
-import javax.swing.text.DefaultFormatter;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
 
 /**
  * DOCUMENT ME!
@@ -78,9 +80,9 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
     public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
     public static final String REDUNDANT_TABLE = "ua_firma";
-        
-    public static final String FIELD__NAME = "name";  
-    public static final String FIELD__ID = "id";                         
+
+    public static final String FIELD__NAME = "name";
+    public static final String FIELD__ID = "id";
     public static final String TABLE_NAME = "ua_firma";
     public static final String FIELD__TEL = "telefon";
 
@@ -90,7 +92,7 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
     public static final String BUNDLE_PANE_SUFFIX = "UaFirmaEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "UaFirmaEditor.isOkForSaving().JOptionPane.title";
     private static String TITLE_NEW_FIRMA = "eine neue Firma anlegen...";
-    
+
     public static final Pattern TEL_FILLING_PATTERN = Pattern.compile("(|\\+(-|[0-9])*)");
     public static final Pattern TEL_MATCHING_PATTERN = Pattern.compile("\\+[0-9]{1,3}(-[0-9]+){1,}");
 
@@ -99,7 +101,7 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
     private Boolean redundantName = false;
 
     private final boolean editor;
-    
+
     private final RegexPatternFormatter telPatternFormatter = new RegexPatternFormatter(
             TEL_FILLING_PATTERN,
             TEL_MATCHING_PATTERN);
@@ -150,7 +152,7 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         final Collection<String> conditions = new ArrayList<>();
         conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
         conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
-        
+
         firmaSearch.setWhere(conditions);
         try {
             redundantName =
@@ -185,7 +187,6 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
             LOG.warn("Name not given.", ex);
             save = false;
         }
-
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -240,14 +241,12 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -280,7 +279,12 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -302,7 +306,12 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblAdresse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.adresse}"), txtAdresse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.adresse}"),
+                txtAdresse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -324,7 +333,12 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblAnsprechpartner, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ansprechpartner}"), txtAnsprechpartner, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ansprechpartner}"),
+                txtAnsprechpartner,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -346,19 +360,28 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblTelefon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtVTelefon, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.telefon}"),
+                ftxtVTelefon,
+                BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         ftxtVTelefon.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent evt) {
-                ftxtVTelefonFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final FocusEvent evt) {
+                    ftxtVTelefonFocusLost(evt);
+                }
+            });
         ftxtVTelefon.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtVTelefonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    ftxtVTelefonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -379,14 +402,12 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -408,15 +429,25 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void ftxtVTelefonFocusLost(FocusEvent evt) {//GEN-FIRST:event_ftxtVTelefonFocusLost
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtVTelefonFocusLost(final FocusEvent evt) { //GEN-FIRST:event_ftxtVTelefonFocusLost
         refreshValidTel();
-    }//GEN-LAST:event_ftxtVTelefonFocusLost
+    }                                                          //GEN-LAST:event_ftxtVTelefonFocusLost
 
-    private void ftxtVTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtVTelefonActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtVTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtVTelefonActionPerformed
         refreshValidTel();
-    }//GEN-LAST:event_ftxtVTelefonActionPerformed
+    }                                                                 //GEN-LAST:event_ftxtVTelefonActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -424,7 +455,7 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
     private void refreshValidTel() {
         ftxtVTelefon.setValue(telPatternFormatter.getLastValid());
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -433,7 +464,7 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
     private void saveValidTel(final Object okValue) {
         telPatternFormatter.setLastValid(okValue);
     }
-    
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -490,8 +521,15 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
     @Override
     public void setTitle(final String string) {
     }
-    
-     class RegexPatternFormatter extends DefaultFormatter {
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class RegexPatternFormatter extends DefaultFormatter {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -551,7 +589,7 @@ public class UaFirmaEditor extends DefaultCustomObjectEditor implements CidsBean
          * @param  okValue  DOCUMENT ME!
          */
         public void setLastValid(final Object okValue) {
-            if (lastValid == null && !(okValue.equals("null"))) {
+            if ((lastValid == null) && !(okValue.equals("null"))) {
                 lastValid = okValue;
             }
         }
