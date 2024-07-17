@@ -83,12 +83,12 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.actions.AlboExportServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheLandesRegNrSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.AlboFlaecheNummerUniqueSearch;
+import de.cismet.cids.custom.wunda_blau.search.server.AlboTeilflaecheSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.editors.BeanInitializer;
-import de.cismet.cids.editors.BeanInitializerForcePaste;
 import de.cismet.cids.editors.BeanInitializerProvider;
 import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -703,6 +703,32 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      * @param  evt  DOCUMENT ME!
      */
     private void btnReport1ActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnReport1ActionPerformed
+        final AlboTeilflaecheSearch search = new AlboTeilflaecheSearch();
+
+        try {
+            final ArrayList<ArrayList<String>> number = (ArrayList<ArrayList<String>>)SessionManager
+                        .getProxy().customServerSearch(search, connectionContext);
+            final List<String> fisAlboNr = new ArrayList<String>();
+
+            if ((number != null) && (number.size() > 0) && (number.get(0) != null) && (number.get(0).size() > 1)) {
+                for (final ArrayList<String> tmp : number) {
+                    fisAlboNr.add(tmp.get(0) + " (" + tmp.get(1) + ")");
+                }
+
+                final String fisAlboNrString = String.join(",\n", fisAlboNr);
+
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    "Die folgenden Altflächen haben keine Hauptfläche: \n"
+                            + fisAlboNrString,
+                    "Fehlerhafter Bearbeitungsstand",
+                    JOptionPane.WARNING_MESSAGE);
+
+                return;
+            }
+        } catch (Exception e) {
+            LOG.error("Cannot check landesregistriernummer", e);
+        }
+
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         CismapBroker.getInstance().getMappingComponent())) {
             final String jobname = DownloadManagerDialog.getInstance().getJobName();

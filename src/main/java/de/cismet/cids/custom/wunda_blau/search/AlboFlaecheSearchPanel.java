@@ -109,6 +109,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -124,6 +125,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel pnlPruefung;
+    private javax.swing.JTextField txtFisAlboNr;
     private javax.swing.JTextField txtGreater;
     private javax.swing.JTextField txtSmaller;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -177,6 +179,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
         RendererTools.makeReadOnly(jCheckBox1, !editable);
         RendererTools.makeReadOnly(jTextField1, !editable);
         RendererTools.makeReadOnly(jTextField2, !editable);
+        RendererTools.makeReadOnly(txtFisAlboNr, !editable);
         RendererTools.makeReadOnly(cbFlaechenstatus, !editable);
         RendererTools.makeReadOnly(cbFlaechentyp, !editable);
         RendererTools.makeReadOnly(cbFlaechenzuordnung, !editable);
@@ -220,6 +223,8 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtFisAlboNr = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         cbFlaechentyp = new DefaultBindableReferenceCombo(ClassCacheMultiple.getMetaClass(
                     CidsBeanSupport.DOMAIN_NAME,
@@ -360,6 +365,32 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel3.add(jTextField2, gridBagConstraints);
+
+        jLabel6.setText("<html>FisAlBo-Nr.: <i>*");
+        jLabel6.setName("jLabel6"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(jLabel6, gridBagConstraints);
+
+        txtFisAlboNr.setName("txtFisAlboNr"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.fisalbonummer}"),
+                txtFisAlboNr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel3.add(txtFisAlboNr, gridBagConstraints);
 
         jLabel15.setText("Flächentyp:");
         jLabel15.setName("jLabel15"); // NOI18N
@@ -859,6 +890,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
                                                                   : AlboFlaecheSearch.SearchMode.OR);
         configuration.setErhebungsNummer(jTextField1.getText());
         configuration.setVorgangSchluessel(jTextField2.getText());
+        configuration.setFisAlboNr(txtFisAlboNr.getText());
         configuration.setStatusSchluessel((cbFlaechenstatus.getSelectedItem() instanceof CidsBean)
                 ? (String)((CidsBean)cbFlaechenstatus.getSelectedItem()).getProperty("schluessel") : null);
         configuration.setTypSchluessel((cbFlaechentyp.getSelectedItem() instanceof CidsBean)
@@ -1004,6 +1036,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
 
             bean.setErhebungsnummer(configuration.getErhebungsNummer());
             bean.setVorgangsnummer(configuration.getVorgangSchluessel());
+            bean.setFisalbonummer(configuration.getFisAlboNr());
             buttonGroup1.setSelected(jRadioButton1.getModel(),
                 AlboFlaecheSearch.SearchMode.AND.equals(configuration.getSearchModeMain()));
             buttonGroup1.setSelected(jRadioButton2.getModel(),
@@ -1172,6 +1205,7 @@ public class AlboFlaecheSearchPanel extends AbstractAbfragePanel<AlboFlaecheSear
 
         private String erhebungsnummer;
         private String vorgangsnummer;
+        private String fisalbonummer;
         private CidsBean fkStatus;
         private CidsBean fkTyp;
         private CidsBean fkZuordnung;
