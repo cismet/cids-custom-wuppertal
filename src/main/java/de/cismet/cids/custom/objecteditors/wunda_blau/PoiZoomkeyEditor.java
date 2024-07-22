@@ -105,7 +105,7 @@ public class PoiZoomkeyEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_POI = "poi_locationinstance";
     public static final String TABLE_PRIO = "poi_zoomprio";
 
-    public static final String BUNDLE_NONAME = "PoiZoomkeyeEditor.isOkForSaving().noName";
+    public static final String BUNDLE_NONAME = "PoiZoomkeyEditor.isOkForSaving().noName";
     public static final String BUNDLE_WRONGNAME = "PoiZoomkeyEditor.isOkForSaving().wrongName";
     public static final String BUNDLE_DUPLICATENAME = "PoiZoomkeyEditor.isOkForSaving().duplicateName";
     public static final String BUNDLE_LENGTHNAME = "PoiZoomkeyEditor.isOkForSaving().lengthName";

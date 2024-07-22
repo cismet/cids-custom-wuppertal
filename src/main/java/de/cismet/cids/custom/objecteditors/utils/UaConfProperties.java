@@ -41,20 +41,21 @@ public class UaConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(UaConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            UaConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Double  bufferMeter;
-    private final String  url;
-    private final String  urlRasterfari;
-    private final String  filesDokumente;
-    private final String  filesFotos;
-    private final String  kompFotos;
-    private final String  showFotos;
+    private final Double bufferMeter;
+    private final String url;
+    private final String urlRasterfari;
+    private final String filesDokumente;
+    private final String filesFotos;
+    private final String kompFotos;
+    private final String showFotos;
     private final Integer fileLimit;
     private final Integer fileLimitDok;
-    private final String  ordnerThema;
+    private final String ordnerThema;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -129,7 +130,8 @@ public class UaConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.UA_CONF_PROPERTIES.getValue(),

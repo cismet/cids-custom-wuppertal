@@ -13,8 +13,8 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
@@ -25,6 +25,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.ELProperty;
 
+import org.jdom.Text;
+
 import org.openide.util.NbBundle;
 
 import java.awt.Dimension;
@@ -32,32 +34,31 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.util.MissingResourceException;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.text.DefaultFormatter;
+
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
-
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.MissingResourceException;
-import java.util.regex.Pattern;
-import javax.swing.text.DefaultFormatter;
-import lombok.Getter;
-import org.jdom.Text;
 /**
  * DOCUMENT ME!
  *
@@ -69,7 +70,6 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
-    
 
     private static final Logger LOG = Logger.getLogger(UaVerursacherPanel.class);
 
@@ -78,18 +78,17 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     public static final String FIELD__ADRESSE = "adresse";
     public static final String FIELD__BEMERKUNG = "bemerkung";
     public static final String FIELD__MAIL = "mail";
-    public static final String FIELD__TEL = "telefon";                            
-    
+    public static final String FIELD__TEL = "telefon";
+
     public static final String TABLE_NAME = "ua_verursacher";
 
     public static final String BUNDLE_NONAME = "UaVerursacherPanel.isOkForSaving().noName";
     public static final String BUNDLE_PANE_PREFIX = "UaVerursacherPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "UaVerursacherPanel.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "UaVerursacherPanel.isOkForSaving().JOptionPane.title";
-   
+
     public static final Pattern TEL_FILLING_PATTERN = Pattern.compile("(|\\+(-|[0-9])*)");
     public static final Pattern TEL_MATCHING_PATTERN = Pattern.compile("\\+[0-9]{1,3}(-[0-9]+){1,}");
-    //~ Enums ------------------------------------------------------------------
 
     //~ Instance fields --------------------------------------------------------
 
@@ -136,14 +135,14 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
                         }
                         break;
                     }
-                    
+
                     default: {
                         setChangeFlag();
                     }
                 }
             }
         };
-    
+
     private final RegexPatternFormatter telPatternFormatter = new RegexPatternFormatter(
             TEL_FILLING_PATTERN,
             TEL_MATCHING_PATTERN);
@@ -180,7 +179,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     /**
      * Creates a new UaEinsatzPanel object.
      *
-     * @param ueeInstance
+     * @param  ueeInstance  DOCUMENT ME!
      */
     public UaVerursacherPanel(final UaEinsatzEditor ueeInstance) {
         this.ueeInstance = ueeInstance;
@@ -190,13 +189,11 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
             this.editor = false;
         }
         initComponents();
-        
+
         setReadOnly();
     }
 
     //~ Methods ----------------------------------------------------------------
-
-  
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -244,7 +241,12 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panVerursacher.add(lblVName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtVName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtVName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -267,7 +269,12 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panVerursacher.add(lblVAdresse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.adresse}"), txtVAdresse, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.adresse}"),
+                txtVAdresse,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -290,19 +297,28 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panVerursacher.add(lblVTelefon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtVTelefon, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.telefon}"),
+                ftxtVTelefon,
+                BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
         ftxtVTelefon.addFocusListener(new FocusAdapter() {
-            public void focusLost(FocusEvent evt) {
-                ftxtVTelefonFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final FocusEvent evt) {
+                    ftxtVTelefonFocusLost(evt);
+                }
+            });
         ftxtVTelefon.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                ftxtVTelefonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    ftxtVTelefonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -323,7 +339,12 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panVerursacher.add(lblVMail, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.mail}"), txtVMail, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.mail}"),
+                txtVMail,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -343,7 +364,12 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         taVBemerkung.setRows(3);
         taVBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taVBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taVBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpVBemerkung.setViewportView(taVBemerkung);
@@ -412,17 +438,26 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void ftxtVTelefonFocusLost(FocusEvent evt) {//GEN-FIRST:event_ftxtVTelefonFocusLost
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtVTelefonFocusLost(final FocusEvent evt) { //GEN-FIRST:event_ftxtVTelefonFocusLost
         refreshValidTel();
-    }//GEN-LAST:event_ftxtVTelefonFocusLost
+    }                                                          //GEN-LAST:event_ftxtVTelefonFocusLost
 
-    private void ftxtVTelefonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_ftxtVTelefonActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void ftxtVTelefonActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_ftxtVTelefonActionPerformed
         refreshValidTel();
-    }//GEN-LAST:event_ftxtVTelefonActionPerformed
+    }                                                                 //GEN-LAST:event_ftxtVTelefonActionPerformed
 
-    
     /**
      * DOCUMENT ME!
      */
@@ -438,7 +473,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     private void saveValidTel(final Object okValue) {
         telPatternFormatter.setLastValid(okValue);
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -452,7 +487,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     public CidsBean getCidsBean() {
         return this.cidsBean;
     }
-    
+
     /**
      * DOCUMENT ME!
      */
@@ -475,20 +510,17 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
             }
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
-            //DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-             //   bindingGroup,
-             //   cb,
-            //    getConnectionContext());
-            bindingGroup.bind(); 
+            // DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
+            // bindingGroup,
+            // cb,
+            // getConnectionContext());
+            bindingGroup.bind();
             if ((getCidsBean() != null) && isEditor()) {
                 setSaveValues();
             }
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
-                
             }
-            if (isEditor()){
-                                
-        
+            if (isEditor()) {
             }
             setReadOnly();
             saveValidTel(String.valueOf(cidsBean.getProperty(FIELD__TEL)));
@@ -514,20 +546,17 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
      * DOCUMENT ME!
      */
     private void setSaveValues() {
-        saveName = (getCidsBean().getProperty(FIELD__NAME) != null)
-            ? ((Text)getCidsBean().getProperty(FIELD__NAME)) : null;
-        saveAdresse= (getCidsBean().getProperty(FIELD__NAME) != null)
+        saveName = (getCidsBean().getProperty(FIELD__NAME) != null) ? ((Text)getCidsBean().getProperty(FIELD__NAME))
+                                                                    : null;
+        saveAdresse = (getCidsBean().getProperty(FIELD__NAME) != null)
             ? ((Text)getCidsBean().getProperty(FIELD__ADRESSE)) : null;
-        saveBem = (getCidsBean().getProperty(FIELD__NAME) != null)
-            ? (Text)getCidsBean().getProperty(FIELD__BEMERKUNG) : null;
-        saveTel = (getCidsBean().getProperty(FIELD__NAME) != null)
-            ? (Text)getCidsBean().getProperty(FIELD__TEL) : null;
-        saveBem = (getCidsBean().getProperty(FIELD__NAME) != null)
-            ? (Text)getCidsBean().getProperty(FIELD__MAIL) : null;
+        saveBem = (getCidsBean().getProperty(FIELD__NAME) != null) ? (Text)getCidsBean().getProperty(FIELD__BEMERKUNG)
+                                                                   : null;
+        saveTel = (getCidsBean().getProperty(FIELD__NAME) != null) ? (Text)getCidsBean().getProperty(FIELD__TEL) : null;
+        saveBem = (getCidsBean().getProperty(FIELD__NAME) != null) ? (Text)getCidsBean().getProperty(FIELD__MAIL)
+                                                                   : null;
     }
-    
-    
-    
+
     @Override
     public void dispose() {
         if (isEditor()) {
@@ -540,8 +569,14 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
         this.cidsBean = null;
     }
 
-
-    public boolean isOkForSaving(CidsBean saveVerursacherBean) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   saveVerursacherBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isOkForSaving(final CidsBean saveVerursacherBean) {
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
@@ -556,7 +591,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
             LOG.warn("name not given.", ex);
             save = false;
         }
-        
+
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(UaVerursacherPanel.class, BUNDLE_PANE_PREFIX)
@@ -564,7 +599,7 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
                         + NbBundle.getMessage(UaVerursacherPanel.class, BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(UaVerursacherPanel.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
-        } 
+        }
         return save;
     }
 
@@ -572,7 +607,9 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
     public ConnectionContext getConnectionContext() {
         return ueeInstance.getConnectionContext();
     }
-    
+
+    //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
@@ -589,7 +626,12 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
             super(new String[] { "Die Daten werden geladen......" });
         }
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class RegexPatternFormatter extends DefaultFormatter {
 
         //~ Instance fields ----------------------------------------------------
@@ -650,10 +692,9 @@ public class UaVerursacherPanel extends javax.swing.JPanel implements Disposable
          * @param  okValue  DOCUMENT ME!
          */
         public void setLastValid(final Object okValue) {
-            if (lastValid == null && !(okValue.equals("null"))) {
+            if ((lastValid == null) && !(okValue.equals("null"))) {
                 lastValid = okValue;
             }
         }
     }
-    
 }

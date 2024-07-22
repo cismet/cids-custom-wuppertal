@@ -20,7 +20,20 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.BindingGroup;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.ELProperty;
+
 import org.openide.util.NbBundle;
+
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,17 +56,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingGroup;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.ELProperty;
 
 /**
  * DOCUMENT ME!
@@ -72,10 +74,10 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
     public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
     public static final String REDUNDANT_TABLE = "ua_gewaesser";
-        
-    public static final String FIELD__NAME = "name";  
-    public static final String FIELD__ID = "id";   
-    public static final String FIELD__WV = "wv";                         
+
+    public static final String FIELD__NAME = "name";
+    public static final String FIELD__ID = "id";
+    public static final String FIELD__WV = "wv";
     public static final String TABLE_NAME = "ua_gewaesser";
 
     public static final String BUNDLE_NONAME = "UaGewaesserEditor.isOkForSaving().noName";
@@ -133,12 +135,12 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
         final Collection<String> conditions = new ArrayList<>();
         conditions.add(FIELD__NAME + " ilike '" + txtName.getText().trim() + "'");
         conditions.add(FIELD__ID + " <> " + getCidsBean().getProperty(FIELD__ID));
-        if("true".equals(getCidsBean().getProperty(FIELD__WV).toString())){
+        if ("true".equals(getCidsBean().getProperty(FIELD__WV).toString())) {
             conditions.add(FIELD__WV);
         } else {
-            conditions.add( "not " + FIELD__WV);
+            conditions.add("not " + FIELD__WV);
         }
-        
+
         gewSearch.setWhere(conditions);
         try {
             redundantName =
@@ -173,7 +175,6 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
             LOG.warn("Name not given.", ex);
             save = false;
         }
-
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -224,14 +225,12 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -264,7 +263,12 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -288,7 +292,12 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
 
         chWv.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.wv}"), chWv, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.wv}"),
+                chWv,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -312,14 +321,12 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -341,7 +348,7 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -363,7 +370,6 @@ public class UaGewaesserEditor extends DefaultCustomObjectEditor implements Cids
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
                 try {
                     this.getCidsBean().setProperty(FIELD__WV, false);
- 
                 } catch (Exception e) {
                     LOG.error("Cannot set wv", e);
                 }
