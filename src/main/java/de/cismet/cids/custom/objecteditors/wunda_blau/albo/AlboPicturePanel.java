@@ -57,6 +57,7 @@ public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStor
     private ConnectionContext cc;
     private boolean editable;
     private WebDavTunnelHelper webDavHelper;
+    private SwingWorker<ImageIcon, Void> imageLoader;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbType;
@@ -292,8 +293,14 @@ public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStor
                                         getConnectionContext());
                                 final BufferedImage image = ImageIO.read(is);
 
+                                if (isCancelled()) {
+                                    return null;
+                                }
+
+                                ImageIcon ic;
+
                                 if ((labPreview.getWidth() > 40) && (labPreview.getHeight() > 40)) {
-                                    return new ImageIcon(ImageUtil.adjustScale(
+                                    ic = new ImageIcon(ImageUtil.adjustScale(
                                                 image,
                                                 labPreview.getWidth()
                                                         - 10,
@@ -302,24 +309,36 @@ public class AlboPicturePanel extends javax.swing.JPanel implements CidsBeanStor
                                                 20,
                                                 20));
                                 } else {
-                                    return new ImageIcon(image);
+                                    ic = new ImageIcon(image);
                                 }
+
+                                if (isCancelled()) {
+                                    return null;
+                                }
+                                return ic;
                             }
 
                             @Override
                             protected void done() {
                                 try {
-                                    labPreview.setIcon(null);
-                                    labPreview.setText("");
                                     final ImageIcon ii = get();
-                                    labPreview.setIcon(ii);
+
+                                    if (ii != null) {
+                                        labPreview.setText("");
+                                        labPreview.setIcon(ii);
+                                    }
                                 } catch (Exception ex) {
                                     LOG.error(ex);
                                 }
                             }
                         };
 
-                    worker.execute();
+                    if (imageLoader != null) {
+                        imageLoader.cancel(true);
+                    }
+
+                    imageLoader = worker;
+                    imageLoader.execute();
                 } else {
                     labPreview.setIcon(null);
                     labPreview.setText("Für diesen Datentyp ist keine Vorschau verfügbar");
