@@ -77,6 +77,7 @@ public class UaUnfallartenEditor extends DefaultCustomObjectEditor implements Ci
 
     public static final String FIELD__NAME = "name";
     public static final String FIELD__ID = "id";
+    public static final String FIELD__SCHLUESSEL = "schluessel";
     public static final String TABLE_NAME = "ua_unfallartenn";
 
     public static final String BUNDLE_NONAME = "UaUnfallartenEditor.isOkForSaving().noName";
@@ -385,6 +386,13 @@ public class UaUnfallartenEditor extends DefaultCustomObjectEditor implements Ci
                     getConnectionContext());
             }
             bindingGroup.bind();
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    this.getCidsBean().setProperty(FIELD__SCHLUESSEL, "neu");
+                } catch (Exception e) {
+                    LOG.error("Cannot set schluessel", e);
+                }
+            }
         } catch (final Exception ex) {
             LOG.warn("Error setCidsBean.", ex);
         }
