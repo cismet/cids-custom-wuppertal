@@ -36,6 +36,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -1470,9 +1471,13 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         public void initializeBean(final CidsBean beanToInit) throws Exception {
             super.initializeBean(beanToInit);
 
-//            if (lastInstance != null) {
-//                lastInstance.setCidsBean(beanToInit);
-//            }
+            EventQueue.invokeLater(new Thread("") {
+
+                    @Override
+                    public void run() {
+                        setCidsBean(beanToInit);
+                    }
+                });
         }
 
         @Override
@@ -1519,6 +1524,25 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
                 geomBean.setProperty(GEOM_FIELD_NAME, g);
                 beanToInit.setProperty(propertyName, geomBean);
+            } else if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                            "albo_massnahmen")) {
+                final CidsBean maBean = CidsBeanSupport.cloneBean(complexValueToProcess, connectionContext);
+                beanToInit.setProperty(propertyName, maBean);
+            } else if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                            "albo_altablagerung")) {
+                final CidsBean abBean = CidsBeanSupport.cloneBean(complexValueToProcess, connectionContext);
+                final List<CidsBean> beans = complexValueToProcess.getBeanCollectionProperty(
+                        "n_altablagerung_abfallherkuenfte");
+
+                if (beans != null) {
+                    for (final CidsBean b : beans) {
+                        final List<CidsBean> newBeans = abBean.getBeanCollectionProperty(
+                                "n_altablagerung_abfallherkuenfte");
+                        newBeans.add(CidsBeanSupport.cloneBean(b, connectionContext));
+                    }
+                }
+
+                beanToInit.setProperty(propertyName, abBean);
             } else {
                 // flat copy
                 beanToInit.setProperty(propertyName, complexValueToProcess);
