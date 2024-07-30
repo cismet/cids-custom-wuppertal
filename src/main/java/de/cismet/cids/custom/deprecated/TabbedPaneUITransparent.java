@@ -19,7 +19,6 @@ package de.cismet.cids.custom.deprecated;
  *
  * @author srichter
  */
-import com.sun.java.swing.plaf.windows.WindowsTabbedPaneUI;
 
 import java.awt.AlphaComposite;
 import java.awt.Font;
@@ -29,12 +28,14 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
+
 /**
  * DOCUMENT ME!
  *
  * @version  $Revision$, $Date$
  */
-public class TabbedPaneUITransparent extends WindowsTabbedPaneUI {
+public class TabbedPaneUITransparent extends BasicTabbedPaneUI {
 
     //~ Methods ----------------------------------------------------------------
 
