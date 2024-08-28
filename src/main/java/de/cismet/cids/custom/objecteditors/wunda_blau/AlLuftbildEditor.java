@@ -722,6 +722,15 @@ public class AlLuftbildEditor extends DefaultCustomObjectEditor implements CidsB
         showDocumentCard(DocumentCard.BUSY);
     }
 
+    @Override
+    public void dispose() {
+        panPreviewMap.dispose();
+        rasterfariDocumentLoaderPanel.dispose();
+
+        bindingGroup.unbind();
+        super.dispose();
+    }
+
     /**
      * DOCUMENT ME!
      *
