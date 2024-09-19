@@ -40,8 +40,8 @@ public class FastBindableReferenceComboCellEditor extends AbstractCellEditor imp
      * @throws  UnsupportedOperationException  DOCUMENT ME!
      */
     public FastBindableReferenceComboCellEditor() {
-        throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods, choose
-                                                                          // Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
+                                                                       // Tools | Templates.
     }
 
     /**

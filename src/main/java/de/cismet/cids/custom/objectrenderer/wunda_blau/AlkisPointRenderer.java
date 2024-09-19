@@ -1525,7 +1525,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 cbPunktorte,
-                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.UUId}"),
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.uuid}"),
                 lblTxtPLIdentifikator,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
