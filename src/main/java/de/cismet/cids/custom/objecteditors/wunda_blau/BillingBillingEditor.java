@@ -862,7 +862,11 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
             txtaBerechnung.setText("");
         }
 
-        txtAngelegt_am.setText(DATE_FORMAT.format(cidsBean.getProperty("ts")));
+        if (cidsBean.getProperty("ts") != null) {
+            txtAngelegt_am.setText(DATE_FORMAT.format(cidsBean.getProperty("ts")));
+        } else {
+            txtAngelegt_am.setText(null);
+        }
 
         final Boolean storniert = (Boolean)cidsBean.getProperty("storniert");
         text = "Buchung ist storniert";

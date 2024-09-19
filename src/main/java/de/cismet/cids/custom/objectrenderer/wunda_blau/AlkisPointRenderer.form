@@ -978,7 +978,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblTxtPLIdentifikator">
               <BindingProperties>
-                <BindingProperty name="text" source="cbPunktorte" sourcePath="${selectedItem.UUId}" target="lblTxtPLIdentifikator" targetPath="text" updateStrategy="1" immediately="false">
+                <BindingProperty name="text" source="cbPunktorte" sourcePath="${selectedItem.uuid}" target="lblTxtPLIdentifikator" targetPath="text" updateStrategy="1" immediately="false">
                   <Property name="nullValue" type="java.lang.String" value="keine Angabe"/>
                   <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
                 </BindingProperty>
