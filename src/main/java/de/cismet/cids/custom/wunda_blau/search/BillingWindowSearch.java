@@ -770,7 +770,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                     "billing_kunden_logins",
                     getConnectionContext());
             String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " \n";
-            query += "FROM " + MB_MC.getTableName();
+            query += "FROM " + MB_MC.getTableName() + "  order by lower(name)";
             final MetaObject[] metaObjects = SessionManager.getProxy()
                         .getMetaObjectByQuery(query, 0, getConnectionContext());
             for (final MetaObject abrechnungsturnus : metaObjects) {
