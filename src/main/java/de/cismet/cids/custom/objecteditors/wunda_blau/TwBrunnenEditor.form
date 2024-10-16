@@ -638,7 +638,7 @@
                         <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_massnahmen}" target="blpMassnahmen" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Beteiligte:&quot;, SORTING_OPTION)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Massnahmen:&quot;, SORTING_OPTION)"/>
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

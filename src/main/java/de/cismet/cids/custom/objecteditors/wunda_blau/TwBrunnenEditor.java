@@ -119,6 +119,10 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     private static final Logger LOG = Logger.getLogger(TwBrunnenEditor.class);
 
     public static final String FIELD__ID = "id";
+    public static final String FIELD__FREI = "barrierefrei";
+    public static final String FIELD__WARTUNG = "wartung";
+    public static final String FIELD__HALB = "halb_oeffentlich";
+    public static final String FIELD__LAEUFER = "dauerlaeufer";
     public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel";
     public static final String FIELD__STRASSE_NAME = "name";                // strasse
     public static final String FIELD__STRASSE_KEY = "strassenschluessel";   // strasse
@@ -349,7 +353,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         taOffen = new JTextArea();
         panFiller = new JPanel();
         lblMassnahmen = new JLabel();
-        blpMassnahmen = new DefaultBindableLabelsPanel(isEditor(), "Beteiligte:", SORTING_OPTION);
+        blpMassnahmen = new DefaultBindableLabelsPanel(isEditor(), "Massnahmen:", SORTING_OPTION);
         lblBemerkung = new JLabel();
         panBemerkung = new JPanel();
         scpBemerkung = new JScrollPane();
@@ -959,7 +963,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     public void setCidsBean(final CidsBean cb) {
         try {
             if (isEditor() && (getCidsBean() != null)) {
-                LOG.info("remove propchange ua_einsatz: " + getCidsBean());
+                LOG.info("remove propchange Tw_brunnen: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
                 cbHNr.removeActionListener(hnrActionListener);
             }
@@ -969,7 +973,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                 }
             }
             labelsPanels.clear();
-            blpMassnahmen.clear();
+            //blpMassnahmen.clear();
             bindingGroup.unbind();
             this.cidsBean = cb;
             if (isEditor() && (getCidsBean() != null)) {
@@ -1010,6 +1014,36 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                 
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__HALB,
+                        false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set keine halb-öffentlich", e);
+                }
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__WARTUNG,
+                        false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set keine Wartung", e);
+                }
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__LAEUFER,
+                        false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set keine Dauerläufer", e);
+                }
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__FREI,
+                        false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set keine Barrierefrei", e);
+                }
+            }
             
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
