@@ -89,6 +89,8 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 /**
  * DOCUMENT ME!
  *
@@ -142,7 +144,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     
     public static final String BUNDLE_PANE_KONTROLLE = "UaEinsatzEditor.editorClose().JOptionPane.kontrolle";
     public static final String BUNDLE_PANE_ADMIN = "UaEinsatzEditor.editorClose().JOptionPane.admin";
-
+    public static final String TEXT_OPEN = "24 Stunden / 7 Tage";
  
     private static final String TITLE_NEW_BRUNNEN = "einen neuen Trinkwasserbrunnen anlegen...";
 
@@ -725,6 +727,11 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
+        chOffen.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent evt) {
+                chOffenStateChanged(evt);
+            }
+        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -942,6 +949,10 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }//GEN-LAST:event_cbStrasseActionPerformed
 
+    private void chOffenStateChanged(ChangeEvent evt) {//GEN-FIRST:event_chOffenStateChanged
+        hatZeiten();
+    }//GEN-LAST:event_chOffenStateChanged
+
    
     /**
      * DOCUMENT ME!
@@ -989,6 +1000,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
             setMapWindow();
             bindingGroup.bind();
+            hatZeiten();
             setTitle(getTitle());
             if (getCidsBean() != null) {
                 labelsPanels.addAll(Arrays.asList(blpMassnahmen));
@@ -1067,6 +1079,20 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }
 
+    private void hatZeiten() {
+        final boolean isNotOpen = chOffen.isSelected();
+
+        if (isEditor()) {
+            taOffen.setEnabled(isNotOpen);
+            if (isNotOpen == false) {
+                taOffen.setText(TEXT_OPEN);
+            } else {
+                if (taOffen.getText().equals(TEXT_OPEN)) {
+                    taOffen.setText("");
+                }
+            }
+        }
+    }
     /**
      * DOCUMENT ME!
      */
