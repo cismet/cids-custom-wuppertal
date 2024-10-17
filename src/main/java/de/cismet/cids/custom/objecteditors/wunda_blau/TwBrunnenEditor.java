@@ -56,7 +56,8 @@ import javax.swing.plaf.basic.ComboPopup;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.UaConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.TwConfProperties;
+import static de.cismet.cids.custom.objecteditors.wunda_blau.EmobLadestationEditor.FOTO_WIDTH;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
@@ -84,13 +85,22 @@ import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
+import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 /**
  * DOCUMENT ME!
  *
@@ -112,6 +122,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
 
     private static String MAPURL;
+    private static String FOTOS;
     private static Double BUFFER;
 
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
@@ -137,13 +148,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String TABLE_GEOM = "geom";
 
    
+    public static final String BUNDLE_NOLOAD = "TwBrunnenEditor.loadPictureWithUrl().noLoad";
     public static final String BUNDLE_NOGEOM = "TwBrunnenEditor.isOkForSaving().noGeom";
     public static final String BUNDLE_PANE_PREFIX = "TwBrunnenEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "TwBrunnenEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "TwBrunnenEditor.isOkForSaving().JOptionPane.title";
     
-    public static final String BUNDLE_PANE_KONTROLLE = "UaEinsatzEditor.editorClose().JOptionPane.kontrolle";
-    public static final String BUNDLE_PANE_ADMIN = "UaEinsatzEditor.editorClose().JOptionPane.admin";
     public static final String TEXT_OPEN = "24 Stunden / 7 Tage";
  
     private static final String TITLE_NEW_BRUNNEN = "einen neuen Trinkwasserbrunnen anlegen...";
@@ -167,6 +177,10 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
   
     private final boolean editor;
+    private final ImageIcon statusFalsch = new ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
+    private final ImageIcon statusOk = new ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
     
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
@@ -248,7 +262,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     }
 
     /**
-     * Creates a new UaEinsatzEditor object.
+     * Creates a new TwBrunnenEditor object.
      *
      * @param  boolEditor  DOCUMENT ME!
      */
@@ -290,7 +304,24 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         }
         
         setReadOnly();
-        
+        txtFoto.getDocument().addDocumentListener(new DocumentListener() {
+
+                // Immer, wenn das Foto geändert wird, wird dieses überprüft und neu geladen.
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    doWithFotoUrl();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    doWithFotoUrl();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    doWithFotoUrl();
+                }
+            });
     }
 
     
@@ -988,7 +1019,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             bindingGroup.unbind();
             this.cidsBean = cb;
             if (isEditor() && (getCidsBean() != null)) {
-                LOG.info("add propchange ua_einsatz: " + getCidsBean());
+                LOG.info("add propchange tw_brunnen: " + getCidsBean());
                 getCidsBean().addPropertyChangeListener(this);
             }
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
@@ -1156,15 +1187,120 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                 }
             }.execute();
     }
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url        DOCUMENT ME!
+     * @param  showLabel  DOCUMENT ME!
+     */
+    private void loadPictureWithUrl(final String url, final JLabel showLabel) {
+        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        final SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
+
+                @Override
+                protected ImageIcon doInBackground() throws Exception {
+                    return loadPicture(new URL(url));
+                }
+
+                @Override
+                protected void done() {
+                    final ImageIcon check;
+                    try {
+                        check = get();
+                        if (check != null) {
+                            showLabel.setIcon(check);
+                            showLabel.setText("");
+                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        } else {
+                            showLabel.setIcon(null);
+                            showLabel.setText(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NOLOAD));
+                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        showLabel.setText(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NOLOAD));
+                        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        LOG.warn("load picture Problem in Worker.", e);
+                    }
+                }
+            };
+        worker.execute();
+    }
+    
+    private void doWithFotoUrl() {
+        final String foto = FOTOS.concat(txtFoto.getText());
+        
+        // Worker Aufruf, grün/rot
+        checkUrl(foto, lblUrlCheck);
+        // Worker Aufruf, Foto laden
+        loadPictureWithUrl(foto, lblFotoAnzeigen);
+    }
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ImageIcon loadPicture(final URL url) {
+        try {
+            final int bildZielBreite = FOTO_WIDTH;
+            final BufferedImage originalBild = ImageIO.read(WebAccessManager.getInstance().doRequest(url));
+            final Image skaliertesBild = originalBild.getScaledInstance(bildZielBreite, -1, Image.SCALE_SMOOTH);
+            return new ImageIcon(skaliertesBild);
+        } catch (final Exception ex) {
+            LOG.error("Could not load picture.", ex);
+            return null;
+        }
+    }
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url        DOCUMENT ME!
+     * @param  showLabel  DOCUMENT ME!
+     */
+    private void checkUrl(final String url, final JLabel showLabel) {
+        showLabel.setIcon(statusFalsch);
+        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    return WebAccessManager.getInstance().checkIfURLaccessible(new URL(url));
+                }
+
+                @Override
+                protected void done() {
+                    final Boolean check;
+                    try {
+                        check = get();
+                        if (check) {
+                            showLabel.setIcon(statusOk);
+                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        } else {
+                            showLabel.setIcon(statusFalsch);
+                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        showLabel.setIcon(statusFalsch);
+                        showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        LOG.warn("URL Check Problem in Worker.", e);
+                    }
+                }
+            };
+        worker.execute();
+    }
 
     /**
      * DOCUMENT ME!
      */
     private void initProperties() {
         try {
-            BUFFER = UaConfProperties.getInstance().getBufferMeter();
-            MAPURL = UaConfProperties.getInstance().getUrl();
-
+            BUFFER = TwConfProperties.getInstance().getBufferMeter();
+            MAPURL = TwConfProperties.getInstance().getUrl();
+            FOTOS = TwConfProperties.getInstance().getFotos();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
@@ -1212,7 +1348,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             cbHNr.removeAll();
             
             if (getCidsBean() != null) {
-                LOG.info("remove propchange ua_einsatz: " + getCidsBean());
+                LOG.info("remove propchange tw_brunnen: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
             }
         }
