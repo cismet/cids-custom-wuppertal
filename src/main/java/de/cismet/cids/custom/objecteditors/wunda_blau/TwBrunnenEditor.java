@@ -133,6 +133,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
     public static final String FIELD__ID = "id";
     public static final String FIELD__FREI = "barrierefrei";
+    public static final String FIELD__GEB = "gebaeude";
     public static final String FIELD__WARTUNG = "wartung";
     public static final String FIELD__HALB = "halb_oeffentlich";
     public static final String FIELD__LAEUFER = "dauerlaeufer";
@@ -203,21 +204,26 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpMassnahmen;
+    private DefaultBindableReferenceCombo cbBetreiber;
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbStrasse;
     private JCheckBox chBarrierefrei;
+    private JCheckBox chGebaeude;
     private JCheckBox chLaeufer;
     private JCheckBox chOffen;
     private JCheckBox chWartung;
     private Box.Filler filler3;
     private Box.Filler filler4;
+    private Box.Filler filler5;
     private JPanel jPanelAllgemein;
     private JLabel lblBarrierefrei;
     private JLabel lblBemerkung;
     private JLabel lblBeschreibung;
+    private JLabel lblBetreiber;
     private JLabel lblFoto;
     private JLabel lblFotoAnzeigen;
+    private JLabel lblGebaeude;
     private JLabel lblGeom;
     private JLabel lblHalb;
     private JLabel lblHnr;
@@ -375,15 +381,19 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBarrierefrei = new JLabel();
         chBarrierefrei = new JCheckBox();
         filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        lblBetreiber = new JLabel();
+        cbBetreiber = new DefaultBindableReferenceCombo(true) ;
         lblHalb = new JLabel();
-        lblOffen = new JLabel();
         chOffen = new JCheckBox();
         lblWartung = new JLabel();
         chWartung = new JCheckBox();
-        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        lblGebaeude = new JLabel();
+        chGebaeude = new JCheckBox();
+        lblOffen = new JLabel();
         panOffen = new JPanel();
         scpOffen = new JScrollPane();
         taOffen = new JTextArea();
+        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         panFiller = new JPanel();
         lblMassnahmen = new JLabel();
         blpMassnahmen = new DefaultBindableLabelsPanel(isEditor(), "Massnahmen:", SORTING_OPTION);
@@ -391,6 +401,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         panBemerkung = new JPanel();
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
+        filler5 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
 
         setLayout(new GridBagLayout());
 
@@ -634,7 +645,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -652,7 +663,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         panUrl.add(lblUrlCheck, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -661,10 +672,9 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         lblFotoAnzeigen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -700,7 +710,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         lblBarrierefrei.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBarrierefrei.setText("Barrierefrei:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
@@ -716,18 +726,45 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(chBarrierefrei, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDaten.add(filler4, gridBagConstraints);
+
+        lblBetreiber.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBetreiber.setText("Betreiber:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblBetreiber, gridBagConstraints);
+
+        cbBetreiber.setNullable(false);
+        cbBetreiber.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbBetreiber.setMaximumRowCount(6);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_betreiber}"), cbBetreiber, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(cbBetreiber, gridBagConstraints);
 
         lblHalb.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblHalb.setText("halb-öffentlich:");
@@ -739,17 +776,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHalb, gridBagConstraints);
-
-        lblOffen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblOffen.setText("Öffnungszeiten:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblOffen, gridBagConstraints);
 
         chOffen.setContentAreaFilled(false);
 
@@ -774,7 +800,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         lblWartung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblWartung.setText("Wartung:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
@@ -790,18 +816,49 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(chWartung, gridBagConstraints);
+
+        lblGebaeude.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblGebaeude.setText("Gebäude:");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panDaten.add(filler3, gridBagConstraints);
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblGebaeude, gridBagConstraints);
+
+        chGebaeude.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gebaeude}"), chGebaeude, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(chGebaeude, gridBagConstraints);
+
+        lblOffen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblOffen.setText("Öffnungszeiten:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDaten.add(lblOffen, gridBagConstraints);
 
         panOffen.setOpaque(false);
         panOffen.setLayout(new GridBagLayout());
@@ -838,6 +895,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panOffen, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panDaten.add(filler3, gridBagConstraints);
 
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
@@ -927,6 +990,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panBemerkung, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panDaten.add(filler5, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1085,6 +1154,13 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                         false);
                 } catch (Exception e) {
                     LOG.error("Cannot set keine Barrierefrei", e);
+                }
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__GEB,
+                        false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set keine gbaeude", e);
                 }
             }
             
