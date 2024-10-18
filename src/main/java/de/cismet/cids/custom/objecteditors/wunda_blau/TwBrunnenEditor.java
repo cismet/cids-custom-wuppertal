@@ -231,6 +231,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     private JLabel lblFotoAnzeigen;
     private JLabel lblGebaeude;
     private JLabel lblGeom;
+    private JLabel lblHNrRenderer;
     private JLabel lblHalb;
     private JLabel lblHnr;
     private JLabel lblKarte;
@@ -372,6 +373,9 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                 hnrSearch.getRepresentationPattern(),
                 hnrSearch.getRepresentationFields()
             );
+        }
+        if (!isEditor()){
+            lblHNrRenderer = new JLabel();
         }
         lblBeschreibung = new JLabel();
         panBeschreibung = new JPanel();
@@ -585,6 +589,26 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             panDaten.add(cbHNr, gridBagConstraints);
+        }
+
+        if (!isEditor()){
+            lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
+
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
+            binding.setSourceNullValue("----");
+            binding.setSourceUnreadableValue("----");
+            bindingGroup.addBinding(binding);
+
+        }
+        if (!isEditor()){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 11;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 10;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+            panDaten.add(lblHNrRenderer, gridBagConstraints);
         }
 
         lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -1181,14 +1205,22 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
      */
     private void setReadOnly() {
         if (!(isEditor())) {
+            RendererTools.makeReadOnly(txtName);
             lblGeom.setVisible(isEditor());
-            RendererTools.makeReadOnly(taOffen);
             RendererTools.makeReadOnly(cbStrasse);
-            // lblHNrRenderer.setVisible(true);
-            // RendererTools.makeReadOnly(cbHNr);
+            lblHNrRenderer.setVisible(true);
+            RendererTools.makeReadOnly(cbHNr);
+            RendererTools.makeReadOnly(taBeschreibung);
+            RendererTools.makeReadOnly(txtFoto);
+            RendererTools.makeReadOnly(chLaeufer);
+            RendererTools.makeReadOnly(chBarrierefrei);
+            RendererTools.makeReadOnly(cbBetreiber);
+            RendererTools.makeReadOnly(chOffen);
+            RendererTools.makeReadOnly(chWartung);
+            RendererTools.makeReadOnly(chGebaeude);
+            RendererTools.makeReadOnly(taOffen);
             RendererTools.makeReadOnly(blpMassnahmen);
             RendererTools.makeReadOnly(taBemerkung);
-            RendererTools.makeReadOnly(txtName);
         }
     }
 
