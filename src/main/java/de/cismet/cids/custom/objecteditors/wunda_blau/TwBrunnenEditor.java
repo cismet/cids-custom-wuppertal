@@ -95,6 +95,7 @@ import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
@@ -151,6 +152,11 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
    
     public static final String BUNDLE_NOLOAD = "TwBrunnenEditor.loadPictureWithUrl().noLoad";
     public static final String BUNDLE_NOGEOM = "TwBrunnenEditor.isOkForSaving().noGeom";
+    public static final String BUNDLE_NOOFFEN = "TwBrunnenEditor.isOkForSaving().noOffen";
+    public static final String BUNDLE_NOHNR = "TwBrunnenEditor.isOkForSaving().noHNr";
+    public static final String BUNDLE_NOSTREET = "TwBrunnenEditor.isOkForSaving().noStreet";
+    public static final String BUNDLE_NOBESCHREIBUNG= "TwBrunnenEditor.isOkForSaving().noBeschreibung";
+    public static final String BUNDLE_NONAME = "TwBrunnenEditor.isOkForSaving().noName";
     public static final String BUNDLE_PANE_PREFIX = "TwBrunnenEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "TwBrunnenEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "TwBrunnenEditor.isOkForSaving().JOptionPane.title";
@@ -1460,6 +1466,65 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
+        // name vorhanden
+        try {
+            if (txtName.getText().trim().isEmpty()) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NONAME));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Name not given.", ex);
+            save = false;
+        }
+        
+        // beschreibung vorhanden
+        try {
+            if (taBeschreibung.getText().trim().isEmpty()) {
+                LOG.warn("No name specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NOBESCHREIBUNG));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("Name not given.", ex);
+            save = false;
+        }
+        
+        // Straße muss angegeben werden
+        try {
+            if (cbStrasse.getSelectedItem() == null) {
+                LOG.warn("No strasse specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NOSTREET));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("strasse not given.", ex);
+            save = false;
+        }
+        
+        // HNr muss angegeben werden, wenn Gebäude
+        try {
+            if ((Objects.equals(getCidsBean().getProperty(FIELD__GEB), true)) && (cbHNr.getSelectedItem() == null)) {
+                LOG.warn("No hnr specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NOHNR));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("hnr not given.", ex);
+            save = false;
+        }
+        
+        // Öffnungszeiten müssen angegeben werden, wenn halb-öffentlich
+        try {
+            if ((Objects.equals(getCidsBean().getProperty(FIELD__HALB), true)) && (taOffen.getText().trim().isEmpty())) {
+                LOG.warn("No offen specified. Skip persisting.");
+                errorMessage.append(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NOOFFEN));
+                save = false;
+            }
+        } catch (final MissingResourceException ex) {
+            LOG.warn("offen not given.", ex);
+            save = false;
+        }
 
         // georeferenz muss gefüllt sein
         try {
