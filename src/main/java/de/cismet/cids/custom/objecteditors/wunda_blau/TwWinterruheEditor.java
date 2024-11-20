@@ -78,7 +78,7 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
     public static final String BUNDLE_PANE_SUFFIX = "TwWinterruheEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "TwWinterruheEditor.isOkForSaving().JOptionPane.title";
 
-    public static final String TITLE = "Winterzeit";
+    public static final String TITLE = "Winterruhe";
     //~ Instance fields --------------------------------------------------------
 
 
@@ -139,7 +139,7 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
                         final LocalDate ldStart;
                         ldStart = dcStart.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                         final LocalDate ldEnde;
-                        ldEnde = dcStart.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        ldEnde = dcEnde.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                         if (!ldStart.isBefore(ldEnde)) {
                             LOG.warn("Start not before Ende. Skip persisting.");
                             errorMessage.append(NbBundle.getMessage(TwWinterruheEditor.class, BUNDLE_NOBEFORE));
