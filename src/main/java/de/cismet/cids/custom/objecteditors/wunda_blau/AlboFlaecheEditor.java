@@ -1292,7 +1292,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                         || ((cidsBean.getProperty("landesregistriernummer") != null)
                             && !cidsBean.getProperty("landesregistriernummer").equals(""))) {
                 final int ans = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
-                        "Wenn es sich um eine Verzeichnisfläche handelt, dann müssen die Hauptnummer, laufende Nummer und FISAlBo-Nr gesetzt sein.\nSollen diese Nummern automatisch entfernt werden?",
+                        "Wenn es sich um eine Verzeichnisfläche handelt, dann darf die Hauptnummer, laufende Nummer und FISAlBo-Nr. nicht gesetzt sein.\nSollen diese Nummern automatisch entfernt werden?",
                         "Fehlerhafter Bearbeitungsstand",
                         JOptionPane.YES_NO_OPTION);
 
