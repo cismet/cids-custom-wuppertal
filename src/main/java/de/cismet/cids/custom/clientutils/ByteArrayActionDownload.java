@@ -8,16 +8,24 @@
 package de.cismet.cids.custom.clientutils;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.actions.PreparedAsyncDownloadHelper;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.concurrent.Future;
 
+import de.cismet.cids.server.actions.PreparedAsyncByteAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.commons.security.WebDavClient;
+import de.cismet.commons.security.WebDavHelper;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
+
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
 
@@ -191,39 +199,62 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
         status = State.RUNNING;
         stateChanged();
 
-        final byte[] content;
+        final Object contentObject;
+
         try {
-            content = execAction();
+            contentObject = execAction();
         } catch (final Exception ex) {
             log.warn("Couldn't execute task '" + taskname + "'.", ex);
             error(ex);
             return;
         }
 
-        if ((content == null) || (content.length <= 0)) {
-            log.info("Downloaded content seems to be empty..");
+        if (contentObject instanceof PreparedAsyncByteAction) {
+            FileOutputStream out = null;
 
-            if (status == State.RUNNING) {
-                status = State.COMPLETED;
-                stateChanged();
+            try {
+                out = new FileOutputStream(fileToSaveTo);
+                PreparedAsyncDownloadHelper.download((PreparedAsyncByteAction)contentObject, out);
+            } catch (final Exception ex) {
+                log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+                error(ex);
+                return;
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        } else {
+            final byte[] content = (byte[])contentObject;
+
+            if ((content == null) || (content.length <= 0)) {
+                log.info("Downloaded content seems to be empty..");
+
+                if (status == State.RUNNING) {
+                    status = State.COMPLETED;
+                    stateChanged();
+                }
+
+                return;
             }
 
-            return;
-        }
-
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(fileToSaveTo);
-            out.write(content);
-        } catch (final IOException ex) {
-            log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
-            error(ex);
-            return;
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (Exception e) {
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(fileToSaveTo);
+                out.write(content);
+            } catch (final IOException ex) {
+                log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+                error(ex);
+                return;
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (Exception e) {
+                    }
                 }
             }
         }
@@ -241,7 +272,7 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    protected byte[] execAction() throws Exception {
+    protected Object execAction() throws Exception {
         if ((paramsFuture != null) && (params == null)) {
             params = paramsFuture.get();
         }
@@ -252,14 +283,15 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
                         domain,
                         body,
                         getConnectionContext(),
+                        false,
                         params);
 
         if (ret instanceof Exception) {
             final Exception ex = (Exception)ret;
             throw ex;
         }
-        final byte[] content = (byte[])ret;
-        return content;
+
+        return ret;
     }
 
     @Override
