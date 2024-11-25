@@ -106,7 +106,7 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
     }
 
     /**
-     * Creates a new TwMassnahmenEditor object.
+     * Creates a new TwWinterruheEditor object.
      *
      * @param  boolEditor  DOCUMENT ME!
      */
