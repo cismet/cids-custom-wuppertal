@@ -41,7 +41,8 @@ public class TwConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TwConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            TwConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -115,7 +116,8 @@ public class TwConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.TW_CONF_PROPERTIES.getValue(),

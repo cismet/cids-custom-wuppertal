@@ -14,7 +14,6 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.AutoBinding;
@@ -32,13 +31,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+
+import java.util.MissingResourceException;
+
 import javax.swing.*;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
 
+import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.SaveVetoable;
 
@@ -48,9 +52,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.MissingResourceException;
 
 /**
  * DOCUMENT ME!
@@ -79,8 +80,8 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
     public static final String BUNDLE_PANE_TITLE = "TwWinterruheEditor.isOkForSaving().JOptionPane.title";
 
     public static final String TITLE = "Winterruhe";
-    //~ Instance fields --------------------------------------------------------
 
+    //~ Instance fields --------------------------------------------------------
 
     private final boolean editor;
 
@@ -121,7 +122,6 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
         boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
-            
         // dateTime Beginn vorhanden
         try {
             if (getCidsBean().getProperty(FIELD__START) == null) {
@@ -145,7 +145,7 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
                             errorMessage.append(NbBundle.getMessage(TwWinterruheEditor.class, BUNDLE_NOBEFORE));
                             save = false;
                         }
-                    }    
+                    }
                 } catch (final MissingResourceException ex) {
                     LOG.warn("End not given.", ex);
                     save = false;
@@ -155,8 +155,6 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
             LOG.warn("Beginn not given.", ex);
             save = false;
         }
-
-        
 
         if (errorMessage.length() > 0) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -207,14 +205,12 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -247,7 +243,12 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblStart, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_start}"), dcStart, BeanProperty.create("date"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_start}"),
+                dcStart,
+                BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(dcStart.getConverter());
@@ -273,7 +274,12 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblEnde, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum_ende}"), dcEnde, BeanProperty.create("date"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum_ende}"),
+                dcEnde,
+                BeanProperty.create("date"));
         binding.setConverter(dcEnde.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -296,14 +302,12 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -325,7 +329,7 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -370,7 +374,7 @@ public class TwWinterruheEditor extends DefaultCustomObjectEditor implements Cid
 
     @Override
     public String getTitle() {
-            return TITLE;
+        return TITLE;
     }
 
     @Override

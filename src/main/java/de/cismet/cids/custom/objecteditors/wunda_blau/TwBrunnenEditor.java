@@ -33,31 +33,42 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.MissingResourceException;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.ComboPopup;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.TwConfProperties;
-import static de.cismet.cids.custom.objecteditors.wunda_blau.EmobLadestationEditor.FOTO_WIDTH;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
@@ -85,23 +96,15 @@ import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.net.URL;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import javax.imageio.ImageIO;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+
+import static de.cismet.cids.custom.objecteditors.wunda_blau.EmobLadestationEditor.FOTO_WIDTH;
 /**
  * DOCUMENT ME!
  *
@@ -121,14 +124,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     private static DefaultBindableReferenceCombo.Option SORTING_OPTION =
         new DefaultBindableReferenceCombo.SortingColumnOption("name");
 
-
     private static String MAPURL;
     private static String FOTOS;
     private static Double BUFFER;
 
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
-    
 
     private static final Logger LOG = Logger.getLogger(TwBrunnenEditor.class);
 
@@ -149,20 +150,19 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     public static final String TABLE_NAME = "tw_brunnen";
     public static final String TABLE_GEOM = "geom";
 
-   
     public static final String BUNDLE_NOLOAD = "TwBrunnenEditor.loadPictureWithUrl().noLoad";
     public static final String BUNDLE_NOGEOM = "TwBrunnenEditor.isOkForSaving().noGeom";
     public static final String BUNDLE_NOOFFEN = "TwBrunnenEditor.isOkForSaving().noOffen";
     public static final String BUNDLE_NOHNR = "TwBrunnenEditor.isOkForSaving().noHNr";
     public static final String BUNDLE_NOSTREET = "TwBrunnenEditor.isOkForSaving().noStreet";
-    public static final String BUNDLE_NOBESCHREIBUNG= "TwBrunnenEditor.isOkForSaving().noBeschreibung";
+    public static final String BUNDLE_NOBESCHREIBUNG = "TwBrunnenEditor.isOkForSaving().noBeschreibung";
     public static final String BUNDLE_NONAME = "TwBrunnenEditor.isOkForSaving().noName";
     public static final String BUNDLE_PANE_PREFIX = "TwBrunnenEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "TwBrunnenEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "TwBrunnenEditor.isOkForSaving().JOptionPane.title";
-    
+
     public static final String TEXT_OPEN = "24 Stunden / 7 Tage";
- 
+
     private static final String TITLE_NEW_BRUNNEN = "einen neuen Trinkwasserbrunnen anlegen...";
 
     //~ Enums ------------------------------------------------------------------
@@ -179,17 +179,15 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         BUSY, DOCUMENT, NO_DOCUMENT, ERROR
     }
 
-
     //~ Instance fields --------------------------------------------------------
 
-  
     private final boolean editor;
     private final ImageIcon statusFalsch = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
     private final ImageIcon statusOk = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
     private final Collection<DefaultBindableLabelsPanel> labelsPanels = new ArrayList<>();
-    
+
     private final AdresseLightweightSearch hnrSearch = new AdresseLightweightSearch(
             AdresseLightweightSearch.Subject.HNR,
             ADRESSE_TOSTRING_TEMPLATE,
@@ -205,8 +203,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                 txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
             }
         };
-
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpMassnahmen;
@@ -307,15 +303,15 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         labelsPanels.clear();
         super.initWithConnectionContext(connectionContext);
         initProperties();
-        
+
         initComponents();
-        
+
         labelsPanels.addAll(Arrays.asList(blpMassnahmen));
         for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
             MetaObjectCache.getInstance().clearCache(labelsPanel.getMetaClass());
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
-        
+
         setReadOnly();
         txtFoto.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -337,7 +333,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             });
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
@@ -360,21 +355,20 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         lblName = new JLabel();
         txtName = new JTextField();
         lblGeom = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class});
+            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class });
         }
         lblStrasse = new JLabel();
         cbStrasse = new FastBindableReferenceCombo();
         lblHnr = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbHNr = new FastBindableReferenceCombo(
-                hnrSearch,
-                hnrSearch.getRepresentationPattern(),
-                hnrSearch.getRepresentationFields()
-            );
+                    hnrSearch,
+                    hnrSearch.getRepresentationPattern(),
+                    hnrSearch.getRepresentationFields());
         }
-        if (!isEditor()){
+        if (!isEditor()) {
             lblHNrRenderer = new JLabel();
         }
         lblBeschreibung = new JLabel();
@@ -392,7 +386,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         chBarrierefrei = new JCheckBox();
         filler4 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         lblBetreiber = new JLabel();
-        cbBetreiber = new DefaultBindableReferenceCombo(true) ;
+        cbBetreiber = new DefaultBindableReferenceCombo(true);
         lblHalb = new JLabel();
         chOffen = new JCheckBox();
         lblWartung = new JLabel();
@@ -486,7 +480,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -510,15 +509,19 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 11;
             gridBagConstraints.gridy = 0;
@@ -543,14 +546,21 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         cbStrasse.setMaximumRowCount(20);
         cbStrasse.setModel(new LoadModelCb());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_strasse}"),
+                cbStrasse,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbStrasse.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbStrasseActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    cbStrasseActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -572,17 +582,21 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblHnr, gridBagConstraints);
 
-        if (isEditor()){
+        if (isEditor()) {
             cbHNr.setMaximumRowCount(20);
             cbHNr.setEnabled(false);
             cbHNr.setMinimumSize(new Dimension(100, 19));
             cbHNr.setPreferredSize(new Dimension(100, 19));
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_adresse}"),
+                    cbHNr,
+                    BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 11;
             gridBagConstraints.gridy = 1;
@@ -591,16 +605,20 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             panDaten.add(cbHNr, gridBagConstraints);
         }
 
-        if (!isEditor()){
+        if (!isEditor()) {
             lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_adresse.hausnummer}"),
+                    lblHNrRenderer,
+                    BeanProperty.create("text"));
             binding.setSourceNullValue("----");
             binding.setSourceUnreadableValue("----");
             bindingGroup.addBinding(binding);
-
         }
-        if (!isEditor()){
+        if (!isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 11;
             gridBagConstraints.gridy = 1;
@@ -630,7 +648,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         taBeschreibung.setRows(2);
         taBeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibung.setViewportView(taBeschreibung);
@@ -669,7 +692,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblFoto, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bild}"), txtFoto, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bild}"),
+                txtFoto,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -685,7 +713,8 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -724,7 +753,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chLaeufer.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.dauerlaeufer}"), chLaeufer, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.dauerlaeufer}"),
+                chLaeufer,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -750,7 +784,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chBarrierefrei.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.barrierefrei}"), chBarrierefrei, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.barrierefrei}"),
+                chBarrierefrei,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -784,7 +823,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         cbBetreiber.setFont(new Font("Dialog", 0, 12)); // NOI18N
         cbBetreiber.setMaximumRowCount(6);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_betreiber}"), cbBetreiber, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_betreiber}"),
+                cbBetreiber,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -809,16 +853,23 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chOffen.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.halb_oeffentlich}"), chOffen, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.halb_oeffentlich}"),
+                chOffen,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         chOffen.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                chOffenStateChanged(evt);
-            }
-        });
+
+                @Override
+                public void stateChanged(final ChangeEvent evt) {
+                    chOffenStateChanged(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -840,7 +891,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chWartung.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.wartung}"), chWartung, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.wartung}"),
+                chWartung,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -866,7 +922,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         chGebaeude.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.gebaeude}"), chGebaeude, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.gebaeude}"),
+                chGebaeude,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -898,7 +959,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         taOffen.setRows(2);
         taOffen.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.oeffnungszeiten}"), taOffen, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.oeffnungszeiten}"),
+                taOffen,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpOffen.setViewportView(taOffen);
@@ -935,14 +1001,16 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         panFiller.setMinimumSize(new Dimension(20, 0));
         panFiller.setOpaque(false);
 
-        GroupLayout panFillerLayout = new GroupLayout(panFiller);
+        final GroupLayout panFillerLayout = new GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
-        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerLayout.setHorizontalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
+        panFillerLayout.setVerticalGroup(panFillerLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -962,7 +1030,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         blpMassnahmen.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_massnahmen}"), blpMassnahmen, BeanProperty.create("selectedElements"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.arr_massnahmen}"),
+                blpMassnahmen,
+                BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -993,7 +1066,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         taBemerkung.setRows(2);
         taBemerkung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bemerkung}"),
+                taBemerkung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(taBemerkung);
@@ -1064,26 +1142,30 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
         if (isEditor() && (getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
         }
-    }//GEN-LAST:event_cbStrasseActionPerformed
+    }                                                                             //GEN-LAST:event_cbStrasseActionPerformed
 
-    private void chOffenStateChanged(ChangeEvent evt) {//GEN-FIRST:event_chOffenStateChanged
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void chOffenStateChanged(final ChangeEvent evt) { //GEN-FIRST:event_chOffenStateChanged
         hatZeiten();
-    }//GEN-LAST:event_chOffenStateChanged
+    }                                                         //GEN-LAST:event_chOffenStateChanged
 
-   
     /**
      * DOCUMENT ME!
      *
@@ -1097,8 +1179,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
     public CidsBean getCidsBean() {
         return cidsBean;
     }
-
-    
 
     @Override
     public void setCidsBean(final CidsBean cb) {
@@ -1114,7 +1194,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                 }
             }
             labelsPanels.clear();
-            //blpMassnahmen.clear();
+            // blpMassnahmen.clear();
             bindingGroup.unbind();
             this.cidsBean = cb;
             if (isEditor() && (getCidsBean() != null)) {
@@ -1140,7 +1220,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                     labelsPanel.reload(true);
                 }
             }
-            
 
             if (isEditor()) {
                 if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
@@ -1153,7 +1232,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                     cbHNr.addActionListener(hnrActionListener);
                 }
                 refreshHnr();
-                
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
@@ -1193,11 +1271,9 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                     LOG.error("Cannot set keine gbaeude", e);
                 }
             }
-            
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
         }
-
     }
 
     /**
@@ -1224,6 +1300,9 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void hatZeiten() {
         final boolean isNotOpen = chOffen.isSelected();
 
@@ -1283,7 +1362,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         }
     }
 
-
     /**
      * DOCUMENT ME!
      */
@@ -1301,7 +1379,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                 }
             }.execute();
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -1340,16 +1418,19 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             };
         worker.execute();
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     */
     private void doWithFotoUrl() {
         final String foto = FOTOS.concat(txtFoto.getText());
-        
+
         // Worker Aufruf, grün/rot
         checkUrl(foto, lblUrlCheck);
         // Worker Aufruf, Foto laden
         loadPictureWithUrl(foto, lblFotoAnzeigen);
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -1368,7 +1449,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             return null;
         }
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -1457,10 +1538,10 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
 
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
-            
+
             cbHNr.removeActionListener(hnrActionListener);
             cbHNr.removeAll();
-            
+
             if (getCidsBean() != null) {
                 LOG.info("remove propchange tw_brunnen: " + getCidsBean());
                 getCidsBean().removePropertyChangeListener(this);
@@ -1490,7 +1571,6 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
         if (evt.getPropertyName().equals(FIELD__GEOM)) {
             setMapWindow();
         }
-        
     }
 
     @Override
@@ -1509,7 +1589,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.warn("Name not given.", ex);
             save = false;
         }
-        
+
         // beschreibung vorhanden
         try {
             if (taBeschreibung.getText().trim().isEmpty()) {
@@ -1521,7 +1601,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.warn("Name not given.", ex);
             save = false;
         }
-        
+
         // Straße muss angegeben werden
         try {
             if (cbStrasse.getSelectedItem() == null) {
@@ -1533,7 +1613,7 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.warn("strasse not given.", ex);
             save = false;
         }
-        
+
         // HNr muss angegeben werden, wenn Gebäude
         try {
             if ((Objects.equals(getCidsBean().getProperty(FIELD__GEB), true)) && (cbHNr.getSelectedItem() == null)) {
@@ -1545,10 +1625,11 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             LOG.warn("hnr not given.", ex);
             save = false;
         }
-        
+
         // Öffnungszeiten müssen angegeben werden, wenn halb-öffentlich
         try {
-            if ((Objects.equals(getCidsBean().getProperty(FIELD__HALB), true)) && (taOffen.getText().trim().isEmpty())) {
+            if ((Objects.equals(getCidsBean().getProperty(FIELD__HALB), true))
+                        && (taOffen.getText().trim().isEmpty())) {
                 LOG.warn("No offen specified. Skip persisting.");
                 errorMessage.append(NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_NOOFFEN));
                 save = false;
@@ -1576,13 +1657,12 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
                         + NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_PANE_SUFFIX),
                 NbBundle.getMessage(TwBrunnenEditor.class, BUNDLE_PANE_TITLE),
                 JOptionPane.WARNING_MESSAGE);
-        } 
+        }
         return save;
     }
 
     @Override
     public void afterSaving(final AfterSavingHook.Event event) {
-
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1603,6 +1683,4 @@ public class TwBrunnenEditor extends DefaultCustomObjectEditor implements CidsBe
             super(new String[] { "Die Daten werden geladen......" });
         }
     }
-
-    
 }
