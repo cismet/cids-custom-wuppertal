@@ -12,20 +12,14 @@ import Sirius.navigator.ui.actions.PreparedAsyncDownloadHelper;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import java.util.concurrent.Future;
 
 import de.cismet.cids.server.actions.PreparedAsyncByteAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.commons.security.WebDavClient;
-import de.cismet.commons.security.WebDavHelper;
-
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
 
@@ -38,6 +32,10 @@ import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
  */
 public class ByteArrayActionDownload extends AbstractCancellableDownload implements ConnectionContextProvider {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final int MIN_LENGTH_TO_SHOW_PROGRESS = 10000;
+
     //~ Instance fields --------------------------------------------------------
 
     protected String taskname;
@@ -48,6 +46,7 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
     private final String domain;
 
     private final ConnectionContext connectionContext;
+    private volatile int progress = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -214,7 +213,26 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
 
             try {
                 out = new FileOutputStream(fileToSaveTo);
-                PreparedAsyncDownloadHelper.download((PreparedAsyncByteAction)contentObject, out);
+                PreparedAsyncDownloadHelper.PreparedAsyncDownloadMonitor monitor = null;
+                final long fileLength = ((PreparedAsyncByteAction)contentObject).getLength();
+
+                if (fileLength > MIN_LENGTH_TO_SHOW_PROGRESS) {
+                    monitor = new PreparedAsyncDownloadHelper.PreparedAsyncDownloadMonitor() {
+
+                            @Override
+                            public void progress(final long bytesRead) {
+                                final int prog = (int)(bytesRead * 100 / fileLength);
+
+                                if (prog > (progress + 5)) {
+                                    progress = prog;
+                                    status = State.RUNNING_WITH_PROGRESS;
+                                    stateChanged();
+                                }
+                            }
+                        };
+                }
+
+                PreparedAsyncDownloadHelper.download((PreparedAsyncByteAction)contentObject, out, monitor);
             } catch (final Exception ex) {
                 log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
                 error(ex);
@@ -259,10 +277,15 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
             }
         }
 
-        if (status == State.RUNNING) {
+        if ((status == State.RUNNING) || (status == State.RUNNING_WITH_PROGRESS)) {
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    @Override
+    public int getProgress() {
+        return progress;
     }
 
     /**
