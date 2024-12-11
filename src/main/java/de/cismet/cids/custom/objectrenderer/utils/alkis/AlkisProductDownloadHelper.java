@@ -692,7 +692,7 @@ public class AlkisProductDownloadHelper {
         //~ Methods ------------------------------------------------------------
 
         @Override
-        protected byte[] execAction() throws Exception {
+        protected Object execAction() throws Exception {
             this.title = "ALKIS-Druck";
             this.directory = DownloadManagerDialog.getInstance().getJobName();
 
