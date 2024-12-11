@@ -8,12 +8,14 @@
 package de.cismet.cids.custom.clientutils;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.actions.PreparedAsyncDownloadHelper;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.concurrent.Future;
 
+import de.cismet.cids.server.actions.PreparedAsyncByteAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -30,6 +32,10 @@ import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
  */
 public class ByteArrayActionDownload extends AbstractCancellableDownload implements ConnectionContextProvider {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final int MIN_LENGTH_TO_SHOW_PROGRESS = 10000;
+
     //~ Instance fields --------------------------------------------------------
 
     protected String taskname;
@@ -40,6 +46,7 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
     private final String domain;
 
     private final ConnectionContext connectionContext;
+    private volatile int progress = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -191,47 +198,94 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
         status = State.RUNNING;
         stateChanged();
 
-        final byte[] content;
+        final Object contentObject;
+
         try {
-            content = execAction();
+            contentObject = execAction();
         } catch (final Exception ex) {
             log.warn("Couldn't execute task '" + taskname + "'.", ex);
             error(ex);
             return;
         }
 
-        if ((content == null) || (content.length <= 0)) {
-            log.info("Downloaded content seems to be empty..");
+        if (contentObject instanceof PreparedAsyncByteAction) {
+            FileOutputStream out = null;
 
-            if (status == State.RUNNING) {
-                status = State.COMPLETED;
-                stateChanged();
+            try {
+                out = new FileOutputStream(fileToSaveTo);
+                PreparedAsyncDownloadHelper.PreparedAsyncDownloadMonitor monitor = null;
+                final long fileLength = ((PreparedAsyncByteAction)contentObject).getLength();
+
+                if (fileLength > MIN_LENGTH_TO_SHOW_PROGRESS) {
+                    monitor = new PreparedAsyncDownloadHelper.PreparedAsyncDownloadMonitor() {
+
+                            @Override
+                            public void progress(final long bytesRead) {
+                                final int prog = (int)(bytesRead * 100 / fileLength);
+
+                                if (prog > (progress + 5)) {
+                                    progress = prog;
+                                    status = State.RUNNING_WITH_PROGRESS;
+                                    stateChanged();
+                                }
+                            }
+                        };
+                }
+
+                PreparedAsyncDownloadHelper.download((PreparedAsyncByteAction)contentObject, out, monitor);
+            } catch (final Exception ex) {
+                log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+                error(ex);
+                return;
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        } else {
+            final byte[] content = (byte[])contentObject;
+
+            if ((content == null) || (content.length <= 0)) {
+                log.info("Downloaded content seems to be empty..");
+
+                if (status == State.RUNNING) {
+                    status = State.COMPLETED;
+                    stateChanged();
+                }
+
+                return;
             }
 
-            return;
-        }
-
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(fileToSaveTo);
-            out.write(content);
-        } catch (final IOException ex) {
-            log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
-            error(ex);
-            return;
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (Exception e) {
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(fileToSaveTo);
+                out.write(content);
+            } catch (final IOException ex) {
+                log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+                error(ex);
+                return;
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (Exception e) {
+                    }
                 }
             }
         }
 
-        if (status == State.RUNNING) {
+        if ((status == State.RUNNING) || (status == State.RUNNING_WITH_PROGRESS)) {
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    @Override
+    public int getProgress() {
+        return progress;
     }
 
     /**
@@ -241,7 +295,7 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
      *
      * @throws  Exception  DOCUMENT ME!
      */
-    protected byte[] execAction() throws Exception {
+    protected Object execAction() throws Exception {
         if ((paramsFuture != null) && (params == null)) {
             params = paramsFuture.get();
         }
@@ -252,14 +306,15 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
                         domain,
                         body,
                         getConnectionContext(),
+                        false,
                         params);
 
         if (ret instanceof Exception) {
             final Exception ex = (Exception)ret;
             throw ex;
         }
-        final byte[] content = (byte[])ret;
-        return content;
+
+        return ret;
     }
 
     @Override
