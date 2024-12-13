@@ -544,7 +544,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
      * DOCUMENT ME!
      */
     private void initMap() {
-        final Object geoObj = cidsBean.getProperty("umschreibendes_rechteck.geo_field");
+        final Object geoObj = cidsBean.getProperty("umschreibendes_rechteck");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
                     ClientAlkisConf.getInstance().getSrsService());
