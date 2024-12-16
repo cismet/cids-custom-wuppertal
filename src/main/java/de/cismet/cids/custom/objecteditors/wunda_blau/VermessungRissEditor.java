@@ -1423,9 +1423,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         for (final CidsBean flurstuecksvermessung : flurstuecksvermessungen) {
             final CidsBean flurstueckKicker = (CidsBean)flurstuecksvermessung.getProperty("flurstueck.flurstueck");
             if ((flurstueckKicker != null)
-                        && (flurstueckKicker.getProperty("umschreibendes_rechteck.geo_field") instanceof Geometry)) {
+                        && (flurstueckKicker.getProperty("umschreibendes_rechteck") instanceof Geometry)) {
                 final Geometry geometry = (Geometry)flurstueckKicker.getProperty(
-                        "umschreibendes_rechteck.geo_field");
+                        "umschreibendes_rechteck");
                 final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs(
                         geometry,
                         ClientAlkisConf.getInstance().getSrsService());
