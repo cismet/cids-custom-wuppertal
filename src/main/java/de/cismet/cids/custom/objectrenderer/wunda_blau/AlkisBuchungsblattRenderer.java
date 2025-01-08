@@ -88,6 +88,7 @@ import javax.swing.text.html.StyleSheet;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.cismet.cids.custom.clientutils.AlkisClientUtils;
 import de.cismet.cids.custom.clientutils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -1704,7 +1705,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         if (cidsBean != null) {
             final Object buchungsblattCodeObj = cidsBean.getProperty("buchungsblattcode");
             if (buchungsblattCodeObj != null) {
-                return AlkisProducts.fixBuchungslattCode(buchungsblattCodeObj.toString());
+                return AlkisClientUtils.fixBuchungslattCode(buchungsblattCodeObj.toString());
             }
         }
         return "";
@@ -2202,7 +2203,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         @Override
         protected Buchungsblatt doInBackground() throws Exception {
             final Buchungsblatt buchungsblatt;
-            buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisProducts.fixBuchungslattCode(
+            buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisClientUtils.fixBuchungslattCode(
                         String.valueOf(bean.getProperty("buchungsblattcode"))),
                     getConnectionContext());
             if (buchungsblatt != null) {

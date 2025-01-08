@@ -39,6 +39,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
+import de.cismet.cids.custom.clientutils.AlkisClientUtils;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisRestUtils;
@@ -490,7 +491,7 @@ public class AlkisEigentuemerPanel extends javax.swing.JPanel implements Connect
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
                     if (!demoMode) {
-                        buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisProducts.fixBuchungslattCode(
+                        buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisClientUtils.fixBuchungslattCode(
                                     buchungsblattcode),
                                 getConnectionContext());
                     } else {

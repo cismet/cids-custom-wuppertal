@@ -89,8 +89,20 @@ public class ServerResourcesLoaderClient extends AbstractServerResourcesLoader {
 
     @Override
     public String loadText(final TextServerResource serverResource) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
-                                                                       // Tools | Templates.
+        final Object ret = SessionManager.getSession()
+                    .getConnection()
+                    .executeTask(SessionManager.getSession().getUser(),
+                        GetServerResourceServerAction.TASK_NAME,
+                        "WUNDA_BLAU",
+                        serverResource,
+                        ConnectionContext.create(
+                            AbstractConnectionContext.Category.STATIC,
+                            ServerResourcesLoaderClient.class.getSimpleName()));
+        if (ret instanceof Exception) {
+            throw (Exception)ret;
+        }
+
+        return (String)ret;
     }
 
     @Override
