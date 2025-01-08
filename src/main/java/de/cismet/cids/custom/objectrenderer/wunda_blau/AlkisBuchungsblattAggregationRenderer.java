@@ -52,6 +52,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import de.cismet.cids.custom.clientutils.AlkisClientUtils;
 import de.cismet.cids.custom.clientutils.BaulastBescheinigungDialog;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
@@ -764,7 +765,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             final Object buchungsblattcode = cidsBean.getProperty("buchungsblattcode");
 
             if (buchungsblattcode != null) {
-                result = AlkisProducts.fixBuchungslattCode(buchungsblattcode.toString());
+                result = AlkisClientUtils.fixBuchungslattCode(buchungsblattcode.toString());
             }
         }
 

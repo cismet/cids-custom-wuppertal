@@ -47,6 +47,7 @@ import java.util.logging.Level;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.clientutils.AlkisClientUtils;
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -1858,7 +1859,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                             final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
                                     CidsAlkisSearchStatement.Resulttyp.BUCHUNGSBLATT,
                                     CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER,
-                                    AlkisProducts.fixBuchungslattCode(buchungsblatt),
+                                    AlkisClientUtils.fixBuchungslattCode(buchungsblatt),
                                     null);
                             final Collection<MetaObjectNode> mons = SessionManager.getProxy()
                                         .customServerSearch(SessionManager.getSession().getUser(),

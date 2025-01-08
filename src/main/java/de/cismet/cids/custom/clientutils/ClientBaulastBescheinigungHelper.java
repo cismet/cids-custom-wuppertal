@@ -92,7 +92,7 @@ public class ClientBaulastBescheinigungHelper extends BaulastBescheinigungHelper
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
-                    buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisProducts.fixBuchungslattCode(
+                    buchungsblatt = ClientAlkisRestUtils.getBuchungsblatt(AlkisClientUtils.fixBuchungslattCode(
                                 buchungsblattcode),
                             getConnectionContext());
                     BUCHUNGSBLATT_CACHE.put(buchungsblattBean, buchungsblatt);

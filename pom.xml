@@ -102,13 +102,13 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>8.8</version>
+                <version>8.8.2</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>8.8</version>
+                <version>8.8.2</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -116,14 +116,14 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>8.5.1</version>
+                <version>8.5.4</version>
                 <type>jar</type>
             </dependency>
             
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>8.3</version>
+                <version>8.3.1</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
