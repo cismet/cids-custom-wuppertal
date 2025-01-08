@@ -37,12 +37,16 @@ public class VCMProperties extends Properties {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VCMProperties.class);
 
     private static final String PROP_URL_TEMPLATE = "URL_TEMPLATE";
+    private static final String PROP_NEW_URL_TEMPLATE = "NEW_URL_TEMPLATE";
     private static final String PROP_USER = "USER";
     private static final String PROP_PASSWORD = "PASSWORD";
     private static final String PROP_TOOLBAR_CONFATTR = "TOOLBAR_CONFATTR";
     private static final String PROP_ROTATION_INDEX = "ROTATION_INDEX";
     private static final String PROP_HEADINGS = "HEADINGS";
     private static final String PROP_SWEET_SPOTS = "SWEET_SPOTS";
+    private static final String USE_NEW_URL = "USE_NEW_URL";
+    private static final String USE_AUTHENTIFICATION = "USE_AUTHENTIFICATION";
+    private static final String RELOAD_CONFIG_EVERY_TIME = "RELOAD_CONFIG_EVERY_TIME";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,6 +65,44 @@ public class VCMProperties extends Properties {
      */
     public String getUrlTemplate() {
         return getProperty(PROP_URL_TEMPLATE);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getNewUrlTemplate() {
+        return getProperty(PROP_NEW_URL_TEMPLATE);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isNewUrl() {
+        return (getProperty(USE_NEW_URL) != null) && getProperty(USE_NEW_URL).equalsIgnoreCase("true");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isWithAuthentication() {
+        return (getProperty(USE_AUTHENTIFICATION) != null)
+                    && getProperty(USE_AUTHENTIFICATION).equalsIgnoreCase("true");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isReloadConfigEveryTime() {
+        return (getProperty(RELOAD_CONFIG_EVERY_TIME) != null)
+                    && getProperty(RELOAD_CONFIG_EVERY_TIME).equalsIgnoreCase("true");
     }
 
     /**

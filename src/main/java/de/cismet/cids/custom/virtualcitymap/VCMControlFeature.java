@@ -95,6 +95,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
     private final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
     private final VCMProperties properties = VCMProperties.getInstance();
     private final ConnectionContext connectionContext;
+    private boolean reloadConfig = true;
 
     private int rotationIndex = 3;
 
@@ -334,20 +335,21 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
      * DOCUMENT ME!
      */
     public void openVCM() {
-        if (properties.isEmpty()) {
+        if (properties.isEmpty() | reloadConfig) {
             LOG.warn("openVCM openVCM(). properties are empty. you should check this server_resource: "
                         + WundaBlauServerResources.VCM_PROPERTIES.getValue());
             LOG.info("trying to load the properties from server_resource");
             properties.load(getConnectionContext());
+            reloadConfig = properties.isReloadConfigEveryTime();
         }
 
-        final Point point = getGeometry().getCentroid();
+        Point point = getGeometry().getCentroid();
         final double distance = CrsTransformer.transformToMetricCrs(getGeometry()).getEnvelopeInternal().getHeight()
                     * 1.10;
         final String user = properties.getUser();
         final String password = properties.getPassword();
-        final double groundPosX = point.getX();
-        final double groundPosY = point.getY();
+        double groundPosX = point.getX();
+        double groundPosY = point.getY();
         final double groundPosZ = 192.2062;
         final int heading = headings[rotationIndex];
         final double camPosX = groundPosX;
@@ -357,28 +359,61 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
                         .getCode());
         final int epsg = currentSrid;
 
-        final String url = String.format(
-                properties.getUrlTemplate(),
-                user,
-                password,
-                groundPosX
-                        + "",
-                groundPosY
-                        + "",
-                groundPosZ
-                        + "",
-                distance
-                        + "",
-                heading
-                        + "",
-                camPosX
-                        + "",
-                camPosY
-                        + "",
-                camPosZ
-                        + "",
-                epsg
-                        + "");
+        final Boolean useNewUrl = properties.isNewUrl();
+        final Boolean useAuthentification = properties.isWithAuthentication();
+        String url;
+
+        if (useNewUrl) {
+            point = CrsTransformer.transformToGivenCrs(point, "EPSG:4326");
+            groundPosX = point.getX();
+            groundPosY = point.getY();
+
+            if (useAuthentification) {
+                url = String.format(
+                        properties.getNewUrlTemplate(),
+                        user,
+                        password,
+                        String.valueOf(groundPosX),
+                        String.valueOf(groundPosY),
+                        String.valueOf(groundPosX),
+                        String.valueOf(groundPosY),
+                        String.valueOf(Math.round(distance)),
+                        String.valueOf(heading));
+            } else {
+                url = String.format(
+                        properties.getNewUrlTemplate(),
+                        String.valueOf(groundPosX),
+                        String.valueOf(groundPosY),
+                        String.valueOf(groundPosX),
+                        String.valueOf(groundPosY),
+                        String.valueOf(Math.round(distance)),
+                        String.valueOf(heading));
+            }
+        } else {
+            url = String.format(
+                    properties.getUrlTemplate(),
+                    user,
+                    password,
+                    groundPosX
+                            + "",
+                    groundPosY
+                            + "",
+                    groundPosZ
+                            + "",
+                    distance
+                            + "",
+                    heading
+                            + "",
+                    camPosX
+                            + "",
+                    camPosY
+                            + "",
+                    camPosZ
+                            + "",
+                    epsg
+                            + "");
+        }
+
         try {
             de.cismet.tools.BrowserLauncher.openURL(url);
         } catch (Exception ex) {
