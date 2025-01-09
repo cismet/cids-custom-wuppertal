@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.virtualcitymap;
 
+import Sirius.navigator.connection.SessionManager;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -361,6 +363,7 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
 
         final Boolean useNewUrl = properties.isNewUrl();
         final Boolean useAuthentification = properties.isWithAuthentication();
+        final Boolean withJwt = properties.isWithJWT();
         String url;
 
         if (useNewUrl) {
@@ -369,16 +372,29 @@ public class VCMControlFeature extends DefaultStyledFeature implements XStyledFe
             groundPosY = point.getY();
 
             if (useAuthentification) {
-                url = String.format(
-                        properties.getNewUrlTemplate(),
-                        user,
-                        password,
-                        String.valueOf(groundPosX),
-                        String.valueOf(groundPosY),
-                        String.valueOf(groundPosX),
-                        String.valueOf(groundPosY),
-                        String.valueOf(Math.round(distance)),
-                        String.valueOf(heading));
+                if (withJwt) {
+                    final String jwt = SessionManager.getSession().getUser().getJwsToken();
+                    url = String.format(
+                            properties.getNewUrlTemplate(),
+                            jwt,
+                            String.valueOf(groundPosX),
+                            String.valueOf(groundPosY),
+                            String.valueOf(groundPosX),
+                            String.valueOf(groundPosY),
+                            String.valueOf(Math.round(distance)),
+                            String.valueOf(heading));
+                } else {
+                    url = String.format(
+                            properties.getNewUrlTemplate(),
+                            user,
+                            password,
+                            String.valueOf(groundPosX),
+                            String.valueOf(groundPosY),
+                            String.valueOf(groundPosX),
+                            String.valueOf(groundPosY),
+                            String.valueOf(Math.round(distance)),
+                            String.valueOf(heading));
+                }
             } else {
                 url = String.format(
                         properties.getNewUrlTemplate(),

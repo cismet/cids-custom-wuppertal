@@ -47,6 +47,7 @@ public class VCMProperties extends Properties {
     private static final String USE_NEW_URL = "USE_NEW_URL";
     private static final String USE_AUTHENTIFICATION = "USE_AUTHENTIFICATION";
     private static final String RELOAD_CONFIG_EVERY_TIME = "RELOAD_CONFIG_EVERY_TIME";
+    private static final String WITH_JWT = "WITH_JWT";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -93,6 +94,16 @@ public class VCMProperties extends Properties {
     public boolean isWithAuthentication() {
         return (getProperty(USE_AUTHENTIFICATION) != null)
                     && getProperty(USE_AUTHENTIFICATION).equalsIgnoreCase("true");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isWithJWT() {
+        return (getProperty(WITH_JWT) != null)
+                    && getProperty(WITH_JWT).equalsIgnoreCase("true");
     }
 
     /**
