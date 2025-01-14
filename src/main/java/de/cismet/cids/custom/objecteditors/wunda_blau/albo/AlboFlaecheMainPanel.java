@@ -766,6 +766,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
      */
     public AlboFlaecheMainPanel() {
         initComponents();
+        jLabel36.setVisible(false);
+        cbFlaechentyp.setVisible(false);
     }
 
     /**
@@ -782,6 +784,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
     @Override
     protected void initGui() {
         initComponents();
+        jLabel36.setVisible(false);
+        cbFlaechentyp.setVisible(false);
 
         if (isEditable()) {
             jButton1.setIcon(new ImageIcon(
@@ -812,7 +816,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
             RendererTools.makeReadOnly(jTextField9);
             RendererTools.makeReadOnly(jTextField11);
             RendererTools.makeReadOnly(jTextField12);
-            RendererTools.makeReadOnly(cbFlaechentyp);
+//            RendererTools.makeReadOnly(cbFlaechentyp);
         }
         RendererTools.makeReadOnly(jXTable1);
         RendererTools.makeReadOnly(jList2);
@@ -1019,7 +1023,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
             RendererTools.makeUneditable(jTextField9, !unlocked);
             RendererTools.makeUneditable(jTextField11, !unlocked);
             RendererTools.makeUneditable(jTextField12, !unlocked);
-            RendererTools.makeUneditable(cbFlaechentyp, !unlocked);
+//            RendererTools.makeUneditable(cbFlaechentyp, !unlocked);
         }
     }
 
