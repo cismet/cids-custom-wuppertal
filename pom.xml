@@ -88,13 +88,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>8.3-SNAPSHOT</version>
+                <version>8.2.6</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>8.3-SNAPSHOT</version>
+                <version>8.2.6</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
