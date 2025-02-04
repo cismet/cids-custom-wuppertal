@@ -364,24 +364,24 @@ public class PfPotenzialflaecheReportGenerator {
                         try {
                             final Boolean success = get();
 
-                            if (!success) {
+                            if (success) {
                                 JOptionPane.showMessageDialog(
                                     StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
                                     NbBundle.getMessage(
-                                        SetTIMNoteAction.class,
+                                        PfPotenzialflaecheReportGenerator.class,
                                         "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().success.message"),
                                     NbBundle.getMessage(
-                                        SetTIMNoteAction.class,
+                                        PfPotenzialflaecheReportGenerator.class,
                                         "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().success.title"),
                                     JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(
                                     StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
                                     NbBundle.getMessage(
-                                        SetTIMNoteAction.class,
+                                        PfPotenzialflaecheReportGenerator.class,
                                         "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().error.message"),
                                     NbBundle.getMessage(
-                                        SetTIMNoteAction.class,
+                                        PfPotenzialflaecheReportGenerator.class,
                                         "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().error.title"),
                                     JOptionPane.INFORMATION_MESSAGE);
                             }
