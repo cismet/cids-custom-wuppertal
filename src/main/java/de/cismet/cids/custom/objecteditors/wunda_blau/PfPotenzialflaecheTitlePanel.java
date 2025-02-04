@@ -27,6 +27,7 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private javax.swing.JButton btnReport;
+    private javax.swing.JButton btnReport1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JLabel txtTitle;
     private javax.swing.JLabel txtTitle1;
@@ -106,6 +107,7 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
         jToggleButton1 = new javax.swing.JToggleButton();
         btnReport = new javax.swing.JButton();
         blWait = new org.jdesktop.swingx.JXBusyLabel();
+        btnReport1 = new javax.swing.JButton();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -176,10 +178,36 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(btnReport, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 5);
         add(blWait, gridBagConstraints);
+
+        btnReport1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/cacheLeeren.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport1,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheTitlePanel.class,
+                "PfPotenzialflaecheTitlePanel.btnReport1.text"));                         // NOI18N
+        btnReport1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheTitlePanel.class,
+                "PfPotenzialflaecheTitlePanel.btnReport1.toolTipText"));                  // NOI18N
+        btnReport1.setBorderPainted(false);
+        btnReport1.setContentAreaFilled(false);
+        btnReport1.setFocusPainted(false);
+        btnReport1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReport1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        add(btnReport1, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -201,4 +229,13 @@ public class PfPotenzialflaecheTitlePanel extends javax.swing.JPanel {
             editor.toggleUsedInputs(jToggleButton1.isSelected());
         }
     }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReport1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReport1ActionPerformed
+        editor.deleteDownloadCache();
+    }                                                                              //GEN-LAST:event_btnReport1ActionPerformed
 }

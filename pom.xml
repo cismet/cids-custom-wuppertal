@@ -13,7 +13,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>8.5.4</version>
+    <version>8.5.5</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
@@ -23,7 +23,7 @@
         <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
-        <tag>v8.5.4</tag>
+        <tag>v8.5.5</tag>
     </scm>
 
     <properties>
@@ -60,13 +60,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>8.0.3</version>
+                <version>8.0.4</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-commons</artifactId>
-                <version>8.0.3</version>
+                <version>8.0.4</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>8.5.4</version>
+                <version>8.5.5</version>
                 <type>jar</type>
             </dependency>
             
@@ -459,7 +459,7 @@
         <dependency>
             <groupId>de.aedsicad</groupId>
             <artifactId>aaaweb-rest-connector</artifactId>
-            <version>7.0.8.2-prerelease-1</version>
+            <version>8.0.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.squareup.okio</groupId>
@@ -470,7 +470,7 @@
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jcommon</artifactId>
-            <version>1.0.15</version>
+            <version>1.0.16</version>
             <scope>compile</scope>
             <type>jar</type>
         </dependency>

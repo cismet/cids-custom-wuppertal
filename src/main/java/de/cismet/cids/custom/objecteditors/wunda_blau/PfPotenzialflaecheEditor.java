@@ -4570,6 +4570,17 @@ public class PfPotenzialflaecheEditor extends javax.swing.JPanel implements Cids
     /**
      * DOCUMENT ME!
      */
+    public void deleteDownloadCache() {
+        final List<CidsBean> beanList = new ArrayList<>();
+
+        beanList.add(getCidsBean());
+
+        PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen(beanList, getConnectionContext());
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     private void initDefinitions() {
         try {
             final Map<MetaClass, String> definitions = new HashMap<>();

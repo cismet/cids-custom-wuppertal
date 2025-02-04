@@ -15,19 +15,32 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.server.middleware.types.MetaObjectNode;
+
 import org.apache.commons.collections.map.MultiValueMap;
 
+import org.openide.util.NbBundle;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.actions.wunda_blau.SetTIMNoteAction;
 import de.cismet.cids.custom.clientutils.PotenzialflaecheReportDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.actions.DeletePotenzialflaecheReportCacheServerAction;
+import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportServerAction;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 
@@ -300,6 +313,82 @@ public class PfPotenzialflaecheReportGenerator {
                             LOG.error(ex, ex);
                             ObjectRendererUtils.showExceptionWindowToUser(
                                 "Fehler Erstellen des Reports",
+                                ex,
+                                StaticSwingTools.getFirstParentFrame(
+                                    ComponentRegistry.getRegistry().getDescriptionPane()));
+                        }
+                    }
+                }.execute();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flaecheBeans       DOCUMENT ME!
+     * @param  connectionContext  DOCUMENT ME!
+     */
+    public static void deleteDownloadCacheForFlaechen(final Collection<CidsBean> flaecheBeans,
+            final ConnectionContext connectionContext) {
+        if (flaecheBeans != null) {
+            new SwingWorker<Boolean, Void>() {
+
+                    @Override
+                    protected Boolean doInBackground() throws Exception {
+                        final List<Integer> idList = new ArrayList<>();
+
+                        for (final CidsBean tmpFlaeche : flaecheBeans) {
+                            final Integer pk = tmpFlaeche.getPrimaryKeyValue();
+                            idList.add(pk);
+                        }
+
+                        final Collection<ServerActionParameter> params = new ArrayList<>();
+
+                        params.add(new ServerActionParameter(
+                                DeletePotenzialflaecheReportCacheServerAction.Parameter.POTENZIALFLAECHE.toString(),
+                                idList.toArray(new Integer[idList.size()])));
+
+                        final Object ret = SessionManager.getProxy()
+                                    .executeTask(
+                                        DeletePotenzialflaecheReportCacheServerAction.TASK_NAME,
+                                        "WUNDA_BLAU",
+                                        null,
+                                        connectionContext,
+                                        params.toArray(new ServerActionParameter[0]));
+
+                        return (Boolean)ret;
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final Boolean success = get();
+
+                            if (!success) {
+                                JOptionPane.showMessageDialog(
+                                    StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
+                                    NbBundle.getMessage(
+                                        SetTIMNoteAction.class,
+                                        "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().success.message"),
+                                    NbBundle.getMessage(
+                                        SetTIMNoteAction.class,
+                                        "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().success.title"),
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(
+                                    StaticSwingTools.getParentFrame(CismapBroker.getInstance().getMappingComponent()),
+                                    NbBundle.getMessage(
+                                        SetTIMNoteAction.class,
+                                        "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().error.message"),
+                                    NbBundle.getMessage(
+                                        SetTIMNoteAction.class,
+                                        "PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen().error.title"),
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                            ObjectRendererUtils.showExceptionWindowToUser(
+                                "Fehler Löschen des Caches",
                                 ex,
                                 StaticSwingTools.getFirstParentFrame(
                                     ComponentRegistry.getRegistry().getDescriptionPane()));
