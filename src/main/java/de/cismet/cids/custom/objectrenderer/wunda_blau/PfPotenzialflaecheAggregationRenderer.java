@@ -171,6 +171,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReport;
+    private javax.swing.JButton btnReport1;
     private de.cismet.cids.search.CidsBeansTableActionPanel cidsBeansTableActionPanel1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
@@ -210,6 +211,7 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         jLabel1 = new javax.swing.JLabel();
         panTitle = new javax.swing.JPanel();
         btnReport = new javax.swing.JButton();
+        btnReport1 = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -271,6 +273,33 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         panTitle.add(btnReport, gridBagConstraints);
+
+        btnReport1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/cacheLeeren.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport1,
+            org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheAggregationRenderer.class,
+                "PfPotenzialflaecheAggregationRenderer.btnReport1.text"));                // NOI18N
+        btnReport1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PfPotenzialflaecheAggregationRenderer.class,
+                "PfPotenzialflaecheAggregationRenderer.btnReport1.toolTipText"));         // NOI18N
+        btnReport1.setBorderPainted(false);
+        btnReport1.setContentAreaFilled(false);
+        btnReport1.setFocusPainted(false);
+        btnReport1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReport1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panTitle.add(btnReport1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -381,6 +410,15 @@ public class PfPotenzialflaecheAggregationRenderer extends javax.swing.JPanel im
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
         PfPotenzialflaecheReportGenerator.startDownloadForFlaechen(getSelectedBeans(), getConnectionContext());
     }                                                                             //GEN-LAST:event_btnReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReport1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReport1ActionPerformed
+        PfPotenzialflaecheReportGenerator.deleteDownloadCacheForFlaechen(getSelectedBeans(), getConnectionContext());
+    }                                                                              //GEN-LAST:event_btnReport1ActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
