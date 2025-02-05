@@ -152,7 +152,7 @@
             <working.dir>${de.cismet.cids.navigator.workingDir.wunda}</working.dir>
             <exec.workingdir>${working.dir}</exec.workingdir>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=18899,suspend=n -Djnlp.intranetUse=${de.cismet.cids.wunda.intranetUse} -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Djdk.tls.client.protocols=TLSv1 -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
+            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=18899,suspend=n -Djnlp.intranetUse=${de.cismet.cids.wunda.intranetUse} -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
             <exec.executable>java</exec.executable>
         </properties>
         <activatedProfiles>
@@ -173,7 +173,7 @@
             <working.dir>${de.cismet.cids.navigator.workingDir.wunda}</working.dir>
             <exec.workingdir>${working.dir}</exec.workingdir>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899,suspend=n -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Djdk.tls.client.protocols=TLSv1 -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator_over_proxybroker@localhost.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
+            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899,suspend=n -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator_over_proxybroker@localhost.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
             <exec.executable>java</exec.executable>
         </properties>
         <activatedProfiles>
@@ -194,7 +194,7 @@
             <working.dir>${de.cismet.cids.navigator.workingDir.wunda}</working.dir>
             <exec.workingdir>${working.dir}</exec.workingdir>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899,suspend=n -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Djdk.tls.client.protocols=TLSv1 -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator@s10221.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
+            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899,suspend=n -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator@s10221.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
             <exec.executable>java</exec.executable>
         </properties>
         <activatedProfiles>
@@ -215,7 +215,7 @@
             <working.dir>${de.cismet.cids.navigator.workingDir.wunda}</working.dir>
             <exec.workingdir>${working.dir}</exec.workingdir>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899,suspend=n -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Djdk.tls.client.protocols=TLSv1 -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator@geoportal.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
+            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899,suspend=n -Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator@geoportal.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
             <exec.executable>java</exec.executable>
         </properties>
         <activatedProfiles>
@@ -236,7 +236,7 @@
             <working.dir>${de.cismet.cids.navigator.workingDir.wunda}</working.dir>
             <exec.workingdir>${working.dir}</exec.workingdir>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.args>-Duser.country=DE -Djnlp.intranetUse=${de.cismet.cids.wunda.intranetUse} -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Djdk.tls.client.protocols=TLSv1 -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
+            <exec.args>-Duser.country=DE -Djnlp.intranetUse=${de.cismet.cids.wunda.intranetUse} -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
             <exec.executable>java</exec.executable>
             <jpda.listen>true</jpda.listen>
         </properties>
@@ -258,7 +258,7 @@
             <working.dir>${de.cismet.cids.navigator.workingDir.wunda}</working.dir>
             <exec.workingdir>${working.dir}</exec.workingdir>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.args>-Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Djdk.tls.client.protocols=TLSv1 -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
+            <exec.args>-Duser.country=DE -Duser.language=de -Ddirectory.extension=WunDa.netbeans -Xms256m -Xmx2g -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${working.dir}/config/log4j.debug.properties ${working.dir}/config/navigator.cfg ${working.dir} ${working.dir}/plugins ${working.dir}/search ${working.dir}/profiles</exec.args>
             <exec.executable>java</exec.executable>
         </properties>
         <activatedProfiles>
