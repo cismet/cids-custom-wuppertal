@@ -92,10 +92,16 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JFormattedTextField jFormattedTextField17;
     private javax.swing.JFormattedTextField jFormattedTextField18;
+    private javax.swing.JFormattedTextField jFormattedTextField19;
+    private javax.swing.JFormattedTextField jFormattedTextField20;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel19;
@@ -105,6 +111,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel pnlAltablagerung;
@@ -147,8 +155,12 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
         RendererTools.makeReadOnly(jFormattedTextField17, !editable);
         RendererTools.makeReadOnly(jFormattedTextField18, !editable);
+        RendererTools.makeReadOnly(jFormattedTextField19, !editable);
+        RendererTools.makeReadOnly(jFormattedTextField20, !editable);
         RendererTools.makeReadOnly(jComboBox1, !editable);
         RendererTools.makeReadOnly(jComboBox2, !editable);
+        RendererTools.makeReadOnly(jComboBox3, !editable);
+        RendererTools.makeReadOnly(jComboBox4, !editable);
         RendererTools.makeReadOnly(cbErhebungsklasse, !editable);
         RendererTools.makeReadOnly(cbFlaechenart, !editable);
         RendererTools.makeReadOnly(cbStofflicheart, !editable);
@@ -249,6 +261,14 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         jComboBox2 = new javax.swing.JComboBox<>();
         jFormattedTextField18 = new javax.swing.JFormattedTextField();
         jButton4 = new javax.swing.JButton();
+        jLabel26 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jFormattedTextField19 = new javax.swing.JFormattedTextField();
+        jButton5 = new javax.swing.JButton();
+        jLabel27 = new javax.swing.JLabel();
+        jComboBox4 = new javax.swing.JComboBox<>();
+        jFormattedTextField20 = new javax.swing.JFormattedTextField();
+        jButton6 = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -444,6 +464,7 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                 new String[] { "exakt", "kürzer als", "länger als" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         pnlStandort.add(jComboBox2, gridBagConstraints);
 
@@ -488,6 +509,120 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         gridBagConstraints.gridx = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnlStandort.add(jButton4, gridBagConstraints);
+        jButton4.setVisible(editable);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel26, "Betriebe:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jLabel26, gridBagConstraints);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "exakt", "mehr", "weniger" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jComboBox3, gridBagConstraints);
+
+        jFormattedTextField19.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.betriebe}"),
+                jFormattedTextField19,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jFormattedTextField19, gridBagConstraints);
+
+        jButton5.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton5.setBorderPainted(false);
+        jButton5.setContentAreaFilled(false);
+        jButton5.setFocusPainted(false);
+        jButton5.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton5.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton5.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton5ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlStandort.add(jButton5, gridBagConstraints);
+        jButton4.setVisible(editable);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel27, "WZ:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jLabel27, gridBagConstraints);
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "exakt", "mehr", "weniger" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jComboBox4, gridBagConstraints);
+
+        jFormattedTextField20.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${bean.wz}"),
+                jFormattedTextField20,
+                org.jdesktop.beansbinding.BeanProperty.create("value"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        binding.setConverter(new LongNumberConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlStandort.add(jFormattedTextField20, gridBagConstraints);
+
+        jButton6.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"))); // NOI18N
+        jButton6.setBorderPainted(false);
+        jButton6.setContentAreaFilled(false);
+        jButton6.setFocusPainted(false);
+        jButton6.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton6.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton6.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton6ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnlStandort.add(jButton6, gridBagConstraints);
         jButton4.setVisible(editable);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -800,6 +935,24 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+        jFormattedTextField19.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
+        jFormattedTextField20.setValue(null);
+    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void refreshArtPanel() {
         final Object selectedObject = cbFlaechenart.getSelectedItem();
@@ -938,6 +1091,9 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         ? "länger als" : (Boolean.FALSE.equals(dauerModus) ? "kürzer als" : "exakt"));
                 bean.setStandortDauer(((AlboFlaecheSearch.StandortInfo)artInfo).getDauer());
                 bean.setStandortJahr(((AlboFlaecheSearch.StandortInfo)artInfo).getJahr());
+                bean.setBetriebe(((AlboFlaecheSearch.StandortInfo)artInfo).getBetriebe());
+                bean.setBetriebeModus(((AlboFlaecheSearch.StandortInfo)artInfo).getBetriebeModus());
+                bean.setWz(((AlboFlaecheSearch.StandortInfo)artInfo).getWz());
 
                 new SwingWorker<CidsBean, Void>() {
 
@@ -1030,6 +1186,8 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
 
                         final Integer jahr = (bean != null) ? bean.getStandortJahr() : null;
                         final Integer dauer = (bean != null) ? bean.getStandortDauer() : null;
+                        final Integer betriebe = (bean != null) ? bean.getBetriebe() : null;
+                        final Integer wz = (bean != null) ? bean.getWz() : null;
                         final Boolean jahrModus = "nach".equals(jComboBox1.getSelectedItem())
                             ? Boolean.TRUE : ("vor".equals(jComboBox1.getSelectedItem()) ? Boolean.FALSE : null);
                         final Boolean dauerModus = "länger als".equals(jComboBox2.getSelectedItem())
@@ -1038,6 +1196,24 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
                         ((AlboFlaecheSearch.StandortInfo)artInfo).setJahrModus(jahrModus);
                         ((AlboFlaecheSearch.StandortInfo)artInfo).setDauer(dauer);
                         ((AlboFlaecheSearch.StandortInfo)artInfo).setDauerModus(dauerModus);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setBetriebe(betriebe);
+                        ((AlboFlaecheSearch.StandortInfo)artInfo).setWz(wz);
+
+                        if ("mehr".equals(jComboBox3.getSelectedItem())) {
+                            ((AlboFlaecheSearch.StandortInfo)artInfo).setBetriebeModus(1);
+                        } else if ("weniger".equals(jComboBox3.getSelectedItem())) {
+                            ((AlboFlaecheSearch.StandortInfo)artInfo).setBetriebeModus(2);
+                        } else {
+                            ((AlboFlaecheSearch.StandortInfo)artInfo).setBetriebeModus(3);
+                        }
+
+                        if ("mehr".equals(jComboBox4.getSelectedItem())) {
+                            ((AlboFlaecheSearch.StandortInfo)artInfo).setWzModus(1);
+                        } else if ("weniger".equals(jComboBox4.getSelectedItem())) {
+                            ((AlboFlaecheSearch.StandortInfo)artInfo).setWzModus(2);
+                        } else {
+                            ((AlboFlaecheSearch.StandortInfo)artInfo).setWzModus(3);
+                        }
                     }
                     break;
                     case "altablagerung": {
@@ -1123,6 +1299,10 @@ public class AlboFlaecheArtSearchPanel extends javax.swing.JPanel implements Con
         private CidsBean fkStofflicheArt;
         private Integer standortJahr;
         private Integer standortDauer;
+        private Integer betriebe;
+        private Integer betriebeModus;
+        private Integer wz;
+        private Integer wzModus;
     }
 
     /**
