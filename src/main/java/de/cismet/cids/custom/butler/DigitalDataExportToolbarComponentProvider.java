@@ -126,6 +126,25 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     /**
      * DOCUMENT ME!
      *
+     * @param   connectionCon1text  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasButler2Access(final ConnectionContext connectionCon1text) {
+        try {
+            return SessionManager.getConnection()
+                        .hasConfigAttr(SessionManager.getSession().getUser(),
+                            "csa://butler2Query",
+                            connectionCon1text);
+        } catch (ConnectionException ex) {
+            LOG.error("Could not validate action tag for Butler 2!", ex);
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -235,8 +254,10 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
             if (validateUserHasNasAccess(getConnectionContext())) {
                 this.add(createNASMenuItem());
             }
-            if (validateUserHasButler1Access(getConnectionContext())) {
+            if (validateUserHasButler2Access(getConnectionContext())) {
                 this.add(createButler2MenuItem());
+            }
+            if (validateUserHasButler1Access(getConnectionContext())) {
                 this.add(createButler1MenuItem());
             }
         }
