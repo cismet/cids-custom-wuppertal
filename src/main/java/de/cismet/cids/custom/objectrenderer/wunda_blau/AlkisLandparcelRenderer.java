@@ -1102,7 +1102,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlFlurstuecksEigentumsnachweisKomInternPdf.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
-        hlFlurstuecksEigentumsnachweisKomInternPdf.setText("Flurstücks- und Eigentumsnachweis (kommunal, intern)");
+        hlFlurstuecksEigentumsnachweisKomInternPdf.setText("Flurstücks- und Eigentumsnachweis (NRW, intern)");
         hlFlurstuecksEigentumsnachweisKomInternPdf.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1218,7 +1218,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlFlurstuecksEigentumsnachweisKomInternHtml.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
-        hlFlurstuecksEigentumsnachweisKomInternHtml.setText("Flurstücks- und Eigentumsnachweis (kommunal,intern)");
+        hlFlurstuecksEigentumsnachweisKomInternHtml.setText("Flurstücks- und Eigentumsnachweis (NRW, intern)");
         hlFlurstuecksEigentumsnachweisKomInternHtml.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override

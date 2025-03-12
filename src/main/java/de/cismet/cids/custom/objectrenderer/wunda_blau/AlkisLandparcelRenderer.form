@@ -628,7 +628,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Flurst&#xfc;cks- und Eigentumsnachweis (kommunal, intern)"/>
+                <Property name="text" type="java.lang.String" value="Flurst&#xfc;cks- und Eigentumsnachweis (NRW, intern)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed"/>
@@ -766,7 +766,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/text-html.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Flurst&#xfc;cks- und Eigentumsnachweis (kommunal,intern)"/>
+                <Property name="text" type="java.lang.String" value="Flurst&#xfc;cks- und Eigentumsnachweis (NRW, intern)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed"/>
