@@ -1091,7 +1091,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisKomInternPdf.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
-        hlBestandsnachweisKomInternPdf.setText("Bestandsnachweis (kommunal, intern)");
+        hlBestandsnachweisKomInternPdf.setText("Bestandsnachweis (NRW, intern)");
         hlBestandsnachweisKomInternPdf.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1271,7 +1271,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisKomInternHtml.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
-        hlBestandsnachweisKomInternHtml.setText("Bestandsnachweis (kommunal, intern)");
+        hlBestandsnachweisKomInternHtml.setText("Bestandsnachweis (NRW, intern)");
         hlBestandsnachweisKomInternHtml.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
