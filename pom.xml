@@ -13,7 +13,7 @@
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
     <artifactId>cids-custom-wuppertal</artifactId>
-    <version>9.0.3</version>
+    <version>9.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${names.cids.custom-wuppertal} [${project.version}]</name>
@@ -23,7 +23,7 @@
         <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
-        <tag>v9.0.3</tag>
+        <tag>v7.1.1</tag>
     </scm>
 
     <properties>
