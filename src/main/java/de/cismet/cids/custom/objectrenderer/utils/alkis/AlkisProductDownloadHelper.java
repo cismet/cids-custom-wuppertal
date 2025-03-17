@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.print.AlkisPrintingSettingsWidget;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.BaulastenReportDownloadHelper;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.berechtigungspruefung.baulastbescheinigung.BerechtigungspruefungBescheinigungDownloadInfo;
@@ -566,6 +567,24 @@ public class AlkisProductDownloadHelper {
     /**
      * DOCUMENT ME!
      *
+     * @param  infoCreator            DOCUMENT ME!
+     * @param  jobName                DOCUMENT ME!
+     * @param  moreFlurstueckeSuffix  DOCUMENT ME!
+     * @param  title                  DOCUMENT ME!
+     * @param  connectionContext      DOCUMENT ME!
+     */
+    public static void downloadKarteCustomProduct(final AlkisKarteDownloadInfoCreator infoCreator,
+            final String jobName,
+            final boolean moreFlurstueckeSuffix,
+            final String title,
+            final ConnectionContext connectionContext) {
+        DownloadManager.instance()
+                .add(new AlkisKarteDownload(moreFlurstueckeSuffix, infoCreator, title, connectionContext));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -671,6 +690,7 @@ public class AlkisProductDownloadHelper {
 
         private final AlkisKarteDownloadInfoCreator infoCreator;
         private final boolean moreFlurstueckeSuffix;
+        private boolean titleSet = false;
 
         //~ Constructors -------------------------------------------------------
 
@@ -689,11 +709,32 @@ public class AlkisProductDownloadHelper {
             this.infoCreator = infoCreator;
         }
 
+        /**
+         * Creates a new DingensDownload object.
+         *
+         * @param  moreFlurstueckeSuffix  DOCUMENT ME!
+         * @param  infoCreator            DOCUMENT ME!
+         * @param  title                  DOCUMENT ME!
+         * @param  connectionContext      DOCUMENT ME!
+         */
+        public AlkisKarteDownload(final boolean moreFlurstueckeSuffix,
+                final AlkisKarteDownloadInfoCreator infoCreator,
+                final String title,
+                final ConnectionContext connectionContext) {
+            super("WUNDA_BLAU", connectionContext);
+            this.moreFlurstueckeSuffix = moreFlurstueckeSuffix;
+            this.infoCreator = infoCreator;
+            this.title = title;
+            this.titleSet = true;
+        }
+
         //~ Methods ------------------------------------------------------------
 
         @Override
         protected Object execAction() throws Exception {
-            this.title = "ALKIS-Druck";
+            if (!this.titleSet) {
+                this.title = "ALKIS-Druck";
+            }
             this.directory = DownloadManagerDialog.getInstance().getJobName();
 
             final AlkisKarteDownloadInfo info = infoCreator.createInfo();
