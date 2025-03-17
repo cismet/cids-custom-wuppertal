@@ -2028,6 +2028,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                 DownloadManagerDialog.getInstance().getJobName(),
                 cidsObjectListModel.size()
                         > 1,
+                selectedProduct.getType(),
                 getConnectionContext());
             dispose();
             mapPrintListener.cleanUpAndRestoreFeatures();
