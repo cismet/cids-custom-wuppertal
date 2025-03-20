@@ -113,7 +113,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
 
                 private void checkFutureString(final String futureString) {
                     // if the number is not a regular one, just change the color of the textfield
-                    if (!futureString.matches("^[0-9_%]{0,6}[a-zA-Z_%]*")) {
+                    if (!futureString.matches("^[0-9_%]{0,7}[a-zA-Z_%]*")) {
                         txtBuchungsblattnummer.setForeground(Color.RED);
                     }
                 }
