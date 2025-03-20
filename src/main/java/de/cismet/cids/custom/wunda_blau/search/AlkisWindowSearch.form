@@ -252,7 +252,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;p&gt;Beispiel: 053001-003117&lt;/p&gt;&lt;br&gt;&lt;p&gt;Platzhaltersymbole:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&lt;b&gt;%&lt;/b&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;eine beliebige Anzahl von Zeichen&lt;/p&gt; &lt;p&gt;&amp;nbsp;&lt;b&gt;_&lt;/b&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ein einzelnes Zeichen&lt;/p&gt; &lt;/html&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;p&gt;Beispiel: 053001-0003117&lt;/p&gt;&lt;br&gt;&lt;p&gt;Platzhaltersymbole:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&lt;b&gt;%&lt;/b&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;eine beliebige Anzahl von Zeichen&lt;/p&gt; &lt;p&gt;&amp;nbsp;&lt;b&gt;_&lt;/b&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ein einzelnes Zeichen&lt;/p&gt; &lt;/html&gt;"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

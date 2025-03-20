@@ -402,7 +402,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panEingabeGrundbuchblatt.add(jLabel12, gridBagConstraints);
 
         jLabel4.setText(
-            "<html> <p>Beispiel: 053001-003117</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+            "<html> <p>Beispiel: 053001-0003117</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
