@@ -1,6 +1,6 @@
 {
     "maxLenDistrictNumberField": 4,
-    "maxBuchungsblattnummerField": 6,
+    "maxBuchungsblattnummerField": 7,
     "delimiter1": "-",
     "conversionMap": {
         "b": 3001,
