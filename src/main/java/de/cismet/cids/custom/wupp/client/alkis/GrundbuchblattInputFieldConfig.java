@@ -26,7 +26,7 @@ public class GrundbuchblattInputFieldConfig extends AbstractInputFieldConfig imp
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final GrundbuchblattInputFieldConfig FallbackConfig = new GrundbuchblattInputFieldConfig('-', 4, 6);
+    public static final GrundbuchblattInputFieldConfig FallbackConfig = new GrundbuchblattInputFieldConfig('-', 4, 7);
 
     //~ Instance fields --------------------------------------------------------
 
