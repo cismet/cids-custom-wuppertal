@@ -196,8 +196,7 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
         }
 
         status = State.RUNNING;
-//        execAction() will call a state change
-//        stateChanged();
+        stateChanged();
 
         final Object contentObject;
 
