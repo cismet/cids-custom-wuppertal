@@ -74,13 +74,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>9.0</version>
+                <version>9.0.3</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>9.0</version>
+                <version>9.0.3</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -88,13 +88,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>9.0.1</version>
+                <version>9.0.3</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>9.0.1</version>
+                <version>9.0.3</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -123,14 +123,14 @@
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>9.0</version>
+                <version>9.0.2</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids.navigator</groupId>
                 <artifactId>cids-navigator</artifactId>
-                <version>9.0</version>
+                <version>9.0.2</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
