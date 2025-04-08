@@ -161,12 +161,13 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JLabel" name="lblAktenzeichen">
+                            <Component class="javax.swing.JLabel" name="lblTitel">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Aktenzeichen:"/>
+                                <Property name="text" type="java.lang.String" value="Titel:"/>
+                                <Property name="toolTipText" type="java.lang.String" value=""/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -174,54 +175,66 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JTextField" name="txtAktenzeichen">
+                            <Component class="javax.swing.JTextField" name="txtTitel">
                               <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.aktenzeichen}" target="txtAktenzeichen" targetPath="text" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.titel}" target="txtTitel" targetPath="text" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="0" gridWidth="8" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="lblAnleger">
+                            <Component class="javax.swing.JLabel" name="lblGeom">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Anleger:"/>
-                                <Property name="toolTipText" type="java.lang.String" value=""/>
+                                <Property name="text" type="java.lang.String" value="Geometrie:"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="10" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="3" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JTextField" name="txtAnleger">
+                            <Component class="javax.swing.JComboBox" name="cbGeom">
                               <Properties>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[10, 24]"/>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Dialog" size="12" style="0"/>
                                 </Property>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[10, 24]"/>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                                  <StringArray count="0"/>
                                 </Property>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.anleger}" target="txtAnleger" targetPath="text" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_geom}" target="cbGeom" targetPath="selectedItem" updateStrategy="0" immediately="false">
+                                  <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                    <Connection code="((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter()" type="code"/>
+                                  </Property>
+                                </BindingProperty>
                               </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor()){"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor();&#xa;((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class, Polygon.class, MultiPolygon.class});"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor()){"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor()){"/>
+                              </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="11" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="18" weightX="1.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="4" gridY="0" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="lblBeginn">
+                            <Component class="javax.swing.JLabel" name="lblStrasse">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Beginn:"/>
+                                <Property name="text" type="java.lang.String" value="Stra&#xdf;e:"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -229,109 +242,93 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.Box$Filler" name="filler4">
+                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbStrasse">
                               <Properties>
-                                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[32767, 0]"/>
+                                <Property name="maximumRowCount" type="int" value="20"/>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="new LoadModelCb()" type="code"/>
                                 </Property>
                               </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_strasse}" target="cbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbStrasseActionPerformed"/>
+                              </Events>
                               <AuxValues>
-                                <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
+                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="4" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="10" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="lblEnde">
+                            <Component class="javax.swing.JLabel" name="lblHnr">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Ende:"/>
+                                <Property name="text" type="java.lang.String" value="Hausnummer:"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="5" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="3" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="dcBeginn">
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JFormattedTextField" name="ftZeitBeginn">
-                              <Properties>
-                                <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-                                  <Format subtype="1" type="2"/>
-                                </Property>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[80, 28]"/>
-                                </Property>
-                                <Property name="name" type="java.lang.String" value="ftZeitBeginn" noResource="true"/>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[80, 28]"/>
-                                </Property>
-                              </Properties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="3" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="dcEnde">
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="6" gridY="1" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JFormattedTextField" name="ftZeitEnde">
-                              <Properties>
-                                <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-                                  <Format subtype="1" type="2"/>
-                                </Property>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[80, 28]"/>
-                                </Property>
-                                <Property name="name" type="java.lang.String" value="ftZeitEnde" noResource="true"/>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[80, 28]"/>
-                                </Property>
-                              </Properties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="8" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblDauer">
+                            <Component class="javax.swing.JLabel" name="lblHNrRenderer">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
+                                  <Font name="Dialog" size="12" style="0"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Dauer:"/>
                               </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse.hausnummer}" target="lblHNrRenderer" targetPath="text" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="java.lang.String" value="----"/>
+                                  <Property name="incompletePathValue" type="java.lang.String" value="----"/>
+                                </BindingProperty>
+                              </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (!isEditor()){"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (!isEditor()){"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (!isEditor()){"/>
+                              </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="10" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="4" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JTextField" name="txtDauer">
+                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbHNr">
+                              <Properties>
+                                <Property name="maximumRowCount" type="int" value="20"/>
+                                <Property name="enabled" type="boolean" value="false"/>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[100, 19]"/>
+                                </Property>
+                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[100, 19]"/>
+                                </Property>
+                              </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_adresse}" target="cbHNr" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor()){"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.FastBindableReferenceCombo(&#xa;    hnrSearch,&#xa;    hnrSearch.getRepresentationPattern(),&#xa;    hnrSearch.getRepresentationFields()&#xa;)"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor()){"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor()){"/>
+                              </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="11" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="4" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
@@ -354,7 +351,7 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="2" gridWidth="11" gridHeight="2" fill="2" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
+                                  <GridBagConstraints gridX="1" gridY="2" gridWidth="5" gridHeight="2" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
                                 </Constraint>
                               </Constraints>
 
@@ -387,12 +384,95 @@
                                 </Container>
                               </SubComponents>
                             </Container>
-                            <Component class="javax.swing.JLabel" name="lblStrasse">
+                            <Component class="javax.swing.JLabel" name="lblStadtweit">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Stra&#xdf;e:"/>
+                                <Property name="text" type="java.lang.String" value="Stadtweit:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JCheckBox" name="chStadtweit">
+                              <Properties>
+                                <Property name="contentAreaFilled" type="boolean" value="false"/>
+                              </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.stadtweit}" target="chStadtweit" targetPath="selected" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="boolean" value="false"/>
+                                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                                </BindingProperty>
+                              </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                                <AuxValue name="generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+                              </AuxValues>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblStadtbezirke">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="Stadtbezirke:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="3" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Container class="javax.swing.JPanel" name="panSbz">
+                              <Properties>
+                                <Property name="opaque" type="boolean" value="false"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="4" gridY="4" gridWidth="2" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="scpSbz">
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+                                  <Constraints>
+                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                      <GridBagConstraints gridX="1" gridY="15" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="1.0"/>
+                                    </Constraint>
+                                  </Constraints>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTextArea" name="taSbz">
+                                      <Properties>
+                                        <Property name="columns" type="int" value="20"/>
+                                        <Property name="lineWrap" type="boolean" value="true"/>
+                                        <Property name="rows" type="int" value="2"/>
+                                        <Property name="wrapStyleWord" type="boolean" value="true"/>
+                                      </Properties>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
+                            <Component class="javax.swing.JLabel" name="lblThema">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="Thema:"/>
+                                <Property name="toolTipText" type="java.lang.String" value=""/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -400,28 +480,110 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbStrasse">
+                            <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="cbThema">
                               <Properties>
-                                <Property name="maximumRowCount" type="int" value="20"/>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                  <Connection code="new LoadModelCb()" type="code"/>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Dialog" size="12" style="0"/>
                                 </Property>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_strasse}" target="cbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_thema}" target="cbThema" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
-                              <Events>
-                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbStrasseActionPerformed"/>
-                              </Events>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION);"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="5" gridWidth="8" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="1" gridY="5" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
+                            <Component class="javax.swing.JLabel" name="lblVeroeffentlicht">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="Ver&#xf6;ffentlicht:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JCheckBox" name="chVeroeffentlicht">
+                              <Properties>
+                                <Property name="contentAreaFilled" type="boolean" value="false"/>
+                              </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.veroeffentlicht}" target="chVeroeffentlicht" targetPath="selected" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="boolean" value="false"/>
+                                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                                </BindingProperty>
+                              </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                                <AuxValue name="generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+                              </AuxValues>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="6" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblBeschreibung">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="Beschreibung:"/>
+                                <Property name="toolTipText" type="java.lang.String" value=""/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="7" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Container class="javax.swing.JPanel" name="panBeschreibung">
+                              <Properties>
+                                <Property name="opaque" type="boolean" value="false"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="7" gridWidth="5" gridHeight="2" fill="2" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="scpBeschreibung">
+                                  <AuxValues>
+                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                                  </AuxValues>
+                                  <Constraints>
+                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                      <GridBagConstraints gridX="1" gridY="15" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="1.0"/>
+                                    </Constraint>
+                                  </Constraints>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JTextArea" name="taBeschreibung">
+                                      <Properties>
+                                        <Property name="columns" type="int" value="20"/>
+                                        <Property name="lineWrap" type="boolean" value="true"/>
+                                        <Property name="rows" type="int" value="2"/>
+                                        <Property name="wrapStyleWord" type="boolean" value="true"/>
+                                      </Properties>
+                                      <BindingProperties>
+                                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.beschreibung}" target="taBeschreibung" targetPath="text" updateStrategy="0" immediately="false"/>
+                                      </BindingProperties>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
                             <Component class="javax.swing.Box$Filler" name="filler3">
                               <Properties>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -433,119 +595,7 @@
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="9" gridY="5" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblHnr">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Hausnummer:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="10" gridY="5" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbHNr">
-                              <Properties>
-                                <Property name="maximumRowCount" type="int" value="20"/>
-                                <Property name="enabled" type="boolean" value="false"/>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[100, 19]"/>
-                                </Property>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[100, 19]"/>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_adresse}" target="cbHNr" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.FastBindableReferenceCombo(&#xa;    hnrSearch,&#xa;    hnrSearch.getRepresentationPattern(),&#xa;    hnrSearch.getRepresentationFields()&#xa;)"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="11" gridY="5" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblHNrRenderer">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Dialog" size="12" style="0"/>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_adresse.hausnummer}" target="lblHNrRenderer" targetPath="text" updateStrategy="0" immediately="false">
-                                  <Property name="nullValue" type="java.lang.String" value="----"/>
-                                  <Property name="incompletePathValue" type="java.lang.String" value="----"/>
-                                </BindingProperty>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (!isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (!isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (!isEditor()){"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="11" gridY="5" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblGeom">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Geometrie:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JComboBox" name="cbGeom">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Dialog" size="12" style="0"/>
-                                </Property>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                                  <StringArray count="0"/>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_geom}" target="cbGeom" targetPath="selectedItem" updateStrategy="0" immediately="false">
-                                  <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                    <Connection code="((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter()" type="code"/>
-                                  </Property>
-                                </BindingProperty>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultCismapGeometryComboBoxEditor();&#xa;((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class});"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="6" gridWidth="8" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="2" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="10" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
@@ -573,154 +623,10 @@
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="11" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="13" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="5" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="13" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Container class="javax.swing.JPanel" name="panFiller">
-                              <Properties>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[20, 0]"/>
-                                </Property>
-                                <Property name="opaque" type="boolean" value="false"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="7" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="20" max="32767" attributes="0"/>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                </DimensionLayout>
-                              </Layout>
-                            </Container>
-                            <Component class="javax.swing.JLabel" name="lblBereitschaft">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Bereitschaft:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="7" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbBereitschaft">
-                              <Properties>
-                                <Property name="maximumRowCount" type="int" value="20"/>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[100, 19]"/>
-                                </Property>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[100, 19]"/>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_bereitschaft}" target="cbBereitschaft" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.FastBindableReferenceCombo(&#xa;    bereitSearch,&#xa;    bereitSearch.getRepresentationPattern(),     &#xa;    bereitSearch.getRepresentationFields() )"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
-                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="7" gridWidth="8" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblBereitschaftRenderer">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Dialog" size="12" style="0"/>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fk_bereitschaft.name}" target="lblBereitschaftRenderer" targetPath="text" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="7" gridWidth="8" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblMelder">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Melder:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="10" gridY="7" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="cbMelder">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Dialog" size="12" style="0"/>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_melder}" target="cbMelder" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION_MELDER);"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="11" gridY="7" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblBeteiligte">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Beteiligte:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="8" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="blpBeteiligte">
-                              <Properties>
-                                <Property name="opaque" type="boolean" value="false"/>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_beteiligte_einsatz}" target="blpBeteiligte" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Beteiligte:&quot;, SORTING_OPTION)"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="8" gridWidth="11" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="1.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-                            </Container>
                           </SubComponents>
                         </Container>
                       </SubComponents>
@@ -751,12 +657,13 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JLabel" name="lblUnfallarten">
+                            <Component class="javax.swing.JLabel" name="lblAnleger">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Unfallarten:"/>
+                                <Property name="text" type="java.lang.String" value="Anleger:"/>
+                                <Property name="toolTipText" type="java.lang.String" value=""/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -764,30 +671,117 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="blpUnfallarten">
+                            <Component class="javax.swing.JTextField" name="txtAnleger">
                               <Properties>
-                                <Property name="opaque" type="boolean" value="false"/>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_unfallarten}" target="blpUnfallarten" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.anleger}" target="txtAnleger" targetPath="text" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Unfallarten:&quot;, SORTING_OPTION)"/>
-                              </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="0" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="1.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-                            </Container>
-                            <Component class="javax.swing.JLabel" name="lblSchadstoffarten">
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblAngelegtAm">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Schadstoffarten:"/>
+                                <Property name="text" type="java.lang.String" value="angelegt am:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="3" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JTextField" name="txtAngelegtAm">
+                              <Properties>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="4" gridY="0" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblLetzterB">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="letzter Bearbeiter:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JTextField" name="txtLetzterB">
+                              <Properties>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                              </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.letzter_bearbeiter}" target="txtLetzterB" targetPath="text" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblLetzteA">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="letzte Bearbeitung:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="3" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JTextField" name="txtLetzteA">
+                              <Properties>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="4" gridY="1" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblAbgeschlossen">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="abgeschlossen:"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -795,138 +789,12 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="blpSchadstoffarten">
-                              <Properties>
-                                <Property name="opaque" type="boolean" value="false"/>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_schadstoffarten}" target="blpSchadstoffarten" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Schadstoffarten:&quot;, SORTING_OPTION)"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="1.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-                            </Container>
-                            <Component class="javax.swing.JLabel" name="lblGewaesser">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Gew&#xe4;sser:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbGewaesser">
-                              <Properties>
-                                <Property name="maximumRowCount" type="int" value="20"/>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                  <Connection code="new LoadModelCb()" type="code"/>
-                                </Property>
-                                <Property name="representationFields" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
-                                  <StringArray count="1">
-                                    <StringItem index="0" value="name"/>
-                                  </StringArray>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_gewaesser}" target="cbGewaesser" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblMenge">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Menge:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="3" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JSpinner" name="spMenge">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Dialog" size="12" style="0"/>
-                                </Property>
-                                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                                  <SpinnerModel initial="0" maximum="1000000" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
-                                </Property>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[75, 20]"/>
-                                </Property>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="value" source="Form" sourcePath="${cidsBean.menge}" target="spMenge" targetPath="value" updateStrategy="0" immediately="false">
-                                  <Property name="nullValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                    <Connection code="0" type="code"/>
-                                  </Property>
-                                  <Property name="incompletePathValue" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                    <Connection code="0" type="code"/>
-                                  </Property>
-                                </BindingProperty>
-                              </BindingProperties>
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="4" gridY="2" gridWidth="1" gridHeight="1" fill="3" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblMengeEinheit">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Liter"/>
-                                <Property name="toolTipText" type="java.lang.String" value=""/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="5" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="5" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblAhnung">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="keine Ahnung:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="3" gridY="3" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JCheckBox" name="chAhnung">
+                            <Component class="javax.swing.JCheckBox" name="chAbgeschlossen">
                               <Properties>
                                 <Property name="contentAreaFilled" type="boolean" value="false"/>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.keine_ahnung}" target="chAhnung" targetPath="selected" updateStrategy="0" immediately="false">
+                                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.abgeschlossen}" target="chAbgeschlossen" targetPath="selected" updateStrategy="0" immediately="false">
                                   <Property name="nullValue" type="boolean" value="false"/>
                                   <Property name="incompletePathValue" type="boolean" value="false"/>
                                 </BindingProperty>
@@ -937,47 +805,92 @@
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="5" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="lblFolgen">
+                            <Component class="javax.swing.Box$Filler" name="filler5">
                               <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
+                                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[32767, 0]"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Unfallfolgen:"/>
                               </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="blpFolgen">
-                              <Properties>
-                                <Property name="opaque" type="boolean" value="false"/>
-                              </Properties>
-                              <BindingProperties>
-                                <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_unfallfolgen}" target="blpFolgen" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
-                              </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Unfallfolgen:&quot;, SORTING_OPTION)"/>
+                                <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="1" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="1.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="2" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="10" weightX="0.0" weightY="1.0"/>
                                 </Constraint>
                               </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-                            </Container>
-                            <Component class="javax.swing.JLabel" name="lblFeststellungen">
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblAbAm">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Feststellungen:"/>
+                                <Property name="text" type="java.lang.String" value="abgeschlossen am:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="3" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JTextField" name="txtAbAm">
+                              <Properties>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[10, 24]"/>
+                                </Property>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="4" gridY="2" gridWidth="2" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblBB">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="B&#xfc;rgerbeteiligung:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JCheckBox" name="chBB">
+                              <Properties>
+                                <Property name="contentAreaFilled" type="boolean" value="false"/>
+                              </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.buergerbeteiligung}" target="chBB" targetPath="selected" updateStrategy="0" immediately="false">
+                                  <Property name="nullValue" type="boolean" value="false"/>
+                                  <Property name="incompletePathValue" type="boolean" value="false"/>
+                                </BindingProperty>
+                              </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
+                                <AuxValue name="generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+                              </AuxValues>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JLabel" name="lblUrl">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="BB-Url:"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -985,71 +898,69 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Container class="javax.swing.JPanel" name="panFeststellungen">
-                              <Properties>
-                                <Property name="opaque" type="boolean" value="false"/>
-                              </Properties>
+                            <Component class="javax.swing.JTextField" name="txtUrl">
+                              <BindingProperties>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bb_url}" target="txtUrl" targetPath="text" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="4" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                              <SubComponents>
-                                <Container class="javax.swing.JScrollPane" name="scpFeststellungen">
-                                  <AuxValues>
-                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                                  </AuxValues>
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                      <GridBagConstraints gridX="1" gridY="15" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="1.0"/>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JTextArea" name="taFeststellungen">
-                                      <Properties>
-                                        <Property name="columns" type="int" value="20"/>
-                                        <Property name="lineWrap" type="boolean" value="true"/>
-                                        <Property name="rows" type="int" value="3"/>
-                                        <Property name="wrapStyleWord" type="boolean" value="true"/>
-                                      </Properties>
-                                      <BindingProperties>
-                                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.feststellungen}" target="taFeststellungen" targetPath="text" updateStrategy="0" immediately="false"/>
-                                      </BindingProperties>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
-                              </SubComponents>
-                            </Container>
-                            <Component class="javax.swing.JLabel" name="lblSofort">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Sofortma&#xdf;nahmen:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="7" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="1" gridY="4" gridWidth="4" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Container class="javax.swing.JPanel" name="panSofort">
+                            <Container class="javax.swing.JPanel" name="panUrl">
                               <Properties>
                                 <Property name="opaque" type="boolean" value="false"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="7" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
+                                  <GridBagConstraints gridX="5" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
 
                               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
                               <SubComponents>
-                                <Container class="javax.swing.JScrollPane" name="scpSofort">
+                                <Component class="javax.swing.JLabel" name="lblUrlCheck">
+                                  <Properties>
+                                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                                      <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"/>
+                                    </Property>
+                                  </Properties>
+                                  <Constraints>
+                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                      <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="0.0" weightY="0.0"/>
+                                    </Constraint>
+                                  </Constraints>
+                                </Component>
+                              </SubComponents>
+                            </Container>
+                            <Component class="javax.swing.JLabel" name="lblText">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="BB-Text:"/>
+                                <Property name="toolTipText" type="java.lang.String" value=""/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="5" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Container class="javax.swing.JPanel" name="panText">
+                              <Properties>
+                                <Property name="opaque" type="boolean" value="false"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="5" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="scpText">
                                   <AuxValues>
                                     <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                                   </AuxValues>
@@ -1061,7 +972,7 @@
 
                                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                                   <SubComponents>
-                                    <Component class="javax.swing.JTextArea" name="taSofort">
+                                    <Component class="javax.swing.JTextArea" name="taText">
                                       <Properties>
                                         <Property name="columns" type="int" value="20"/>
                                         <Property name="lineWrap" type="boolean" value="true"/>
@@ -1069,19 +980,99 @@
                                         <Property name="wrapStyleWord" type="boolean" value="true"/>
                                       </Properties>
                                       <BindingProperties>
-                                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.sofort}" target="taSofort" targetPath="text" updateStrategy="0" immediately="false"/>
+                                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bb_text}" target="taText" targetPath="text" updateStrategy="0" immediately="false"/>
                                       </BindingProperties>
                                     </Component>
                                   </SubComponents>
                                 </Container>
                               </SubComponents>
                             </Container>
-                            <Component class="javax.swing.JLabel" name="lblFolge">
+                            <Component class="javax.swing.JLabel" name="lblLink">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Folgema&#xdf;nahmen:"/>
+                                <Property name="text" type="java.lang.String" value="Link:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="8" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Component class="javax.swing.JTextField" name="txtLink">
+                              <BindingProperties>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.link}" target="txtLink" targetPath="text" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="8" gridWidth="4" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Container class="javax.swing.JPanel" name="panLink">
+                              <Properties>
+                                <Property name="opaque" type="boolean" value="false"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="5" gridY="8" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+                              <SubComponents>
+                                <Component class="javax.swing.JLabel" name="lblLinkCheck">
+                                  <Properties>
+                                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                                      <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"/>
+                                    </Property>
+                                  </Properties>
+                                  <Constraints>
+                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                      <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="0.0" weightY="0.0"/>
+                                    </Constraint>
+                                  </Constraints>
+                                </Component>
+                              </SubComponents>
+                            </Container>
+                            <Component class="javax.swing.JLabel" name="lblStek">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="Fokusraum STEK:"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="0" gridY="9" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="blpStek">
+                              <Properties>
+                                <Property name="opaque" type="boolean" value="false"/>
+                              </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_vorhaben_stek}" target="blpStek" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Fokusraum STEK:&quot;, SORTING_OPTION)"/>
+                              </AuxValues>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="9" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="1.0" weightY="0.0"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+                            </Container>
+                            <Component class="javax.swing.JLabel" name="lblKontakt">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Tahoma" size="11" style="1"/>
+                                </Property>
+                                <Property name="text" type="java.lang.String" value="Kontakt:"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1089,258 +1080,27 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Container class="javax.swing.JPanel" name="panFolge">
+                            <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbKontakt">
                               <Properties>
-                                <Property name="opaque" type="boolean" value="false"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="10" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                              <SubComponents>
-                                <Container class="javax.swing.JScrollPane" name="scpFolge">
-                                  <AuxValues>
-                                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                                  </AuxValues>
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                      <GridBagConstraints gridX="1" gridY="15" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="1.0"/>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JTextArea" name="taFolge">
-                                      <Properties>
-                                        <Property name="columns" type="int" value="20"/>
-                                        <Property name="lineWrap" type="boolean" value="true"/>
-                                        <Property name="rows" type="int" value="3"/>
-                                        <Property name="wrapStyleWord" type="boolean" value="true"/>
-                                      </Properties>
-                                      <BindingProperties>
-                                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.folge}" target="taFolge" targetPath="text" updateStrategy="0" immediately="false"/>
-                                      </BindingProperties>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
-                              </SubComponents>
-                            </Container>
-                            <Component class="javax.swing.JLabel" name="lblBeteiligteFolge">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
+                                <Property name="maximumRowCount" type="int" value="20"/>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="new LoadModelCb()" type="code"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Beteiligte-Folge:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="13" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Container class="de.cismet.cids.editors.DefaultBindableLabelsPanel" name="blpBeteiligteFolge">
-                              <Properties>
-                                <Property name="opaque" type="boolean" value="false"/>
+                                <Property name="representationFields" type="[Ljava.lang.String;" editor="org.netbeans.beaninfo.editors.StringArrayEditor">
+                                  <StringArray count="1">
+                                    <StringItem index="0" value="mail"/>
+                                  </StringArray>
+                                </Property>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="selectedElements" source="Form" sourcePath="${cidsBean.arr_beteiligte_folge}" target="blpBeteiligteFolge" targetPath="selectedElements" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_kontakt}" target="cbKontakt" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.DefaultBindableLabelsPanel(isEditor(), &quot;Beteiligte:&quot;, SORTING_OPTION)"/>
+                                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="13" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="10" weightX="1.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-                            </Container>
-                            <Container class="javax.swing.JPanel" name="panFirma">
-                              <Properties>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[134, 110]"/>
-                                </Property>
-                                <Property name="opaque" type="boolean" value="false"/>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[134, 110]"/>
-                                </Property>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="14" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                              <SubComponents>
-                                <Container class="de.cismet.tools.gui.RoundedPanel" name="rpFirma">
-                                  <Properties>
-                                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
-                                  </Properties>
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                      <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="11" weightX="1.0" weightY="1.0"/>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                                  <SubComponents>
-                                    <Container class="de.cismet.tools.gui.SemiRoundedPanel" name="semiRoundedPanel8">
-                                      <Properties>
-                                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                          <Color blue="40" green="40" id="darkGray" palette="1" red="40" type="palette"/>
-                                        </Property>
-                                      </Properties>
-                                      <Constraints>
-                                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                          <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="0.0"/>
-                                        </Constraint>
-                                      </Constraints>
-
-                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                                      <SubComponents>
-                                        <Component class="javax.swing.JLabel" name="lblFirma">
-                                          <Properties>
-                                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                                            </Property>
-                                            <Property name="text" type="java.lang.String" value="Firma - Leistungen"/>
-                                          </Properties>
-                                          <Constraints>
-                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                              <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                            </Constraint>
-                                          </Constraints>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="btnAddNewFirma">
-                                          <Properties>
-                                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                                              <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
-                                            </Property>
-                                            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                              <Dimension value="[39, 20]"/>
-                                            </Property>
-                                            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                              <Dimension value="[39, 20]"/>
-                                            </Property>
-                                            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                              <Dimension value="[25, 20]"/>
-                                            </Property>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddNewFirmaActionPerformed"/>
-                                          </Events>
-                                          <AuxValues>
-                                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
-                                            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                                            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if (isEditor()){"/>
-                                            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="}"/>
-                                            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
-                                          </AuxValues>
-                                          <Constraints>
-                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                              <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="13" weightX="0.0" weightY="0.0"/>
-                                            </Constraint>
-                                          </Constraints>
-                                        </Component>
-                                      </SubComponents>
-                                    </Container>
-                                    <Container class="javax.swing.JScrollPane" name="scpFirma">
-                                      <Properties>
-                                        <Property name="horizontalScrollBarPolicy" type="int" value="31"/>
-                                        <Property name="opaque" type="boolean" value="false"/>
-                                      </Properties>
-                                      <AuxValues>
-                                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="scpFirma.getViewport().setOpaque(false);"/>
-                                      </AuxValues>
-                                      <Constraints>
-                                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                          <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="11" weightX="1.0" weightY="1.0"/>
-                                        </Constraint>
-                                      </Constraints>
-
-                                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                                      <SubComponents>
-                                        <Container class="javax.swing.JPanel" name="panFirmen">
-                                          <Properties>
-                                            <Property name="opaque" type="boolean" value="false"/>
-                                          </Properties>
-                                          <AuxValues>
-                                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new ScrollablePanel(new GridLayout(0, 1, 0, 10))"/>
-                                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((ScrollablePanel)panFirmen).setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);&#xa;((ScrollablePanel)panFirmen).setScrollableBlockIncrement(ScrollablePanel.VERTICAL, ScrollablePanel.IncrementType.PERCENT, 100);"/>
-                                          </AuxValues>
-
-                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                                        </Container>
-                                      </SubComponents>
-                                    </Container>
-                                  </SubComponents>
-                                </Container>
-                              </SubComponents>
-                            </Container>
-                            <Component class="javax.swing.JLabel" name="lblVerursacher">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Verursacher:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="17" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JLabel" name="lblVerursacherText">
-                              <Properties>
-                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Tahoma" size="11" style="1"/>
-                                </Property>
-                                <Property name="text" type="java.lang.String" value="Verursacher:"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="17" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="javax.swing.JButton" name="btnAddNewVerursacher">
-                              <Properties>
-                                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                                  <Image iconType="3" name="/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"/>
-                                </Property>
-                                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[39, 20]"/>
-                                </Property>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[39, 20]"/>
-                                </Property>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[25, 20]"/>
-                                </Property>
-                              </Properties>
-                              <Events>
-                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddNewVerursacherActionPerformed"/>
-                              </Events>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="17" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.UaVerursacherPanel" name="uaVerursacherPanel">
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new UaVerursacherPanel(this)"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="17" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="1" gridY="10" gridWidth="5" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
@@ -1353,7 +1113,7 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="18" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="0" gridY="11" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="10" insetsTop="2" insetsLeft="0" insetsBottom="2" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
@@ -1363,7 +1123,7 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="18" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
+                                  <GridBagConstraints gridX="1" gridY="11" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="17" weightX="1.0" weightY="1.0"/>
                                 </Constraint>
                               </Constraints>
 
@@ -1396,47 +1156,6 @@
                                 </Container>
                               </SubComponents>
                             </Container>
-                            <Component class="javax.swing.Box$Filler" name="filler5">
-                              <Properties>
-                                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[32767, 0]"/>
-                                </Property>
-                              </Properties>
-                              <AuxValues>
-                                <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="21" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="10" weightX="0.0" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Container class="javax.swing.JPanel" name="panFiller1">
-                              <Properties>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[20, 0]"/>
-                                </Property>
-                                <Property name="opaque" type="boolean" value="false"/>
-                              </Properties>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="16" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="20" max="32767" attributes="0"/>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                </DimensionLayout>
-                              </Layout>
-                            </Container>
                           </SubComponents>
                         </Container>
                       </SubComponents>
@@ -1466,18 +1185,6 @@
                           </Constraints>
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                          <SubComponents>
-                            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.SimpleDocumentWebDavPanel" name="simpleDocumentWebDavPanel_Dok">
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleDocumentWebDavPanel(isEditor(),&#xa;&quot;n_dokumente&quot;, &#xa;&quot;ua_einsatz_dokumente&quot;, &#xa;&quot;dateiname&quot;, &#xa;&quot;UaWebDavTunnelAction&quot;, &#xa;getConnectionContext(),&#xa;fileChooserDokumente,&#xa;KOMP_FOTOS.split(&quot;,&quot;),&#xa;FILE_LIMIT_DOK)"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="13" insetsLeft="2" insetsBottom="0" insetsRight="7" anchor="10" weightX="0.5" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                          </SubComponents>
                         </Container>
                       </SubComponents>
                     </Container>
@@ -1506,28 +1213,6 @@
                           </Constraints>
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
-                          <SubComponents>
-                            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.UaEinsatzPicturePanel" name="uaEinsatzPicturePanel">
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new UaEinsatzPicturePanel(isEditor(),&#xa;SHOW_FOTOS.split(&quot;,&quot;))"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="3" insetsRight="0" anchor="10" weightX="1.0" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                            <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.SimpleDocumentWebDavPanel" name="simpleDocumentWebDavPanel">
-                              <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleDocumentWebDavPanel(isEditor(),&#xa;&quot;n_fotos&quot;, &#xa;&quot;ua_einsatz_fotos&quot;, &#xa;&quot;dateiname&quot;, &#xa;&quot;UaWebDavTunnelAction&quot;, &#xa;getConnectionContext(),&#xa;fileChooserFotos,&#xa;KOMP_FOTOS.split(&quot;,&quot;),&#xa;FILE_LIMIT)"/>
-                              </AuxValues>
-                              <Constraints>
-                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="13" insetsLeft="2" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.5" weightY="1.0"/>
-                                </Constraint>
-                              </Constraints>
-                            </Component>
-                          </SubComponents>
                         </Container>
                       </SubComponents>
                     </Container>
