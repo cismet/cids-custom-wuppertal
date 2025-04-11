@@ -59,7 +59,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.cids.dynamics.Disposable;
 
-import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -84,39 +83,36 @@ import javax.swing.SwingWorker;
  * @author   sandra
  * @version  $Revision$, $Date$
  */
-public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
+public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
     CidsBeanStore,
     ConnectionContextProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(VkBeschlussPanel.class);
+    private static final Logger LOG = Logger.getLogger(VkLinkPanel.class);
 
 
     static {
         final ConnectionContext connectionContext = ConnectionContext.create(ConnectionContext.Category.STATIC,
-                VkBeschlussPanel.class.getSimpleName());
+                VkLinkPanel.class.getSimpleName());
     }
-
-    public static final String FIELD__DATE = "datum";                           
+                         
     public static final String FIELD__ANZEIGE = "anzeige";                          
     public static final String FIELD__BEMERKUNG = "bemerkung";                           
-    public static final String FIELD__URL = "url";                          
-    public static final String FIELD__DATUM = "datum"; 
+    public static final String FIELD__URL = "url";      
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";                 
 
 
-    public static final String TABLE__NAME = "vk_vorhaben_beschluesse";
+    public static final String TABLE__NAME = "vk_vorhaben_links";
 
-    public static final String BUNDLE_NODATE = "VkBeschlussPanel.isOkForSaving().noDatum";
-    public static final String BUNDLE_NOURL = "VkBeschlussPanel.isOkForSaving().noUrl";
-    public static final String BUNDLE_WHICH = "VkBeschlussPanel.isOkForSaving().welcherBeschluss";
-    public static final String BUNDLE_PANE_PREFIX = "VkBeschlussPanel.isOkForSaving().JOptionPane.message.prefix";
-    public static final String BUNDLE_PANE_SUFFIX = "VkBeschlussPanel.isOkForSaving().JOptionPane.message.suffix";
-    public static final String BUNDLE_PANE_TITLE = "VkBeschlussPanel.isOkForSaving().JOptionPane.title";
+    public static final String BUNDLE_NOURL = "VkLinkPanel.isOkForSaving().noUrl";
+    public static final String BUNDLE_WHICH = "VkLinkPanel.isOkForSaving().welcherLink";
+    public static final String BUNDLE_PANE_PREFIX = "VkLinkPanel.isOkForSaving().JOptionPane.message.prefix";
+    public static final String BUNDLE_PANE_SUFFIX = "VkLinkPanel.isOkForSaving().JOptionPane.message.suffix";
+    public static final String BUNDLE_PANE_TITLE = "VkLinkPanel.isOkForSaving().JOptionPane.title";
     
-    public static final String BUNDLE_NOSAVE_MESSAGE = "VkBeschlussPanel.noSave().message";
-    public static final String BUNDLE_NOSAVE_TITLE = "VkBeschlussPanel.noSave().title";
+    public static final String BUNDLE_NOSAVE_MESSAGE = "VkLinkPanel.noSave().message";
+    public static final String BUNDLE_NOSAVE_TITLE = "VkLinkPanel.noSave().title";
     
 
     /**
@@ -130,9 +126,7 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         bindingGroup = new BindingGroup();
 
         panDaten = new JPanel();
-        panBeschluss = new JPanel();
-        lblDatum = new JLabel();
-        dcDatum = new DefaultBindableDateChooser();
+        panLink = new JPanel();
         lblAnzeige = new JLabel();
         txtAnzeige = new JTextField();
         lblBemerkung = new JLabel();
@@ -151,78 +145,50 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
 
-        panBeschluss.setMinimumSize(new Dimension(100, 10));
-        panBeschluss.setName("panBeschluss"); // NOI18N
-        panBeschluss.setOpaque(false);
-        panBeschluss.setPreferredSize(new Dimension(520, 270));
-        panBeschluss.setLayout(new GridBagLayout());
-
-        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblDatum, NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblDatum.text")); // NOI18N
-        lblDatum.setName("lblDatum"); // NOI18N
-        lblDatum.setRequestFocusEnabled(false);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panBeschluss.add(lblDatum, gridBagConstraints);
-
-        dcDatum.setEnabled(false);
-        dcDatum.setName("dcDatum"); // NOI18N
-
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
-        binding.setConverter(dcDatum.getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschluss.add(dcDatum, gridBagConstraints);
+        panLink.setMinimumSize(new Dimension(100, 10));
+        panLink.setName("panLink"); // NOI18N
+        panLink.setOpaque(false);
+        panLink.setPreferredSize(new Dimension(520, 270));
+        panLink.setLayout(new GridBagLayout());
 
         lblAnzeige.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblAnzeige, NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblAnzeige.text")); // NOI18N
+        Mnemonics.setLocalizedText(lblAnzeige, NbBundle.getMessage(VkLinkPanel.class, "VkLinkPanel.lblAnzeige.text")); // NOI18N
         lblAnzeige.setName("lblAnzeige"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panBeschluss.add(lblAnzeige, gridBagConstraints);
+        panLink.add(lblAnzeige, gridBagConstraints);
 
         txtAnzeige.setEnabled(false);
         txtAnzeige.setName("txtAnzeige"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzeige}"), txtAnzeige, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzeige}"), txtAnzeige, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschluss.add(txtAnzeige, gridBagConstraints);
+        panLink.add(txtAnzeige, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
         lblBemerkung.setName("lblBemerkung"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panBeschluss.add(lblBemerkung, gridBagConstraints);
+        panLink.add(lblBemerkung, gridBagConstraints);
 
         scpBemerkung.setName("scpBemerkung"); // NOI18N
 
@@ -241,26 +207,26 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 0, 2);
-        panBeschluss.add(scpBemerkung, gridBagConstraints);
+        panLink.add(scpBemerkung, gridBagConstraints);
 
         lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblUrl, NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblUrl.text")); // NOI18N
+        Mnemonics.setLocalizedText(lblUrl, NbBundle.getMessage(VkLinkPanel.class, "VkLinkPanel.lblUrl.text")); // NOI18N
         lblUrl.setName("lblUrl"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panBeschluss.add(lblUrl, gridBagConstraints);
+        panLink.add(lblUrl, gridBagConstraints);
 
         txtUrl.setEnabled(false);
         txtUrl.setName("txtUrl"); // NOI18N
@@ -270,12 +236,12 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschluss.add(txtUrl, gridBagConstraints);
+        panLink.add(txtUrl, gridBagConstraints);
 
         panUrl.setName("panUrl"); // NOI18N
         panUrl.setOpaque(false);
@@ -291,11 +257,11 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panBeschluss.add(panUrl, gridBagConstraints);
+        panLink.add(panUrl, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -304,7 +270,7 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panDaten.add(panBeschluss, gridBagConstraints);
+        panDaten.add(panLink, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -327,7 +293,6 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
     private String saveBemerkung;
     private String saveAnzeige;
     private String saveUrl;
-    private Date saveDatum;
     
     private final ImageIcon statusFalsch = new ImageIcon(
             getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
@@ -353,16 +318,10 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
                         }
                         break;
                     }
-                    case FIELD__DATUM: {
-                        if (evt.getNewValue() != saveDatum) {
-                            setChangeFlag();
-                        }
-                        break;
-                    }
                     case FIELD__URL: {
                         if (evt.getNewValue() != saveUrl) {
                             setChangeFlag();
-                            checkBeschluss();
+                            checkLink();
                         }
                         break;
                     }
@@ -375,14 +334,12 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    DefaultBindableDateChooser dcDatum;
     JLabel lblAnzeige;
     JLabel lblBemerkung;
-    JLabel lblDatum;
     JLabel lblUrl;
     JLabel lblUrlCheck;
-    JPanel panBeschluss;
     JPanel panDaten;
+    JPanel panLink;
     JPanel panUrl;
     JScrollPane scpBemerkung;
     JTextArea taBemerkung;
@@ -394,18 +351,18 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new VkBeschlussPanel object.
+     * Creates a new VkLinkPanel object.
      */
-    public VkBeschlussPanel() {
+    public VkLinkPanel() {
         this(null);
     }
 
     /**
-     * Creates new VkBeschlussPanel.
+     * Creates new VkLinkPanel.
      *
      * @param  vdlInstance DOCUMENT ME!
      */
-    public VkBeschlussPanel(final VkDocumentLoader vdlInstance) {
+    public VkLinkPanel(final VkDocumentLoader vdlInstance) {
         this.vkDocumentLoader = vdlInstance;
         if (vdlInstance != null) {
             this.editor = vdlInstance.getParentOrganizer().isEditor();
@@ -452,18 +409,17 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
      */
     private void setReadOnly() {
         if (!isEditor()) {
-            RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(txtAnzeige);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(txtUrl);
         }
     }
     
-    private void checkBeschluss(){
+    private void checkLink(){
         lblUrlCheck.setIcon(statusFalsch);
         lblUrlCheck.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         if (txtUrl.getText() != null && txtUrl.getText().length() > 10){
-            EventQueue.invokeLater(new Thread("checkBeschlussThread") {
+            EventQueue.invokeLater(new Thread("checkLinkThread") {
                 @Override
                 public void run() {
                     checkUrl(txtUrl.getText(), lblUrlCheck);
@@ -556,8 +512,6 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
             ? ((String)getCidsBean().getProperty(FIELD__URL)) : null;
         saveBemerkung = (getCidsBean().getProperty(FIELD__BEMERKUNG) != null)
             ? ((String)getCidsBean().getProperty(FIELD__BEMERKUNG)) : null;
-        saveDatum = (getCidsBean().getProperty(FIELD__DATUM) != null) ? 
-                (Date)getCidsBean().getProperty(FIELD__DATUM) : null;
     }
     
     
@@ -581,7 +535,7 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
                         getConnectionContext());
                 } 
                 bindingGroup.bind();
-                checkBeschluss();
+                checkLink();
                 
                 if (isEditor() && (getCidsBean() != null)) {
                     getCidsBean().addPropertyChangeListener(changeListener);
@@ -605,14 +559,14 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
      */
     public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NOSAVE_TITLE),
-                NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NOSAVE_MESSAGE),
+                NbBundle.getMessage(VkLinkPanel.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(VkLinkPanel.class, BUNDLE_NOSAVE_MESSAGE),
                 null,
                 null,
                 getErrorNoSave(),
                 Level.SEVERE,
                 null);
-        JXErrorPane.showDialog(VkBeschlussPanel.this, info);
+        JXErrorPane.showDialog(VkLinkPanel.this, info);
     }
 
     /**
@@ -621,7 +575,6 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
      * @param  edit  DOCUMENT ME!
      */
     private void nullNoEdit(final boolean edit) {
-        dcDatum.setEnabled(edit);
         txtAnzeige.setEnabled(edit);
         taBemerkung.setEnabled(edit);
         txtUrl.setEnabled(edit);
@@ -630,11 +583,11 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
     /**
      * DOCUMENT ME!
      *
-     * @param   saveBeschlussBean  DOCUMENT ME!
+     * @param   saveLinkBean  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public boolean isOkForSaving(final CidsBean saveBeschlussBean) {
+    public boolean isOkForSaving(final CidsBean saveLinkBean) {
         if (getErrorNoSave() != null) {
             noSave();
             return false;
@@ -642,23 +595,11 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
             boolean save = true;
             final StringBuilder errorMessage = new StringBuilder();
 
-            // datum vorhanden
-            try {
-                if (saveBeschlussBean.getProperty(FIELD__DATUM) == null) {
-                    LOG.warn("No datum specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NODATE));
-                    save = false;
-                }
-            } catch (final MissingResourceException ex) {
-                LOG.warn("Datum not given.", ex);
-                save = false;
-            }
-            
             // url vorhanden
             try {
-                if (saveBeschlussBean.getProperty(FIELD__URL) == null) {
+                if (saveLinkBean.getProperty(FIELD__URL) == null) {
                     LOG.warn("No datum specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NOURL));
+                    errorMessage.append(NbBundle.getMessage(VkLinkPanel.class, BUNDLE_NOURL));
                     save = false;
                 }
             } catch (final MissingResourceException ex) {
@@ -668,14 +609,14 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
             if (errorMessage.length() > 0) {
                 if (vkDocumentLoader.getParentOrganizer() instanceof VkVorhabenEditor) {
-                    errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_WHICH))
-                            .append(saveBeschlussBean.getPrimaryKeyValue());
+                    errorMessage.append(NbBundle.getMessage(VkLinkPanel.class, BUNDLE_WHICH))
+                            .append(saveLinkBean.getPrimaryKeyValue());
                 } 
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                    NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_PANE_PREFIX)
+                    NbBundle.getMessage(VkLinkPanel.class, BUNDLE_PANE_PREFIX)
                             + errorMessage.toString()
-                            + NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_PANE_SUFFIX),
-                    NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_PANE_TITLE),
+                            + NbBundle.getMessage(VkLinkPanel.class, BUNDLE_PANE_SUFFIX),
+                    NbBundle.getMessage(VkLinkPanel.class, BUNDLE_PANE_TITLE),
                     JOptionPane.WARNING_MESSAGE);
             }
             return save;

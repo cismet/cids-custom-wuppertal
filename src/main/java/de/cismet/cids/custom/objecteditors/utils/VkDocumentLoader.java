@@ -124,7 +124,56 @@ public class VkDocumentLoader {
         return true;
     }
     
-    
+     public boolean loadChildrenLinks(final Integer idVorhaben, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        final Collection<MetaObjectNode> mons;
+        try {
+            searchDocument.setParentId(idVorhaben);
+            searchDocument.setFkField(FK_VORHABEN);
+            searchDocument.setTable(TABLE_LINKS);
+            searchDocument.setRepresentationFields(CHILD_TOSTRING_FIELDS);
+            mons = SessionManager.getProxy().customServerSearch(
+                    searchDocument,
+                    connectionContext);
+            final List<CidsBean> beansLinks = new ArrayList<>();
+            if (!mons.isEmpty()) {
+                for (final MetaObjectNode mon : mons) {
+                    beansLinks.add(SessionManager.getProxy().getMetaObject(
+                            mon.getObjectId(),
+                            mon.getClassId(),
+                            "WUNDA_BLAU",
+                            connectionContext).getBean());
+                }
+            }
+
+            if (!mapLinks.containsKey(idVorhaben)) {
+                mapLinks.put(idVorhaben, beansLinks);
+            }
+            fireLoadingCompleteLinks();
+        } catch (ConnectionException ex) {
+            // Exceptions.printStackTrace(ex);
+            LOG.error("Error during loading", ex);
+            return false;
+        }
+        return true;
+    }
+     
+     public boolean loadChildren(final Integer id, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        if (loadChildrenBeschluesse(id, connectionContext)) {
+            fireLoadingCompleteBeschluesse();
+        } else {
+            fireLoadingErrorBeschluesse(id);
+            return false;
+        }
+        if (loadChildrenLinks(id, connectionContext)) {
+            fireLoadingCompleteLinks();
+        } else {
+            fireLoadingErrorLinks(id);
+            return false;
+        }
+        return true;
+    }
 
     /**
      * DOCUMENT ME!
@@ -275,7 +324,7 @@ public class VkDocumentLoader {
      *
      * @param  primaryKeyValue  DOCUMENT ME!
      */
-    private void fireLoadingCompleteLinks(final Integer primaryKeyValue) {
+    private void fireLoadingCompleteLinks() {
         for (final Listener listener : listeners) {
             listener.loadingCompleteLinks();
         }

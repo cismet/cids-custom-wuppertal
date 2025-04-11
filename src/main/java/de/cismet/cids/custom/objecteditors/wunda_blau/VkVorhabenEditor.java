@@ -79,7 +79,6 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.editors.SaveVetoable;
 import de.cismet.cids.editors.hooks.AfterClosingHook;
 import de.cismet.cids.editors.hooks.AfterSavingHook;
-import de.cismet.cids.editors.hooks.BeforeSavingHook;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -104,7 +103,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
@@ -114,8 +112,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import lombok.Getter;
 import lombok.Setter;
 import org.jdesktop.swingx.JXBusyLabel;
@@ -148,12 +144,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
    
     private static String MAPURL;
     private static Double BUFFER;
-    private static String FILES_DOKUMENTE;
-    private static String FILES_FOTOS;
-    private static String KOMP_FOTOS;
-    private static String SHOW_FOTOS;
-    private static Integer FILE_LIMIT;
-    private static Integer FILE_LIMIT_DOK;
 
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
@@ -172,7 +162,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__BB_URL = "bb_url";
     public static final String FIELD__LINK = "link";
     public static final String FIELD__STADT = "stadtweit";
-    //public static final String FIELD__BESCHLUSS = "n_beschluesse"; 
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";
     //public static final String FIELD__FOTOS = "n_fotos";
     public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel";
@@ -189,6 +178,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_GEOM = "geom";
     public static final String TABLE_SBZ = "kst_stadtbezirk";
     public static final String TABLE_NAME_BESCHLUESSE = "vk_vorhaben_beschluesse";
+    public static final String TABLE_NAME_LINKS = "vk_vorhaben_links";
 
     public static final String BUNDLE_NOGEOM = "VkVorhabenEditor.isOkForSaving().noGeom";
     
@@ -213,7 +203,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
     public static final String CHILD_TOSTRING_TEMPLATE = "%s";
     public static final String[] CHILD_TOSTRING_FIELDS = { "id" };
-    public static final String CHILD_TABLE = "vk_vorhaben_beschluesse";
+    public static final String CHILD_TABLE_BESCHLUSS = "vk_vorhaben_beschluesse";
+    public static final String CHILD_TABLE_LINK = "vk_vorhaben_links";
         
     private static String RASTERFARI;
     
@@ -283,14 +274,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private SwingWorker worker_bb;
     private SwingWorker worker_link;
 
-    private final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-
     @Getter @Setter private static Integer counterBeschluesse = -1;
+    @Getter @Setter private static Integer counterLinks = -1;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpStek;
     private JButton btnAddNewBeschluss;
+    private JButton btnAddNewLink;
     private JButton btnCreateGeometrie;
     private JButton btnRemoveBeschluss;
+    private JButton btnRemoveLink;
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbKontakt;
@@ -309,7 +301,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel jPanel4;
     private JPanel jPanelAllgemein;
     private JPanel jPanelDetails;
-    private JPanel jPanelDokAuswahl;
+    private JPanel jPanelDokBeschluesse;
+    private JPanel jPanelDokLinks;
     private JPanel jPanelDokumente;
     private JPanel jPanelFotoAuswahl;
     private JPanel jPanelFotos;
@@ -331,10 +324,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblKeineFotos;
     private JLabel lblKontakt;
     private JLabel lblLadenBeschluss;
+    private JLabel lblLadenLinks;
     private JLabel lblLetzteA;
     private JLabel lblLetzterB;
     private JLabel lblLink;
     private JLabel lblLinkCheck;
+    private JLabel lblLinks;
     private JLabel lblOrt;
     private JLabel lblStadtbezirke;
     private JLabel lblStadtweit;
@@ -347,10 +342,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblUrlCheck;
     private JLabel lblVeroeffentlicht;
     private JList lstBeschluesse;
+    private JList lstLinks;
     private JPanel panBemerkung;
     private JPanel panBeschreibung;
     private JPanel panContent;
     private JPanel panControlsNewBeschluesse;
+    private JPanel panControlsNewLinks;
     private JPanel panDaten;
     private JPanel panDetails;
     private JPanel panEinsatz;
@@ -371,6 +368,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JScrollPane scpBemerkung;
     private JScrollPane scpBeschluesse;
     private JScrollPane scpBeschreibung;
+    private JScrollPane scpLinks;
     private JScrollPane scpOrt;
     private JScrollPane scpSbz;
     private JScrollPane scpText;
@@ -389,6 +387,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JTextField txtTitel;
     private JTextField txtUrl;
     private VkBeschlussPanel vkBeschlussPanel;
+    private VkLinkPanel vkLinkPanel;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -444,6 +443,33 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
         lstBeschluesse.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(final JList list,
+                    final Object value,
+                    final int index,
+                    final boolean isSelected,
+                    final boolean cellHasFocus) {
+                Object newValue = value;
+
+                if (value instanceof CidsBean) {
+                    final CidsBean bean = (CidsBean)value;
+                    newValue = bean.getProperty(FIELD__ID);
+
+                    if (newValue == null) {
+                        newValue = "unbenannt";
+                    }
+                }
+                final Component compoTeil = super.getListCellRendererComponent(
+                        list,
+                        newValue,
+                        index,
+                        isSelected,
+                        cellHasFocus);
+                compoTeil.setForeground(new Color(87, 175, 54));
+                return compoTeil;
+            }
+        });
+        lstLinks.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(final JList list,
                     final Object value,
@@ -577,7 +603,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         jPanelDokumente = new JPanel();
-        jPanelDokAuswahl = new JPanel();
+        jPanelDokBeschluesse = new JPanel();
         lblBeschluesse = new JLabel();
         lblLadenBeschluss = new JLabel();
         scpBeschluesse = new JScrollPane();
@@ -586,6 +612,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewBeschluesse = new JPanel();
         btnAddNewBeschluss = new JButton();
         btnRemoveBeschluss = new JButton();
+        jPanelDokLinks = new JPanel();
+        lblLinks = new JLabel();
+        lblLadenLinks = new JLabel();
+        vkLinkPanel = vkLinkPanel = new VkLinkPanel(this.getVkDocumentLoader());
+        scpLinks = new JScrollPane();
+        lstLinks = new JList();
+        panControlsNewLinks = new JPanel();
+        btnAddNewLink = new JButton();
+        btnRemoveLink = new JButton();
         panFillerUnten4 = new JPanel();
         jPanelFotos = new JPanel();
         jPanelFotoAuswahl = new JPanel();
@@ -1487,8 +1522,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelDokumente.setOpaque(false);
         jPanelDokumente.setLayout(new GridBagLayout());
 
-        jPanelDokAuswahl.setOpaque(false);
-        jPanelDokAuswahl.setLayout(new GridBagLayout());
+        jPanelDokBeschluesse.setOpaque(false);
+        jPanelDokBeschluesse.setLayout(new GridBagLayout());
 
         lblBeschluesse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBeschluesse.setText("Beschlüsse:");
@@ -1500,7 +1535,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        jPanelDokAuswahl.add(lblBeschluesse, gridBagConstraints);
+        jPanelDokBeschluesse.add(lblBeschluesse, gridBagConstraints);
 
         lblLadenBeschluss.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLadenBeschluss.setForeground(new Color(153, 153, 153));
@@ -1513,7 +1548,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        jPanelDokAuswahl.add(lblLadenBeschluss, gridBagConstraints);
+        jPanelDokBeschluesse.add(lblLadenBeschluss, gridBagConstraints);
 
         scpBeschluesse.setPreferredSize(new Dimension(80, 130));
 
@@ -1532,7 +1567,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        jPanelDokAuswahl.add(scpBeschluesse, gridBagConstraints);
+        jPanelDokBeschluesse.add(scpBeschluesse, gridBagConstraints);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstBeschluesse, ELProperty.create("${selectedElement}"), vkBeschlussPanel, BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
@@ -1543,7 +1578,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        jPanelDokAuswahl.add(vkBeschlussPanel, gridBagConstraints);
+        jPanelDokBeschluesse.add(vkBeschlussPanel, gridBagConstraints);
 
         panControlsNewBeschluesse.setOpaque(false);
         panControlsNewBeschluesse.setLayout(new GridBagLayout());
@@ -1585,15 +1620,127 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        jPanelDokAuswahl.add(panControlsNewBeschluesse, gridBagConstraints);
+        jPanelDokBeschluesse.add(panControlsNewBeschluesse, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
-        jPanelDokumente.add(jPanelDokAuswahl, gridBagConstraints);
+        jPanelDokumente.add(jPanelDokBeschluesse, gridBagConstraints);
+
+        jPanelDokLinks.setOpaque(false);
+        jPanelDokLinks.setLayout(new GridBagLayout());
+
+        lblLinks.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLinks.setText("Links:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        jPanelDokLinks.add(lblLinks, gridBagConstraints);
+
+        lblLadenLinks.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLadenLinks.setForeground(new Color(153, 153, 153));
+        lblLadenLinks.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        jPanelDokLinks.add(lblLadenLinks, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstLinks, ELProperty.create("${selectedElement}"), vkLinkPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        jPanelDokLinks.add(vkLinkPanel, gridBagConstraints);
+
+        scpLinks.setPreferredSize(new Dimension(80, 130));
+
+        lstLinks.setModel(new DefaultListModel<>());
+        lstLinks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstLinks.setFixedCellWidth(75);
+        lstLinks.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                lstLinksMouseEntered(evt);
+            }
+        });
+        scpLinks.setViewportView(lstLinks);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanelDokLinks.add(scpLinks, gridBagConstraints);
+
+        panControlsNewLinks.setOpaque(false);
+        panControlsNewLinks.setLayout(new GridBagLayout());
+
+        btnAddNewLink.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewLink.setEnabled(false);
+        btnAddNewLink.setMaximumSize(new Dimension(39, 20));
+        btnAddNewLink.setMinimumSize(new Dimension(39, 20));
+        btnAddNewLink.setPreferredSize(new Dimension(25, 20));
+        btnAddNewLink.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnAddNewLinkActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewLinks.add(btnAddNewLink, gridBagConstraints);
+
+        btnRemoveLink.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveLink.setEnabled(false);
+        btnRemoveLink.setMaximumSize(new Dimension(39, 20));
+        btnRemoveLink.setMinimumSize(new Dimension(39, 20));
+        btnRemoveLink.setPreferredSize(new Dimension(25, 20));
+        btnRemoveLink.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnRemoveLinkActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewLinks.add(btnRemoveLink, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
+        jPanelDokLinks.add(panControlsNewLinks, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        jPanelDokumente.add(jPanelDokLinks, gridBagConstraints);
 
         panFillerUnten4.setName(""); // NOI18N
         panFillerUnten4.setOpaque(false);
@@ -1875,6 +2022,74 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }//GEN-LAST:event_btnRemoveBeschlussActionPerformed
 
+    private void lstLinksMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstLinksMouseEntered
+        vkLinkPanel.taBemerkung.requestFocus();
+    }//GEN-LAST:event_lstLinksMouseEntered
+
+    private void btnAddNewLinkActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewLinkActionPerformed
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
+                try {
+                    // linkBean erzeugen und vorbelegen:
+                    final CidsBean beanLink = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            TABLE_NAME_LINKS,
+                            getConnectionContext());
+                    final CidsBean beanVorhaben = getCidsBean();
+                    beanVorhaben.getMetaObject().setStatus(MetaObject.MODIFIED);
+                    beanLink.setProperty(FIELD__FK_VORHABEN, beanVorhaben);
+                    beanLink.setProperty(FIELD__ID, getCounterLinks());
+                    setCounterLinks(getCounterLinks() - 1);
+
+                    // Links erweitern:
+                    if (isEditor()) {
+                        getVkDocumentLoader().addLinks(getCidsBean().getPrimaryKeyValue(), beanLink);
+                    }
+                    ((DefaultListModel)lstLinks.getModel()).addElement(beanLink);
+
+                    // Refresh:
+                    lstLinks.setSelectedValue(beanLink, true);
+                    getCidsBean().setArtificialChangeFlag(true);
+                } catch (Exception e) {
+                    LOG.error("Cannot add new Link object", e);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAddNewLinkActionPerformed
+
+    private void btnRemoveLinkActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveLinkActionPerformed
+        final Object selectedObject = lstLinks.getSelectedValue();
+
+        if (selectedObject instanceof CidsBean) {
+            final Integer idLink = ((CidsBean)selectedObject).getPrimaryKeyValue();
+            if (getVkDocumentLoader().getMapValueLinks(idLink) == null) {
+                final List<CidsBean> listLinks = getVkDocumentLoader().getMapValueLinks(getCidsBean()
+                    .getPrimaryKeyValue());
+                if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
+                    getVkDocumentLoader().removeLinks(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                } else {
+                    for (final CidsBean beanLink : listLinks) {
+                        if (beanLink.equals(selectedObject)) {
+                            try {
+                                beanLink.delete();
+                            } catch (Exception ex) {
+                                LOG.warn("problem in delete link: not removed.", ex);
+                            }
+                            break;
+                        }
+                    }
+                    getVkDocumentLoader().getMapLinks().replace(getCidsBean().getPrimaryKeyValue(), listLinks);
+                }
+                ((DefaultListModel)lstLinks.getModel()).removeElement(selectedObject);
+                
+                if (getActiveBeans(listLinks) > 0) {
+                    lstLinks.setSelectedIndex(0);
+                }
+                getCidsBean().setArtificialChangeFlag(true);
+            } 
+        }
+    }//GEN-LAST:event_btnRemoveLinkActionPerformed
+
     
 
     /**
@@ -1924,6 +2139,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             }
             if (getCidsBean() != null) {
                 zeigeBeschluesse();
+                zeigeLinks();
+            } else{
+                setBeansBeschluss(null);
+                setBeansLink(null);
             }
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
@@ -1942,6 +2161,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {
                 getVkDocumentLoader().setLoadingCompletedWithoutError(true);
                 allowAddRemoveBeschluesse();
+                allowAddRemoveLinks();
             }
             for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
                 if (labelsPanel != null) {
@@ -1955,28 +2175,28 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                         FIELD__ENDE,
                         false);
                 } catch (Exception e) {
-                    LOG.error("Cannot set abgeschlossen", e);
+                    LOG.error("Cannot set ende", e);
                 }
                 try {
                     getCidsBean().setProperty(
                         FIELD__BB,
                         false);
                 } catch (Exception e) {
-                    LOG.error("Cannot set keine Wartung", e);
+                    LOG.error("Cannot set bb", e);
                 }
                 try {
                     getCidsBean().setProperty(
                         FIELD__STADT,
                         false);
                 } catch (Exception e) {
-                    LOG.error("Cannot set keine Dauerläufer", e);
+                    LOG.error("Cannot set stadt", e);
                 }
                 try {
                     getCidsBean().setProperty(
                         FIELD__VEROEFFENTLICHT,
                         false);
                 } catch (Exception e) {
-                    LOG.error("Cannot set keine Barrierefrei", e);
+                    LOG.error("Cannot set veroeffent", e);
                 }
             } else {
                 setStadtbezirke();
@@ -2045,7 +2265,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    return getVkDocumentLoader().loadChildrenBeschluesse(id, getConnectionContext());
+                    return getVkDocumentLoader().loadChildren(id, getConnectionContext());
                 }
 
                 @Override
@@ -2054,11 +2274,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                         areDocumentsLoad = get();
                         getVkDocumentLoader().setLoadingCompletedWithoutError(areDocumentsLoad);
                         if (!areDocumentsLoad) {
-                            setTitle(NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_LOAD_ERROR));
+                            setTitle(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_LOAD_ERROR));
                         } else {
                             if (isEditor()) {
                                 btnAddNewBeschluss.setEnabled(true);
                                 btnRemoveBeschluss.setEnabled(true);
+                                btnAddNewLink.setEnabled(true);
+                                btnRemoveLink.setEnabled(true);
                             }
                         }
                     } catch (final InterruptedException | ExecutionException ex) {
@@ -2352,6 +2574,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             }
         }
         bindingGroup.unbind();
+        cidsBean = null;
         if (labelsPanels != null) {
             for (final DefaultBindableLabelsPanel panel : labelsPanels) {
                 panel.dispose();
@@ -2359,13 +2582,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
         labelsPanels.clear();
         vkBeschlussPanel.dispose();
+        vkLinkPanel.dispose();
         clearVkDocumentLoader();
         
         bindingGroup.unbind();
         super.dispose();
-        setCounterBeschluesse(null);
     }
-    
     
     /**
      * DOCUMENT ME!
@@ -2437,11 +2659,34 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                         } catch (final Exception ex) {
                             LOG.error("Fehler bei der Speicher-Vorbereitung der Beschluesse.", ex);
                             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
-                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_KONTROLLE)
-                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_ADMIN)
-                                        + NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_SUFFIX),
-                                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_KONTROLLE)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_ADMIN)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_SUFFIX),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        LOG.warn("problem in persist documents.", ex);
+                    }
+                }
+                final List<CidsBean> listLink = getVkDocumentLoader().getMapValueLinks(getCidsBean()
+                                .getPrimaryKeyValue());
+                for (CidsBean beanLink : listLink) {
+                    try {
+                        if(beanLink.getMetaObject().getStatus() != MetaObject.TO_DELETE){
+                            beanLink.setProperty(FIELD__FK_VORHABEN, event.getPersistedBean());
+                        }
+                        try {
+                            beanLink = beanLink.persist(getConnectionContext());
+                        } catch (final Exception ex) {
+                            LOG.error("Fehler bei der Speicher-Vorbereitung der Links.", ex);
+                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_KONTROLLE)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_ADMIN)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_SUFFIX),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_TITLE_PERSIST),
                                 JOptionPane.ERROR_MESSAGE);
                         }
                     } catch (Exception ex) {
@@ -2484,6 +2729,19 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             } catch (final Exception ex) {
                 noErrorOccured = false;
                 LOG.error("Fehler beim Speicher-Check der Beschluesse.", ex);
+            }
+        }
+        
+        for (final CidsBean beanLink
+                    : getVkDocumentLoader().getMapValueLinks(getCidsBean().getPrimaryKeyValue())) {
+            try {
+                noErrorOccured = vkLinkPanel.isOkForSaving(beanLink);
+                if (!noErrorOccured) {
+                    break;
+                }
+            } catch (final Exception ex) {
+                noErrorOccured = false;
+                LOG.error("Fehler beim Speicher-Check der Links.", ex);
             }
         }
         
@@ -2564,6 +2822,19 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             lblLadenBeschluss.setVisible(false);
         }
     }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void allowAddRemoveLinks() {
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (isEditor()) {
+                btnAddNewLink.setEnabled(true);
+                btnRemoveLink.setEnabled(true);
+            }
+            lblLadenLinks.setVisible(false);
+        }
+    }
 
     
     /**
@@ -2571,6 +2842,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void zeigeBeschluesse() {
         setBeansBeschluss(getVkDocumentLoader().getMapValueBeschluesse(getCidsBean().getPrimaryKeyValue()));
+    }
+    
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void zeigeLinks() {
+        setBeansLink(getVkDocumentLoader().getMapValueLinks(getCidsBean().getPrimaryKeyValue()));
     }
 
     /**
@@ -2593,6 +2872,30 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             prepareBeschluss();
         } catch (final Exception ex) {
             LOG.warn("beschluesse list not cleared.", ex);
+        }
+    }
+    
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBeans  DOCUMENT ME!
+     */
+    private void setBeansLink(final List<CidsBean> cidsBeans) {
+        try {
+            vkLinkPanel.setCidsBean(null);
+            ((DefaultListModel)lstLinks.getModel()).clear();
+            if (cidsBeans != null) {
+                for (final Object bean : cidsBeans) {
+                    if ((bean instanceof CidsBean)
+                                && (((CidsBean)bean).getMetaObject().getStatus() != MetaObject.TO_DELETE)) {
+                        ((DefaultListModel)lstLinks.getModel()).addElement(bean);
+                    }
+                }
+            }
+            prepareLink();
+        } catch (final Exception ex) {
+            LOG.warn("links list not cleared.", ex);
         }
     }
     
@@ -2651,6 +2954,41 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             });
     }
     
+    /**
+     * DOCUMENT ME!
+     */
+    private void prepareLink() {
+        if ((getVkDocumentLoader().getMapLinks()!= null)
+                    && (getActiveBeans(getVkDocumentLoader().getMapValueLinks(
+                                getCidsBean().getPrimaryKeyValue())) > 0)) {
+            lstLinks.setSelectedIndex(0);
+        }
+
+        lstLinks.setCellRenderer(new DefaultListCellRenderer() {
+
+                 @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        newValue = bean.getProperty(FIELD__ID);
+                    }
+                    final Component compoId = super.getListCellRendererComponent(
+                            list,
+                            newValue,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    compoId.setForeground(new Color(87, 175, 54));
+                    return compoId;
+                }
+            });
+    }
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -2681,11 +3019,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         @Override
         public void loadingCompleteLinks() {
-           /* if (getCidsBean() != null) {
-                lblLadenBeschluss.setVisible(false);
-                zeigeBeschluesse();
+            if (getCidsBean() != null) {
+                lblLadenLinks.setVisible(false);
+                zeigeLinks();
             }
-            allowAddRemoveBeschluesse();*/
+            allowAddRemoveLinks();
         }
 
         @Override
