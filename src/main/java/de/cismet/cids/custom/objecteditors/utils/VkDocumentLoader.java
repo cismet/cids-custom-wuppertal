@@ -48,6 +48,8 @@ public class VkDocumentLoader {
     private static final String TABLE_VORHABEN = "vk_vorhaben";
     private static final String TABLE_BESCHLUSS = "vk_vorhaben_beschluesse";
     private static final String TABLE_LINKS = "vk_vorhaben_links";
+    private static final String TABLE_DOKUMENTE = "vk_vorhaben_dokumente";
+    private static final String TABLE_FOTOS = "vk_vorhaben_fotos";
     private static final String[] CHILD_TOSTRING_FIELDS = { "id" };
     private static final String FK_VORHABEN = "fk_vorhaben";
 
@@ -56,6 +58,8 @@ public class VkDocumentLoader {
     @Getter public Boolean loadingCompletedWithoutError = false;
     @Getter public Map<Integer, List<CidsBean>> mapBeschluesse = new HashMap<>();
     @Getter public Map<Integer, List<CidsBean>> mapLinks = new HashMap<>();
+    @Getter public Map<Integer, List<CidsBean>> mapDokumente = new HashMap<>();
+    @Getter public Map<Integer, List<CidsBean>> mapFotos = new HashMap<>();
     public Collection<Listener> listeners = new ArrayList<>();
     private final VkDocumentLightweightSearch searchDocument;
     @Getter private final VkParentPanel parentOrganizer;
@@ -115,7 +119,6 @@ public class VkDocumentLoader {
             if (!mapBeschluesse.containsKey(idVorhaben)) {
                 mapBeschluesse.put(idVorhaben, beansBeschluesse);
             }
-            fireLoadingCompleteBeschluesse();
         } catch (ConnectionException ex) {
             // Exceptions.printStackTrace(ex);
             LOG.error("Error during loading", ex);
@@ -124,7 +127,7 @@ public class VkDocumentLoader {
         return true;
     }
     
-     public boolean loadChildrenLinks(final Integer idVorhaben, final ConnectionContext connectionContext)
+    public boolean loadChildrenLinks(final Integer idVorhaben, final ConnectionContext connectionContext)
             throws ConnectionException {
         final Collection<MetaObjectNode> mons;
         try {
@@ -149,7 +152,6 @@ public class VkDocumentLoader {
             if (!mapLinks.containsKey(idVorhaben)) {
                 mapLinks.put(idVorhaben, beansLinks);
             }
-            fireLoadingCompleteLinks();
         } catch (ConnectionException ex) {
             // Exceptions.printStackTrace(ex);
             LOG.error("Error during loading", ex);
@@ -157,8 +159,76 @@ public class VkDocumentLoader {
         }
         return true;
     }
-     
-     public boolean loadChildren(final Integer id, final ConnectionContext connectionContext)
+    
+    
+    public boolean loadChildrenFotos(final Integer idVorhaben, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        final Collection<MetaObjectNode> mons;
+        try {
+            searchDocument.setParentId(idVorhaben);
+            searchDocument.setFkField(FK_VORHABEN);
+            searchDocument.setTable(TABLE_FOTOS);
+            searchDocument.setRepresentationFields(CHILD_TOSTRING_FIELDS);
+            mons = SessionManager.getProxy().customServerSearch(
+                    searchDocument,
+                    connectionContext);
+            final List<CidsBean> beansFotos = new ArrayList<>();
+            if (!mons.isEmpty()) {
+                for (final MetaObjectNode mon : mons) {
+                    beansFotos.add(SessionManager.getProxy().getMetaObject(
+                            mon.getObjectId(),
+                            mon.getClassId(),
+                            "WUNDA_BLAU",
+                            connectionContext).getBean());
+                }
+            }
+
+            if (!mapFotos.containsKey(idVorhaben)) {
+                mapFotos.put(idVorhaben, beansFotos);
+            }
+        } catch (ConnectionException ex) {
+            // Exceptions.printStackTrace(ex);
+            LOG.error("Error during loading", ex);
+            return false;
+        }
+        return true;
+    }
+    
+    
+    public boolean loadChildrenDokumente(final Integer idVorhaben, final ConnectionContext connectionContext)
+            throws ConnectionException {
+        final Collection<MetaObjectNode> mons;
+        try {
+            searchDocument.setParentId(idVorhaben);
+            searchDocument.setFkField(FK_VORHABEN);
+            searchDocument.setTable(TABLE_DOKUMENTE);
+            searchDocument.setRepresentationFields(CHILD_TOSTRING_FIELDS);
+            mons = SessionManager.getProxy().customServerSearch(
+                    searchDocument,
+                    connectionContext);
+            final List<CidsBean> beansDokumente= new ArrayList<>();
+            if (!mons.isEmpty()) {
+                for (final MetaObjectNode mon : mons) {
+                    beansDokumente.add(SessionManager.getProxy().getMetaObject(
+                            mon.getObjectId(),
+                            mon.getClassId(),
+                            "WUNDA_BLAU",
+                            connectionContext).getBean());
+                }
+            }
+
+            if (!mapDokumente.containsKey(idVorhaben)) {
+                mapDokumente.put(idVorhaben, beansDokumente);
+            }
+        } catch (ConnectionException ex) {
+            // Exceptions.printStackTrace(ex);
+            LOG.error("Error during loading", ex);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean loadChildren(final Integer id, final ConnectionContext connectionContext)
             throws ConnectionException {
         if (loadChildrenBeschluesse(id, connectionContext)) {
             fireLoadingCompleteBeschluesse();
@@ -170,6 +240,18 @@ public class VkDocumentLoader {
             fireLoadingCompleteLinks();
         } else {
             fireLoadingErrorLinks(id);
+            return false;
+        }
+        if (loadChildrenDokumente(id, connectionContext)) {
+            fireLoadingCompleteDokumente();
+        } else {
+            fireLoadingErrorDokumente(id);
+            return false;
+        }
+        if (loadChildrenFotos(id, connectionContext)) {
+            fireLoadingCompleteFotos();
+        } else {
+            fireLoadingErrorFotos(id);
             return false;
         }
         return true;
@@ -196,6 +278,27 @@ public class VkDocumentLoader {
         return mapLinks.get(key);
     }
     
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   key  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<CidsBean> getMapValueDokumente(final Integer key) {
+        return mapDokumente.get(key);
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   key  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<CidsBean> getMapValueFotos(final Integer key) {
+        return mapFotos.get(key);
+    }
+    
 
     /**
      * DOCUMENT ME!
@@ -203,6 +306,8 @@ public class VkDocumentLoader {
     public void clearAllMaps() {
         mapBeschluesse.clear();
         mapLinks.clear();
+        mapDokumente.clear();
+        mapFotos.clear();
     }
 
     /**
@@ -214,6 +319,9 @@ public class VkDocumentLoader {
         this.loadingCompletedWithoutError = status;
         if (status) {
             fireLoadingCompleteBeschluesse();
+            fireLoadingCompleteDokumente();
+            fireLoadingCompleteFotos();
+            fireLoadingCompleteLinks();
         }
     }
 
@@ -226,7 +334,6 @@ public class VkDocumentLoader {
      * @return  DOCUMENT ME!
      */
     public boolean removeBeschluesse(final Integer idVorhaben, final CidsBean beanBeschluesse) {
-        // return (mapOrt.get(idMeldung)).remove(beanOrt);
         return removeFromMap(idVorhaben, beanBeschluesse, mapBeschluesse);
     }
     
@@ -241,6 +348,32 @@ public class VkDocumentLoader {
      */
     public boolean removeLinks (final Integer idVorhaben, final CidsBean beanLinks ) {
         return removeFromMap(idVorhaben, beanLinks , mapLinks );
+    }
+    
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   idVorhaben  DOCUMENT ME!
+     * @param beanDokumente
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean removeDokumente(final Integer idVorhaben, final CidsBean beanDokumente) {
+        return removeFromMap(idVorhaben, beanDokumente, mapDokumente);
+    }
+    
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   idVorhaben  DOCUMENT ME!
+     * @param beanFotos
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean removeFotos (final Integer idVorhaben, final CidsBean beanFotos ) {
+        return removeFromMap(idVorhaben, beanFotos, mapFotos );
     }
 
 
@@ -262,6 +395,25 @@ public class VkDocumentLoader {
      */
     public void addLinks(final Integer idVorhaben, final CidsBean beanLinks) {
         addToMap(idVorhaben, beanLinks, mapLinks);
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  idVorhaben    DOCUMENT ME!
+     * @param beanDokumente
+     */
+    public void addDokumente(final Integer idVorhaben, final CidsBean beanDokumente) {
+        addToMap(idVorhaben, beanDokumente, mapDokumente);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  idVorhaben    DOCUMENT ME!
+     * @param beanFotos
+     */
+    public void addFotos(final Integer idVorhaben, final CidsBean beanFotos) {
+        addToMap(idVorhaben, beanFotos, mapFotos);
     }
 
     /**
@@ -363,7 +515,49 @@ public class VkDocumentLoader {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  primaryKeyValue  DOCUMENT ME!
+     */
+    private void fireLoadingCompleteDokumente() {
+        for (final Listener listener : listeners) {
+            listener.loadingCompleteDokumente();
+        }
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  primaryKeyValue  DOCUMENT ME!
+     */
+    private void fireLoadingErrorDokumente(final Integer primaryKeyValue) {
+        for (final Listener listener : listeners) {
+            listener.loadingErrorDokumente(primaryKeyValue);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  primaryKeyValue  DOCUMENT ME!
+     */
+    private void fireLoadingCompleteFotos() {
+        for (final Listener listener : listeners) {
+            listener.loadingCompleteFotos();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  primaryKeyValue  DOCUMENT ME!
+     */
+    private void fireLoadingErrorFotos(final Integer primaryKeyValue) {
+        for (final Listener listener : listeners) {
+            listener.loadingErrorFotos(primaryKeyValue);
+        }
+    }
 
     //~ Inner Interfaces -------------------------------------------------------
 
@@ -401,6 +595,31 @@ public class VkDocumentLoader {
          * @param  idVorhaben DOCUMENT ME!
          */
         void loadingErrorLinks(Integer idVorhaben);
+        /**
+         * DOCUMENT ME!
+         *
+         */
+        void loadingCompleteDokumente();
+
+        /**
+         * DOCUMENT ME!
+         *
+         */
+        void loadingCompleteFotos();
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  idVorhaben  DOCUMENT ME!
+         */
+        void loadingErrorDokumente(Integer idVorhaben);
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  idVorhaben DOCUMENT ME!
+         */
+        void loadingErrorFotos(Integer idVorhaben);
 
     }
 }

@@ -89,7 +89,6 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
@@ -99,8 +98,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -114,7 +111,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import lombok.Getter;
 import lombok.Setter;
-import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 /**
@@ -129,8 +125,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     AfterClosingHook,
     RequestsFullSizeComponent,
     PropertyChangeListener,
-    VkParentPanel,
-    RasterfariDocumentLoaderPanel.Listener {
+    VkParentPanel {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -179,6 +174,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_SBZ = "kst_stadtbezirk";
     public static final String TABLE_NAME_BESCHLUESSE = "vk_vorhaben_beschluesse";
     public static final String TABLE_NAME_LINKS = "vk_vorhaben_links";
+    public static final String TABLE_NAME_DOKUMENTE = "vk_vorhaben_dokumente";
+    public static final String TABLE_NAME_FOTOS = "vk_vorhaben_fotos";
 
     public static final String BUNDLE_NOGEOM = "VkVorhabenEditor.isOkForSaving().noGeom";
     
@@ -205,8 +202,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String[] CHILD_TOSTRING_FIELDS = { "id" };
     public static final String CHILD_TABLE_BESCHLUSS = "vk_vorhaben_beschluesse";
     public static final String CHILD_TABLE_LINK = "vk_vorhaben_links";
+    public static final String CHILD_TABLE_DOKUMENT = "vk_vorhaben_dokumente";
+    public static final String CHILD_TABLE_FOTOT = "vk_vorhaben_fotos";
         
-    private static String RASTERFARI;
     
     
     @Getter @Setter private static Exception errorNoSave = null;
@@ -276,12 +274,18 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
     @Getter @Setter private static Integer counterBeschluesse = -1;
     @Getter @Setter private static Integer counterLinks = -1;
+    @Getter @Setter private static Integer counterDokumente = -1;
+    @Getter @Setter private static Integer counterFotos = -1;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpStek;
     private JButton btnAddNewBeschluss;
+    private JButton btnAddNewDokument;
+    private JButton btnAddNewFoto;
     private JButton btnAddNewLink;
     private JButton btnCreateGeometrie;
     private JButton btnRemoveBeschluss;
+    private JButton btnRemoveDokument;
+    private JButton btnRemoveFoto;
     private JButton btnRemoveLink;
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
@@ -294,20 +298,16 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     JCheckBox chVeroeffentlicht;
     private Box.Filler filler3;
     private Box.Filler filler5;
-    private JLabel jLabel2;
-    private JPanel jPanel1;
-    private JPanel jPanel2;
-    private JPanel jPanel3;
-    private JPanel jPanel4;
     private JPanel jPanelAllgemein;
     private JPanel jPanelDetails;
     private JPanel jPanelDokBeschluesse;
+    private JPanel jPanelDokDokumente;
     private JPanel jPanelDokLinks;
     private JPanel jPanelDokumente;
-    private JPanel jPanelFotoAuswahl;
+    private JPanel jPanelExt;
+    private JPanel jPanelFoto;
     private JPanel jPanelFotos;
     JTabbedPane jTabbedPane;
-    private JXBusyLabel jxLBusy;
     private JLabel lblAbAm;
     private JLabel lblAbgeschlossen;
     private JLabel lblAngelegtAm;
@@ -316,14 +316,16 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblBemerkung;
     private JLabel lblBeschluesse;
     private JLabel lblBeschreibung;
+    private JLabel lblDokumente;
+    private JLabel lblFotos;
     private JLabel lblGeom;
     private JLabel lblHNrRenderer;
-    private JLabel lblHeaderDocument;
     private JLabel lblHnr;
     private JLabel lblKarte;
-    private JLabel lblKeineFotos;
     private JLabel lblKontakt;
     private JLabel lblLadenBeschluss;
+    private JLabel lblLadenDokumente;
+    private JLabel lblLadenFotos;
     private JLabel lblLadenLinks;
     private JLabel lblLetzteA;
     private JLabel lblLetzterB;
@@ -342,16 +344,21 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblUrlCheck;
     private JLabel lblVeroeffentlicht;
     private JList lstBeschluesse;
+    private JList lstDokumente;
+    private JList lstFotos;
     private JList lstLinks;
     private JPanel panBemerkung;
     private JPanel panBeschreibung;
     private JPanel panContent;
     private JPanel panControlsNewBeschluesse;
+    private JPanel panControlsNewDokumente;
+    private JPanel panControlsNewFotos;
     private JPanel panControlsNewLinks;
     private JPanel panDaten;
     private JPanel panDetails;
     private JPanel panEinsatz;
     private JPanel panFillerUnten4;
+    private JPanel panFillerUnten5;
     private JPanel panGeometrie;
     private JPanel panLink;
     private JPanel panOrt;
@@ -359,15 +366,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panSbz;
     private JPanel panText;
     private JPanel panUrl;
-    private JPanel pnlBild;
     private JPanel pnlCard1;
-    private RoundedPanel pnlDocument;
-    private SemiRoundedPanel pnlHeaderDocument;
-    private RoundedPanel pnlPages;
     private RoundedPanel rpKarte;
     private JScrollPane scpBemerkung;
     private JScrollPane scpBeschluesse;
     private JScrollPane scpBeschreibung;
+    private JScrollPane scpDokumente;
+    private JScrollPane scpFotos;
     private JScrollPane scpLinks;
     private JScrollPane scpOrt;
     private JScrollPane scpSbz;
@@ -387,6 +392,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JTextField txtTitel;
     private JTextField txtUrl;
     private VkBeschlussPanel vkBeschlussPanel;
+    private VkDokumentPanel vkDokumentPanel;
+    private VkFotoPanel vkFotoPanel;
     private VkLinkPanel vkLinkPanel;
     private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -411,24 +418,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
-    public void showMeasureIsLoading() {
-        showDocumentCard(DocumentCard.BUSY);
-    }
-
-    @Override
-    public void showMeasurePanel() {
-        showDocumentCard(DocumentCard.DOCUMENT);
-    }
-
-     /**
-     * DOCUMENT ME!
-     *
-     * @param  card  DOCUMENT ME!
-     */
-    private void showDocumentCard(final DocumentCard card) {
-        ((CardLayout)pnlBild.getLayout()).show(pnlBild, card.toString());
-    }
     
     @Override
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
@@ -443,6 +432,61 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             labelsPanel.initWithConnectionContext(getConnectionContext());
         }
         lstBeschluesse.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(final JList list,
+                    final Object value,
+                    final int index,
+                    final boolean isSelected,
+                    final boolean cellHasFocus) {
+                Object newValue = value;
+
+                if (value instanceof CidsBean) {
+                    final CidsBean bean = (CidsBean)value;
+                    newValue = bean.getProperty(FIELD__ID);
+
+                    if (newValue == null) {
+                        newValue = "unbenannt";
+                    }
+                }
+                final Component compoTeil = super.getListCellRendererComponent(
+                        list,
+                        newValue,
+                        index,
+                        isSelected,
+                        cellHasFocus);
+                compoTeil.setForeground(new Color(87, 175, 54));
+                return compoTeil;
+            }
+        });
+        lstLinks.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(final JList list,
+                    final Object value,
+                    final int index,
+                    final boolean isSelected,
+                    final boolean cellHasFocus) {
+                Object newValue = value;
+
+                if (value instanceof CidsBean) {
+                    final CidsBean bean = (CidsBean)value;
+                    newValue = bean.getProperty(FIELD__ID);
+
+                    if (newValue == null) {
+                        newValue = "unbenannt";
+                    }
+                }
+                final Component compoTeil = super.getListCellRendererComponent(
+                        list,
+                        newValue,
+                        index,
+                        isSelected,
+                        cellHasFocus);
+                compoTeil.setForeground(new Color(87, 175, 54));
+                return compoTeil;
+            }
+        });
+        
+        lstDokumente.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(final JList list,
                     final Object value,
@@ -603,6 +647,17 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         jPanelDokumente = new JPanel();
+        jPanelDokDokumente = new JPanel();
+        lblDokumente = new JLabel();
+        vkDokumentPanel = vkDokumentPanel = new VkDokumentPanel(this.getVkDocumentLoader());
+        lblLadenDokumente = new JLabel();
+        scpDokumente = new JScrollPane();
+        lstDokumente = new JList();
+        panControlsNewDokumente = new JPanel();
+        btnAddNewDokument = new JButton();
+        btnRemoveDokument = new JButton();
+        panFillerUnten5 = new JPanel();
+        jPanelExt = new JPanel();
         jPanelDokBeschluesse = new JPanel();
         lblBeschluesse = new JLabel();
         lblLadenBeschluss = new JLabel();
@@ -623,19 +678,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         btnRemoveLink = new JButton();
         panFillerUnten4 = new JPanel();
         jPanelFotos = new JPanel();
-        jPanelFotoAuswahl = new JPanel();
-        pnlPages = new RoundedPanel();
-        pnlDocument = new RoundedPanel();
-        pnlHeaderDocument = new SemiRoundedPanel();
-        lblHeaderDocument = new JLabel();
-        pnlBild = new JPanel();
-        jPanel1 = new JPanel();
-        jPanel2 = new JPanel();
-        jxLBusy = new JXBusyLabel(new Dimension(64,64));
-        jPanel3 = new JPanel();
-        lblKeineFotos = new JLabel();
-        jPanel4 = new JPanel();
-        jLabel2 = new JLabel();
+        jPanelFoto = new JPanel();
+        lblFotos = new JLabel();
+        lblLadenFotos = new JLabel();
+        scpFotos = new JScrollPane();
+        lstFotos = new JList();
+        vkFotoPanel = vkFotoPanel = new VkFotoPanel(this.getVkDocumentLoader());
+        panControlsNewFotos = new JPanel();
+        btnAddNewFoto = new JButton();
+        btnRemoveFoto = new JButton();
 
         setLayout(new GridBagLayout());
 
@@ -695,7 +746,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(5, 10, 10, 15);
         jPanelAllgemein.add(panGeometrie, gridBagConstraints);
 
         panDaten.setOpaque(false);
@@ -950,7 +1001,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
         panDaten.add(panSbz, gridBagConstraints);
 
         lblThema.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -1522,6 +1573,144 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelDokumente.setOpaque(false);
         jPanelDokumente.setLayout(new GridBagLayout());
 
+        jPanelDokDokumente.setOpaque(false);
+        jPanelDokDokumente.setLayout(new GridBagLayout());
+
+        lblDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDokumente.setText("Dokumente:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        jPanelDokDokumente.add(lblDokumente, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstDokumente, ELProperty.create("${selectedElement}"), vkDokumentPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        jPanelDokDokumente.add(vkDokumentPanel, gridBagConstraints);
+
+        lblLadenDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLadenDokumente.setForeground(new Color(153, 153, 153));
+        lblLadenDokumente.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        jPanelDokDokumente.add(lblLadenDokumente, gridBagConstraints);
+
+        scpDokumente.setPreferredSize(new Dimension(80, 130));
+
+        lstDokumente.setModel(new DefaultListModel<>());
+        lstDokumente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstDokumente.setFixedCellWidth(75);
+        lstDokumente.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                lstDokumenteMouseEntered(evt);
+            }
+        });
+        scpDokumente.setViewportView(lstDokumente);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 0, 0);
+        jPanelDokDokumente.add(scpDokumente, gridBagConstraints);
+
+        panControlsNewDokumente.setOpaque(false);
+        panControlsNewDokumente.setLayout(new GridBagLayout());
+
+        btnAddNewDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewDokument.setEnabled(false);
+        btnAddNewDokument.setMaximumSize(new Dimension(39, 20));
+        btnAddNewDokument.setMinimumSize(new Dimension(39, 20));
+        btnAddNewDokument.setPreferredSize(new Dimension(25, 20));
+        btnAddNewDokument.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnAddNewDokumentActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewDokumente.add(btnAddNewDokument, gridBagConstraints);
+
+        btnRemoveDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveDokument.setEnabled(false);
+        btnRemoveDokument.setMaximumSize(new Dimension(39, 20));
+        btnRemoveDokument.setMinimumSize(new Dimension(39, 20));
+        btnRemoveDokument.setPreferredSize(new Dimension(25, 20));
+        btnRemoveDokument.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnRemoveDokumentActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewDokumente.add(btnRemoveDokument, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
+        jPanelDokDokumente.add(panControlsNewDokumente, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        jPanelDokumente.add(jPanelDokDokumente, gridBagConstraints);
+
+        panFillerUnten5.setName(""); // NOI18N
+        panFillerUnten5.setOpaque(false);
+
+        GroupLayout panFillerUnten5Layout = new GroupLayout(panFillerUnten5);
+        panFillerUnten5.setLayout(panFillerUnten5Layout);
+        panFillerUnten5Layout.setHorizontalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten5Layout.setVerticalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        jPanelDokumente.add(panFillerUnten5, gridBagConstraints);
+
+        jTabbedPane.addTab("Dokumente", jPanelDokumente);
+
+        jPanelExt.setOpaque(false);
+        jPanelExt.setLayout(new GridBagLayout());
+
         jPanelDokBeschluesse.setOpaque(false);
         jPanelDokBeschluesse.setLayout(new GridBagLayout());
 
@@ -1567,6 +1756,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 0, 0);
         jPanelDokBeschluesse.add(scpBeschluesse, gridBagConstraints);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstBeschluesse, ELProperty.create("${selectedElement}"), vkBeschlussPanel, BeanProperty.create("cidsBean"));
@@ -1578,6 +1768,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         jPanelDokBeschluesse.add(vkBeschlussPanel, gridBagConstraints);
 
         panControlsNewBeschluesse.setOpaque(false);
@@ -1630,7 +1821,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
-        jPanelDokumente.add(jPanelDokBeschluesse, gridBagConstraints);
+        jPanelExt.add(jPanelDokBeschluesse, gridBagConstraints);
 
         jPanelDokLinks.setOpaque(false);
         jPanelDokLinks.setLayout(new GridBagLayout());
@@ -1669,6 +1860,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
         jPanelDokLinks.add(vkLinkPanel, gridBagConstraints);
 
         scpLinks.setPreferredSize(new Dimension(80, 130));
@@ -1688,6 +1880,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 0, 0);
         jPanelDokLinks.add(scpLinks, gridBagConstraints);
 
         panControlsNewLinks.setOpaque(false);
@@ -1740,7 +1933,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
-        jPanelDokumente.add(jPanelDokLinks, gridBagConstraints);
+        jPanelExt.add(jPanelDokLinks, gridBagConstraints);
 
         panFillerUnten4.setName(""); // NOI18N
         panFillerUnten4.setOpaque(false);
@@ -1761,109 +1954,132 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        jPanelDokumente.add(panFillerUnten4, gridBagConstraints);
+        jPanelExt.add(panFillerUnten4, gridBagConstraints);
 
-        jTabbedPane.addTab("Dokumente", jPanelDokumente);
+        jTabbedPane.addTab("Externe Links", jPanelExt);
 
         jPanelFotos.setOpaque(false);
         jPanelFotos.setLayout(new GridBagLayout());
 
-        jPanelFotoAuswahl.setOpaque(false);
-        jPanelFotoAuswahl.setLayout(new GridBagLayout());
+        jPanelFoto.setOpaque(false);
+        jPanelFoto.setLayout(new GridBagLayout());
+
+        lblFotos.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFotos.setText("Dokumente:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        jPanelFoto.add(lblFotos, gridBagConstraints);
+
+        lblLadenFotos.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLadenFotos.setForeground(new Color(153, 153, 153));
+        lblLadenFotos.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new Insets(5, 0, 0, 5);
-        jPanelFotoAuswahl.add(pnlPages, gridBagConstraints);
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        jPanelFoto.add(lblLadenFotos, gridBagConstraints);
 
-        pnlDocument.setLayout(new GridBagLayout());
+        scpFotos.setPreferredSize(new Dimension(80, 130));
 
-        pnlHeaderDocument.setBackground(Color.darkGray);
-        pnlHeaderDocument.setLayout(new GridBagLayout());
-
-        lblHeaderDocument.setForeground(Color.white);
-        lblHeaderDocument.setText("Foto");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        pnlHeaderDocument.add(lblHeaderDocument, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        pnlDocument.add(pnlHeaderDocument, gridBagConstraints);
-
-        pnlBild.setOpaque(false);
-        pnlBild.setLayout(new CardLayout());
-
-        jPanel1.setLayout(new BorderLayout());
-        pnlBild.add(jPanel1, "DOCUMENT");
-
-        jPanel2.setLayout(new BorderLayout());
-
-        jxLBusy.setHorizontalAlignment(SwingConstants.CENTER);
-        jxLBusy.setPreferredSize(new Dimension(64, 64));
-        jPanel2.add(jxLBusy, BorderLayout.CENTER);
-
-        pnlBild.add(jPanel2, "BUSY");
-
-        jPanel3.setLayout(new BorderLayout());
-
-        lblKeineFotos.setHorizontalAlignment(SwingConstants.CENTER);
-        lblKeineFotos.setText("Für dieses Gebiet sind beim nächtlichen Abgleich keine Fotos vorhanden gewesen.");
-        jPanel3.add(lblKeineFotos, BorderLayout.CENTER);
-
-        pnlBild.add(jPanel3, "NO_DOCUMENT");
-
-        jPanel4.setLayout(new BorderLayout());
-
-        jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel2.setText("Das Foto für dieses Gebiet kann nicht geladen werden.");
-        jPanel4.add(jLabel2, BorderLayout.CENTER);
-
-        pnlBild.add(jPanel4, "ERROR");
+        lstFotos.setModel(new DefaultListModel<>());
+        lstFotos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstFotos.setFixedCellWidth(75);
+        lstFotos.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                lstFotosMouseEntered(evt);
+            }
+        });
+        scpFotos.setViewportView(lstFotos);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.ipady = 1;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.9;
-        gridBagConstraints.insets = new Insets(0, 0, 8, 0);
-        pnlDocument.add(pnlBild, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 0, 0);
+        jPanelFoto.add(scpFotos, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstFotos, ELProperty.create("${selectedElement}"), vkFotoPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 0, 0, 5);
-        jPanelFotoAuswahl.add(pnlDocument, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        jPanelFotos.add(jPanelFotoAuswahl, gridBagConstraints);
+        jPanelFoto.add(vkFotoPanel, gridBagConstraints);
+
+        panControlsNewFotos.setOpaque(false);
+        panControlsNewFotos.setLayout(new GridBagLayout());
+
+        btnAddNewFoto.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewFoto.setEnabled(false);
+        btnAddNewFoto.setMaximumSize(new Dimension(39, 20));
+        btnAddNewFoto.setMinimumSize(new Dimension(39, 20));
+        btnAddNewFoto.setPreferredSize(new Dimension(25, 20));
+        btnAddNewFoto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnAddNewFotoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewFotos.add(btnAddNewFoto, gridBagConstraints);
+
+        btnRemoveFoto.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveFoto.setEnabled(false);
+        btnRemoveFoto.setMaximumSize(new Dimension(39, 20));
+        btnRemoveFoto.setMinimumSize(new Dimension(39, 20));
+        btnRemoveFoto.setPreferredSize(new Dimension(25, 20));
+        btnRemoveFoto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnRemoveFotoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewFotos.add(btnRemoveFoto, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
+        jPanelFoto.add(panControlsNewFotos, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        jPanelFotos.add(jPanelFoto, gridBagConstraints);
 
         jTabbedPane.addTab("Fotos", jPanelFotos);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         pnlCard1.add(jTabbedPane, gridBagConstraints);
@@ -2090,6 +2306,142 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }//GEN-LAST:event_btnRemoveLinkActionPerformed
 
+    private void btnRemoveDokumentActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveDokumentActionPerformed
+        final Object selectedObject = lstDokumente.getSelectedValue();
+
+        if (selectedObject instanceof CidsBean) {
+            final Integer idDokument = ((CidsBean)selectedObject).getPrimaryKeyValue();
+            if (getVkDocumentLoader().getMapValueDokumente(idDokument) == null) {
+                final List<CidsBean> listDokumente = getVkDocumentLoader().getMapValueDokumente(getCidsBean()
+                    .getPrimaryKeyValue());
+                if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
+                    getVkDocumentLoader().removeDokumente(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                } else {
+                    for (final CidsBean beanDokument : listDokumente) {
+                        if (beanDokument.equals(selectedObject)) {
+                            try {
+                                beanDokument.delete();
+                            } catch (Exception ex) {
+                                LOG.warn("problem in delete dokument: not removed.", ex);
+                            }
+                            break;
+                        }
+                    }
+                    getVkDocumentLoader().getMapDokumente().replace(getCidsBean().getPrimaryKeyValue(), listDokumente);
+                }
+                ((DefaultListModel)lstDokumente.getModel()).removeElement(selectedObject);
+                
+                if (getActiveBeans(listDokumente) > 0) {
+                    lstDokumente.setSelectedIndex(0);
+                }
+                getCidsBean().setArtificialChangeFlag(true);
+            } 
+        }
+    }//GEN-LAST:event_btnRemoveDokumentActionPerformed
+
+    private void btnAddNewDokumentActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewDokumentActionPerformed
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
+                try {
+                    // dokumenteBean erzeugen und vorbelegen:
+                    final CidsBean beanDokumente = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            TABLE_NAME_DOKUMENTE,
+                            getConnectionContext());
+                    final CidsBean beanVorhaben = getCidsBean();
+                    beanVorhaben.getMetaObject().setStatus(MetaObject.MODIFIED);
+                    beanDokumente.setProperty(FIELD__FK_VORHABEN, beanVorhaben);
+                    beanDokumente.setProperty(FIELD__ID, getCounterDokumente());
+                    setCounterDokumente(getCounterDokumente()- 1);
+
+                    // Dokumente erweitern:
+                    if (isEditor()) {
+                        getVkDocumentLoader().addDokumente(getCidsBean().getPrimaryKeyValue(), beanDokumente);
+                    }
+                    ((DefaultListModel)lstDokumente.getModel()).addElement(beanDokumente);
+
+                    // Refresh:
+                    lstDokumente.setSelectedValue(beanDokumente, true);
+                    getCidsBean().setArtificialChangeFlag(true);
+                } catch (Exception e) {
+                    LOG.error("Cannot add new Dokumente object", e);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAddNewDokumentActionPerformed
+
+    private void lstDokumenteMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstDokumenteMouseEntered
+        vkDokumentPanel.taBemerkung.requestFocus();
+    }//GEN-LAST:event_lstDokumenteMouseEntered
+
+    private void btnAddNewFotoActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewFotoActionPerformed
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
+                try {
+                    // fotoBean erzeugen und vorbelegen:
+                    final CidsBean beanFoto = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            TABLE_NAME_FOTOS,
+                            getConnectionContext());
+                    final CidsBean beanVorhaben = getCidsBean();
+                    beanVorhaben.getMetaObject().setStatus(MetaObject.MODIFIED);
+                    beanFoto.setProperty(FIELD__FK_VORHABEN, beanVorhaben);
+                    beanFoto.setProperty(FIELD__ID, getCounterFotos());
+                    setCounterFotos(getCounterFotos()- 1);
+
+                    // Fotos erweitern:
+                    if (isEditor()) {
+                        getVkDocumentLoader().addFotos(getCidsBean().getPrimaryKeyValue(), beanFoto);
+                    }
+                    ((DefaultListModel)lstFotos.getModel()).addElement(beanFoto);
+
+                    // Refresh:
+                    lstFotos.setSelectedValue(beanFoto, true);
+                    getCidsBean().setArtificialChangeFlag(true);
+                } catch (Exception e) {
+                    LOG.error("Cannot add new Fotos object", e);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAddNewFotoActionPerformed
+
+    private void btnRemoveFotoActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveFotoActionPerformed
+       final Object selectedObject = lstFotos.getSelectedValue();
+
+        if (selectedObject instanceof CidsBean) {
+            final Integer idFotos = ((CidsBean)selectedObject).getPrimaryKeyValue();
+            if (getVkDocumentLoader().getMapValueFotos(idFotos) == null) {
+                final List<CidsBean> listFotos = getVkDocumentLoader().getMapValueFotos(getCidsBean()
+                    .getPrimaryKeyValue());
+                if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
+                    getVkDocumentLoader().removeFotos(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                } else {
+                    for (final CidsBean beanFoto : listFotos) {
+                        if (beanFoto.equals(selectedObject)) {
+                            try {
+                                beanFoto.delete();
+                            } catch (Exception ex) {
+                                LOG.warn("problem in delete foto: not removed.", ex);
+                            }
+                            break;
+                        }
+                    }
+                    getVkDocumentLoader().getMapFotos().replace(getCidsBean().getPrimaryKeyValue(), listFotos);
+                }
+                ((DefaultListModel)lstFotos.getModel()).removeElement(selectedObject);
+                
+                if (getActiveBeans(listFotos) > 0) {
+                    lstFotos.setSelectedIndex(0);
+                }
+                getCidsBean().setArtificialChangeFlag(true);
+            } 
+        }
+    }//GEN-LAST:event_btnRemoveFotoActionPerformed
+
+    private void lstFotosMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstFotosMouseEntered
+        vkFotoPanel.taBemerkung.requestFocus();
+    }//GEN-LAST:event_lstFotosMouseEntered
+
     
 
     /**
@@ -2140,9 +2492,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             if (getCidsBean() != null) {
                 zeigeBeschluesse();
                 zeigeLinks();
+                zeigeDokumente();
+                zeigeFotos();
             } else{
                 setBeansBeschluss(null);
                 setBeansLink(null);
+                setBeansDokument(null);
+                setBeansFoto(null);
             }
             // 8.5.17 s.Simmert: Methodenaufruf, weil sonst die Comboboxen nicht gefüllt werden
             // evtl. kann dies verbessert werden.
@@ -2162,6 +2518,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 getVkDocumentLoader().setLoadingCompletedWithoutError(true);
                 allowAddRemoveBeschluesse();
                 allowAddRemoveLinks();
+                allowAddRemoveDokumente();
+                allowAddRemoveFotos();
             }
             for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
                 if (labelsPanel != null) {
@@ -2281,6 +2639,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                                 btnRemoveBeschluss.setEnabled(true);
                                 btnAddNewLink.setEnabled(true);
                                 btnRemoveLink.setEnabled(true);
+                                btnAddNewDokument.setEnabled(true);
+                                btnRemoveDokument.setEnabled(true);
+                                btnAddNewFoto.setEnabled(true);
+                                btnRemoveFoto.setEnabled(true);
                             }
                         }
                     } catch (final InterruptedException | ExecutionException ex) {
@@ -2583,6 +2945,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         labelsPanels.clear();
         vkBeschlussPanel.dispose();
         vkLinkPanel.dispose();
+        vkDokumentPanel.dispose();
+        vkFotoPanel.dispose();
         clearVkDocumentLoader();
         
         bindingGroup.unbind();
@@ -2693,6 +3057,52 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                         LOG.warn("problem in persist documents.", ex);
                     }
                 }
+                final List<CidsBean> listDokument = getVkDocumentLoader().getMapValueDokumente(getCidsBean()
+                                .getPrimaryKeyValue());
+                for (CidsBean beanDokument : listDokument) {
+                    try {
+                        if(beanDokument.getMetaObject().getStatus() != MetaObject.TO_DELETE){
+                            beanDokument.setProperty(FIELD__FK_VORHABEN, event.getPersistedBean());
+                        }
+                        try {
+                            beanDokument = beanDokument.persist(getConnectionContext());
+                        } catch (final Exception ex) {
+                            LOG.error("Fehler bei der Speicher-Vorbereitung der Dokumente.", ex);
+                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_KONTROLLE)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_ADMIN)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_SUFFIX),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        LOG.warn("problem in persist documents.", ex);
+                    }
+                }
+                final List<CidsBean> listFoto = getVkDocumentLoader().getMapValueFotos(getCidsBean()
+                                .getPrimaryKeyValue());
+                for (CidsBean beanFoto : listFoto) {
+                    try {
+                        if(beanFoto.getMetaObject().getStatus() != MetaObject.TO_DELETE){
+                            beanFoto.setProperty(FIELD__FK_VORHABEN, event.getPersistedBean());
+                        }
+                        try {
+                            beanFoto = beanFoto.persist(getConnectionContext());
+                        } catch (final Exception ex) {
+                            LOG.error("Fehler bei der Speicher-Vorbereitung der Fotos.", ex);
+                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_PREFIX_MELDUNG)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_KONTROLLE)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_ADMIN)
+                                        + NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_SUFFIX),
+                                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_TITLE_PERSIST),
+                                JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        LOG.warn("problem in persist documents.", ex);
+                    }
+                }
             }
         } catch (final Exception ex) {
             LOG.warn("problem in afterSaving.", ex);
@@ -2717,13 +3127,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         
         boolean save = true;
         boolean noErrorOccured = true;
+        boolean testErgebnis = true;
         final StringBuilder errorMessage = new StringBuilder();
 
         for (final CidsBean beanBeschluss
                     : getVkDocumentLoader().getMapValueBeschluesse(getCidsBean().getPrimaryKeyValue())) {
             try {
-                noErrorOccured = vkBeschlussPanel.isOkForSaving(beanBeschluss);
-                if (!noErrorOccured) {
+                testErgebnis = vkBeschlussPanel.isOkForSaving(beanBeschluss);
+                if (!testErgebnis) {
+                    noErrorOccured = false;
                     break;
                 }
             } catch (final Exception ex) {
@@ -2735,13 +3147,43 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         for (final CidsBean beanLink
                     : getVkDocumentLoader().getMapValueLinks(getCidsBean().getPrimaryKeyValue())) {
             try {
-                noErrorOccured = vkLinkPanel.isOkForSaving(beanLink);
-                if (!noErrorOccured) {
+                testErgebnis = vkLinkPanel.isOkForSaving(beanLink);
+                if (!testErgebnis) {
+                    noErrorOccured = false;
                     break;
                 }
             } catch (final Exception ex) {
                 noErrorOccured = false;
                 LOG.error("Fehler beim Speicher-Check der Links.", ex);
+            }
+        }
+        
+        
+        for (final CidsBean beanDokument
+                    : getVkDocumentLoader().getMapValueDokumente(getCidsBean().getPrimaryKeyValue())) {
+            try {
+                testErgebnis = vkDokumentPanel.isOkForSaving(beanDokument);
+                if (!testErgebnis) {
+                    noErrorOccured = false;
+                    break;
+                }
+            } catch (final Exception ex) {
+                noErrorOccured = false;
+                LOG.error("Fehler beim Speicher-Check der Dokumente.", ex);
+            }
+        }
+        
+        for (final CidsBean beanFoto
+                    : getVkDocumentLoader().getMapValueFotos(getCidsBean().getPrimaryKeyValue())) {
+            try {
+                testErgebnis = vkFotoPanel.isOkForSaving(beanFoto);
+                if (!testErgebnis) {
+                    noErrorOccured = false;
+                    break;
+                }
+            } catch (final Exception ex) {
+                noErrorOccured = false;
+                LOG.error("Fehler beim Speicher-Check der Fotos.", ex);
             }
         }
         
@@ -2835,6 +3277,32 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             lblLadenLinks.setVisible(false);
         }
     }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void allowAddRemoveDokumente() {
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (isEditor()) {
+                btnAddNewDokument.setEnabled(true);
+                btnRemoveDokument.setEnabled(true);
+            }
+            lblLadenDokumente.setVisible(false);
+        }
+    }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void allowAddRemoveFotos() {
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (isEditor()) {
+                btnAddNewFoto.setEnabled(true);
+                btnRemoveFoto.setEnabled(true);
+            }
+            lblLadenFotos.setVisible(false);
+        }
+    }
 
     
     /**
@@ -2850,6 +3318,21 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void zeigeLinks() {
         setBeansLink(getVkDocumentLoader().getMapValueLinks(getCidsBean().getPrimaryKeyValue()));
+    }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void zeigeDokumente() {
+        setBeansDokument(getVkDocumentLoader().getMapValueDokumente(getCidsBean().getPrimaryKeyValue()));
+    }
+    
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void zeigeFotos() {
+        setBeansFoto(getVkDocumentLoader().getMapValueFotos(getCidsBean().getPrimaryKeyValue()));
     }
 
     /**
@@ -2896,6 +3379,53 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             prepareLink();
         } catch (final Exception ex) {
             LOG.warn("links list not cleared.", ex);
+        }
+    }
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBeans  DOCUMENT ME!
+     */
+    private void setBeansDokument(final List<CidsBean> cidsBeans) {
+        try {
+            vkDokumentPanel.setCidsBean(null);
+            ((DefaultListModel)lstDokumente.getModel()).clear();
+            if (cidsBeans != null) {
+                for (final Object bean : cidsBeans) {
+                    if ((bean instanceof CidsBean)
+                                && (((CidsBean)bean).getMetaObject().getStatus() != MetaObject.TO_DELETE)) {
+                        ((DefaultListModel)lstDokumente.getModel()).addElement(bean);
+                    }
+                }
+            }
+            prepareDokument();
+        } catch (final Exception ex) {
+            LOG.warn("dokummente list not cleared.", ex);
+        }
+    }
+    
+    
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBeans  DOCUMENT ME!
+     */
+    private void setBeansFoto(final List<CidsBean> cidsBeans) {
+        try {
+            vkFotoPanel.setCidsBean(null);
+            ((DefaultListModel)lstFotos.getModel()).clear();
+            if (cidsBeans != null) {
+                for (final Object bean : cidsBeans) {
+                    if ((bean instanceof CidsBean)
+                                && (((CidsBean)bean).getMetaObject().getStatus() != MetaObject.TO_DELETE)) {
+                        ((DefaultListModel)lstFotos.getModel()).addElement(bean);
+                    }
+                }
+            }
+            prepareFoto();
+        } catch (final Exception ex) {
+            LOG.warn("fotos list not cleared.", ex);
         }
     }
     
@@ -2989,6 +3519,77 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             });
     }
+    /**
+     * DOCUMENT ME!
+     */
+    private void prepareDokument() {
+        if ((getVkDocumentLoader().getMapDokumente()!= null)
+                    && (getActiveBeans(getVkDocumentLoader().getMapValueDokumente(
+                                getCidsBean().getPrimaryKeyValue())) > 0)) {
+            lstDokumente.setSelectedIndex(0);
+        }
+
+        lstDokumente.setCellRenderer(new DefaultListCellRenderer() {
+
+                 @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        newValue = bean.getProperty(FIELD__ID);
+                    }
+                    final Component compoId = super.getListCellRendererComponent(
+                            list,
+                            newValue,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    compoId.setForeground(new Color(87, 175, 54));
+                    return compoId;
+                }
+            });
+    }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void prepareFoto() {
+        if ((getVkDocumentLoader().getMapFotos()!= null)
+                    && (getActiveBeans(getVkDocumentLoader().getMapValueFotos(
+                                getCidsBean().getPrimaryKeyValue())) > 0)) {
+            lstFotos.setSelectedIndex(0);
+        }
+
+        lstFotos.setCellRenderer(new DefaultListCellRenderer() {
+
+                 @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    Object newValue = value;
+
+                    if (value instanceof CidsBean) {
+                        final CidsBean bean = (CidsBean)value;
+                        newValue = bean.getProperty(FIELD__ID);
+                    }
+                    final Component compoId = super.getListCellRendererComponent(
+                            list,
+                            newValue,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    compoId.setForeground(new Color(87, 175, 54));
+                    return compoId;
+                }
+            });
+    }
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -3025,13 +3626,30 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             }
             allowAddRemoveLinks();
         }
-
+        
         @Override
-        public void loadingErrorBeschluesse(final Integer idMeldung) {
+        public void loadingCompleteFotos() {
+            if (getCidsBean() != null) {
+                lblLadenFotos.setVisible(false);
+                zeigeFotos();
+            }
+            allowAddRemoveFotos();
         }
 
         @Override
-        public void loadingErrorLinks(final Integer idMeldung) {
+        public void loadingErrorBeschluesse(final Integer idVorhaben) {
+        }
+
+        @Override
+        public void loadingErrorLinks(final Integer idVorhaben) {
+        }
+        
+        @Override
+        public void loadingErrorDokumente(final Integer idVorhaben) {
+        }
+
+        @Override
+        public void loadingErrorFotos(final Integer idVorhaben) {
         }
 
         @Override
@@ -3041,6 +3659,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 zeigeBeschluesse();
             }
             allowAddRemoveBeschluesse();
+        }
+        
+        @Override
+        public void loadingCompleteDokumente() {
+            if (getCidsBean() != null) {
+                lblLadenDokumente.setVisible(false);
+                zeigeDokumente();
+            }
+            allowAddRemoveDokumente();
         }
     }
 }
