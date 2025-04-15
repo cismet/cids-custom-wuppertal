@@ -1337,6 +1337,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDetails.add(lblUrl, gridBagConstraints);
 
+        txtUrl.setEnabled(false);
+
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bb_url}"), txtUrl, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
@@ -1387,6 +1389,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taText.setLineWrap(true);
         taText.setRows(3);
         taText.setWrapStyleWord(true);
+        taText.setEnabled(false);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bb_text}"), taText, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -2557,6 +2560,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                     LOG.error("Cannot set veroeffent", e);
                 }
             } else {
+                hatBB();
                 setStadtbezirke();
                 checkBB();
                 checkLink();
@@ -3003,6 +3007,25 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if (evt.getPropertyName().equals(FIELD__LINK)) {
             checkLink();
+        }
+        if (evt.getPropertyName().equals(FIELD__BB)) {
+            hatBB();
+        }
+    }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    private void hatBB() {
+        final boolean hatBB = chBB.isSelected();
+
+        if (isEditor()) {
+            taText.setEnabled(hatBB);
+            txtUrl.setEnabled(hatBB);
+            if (hatBB == false) {
+                taText.setText("");
+                txtUrl.setText("");
+            } 
         }
     }
     

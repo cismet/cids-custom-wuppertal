@@ -899,6 +899,9 @@
                               </Constraints>
                             </Component>
                             <Component class="javax.swing.JTextField" name="txtUrl">
+                              <Properties>
+                                <Property name="enabled" type="boolean" value="false"/>
+                              </Properties>
                               <BindingProperties>
                                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bb_url}" target="txtUrl" targetPath="text" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
@@ -978,6 +981,7 @@
                                         <Property name="lineWrap" type="boolean" value="true"/>
                                         <Property name="rows" type="int" value="3"/>
                                         <Property name="wrapStyleWord" type="boolean" value="true"/>
+                                        <Property name="enabled" type="boolean" value="false"/>
                                       </Properties>
                                       <BindingProperties>
                                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bb_text}" target="taText" targetPath="text" updateStrategy="0" immediately="false"/>
