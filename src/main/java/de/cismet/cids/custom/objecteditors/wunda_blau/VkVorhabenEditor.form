@@ -1259,9 +1259,6 @@
                                     <Property name="selectionMode" type="int" value="0"/>
                                     <Property name="fixedCellWidth" type="int" value="75"/>
                                   </Properties>
-                                  <Events>
-                                    <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstDokumenteMouseEntered"/>
-                                  </Events>
                                 </Component>
                               </SubComponents>
                             </Container>

@@ -644,7 +644,8 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
             // datum vorhanden
             try {
-                if (saveBeschlussBean.getProperty(FIELD__DATUM) == null) {
+                if (saveBeschlussBean.getProperty(FIELD__DATUM) == null || 
+                        saveBeschlussBean.getProperty(FIELD__DATUM).toString().trim().isEmpty()) {
                     LOG.warn("No datum specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NODATE));
                     save = false;
@@ -656,7 +657,8 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
             
             // url vorhanden
             try {
-                if (saveBeschlussBean.getProperty(FIELD__URL) == null) {
+                if (saveBeschlussBean.getProperty(FIELD__URL) == null || 
+                        saveBeschlussBean.getProperty(FIELD__URL).toString().trim().isEmpty()) {
                     LOG.warn("No datum specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NOURL));
                     save = false;

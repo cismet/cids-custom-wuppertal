@@ -38,7 +38,6 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -597,7 +596,8 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
 
             // url vorhanden
             try {
-                if (saveLinkBean.getProperty(FIELD__URL) == null) {
+                if (saveLinkBean.getProperty(FIELD__URL) == null || 
+                        saveLinkBean.getProperty(FIELD__URL).toString().trim().isEmpty()) {
                     LOG.warn("No datum specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(VkLinkPanel.class, BUNDLE_NOURL));
                     save = false;

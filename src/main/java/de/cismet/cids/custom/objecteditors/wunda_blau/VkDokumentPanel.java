@@ -596,7 +596,8 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
 
             // url vorhanden
             try {
-                if (saveDokumentBean.getProperty(FIELD__URL) == null) {
+                if (saveDokumentBean.getProperty(FIELD__URL) == null || 
+                        saveDokumentBean.getProperty(FIELD__URL).toString().trim().isEmpty()) {
                     LOG.warn("No url specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(VkDokumentPanel.class, BUNDLE_NOURL));
                     save = false;

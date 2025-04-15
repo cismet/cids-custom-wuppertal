@@ -1621,11 +1621,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lstDokumente.setModel(new DefaultListModel<>());
         lstDokumente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstDokumente.setFixedCellWidth(75);
-        lstDokumente.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                lstDokumenteMouseEntered(evt);
-            }
-        });
         scpDokumente.setViewportView(lstDokumente);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2372,10 +2367,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             }
         }
     }//GEN-LAST:event_btnAddNewDokumentActionPerformed
-
-    private void lstDokumenteMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstDokumenteMouseEntered
-        vkDokumentPanel.taBemerkung.requestFocus();
-    }//GEN-LAST:event_lstDokumenteMouseEntered
 
     private void btnAddNewFotoActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewFotoActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {

@@ -445,7 +445,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
                 @Override
                 public void run() {
                     // Worker Aufruf, grün/rot
-                    checkUrl(txtUrl.getText(), lblUrlCheck);
+                    checkUrl(foto, lblUrlCheck);
                     // Worker Aufruf, Foto laden
                     loadPictureWithUrl(foto, lblFotoAnzeigen);
                 }
@@ -681,7 +681,8 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
 
             // url vorhanden
             try {
-                if (saveFotoBean.getProperty(FIELD__URL) == null) {
+                if (saveFotoBean.getProperty(FIELD__URL) == null|| 
+                        saveFotoBean.getProperty(FIELD__URL).toString().trim().isEmpty()) {
                     LOG.warn("No url specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(VkFotoPanel.class, BUNDLE_NOURL));
                     save = false;
