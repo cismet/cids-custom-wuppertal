@@ -63,7 +63,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objecteditors.utils.UaConfProperties;
+import de.cismet.cids.custom.objecteditors.utils.VkConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.VkDocumentLoader;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
@@ -2877,8 +2877,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void initProperties() {
         try {
-            BUFFER = UaConfProperties.getInstance().getBufferMeter();
-            MAPURL = UaConfProperties.getInstance().getUrl();
+            BUFFER = VkConfProperties.getInstance().getBufferMeter();
+            MAPURL = VkConfProperties.getInstance().getUrl();
 
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
