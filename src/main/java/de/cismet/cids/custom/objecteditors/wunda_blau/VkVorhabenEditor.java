@@ -152,6 +152,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__AKTUALISIERT = "letzte_aktualisierung";
     public static final String FIELD__ENDE = "abgeschlossen";
     public static final String FIELD__ENDE_AM = "abgeschlossen_am";
+    public static final String FIELD__QUARTAL = "ende_quartal";
+    public static final String FIELD__JAHR = "ende_jahr";
     public static final String FIELD__VEROEFFENTLICHT = "veroeffentlicht";
     public static final String FIELD__BB = "buergerbeteiligung";
     public static final String FIELD__BB_URL = "bb_url";
@@ -322,6 +324,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblGeom;
     private JLabel lblHNrRenderer;
     private JLabel lblHnr;
+    private JLabel lblJahr;
     private JLabel lblKarte;
     private JLabel lblKontakt;
     private JLabel lblLadenBeschluss;
@@ -334,6 +337,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblLinkCheck;
     private JLabel lblLinks;
     private JLabel lblOrt;
+    private JLabel lblQuartal;
     private JLabel lblStadtbezirke;
     private JLabel lblStadtweit;
     private JLabel lblStek;
@@ -357,7 +361,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panControlsNewLinks;
     private JPanel panDaten;
     private JPanel panDetails;
-    private JPanel panEinsatz;
     private JPanel panFillerUnten4;
     private JPanel panFillerUnten5;
     private JPanel panGeometrie;
@@ -367,6 +370,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panSbz;
     private JPanel panText;
     private JPanel panUrl;
+    private JPanel panVorhaben;
     private JPanel pnlCard1;
     private RoundedPanel rpKarte;
     private JScrollPane scpBemerkung;
@@ -379,6 +383,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JScrollPane scpSbz;
     private JScrollPane scpText;
     private SemiRoundedPanel semiRoundedPanel7;
+    JSpinner spJahr;
+    JSpinner spQuartal;
     private JTextArea taBemerkung;
     private JTextArea taBeschreibung;
     private JTextArea taOrt;
@@ -560,7 +566,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         bindingGroup = new BindingGroup();
 
         panContent = new RoundedPanel();
-        panEinsatz = new JPanel();
+        panVorhaben = new JPanel();
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
@@ -618,6 +624,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         txtAngelegtAm = new JTextField();
         lblLetzterB = new JLabel();
         txtLetzterB = new JTextField();
+        lblQuartal = new JLabel();
+        spQuartal = new JSpinner();
+        lblJahr = new JLabel();
+        spJahr = new JSpinner();
         lblLetzteA = new JLabel();
         txtLetzteA = new JTextField();
         lblAbgeschlossen = new JLabel();
@@ -695,8 +705,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panContent.setOpaque(false);
         panContent.setLayout(new GridBagLayout());
 
-        panEinsatz.setOpaque(false);
-        panEinsatz.setLayout(new GridBagLayout());
+        panVorhaben.setOpaque(false);
+        panVorhaben.setLayout(new GridBagLayout());
 
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new GridBagLayout());
@@ -1222,6 +1232,62 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(txtLetzterB, gridBagConstraints);
 
+        lblQuartal.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblQuartal.setText("Ende geplant Quartal:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblQuartal, gridBagConstraints);
+
+        spQuartal.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spQuartal.setModel(new SpinnerNumberModel(1, 1, 4, 1));
+        spQuartal.setPreferredSize(new Dimension(75, 20));
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ende_quartal}"), spQuartal, BeanProperty.create("value"));
+        binding.setSourceNullValue(1);
+        binding.setSourceUnreadableValue(1);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(spQuartal, gridBagConstraints);
+
+        lblJahr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblJahr.setText("Ende geplant Jahr:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblJahr, gridBagConstraints);
+
+        spJahr.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spJahr.setModel(new SpinnerNumberModel(2025, 2025, 2100, 1));
+        spJahr.setPreferredSize(new Dimension(75, 20));
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ende_jahr}"), spJahr, BeanProperty.create("value"));
+        binding.setSourceNullValue(2025);
+        binding.setSourceUnreadableValue(2025);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(spJahr, gridBagConstraints);
+
         lblLetzteA.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLetzteA.setText("letzte Bearbeitung:");
         gridBagConstraints = new GridBagConstraints();
@@ -1249,7 +1315,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblAbgeschlossen.setText("abgeschlossen:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1265,14 +1331,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(chAbgeschlossen, gridBagConstraints);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
@@ -1282,7 +1348,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblAbAm.setText("abgeschlossen am:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1293,7 +1359,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         txtAbAm.setPreferredSize(new Dimension(10, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1305,7 +1371,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblBB.setText("Bürgerbeteiligung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1321,7 +1387,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1331,7 +1397,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblUrl.setText("BB-Url:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1345,7 +1411,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1365,7 +1431,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1376,7 +1442,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblText.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1410,7 +1476,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1424,7 +1490,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblLink.setText("Link:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1436,7 +1502,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1456,7 +1522,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1466,7 +1532,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblStek.setText("Fokusraum STEK:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1480,7 +1546,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -1491,7 +1557,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblKontakt.setText("Kontakt:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1507,7 +1573,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1519,7 +1585,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblBemerkung.setText("Bemerkung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1552,7 +1618,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -2090,7 +2156,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panEinsatz.add(pnlCard1, gridBagConstraints);
+        panVorhaben.add(pnlCard1, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2099,7 +2165,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        panContent.add(panEinsatz, gridBagConstraints);
+        panContent.add(panVorhaben, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2470,6 +2536,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 getConnectionContext());
 
             setMapWindow();
+     /*       
+            if ((getCidsBean() != null)
+                        && (getCidsBean().getProperty(FIELD__QUARTAL) == null)) {
+                getCidsBean().setProperty(FIELD__QUARTAL, 1);
+            }
+            if ((getCidsBean() != null)
+                        && (getCidsBean().getProperty(FIELD__JAHR) == null)) {
+                getCidsBean().setProperty(FIELD__JAHR, 2025);
+            }*/
             bindingGroup.bind();
             setTitle(getTitle());
             stadtweitChoose();
@@ -2526,6 +2601,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 checkLink();
             } 
             txtAngelegtAm.setText(DATE_FORMAT.format(cidsBean.getProperty(FIELD__ANGELEGT)));
+            setEnde();
             if (cidsBean.getProperty(FIELD__AKTUALISIERT) != null){
                 txtLetzteA.setText(DATE_FORMAT.format(cidsBean.getProperty(FIELD__AKTUALISIERT)));
             }
@@ -2730,6 +2806,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(chAbgeschlossen);
             RendererTools.makeReadOnly(blpStek);
             RendererTools.makeReadOnly(taBemerkung);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spJahr, 0);
+            RendererTools.makeReadOnly(spJahr);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spQuartal, 0);
+            RendererTools.makeReadOnly(spQuartal);
         }
         RendererTools.makeReadOnly(txtAnleger);
         RendererTools.makeReadOnly(txtLetzteA);
@@ -3015,6 +3095,26 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             title = "<Error>";
         }
     }
+    
+    private void setEnde(){
+        if(getCidsBean().getProperty(FIELD__ENDE) == null || Objects.equals(getCidsBean().getProperty(FIELD__ENDE),false)){ 
+            try {
+                getCidsBean().setProperty(FIELD__ENDE_AM, null);
+                txtAbAm.setText("");
+            } catch (Exception ex) {
+                LOG.warn("datum ende not cleared.", ex);
+            }
+        } else {
+            try {
+            getCidsBean().setProperty(
+                FIELD__ENDE_AM,
+                new java.sql.Timestamp(System.currentTimeMillis()));
+                txtAbAm.setText(DATE_FORMAT.format(cidsBean.getProperty(FIELD__ENDE_AM)));
+            } catch (Exception ex) {
+               LOG.warn("datum ende not set.", ex);
+            }
+        }
+    }
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
@@ -3025,6 +3125,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         if (evt.getPropertyName().equals(FIELD__STADT)) {
             setStadtbezirke();
             stadtweitChoose();
+        }
+        if (evt.getPropertyName().equals(FIELD__ENDE)) {
+            setEnde();
         }
         if (evt.getPropertyName().equals(FIELD__BB_URL)) {
             checkBB();
