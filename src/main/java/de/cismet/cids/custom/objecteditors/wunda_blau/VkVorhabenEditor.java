@@ -159,6 +159,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__STADT = "stadtweit";
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";
     //public static final String FIELD__FOTOS = "n_fotos";
+    public static final String FIELD__STRASSE = "fk_strasse";
     public static final String FIELD__STRASSE_SCHLUESSEL = "fk_strasse.strassenschluessel";
     public static final String FIELD__STRASSE_NAME = "name";                // strasse
     public static final String FIELD__STRASSE_KEY = "strassenschluessel";   // strasse
@@ -571,11 +572,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten = new JPanel();
         lblTitel = new JLabel();
         txtTitel = new JTextField();
-        lblGeom = new JLabel();
-        if (isEditor()){
-            cbGeom = new DefaultCismapGeometryComboBoxEditor();
-            ((DefaultCismapGeometryComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class, Polygon.class, MultiPolygon.class});
-        }
+        lblThema = new JLabel();
+        cbThema = new DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION);
         lblStrasse = new JLabel();
         cbStrasse = new FastBindableReferenceCombo();
         lblHnr = new JLabel();
@@ -589,6 +587,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 hnrSearch.getRepresentationFields()
             );
         }
+        btnCreateGeometrie = new JButton();
         lblOrt = new JLabel();
         panOrt = new JPanel();
         scpOrt = new JScrollPane();
@@ -599,8 +598,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panSbz = new JPanel();
         scpSbz = new JScrollPane();
         taSbz = new JTextArea();
-        lblThema = new JLabel();
-        cbThema = new DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION);
+        lblGeom = new JLabel();
+        if (isEditor()){
+            cbGeom = new DefaultCismapGeometryComboBoxEditor();
+            ;
+        }
         lblVeroeffentlicht = new JLabel();
         chVeroeffentlicht = new JCheckBox();
         lblBeschreibung = new JLabel();
@@ -608,7 +610,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         scpBeschreibung = new JScrollPane();
         taBeschreibung = new JTextArea();
         filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
-        btnCreateGeometrie = new JButton();
         jPanelDetails = new JPanel();
         panDetails = new JPanel();
         lblAnleger = new JLabel();
@@ -776,8 +777,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(txtTitel, gridBagConstraints);
 
-        lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblGeom.setText("Geometrie:");
+        lblThema.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblThema.setText("Thema:");
+        lblThema.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -785,27 +787,22 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblGeom, gridBagConstraints);
+        panDaten.add(lblThema, gridBagConstraints);
 
-        if (isEditor()){
-            cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        cbThema.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
-            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
-            bindingGroup.addBinding(binding);
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_thema}"), cbThema, BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
-        }
-        if (isEditor()){
-            gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.gridwidth = 2;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = GridBagConstraints.WEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-            panDaten.add(cbGeom, gridBagConstraints);
-        }
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(cbThema, gridBagConstraints);
 
         lblStrasse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblStrasse.setText("Straße:");
@@ -888,11 +885,29 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             panDaten.add(cbHNr, gridBagConstraints);
         }
 
+        btnCreateGeometrie.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
+        btnCreateGeometrie.setToolTipText("Geometrie aus Adresse generieren");
+        btnCreateGeometrie.setMaximumSize(new Dimension(66, 50));
+        btnCreateGeometrie.setMinimumSize(new Dimension(20, 19));
+        btnCreateGeometrie.setPreferredSize(new Dimension(33, 24));
+        btnCreateGeometrie.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnCreateGeometrieActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDaten.add(btnCreateGeometrie, gridBagConstraints);
+        btnCreateGeometrie.setVisible(isEditor());
+
         lblOrt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblOrt.setText("Ortsbeschreibung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -925,7 +940,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -939,7 +954,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblStadtweit.setText("Stadtweit:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -955,7 +970,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -965,7 +980,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblStadtbezirke.setText("Stadtbezirke:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -994,47 +1009,51 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(panSbz, gridBagConstraints);
 
-        lblThema.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblThema.setText("Thema:");
-        lblThema.setToolTipText("");
+        lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblThema, gridBagConstraints);
+        panDaten.add(lblGeom, gridBagConstraints);
 
-        cbThema.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        if (isEditor()){
+            cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_thema}"), cbThema, BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
+            bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(cbThema, gridBagConstraints);
+        }
+        if (isEditor()){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            panDaten.add(cbGeom, gridBagConstraints);
+        }
 
         lblVeroeffentlicht.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblVeroeffentlicht.setText("Veröffentlicht:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1050,7 +1069,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1061,7 +1080,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblBeschreibung.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1094,7 +1113,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -1109,24 +1128,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDaten.add(filler3, gridBagConstraints);
-
-        btnCreateGeometrie.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
-        btnCreateGeometrie.setToolTipText("Geometrie aus Adresse generieren");
-        btnCreateGeometrie.setMaximumSize(new Dimension(66, 50));
-        btnCreateGeometrie.setMinimumSize(new Dimension(20, 19));
-        btnCreateGeometrie.setPreferredSize(new Dimension(33, 24));
-        btnCreateGeometrie.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnCreateGeometrieActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = GridBagConstraints.EAST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(btnCreateGeometrie, gridBagConstraints);
-        btnCreateGeometrie.setVisible(isEditor());
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2132,40 +2133,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreateGeometrieActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnCreateGeometrieActionPerformed
-        if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__HNR) != null)) {
-            final CidsBean beanHnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR);
-            int result = JOptionPane.OK_OPTION;
-            if (getCidsBean().getProperty(FIELD__GEOM) != null) {
-                final Object[] options = { "Ja, Geom überschreiben", "Abbrechen" };
-                result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
-                        NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_GEOMQUESTION),
-                        NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_GEOMWRITE),
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.WARNING_MESSAGE,
-                        null,
-                        options,
-                        options[1]);
-            }
-            if ((result == JOptionPane.CLOSED_OPTION) || (result == 1)) {
-                return;
-            } else {
-                final CidsBean beanAdresse = (CidsBean)beanHnr.getProperty(FIELD__HNR_GEOM);
-                final CidsBean beanNewGeometrie = CidsBeanSupport.cloneBean(
-                        beanAdresse,
-                        getConnectionContext(),
-                        TABLE_GEOM);
-                try {
-                    this.getCidsBean().setProperty(FIELD__GEOM, beanNewGeometrie);
-                } catch (Exception ex) {
-                    Exceptions.printStackTrace(ex);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOGEOMCREATE),
-                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_TITLE),
-                JOptionPane.WARNING_MESSAGE);
-        }
+        setGeomFromAdress();
     }//GEN-LAST:event_btnCreateGeometrieActionPerformed
 
     private void lstBeschluesseMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstBeschluesseMouseEntered
@@ -2504,6 +2472,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             setMapWindow();
             bindingGroup.bind();
             setTitle(getTitle());
+            stadtweitChoose();
             if (getCidsBean() != null) {
                 labelsPanels.addAll(Arrays.asList(blpStek));
                 loadDocuments(getCidsBean().getPrimaryKeyValue());
@@ -2606,6 +2575,48 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 Level.SEVERE,
                 null);
         JXErrorPane.showDialog(VkVorhabenEditor.this, info);
+    }
+    
+    /**
+     * DOCUMENT ME!
+     */
+    public void setGeomFromAdress() {
+        if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__HNR) != null)) {
+            int result = JOptionPane.OK_OPTION;
+            if (getCidsBean().getProperty(FIELD__GEOM) != null) {
+                final Object[] options = { "Ja, Geom überschreiben", "Abbrechen" };
+                result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
+                        NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_GEOMQUESTION),
+                        NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_GEOMWRITE),
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.WARNING_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+            }
+            if ((result == JOptionPane.CLOSED_OPTION) || (result == 1)) {
+                return;
+            } else {
+                if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__HNR) != null)) {
+            final CidsBean beanHnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR);
+            final CidsBean beanAdresse = (CidsBean)beanHnr.getProperty(FIELD__HNR_GEOM);
+            final CidsBean beanNewGeometrie = CidsBeanSupport.cloneBean(
+                    beanAdresse,
+                    getConnectionContext(),
+                    TABLE_GEOM);
+            try {
+                this.getCidsBean().setProperty(FIELD__GEOM, beanNewGeometrie);
+            } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+            }
+        } else {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOGEOMCREATE),
+                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_TITLE),
+                JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     /**
@@ -2837,6 +2848,27 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             LOG.warn("Map window not set.", ex);
         }
     }
+    
+    private void setStadtweitGeom(){
+        final int srid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode());
+        final BoundingBox initialBoundingBox = CismapBroker.getInstance()
+                    .getMappingComponent()
+                    .getMappingModel()
+                    .getInitialBoundingBox();
+        final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
+
+        final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
+                CidsBeanSupport.DOMAIN_NAME,
+                TABLE_GEOM,
+                getConnectionContext());
+        final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
+        try {
+            newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
+            getCidsBean().setProperty(FIELD__GEOM, newGeom);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -2992,6 +3024,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if (evt.getPropertyName().equals(FIELD__STADT)) {
             setStadtbezirke();
+            stadtweitChoose();
         }
         if (evt.getPropertyName().equals(FIELD__BB_URL)) {
             checkBB();
@@ -3002,6 +3035,32 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         if (evt.getPropertyName().equals(FIELD__BB)) {
             hatBB();
         }
+        if (evt.getPropertyName().equals(FIELD__HNR)) {
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {        
+                btnCreateGeometrie.doClick();
+            }
+        }
+    }
+    
+    private void stadtweitChoose(){
+        if (getCidsBean().getProperty(FIELD__STADT) == null || Objects.equals(getCidsBean().getProperty(FIELD__STADT),false)) {
+                cbHNr.setEnabled(true);
+                cbStrasse.setEnabled(true);
+            } else {
+                if (getCidsBean()!= null && getCidsBean().getProperty(FIELD__GEOM) == null){
+                    setStadtweitGeom();
+                }
+                try{
+                    getCidsBean().setProperty(FIELD__STRASSE, null);
+                    cbHNr.setSelectedItem(null);
+                    refreshHnr();
+                    cbHNr.setEnabled(false);
+                    cbStrasse.setEnabled(false);
+                } catch (Exception ex){
+                    LOG.error("set  adresse -stadtweit error.", ex);
+                }
+                
+            }
     }
     
     /**
