@@ -612,10 +612,10 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                 final Collection<Geometry> geomsBoth = new ArrayList<Geometry>();
 
                 for (final CidsBean bel : cidsBean.getBeanCollectionProperty("flurstuecke_belastet")) {
-                    geomsBel.add((Geometry)bel.getProperty("fs_referenz.umschreibendes_rechteck.geo_field"));
+                    geomsBel.add((Geometry)bel.getProperty("fs_referenz.umschreibendes_rechteck"));
                 }
                 for (final CidsBean beg : cidsBean.getBeanCollectionProperty("flurstuecke_beguenstigt")) {
-                    geomsBeg.add((Geometry)beg.getProperty("fs_referenz.umschreibendes_rechteck.geo_field"));
+                    geomsBeg.add((Geometry)beg.getProperty("fs_referenz.umschreibendes_rechteck"));
                 }
                 geomsBoth.addAll(geomsBel);
                 geomsBoth.addAll(geomsBeg);
@@ -664,8 +664,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
                 Collection<CidsBean> fs_kickers;
                 fs_kickers = CidsBeanSupport.getBeanCollectionFromProperty(baulast, "flurstuecke_belastet");
                 for (final CidsBean fs_kicker : fs_kickers) {
-                    final Geometry geom = (Geometry)fs_kicker.getProperty(
-                            "fs_referenz.umschreibendes_rechteck.geo_field");
+                    final Geometry geom = (Geometry)fs_kicker.getProperty("fs_referenz.umschreibendes_rechteck");
                     if (geom != null) {
                         geometries.add(geom);
                     }
@@ -673,8 +672,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
 
                 fs_kickers = CidsBeanSupport.getBeanCollectionFromProperty(baulast, "flurstuecke_beguenstigt");
                 for (final CidsBean fs_kicker : fs_kickers) {
-                    final Geometry geom = (Geometry)fs_kicker.getProperty(
-                            "fs_referenz.umschreibendes_rechteck.geo_field");
+                    final Geometry geom = (Geometry)fs_kicker.getProperty("fs_referenz.umschreibendes_rechteck");
                     if (geom != null) {
                         geometries.add(geom);
                     }
