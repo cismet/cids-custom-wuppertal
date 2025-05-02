@@ -96,8 +96,7 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
                 VkDokumentPanel.class.getSimpleName());
     }
                          
-    public static final String FIELD__ANZEIGE = "anzeige";                          
-    public static final String FIELD__BEMERKUNG = "bemerkung";                           
+    public static final String FIELD__ANZEIGE = "anzeige";                                
     public static final String FIELD__URL = "url";      
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";                 
 
@@ -105,6 +104,8 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
     public static final String TABLE__NAME = "vk_vorhaben_dokumente";
 
     public static final String BUNDLE_NOURL = "VkDokumentPanel.isOkForSaving().noUrl";
+    public static final String BUNDLE_ANZEIGE = "VkDokumentPanel.isOkForSaving().anzeige";
+    public static final String BUNDLE_ANZEIGE_EMPTY = "VkDokumentPanel.isOkForSaving().anzeigeEmpty";
     public static final String BUNDLE_WHICH = "VkDokumentPanel.isOkForSaving().welchesDokument";
     public static final String BUNDLE_PANE_PREFIX = "VkDokumentPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "VkDokumentPanel.isOkForSaving().JOptionPane.message.suffix";
@@ -112,6 +113,8 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
     
     public static final String BUNDLE_NOSAVE_MESSAGE = "VkDokumentPanel.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "VkDokumentPanel.noSave().title";
+    
+    private static final int MAX_ZEICHEN = 75;
     
     private static String PATH_DOKUMENTE;
     /**
@@ -270,7 +273,6 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
     private final boolean editor;
     @Getter private final VkDocumentLoader vkDocumentLoader;
     private CidsBean cidsBean;
-    private String saveBemerkung;
     private String saveAnzeige;
     private String saveUrl;
     
@@ -288,12 +290,6 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
                 switch (evt.getPropertyName()) {
                     case FIELD__ANZEIGE: {
                         if (evt.getNewValue() != saveAnzeige) {
-                            setChangeFlag();
-                        }
-                        break;
-                    }
-                    case FIELD__BEMERKUNG: {
-                        if (evt.getNewValue() != saveBemerkung) {
                             setChangeFlag();
                         }
                         break;
@@ -489,8 +485,6 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
             ? ((String)getCidsBean().getProperty(FIELD__ANZEIGE)) : null;
         saveUrl = (getCidsBean().getProperty(FIELD__URL) != null)
             ? ((String)getCidsBean().getProperty(FIELD__URL)) : null;
-        saveBemerkung = (getCidsBean().getProperty(FIELD__BEMERKUNG) != null)
-            ? ((String)getCidsBean().getProperty(FIELD__BEMERKUNG)) : null;
     }
     
     
@@ -594,6 +588,27 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
                 }
             } catch (final MissingResourceException ex) {
                 LOG.warn("url not given.", ex);
+                save = false;
+            }
+            
+            // Zeichenanzahl Anzeige
+            try {
+                if (saveDokumentBean.getProperty(FIELD__ANZEIGE) != null && 
+                        !saveDokumentBean.getProperty(FIELD__ANZEIGE).toString().isEmpty()) {
+                    if(saveDokumentBean.getProperty(FIELD__ANZEIGE).toString().length() > MAX_ZEICHEN){
+                        LOG.warn("Long Anzeige specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(VkDokumentPanel.class, BUNDLE_ANZEIGE));
+                        save = false;
+                    } else {
+                        if(saveDokumentBean.getProperty(FIELD__ANZEIGE).toString().trim().isEmpty()){
+                            LOG.warn("Empty Anzeige specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(VkDokumentPanel.class, BUNDLE_ANZEIGE_EMPTY));
+                            save = false;
+                        }
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("anzeige too long.", ex);
                 save = false;
             }
 

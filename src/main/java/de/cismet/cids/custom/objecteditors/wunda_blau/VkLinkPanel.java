@@ -72,6 +72,7 @@ import java.awt.EventQueue;
 import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
+import javax.swing.GroupLayout;
 import javax.swing.SwingWorker;
 
 /**
@@ -94,8 +95,7 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
                 VkLinkPanel.class.getSimpleName());
     }
                          
-    public static final String FIELD__ANZEIGE = "anzeige";                          
-    public static final String FIELD__BEMERKUNG = "bemerkung";                           
+    public static final String FIELD__ANZEIGE = "anzeige";                                
     public static final String FIELD__URL = "url";      
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";                 
 
@@ -103,6 +103,8 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
     public static final String TABLE__NAME = "vk_vorhaben_links";
 
     public static final String BUNDLE_NOURL = "VkLinkPanel.isOkForSaving().noUrl";
+    public static final String BUNDLE_ANZEIGE = "VkLinkPanel.isOkForSaving().anzeige";
+    public static final String BUNDLE_ANZEIGE_EMPTY = "VkLinkPanel.isOkForSaving().anzeigeEmpty";
     public static final String BUNDLE_WHICH = "VkLinkPanel.isOkForSaving().welcherLink";
     public static final String BUNDLE_PANE_PREFIX = "VkLinkPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "VkLinkPanel.isOkForSaving().JOptionPane.message.suffix";
@@ -111,6 +113,7 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
     public static final String BUNDLE_NOSAVE_MESSAGE = "VkLinkPanel.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "VkLinkPanel.noSave().title";
     
+    private static final int MAX_ZEICHEN = 75;
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -119,143 +122,141 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+        GridBagConstraints gridBagConstraints;
+        bindingGroup = new BindingGroup();
 
-        panDaten = new javax.swing.JPanel();
-        panLink = new javax.swing.JPanel();
-        lblAnzeige = new javax.swing.JLabel();
-        txtAnzeige = new javax.swing.JTextField();
-        lblUrl = new javax.swing.JLabel();
-        txtUrl = new javax.swing.JTextField();
-        panUrl = new javax.swing.JPanel();
-        lblUrlCheck = new javax.swing.JLabel();
-        panFillerUnten4 = new javax.swing.JPanel();
+        panDaten = new JPanel();
+        panLink = new JPanel();
+        lblAnzeige = new JLabel();
+        txtAnzeige = new JTextField();
+        lblUrl = new JLabel();
+        txtUrl = new JTextField();
+        panUrl = new JPanel();
+        lblUrlCheck = new JLabel();
+        panFillerUnten4 = new JPanel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new GridBagLayout());
 
         panDaten.setName("panDaten"); // NOI18N
         panDaten.setOpaque(false);
-        panDaten.setLayout(new java.awt.GridBagLayout());
+        panDaten.setLayout(new GridBagLayout());
 
-        panLink.setMinimumSize(new java.awt.Dimension(100, 10));
+        panLink.setMinimumSize(new Dimension(100, 10));
         panLink.setName("panLink"); // NOI18N
         panLink.setOpaque(false);
-        panLink.setPreferredSize(new java.awt.Dimension(520, 270));
-        panLink.setLayout(new java.awt.GridBagLayout());
+        panLink.setPreferredSize(new Dimension(520, 270));
+        panLink.setLayout(new GridBagLayout());
 
-        lblAnzeige.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblAnzeige, org.openide.util.NbBundle.getMessage(VkLinkPanel.class, "VkLinkPanel.lblAnzeige.text")); // NOI18N
+        lblAnzeige.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblAnzeige, NbBundle.getMessage(VkLinkPanel.class, "VkLinkPanel.lblAnzeige.text")); // NOI18N
         lblAnzeige.setName("lblAnzeige"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panLink.add(lblAnzeige, gridBagConstraints);
 
         txtAnzeige.setEnabled(false);
         txtAnzeige.setName("txtAnzeige"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzeige}"), txtAnzeige, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzeige}"), txtAnzeige, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panLink.add(txtAnzeige, gridBagConstraints);
 
-        lblUrl.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(lblUrl, org.openide.util.NbBundle.getMessage(VkLinkPanel.class, "VkLinkPanel.lblUrl.text")); // NOI18N
+        lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        Mnemonics.setLocalizedText(lblUrl, NbBundle.getMessage(VkLinkPanel.class, "VkLinkPanel.lblUrl.text")); // NOI18N
         lblUrl.setName("lblUrl"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panLink.add(lblUrl, gridBagConstraints);
 
         txtUrl.setEnabled(false);
         txtUrl.setName("txtUrl"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.url}"), txtUrl, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.url}"), txtUrl, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panLink.add(txtUrl, gridBagConstraints);
 
         panUrl.setName("panUrl"); // NOI18N
         panUrl.setOpaque(false);
-        panUrl.setLayout(new java.awt.GridBagLayout());
+        panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         lblUrlCheck.setName("lblUrlCheck"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         panUrl.add(lblUrlCheck, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panLink.add(panUrl, gridBagConstraints);
 
         panFillerUnten4.setName(""); // NOI18N
         panFillerUnten4.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUnten4Layout = new javax.swing.GroupLayout(panFillerUnten4);
+        GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
         panFillerUnten4.setLayout(panFillerUnten4Layout);
-        panFillerUnten4Layout.setHorizontalGroup(
-            panFillerUnten4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        panFillerUnten4Layout.setVerticalGroup(
-            panFillerUnten4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
         panLink.add(panFillerUnten4, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panDaten.add(panLink, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(panDaten, gridBagConstraints);
@@ -270,7 +271,6 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
     private final boolean editor;
     @Getter private final VkDocumentLoader vkDocumentLoader;
     private CidsBean cidsBean;
-    private String saveBemerkung;
     private String saveAnzeige;
     private String saveUrl;
     
@@ -292,12 +292,6 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
                         }
                         break;
                     }
-                    case FIELD__BEMERKUNG: {
-                        if (evt.getNewValue() != saveBemerkung) {
-                            setChangeFlag();
-                        }
-                        break;
-                    }
                     case FIELD__URL: {
                         if (evt.getNewValue() != saveUrl) {
                             setChangeFlag();
@@ -314,16 +308,16 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JLabel lblAnzeige;
-    javax.swing.JLabel lblUrl;
-    javax.swing.JLabel lblUrlCheck;
-    javax.swing.JPanel panDaten;
-    javax.swing.JPanel panFillerUnten4;
-    javax.swing.JPanel panLink;
-    javax.swing.JPanel panUrl;
-    javax.swing.JTextField txtAnzeige;
-    javax.swing.JTextField txtUrl;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    JLabel lblAnzeige;
+    JLabel lblUrl;
+    JLabel lblUrlCheck;
+    JPanel panDaten;
+    JPanel panFillerUnten4;
+    JPanel panLink;
+    JPanel panUrl;
+    JTextField txtAnzeige;
+    JTextField txtUrl;
+    private BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -487,8 +481,6 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
             ? ((String)getCidsBean().getProperty(FIELD__ANZEIGE)) : null;
         saveUrl = (getCidsBean().getProperty(FIELD__URL) != null)
             ? ((String)getCidsBean().getProperty(FIELD__URL)) : null;
-        saveBemerkung = (getCidsBean().getProperty(FIELD__BEMERKUNG) != null)
-            ? ((String)getCidsBean().getProperty(FIELD__BEMERKUNG)) : null;
     }
     
     
@@ -581,6 +573,27 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
                 }
             } catch (final MissingResourceException ex) {
                 LOG.warn("url not given.", ex);
+                save = false;
+            }
+            
+            // Zeichenanzahl Anzeige
+            try {
+                if (saveLinkBean.getProperty(FIELD__ANZEIGE) != null && 
+                        !saveLinkBean.getProperty(FIELD__ANZEIGE).toString().isEmpty()) {
+                    if(saveLinkBean.getProperty(FIELD__ANZEIGE).toString().length() > MAX_ZEICHEN){
+                        LOG.warn("Long Anzeige specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(VkLinkPanel.class, BUNDLE_ANZEIGE));
+                        save = false;
+                    } else {
+                        if(saveLinkBean.getProperty(FIELD__ANZEIGE).toString().trim().isEmpty()){
+                            LOG.warn("Empty Anzeige specified. Skip persisting.");
+                            errorMessage.append(NbBundle.getMessage(VkLinkPanel.class, BUNDLE_ANZEIGE_EMPTY));
+                            save = false;
+                        }
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("anzeige too long.", ex);
                 save = false;
             }
 
