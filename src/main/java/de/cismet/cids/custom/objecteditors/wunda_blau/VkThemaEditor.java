@@ -58,6 +58,7 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -107,6 +108,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
     private JColorChooser jColorChooser;
     private JLabel lblBeschreibung;
     private JLabel lblFarbe;
+    private JLabel lblFuellung;
     private JLabel lblIcon;
     private JLabel lblName;
     private JPanel panBeschreibung;
@@ -116,6 +118,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
     private JPanel panMenButtonsColor;
     private JPanel panName;
     private JScrollPane scpBeschreibung;
+    JSpinner spFuellung;
     private JTextArea taBeschreibung;
     private JTextField txtFarbe;
     private JTextField txtFarbeZeigen;
@@ -197,6 +200,8 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         txtFarbe = new JTextField();
         btnChooseColor = new JButton();
         txtFarbeZeigen = new JTextField();
+        lblFuellung = new JLabel();
+        spFuellung = new JSpinner();
         lblBeschreibung = new JLabel();
         panBeschreibung = new JPanel();
         scpBeschreibung = new JScrollPane();
@@ -312,7 +317,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblName, gridBagConstraints);
 
         Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
@@ -334,7 +339,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblIcon, gridBagConstraints);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.signatur}"), txtIcon, BeanProperty.create("text"));
@@ -356,7 +361,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblFarbe, gridBagConstraints);
 
         txtFarbe.setEnabled(false);
@@ -396,15 +401,42 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtFarbeZeigen, gridBagConstraints);
 
+        lblFuellung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFuellung.setText("Flächenfüllung:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panName.add(lblFuellung, gridBagConstraints);
+
+        spFuellung.setFont(new Font("Dialog", 0, 12)); // NOI18N
+        spFuellung.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+        spFuellung.setPreferredSize(new Dimension(75, 25));
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fuellung}"), spFuellung, BeanProperty.create("value"));
+        binding.setSourceNullValue(0);
+        binding.setSourceUnreadableValue(0);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panName.add(spFuellung, gridBagConstraints);
+
         lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBeschreibung.setText("Beschreibung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblBeschreibung, gridBagConstraints);
 
         panBeschreibung.setOpaque(false);
@@ -433,9 +465,9 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
