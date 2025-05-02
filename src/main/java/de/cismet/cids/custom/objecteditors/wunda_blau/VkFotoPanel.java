@@ -99,8 +99,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
     }
     public static final int FOTO_WIDTH = 500;
                          
-    public static final String FIELD__ANZEIGE = "anzeige";                          
-    public static final String FIELD__BEMERKUNG = "bemerkung";                           
+    public static final String FIELD__ANZEIGE = "anzeige";                            
     public static final String FIELD__URL = "url";      
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";                 
 
@@ -272,7 +271,6 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
     private final boolean editor;
     @Getter private final VkDocumentLoader vkDocumentLoader;
     private CidsBean cidsBean;
-    private String saveBemerkung;
     private String saveAnzeige;
     private String saveUrl;
     
@@ -290,12 +288,6 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
                 switch (evt.getPropertyName()) {
                     case FIELD__ANZEIGE: {
                         if (evt.getNewValue() != saveAnzeige) {
-                            setChangeFlag();
-                        }
-                        break;
-                    }
-                    case FIELD__BEMERKUNG: {
-                        if (evt.getNewValue() != saveBemerkung) {
                             setChangeFlag();
                         }
                         break;
@@ -566,8 +558,6 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
             ? ((String)getCidsBean().getProperty(FIELD__ANZEIGE)) : null;
         saveUrl = (getCidsBean().getProperty(FIELD__URL) != null)
             ? ((String)getCidsBean().getProperty(FIELD__URL)) : null;
-        saveBemerkung = (getCidsBean().getProperty(FIELD__BEMERKUNG) != null)
-            ? ((String)getCidsBean().getProperty(FIELD__BEMERKUNG)) : null;
     }
     
     
