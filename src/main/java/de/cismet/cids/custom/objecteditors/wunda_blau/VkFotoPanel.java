@@ -45,8 +45,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
@@ -131,12 +129,9 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         bindingGroup = new BindingGroup();
 
         panDaten = new JPanel();
-        panLink = new JPanel();
+        panFoto = new JPanel();
         lblAnzeige = new JLabel();
         txtAnzeige = new JTextField();
-        lblBemerkung = new JLabel();
-        scpBemerkung = new JScrollPane();
-        taBemerkung = new JTextArea();
         lblUrl = new JLabel();
         txtUrl = new JTextField();
         panUrl = new JPanel();
@@ -151,11 +146,11 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
 
-        panLink.setMinimumSize(new Dimension(100, 10));
-        panLink.setName("panLink"); // NOI18N
-        panLink.setOpaque(false);
-        panLink.setPreferredSize(new Dimension(520, 270));
-        panLink.setLayout(new GridBagLayout());
+        panFoto.setMinimumSize(new Dimension(100, 10));
+        panFoto.setName("panFoto"); // NOI18N
+        panFoto.setOpaque(false);
+        panFoto.setPreferredSize(new Dimension(520, 270));
+        panFoto.setLayout(new GridBagLayout());
 
         lblAnzeige.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblAnzeige, NbBundle.getMessage(VkFotoPanel.class, "VkFotoPanel.lblAnzeige.text")); // NOI18N
@@ -167,7 +162,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panLink.add(lblAnzeige, gridBagConstraints);
+        panFoto.add(lblAnzeige, gridBagConstraints);
 
         txtAnzeige.setEnabled(false);
         txtAnzeige.setName("txtAnzeige"); // NOI18N
@@ -182,44 +177,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panLink.add(txtAnzeige, gridBagConstraints);
-
-        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
-        lblBemerkung.setName("lblBemerkung"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panLink.add(lblBemerkung, gridBagConstraints);
-
-        scpBemerkung.setName("scpBemerkung"); // NOI18N
-
-        taBemerkung.setLineWrap(true);
-        taBemerkung.setRows(2);
-        taBemerkung.setWrapStyleWord(true);
-        taBemerkung.setEnabled(false);
-        taBemerkung.setName("taBemerkung"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
-        scpBemerkung.setViewportView(taBemerkung);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 0, 2);
-        panLink.add(scpBemerkung, gridBagConstraints);
+        panFoto.add(txtAnzeige, gridBagConstraints);
 
         lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblUrl, NbBundle.getMessage(VkFotoPanel.class, "VkFotoPanel.lblUrl.text")); // NOI18N
@@ -231,7 +189,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panLink.add(lblUrl, gridBagConstraints);
+        panFoto.add(lblUrl, gridBagConstraints);
 
         txtUrl.setEnabled(false);
         txtUrl.setName("txtUrl"); // NOI18N
@@ -246,7 +204,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panLink.add(txtUrl, gridBagConstraints);
+        panFoto.add(txtUrl, gridBagConstraints);
 
         panUrl.setName("panUrl"); // NOI18N
         panUrl.setOpaque(false);
@@ -266,13 +224,13 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panLink.add(panUrl, gridBagConstraints);
+        panFoto.add(panUrl, gridBagConstraints);
 
         lblFotoAnzeigen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblFotoAnzeigen.setName("lblFotoAnzeigen"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -281,7 +239,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 4);
-        panLink.add(lblFotoAnzeigen, gridBagConstraints);
+        panFoto.add(lblFotoAnzeigen, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -290,7 +248,7 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panDaten.add(panLink, gridBagConstraints);
+        panDaten.add(panFoto, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -355,15 +313,12 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JLabel lblAnzeige;
-    JLabel lblBemerkung;
     JLabel lblFotoAnzeigen;
     JLabel lblUrl;
     JLabel lblUrlCheck;
     JPanel panDaten;
-    JPanel panLink;
+    JPanel panFoto;
     JPanel panUrl;
-    JScrollPane scpBemerkung;
-    JTextArea taBemerkung;
     JTextField txtAnzeige;
     JTextField txtUrl;
     private BindingGroup bindingGroup;
@@ -432,7 +387,6 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
     private void setReadOnly() {
         if (!isEditor()) {
             RendererTools.makeReadOnly(txtAnzeige);
-            RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(txtUrl);
         }
     }
@@ -674,7 +628,6 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
      */
     private void nullNoEdit(final boolean edit) {
         txtAnzeige.setEnabled(edit);
-        taBemerkung.setEnabled(edit);
         txtUrl.setEnabled(edit);
     }
 

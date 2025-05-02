@@ -45,8 +45,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
@@ -75,6 +73,7 @@ import java.awt.EventQueue;
 import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
+import javax.swing.GroupLayout;
 import javax.swing.SwingWorker;
 
 /**
@@ -126,16 +125,14 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         bindingGroup = new BindingGroup();
 
         panDaten = new JPanel();
-        panLink = new JPanel();
+        panDokument = new JPanel();
         lblAnzeige = new JLabel();
         txtAnzeige = new JTextField();
-        lblBemerkung = new JLabel();
-        scpBemerkung = new JScrollPane();
-        taBemerkung = new JTextArea();
         lblUrl = new JLabel();
         txtUrl = new JTextField();
         panUrl = new JPanel();
         lblUrlCheck = new JLabel();
+        panFillerUnten4 = new JPanel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -145,11 +142,11 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         panDaten.setOpaque(false);
         panDaten.setLayout(new GridBagLayout());
 
-        panLink.setMinimumSize(new Dimension(100, 10));
-        panLink.setName("panLink"); // NOI18N
-        panLink.setOpaque(false);
-        panLink.setPreferredSize(new Dimension(520, 270));
-        panLink.setLayout(new GridBagLayout());
+        panDokument.setMinimumSize(new Dimension(100, 10));
+        panDokument.setName("panDokument"); // NOI18N
+        panDokument.setOpaque(false);
+        panDokument.setPreferredSize(new Dimension(520, 270));
+        panDokument.setLayout(new GridBagLayout());
 
         lblAnzeige.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblAnzeige, NbBundle.getMessage(VkDokumentPanel.class, "VkDokumentPanel.lblAnzeige.text")); // NOI18N
@@ -161,7 +158,7 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panLink.add(lblAnzeige, gridBagConstraints);
+        panDokument.add(lblAnzeige, gridBagConstraints);
 
         txtAnzeige.setEnabled(false);
         txtAnzeige.setName("txtAnzeige"); // NOI18N
@@ -176,45 +173,7 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panLink.add(txtAnzeige, gridBagConstraints);
-
-        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblBemerkung, "Bemerkung:");
-        lblBemerkung.setName("lblBemerkung"); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panLink.add(lblBemerkung, gridBagConstraints);
-
-        scpBemerkung.setName("scpBemerkung"); // NOI18N
-
-        taBemerkung.setLineWrap(true);
-        taBemerkung.setRows(2);
-        taBemerkung.setWrapStyleWord(true);
-        taBemerkung.setEnabled(false);
-        taBemerkung.setName("taBemerkung"); // NOI18N
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
-        scpBemerkung.setViewportView(taBemerkung);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 0, 2);
-        panLink.add(scpBemerkung, gridBagConstraints);
+        panDokument.add(txtAnzeige, gridBagConstraints);
 
         lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblUrl, NbBundle.getMessage(VkDokumentPanel.class, "VkDokumentPanel.lblUrl.text")); // NOI18N
@@ -226,7 +185,7 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panLink.add(lblUrl, gridBagConstraints);
+        panDokument.add(lblUrl, gridBagConstraints);
 
         txtUrl.setEnabled(false);
         txtUrl.setName("txtUrl"); // NOI18N
@@ -241,7 +200,7 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panLink.add(txtUrl, gridBagConstraints);
+        panDokument.add(txtUrl, gridBagConstraints);
 
         panUrl.setName("panUrl"); // NOI18N
         panUrl.setOpaque(false);
@@ -261,7 +220,28 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panLink.add(panUrl, gridBagConstraints);
+        panDokument.add(panUrl, gridBagConstraints);
+
+        panFillerUnten4.setName(""); // NOI18N
+        panFillerUnten4.setOpaque(false);
+
+        GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
+        panFillerUnten4.setLayout(panFillerUnten4Layout);
+        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        panDokument.add(panFillerUnten4, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -270,7 +250,7 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panDaten.add(panLink, gridBagConstraints);
+        panDaten.add(panDokument, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -335,14 +315,12 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JLabel lblAnzeige;
-    JLabel lblBemerkung;
     JLabel lblUrl;
     JLabel lblUrlCheck;
     JPanel panDaten;
-    JPanel panLink;
+    JPanel panDokument;
+    JPanel panFillerUnten4;
     JPanel panUrl;
-    JScrollPane scpBemerkung;
-    JTextArea taBemerkung;
     JTextField txtAnzeige;
     JTextField txtUrl;
     private BindingGroup bindingGroup;
@@ -411,7 +389,6 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
     private void setReadOnly() {
         if (!isEditor()) {
             RendererTools.makeReadOnly(txtAnzeige);
-            RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(txtUrl);
         }
     }
@@ -578,7 +555,6 @@ public class VkDokumentPanel extends javax.swing.JPanel implements Disposable,
      */
     private void nullNoEdit(final boolean edit) {
         txtAnzeige.setEnabled(edit);
-        taBemerkung.setEnabled(edit);
         txtUrl.setEnabled(edit);
     }
     

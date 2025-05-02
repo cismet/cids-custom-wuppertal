@@ -21,10 +21,8 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.MultiPolygon;
 
 import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 
 
 import org.apache.log4j.Logger;
@@ -658,15 +656,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         jPanelDokumente = new JPanel();
-        jPanelDokDokumente = new JPanel();
-        lblDokumente = new JLabel();
-        vkDokumentPanel = vkDokumentPanel = new VkDokumentPanel(this.getVkDocumentLoader());
-        lblLadenDokumente = new JLabel();
-        scpDokumente = new JScrollPane();
-        lstDokumente = new JList();
-        panControlsNewDokumente = new JPanel();
-        btnAddNewDokument = new JButton();
-        btnRemoveDokument = new JButton();
         panFillerUnten5 = new JPanel();
         jPanelExt = new JPanel();
         jPanelDokBeschluesse = new JPanel();
@@ -687,6 +676,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewLinks = new JPanel();
         btnAddNewLink = new JButton();
         btnRemoveLink = new JButton();
+        jPanelDokDokumente = new JPanel();
+        lblDokumente = new JLabel();
+        vkDokumentPanel = vkDokumentPanel = new VkDokumentPanel(this.getVkDocumentLoader());
+        lblLadenDokumente = new JLabel();
+        scpDokumente = new JScrollPane();
+        lstDokumente = new JList();
+        panControlsNewDokumente = new JPanel();
+        btnAddNewDokument = new JButton();
+        btnRemoveDokument = new JButton();
         panFillerUnten4 = new JPanel();
         jPanelFotos = new JPanel();
         jPanelFoto = new JPanel();
@@ -1643,113 +1641,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelDokumente.setOpaque(false);
         jPanelDokumente.setLayout(new GridBagLayout());
 
-        jPanelDokDokumente.setOpaque(false);
-        jPanelDokDokumente.setLayout(new GridBagLayout());
-
-        lblDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblDokumente.setText("Dokumente:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        jPanelDokDokumente.add(lblDokumente, gridBagConstraints);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstDokumente, ELProperty.create("${selectedElement}"), vkDokumentPanel, BeanProperty.create("cidsBean"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
-        jPanelDokDokumente.add(vkDokumentPanel, gridBagConstraints);
-
-        lblLadenDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblLadenDokumente.setForeground(new Color(153, 153, 153));
-        lblLadenDokumente.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
-        jPanelDokDokumente.add(lblLadenDokumente, gridBagConstraints);
-
-        scpDokumente.setPreferredSize(new Dimension(80, 130));
-
-        lstDokumente.setModel(new DefaultListModel<>());
-        lstDokumente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lstDokumente.setFixedCellWidth(75);
-        scpDokumente.setViewportView(lstDokumente);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(1, 0, 0, 0);
-        jPanelDokDokumente.add(scpDokumente, gridBagConstraints);
-
-        panControlsNewDokumente.setOpaque(false);
-        panControlsNewDokumente.setLayout(new GridBagLayout());
-
-        btnAddNewDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddNewDokument.setEnabled(false);
-        btnAddNewDokument.setMaximumSize(new Dimension(39, 20));
-        btnAddNewDokument.setMinimumSize(new Dimension(39, 20));
-        btnAddNewDokument.setPreferredSize(new Dimension(25, 20));
-        btnAddNewDokument.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddNewDokumentActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsNewDokumente.add(btnAddNewDokument, gridBagConstraints);
-
-        btnRemoveDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveDokument.setEnabled(false);
-        btnRemoveDokument.setMaximumSize(new Dimension(39, 20));
-        btnRemoveDokument.setMinimumSize(new Dimension(39, 20));
-        btnRemoveDokument.setPreferredSize(new Dimension(25, 20));
-        btnRemoveDokument.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveDokumentActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panControlsNewDokumente.add(btnRemoveDokument, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
-        jPanelDokDokumente.add(panControlsNewDokumente, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
-        jPanelDokumente.add(jPanelDokDokumente, gridBagConstraints);
-
         panFillerUnten5.setName(""); // NOI18N
         panFillerUnten5.setOpaque(false);
 
@@ -2000,6 +1891,113 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
         jPanelExt.add(jPanelDokLinks, gridBagConstraints);
 
+        jPanelDokDokumente.setOpaque(false);
+        jPanelDokDokumente.setLayout(new GridBagLayout());
+
+        lblDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblDokumente.setText("Dokumente-abgelegt:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        jPanelDokDokumente.add(lblDokumente, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstDokumente, ELProperty.create("${selectedElement}"), vkDokumentPanel, BeanProperty.create("cidsBean"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(0, 5, 0, 0);
+        jPanelDokDokumente.add(vkDokumentPanel, gridBagConstraints);
+
+        lblLadenDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLadenDokumente.setForeground(new Color(153, 153, 153));
+        lblLadenDokumente.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+        jPanelDokDokumente.add(lblLadenDokumente, gridBagConstraints);
+
+        scpDokumente.setPreferredSize(new Dimension(80, 130));
+
+        lstDokumente.setModel(new DefaultListModel<>());
+        lstDokumente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstDokumente.setFixedCellWidth(75);
+        scpDokumente.setViewportView(lstDokumente);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(1, 0, 0, 0);
+        jPanelDokDokumente.add(scpDokumente, gridBagConstraints);
+
+        panControlsNewDokumente.setOpaque(false);
+        panControlsNewDokumente.setLayout(new GridBagLayout());
+
+        btnAddNewDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewDokument.setEnabled(false);
+        btnAddNewDokument.setMaximumSize(new Dimension(39, 20));
+        btnAddNewDokument.setMinimumSize(new Dimension(39, 20));
+        btnAddNewDokument.setPreferredSize(new Dimension(25, 20));
+        btnAddNewDokument.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnAddNewDokumentActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewDokumente.add(btnAddNewDokument, gridBagConstraints);
+
+        btnRemoveDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveDokument.setEnabled(false);
+        btnRemoveDokument.setMaximumSize(new Dimension(39, 20));
+        btnRemoveDokument.setMinimumSize(new Dimension(39, 20));
+        btnRemoveDokument.setPreferredSize(new Dimension(25, 20));
+        btnRemoveDokument.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnRemoveDokumentActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panControlsNewDokumente.add(btnRemoveDokument, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(0, 0, 5, 0);
+        jPanelDokDokumente.add(panControlsNewDokumente, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        jPanelExt.add(jPanelDokDokumente, gridBagConstraints);
+
         panFillerUnten4.setName(""); // NOI18N
         panFillerUnten4.setOpaque(false);
 
@@ -2030,7 +2028,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelFoto.setLayout(new GridBagLayout());
 
         lblFotos.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblFotos.setText("Dokumente:");
+        lblFotos.setText("Fotos:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -2203,7 +2201,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnCreateGeometrieActionPerformed
 
     private void lstBeschluesseMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstBeschluesseMouseEntered
-        vkBeschlussPanel.taBemerkung.requestFocus();
+        
     }//GEN-LAST:event_lstBeschluesseMouseEntered
 
     private void btnAddNewBeschlussActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewBeschlussActionPerformed
@@ -2271,7 +2269,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnRemoveBeschlussActionPerformed
 
     private void lstLinksMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstLinksMouseEntered
-        vkLinkPanel.taBemerkung.requestFocus();
+        
     }//GEN-LAST:event_lstLinksMouseEntered
 
     private void btnAddNewLinkActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddNewLinkActionPerformed
@@ -2467,7 +2465,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnRemoveFotoActionPerformed
 
     private void lstFotosMouseEntered(MouseEvent evt) {//GEN-FIRST:event_lstFotosMouseEntered
-        vkFotoPanel.taBemerkung.requestFocus();
+        
     }//GEN-LAST:event_lstFotosMouseEntered
 
     
