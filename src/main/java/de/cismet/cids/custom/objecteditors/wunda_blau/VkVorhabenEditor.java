@@ -104,6 +104,7 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -134,8 +135,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         new DefaultBindableReferenceCombo.NullableOption(null, "-");
     private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION = null;
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    private static DateFormat YEAR_FORMAT = new SimpleDateFormat("yyyy");
 
-   
+ 
     private static String MAPURL;
     private static Double BUFFER;
 
@@ -145,6 +147,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private static final Logger LOG = Logger.getLogger(VkVorhabenEditor.class);
 
     public static final String FIELD__ID = "id";
+    public static final String FIELD__TITEL = "titel";
+    public static final String FIELD__THEMA = "fk_thema";
+    public static final String FIELD__BESCHREIBUNG = "beschreibung";
     public static final String FIELD__ANLEGER = "anleger";
     public static final String FIELD__ANGELEGT = "angelegt";
     public static final String FIELD__BEARBEITER = "letzter_bearbeiter";
@@ -183,6 +188,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String TABLE_NAME_FOTOS = "vk_vorhaben_fotos";
 
     public static final String BUNDLE_NOGEOM = "VkVorhabenEditor.isOkForSaving().noGeom";
+    public static final String BUNDLE_NOTHEMA = "VkVorhabenEditor.isOkForSaving().noThema";
+    public static final String BUNDLE_NOTITEL = "VkVorhabenEditor.isOkForSaving().noTitel";
+    public static final String BUNDLE_NOBESCH = "VkVorhabenEditor.isOkForSaving().noBeschreibung";
+    public static final String BUNDLE_PASTYEAR = "VkVorhabenEditor.isOkForSaving().pastYear";
     
     public static final String BUNDLE_PANE_PREFIX = "VkVorhabenEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "VkVorhabenEditor.isOkForSaving().JOptionPane.message.suffix";
@@ -2890,7 +2899,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             // lblHNrRenderer.setVisible(true);
             // RendererTools.makeReadOnly(cbHNr);
             RendererTools.makeReadOnly(cbThema);
-            RendererTools.makeReadOnly(cbThema);
             RendererTools.makeReadOnly(cbKontakt);
             RendererTools.makeReadOnly(chAbgeschlossen);
             RendererTools.makeReadOnly(blpStek);
@@ -3419,107 +3427,120 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 return false;
             }
         
-        boolean save = true;
-        boolean noErrorOccured = true;
-        boolean testErgebnis = true;
-        final StringBuilder errorMessage = new StringBuilder();
+            boolean save = true;
+            boolean noErrorOccured = true;
+            boolean testErgebnis = true;
+            final StringBuilder errorMessage = new StringBuilder();
 
-        for (final CidsBean beanBeschluss
-                    : getVkDocumentLoader().getMapValueBeschluesse(getCidsBean().getPrimaryKeyValue())) {
-            try {
-                testErgebnis = vkBeschlussPanel.isOkForSaving(beanBeschluss);
-                if (!testErgebnis) {
+            for (final CidsBean beanBeschluss
+                        : getVkDocumentLoader().getMapValueBeschluesse(getCidsBean().getPrimaryKeyValue())) {
+                try {
+                    testErgebnis = vkBeschlussPanel.isOkForSaving(beanBeschluss);
+                    if (!testErgebnis) {
+                        noErrorOccured = false;
+                        break;
+                    }
+                } catch (final Exception ex) {
                     noErrorOccured = false;
-                    break;
+                    LOG.error("Fehler beim Speicher-Check der Beschluesse.", ex);
                 }
-            } catch (final Exception ex) {
-                noErrorOccured = false;
-                LOG.error("Fehler beim Speicher-Check der Beschluesse.", ex);
             }
-        }
-        
-        for (final CidsBean beanLink
-                    : getVkDocumentLoader().getMapValueLinks(getCidsBean().getPrimaryKeyValue())) {
-            try {
-                testErgebnis = vkLinkPanel.isOkForSaving(beanLink);
-                if (!testErgebnis) {
+
+            for (final CidsBean beanLink
+                        : getVkDocumentLoader().getMapValueLinks(getCidsBean().getPrimaryKeyValue())) {
+                try {
+                    testErgebnis = vkLinkPanel.isOkForSaving(beanLink);
+                    if (!testErgebnis) {
+                        noErrorOccured = false;
+                        break;
+                    }
+                } catch (final Exception ex) {
                     noErrorOccured = false;
-                    break;
+                    LOG.error("Fehler beim Speicher-Check der Links.", ex);
                 }
-            } catch (final Exception ex) {
-                noErrorOccured = false;
-                LOG.error("Fehler beim Speicher-Check der Links.", ex);
             }
-        }
-        
-        
-        for (final CidsBean beanDokument
-                    : getVkDocumentLoader().getMapValueDokumente(getCidsBean().getPrimaryKeyValue())) {
-            try {
-                testErgebnis = vkDokumentPanel.isOkForSaving(beanDokument);
-                if (!testErgebnis) {
+
+
+            for (final CidsBean beanDokument
+                        : getVkDocumentLoader().getMapValueDokumente(getCidsBean().getPrimaryKeyValue())) {
+                try {
+                    testErgebnis = vkDokumentPanel.isOkForSaving(beanDokument);
+                    if (!testErgebnis) {
+                        noErrorOccured = false;
+                        break;
+                    }
+                } catch (final Exception ex) {
                     noErrorOccured = false;
-                    break;
+                    LOG.error("Fehler beim Speicher-Check der Dokumente.", ex);
                 }
-            } catch (final Exception ex) {
-                noErrorOccured = false;
-                LOG.error("Fehler beim Speicher-Check der Dokumente.", ex);
             }
-        }
-        
-        for (final CidsBean beanFoto
-                    : getVkDocumentLoader().getMapValueFotos(getCidsBean().getPrimaryKeyValue())) {
-            try {
-                testErgebnis = vkFotoPanel.isOkForSaving(beanFoto);
-                if (!testErgebnis) {
+
+            for (final CidsBean beanFoto
+                        : getVkDocumentLoader().getMapValueFotos(getCidsBean().getPrimaryKeyValue())) {
+                try {
+                    testErgebnis = vkFotoPanel.isOkForSaving(beanFoto);
+                    if (!testErgebnis) {
+                        noErrorOccured = false;
+                        break;
+                    }
+                } catch (final Exception ex) {
                     noErrorOccured = false;
-                    break;
+                    LOG.error("Fehler beim Speicher-Check der Fotos.", ex);
                 }
-            } catch (final Exception ex) {
-                noErrorOccured = false;
-                LOG.error("Fehler beim Speicher-Check der Fotos.", ex);
             }
-        }
-        
-    /*
-            // Melder
+
+            // titel vorhanden
             try {
-                if (getCidsBean().getProperty(FIELD__MELDER) == null) {
-                    LOG.warn("No melder specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOMELDER));
+                if (getCidsBean().getProperty(FIELD__TITEL) == null || 
+                        getCidsBean().getProperty(FIELD__TITEL).toString().trim().isEmpty()) {
+                    LOG.warn("No titel specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOTITEL));
                     save = false;
                 }
             } catch (final MissingResourceException ex) {
-                LOG.warn("melder not given.", ex);
+                LOG.warn("titel not given.", ex);
                 save = false;
             }
 
-            // Beteiligte Einsatz
+            // thema vorhanden
             try {
-                final Collection<CidsBean> collectionBeteiligteE = getCidsBean().getBeanCollectionProperty(
-                        FIELD__BETEILIGTE_E_ARR);
-                if ((collectionBeteiligteE == null) || collectionBeteiligteE.isEmpty()) {
-                    LOG.warn("No beteiligte einsatz specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOBETE));
+                if (getCidsBean().getProperty(FIELD__THEMA) == null) {
+                    LOG.warn("No thema specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOTHEMA));
                     save = false;
-                } else {
-                    Boolean keiner = false;
-                    for (final CidsBean betBean : collectionBeteiligteE) {
-                        if ((betBean.getProperty(FIELD__BET_SCHLUESSEL)).toString().equals(BET_KEINER)) {
-                            keiner = true;
-                        }
-                    }
-                    if (keiner && (collectionBeteiligteE.size() > 1)) {
-                        LOG.warn("keiner + specified. Skip persisting.");
-                        errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_BETKEINER));
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("thema not given.", ex);
+                save = false;
+            }
+
+            // Beschreibung vorhanden wenn veroeffentlicht
+            try {
+                if(Objects.equals(getCidsBean().getProperty(FIELD__VEROEFFENTLICHT), true)) {
+                    if (getCidsBean().getProperty(FIELD__BESCHREIBUNG) == null) {
+                        LOG.warn("No beschreibung specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOBESCH));
                         save = false;
                     }
                 }
             } catch (final MissingResourceException ex) {
-                LOG.warn("beteiligte einsatz not given.", ex);
+                LOG.warn("beschreibung not given.", ex);
                 save = false;
+
             }
-    */
+            
+            //Ende nicht vor angelegt
+            if (getCidsBean().getProperty(FIELD__ANGELEGT) != null && 
+                    getCidsBean().getProperty(FIELD__JAHR) != null) {
+                final String jahrAngelegt = YEAR_FORMAT.format((Date) getCidsBean().getProperty(FIELD__ANGELEGT));
+                final String jahrGeplant = getCidsBean().getProperty(FIELD__JAHR).toString();
+                 if (Integer.parseInt(jahrGeplant) < Integer.parseInt(jahrAngelegt)) {
+                    LOG.warn("Wrong enddatum specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PASTYEAR));
+                    save = false;
+                }
+            }
+
 
             // georeferenz muss gefüllt sein
             try {
