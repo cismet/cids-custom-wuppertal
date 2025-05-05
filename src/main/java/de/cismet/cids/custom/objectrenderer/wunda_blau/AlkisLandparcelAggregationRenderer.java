@@ -1136,9 +1136,9 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             this.selected = selected;
             this.gemarkung = cidsBean.getProperty("gemarkung").toString();
             this.bezeichnung = cidsBean.getProperty("bezeichnung").toString();
-            if (cidsBean.getProperty("geometrie.geo_field") instanceof Geometry) {
+            if (cidsBean.getProperty("geometrie") instanceof Geometry) {
                 this.geometry = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
-                            "geometrie.geo_field"),
+                            "geometrie"),
                         ClientAlkisConf.getInstance().getSrsService());
             }
 
