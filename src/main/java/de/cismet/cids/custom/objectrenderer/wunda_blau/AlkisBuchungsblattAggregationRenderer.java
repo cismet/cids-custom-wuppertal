@@ -1118,7 +1118,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             this.features = new LinkedList<StyledFeature>();
 
             for (final CidsBean landparcel : this.cidsBean.getBeanCollectionProperty("landparcels")) {
-                final Object geometry = landparcel.getProperty("geometrie.geo_field");
+                final Object geometry = landparcel.getProperty("geometrie");
                 if (geometry instanceof Geometry) {
                     final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs((Geometry)geometry,
                             ClientAlkisConf.getInstance().getSrsService());

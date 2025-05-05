@@ -2298,7 +2298,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     final CidsBean currentBean = tmp.get(landParcel3A.getLandparcelCode());
                     if (currentBean != null) {
                         landParcel3A.setFullObjectID((Integer)currentBean.getProperty("fullobjectid"));
-                        landParcel3A.setGeometry((Geometry)currentBean.getProperty("geometrie.geo_field"));
+                        landParcel3A.setGeometry((Geometry)currentBean.getProperty("geometrie"));
                     }
                 }
             }

@@ -31,7 +31,9 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
+import java.awt.event.MouseEvent;
 
 import java.io.IOException;
 
@@ -49,6 +51,7 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.clientutils.AlkisClientUtils;
 import de.cismet.cids.custom.clientutils.ByteArrayActionDownload;
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.converter.SQLTimestampToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
@@ -154,7 +157,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
-    private org.jdesktop.swingx.JXHyperlink jXHyperlink2;
     private javax.swing.JLabel labInfoTitle;
     private javax.swing.JLabel labInfoTitle1;
     private javax.swing.JLabel labInfoTitle2;
@@ -174,15 +176,16 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JLabel lblGebuehrValue;
     private javax.swing.JLabel lblLaAdresse;
     private javax.swing.JLabel lblLaFirma;
-    private javax.swing.JLabel lblLaFirmaValue;
+    private javax.swing.JTextField lblLaFirmaValue;
     private javax.swing.JLabel lblLaLand;
     private javax.swing.JLabel lblLaLandValue;
     private javax.swing.JLabel lblLaName;
-    private javax.swing.JLabel lblLaNameValue;
+    private javax.swing.JTextField lblLaNameValue;
+    private javax.swing.JTextField lblLaNameValue1;
     private javax.swing.JLabel lblLaOrt;
-    private javax.swing.JLabel lblLaOrtValue;
+    private javax.swing.JTextField lblLaOrtValue;
     private javax.swing.JLabel lblLaStrasse;
-    private javax.swing.JLabel lblLaStrasseValue;
+    private javax.swing.JTextField lblLaStrasseValue;
     private javax.swing.JLabel lblLand;
     private javax.swing.JLabel lblLandValue;
     private javax.swing.JLabel lblName;
@@ -232,6 +235,35 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
         initComponents();
+        RendererTools.makeReadOnly(lblLaFirmaValue);
+        RendererTools.makeReadOnly(lblLaNameValue);
+        RendererTools.makeReadOnly(lblLaStrasseValue);
+        RendererTools.makeReadOnly(lblLaOrtValue);
+        RendererTools.makeReadOnly(lblLaNameValue1);
+
+        lblLaNameValue1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        lblLaNameValue1.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final MouseEvent e) {
+                    final String url = "https://www.wuppertal.de/kartendownload/index.php?tid="
+                                + (String)cidsBean.getProperty("transid");
+                    try {
+                        BrowserLauncher.openURL(url);
+                    } catch (final Exception ex) {
+                        final ErrorInfo info = new ErrorInfo(
+                                "Fehler beim Öffnen der URL",
+                                ex.getMessage(),
+                                null,
+                                null,
+                                ex,
+                                Level.SEVERE,
+                                null);
+                        JXErrorPane.showDialog(Fs_bestellungRenderer.this, info);
+                    }
+                }
+            });
     }
 
     /**
@@ -320,7 +352,7 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         labInfoTitle = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblTransId = new javax.swing.JLabel();
-        jXHyperlink2 = new org.jdesktop.swingx.JXHyperlink();
+        lblLaNameValue1 = new javax.swing.JTextField();
         lblEingegangenAm = new javax.swing.JLabel();
         lblEingegangenAmValue = new javax.swing.JLabel();
         lblBezugsweg = new javax.swing.JLabel();
@@ -357,13 +389,13 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         labInfoTitle1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lblLaFirma = new javax.swing.JLabel();
-        lblLaFirmaValue = new javax.swing.JLabel();
+        lblLaFirmaValue = new javax.swing.JTextField();
         lblLaName = new javax.swing.JLabel();
-        lblLaNameValue = new javax.swing.JLabel();
+        lblLaNameValue = new javax.swing.JTextField();
         lblLaStrasse = new javax.swing.JLabel();
-        lblLaStrasseValue = new javax.swing.JLabel();
+        lblLaStrasseValue = new javax.swing.JTextField();
         lblLaOrt = new javax.swing.JLabel();
-        lblLaOrtValue = new javax.swing.JLabel();
+        lblLaOrtValue = new javax.swing.JTextField();
         lblLaAdresse = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -486,28 +518,27 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblTransId, gridBagConstraints);
 
+        lblLaNameValue1.setForeground(new java.awt.Color(0, 51, 255));
+        lblLaNameValue1.setMinimumSize(new java.awt.Dimension(4, 18));
+        lblLaNameValue1.setPreferredSize(new java.awt.Dimension(4, 18));
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.transid}"),
-                jXHyperlink2,
+                lblLaNameValue1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
-        jXHyperlink2.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jXHyperlink2ActionPerformed(evt);
-                }
-            });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jXHyperlink2, gridBagConstraints);
+        jPanel1.add(lblLaNameValue1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblEingegangenAm,
@@ -1018,6 +1049,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaFirma, gridBagConstraints);
 
+        lblLaFirmaValue.setMinimumSize(new java.awt.Dimension(4, 18));
+        lblLaFirmaValue.setPreferredSize(new java.awt.Dimension(4, 18));
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -1045,6 +1079,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaName, gridBagConstraints);
+
+        lblLaNameValue.setMinimumSize(new java.awt.Dimension(4, 18));
+        lblLaNameValue.setPreferredSize(new java.awt.Dimension(4, 18));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1075,6 +1112,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaStrasse, gridBagConstraints);
 
+        lblLaStrasseValue.setMinimumSize(new java.awt.Dimension(4, 18));
+        lblLaStrasseValue.setPreferredSize(new java.awt.Dimension(4, 18));
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -1104,6 +1144,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblLaOrt, gridBagConstraints);
 
+        lblLaOrtValue.setMinimumSize(new java.awt.Dimension(4, 18));
+        lblLaOrtValue.setPreferredSize(new java.awt.Dimension(4, 18));
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -1111,6 +1154,8 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
                     "${cidsBean.fk_adresse_versand.plz} ${cidsBean.fk_adresse_versand.ort}"),
                 lblLaOrtValue,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("-");
+        binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1666,30 +1711,6 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
             }
         }
     } //GEN-LAST:event_jXHyperlink1ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jXHyperlink2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jXHyperlink2ActionPerformed
-
-        final String url = "https://www.wuppertal.de/kartendownload/index.php?tid="
-                    + (String)cidsBean.getProperty("transid");
-        try {
-            BrowserLauncher.openURL(url);
-        } catch (final Exception ex) {
-            final ErrorInfo info = new ErrorInfo(
-                    "Fehler beim Öffnen der URL",
-                    ex.getMessage(),
-                    null,
-                    null,
-                    ex,
-                    Level.SEVERE,
-                    null);
-            JXErrorPane.showDialog(this, info);
-        }
-    } //GEN-LAST:event_jXHyperlink2ActionPerformed
 
     /**
      * DOCUMENT ME!
