@@ -294,6 +294,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     @Getter @Setter private static Integer counterLinks = -1;
     @Getter @Setter private static Integer counterDokumente = -1;
     @Getter @Setter private static Integer counterFotos = -1;
+    @Getter @Setter private static Boolean strasseChanged= false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpStek;
     private JButton btnAddNewBeschluss;
@@ -2772,18 +2773,18 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 return;
             } else {
                 if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__HNR) != null)) {
-            final CidsBean beanHnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR);
-            final CidsBean beanAdresse = (CidsBean)beanHnr.getProperty(FIELD__HNR_GEOM);
-            final CidsBean beanNewGeometrie = CidsBeanSupport.cloneBean(
-                    beanAdresse,
-                    getConnectionContext(),
-                    TABLE_GEOM);
-            try {
-                this.getCidsBean().setProperty(FIELD__GEOM, beanNewGeometrie);
-            } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
+                    final CidsBean beanHnr = (CidsBean)getCidsBean().getProperty(FIELD__HNR);
+                    final CidsBean beanAdresse = (CidsBean)beanHnr.getProperty(FIELD__HNR_GEOM);
+                    final CidsBean beanNewGeometrie = CidsBeanSupport.cloneBean(
+                            beanAdresse,
+                            getConnectionContext(),
+                            TABLE_GEOM);
+                    try {
+                        this.getCidsBean().setProperty(FIELD__GEOM, beanNewGeometrie);
+                    } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
             }
         } else {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
@@ -3236,7 +3237,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             hatBB();
         }
         if (evt.getPropertyName().equals(FIELD__HNR)) {
-            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) {        
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW && 
+                    getCidsBean().getProperty(FIELD__HNR)!= null) {        
                 btnCreateGeometrie.doClick();
             }
         }
