@@ -383,6 +383,8 @@ public class VkLinkPanel extends javax.swing.JPanel implements Disposable,
         if (!isEditor()) {
             RendererTools.makeReadOnly(txtAnzeige);
             RendererTools.makeReadOnly(txtUrl);
+            txtAnzeige.setEnabled(true);
+            txtUrl.setEnabled(true);
         }
     }
     

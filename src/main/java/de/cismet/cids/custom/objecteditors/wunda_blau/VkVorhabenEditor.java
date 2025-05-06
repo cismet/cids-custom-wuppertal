@@ -2931,20 +2931,38 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtTitel);
-            lblGeom.setVisible(isEditor());
-            RendererTools.makeReadOnly(taOrt);
-            RendererTools.makeReadOnly(cbStrasse);
             // lblHNrRenderer.setVisible(true);
             // RendererTools.makeReadOnly(cbHNr);
             RendererTools.makeReadOnly(cbThema);
             RendererTools.makeReadOnly(cbKontakt);
             RendererTools.makeReadOnly(chAbgeschlossen);
             RendererTools.makeReadOnly(blpStek);
-            RendererTools.makeReadOnly(taBemerkung);
+            RendererTools.jSpinnerShouldLookLikeLabel(spJahr);
             RendererTools.makeDoubleSpinnerWithoutButtons(spJahr, 0);
             RendererTools.makeReadOnly(spJahr);
+            RendererTools.jSpinnerShouldLookLikeLabel(spQuartal);
             RendererTools.makeDoubleSpinnerWithoutButtons(spQuartal, 0);
             RendererTools.makeReadOnly(spQuartal);
+            RendererTools.makeReadOnly(chVeroeffentlicht);
+            RendererTools.makeReadOnly(chAbgeschlossen);
+            lblGeom.setVisible(isEditor());
+            RendererTools.makeReadOnly(taOrt);
+            RendererTools.makeReadOnly(cbStrasse);
+            RendererTools.makeReadOnly(chStadtweit);
+            RendererTools.makeReadOnly(txtMail);
+            RendererTools.makeReadOnly(chMailBB);
+            RendererTools.makeReadOnly(taBemerkung);
+            RendererTools.makeReadOnly(taBeschreibung);
+            RendererTools.makeReadOnly(chBB);
+            RendererTools.makeReadOnly(txtLink);
+            RendererTools.makeReadOnly(taText);
+            RendererTools.makeReadOnly(txtUrl);
+            txtUrl.setEnabled(true);
+            taText.setEnabled(true);
+            panControlsNewBeschluesse.setVisible(false);
+            panControlsNewDokumente.setVisible(false);
+            panControlsNewFotos.setVisible(false);
+            panControlsNewLinks.setVisible(false);
         }
         RendererTools.makeReadOnly(txtAnleger);
         RendererTools.makeReadOnly(txtLetzteA);

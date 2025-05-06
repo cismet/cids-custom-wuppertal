@@ -428,6 +428,9 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
             RendererTools.makeReadOnly(dcDatum);
             RendererTools.makeReadOnly(txtAnzeige);
             RendererTools.makeReadOnly(txtUrl);
+            dcDatum.setEnabled(true);
+            txtAnzeige.setEnabled(true);
+            txtUrl.setEnabled(true);
         }
     }
     

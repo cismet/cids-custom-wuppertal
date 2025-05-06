@@ -111,6 +111,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
     private JLabel lblFuellung;
     private JLabel lblIcon;
     private JLabel lblName;
+    private JLabel lblProzent;
     private JPanel panBeschreibung;
     private JPanel panContent;
     private JPanel panFillerUnten;
@@ -202,6 +203,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         txtFarbeZeigen = new JTextField();
         lblFuellung = new JLabel();
         spFuellung = new JSpinner();
+        lblProzent = new JLabel();
         lblBeschreibung = new JLabel();
         panBeschreibung = new JPanel();
         scpBeschreibung = new JScrollPane();
@@ -428,6 +430,16 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(spFuellung, gridBagConstraints);
 
+        lblProzent.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblProzent.setText("% Transparenz");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 7, 2, 5);
+        panName.add(lblProzent, gridBagConstraints);
+
         lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBeschreibung.setText("Beschreibung:");
         gridBagConstraints = new GridBagConstraints();
@@ -615,6 +627,11 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtIcon);
             RendererTools.makeReadOnly(txtFarbe);
+            RendererTools.makeReadOnly(taBeschreibung); 
+            RendererTools.jSpinnerShouldLookLikeLabel(spFuellung);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spFuellung, 0);
+            RendererTools.makeReadOnly(spFuellung);  
+            btnChooseColor.setVisible(false);      
         }
     }
     
