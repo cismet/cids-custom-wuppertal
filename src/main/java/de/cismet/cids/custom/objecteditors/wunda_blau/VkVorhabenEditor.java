@@ -136,6 +136,17 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private static DefaultBindableReferenceCombo.Option MANAGEABLE_OPTION = null;
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
     private static DateFormat YEAR_FORMAT = new SimpleDateFormat("yyyy");
+    
+ /*   private static final MetaClass MC__HNR;
+    static {
+        final ConnectionContext connectionContext = ConnectionContext.create(
+                ConnectionContext.Category.STATIC,
+                VkVorhabenEditor.class.getSimpleName());
+        MC__HNR = ClassCacheMultiple.getMetaClass(
+                        "WUNDA_BLAU",
+                        "ADRESSE",
+                        connectionContext);
+    }*/
 
  
     private static String MAPURL;
@@ -294,7 +305,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     @Getter @Setter private static Integer counterLinks = -1;
     @Getter @Setter private static Integer counterDokumente = -1;
     @Getter @Setter private static Integer counterFotos = -1;
-    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private DefaultBindableLabelsPanel blpStek;
     private JButton btnAddNewBeschluss;
@@ -575,6 +586,27 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         getVkDocumentLoader().addListener(loadDocumentListener);
         cbThema.setNullable(false);
         setReadOnly();
+      /*  new SwingWorker<Void, Void>() {
+
+            @Override
+            protected Void doInBackground() throws Exception {
+                mcHnr = ClassCacheMultiple.getMetaClass(
+                        "WUNDA_BLAU",
+                        "ADRESSE",
+                        connectionContext);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get();
+                    cbHNr.setMetaClass(mcHnr);
+                } catch (final InterruptedException | ExecutionException ex) {
+                    LOG.error(ex, ex);
+                }
+            }
+        }.execute();*/
     }
 
     
@@ -2674,7 +2706,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             }*/
             bindingGroup.bind();
             setTitle(getTitle());
-            stadtweitChoose();
             if (getCidsBean() != null) {
                 labelsPanels.addAll(Arrays.asList(blpStek));
                 loadDocuments(getCidsBean().getPrimaryKeyValue());
@@ -2764,6 +2795,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             if ((getCidsBean() != null) && isEditor()) {
                 setSaveValues();
             }
+          //  cbHNr.setMetaClass(MC__HNR);
+            stadtweitChoose();
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
             if (isEditor()) {
@@ -3135,8 +3168,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }.execute();
     }
-
-
+    
+    
     /**
      * DOCUMENT ME!
      */
@@ -3300,7 +3333,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }
     
     private void stadtweitChoose(){
-        if (getCidsBean().getProperty(FIELD__STADT) == null || Objects.equals(getCidsBean().getProperty(FIELD__STADT),false)) {
+        if (isEditor())  {
+            if ((getCidsBean().getProperty(FIELD__STADT) == null || 
+                Objects.equals(getCidsBean().getProperty(FIELD__STADT),false))) {
                 cbHNr.setEnabled(true);
                 cbStrasse.setEnabled(true);
             } else {
@@ -3318,6 +3353,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
                 
             }
+        }
     }
     
     /**
