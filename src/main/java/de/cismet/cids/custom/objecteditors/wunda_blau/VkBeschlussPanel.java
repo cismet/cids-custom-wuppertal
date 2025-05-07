@@ -108,6 +108,7 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
     public static final String BUNDLE_NODATE = "VkBeschlussPanel.isOkForSaving().noDatum";
     public static final String BUNDLE_NOURL = "VkBeschlussPanel.isOkForSaving().noUrl";
+    public static final String BUNDLE_NOANZEIGE = "VkBeschlussPanel.isOkForSaving().noAnzeige";
     public static final String BUNDLE_ANZEIGE = "VkBeschlussPanel.isOkForSaving().anzeige";
     public static final String BUNDLE_ANZEIGE_EMPTY = "VkBeschlussPanel.isOkForSaving().anzeigeEmpty";
     public static final String BUNDLE_WHICH = "VkBeschlussPanel.isOkForSaving().welcherBeschluss";
@@ -656,6 +657,10 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
                             save = false;
                         }
                     }
+                } else {
+                    LOG.warn("No Anzeige specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NOANZEIGE));
+                    save = false;
                 }
             } catch (final MissingResourceException ex) {
                 LOG.warn("anzeige too long.", ex);

@@ -175,6 +175,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__MAIL_BB = "mail_bb";
     public static final String FIELD__BB = "buergerbeteiligung";
     public static final String FIELD__BB_URL = "bb_url";
+    public static final String FIELD__BB_TEXT = "bb_text";
     public static final String FIELD__LINK = "link";
     public static final String FIELD__STADT = "stadtweit";
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";
@@ -202,6 +203,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_NOTHEMA = "VkVorhabenEditor.isOkForSaving().noThema";
     public static final String BUNDLE_NOTITEL = "VkVorhabenEditor.isOkForSaving().noTitel";
     public static final String BUNDLE_NOBESCH = "VkVorhabenEditor.isOkForSaving().noBeschreibung";
+    public static final String BUNDLE_NOTEXT = "VkVorhabenEditor.isOkForSaving().noText";
     public static final String BUNDLE_PASTYEAR = "VkVorhabenEditor.isOkForSaving().pastYear";
     
     public static final String BUNDLE_PANE_PREFIX = "VkVorhabenEditor.isOkForSaving().JOptionPane.message.prefix";
@@ -3615,6 +3617,21 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                     if (getCidsBean().getProperty(FIELD__BESCHREIBUNG) == null) {
                         LOG.warn("No beschreibung specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOBESCH));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("beschreibung not given.", ex);
+                save = false;
+
+            }
+            
+            // Text vorhanden wenn bb
+            try {
+                if(Objects.equals(getCidsBean().getProperty(FIELD__BB), true)) {
+                    if (getCidsBean().getProperty(FIELD__BB_TEXT) == null) {
+                        LOG.warn("No bb text specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOTEXT));
                         save = false;
                     }
                 }
