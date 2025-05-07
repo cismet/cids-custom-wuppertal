@@ -3283,7 +3283,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }
     
     private void setEnde(){
-        if(getCidsBean().getProperty(FIELD__ENDE) == null || Objects.equals(getCidsBean().getProperty(FIELD__ENDE),false)){ 
+        if (getCidsBean().getProperty(FIELD__ENDE) == null || Objects.equals(getCidsBean().getProperty(FIELD__ENDE),false)){ 
             try {
                 getCidsBean().setProperty(FIELD__ENDE_AM, null);
                 txtAbAm.setText("");
@@ -3292,10 +3292,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             }
         } else {
             try {
-            getCidsBean().setProperty(
-                FIELD__ENDE_AM,
-                new java.sql.Timestamp(System.currentTimeMillis()));
-                txtAbAm.setText(DATE_FORMAT.format(cidsBean.getProperty(FIELD__ENDE_AM)));
+                if(getCidsBean().getProperty(FIELD__ENDE_AM) == null){
+                    getCidsBean().setProperty(
+                        FIELD__ENDE_AM,
+                        new java.sql.Timestamp(System.currentTimeMillis()));
+                        txtAbAm.setText(DATE_FORMAT.format(cidsBean.getProperty(FIELD__ENDE_AM)));
+                }
             } catch (Exception ex) {
                LOG.warn("datum ende not set.", ex);
             }
