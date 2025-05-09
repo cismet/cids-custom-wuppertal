@@ -571,6 +571,8 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
                 getCidsBean().removePropertyChangeListener(changeListener);
             }
             try {
+                lblFotoAnzeigen.setIcon(null);
+                lblFotoAnzeigen.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 bindingGroup.unbind();
                 this.cidsBean = cidsBean;
                 if ((getCidsBean() != null) && isEditor()) {
