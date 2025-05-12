@@ -78,7 +78,7 @@ public class VkKontaktEditor extends DefaultCustomObjectEditor implements CidsBe
 
     private static final Logger LOG = Logger.getLogger(VkKontaktEditor.class);
     public static final String REDUNDANT_TOSTRING_TEMPLATE = "%s";
-    public static final String[] REDUNDANT_TOSTRING_FIELDS = { "name", "id" };
+    public static final String[] REDUNDANT_TOSTRING_FIELDS = { "mail", "id" };
     public static final String REDUNDANT_TABLE = "vk_kontakt";
 
     public static final String FIELD__NAME = "mail";
