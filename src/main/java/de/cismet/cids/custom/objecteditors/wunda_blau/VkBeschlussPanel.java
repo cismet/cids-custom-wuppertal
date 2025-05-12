@@ -182,7 +182,7 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
         panBeschluss.add(dcDatum, gridBagConstraints);
 
         lblAnzeige.setFont(new Font("Tahoma", 1, 11)); // NOI18N

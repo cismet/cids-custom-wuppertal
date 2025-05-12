@@ -358,6 +358,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblJahr;
     private JLabel lblKarte;
     private JLabel lblKontakt;
+    private JLabel lblKontaktHelp;
     private JLabel lblLadenBeschluss;
     private JLabel lblLadenDokumente;
     private JLabel lblLadenFotos;
@@ -397,7 +398,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panDetails;
     private JPanel panFillerUnten4;
     private JPanel panFillerUnten5;
-    private JPanel panFillerUnten7;
     private JPanel panGeometrie;
     private JPanel panIntern;
     private JPanel panLink;
@@ -429,6 +429,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JTextField txtAbAm;
     private JTextField txtAngelegtAm;
     private JTextField txtAnleger;
+    private JTextField txtDokumenteHinweis;
+    private JTextField txtFotoHinweis;
     private JTextField txtLetzteA;
     private JTextField txtLetzterB;
     private JTextField txtLink;
@@ -647,8 +649,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         spQuartal = new JSpinner();
         lblJahr = new JLabel();
         spJahr = new JSpinner();
-        lblVeroeffentlicht = new JLabel();
-        chVeroeffentlicht = new JCheckBox();
         lblAbgeschlossen = new JLabel();
         chAbgeschlossen = new JCheckBox();
         lblAbAm = new JLabel();
@@ -663,6 +663,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewFotos = new JPanel();
         btnAddNewFoto = new JButton();
         btnRemoveFoto = new JButton();
+        txtFotoHinweis = new JTextField();
         jPanelOrt = new JPanel();
         panGeometrie = new JPanel();
         rpKarte = new RoundedPanel();
@@ -712,27 +713,27 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewBeschluesse = new JPanel();
         btnAddNewBeschluss = new JButton();
         btnRemoveBeschluss = new JButton();
-        lblBB = new JLabel();
-        chBB = new JCheckBox();
-        lblUrl = new JLabel();
-        txtUrl = new JTextField();
-        panUrl = new JPanel();
-        lblUrlCheck = new JLabel();
-        lblText = new JLabel();
-        panText = new JPanel();
-        scpText = new JScrollPane();
-        taText = new JTextArea();
-        lblLink = new JLabel();
-        txtLink = new JTextField();
-        panLink = new JPanel();
-        lblLinkCheck = new JLabel();
-        lblKontakt = new JLabel();
-        cbKontakt = new FastBindableReferenceCombo();
         lblBeschreibung = new JLabel();
         panBeschreibung = new JPanel();
         scpBeschreibung = new JScrollPane();
         taBeschreibung = new JTextArea();
-        panFillerUnten7 = new JPanel();
+        lblLink = new JLabel();
+        txtLink = new JTextField();
+        lblBB = new JLabel();
+        chBB = new JCheckBox();
+        lblText = new JLabel();
+        panText = new JPanel();
+        scpText = new JScrollPane();
+        taText = new JTextArea();
+        lblUrl = new JLabel();
+        txtUrl = new JTextField();
+        panUrl = new JPanel();
+        lblUrlCheck = new JLabel();
+        panLink = new JPanel();
+        lblLinkCheck = new JLabel();
+        lblKontakt = new JLabel();
+        cbKontakt = new FastBindableReferenceCombo();
+        lblKontaktHelp = new JLabel();
         jPanelExt = new JPanel();
         jPanelDokLinks = new JPanel();
         lblLinks = new JLabel();
@@ -745,6 +746,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         btnRemoveLink = new JButton();
         jPanelDokDokumente = new JPanel();
         lblDokumente = new JLabel();
+        txtDokumenteHinweis = new JTextField();
         vkDokumentPanel = vkDokumentPanel = new VkDokumentPanel(this.getVkDocumentLoader());
         lblLadenDokumente = new JLabel();
         scpDokumente = new JScrollPane();
@@ -764,6 +766,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         panFillerUnten5 = new JPanel();
+        lblVeroeffentlicht = new JLabel();
+        chVeroeffentlicht = new JCheckBox();
 
         setLayout(new GridBagLayout());
 
@@ -959,7 +963,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten.add(blpStek, gridBagConstraints);
 
         lblQuartal.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblQuartal.setText("Ende geplant Quartal:");
+        lblQuartal.setText("Geplanter Abschluss Quartal:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -986,7 +990,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten.add(spQuartal, gridBagConstraints);
 
         lblJahr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblJahr.setText("Ende geplant Jahr:");
+        lblJahr.setText("Geplanter Abschluss Jahr:");
+        lblJahr.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
@@ -1013,32 +1018,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDaten.add(spJahr, gridBagConstraints);
-
-        lblVeroeffentlicht.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblVeroeffentlicht.setText("Veröffentlicht:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblVeroeffentlicht, gridBagConstraints);
-
-        chVeroeffentlicht.setContentAreaFilled(false);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.veroeffentlicht}"), chVeroeffentlicht, BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDaten.add(chVeroeffentlicht, gridBagConstraints);
 
         lblAbgeschlossen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblAbgeschlossen.setText("abgeschlossen:");
@@ -1113,10 +1092,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         jPanelFoto.add(lblFotos, gridBagConstraints);
 
@@ -1206,6 +1183,17 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 5, 0);
         jPanelFoto.add(panControlsNewFotos, gridBagConstraints);
+
+        txtFotoHinweis.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
+        txtFotoHinweis.setText("Bitte beachten Sie, dass die Fotos unter ftp://sl0317.dmz.wuppertal.de/geoportal/vorhabenkarte/fotos abgelegt werden müssen.");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        jPanelFoto.add(txtFotoHinweis, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1540,10 +1528,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDetails.setLayout(new GridBagLayout());
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(20, 20, 20, 20);
         panDetails.add(filler5, gridBagConstraints);
 
         jPanelDokBeschluesse.setOpaque(false);
@@ -1659,11 +1647,82 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(10, 0, 5, 10);
         panDetails.add(jPanelDokBeschluesse, gridBagConstraints);
 
+        lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBeschreibung.setText("Vorhabenbeschreibung:");
+        lblBeschreibung.setToolTipText("");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblBeschreibung, gridBagConstraints);
+
+        panBeschreibung.setOpaque(false);
+        panBeschreibung.setLayout(new GridBagLayout());
+
+        taBeschreibung.setColumns(20);
+        taBeschreibung.setLineWrap(true);
+        taBeschreibung.setRows(3);
+        taBeschreibung.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpBeschreibung.setViewportView(taBeschreibung);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panBeschreibung.add(scpBeschreibung, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(panBeschreibung, gridBagConstraints);
+
+        lblLink.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblLink.setText("Link (Infoseite):");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panDetails.add(lblLink, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.link}"), txtLink, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(txtLink, gridBagConstraints);
+
         lblBB.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBB.setText("Bürgerbeteiligung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1679,62 +1738,19 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(chBB, gridBagConstraints);
 
-        lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblUrl.setText("BB-Url:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDetails.add(lblUrl, gridBagConstraints);
-
-        txtUrl.setEnabled(false);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bb_url}"), txtUrl, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDetails.add(txtUrl, gridBagConstraints);
-
-        panUrl.setOpaque(false);
-        panUrl.setLayout(new GridBagLayout());
-
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        panUrl.add(lblUrlCheck, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDetails.add(panUrl, gridBagConstraints);
-
         lblText.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblText.setText("BB-Text:");
         lblText.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1768,7 +1784,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1778,28 +1794,48 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(panText, gridBagConstraints);
 
-        lblLink.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblLink.setText("Link:");
+        lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblUrl.setText("BB-Url:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDetails.add(lblLink, gridBagConstraints);
+        panDetails.add(lblUrl, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.link}"), txtLink, BeanProperty.create("text"));
+        txtUrl.setEnabled(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bb_url}"), txtUrl, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDetails.add(txtLink, gridBagConstraints);
+        panDetails.add(txtUrl, gridBagConstraints);
+
+        panUrl.setOpaque(false);
+        panUrl.setLayout(new GridBagLayout());
+
+        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        panUrl.add(lblUrlCheck, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panDetails.add(panUrl, gridBagConstraints);
 
         panLink.setOpaque(false);
         panLink.setLayout(new GridBagLayout());
@@ -1813,7 +1849,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1823,7 +1859,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblKontakt.setText("Kontakt:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1839,7 +1875,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1847,53 +1883,16 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDetails.add(cbKontakt, gridBagConstraints);
 
-        lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBeschreibung.setText("Beschreibung:");
-        lblBeschreibung.setToolTipText("");
+        lblKontaktHelp.setFont(new Font("Tahoma", 2, 11)); // NOI18N
+        lblKontaktHelp.setText("Ein Kontakt muss vorher angelegt werden, sonst kann er nicht ausgewählt werden.");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDetails.add(lblBeschreibung, gridBagConstraints);
-
-        panBeschreibung.setOpaque(false);
-        panBeschreibung.setLayout(new GridBagLayout());
-
-        taBeschreibung.setColumns(20);
-        taBeschreibung.setLineWrap(true);
-        taBeschreibung.setRows(2);
-        taBeschreibung.setWrapStyleWord(true);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        scpBeschreibung.setViewportView(taBeschreibung);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        panBeschreibung.add(scpBeschreibung, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panDetails.add(panBeschreibung, gridBagConstraints);
+        panDetails.add(lblKontaktHelp, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1904,27 +1903,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
         jPanelDetails.add(panDetails, gridBagConstraints);
-
-        panFillerUnten7.setName(""); // NOI18N
-        panFillerUnten7.setOpaque(false);
-
-        GroupLayout panFillerUnten7Layout = new GroupLayout(panFillerUnten7);
-        panFillerUnten7.setLayout(panFillerUnten7Layout);
-        panFillerUnten7Layout.setHorizontalGroup(panFillerUnten7Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten7Layout.setVerticalGroup(panFillerUnten7Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelDetails.add(panFillerUnten7, gridBagConstraints);
 
         jTabbedPane.addTab("Details", jPanelDetails);
 
@@ -2047,16 +2025,30 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelDokDokumente.setLayout(new GridBagLayout());
 
         lblDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblDokumente.setText("Dokumente-abgelegt:");
+        lblDokumente.setText("Dokumente:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         jPanelDokDokumente.add(lblDokumente, gridBagConstraints);
+
+        txtDokumenteHinweis.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
+        txtDokumenteHinweis.setText("Bitte beachten Sie, dass die Dokumente unter ftp://sl0317.dmz.wuppertal.de/geoportal/vorhabenkarte/dokumente abgelegt werden müssen.");
+        txtDokumenteHinweis.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                txtDokumenteHinweisActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        jPanelDokDokumente.add(txtDokumenteHinweis, gridBagConstraints);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstDokumente, ELProperty.create("${selectedElement}"), vkDokumentPanel, BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
@@ -2323,11 +2315,38 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panVorhaben.add(pnlCard1, gridBagConstraints);
+
+        lblVeroeffentlicht.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVeroeffentlicht.setText("Veröffentlicht:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panVorhaben.add(lblVeroeffentlicht, gridBagConstraints);
+
+        chVeroeffentlicht.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.veroeffentlicht}"), chVeroeffentlicht, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panVorhaben.add(chVeroeffentlicht, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2630,6 +2649,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private void btnCreateGeometrieActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnCreateGeometrieActionPerformed
        setGeomFromAdress();
     }//GEN-LAST:event_btnCreateGeometrieActionPerformed
+
+    private void txtDokumenteHinweisActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtDokumenteHinweisActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDokumenteHinweisActionPerformed
 
     
 
@@ -3003,6 +3026,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         RendererTools.makeReadOnly(txtLetzteA);
         RendererTools.makeReadOnly(txtLetzterB);
         RendererTools.makeReadOnly(txtAngelegtAm);
+        RendererTools.makeReadOnly(txtFotoHinweis);
+        RendererTools.makeReadOnly(txtDokumenteHinweis);
         RendererTools.makeReadOnly(txtAbAm);
         RendererTools.makeReadOnly(taSbz);
     }
