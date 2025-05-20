@@ -240,8 +240,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
     private void finishBuchungsblattnummer() {
         final String text = txtBuchungsblattnummer.getText();
         if ((text != null) && !text.isEmpty() && !txtBuchungsblattnummer.getText().contains("%")) {
-            final int countLetters = text.length() - text.replaceAll("[a-zA-Z]", "").length();
-            final int newMaxLength = config.getMaxBuchungsblattnummerField() + countLetters;
+            final int newMaxLength = config.getMaxBuchungsblattnummerField();
             addLeadingZeroes(txtBuchungsblattnummer.getDocument(), newMaxLength);
         }
         fireAreaBlockFinished(BlockType.BUCHUNGSBLATTNUMMER);
