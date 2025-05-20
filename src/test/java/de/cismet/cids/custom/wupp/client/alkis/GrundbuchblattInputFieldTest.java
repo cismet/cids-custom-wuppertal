@@ -166,7 +166,7 @@ public class GrundbuchblattInputFieldTest {
         String buchungsblattnummer = "abced";
         GrundbuchblattInputField instance = field;
         instance.setBuchungsblattnummerInTxtBuchungsblattnummer(buchungsblattnummer);
-        assertEquals("0000000abced", instance.getBuchungsblattnummer());
+        assertEquals("00abced", instance.getBuchungsblattnummer());
     }
     
     @Test
@@ -175,7 +175,7 @@ public class GrundbuchblattInputFieldTest {
         String buchungsblattnummer = "12ab";
         GrundbuchblattInputField instance = field;
         instance.setBuchungsblattnummerInTxtBuchungsblattnummer(buchungsblattnummer);
-        assertEquals("0000012ab", instance.getBuchungsblattnummer());
+        assertEquals("00012ab", instance.getBuchungsblattnummer());
     }
 
     /**
@@ -187,7 +187,7 @@ public class GrundbuchblattInputFieldTest {
         String grundbuchblattnummer = "3001-000A";
         GrundbuchblattInputField instance = field;
         instance.setGrundbuchblattNummerForTest(grundbuchblattnummer);
-        assertEquals("053001-0000000A", instance.getGrundbuchblattnummer());
+        assertEquals("053001-000000A", instance.getGrundbuchblattnummer());
     }
     
     @Test
