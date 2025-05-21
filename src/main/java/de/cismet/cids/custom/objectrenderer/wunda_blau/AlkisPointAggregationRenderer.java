@@ -128,7 +128,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     // Spaltenbreiten
     private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 80, 200, 200 };
     // Namen der Properties -> Spalten
-    private static final String[] AGR_PROPERTY_NAMES = new String[] { "pointcode", "pointtype", "geom.geo_field" };
+    private static final String[] AGR_PROPERTY_NAMES = new String[] { "pointcode", "pointtype", "geom" };
     // Formater fuer Hochwert/Rechtswert
     private static final NumberFormat HW_RW_NUMBER_FORMAT = new DecimalFormat("##########.###");
     // Modell fuer die Auswahlbox des produktformats
@@ -806,7 +806,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         for (final CidsBean parcel : lpList) {
             try {
-                allGeomList.add((Geometry)parcel.getProperty("geom.geo_field"));
+                allGeomList.add((Geometry)parcel.getProperty("geom"));
             } catch (Exception ex) {
                 log.warn(ex, ex);
             }
