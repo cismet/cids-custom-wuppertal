@@ -419,6 +419,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panMailHinweis;
     private JPanel panMenButtonsMail;
     private JPanel panOrt;
+    private JPanel panOrtHinweis;
     private DefaultPreviewMapPanel panPreviewMap;
     private JPanel panSbz;
     private JPanel panText;
@@ -436,6 +437,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JScrollPane scpLinks;
     private JScrollPane scpMailHinweis;
     private JScrollPane scpOrt;
+    private JScrollPane scpOrtHinweis;
     private JScrollPane scpSbz;
     private JScrollPane scpText;
     private SemiRoundedPanel semiRoundedPanel8;
@@ -447,6 +449,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JTextArea taFeedbackHinweis;
     private JTextArea taMailHinweis;
     private JTextArea taOrt;
+    private JTextArea taOrtHinweis;
     private JTextArea taSbz;
     private JTextArea taText;
     private JTextField txtAbAm;
@@ -703,6 +706,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         semiRoundedPanel8 = new SemiRoundedPanel();
         lblKarte = new JLabel();
         panDatenOrt = new JPanel();
+        panOrtHinweis = new JPanel();
+        scpOrtHinweis = new JScrollPane();
+        taOrtHinweis = new JTextArea();
         lblStrasse = new JLabel();
         cbStrasse = new FastBindableReferenceCombo();
         lblHnr = new JLabel();
@@ -967,7 +973,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten.add(txtLetzteA, gridBagConstraints);
 
         lblTitel.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblTitel.setText("Titel:");
+        lblTitel.setText("Vorhabentitel:");
         lblTitel.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1019,6 +1025,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblStek.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblStek.setText("Fokusraum STEK:");
+        lblStek.setToolTipText("Details siehe auf der Beschreibungsseite der Fokusräume");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -1043,7 +1050,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten.add(blpStek, gridBagConstraints);
 
         lblQuartal.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblQuartal.setText("Geplanter Abschluss Quartal:");
+        lblQuartal.setText("Geplanter Abschluss (Quartal):");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -1070,7 +1077,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDaten.add(spQuartal, gridBagConstraints);
 
         lblJahr.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblJahr.setText("Geplanter Abschluss Jahr:");
+        lblJahr.setText("Geplanter Abschluss (Jahr):");
         lblJahr.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -1101,6 +1108,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblAbgeschlossen.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblAbgeschlossen.setText("abgeschlossen:");
+        lblAbgeschlossen.setToolTipText("Wenn Vorhaben abgeschlossen");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -1339,11 +1347,45 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDatenOrt.setOpaque(false);
         panDatenOrt.setLayout(new GridBagLayout());
 
+        panOrtHinweis.setOpaque(false);
+        panOrtHinweis.setLayout(new GridBagLayout());
+
+        taOrtHinweis.setColumns(20);
+        taOrtHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
+        taOrtHinweis.setLineWrap(true);
+        taOrtHinweis.setRows(9);
+        taOrtHinweis.setText("Damit eine Bearbeitung einfacher ist, laufen einige Dinge automatisch ab:\n   • Bei einem neuen Vorhaben wird bei der Auswahl (Änderung) der Hausnummer die Geometrie aus dieser übernommen. Sollte die Geometrie schon vorhanden sein, so wird gefragt, ob diese geändert werden soll.\n   • Bei bestehenden Vorhaben passiert dies nicht automatisch. Über den Zauberstab kann jedoch jederzeit die Adressgeometrie übernommen werden.\n   • Wird das Häkchen bei stadtweit gesetzt, so wird die ausgewählte Adresse entfernt und die Auswahllisten grauen aus. Ist keine Geometrie vorhanden, so wird ein Punkt am Rathaus gesetzt. Ist eine Geometrie vorhanden wird diese nicht verändert.\n   • Wird das Häkchen bei stadtweit entfernt, so ist wieder eine Auswahl der Adresse möglich. Es erfolgt keine Änderung der Geometrie.\nDie Geometrie kann unabhängig von Adresse bzw. stadtweit angepasst bzw. auch gelöscht werden. Deswegen ist diese ein Pflichtattribut."); // NOI18N
+        taOrtHinweis.setWrapStyleWord(true);
+        scpOrtHinweis.setViewportView(taOrtHinweis);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panOrtHinweis.add(scpOrtHinweis, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
+        panDatenOrt.add(panOrtHinweis, gridBagConstraints);
+
         lblStrasse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblStrasse.setText("Straße:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1363,7 +1405,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -1374,7 +1416,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblHnr.setText("Hausnummer:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1393,7 +1435,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         if (!isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 1;
+            gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.weightx = 1.0;
@@ -1414,7 +1456,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 1;
+            gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             panDatenOrt.add(cbHNr, gridBagConstraints);
@@ -1432,7 +1474,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panDatenOrt.add(btnCreateGeometrie, gridBagConstraints);
@@ -1442,7 +1484,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblOrt.setText("Ortsbeschreibung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1455,6 +1497,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taOrt.setColumns(20);
         taOrt.setLineWrap(true);
         taOrt.setRows(2);
+        taOrt.setTabSize(9);
         taOrt.setWrapStyleWord(true);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ortsbeschreibung}"), taOrt, BeanProperty.create("text"));
@@ -1475,7 +1518,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1489,7 +1532,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblStadtweit.setText("Stadtweit:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1505,7 +1548,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -1515,7 +1558,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblStadtbezirke.setText("Stadtbezirke:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1544,7 +1587,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -1558,7 +1601,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblGeom.setText("Geometrie:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -1576,7 +1619,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         if (isEditor()){
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 3;
+            gridBagConstraints.gridy = 4;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.weightx = 1.0;
@@ -1585,7 +1628,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panDatenOrt.add(filler4, gridBagConstraints);
@@ -1593,9 +1636,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
         jPanelOrt.add(panDatenOrt, gridBagConstraints);
 
@@ -1619,6 +1663,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblBeschluesse.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBeschluesse.setText("Beschlüsse:");
+        lblBeschluesse.setToolTipText("Beschlussvorlage aus RIS");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1729,7 +1774,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblBeschreibung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblBeschreibung.setText("Vorhabenbeschreibung:");
-        lblBeschreibung.setToolTipText("");
+        lblBeschreibung.setToolTipText("Hintergründe, Ziel, Ablauf");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1745,6 +1790,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taBeschreibung.setColumns(20);
         taBeschreibung.setLineWrap(true);
         taBeschreibung.setRows(3);
+        taBeschreibung.setToolTipText("");
         taBeschreibung.setWrapStyleWord(true);
 
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
@@ -1776,7 +1822,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDetails.add(panBeschreibung, gridBagConstraints);
 
         lblLink.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblLink.setText("Link (Infoseite):");
+        lblLink.setText("Infoseite-Url:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -1826,8 +1872,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDetails.add(chBB, gridBagConstraints);
 
         lblText.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblText.setText("BB-Text:");
-        lblText.setToolTipText("");
+        lblText.setText("BB-Beschreibung:");
+        lblText.setToolTipText("Gestaltungsspielraum, Erkenntnisinteresse, Formate");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -1876,6 +1922,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblUrl.setText("BB-Url:");
+        lblUrl.setToolTipText("Projektseite talbeteiligung.de");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -1937,6 +1984,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblKontakt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblKontakt.setText("Kontakt:");
+        lblKontakt.setToolTipText("Mail (und Telefon) für den Bürger");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -1994,6 +2042,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblLinks.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLinks.setText("Links:");
+        lblLinks.setToolTipText("Internetseiten mit weiterführenden Informationen");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -2106,6 +2155,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblDokumente.setText("Dokumente:");
+        lblDokumente.setToolTipText("Dateien mit weiterführenden Informationen");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

@@ -187,6 +187,7 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
         lblAnzeige.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         Mnemonics.setLocalizedText(lblAnzeige, NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblAnzeige.text")); // NOI18N
+        lblAnzeige.setToolTipText(NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblAnzeige.toolTipText")); // NOI18N
         lblAnzeige.setName("lblAnzeige"); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
