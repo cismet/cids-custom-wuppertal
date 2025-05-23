@@ -155,7 +155,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
  
     private static String MAPURL;
     private static Double BUFFER;
-
+    private static String MAIL_BB;
+    private static String MAIL_NEU;
+    private static String NEU_VORHABEN;
+    
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
     
@@ -226,7 +229,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     
     
     private static final String TITLE_NEW_VORHABEN = "ein neues Vorhaben anlegen...";
-    private static final String MAIL_BB = "sandra.simmert@stadt.wuppertal.de";//buergerbeteiligung@stadt.wuppertal.de";
+    //private static final String MAIL_BB = "sandra.simmert@stadt.wuppertal.de";//buergerbeteiligung@stadt.wuppertal.de";
     private static final String KEIN_ABSENDER = "Es konnte Ihre Mailadresse nicht aus der Datenbank ermittelt werden. Deswegen ist der Absender: Vorhabenkarte";
 
     public static final String CHILD_TOSTRING_TEMPLATE = "%s";
@@ -3566,6 +3569,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             BUFFER = VkConfProperties.getInstance().getBufferMeter();
             MAPURL = VkConfProperties.getInstance().getUrl();
+            NEU_VORHABEN = VkConfProperties.getInstance().getNeuVorhaben();
+            MAIL_BB = VkConfProperties.getInstance().getMailBB();
+            MAIL_NEU = VkConfProperties.getInstance().getMailNeu();
 
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
@@ -3878,6 +3884,17 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                     } catch (Exception ex) {
                         LOG.warn("problem in persist documents.", ex);
                     }
+                }
+            }
+            if (getCidsBean().getMetaObject().getStatus() == MetaObject.NEW && NEU_VORHABEN.equals("JA")){
+                try{
+                    final String mailtext = String.format("Es wurde ein neues Vorhaben (%s) beim Thema %s angelegt."
+                            ,getCidsBean().getProperty(FIELD__TITEL).toString()
+                            ,getCidsBean().getProperty(FIELD__THEMA).toString());
+                    final Object ret = sendMail(MAIL_NEU, MAIL_NEU, TITLE_NEW_VORHABEN, mailtext);
+                    LOG.debug(ret);
+                } catch (Exception ex) {
+                    LOG.warn("problem in sen mail new", ex);
                 }
             }
         } catch (final Exception ex) {

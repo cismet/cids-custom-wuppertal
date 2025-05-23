@@ -49,6 +49,9 @@ public class VkConfProperties {
     private final String url;
     private final String pathDokumente;
     private final String pathFotos;
+    private final String neuVorhaben;
+    private final String mailBB;
+    private final String mailNeu;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -62,6 +65,9 @@ public class VkConfProperties {
         url = String.valueOf(readProperty(properties, "MAP_CALL_STRING", null));
         pathDokumente = String.valueOf(readProperty(properties, "DOK_PATH", null));
         pathFotos = String.valueOf(readProperty(properties, "FOTOS_PATH", null));
+        neuVorhaben = String.valueOf(readProperty(properties, "NEU_VORHABEN", null));
+        mailBB = String.valueOf(readProperty(properties, "MAIL_BB", null));
+        mailNeu= String.valueOf(readProperty(properties, "MAIL_NEU", null));
     }
 
     //~ Methods ----------------------------------------------------------------
