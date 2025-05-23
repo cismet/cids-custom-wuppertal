@@ -16,6 +16,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+//import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -65,9 +66,10 @@ import de.cismet.cids.custom.objecteditors.utils.VkConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.VkDocumentLoader;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel;
-import de.cismet.cids.custom.utils.GeneralUtils;
+import de.cismet.cids.custom.wunda_blau.search.actions.VkSendMailServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.AdresseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.BufferingGeosearch;
+import de.cismet.cids.custom.wunda_blau.search.server.UserMailSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -80,6 +82,7 @@ import de.cismet.cids.editors.hooks.AfterClosingHook;
 import de.cismet.cids.editors.hooks.AfterSavingHook;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -97,6 +100,7 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -165,8 +169,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__ANGELEGT = "angelegt";
     public static final String FIELD__BEARBEITER = "letzter_bearbeiter";
     public static final String FIELD__AKTUALISIERT = "letzte_aktualisierung";
-    public static final String FIELD__MAIL = "mail";
-    public static final String FIELD__BEMERKUNG = "bemerkung";
     public static final String FIELD__ENDE = "abgeschlossen";
     public static final String FIELD__ENDE_AM = "abgeschlossen_am";
     public static final String FIELD__QUARTAL = "ende_quartal";
@@ -224,6 +226,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     
     
     private static final String TITLE_NEW_VORHABEN = "ein neues Vorhaben anlegen...";
+    private static final String MAIL_BB = "sandra.simmert@stadt.wuppertal.de";//buergerbeteiligung@stadt.wuppertal.de";
+    private static final String KEIN_ABSENDER = "Es konnte Ihre Mailadresse nicht aus der Datenbank ermittelt werden. Deswegen ist der Absender: Vorhabenkarte";
 
     public static final String CHILD_TOSTRING_TEMPLATE = "%s";
     public static final String[] CHILD_TOSTRING_FIELDS = { "id" };
@@ -284,9 +288,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             ADRESSE_TOSTRING_TEMPLATE,
             ADRESSE_TOSTRING_FIELDS);
     private CidsBean beanHNr;
-    private String saveMail;
-    private String saveBemerkung;
-    private Boolean saveMailBB;
     
     private final ActionListener hnrActionListener = new ActionListener() {
 
@@ -302,6 +303,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private SwingWorker worker_sbz;
     private SwingWorker worker_bb;
     private SwingWorker worker_link;
+    
+    @Getter @Setter private String user;
 
     @Getter @Setter private static Integer counterBeschluesse = -1;
     @Getter @Setter private static Integer counterLinks = -1;
@@ -315,10 +318,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JButton btnAddNewFoto;
     private JButton btnAddNewLink;
     private JButton btnCreateGeometrie;
+    private JButton btnMenOkMail;
     private JButton btnRemoveBeschluss;
     private JButton btnRemoveDokument;
     private JButton btnRemoveFoto;
     private JButton btnRemoveLink;
+    private JButton btnSendMail;
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbKontakt;
@@ -329,6 +334,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     JCheckBox chMailBB;
     JCheckBox chStadtweit;
     JCheckBox chVeroeffentlicht;
+    private JDialog dlgMail;
     private Box.Filler filler3;
     private Box.Filler filler4;
     private Box.Filler filler5;
@@ -344,13 +350,16 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     JTabbedPane jTabbedPane;
     private JLabel lblAbAm;
     private JLabel lblAbgeschlossen;
+    private JLabel lblAbsender;
     private JLabel lblAngelegtAm;
     private JLabel lblAnleger;
     private JLabel lblBB;
     private JLabel lblBemerkung;
     private JLabel lblBeschluesse;
     private JLabel lblBeschreibung;
+    private JLabel lblBetreff;
     private JLabel lblDokumente;
+    private JLabel lblFeedback;
     private JLabel lblFotos;
     private JLabel lblGeom;
     private JLabel lblHNrRenderer;
@@ -370,6 +379,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblLinks;
     private JLabel lblMail;
     private JLabel lblMailBB;
+    private JLabel lblNoMail;
     private JLabel lblOrt;
     private JLabel lblQuartal;
     private JLabel lblStadtbezirke;
@@ -396,11 +406,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panDaten;
     private JPanel panDatenOrt;
     private JPanel panDetails;
+    private JPanel panFeedback;
+    private JPanel panFeedbackHinweis;
     private JPanel panFillerUnten4;
-    private JPanel panFillerUnten5;
     private JPanel panGeometrie;
     private JPanel panIntern;
     private JPanel panLink;
+    private JPanel panMail;
+    private JPanel panMailHinweis;
+    private JPanel panMenButtonsMail;
     private JPanel panOrt;
     private DefaultPreviewMapPanel panPreviewMap;
     private JPanel panSbz;
@@ -413,8 +427,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JScrollPane scpBeschluesse;
     private JScrollPane scpBeschreibung;
     private JScrollPane scpDokumente;
+    private JScrollPane scpFeedback;
+    private JScrollPane scpFeedbackHinweis;
     private JScrollPane scpFotos;
     private JScrollPane scpLinks;
+    private JScrollPane scpMailHinweis;
     private JScrollPane scpOrt;
     private JScrollPane scpSbz;
     private JScrollPane scpText;
@@ -423,12 +440,17 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     JSpinner spQuartal;
     private JTextArea taBemerkung;
     private JTextArea taBeschreibung;
+    private JTextArea taFeedback;
+    private JTextArea taFeedbackHinweis;
+    private JTextArea taMailHinweis;
     private JTextArea taOrt;
     private JTextArea taSbz;
     private JTextArea taText;
     private JTextField txtAbAm;
+    private JTextField txtAbsender;
     private JTextField txtAngelegtAm;
     private JTextField txtAnleger;
+    private JTextField txtBetreff;
     private JTextField txtDokumenteHinweis;
     private JTextField txtFotoHinweis;
     private JTextField txtLetzteA;
@@ -472,6 +494,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         initProperties();
         
         initComponents();
+        dlgMail.pack();
+        dlgMail.getRootPane().setDefaultButton(btnMenOkMail);
         labelsPanels.addAll(Arrays.asList(blpStek));
         for (final DefaultBindableLabelsPanel labelsPanel : labelsPanels) {
             MetaObjectCache.getInstance().clearCache(labelsPanel.getMetaClass());
@@ -625,6 +649,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         GridBagConstraints gridBagConstraints;
         bindingGroup = new BindingGroup();
 
+        dlgMail = new JDialog();
+        panMail = new JPanel();
+        lblNoMail = new JLabel();
+        panMenButtonsMail = new JPanel();
+        btnMenOkMail = new JButton();
         panContent = new RoundedPanel();
         panVorhaben = new JPanel();
         pnlCard1 = new JPanel();
@@ -757,17 +786,65 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten4 = new JPanel();
         jPanelKommunikation = new JPanel();
         panIntern = new JPanel();
+        panMailHinweis = new JPanel();
+        scpMailHinweis = new JScrollPane();
+        taMailHinweis = new JTextArea();
+        lblAbsender = new JLabel();
+        txtAbsender = new JTextField();
         lblMail = new JLabel();
         txtMail = new JTextField();
         lblMailBB = new JLabel();
         chMailBB = new JCheckBox();
+        lblBetreff = new JLabel();
+        txtBetreff = new JTextField();
         lblBemerkung = new JLabel();
         panBemerkung = new JPanel();
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
-        panFillerUnten5 = new JPanel();
+        btnSendMail = new JButton();
+        lblFeedback = new JLabel();
+        panFeedbackHinweis = new JPanel();
+        scpFeedbackHinweis = new JScrollPane();
+        taFeedbackHinweis = new JTextArea();
+        panFeedback = new JPanel();
+        scpFeedback = new JScrollPane();
+        taFeedback = new JTextArea();
         lblVeroeffentlicht = new JLabel();
         chVeroeffentlicht = new JCheckBox();
+
+        dlgMail.setTitle("Mail versenden");
+        dlgMail.setModal(true);
+
+        panMail.setLayout(new GridBagLayout());
+
+        lblNoMail.setText("Ihre Mailadresse konnte in der Datenbank leider nicht gefunden werden. Die Mail(s) werden aber verschickt. Stattdessen erscheint \"Vorhabenkarte\". An diesen Absender kann jedoch nicht geantwortet werden."); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panMail.add(lblNoMail, gridBagConstraints);
+        lblNoMail.getAccessibleContext().setAccessibleName("");
+
+        panMenButtonsMail.setLayout(new GridBagLayout());
+
+        btnMenOkMail.setText("Ok");
+        btnMenOkMail.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnMenOkMailActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panMenButtonsMail.add(btnMenOkMail, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        panMail.add(panMenButtonsMail, gridBagConstraints);
+
+        dlgMail.getContentPane().add(panMail, BorderLayout.CENTER);
 
         setLayout(new GridBagLayout());
 
@@ -2036,11 +2113,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         txtDokumenteHinweis.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
         txtDokumenteHinweis.setText("Bitte beachten Sie, dass die Dokumente unter ftp://sl0317.dmz.wuppertal.de/geoportal/vorhabenkarte/dokumente abgelegt werden müssen.");
-        txtDokumenteHinweis.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                txtDokumenteHinweisActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -2171,11 +2243,66 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panIntern.setOpaque(false);
         panIntern.setLayout(new GridBagLayout());
 
+        panMailHinweis.setOpaque(false);
+        panMailHinweis.setLayout(new GridBagLayout());
+
+        taMailHinweis.setColumns(20);
+        taMailHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
+        taMailHinweis.setLineWrap(true);
+        taMailHinweis.setRows(2);
+        taMailHinweis.setText("Hier können Sie Kollegen und/oder dem Team BB eine Mail schicken, welche automatisch Thema und Titel des Vorhabens versendet. Zum Beispiel für Rückfragen, für Bitten um Ergänzung, Prüfung etc. \nAus ihren WuNDa-Kontaktdaten werden Sie als Absender automatisch ermittelt. \nSoll die Mail an die Bürgerbeteiligung gehen, so reicht es, ein Häkchen zu setzen. Andere Empfänger können mit Semikolon getrennt eingetragen werden. \nUm die Mail zu versenden, klicken Sie unten auf den Button. Für jeden Empfänger wird eine Mail versendet."); // NOI18N
+        taMailHinweis.setWrapStyleWord(true);
+        scpMailHinweis.setViewportView(taMailHinweis);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panMailHinweis.add(scpMailHinweis, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
+        panIntern.add(panMailHinweis, gridBagConstraints);
+
+        lblAbsender.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblAbsender.setText("Absender:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panIntern.add(lblAbsender, gridBagConstraints);
+
+        txtAbsender.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panIntern.add(txtAbsender, gridBagConstraints);
+
         lblMail.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblMail.setText("Mail an:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -2184,13 +2311,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         txtMail.setMinimumSize(new Dimension(10, 24));
         txtMail.setPreferredSize(new Dimension(10, 24));
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.mail}"), txtMail, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -2201,7 +2324,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblMailBB.setText("Mail an Bürgerbeteiligung:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -2209,25 +2332,41 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panIntern.add(lblMailBB, gridBagConstraints);
 
         chMailBB.setContentAreaFilled(false);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.mail_bb}"), chMailBB, BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panIntern.add(chMailBB, gridBagConstraints);
 
-        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBemerkung.setText("Bemerkung:");
+        lblBetreff.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBetreff.setText("Betreff::");
+        lblBetreff.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panIntern.add(lblBetreff, gridBagConstraints);
+
+        txtBetreff.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panIntern.add(txtBetreff, gridBagConstraints);
+
+        lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBemerkung.setText("Mailtext::");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -2241,10 +2380,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taBemerkung.setLineWrap(true);
         taBemerkung.setRows(3);
         taBemerkung.setWrapStyleWord(true);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bemerkung}"), taBemerkung, BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         scpBemerkung.setViewportView(taBemerkung);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2260,7 +2395,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -2268,6 +2403,102 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panIntern.add(panBemerkung, gridBagConstraints);
+
+        btnSendMail.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/mail_new.png"))); // NOI18N
+        btnSendMail.setToolTipText("Mail versenden");
+        btnSendMail.setMaximumSize(new Dimension(198, 150));
+        btnSendMail.setMinimumSize(new Dimension(20, 19));
+        btnSendMail.setPreferredSize(new Dimension(66, 48));
+        btnSendMail.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                btnSendMailActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panIntern.add(btnSendMail, gridBagConstraints);
+        btnCreateGeometrie.setVisible(isEditor());
+
+        lblFeedback.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFeedback.setText("Versandprotokoll:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panIntern.add(lblFeedback, gridBagConstraints);
+
+        panFeedbackHinweis.setOpaque(false);
+        panFeedbackHinweis.setLayout(new GridBagLayout());
+
+        taFeedbackHinweis.setColumns(20);
+        taFeedbackHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
+        taFeedbackHinweis.setLineWrap(true);
+        taFeedbackHinweis.setRows(2);
+        taFeedbackHinweis.setText("Wenn Empfänger, Betreff und Mailtext vorhanden sind und der Button gedrückt wird, so erscheint unten eine Art Versandprotokoll.\nHier ist ersichtlich, ob der Versand erfolgreich war (wunda@stadt.wuppertal.de) oder nicht (z.B. wundastadt.wuppertal.de--> @ vergessen).\nAn dieser Stelle kann jedoch keine Aussage darüber getroffen werden, ob die Adresse wirklich (Peter.Pan@stadt.doubleuuppervalley.de) existiert. Wenn Sie als Absender oben stehen, erhalten Sie eine extra Mail dazu.\nWird erneut auf den Button geklickt, werden neue Mails versendet und es erscheinen neue Versandprotokolle."); // NOI18N
+        taFeedbackHinweis.setWrapStyleWord(true);
+        scpFeedbackHinweis.setViewportView(taFeedbackHinweis);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFeedbackHinweis.add(scpFeedbackHinweis, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 2);
+        panIntern.add(panFeedbackHinweis, gridBagConstraints);
+
+        panFeedback.setOpaque(false);
+        panFeedback.setLayout(new GridBagLayout());
+
+        taFeedback.setColumns(20);
+        taFeedback.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
+        taFeedback.setForeground(new Color(102, 102, 255));
+        taFeedback.setLineWrap(true);
+        taFeedback.setRows(2);
+        taFeedback.setWrapStyleWord(true);
+        scpFeedback.setViewportView(taFeedback);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFeedback.add(scpFeedback, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panIntern.add(panFeedback, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2278,27 +2509,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
         jPanelKommunikation.add(panIntern, gridBagConstraints);
-
-        panFillerUnten5.setName(""); // NOI18N
-        panFillerUnten5.setOpaque(false);
-
-        GroupLayout panFillerUnten5Layout = new GroupLayout(panFillerUnten5);
-        panFillerUnten5.setLayout(panFillerUnten5Layout);
-        panFillerUnten5Layout.setHorizontalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten5Layout.setVerticalGroup(panFillerUnten5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 1;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        jPanelKommunikation.add(panFillerUnten5, gridBagConstraints);
 
         jTabbedPane.addTab("interne Kommunikation", jPanelKommunikation);
 
@@ -2650,11 +2860,158 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
        setGeomFromAdress();
     }//GEN-LAST:event_btnCreateGeometrieActionPerformed
 
-    private void txtDokumenteHinweisActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtDokumenteHinweisActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDokumenteHinweisActionPerformed
+    private void btnSendMailActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnSendMailActionPerformed
+        final StringBuilder userFeedback = new StringBuilder();
+        //Ermitteln der Mailadresse des Users
+        String userMail = "vk";
+        final UserMailSearch search = new UserMailSearch(getUser());
+        final Collection<ArrayList> al;
+        try {
+            if (txtAbsender.getText().isEmpty()||txtAbsender.getText().equals(KEIN_ABSENDER)) { 
+                al = SessionManager.getProxy()
+                    .customServerSearch(
+                            SessionManager.getSession().getUser(),
+                            search,
+                            getConnectionContext());
+
+                if ((al != null) && !al.isEmpty()) {
+                    for (final ArrayList obj:al){
+                        userMail = (String) obj.get(0);
+                        txtAbsender.setText(userMail);
+                        if (userMail != null){
+                            break;
+                        }
+                    } 
+                } else {
+                    userMail = KEIN_ABSENDER;
+                    try {
+                        lblNoMail.setText("Ihre Mailadresse konnte in der Datenbank leider nicht gefunden werden. Die Mail(s) werden aber verschickt. Stattdessen erscheint \"Vorhabenkarte\". An diesen Absender kann jedoch nicht geantwortet werden.");
+                        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(VkVorhabenEditor.this), dlgMail, true);
+                    } catch (Exception e) {
+                        LOG.error("Cannot found user mailadresse", e);
+                    }
+                }
+            } else {
+                userMail = txtAbsender.getText();
+            }             
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+            
+            
+        final String mail = (txtMail.getText() != null && !(txtMail.getText().isEmpty()))
+            ? (txtMail.getText()) : null;
+        final String bemerkung = (taBemerkung.getText() != null && !(taBemerkung.getText().isEmpty()))
+            ? (taBemerkung.getText()) : null;
+        final Boolean mailBB = chMailBB.isSelected();
+
+        if (getCidsBean().getProperty(FIELD__TITEL) != null && !getCidsBean().getProperty(FIELD__TITEL).toString().isEmpty()
+                && getCidsBean().getProperty(FIELD__THEMA) != null && !getCidsBean().getProperty(FIELD__THEMA).toString().isEmpty()){
+            String betreff =  txtBetreff.getText();
+            if (bemerkung != null){
+                if (!mailBB && mail == null){
+                    try {
+                        lblNoMail.setText("Sie haben keinen Empfänger eingegeben.");
+                        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(VkVorhabenEditor.this), dlgMail, true);
+                    } catch (Exception e) {
+                        LOG.error("Cannot found bemerkung", e);
+                    }
+                } else {
+                    if (mailBB){ 
+                        final Object ret = sendMail(userMail, MAIL_BB, betreff, bemerkung);
+                        //Rückgabe user feedback
+                        userFeedback.append(String.format("Beim Versand an %s kam es zu folgenden Meldungen: \n", MAIL_BB));
+                        userFeedback.append(ret.toString());
+                    }
+                    //mehrere Empfänger
+                    if (mail != null) {
+                        String[] mailArray = mail.split(";");
+                            for (final String mailAdr : mailArray) {
+                                System.out.println(mailAdr);
+                                final String toAdresse = mailAdr.trim();
+                                final Object ret = sendMail(userMail, toAdresse, betreff, bemerkung);
+                                //Rückgabe user feedback
+                                userFeedback.append(String.format("Beim Versand an %s kam es zu folgenden Meldungen: \n", toAdresse));
+                                userFeedback.append(ret.toString());
+                            }
+                    }
+                }
+            } else {
+            //Meldung bemerkung
+                try {
+                    lblNoMail.setText("Sie haben keinen Text eingegeben.");
+                    StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(VkVorhabenEditor.this), dlgMail, true);
+                } catch (Exception e) {
+                    LOG.error("Cannot found bemerkung", e);
+                }
+            }
+            if (userFeedback.length() > 0) {
+                taFeedback.setText(userFeedback.toString());
+            }
+        } else {
+            //Meldung Titel Thema
+            try {
+                lblNoMail.setText("Für den Betreff werden Thema und Titel benötigt.");
+                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(VkVorhabenEditor.this), dlgMail, true);
+            } catch (Exception e) {
+                LOG.error("Cannot found titel thema", e);
+            }
+        }
+    }//GEN-LAST:event_btnSendMailActionPerformed
 
     
+    private Object sendMail(final String userMail, final String mail, final String betreff, final String bemerkung){
+        final ServerActionParameter[] param = new ServerActionParameter[] {
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.ABSENDER.toString(),
+                        userMail),
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.MAIL_ADRESS.toString(),
+                        mail),
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.BETREFF.toString(),
+                       betreff),
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.CONTENT.toString(),
+                        bemerkung),
+                };
+
+        try {
+            return SessionManager.getProxy().executeTask(
+                    VkSendMailServerAction.TASK_NAME,
+                    "WUNDA_BLAU",
+                    (Object) null,
+                    getConnectionContext(),
+                    param
+            );
+           
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+            return null;
+        }
+    }
+    
+    private void btnMenOkMailActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkMailActionPerformed
+        try {
+            dlgMail.setVisible(false);
+        } catch (Exception ex) {
+            LOG.error("Fehler beim Schliessen.", ex);
+        } finally {
+            dlgMail.setVisible(false);
+        }
+    }//GEN-LAST:event_btnMenOkMailActionPerformed
+/*
+    protected DomainServerImpl waitForMetaService() {
+        DomainServerImpl metaService = null;
+        while (metaService == null) {
+            metaService = DomainServerImpl.getServerInstance();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+            }
+        }
+        return metaService;
+    }*/
 
     /**
      * DOCUMENT ME!
@@ -2730,6 +3087,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 getCidsBean().setProperty(FIELD__JAHR, 2025);
             }*/
             bindingGroup.bind();
+            setBetreff();
+            setUser(getCurrentUser());
             setTitle(getTitle());
             if (getCidsBean() != null) {
                 labelsPanels.addAll(Arrays.asList(blpStek));
@@ -2817,9 +3176,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
-            if ((getCidsBean() != null) && isEditor()) {
-                setSaveValues();
-            }
           //  cbHNr.setMetaClass(MC__HNR);
             stadtweitChoose();
         } catch (Exception ex) {
@@ -3021,6 +3377,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             panControlsNewDokumente.setVisible(false);
             panControlsNewFotos.setVisible(false);
             panControlsNewLinks.setVisible(false);
+            btnSendMail.setVisible(false);
         }
         RendererTools.makeReadOnly(txtAnleger);
         RendererTools.makeReadOnly(txtLetzteA);
@@ -3030,6 +3387,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         RendererTools.makeReadOnly(txtDokumenteHinweis);
         RendererTools.makeReadOnly(txtAbAm);
         RendererTools.makeReadOnly(taSbz);
+        RendererTools.makeReadOnly(taMailHinweis);
+        RendererTools.makeReadOnly(txtAbsender);
+        RendererTools.makeReadOnly(txtBetreff);
+        RendererTools.makeReadOnly(taFeedbackHinweis);
+        RendererTools.makeReadOnly(taFeedback);
     }
     
     public void setStadtbezirke(){
@@ -3244,7 +3606,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     @Override
     public void dispose() {
         panPreviewMap.dispose();
-
+        dlgMail.dispose();
         if (isEditor()) {
             ((DefaultCismapGeometryComboBoxEditor)cbGeom).dispose();
             cbHNr.removeActionListener(hnrActionListener);
@@ -3286,7 +3648,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         try {
             getCidsBean().setProperty(
                 durch,
-                getCurrentUser());
+                getUser());
         } catch (Exception ex) {
             LOG.warn("User not set.", ex);
             return false;
@@ -3359,6 +3721,24 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 btnCreateGeometrie.doClick();
             }
         }
+        
+        if (evt.getPropertyName().equals(FIELD__THEMA)) {
+            setBetreff();
+        }
+        if (evt.getPropertyName().equals(FIELD__TITEL)) {
+            setBetreff();
+        }
+    }
+    
+    private void setBetreff(){
+        if (getCidsBean() != null 
+                && getCidsBean().getProperty(FIELD__THEMA) != null
+                && getCidsBean().getProperty(FIELD__TITEL) != null) {
+            txtBetreff.setText("Vk: " + getCidsBean().getProperty(FIELD__THEMA).toString() + " - " + getCidsBean().getProperty(FIELD__TITEL).toString());
+        } else {
+            txtBetreff.setText("Der Betreff kann noch nicht ermittelt werden.");
+        }
+            
     }
     
     private void stadtweitChoose(){
@@ -3400,17 +3780,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             } 
         }
     }
-    
-    /**
-     * DOCUMENT ME!
-     */
-    private void setSaveValues() {
-        saveMail= (getCidsBean().getProperty(FIELD__MAIL) != null)
-            ? ((String)getCidsBean().getProperty(FIELD__MAIL)) : null;
-        saveBemerkung= (getCidsBean().getProperty(FIELD__BEMERKUNG) != null)
-            ? ((String)getCidsBean().getProperty(FIELD__BEMERKUNG)) : null;
-        saveMailBB = (Boolean) getCidsBean().getProperty(FIELD__MAIL_BB);
-    }
+
     
     @Override
     public void afterSaving(final AfterSavingHook.Event event) {
@@ -3507,24 +3877,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                         }
                     } catch (Exception ex) {
                         LOG.warn("problem in persist documents.", ex);
-                    }
-                }
-                final String mail= (getCidsBean().getProperty(FIELD__MAIL) != null)
-                        ? ((String)getCidsBean().getProperty(FIELD__MAIL)) : null;
-                final String bemerkung= (getCidsBean().getProperty(FIELD__BEMERKUNG) != null)
-                    ? ((String)getCidsBean().getProperty(FIELD__BEMERKUNG)) : null;
-                final Boolean mailBB = (Boolean) getCidsBean().getProperty(FIELD__MAIL_BB);
-                if ((mail == null ? saveMail != null : !mail.equals(saveMail)) 
-                        || !Objects.equals(mailBB, saveMailBB) 
-                        || (bemerkung == null ? saveBemerkung != null : !bemerkung.equals(saveBemerkung))){
-                    if (mailBB){
-                       /*GeneralUtils.sendMail("sendEmail -s smtp.wuppertal-intra.de -f sandra.simmert@stadt.wuppertal.de -t \"{MAIL_ADDRESS}\" -u \"{TOPIC}\" -m \"{MESSAGE}\";", 
-                        "sandra.simmert@stadt.wuppertal.de", 
-                        "Hallo", 
-                        "Vorhabenkarte");*/
-                    }
-                    if (mail != null){
-                        
                     }
                 }
             }
