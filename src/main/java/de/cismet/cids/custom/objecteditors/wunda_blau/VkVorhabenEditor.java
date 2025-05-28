@@ -2669,34 +2669,36 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnAddNewBeschlussActionPerformed
 
     private void btnRemoveBeschlussActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveBeschlussActionPerformed
-        final Object selectedObject = lstBeschluesse.getSelectedValue();
-
-        if (selectedObject instanceof CidsBean) {
-            final Integer idBeschluss = ((CidsBean)selectedObject).getPrimaryKeyValue();
-            if (getVkDocumentLoader().getMapValueBeschluesse(idBeschluss) == null) {
-                final List<CidsBean> listBeschluesse = getVkDocumentLoader().getMapValueBeschluesse(getCidsBean()
-                    .getPrimaryKeyValue());
-                if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
-                    getVkDocumentLoader().removeBeschluesse(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
-                } else {
-                    for (final CidsBean beanBeschluss : listBeschluesse) {
-                        if (beanBeschluss.equals(selectedObject)) {
-                            try {
-                                beanBeschluss.delete();
-                            } catch (Exception ex) {
-                                LOG.warn("problem in delete beschluss: not removed.", ex);
-                            }
-                            break;
-                        }
-                    }
-                    getVkDocumentLoader().getMapBeschluesse().replace(getCidsBean().getPrimaryKeyValue(), listBeschluesse);
-                }
-                ((DefaultListModel)lstBeschluesse.getModel()).removeElement(selectedObject);
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
                 
-                if (getActiveBeans(listBeschluesse) > 0) {
-                    lstBeschluesse.setSelectedIndex(0);
+                final Object selectedObject = lstBeschluesse.getSelectedValue();
+
+                if (selectedObject instanceof CidsBean) {
+                    final List<CidsBean> listBeschluesse = getVkDocumentLoader().getMapValueBeschluesse(
+                            getCidsBean().getPrimaryKeyValue());
+                    if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
+                        getVkDocumentLoader().removeBeschluesse(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    } else {
+                        for (final CidsBean beanBeschluss : listBeschluesse) {
+                            if (beanBeschluss.equals(selectedObject)) {
+                                try {
+                                    beanBeschluss.delete();
+                                } catch (Exception ex) {
+                                    LOG.warn("problem in delete beschluss: not removed.", ex);
+                                }
+                                break;
+                            }
+                        }
+                        getVkDocumentLoader().getMapBeschluesse().replace(getCidsBean().getPrimaryKeyValue(), listBeschluesse);
+                    }
+                    ((DefaultListModel)lstBeschluesse.getModel()).removeElement(selectedObject);
+
+                    if (getActiveBeans(listBeschluesse) > 0) {
+                        lstBeschluesse.setSelectedIndex(0);
+                    }
+                    getCidsBean().setArtificialChangeFlag(true);
                 }
-                getCidsBean().setArtificialChangeFlag(true);
             } 
         }
     }//GEN-LAST:event_btnRemoveBeschlussActionPerformed
@@ -2737,67 +2739,69 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnAddNewLinkActionPerformed
 
     private void btnRemoveLinkActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveLinkActionPerformed
-        final Object selectedObject = lstLinks.getSelectedValue();
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
+                final Object selectedObject = lstLinks.getSelectedValue();
 
-        if (selectedObject instanceof CidsBean) {
-            final Integer idLink = ((CidsBean)selectedObject).getPrimaryKeyValue();
-            if (getVkDocumentLoader().getMapValueLinks(idLink) == null) {
-                final List<CidsBean> listLinks = getVkDocumentLoader().getMapValueLinks(getCidsBean()
-                    .getPrimaryKeyValue());
-                if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
-                    getVkDocumentLoader().removeLinks(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
-                } else {
-                    for (final CidsBean beanLink : listLinks) {
-                        if (beanLink.equals(selectedObject)) {
-                            try {
-                                beanLink.delete();
-                            } catch (Exception ex) {
-                                LOG.warn("problem in delete link: not removed.", ex);
+                if (selectedObject instanceof CidsBean) {
+                    final List<CidsBean> listLinks = getVkDocumentLoader().getMapValueLinks(
+                            getCidsBean().getPrimaryKeyValue());
+                    if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
+                        getVkDocumentLoader().removeLinks(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    } else {
+                        for (final CidsBean beanLink : listLinks) {
+                            if (beanLink.equals(selectedObject)) {
+                                try {
+                                    beanLink.delete();
+                                } catch (Exception ex) {
+                                    LOG.warn("problem in delete link: not removed.", ex);
+                                }
+                                break;
                             }
-                            break;
                         }
+                        getVkDocumentLoader().getMapLinks().replace(getCidsBean().getPrimaryKeyValue(), listLinks);
                     }
-                    getVkDocumentLoader().getMapLinks().replace(getCidsBean().getPrimaryKeyValue(), listLinks);
-                }
-                ((DefaultListModel)lstLinks.getModel()).removeElement(selectedObject);
-                
-                if (getActiveBeans(listLinks) > 0) {
-                    lstLinks.setSelectedIndex(0);
-                }
-                getCidsBean().setArtificialChangeFlag(true);
-            } 
+                    ((DefaultListModel)lstLinks.getModel()).removeElement(selectedObject);
+
+                    if (getActiveBeans(listLinks) > 0) {
+                        lstLinks.setSelectedIndex(0);
+                    }
+                    getCidsBean().setArtificialChangeFlag(true);
+                } 
+            }
         }
     }//GEN-LAST:event_btnRemoveLinkActionPerformed
 
     private void btnRemoveDokumentActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveDokumentActionPerformed
-        final Object selectedObject = lstDokumente.getSelectedValue();
+        if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
+                final Object selectedObject = lstDokumente.getSelectedValue();
 
-        if (selectedObject instanceof CidsBean) {
-            final Integer idDokument = ((CidsBean)selectedObject).getPrimaryKeyValue();
-            if (getVkDocumentLoader().getMapValueDokumente(idDokument) == null) {
-                final List<CidsBean> listDokumente = getVkDocumentLoader().getMapValueDokumente(getCidsBean()
-                    .getPrimaryKeyValue());
-                if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
-                    getVkDocumentLoader().removeDokumente(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
-                } else {
-                    for (final CidsBean beanDokument : listDokumente) {
-                        if (beanDokument.equals(selectedObject)) {
-                            try {
-                                beanDokument.delete();
-                            } catch (Exception ex) {
-                                LOG.warn("problem in delete dokument: not removed.", ex);
+                if (selectedObject instanceof CidsBean) {
+                    final List<CidsBean> listDokumente = getVkDocumentLoader().getMapValueDokumente(
+                            getCidsBean().getPrimaryKeyValue());
+                    if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
+                        getVkDocumentLoader().removeDokumente(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    } else {
+                        for (final CidsBean beanDokument : listDokumente) {
+                            if (beanDokument.equals(selectedObject)) {
+                                try {
+                                    beanDokument.delete();
+                                } catch (Exception ex) {
+                                    LOG.warn("problem in delete dokument: not removed.", ex);
+                                }
+                                break;
                             }
-                            break;
                         }
+                        getVkDocumentLoader().getMapDokumente().replace(getCidsBean().getPrimaryKeyValue(), listDokumente);
                     }
-                    getVkDocumentLoader().getMapDokumente().replace(getCidsBean().getPrimaryKeyValue(), listDokumente);
+                    ((DefaultListModel)lstDokumente.getModel()).removeElement(selectedObject);
+
+                    if (getActiveBeans(listDokumente) > 0) {
+                        lstDokumente.setSelectedIndex(0);
+                    }
+                    getCidsBean().setArtificialChangeFlag(true);
                 }
-                ((DefaultListModel)lstDokumente.getModel()).removeElement(selectedObject);
-                
-                if (getActiveBeans(listDokumente) > 0) {
-                    lstDokumente.setSelectedIndex(0);
-                }
-                getCidsBean().setArtificialChangeFlag(true);
             } 
         }
     }//GEN-LAST:event_btnRemoveDokumentActionPerformed
@@ -2865,34 +2869,35 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnAddNewFotoActionPerformed
 
     private void btnRemoveFotoActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnRemoveFotoActionPerformed
-       final Object selectedObject = lstFotos.getSelectedValue();
+       if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
+            if (getCidsBean() != null) {
+                final Object selectedObject = lstFotos.getSelectedValue();
 
-        if (selectedObject instanceof CidsBean) {
-            final Integer idFotos = ((CidsBean)selectedObject).getPrimaryKeyValue();
-            if (getVkDocumentLoader().getMapValueFotos(idFotos) == null) {
-                final List<CidsBean> listFotos = getVkDocumentLoader().getMapValueFotos(getCidsBean()
-                    .getPrimaryKeyValue());
-                if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
-                    getVkDocumentLoader().removeFotos(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
-                } else {
-                    for (final CidsBean beanFoto : listFotos) {
-                        if (beanFoto.equals(selectedObject)) {
-                            try {
-                                beanFoto.delete();
-                            } catch (Exception ex) {
-                                LOG.warn("problem in delete foto: not removed.", ex);
+                if (selectedObject instanceof CidsBean) {
+                    final List<CidsBean> listFotos = getVkDocumentLoader().getMapValueFotos(
+                            getCidsBean().getPrimaryKeyValue());
+                    if (((CidsBean)selectedObject).getMetaObject().getStatus() == MetaObject.NEW) {
+                        getVkDocumentLoader().removeFotos(getCidsBean().getPrimaryKeyValue(), (CidsBean)selectedObject);
+                    } else {
+                        for (final CidsBean beanFoto : listFotos) {
+                            if (beanFoto.equals(selectedObject)) {
+                                try {
+                                    beanFoto.delete();
+                                } catch (Exception ex) {
+                                    LOG.warn("problem in delete foto: not removed.", ex);
+                                }
+                                break;
                             }
-                            break;
                         }
+                        getVkDocumentLoader().getMapFotos().replace(getCidsBean().getPrimaryKeyValue(), listFotos);
                     }
-                    getVkDocumentLoader().getMapFotos().replace(getCidsBean().getPrimaryKeyValue(), listFotos);
+                    ((DefaultListModel)lstFotos.getModel()).removeElement(selectedObject);
+
+                    if (getActiveBeans(listFotos) > 0) {
+                        lstFotos.setSelectedIndex(0);
+                    }
+                    getCidsBean().setArtificialChangeFlag(true);
                 }
-                ((DefaultListModel)lstFotos.getModel()).removeElement(selectedObject);
-                
-                if (getActiveBeans(listFotos) > 0) {
-                    lstFotos.setSelectedIndex(0);
-                }
-                getCidsBean().setArtificialChangeFlag(true);
             } 
         }
     }//GEN-LAST:event_btnRemoveFotoActionPerformed
