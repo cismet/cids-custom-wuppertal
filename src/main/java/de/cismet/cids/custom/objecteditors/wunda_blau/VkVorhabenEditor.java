@@ -158,6 +158,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private static String MAIL_BB;
     private static String MAIL_NEU;
     private static String NEU_VORHABEN;
+    private static String HILFE_FOTOS;
+    private static String HILFE_KONTAKT;
+    private static String HILFE_DOKUMENTE;
+    private static String HILFE_ORT;
+    private static String HILFE_ANHANG;
     
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
@@ -399,6 +404,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JList lstDokumente;
     private JList lstFotos;
     private JList lstLinks;
+    private JPanel panAnhangHinweis;
     private JPanel panBemerkung;
     private JPanel panBeschreibung;
     private JPanel panContent;
@@ -427,6 +433,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panVorhaben;
     private JPanel pnlCard1;
     private RoundedPanel rpKarte;
+    private JScrollPane scpAnhangHinweis;
     private JScrollPane scpBemerkung;
     private JScrollPane scpBeschluesse;
     private JScrollPane scpBeschreibung;
@@ -443,6 +450,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private SemiRoundedPanel semiRoundedPanel8;
     JSpinner spJahr;
     JSpinner spQuartal;
+    private JTextArea taAnhangHinweis;
     private JTextArea taBemerkung;
     private JTextArea taBeschreibung;
     private JTextArea taFeedback;
@@ -773,6 +781,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         cbKontakt = new FastBindableReferenceCombo();
         lblKontaktHelp = new JLabel();
         jPanelExt = new JPanel();
+        panAnhangHinweis = new JPanel();
+        scpAnhangHinweis = new JScrollPane();
+        taAnhangHinweis = new JTextArea();
         jPanelDokLinks = new JPanel();
         lblLinks = new JLabel();
         lblLadenLinks = new JLabel();
@@ -1187,7 +1198,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblLadenFotos.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLadenFotos.setForeground(new Color(153, 153, 153));
-        lblLadenFotos.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        lblLadenFotos.setText("wird geladen...");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1353,7 +1364,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taOrtHinweis.setColumns(20);
         taOrtHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
         taOrtHinweis.setLineWrap(true);
-        taOrtHinweis.setRows(9);
+        taOrtHinweis.setRows(3);
         taOrtHinweis.setText("Damit eine Bearbeitung einfacher ist, laufen einige Dinge automatisch ab:\n   • Bei einem neuen Vorhaben wird bei der Auswahl (Änderung) der Hausnummer die Geometrie aus dieser übernommen. Sollte die Geometrie schon vorhanden sein, so wird gefragt, ob diese geändert werden soll.\n   • Bei bestehenden Vorhaben passiert dies nicht automatisch. Über den Zauberstab kann jedoch jederzeit die Adressgeometrie übernommen werden.\n   • Wird das Häkchen bei stadtweit gesetzt, so wird die ausgewählte Adresse entfernt und die Auswahllisten grauen aus. Ist keine Geometrie vorhanden, so wird ein Punkt am Rathaus gesetzt. Ist eine Geometrie vorhanden wird diese nicht verändert.\n   • Wird das Häkchen bei stadtweit entfernt, so ist wieder eine Auswahl der Adresse möglich. Es erfolgt keine Änderung der Geometrie.\nDie Geometrie kann unabhängig von Adresse bzw. stadtweit angepasst bzw. auch gelöscht werden. Deswegen ist diese ein Pflichtattribut."); // NOI18N
         taOrtHinweis.setWrapStyleWord(true);
         scpOrtHinweis.setViewportView(taOrtHinweis);
@@ -1676,7 +1687,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblLadenBeschluss.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLadenBeschluss.setForeground(new Color(153, 153, 153));
-        lblLadenBeschluss.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        lblLadenBeschluss.setText("wird geladen...");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -2037,6 +2048,40 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         jPanelExt.setOpaque(false);
         jPanelExt.setLayout(new GridBagLayout());
 
+        panAnhangHinweis.setOpaque(false);
+        panAnhangHinweis.setLayout(new GridBagLayout());
+
+        taAnhangHinweis.setColumns(20);
+        taAnhangHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
+        taAnhangHinweis.setLineWrap(true);
+        taAnhangHinweis.setRows(3);
+        taAnhangHinweis.setText("Text Jonathan"); // NOI18N
+        taAnhangHinweis.setWrapStyleWord(true);
+        scpAnhangHinweis.setViewportView(taAnhangHinweis);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panAnhangHinweis.add(scpAnhangHinweis, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        jPanelExt.add(panAnhangHinweis, gridBagConstraints);
+
         jPanelDokLinks.setOpaque(false);
         jPanelDokLinks.setLayout(new GridBagLayout());
 
@@ -2055,7 +2100,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblLadenLinks.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLadenLinks.setForeground(new Color(153, 153, 153));
-        lblLadenLinks.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        lblLadenLinks.setText("wird geladen...");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -2142,7 +2187,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -2189,7 +2234,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblLadenDokumente.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblLadenDokumente.setForeground(new Color(153, 153, 153));
-        lblLadenDokumente.setText(NbBundle.getMessage(VkVorhabenEditor.class, "BaumMeldungPanel.lblLadenOrt.text")); // NOI18N
+        lblLadenDokumente.setText("wird geladen...");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -2259,7 +2304,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -2281,7 +2326,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -3236,6 +3281,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
           //  cbHNr.setMetaClass(MC__HNR);
             stadtweitChoose();
+            setHelp();
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
             if (isEditor()) {
@@ -3251,8 +3297,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      */
     public void noSave() {
         final ErrorInfo info = new ErrorInfo(
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_TITLE),
-                NbBundle.getMessage(BaumGebietEditor.class, BUNDLE_NOSAVE_MESSAGE),
+                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOSAVE_TITLE),
+                NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOSAVE_MESSAGE),
                 null,
                 null,
                 getErrorNoSave(),
@@ -3442,6 +3488,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         RendererTools.makeReadOnly(txtLetzterB);
         RendererTools.makeReadOnly(txtAngelegtAm);
         RendererTools.makeReadOnly(txtFotoHinweis);
+        RendererTools.makeReadOnly(taOrtHinweis);
         RendererTools.makeReadOnly(txtDokumenteHinweis);
         RendererTools.makeReadOnly(txtAbAm);
         RendererTools.makeReadOnly(taSbz);
@@ -3450,6 +3497,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         RendererTools.makeReadOnly(txtBetreff);
         RendererTools.makeReadOnly(taFeedbackHinweis);
         RendererTools.makeReadOnly(taFeedback);
+        RendererTools.makeReadOnly(taAnhangHinweis);
     }
     
     public void setStadtbezirke(){
@@ -3627,12 +3675,23 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             NEU_VORHABEN = VkConfProperties.getInstance().getNeuVorhaben();
             MAIL_BB = VkConfProperties.getInstance().getMailBB();
             MAIL_NEU = VkConfProperties.getInstance().getMailNeu();
-
+            HILFE_FOTOS = VkConfProperties.getInstance().getHilfeFotos();
+            HILFE_ORT = VkConfProperties.getInstance().getHilfeOrt();
+            HILFE_KONTAKT = VkConfProperties.getInstance().getHilfeKontakt();
+            HILFE_ANHANG = VkConfProperties.getInstance().getHilfeAnhang();
+            HILFE_DOKUMENTE = VkConfProperties.getInstance().getHilfeDokumente();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
     }
 
+    public void setHelp(){
+            txtFotoHinweis.setText(HILFE_FOTOS);
+            taOrtHinweis.setText(HILFE_ORT);
+            lblKontaktHelp.setText(HILFE_KONTAKT);
+            taAnhangHinweis.setText(HILFE_ANHANG);
+            txtDokumenteHinweis.setText(HILFE_DOKUMENTE);
+    }
     /**
      * DOCUMENT ME!
      *

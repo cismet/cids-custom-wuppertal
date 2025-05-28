@@ -565,9 +565,7 @@
                                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="99" green="99" red="99" type="rgb"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumMeldungPanel.lblLadenOrt.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                                </Property>
+                                <Property name="text" type="java.lang.String" value="wird geladen..."/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -824,7 +822,7 @@
                                           <Font name="Noto Sans" size="12" style="2"/>
                                         </Property>
                                         <Property name="lineWrap" type="boolean" value="true"/>
-                                        <Property name="rows" type="int" value="9"/>
+                                        <Property name="rows" type="int" value="3"/>
                                         <Property name="text" type="java.lang.String" value="Damit eine Bearbeitung einfacher ist, laufen einige Dinge automatisch ab:&#xa;   &#x2022; Bei einem neuen Vorhaben wird bei der Auswahl (&#xc4;nderung) der Hausnummer die Geometrie aus dieser &#xfc;bernommen. Sollte die Geometrie schon vorhanden sein, so wird gefragt, ob diese ge&#xe4;ndert werden soll.&#xa;   &#x2022; Bei bestehenden Vorhaben passiert dies nicht automatisch. &#xdc;ber den Zauberstab kann jedoch jederzeit die Adressgeometrie &#xfc;bernommen werden.&#xa;   &#x2022; Wird das H&#xe4;kchen bei stadtweit gesetzt, so wird die ausgew&#xe4;hlte Adresse entfernt und die Auswahllisten grauen aus. Ist keine Geometrie vorhanden, so wird ein Punkt am Rathaus gesetzt. Ist eine Geometrie vorhanden wird diese nicht ver&#xe4;ndert.&#xa;   &#x2022; Wird das H&#xe4;kchen bei stadtweit entfernt, so ist wieder eine Auswahl der Adresse m&#xf6;glich. Es erfolgt keine &#xc4;nderung der Geometrie.&#xa;Die Geometrie kann unabh&#xe4;ngig von Adresse bzw. stadtweit angepasst bzw. auch gel&#xf6;scht werden. Deswegen ist diese ein Pflichtattribut." noResource="true"/>
                                         <Property name="wrapStyleWord" type="boolean" value="true"/>
                                       </Properties>
@@ -1237,9 +1235,7 @@
                                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                       <Color blue="99" green="99" red="99" type="rgb"/>
                                     </Property>
-                                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                      <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumMeldungPanel.lblLadenOrt.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="wird geladen..."/>
                                   </Properties>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1669,13 +1665,53 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
                       <SubComponents>
+                        <Container class="javax.swing.JPanel" name="panAnhangHinweis">
+                          <Properties>
+                            <Property name="opaque" type="boolean" value="false"/>
+                          </Properties>
+                          <Constraints>
+                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                              <GridBagConstraints gridX="0" gridY="0" gridWidth="6" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="1.0"/>
+                            </Constraint>
+                          </Constraints>
+
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
+                          <SubComponents>
+                            <Container class="javax.swing.JScrollPane" name="scpAnhangHinweis">
+                              <AuxValues>
+                                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                              </AuxValues>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                                  <GridBagConstraints gridX="1" gridY="15" gridWidth="5" gridHeight="3" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="1.0" weightY="1.0"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                              <SubComponents>
+                                <Component class="javax.swing.JTextArea" name="taAnhangHinweis">
+                                  <Properties>
+                                    <Property name="columns" type="int" value="20"/>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Noto Sans" size="12" style="2"/>
+                                    </Property>
+                                    <Property name="lineWrap" type="boolean" value="true"/>
+                                    <Property name="rows" type="int" value="3"/>
+                                    <Property name="text" type="java.lang.String" value="Text Jonathan" noResource="true"/>
+                                    <Property name="wrapStyleWord" type="boolean" value="true"/>
+                                  </Properties>
+                                </Component>
+                              </SubComponents>
+                            </Container>
+                          </SubComponents>
+                        </Container>
                         <Container class="javax.swing.JPanel" name="jPanelDokLinks">
                           <Properties>
                             <Property name="opaque" type="boolean" value="false"/>
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="18" weightX="1.0" weightY="1.0"/>
+                              <GridBagConstraints gridX="0" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="18" weightX="1.0" weightY="1.0"/>
                             </Constraint>
                           </Constraints>
 
@@ -1703,9 +1739,7 @@
                                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="99" green="99" red="99" type="rgb"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumMeldungPanel.lblLadenOrt.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                                </Property>
+                                <Property name="text" type="java.lang.String" value="wird geladen..."/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1829,7 +1863,7 @@
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="18" weightX="1.0" weightY="1.0"/>
+                              <GridBagConstraints gridX="0" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="10" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="18" weightX="1.0" weightY="1.0"/>
                             </Constraint>
                           </Constraints>
 
@@ -1883,9 +1917,7 @@
                                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="99" green="99" red="99" type="rgb"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                                  <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="BaumMeldungPanel.lblLadenOrt.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                                </Property>
+                                <Property name="text" type="java.lang.String" value="wird geladen..."/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1994,7 +2026,7 @@
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="1" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="0.0" weightY="1.0"/>
+                              <GridBagConstraints gridX="0" gridY="4" gridWidth="1" gridHeight="1" fill="1" ipadX="1" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="17" weightX="0.0" weightY="1.0"/>
                             </Constraint>
                           </Constraints>
 

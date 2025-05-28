@@ -52,6 +52,11 @@ public class VkConfProperties {
     private final String neuVorhaben;
     private final String mailBB;
     private final String mailNeu;
+    private final String hilfeDokumente;
+    private final String hilfeFotos;
+    private final String hilfeAnhang;
+    private final String hilfeOrt;
+    private final String hilfeKontakt;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -68,6 +73,11 @@ public class VkConfProperties {
         neuVorhaben = String.valueOf(readProperty(properties, "NEU_VORHABEN", null));
         mailBB = String.valueOf(readProperty(properties, "MAIL_BB", null));
         mailNeu= String.valueOf(readProperty(properties, "MAIL_NEU", null));
+        hilfeDokumente= String.valueOf(readProperty(properties, "HILFE_DOKUMENTE", null));
+        hilfeFotos= String.valueOf(readProperty(properties, "HILFE_FOTOS", null));
+        hilfeAnhang= String.valueOf(readProperty(properties, "HILFE_ANHANG", null));
+        hilfeOrt= String.valueOf(readProperty(properties, "HILFE_ORT", null));
+        hilfeKontakt= String.valueOf(readProperty(properties, "HILFE_KONTAKT", null));
     }
 
     //~ Methods ----------------------------------------------------------------
