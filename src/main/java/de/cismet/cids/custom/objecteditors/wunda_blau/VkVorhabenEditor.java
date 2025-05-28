@@ -132,7 +132,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     VkParentPanel {
 
     //~ Static fields/initializers ---------------------------------------------
-
+        
     private static DefaultBindableReferenceCombo.Option SORTING_OPTION =
         new DefaultBindableReferenceCombo.SortingColumnOption("name");
     private static DefaultBindableReferenceCombo.Option NULLABLE_OPTION =
@@ -168,6 +168,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
     
     private static final Logger LOG = Logger.getLogger(VkVorhabenEditor.class);
+    public static final Color ONLINE_COLOR = new Color(0, 128, 0);
+    public static final Color OFFLINE_COLOR = Color.black;
 
     public static final String FIELD__ID = "id";
     public static final String FIELD__TITEL = "titel";
@@ -670,6 +672,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         btnMenOkMail = new JButton();
         panContent = new RoundedPanel();
         panVorhaben = new JPanel();
+        lblVeroeffentlicht = new JLabel();
+        chVeroeffentlicht = new JCheckBox();
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
@@ -829,8 +833,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panFeedback = new JPanel();
         scpFeedback = new JScrollPane();
         taFeedback = new JTextArea();
-        lblVeroeffentlicht = new JLabel();
-        chVeroeffentlicht = new JCheckBox();
 
         dlgMail.setTitle("Mail versenden");
         dlgMail.setModal(true);
@@ -875,6 +877,32 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panVorhaben.setOpaque(false);
         panVorhaben.setLayout(new GridBagLayout());
 
+        lblVeroeffentlicht.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblVeroeffentlicht.setText("Vorhaben wird online angezeigt:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panVorhaben.add(lblVeroeffentlicht, gridBagConstraints);
+
+        chVeroeffentlicht.setContentAreaFilled(false);
+
+        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.veroeffentlicht}"), chVeroeffentlicht, BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panVorhaben.add(chVeroeffentlicht, gridBagConstraints);
+
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new GridBagLayout());
 
@@ -899,7 +927,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         txtAnleger.setMinimumSize(new Dimension(10, 24));
         txtAnleger.setPreferredSize(new Dimension(10, 24));
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anleger}"), txtAnleger, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anleger}"), txtAnleger, BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1609,7 +1637,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDatenOrt.add(panSbz, gridBagConstraints);
 
         lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblGeom.setText("Geometrie:");
+        lblGeom.setText("Geometrie (Fläche, Linie oder Punkt):");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -1994,7 +2022,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDetails.add(panLink, gridBagConstraints);
 
         lblKontakt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblKontakt.setText("Kontakt:");
+        lblKontakt.setText("Vorhaben-Kontakt:");
         lblKontakt.setToolTipText("Mail (und Telefon) für den Bürger");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2348,7 +2376,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taMailHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
         taMailHinweis.setLineWrap(true);
         taMailHinweis.setRows(2);
-        taMailHinweis.setText("Hier können Sie Kollegen und/oder dem Team BB eine Mail schicken, welche automatisch Thema und Titel des Vorhabens versendet. Zum Beispiel für Rückfragen, für Bitten um Ergänzung, Prüfung etc. \nAus ihren WuNDa-Kontaktdaten werden Sie als Absender automatisch ermittelt. \nSoll die Mail an die Bürgerbeteiligung gehen, so reicht es, ein Häkchen zu setzen. Andere Empfänger können mit Semikolon getrennt eingetragen werden. \nUm die Mail zu versenden, klicken Sie unten auf den Button. Für jeden Empfänger wird eine Mail versendet."); // NOI18N
+        taMailHinweis.setText("Hier können Sie Kollegen und/oder dem Team Bürgerbeteiligung eine Mail schicken, welche automatisch Thema und Titel des Vorhabens versendet. Zum Beispiel für Rückfragen, für Bitten um Ergänzung, Prüfung etc. \nAus ihren WuNDa-Kontaktdaten werden Sie als Absender automatisch ermittelt. \nSoll die Mail an die Bürgerbeteiligung gehen, so reicht es, ein Häkchen zu setzen. Andere Empfänger können mit Semikolon getrennt eingetragen werden. \nUm die Mail zu versenden, klicken Sie unten auf den Button. Für jeden Empfänger wird eine Mail versendet."); // NOI18N
         taMailHinweis.setWrapStyleWord(true);
         scpMailHinweis.setViewportView(taMailHinweis);
 
@@ -2622,39 +2650,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panVorhaben.add(pnlCard1, gridBagConstraints);
-
-        lblVeroeffentlicht.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblVeroeffentlicht.setText("Veröffentlicht:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panVorhaben.add(lblVeroeffentlicht, gridBagConstraints);
-
-        chVeroeffentlicht.setContentAreaFilled(false);
-
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.veroeffentlicht}"), chVeroeffentlicht, BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panVorhaben.add(chVeroeffentlicht, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -3282,6 +3284,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
           //  cbHNr.setMetaClass(MC__HNR);
             stadtweitChoose();
             setHelp();
+            setOnline();
         } catch (Exception ex) {
             LOG.error("Bean not set", ex);
             if (isEditor()) {
@@ -3848,6 +3851,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         if (evt.getPropertyName().equals(FIELD__TITEL)) {
             setBetreff();
         }
+        if (evt.getPropertyName().equals(FIELD__VEROEFFENTLICHT)) {
+            setOnline();
+        }
     }
     
     private void setBetreff(){
@@ -4239,7 +4245,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }
 
-    
+    private void setOnline(){
+        if (chVeroeffentlicht.isSelected()){
+            lblVeroeffentlicht.setForeground(ONLINE_COLOR);
+        } else {
+            
+            lblVeroeffentlicht.setForeground(OFFLINE_COLOR);
+        }
+    }
     /**
      * DOCUMENT ME!
      */
