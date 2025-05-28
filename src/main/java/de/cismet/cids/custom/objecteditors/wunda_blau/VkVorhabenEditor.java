@@ -163,6 +163,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private static String HILFE_DOKUMENTE;
     private static String HILFE_ORT;
     private static String HILFE_ANHANG;
+    private static String HINWEIS_MAILVERSAND;
     
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
@@ -3032,9 +3033,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                     if (mail != null) {
                         String[] mailArray = mail.split(";");
                             for (final String mailAdr : mailArray) {
-                                System.out.println(mailAdr);
+                                //System.out.println(mailAdr);
+                                final String mailtext = String.format("%s \n\n %s", bemerkung, HINWEIS_MAILVERSAND);
                                 final String toAdresse = mailAdr.trim();
-                                final Object ret = sendMail(userMail, toAdresse, betreff, bemerkung);
+                                final Object ret = sendMail(userMail, toAdresse, betreff, mailtext);
                                 //Rückgabe user feedback
                                 userFeedback.append(String.format("Beim Versand an %s kam es zu folgenden Meldungen: \n", toAdresse));
                                 userFeedback.append(ret.toString());
@@ -3683,6 +3685,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             HILFE_KONTAKT = VkConfProperties.getInstance().getHilfeKontakt();
             HILFE_ANHANG = VkConfProperties.getInstance().getHilfeAnhang();
             HILFE_DOKUMENTE = VkConfProperties.getInstance().getHilfeDokumente();
+            HINWEIS_MAILVERSAND = VkConfProperties.getInstance().getHinweisMailversand();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }

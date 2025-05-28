@@ -57,6 +57,7 @@ public class VkConfProperties {
     private final String hilfeAnhang;
     private final String hilfeOrt;
     private final String hilfeKontakt;
+    private final String hinweisMailversand;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -72,12 +73,13 @@ public class VkConfProperties {
         pathFotos = String.valueOf(readProperty(properties, "FOTOS_PATH", null));
         neuVorhaben = String.valueOf(readProperty(properties, "NEU_VORHABEN", null));
         mailBB = String.valueOf(readProperty(properties, "MAIL_BB", null));
-        mailNeu= String.valueOf(readProperty(properties, "MAIL_NEU", null));
-        hilfeDokumente= String.valueOf(readProperty(properties, "HILFE_DOKUMENTE", null));
-        hilfeFotos= String.valueOf(readProperty(properties, "HILFE_FOTOS", null));
-        hilfeAnhang= String.valueOf(readProperty(properties, "HILFE_ANHANG", null));
-        hilfeOrt= String.valueOf(readProperty(properties, "HILFE_ORT", null));
-        hilfeKontakt= String.valueOf(readProperty(properties, "HILFE_KONTAKT", null));
+        mailNeu = String.valueOf(readProperty(properties, "MAIL_NEU", null));
+        hilfeDokumente = String.valueOf(readProperty(properties, "HILFE_DOKUMENTE", null));
+        hilfeFotos = String.valueOf(readProperty(properties, "HILFE_FOTOS", null));
+        hilfeAnhang = String.valueOf(readProperty(properties, "HILFE_ANHANG", null));
+        hilfeOrt = String.valueOf(readProperty(properties, "HILFE_ORT", null));
+        hilfeKontakt = String.valueOf(readProperty(properties, "HILFE_KONTAKT", null));
+        hinweisMailversand = String.valueOf(readProperty(properties, "HINWEIS_MAILVERSAND", null));
     }
 
     //~ Methods ----------------------------------------------------------------
