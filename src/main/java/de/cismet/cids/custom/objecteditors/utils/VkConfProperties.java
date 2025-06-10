@@ -68,6 +68,7 @@ public class VkConfProperties {
     private final String textAbgeschlossenJa;
     private final String textAbgeschlossenNein;
     private final String textAbgeschlossenNicht;
+    private final String textLage;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -100,6 +101,7 @@ public class VkConfProperties {
         textAbgeschlossenJa = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_JA", null));
         textAbgeschlossenNein = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_NEIN", null));
         textAbgeschlossenNicht = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_NICHT", null));
+        textLage = String.valueOf(readProperty(properties, "TEXT_LAGE", null));
     }
 
     //~ Methods ----------------------------------------------------------------
