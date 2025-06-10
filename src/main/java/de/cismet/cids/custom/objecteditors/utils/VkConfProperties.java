@@ -65,6 +65,9 @@ public class VkConfProperties {
     private final String hilfeOrt;
     private final String hilfeKontakt;
     private final String hinweisMailversand;
+    private final String textAbgeschlossenJa;
+    private final String textAbgeschlossenNein;
+    private final String textAbgeschlossenNicht;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -94,6 +97,9 @@ public class VkConfProperties {
         hilfeOrt = String.valueOf(readProperty(properties, "HILFE_ORT", null));
         hilfeKontakt = String.valueOf(readProperty(properties, "HILFE_KONTAKT", null));
         hinweisMailversand = String.valueOf(readProperty(properties, "HINWEIS_MAILVERSAND", null));
+        textAbgeschlossenJa = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_JA", null));
+        textAbgeschlossenNein = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_NEIN", null));
+        textAbgeschlossenNicht = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_NICHT", null));
     }
 
     //~ Methods ----------------------------------------------------------------

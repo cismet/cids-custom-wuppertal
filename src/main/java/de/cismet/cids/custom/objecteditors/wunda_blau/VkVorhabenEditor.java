@@ -106,8 +106,11 @@ import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -171,6 +174,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private static String HILFE_ORT;
     private static String HILFE_ANHANG;
     private static String HINWEIS_MAILVERSAND;
+    private static String HINWEIS_ABGESCHLOSSEN_JA;
+    private static String HINWEIS_ABGESCHLOSSEN_NEIN;
+    private static String HINWEIS_ABGESCHLOSSEN_NICHT;
     
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
@@ -471,6 +477,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JTextArea taSbz;
     private JTextArea taText;
     private JTextField txtAbAm;
+    private JTextField txtAbgeschlossenHinweis;
     private JTextField txtAbsender;
     private JTextField txtAngelegtAm;
     private JTextField txtAnleger;
@@ -689,6 +696,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panVorhaben = new JPanel();
         lblVeroeffentlicht = new JLabel();
         chVeroeffentlicht = new JCheckBox();
+        txtAbgeschlossenHinweis = new JTextField();
         pnlCard1 = new JPanel();
         jTabbedPane = new JTabbedPane();
         jPanelAllgemein = new JPanel();
@@ -924,6 +932,17 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panVorhaben.add(chVeroeffentlicht, gridBagConstraints);
+
+        txtAbgeschlossenHinweis.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
+        txtAbgeschlossenHinweis.setText("Bitte beachten Sie, dass ....");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panVorhaben.add(txtAbgeschlossenHinweis, gridBagConstraints);
 
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new GridBagLayout());
@@ -2746,7 +2765,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -3349,6 +3368,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 setStadtbezirke();
                 checkBB();
                 checkLink();
+                setAbgeschlossenText();
             } 
             txtAngelegtAm.setText(DATE_FORMAT.format(cidsBean.getProperty(FIELD__ANGELEGT)));
             setEnde();
@@ -3604,6 +3624,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         RendererTools.makeReadOnly(taFeedbackHinweis);
         RendererTools.makeReadOnly(taFeedback);
         RendererTools.makeReadOnly(taAnhangHinweis);
+        RendererTools.makeReadOnly(txtAbgeschlossenHinweis);
     }
     
     public void setStadtbezirke(){
@@ -3794,6 +3815,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             HILFE_BESCHLUSS = VkConfProperties.getInstance().getHilfeBeschluss();
             HILFE_LINK = VkConfProperties.getInstance().getHilfeLink();
             HINWEIS_MAILVERSAND = VkConfProperties.getInstance().getHinweisMailversand();
+            HINWEIS_ABGESCHLOSSEN_JA = VkConfProperties.getInstance().getTextAbgeschlossenJa();
+            HINWEIS_ABGESCHLOSSEN_NEIN = VkConfProperties.getInstance().getTextAbgeschlossenNein();
+            HINWEIS_ABGESCHLOSSEN_NICHT = VkConfProperties.getInstance().getTextAbgeschlossenNicht();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
@@ -3812,6 +3836,33 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             txtDokumenteHinweis.setText(HILFE_DOKUMENTE);
             txtDokumenteHinweisUrl.setText(HILFE_DOKUMENTE_URL);
             txtDokumenteHinweisEndung.setText(HILFE_DOKUMENTE_ENDUNG);
+    }
+    
+    public void setAbgeschlossenText(){
+        if (getCidsBean().getProperty(FIELD__ENDE) == null || Objects.equals(getCidsBean().getProperty(FIELD__ENDE),false)){
+                txtAbgeschlossenHinweis.setVisible(false);
+        } else {
+            txtAbgeschlossenHinweis.setVisible(true);
+            if (getCidsBean().getProperty(FIELD__VEROEFFENTLICHT) == null || Objects.equals(getCidsBean().getProperty(FIELD__VEROEFFENTLICHT),false)){
+                txtAbgeschlossenHinweis.setText(HINWEIS_ABGESCHLOSSEN_NICHT);
+                lblVeroeffentlicht.setForeground(OFFLINE_COLOR);
+            } else {
+                final LocalDate ld;
+                final LocalDate jetztDatum = LocalDate.now();
+                final Date checkDate = (Date) getCidsBean().getProperty(FIELD__ENDE_AM);
+                if (checkDate != null) {
+                    ld = checkDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    final LocalDate anzeigeDatum = ld.plusMonths(6);
+                    if (anzeigeDatum.isAfter(jetztDatum)) {
+                        txtAbgeschlossenHinweis.setText(HINWEIS_ABGESCHLOSSEN_JA);
+                        lblVeroeffentlicht.setForeground(ONLINE_COLOR);
+                    } else {
+                        txtAbgeschlossenHinweis.setText(HINWEIS_ABGESCHLOSSEN_NEIN);
+                        lblVeroeffentlicht.setForeground(OFFLINE_COLOR);
+                    }
+                }
+            }
+        }
     }
     /**
      * DOCUMENT ME!
@@ -3946,6 +3997,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if (evt.getPropertyName().equals(FIELD__ENDE)) {
             setEnde();
+            setAbgeschlossenText();
         }
         if (evt.getPropertyName().equals(FIELD__BB_URL)) {
             checkBB();
@@ -3971,6 +4023,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         }
         if (evt.getPropertyName().equals(FIELD__VEROEFFENTLICHT)) {
             setOnline();
+            setAbgeschlossenText();
         }
     }
     
