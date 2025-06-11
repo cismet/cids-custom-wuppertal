@@ -177,6 +177,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private static String HINWEIS_ABGESCHLOSSEN_NEIN;
     private static String HINWEIS_ABGESCHLOSSEN_NICHT;
     private static String TEXT_LAGE;
+    private static String TEXT_MAIL_HINWEIS;
+    private static String TEXT_MAIL_PROTOKOLL;
     
     public static final String ADRESSE_TOSTRING_TEMPLATE = "%s";
     public static final String[] ADRESSE_TOSTRING_FIELDS = { AdresseLightweightSearch.Subject.HNR.toString() };
@@ -1923,7 +1925,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDetails.add(panBeschreibung, gridBagConstraints);
 
         lblLink.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblLink.setText("Infoseite-Url:");
+        lblLink.setText("Infoseite-Link:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -2040,7 +2042,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panDetails.add(panText, gridBagConstraints);
 
         lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblUrl.setText("BB-Url:");
+        lblUrl.setText("BB-Link:");
         lblUrl.setToolTipText("Projektseite talbeteiligung.de");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2469,7 +2471,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taMailHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
         taMailHinweis.setLineWrap(true);
         taMailHinweis.setRows(2);
-        taMailHinweis.setText("Hier können Sie Kollegen und/oder dem Team Bürgerbeteiligung eine Mail schicken, welche automatisch Thema und Titel des Vorhabens versendet. Zum Beispiel für Rückfragen, für Bitten um Ergänzung, Prüfung etc. \nAus ihren WuNDa-Kontaktdaten werden Sie als Absender automatisch ermittelt. \nSoll die Mail an die Bürgerbeteiligung gehen, so reicht es, ein Häkchen zu setzen. Andere Empfänger können mit Semikolon getrennt eingetragen werden. \nUm die Mail zu versenden, klicken Sie unten auf den Button. Für jeden Empfänger wird eine Mail versendet."); // NOI18N
+        taMailHinweis.setText("Text Hinweis\n"); // NOI18N
         taMailHinweis.setWrapStyleWord(true);
         scpMailHinweis.setViewportView(taMailHinweis);
 
@@ -2658,7 +2660,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taFeedbackHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
         taFeedbackHinweis.setLineWrap(true);
         taFeedbackHinweis.setRows(2);
-        taFeedbackHinweis.setText("Wenn Empfänger, Betreff und Mailtext vorhanden sind und der Button gedrückt wird, so erscheint unten eine Art Versandprotokoll.\nHier ist ersichtlich, ob der Versand erfolgreich war (wunda@stadt.wuppertal.de) oder nicht (z.B. wundastadt.wuppertal.de--> @ vergessen).\nAn dieser Stelle kann jedoch keine Aussage darüber getroffen werden, ob die Adresse wirklich (Peter.Pan@stadt.doubleuuppervalley.de) existiert. Wenn Sie als Absender oben stehen, erhalten Sie eine extra Mail dazu.\nWird erneut auf den Button geklickt, werden neue Mails versendet und es erscheinen neue Versandprotokolle."); // NOI18N
+        taFeedbackHinweis.setText("Text Protokoll"); // NOI18N
         taFeedbackHinweis.setWrapStyleWord(true);
         scpFeedbackHinweis.setViewportView(taFeedbackHinweis);
 
@@ -3802,25 +3804,29 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             HINWEIS_ABGESCHLOSSEN_NEIN = VkConfProperties.getInstance().getTextAbgeschlossenNein();
             HINWEIS_ABGESCHLOSSEN_NICHT = VkConfProperties.getInstance().getTextAbgeschlossenNicht();
             TEXT_LAGE = VkConfProperties.getInstance().getTextLage();
+            TEXT_MAIL_HINWEIS = VkConfProperties.getInstance().getTextMailHinweis();
+            TEXT_MAIL_PROTOKOLL = VkConfProperties.getInstance().getTextMailProtokoll();
         } catch (final Exception ex) {
             LOG.warn("Get no conf properties.", ex);
         }
     }
 
     public void setHelp(){
-            txtBeschlussHinweis.setText(HILFE_BESCHLUSS);
-            txtLinkHinweis.setText(HILFE_LINK);
-            txtFotoHinweis.setText(HILFE_FOTOS);
-            txtFotoHinweisEndung.setText(HILFE_FOTOS_ENDUNG);
-            txtFotoHinweisUrl.setText(HILFE_FOTOS_URL);
-            txtStekHinweis.setText(HILFE_STEK);
-            taOrtHinweis.setText(HILFE_ORT);
-            lblKontaktHelp.setText(HILFE_KONTAKT);
-            taAnhangHinweis.setText(HILFE_ANHANG);
-            txtDokumenteHinweis.setText(HILFE_DOKUMENTE);
-            txtDokumenteHinweisUrl.setText(HILFE_DOKUMENTE_URL);
-            txtDokumenteHinweisEndung.setText(HILFE_DOKUMENTE_ENDUNG);
-            lblKarte.setText(TEXT_LAGE);
+        txtBeschlussHinweis.setText(HILFE_BESCHLUSS);
+        txtLinkHinweis.setText(HILFE_LINK);
+        txtFotoHinweis.setText(HILFE_FOTOS);
+        txtFotoHinweisEndung.setText(HILFE_FOTOS_ENDUNG);
+        txtFotoHinweisUrl.setText(HILFE_FOTOS_URL);
+        txtStekHinweis.setText(HILFE_STEK);
+        taOrtHinweis.setText(HILFE_ORT);
+        lblKontaktHelp.setText(HILFE_KONTAKT);
+        taAnhangHinweis.setText(HILFE_ANHANG);
+        txtDokumenteHinweis.setText(HILFE_DOKUMENTE);
+        txtDokumenteHinweisUrl.setText(HILFE_DOKUMENTE_URL);
+        txtDokumenteHinweisEndung.setText(HILFE_DOKUMENTE_ENDUNG);
+        lblKarte.setText(TEXT_LAGE);
+        taMailHinweis.setText(TEXT_MAIL_HINWEIS);
+        taFeedbackHinweis.setText(TEXT_MAIL_PROTOKOLL);
     }
     
     public void setAbgeschlossenText(){

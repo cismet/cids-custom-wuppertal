@@ -69,6 +69,8 @@ public class VkConfProperties {
     private final String textAbgeschlossenNein;
     private final String textAbgeschlossenNicht;
     private final String textLage;
+    private final String textMailHinweis;
+    private final String textMailProtokoll;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -102,6 +104,8 @@ public class VkConfProperties {
         textAbgeschlossenNein = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_NEIN", null));
         textAbgeschlossenNicht = String.valueOf(readProperty(properties, "TEXT_ABGESCHLOSSEN_NICHT", null));
         textLage = String.valueOf(readProperty(properties, "TEXT_LAGE", null));
+        textMailHinweis = String.valueOf(readProperty(properties, "TEXT_MAIL", null));
+        textMailProtokoll = String.valueOf(readProperty(properties, "TEXT_PROTOKOLL", null));
     }
 
     //~ Methods ----------------------------------------------------------------

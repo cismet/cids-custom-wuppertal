@@ -1481,7 +1481,7 @@
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="Infoseite-Url:"/>
+                                <Property name="text" type="java.lang.String" value="Infoseite-Link:"/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1617,7 +1617,7 @@
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Tahoma" size="11" style="1"/>
                                 </Property>
-                                <Property name="text" type="java.lang.String" value="BB-Url:"/>
+                                <Property name="text" type="java.lang.String" value="BB-Link:"/>
                                 <Property name="toolTipText" type="java.lang.String" value="Projektseite talbeteiligung.de"/>
                               </Properties>
                               <Constraints>
@@ -2211,7 +2211,7 @@
                                         </Property>
                                         <Property name="lineWrap" type="boolean" value="true"/>
                                         <Property name="rows" type="int" value="2"/>
-                                        <Property name="text" type="java.lang.String" value="Hier k&#xf6;nnen Sie Kollegen und/oder dem Team B&#xfc;rgerbeteiligung eine Mail schicken, welche automatisch Thema und Titel des Vorhabens versendet. Zum Beispiel f&#xfc;r R&#xfc;ckfragen, f&#xfc;r Bitten um Erg&#xe4;nzung, Pr&#xfc;fung etc. &#xa;Aus ihren WuNDa-Kontaktdaten werden Sie als Absender automatisch ermittelt. &#xa;Soll die Mail an die B&#xfc;rgerbeteiligung gehen, so reicht es, ein H&#xe4;kchen zu setzen. Andere Empf&#xe4;nger k&#xf6;nnen mit Semikolon getrennt eingetragen werden. &#xa;Um die Mail zu versenden, klicken Sie unten auf den Button. F&#xfc;r jeden Empf&#xe4;nger wird eine Mail versendet." noResource="true"/>
+                                        <Property name="text" type="java.lang.String" value="Text Hinweis&#xa;" noResource="true"/>
                                         <Property name="wrapStyleWord" type="boolean" value="true"/>
                                       </Properties>
                                     </Component>
@@ -2444,7 +2444,7 @@
                                         </Property>
                                         <Property name="lineWrap" type="boolean" value="true"/>
                                         <Property name="rows" type="int" value="2"/>
-                                        <Property name="text" type="java.lang.String" value="Wenn Empf&#xe4;nger, Betreff und Mailtext vorhanden sind und der Button gedr&#xfc;ckt wird, so erscheint unten eine Art Versandprotokoll.&#xa;Hier ist ersichtlich, ob der Versand erfolgreich war (wunda@stadt.wuppertal.de) oder nicht (z.B. wundastadt.wuppertal.de--&gt; @ vergessen).&#xa;An dieser Stelle kann jedoch keine Aussage dar&#xfc;ber getroffen werden, ob die Adresse wirklich (Peter.Pan@stadt.doubleuuppervalley.de) existiert. Wenn Sie als Absender oben stehen, erhalten Sie eine extra Mail dazu.&#xa;Wird erneut auf den Button geklickt, werden neue Mails versendet und es erscheinen neue Versandprotokolle." noResource="true"/>
+                                        <Property name="text" type="java.lang.String" value="Text Protokoll" noResource="true"/>
                                         <Property name="wrapStyleWord" type="boolean" value="true"/>
                                       </Properties>
                                     </Component>
