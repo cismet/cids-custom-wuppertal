@@ -152,7 +152,7 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
                 public void valueChanged(final ListSelectionEvent e) {
                     final int selectedRow = table.getSelectedRow();
 
-                    if (selectedRow > 0) {
+                    if (selectedRow >= 0) {
                         int step = -1;
                         int index = selectedRow;
                         int indexModel = getRowSorter().convertRowIndexToModel(selectedRow);
@@ -166,17 +166,20 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
                         while ((filter != null) && !filter.selectionOfDisabledElementsAllowed()
                                     && !filter.isEnabled(selectedValue, indexModel)) {
                             index = index + step;
-                            indexModel = ((index != -1) ? getRowSorter().convertRowIndexToModel(index) : -1);
-                            selectedValue = String.valueOf(
-                                    ComboBoxFilterDialog.this.comboBox.getModel().getElementAt(indexModel));
-
-                            if ((index < 0) || (index >= table.getRowCount())) {
-                                index = lastSelectedRow;
+                            if ((index < table.getRowSorter().getViewRowCount()) && (index > -1)) {
+                                indexModel = getRowSorter().convertRowIndexToModel(index);
+                            } else {
+                                // no valid element found
+                                index = -1;
                                 break;
                             }
+                            selectedValue = String.valueOf(
+                                    ComboBoxFilterDialog.this.comboBox.getModel().getElementAt(indexModel));
                         }
                         if (index != -1) {
                             table.getSelectionModel().setSelectionInterval(index, index);
+                        } else {
+                            table.getSelectionModel().clearSelection();
                         }
                     }
                     lastSelectedRow = table.getSelectedRow();
@@ -209,7 +212,7 @@ public class ComboBoxFilterDialog extends javax.swing.JDialog implements Connect
                 @Override
                 public void valueChanged(final ListSelectionEvent e) {
                     if (!e.getValueIsAdjusting()) {
-                        btnApply.setEnabled(e.getFirstIndex() >= 0);
+                        btnApply.setEnabled(table.getSelectedRow() >= 0);
                     }
                 }
             });
