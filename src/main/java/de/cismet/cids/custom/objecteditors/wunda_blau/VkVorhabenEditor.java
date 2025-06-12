@@ -3646,47 +3646,49 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     
     public String getStadtbezirkeWithGeom(final Geometry geomVorhaben){
         String sbz = "kein Stadtbezirk gefunden";
-        final MetaClass mc = ClassCacheMultiple.getMetaClass(
-                "WUNDA_BLAU",
-                TABLE_SBZ,
-                getConnectionContext());
-        if (mc != null) {
-            // Suche Konfigurieren
-            final BufferingGeosearch search = new BufferingGeosearch();
-            search.setValidClasses(Arrays.asList(mc));
-            search.setGeometry(geomVorhaben);
-            // Suche ausführen
-            final Collection<MetaObjectNode> mons;
-            try {
-                mons = SessionManager.getProxy()
-                        .customServerSearch(
-                                SessionManager.getSession().getUser(),
-                                search,
-                                getConnectionContext());
-                
-                if ((mons != null) && !mons.isEmpty()) {
-                    sbz = "";
-                    MetaObject mo;
-                    CidsBean beanSbz;
-                    for (final MetaObjectNode mon:mons){
-                        mo = SessionManager.getProxy()
-                                .getMetaObject(mon.getObjectId(),
-                                    mon.getClassId(),
-                                    mon.getDomain(),
+         if(geomVorhaben != null){ 
+            final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    TABLE_SBZ,
+                    getConnectionContext());
+            if (mc != null) {
+                // Suche Konfigurieren
+                final BufferingGeosearch search = new BufferingGeosearch();
+                search.setValidClasses(Arrays.asList(mc));
+                search.setGeometry(geomVorhaben);
+                // Suche ausführen
+                final Collection<MetaObjectNode> mons;
+                try {
+                    mons = SessionManager.getProxy()
+                            .customServerSearch(
+                                    SessionManager.getSession().getUser(),
+                                    search,
                                     getConnectionContext());
 
-                        beanSbz = mo.getBean();
-                        if (sbz.length() == 0){
-                            sbz = beanSbz.getProperty(FIELD__SBZ).toString();
-                        } else {
-                            sbz += ", " + beanSbz.getProperty(FIELD__SBZ).toString();
+                    if ((mons != null) && !mons.isEmpty()) {
+                        sbz = "";
+                        MetaObject mo;
+                        CidsBean beanSbz;
+                        for (final MetaObjectNode mon:mons){
+                            mo = SessionManager.getProxy()
+                                    .getMetaObject(mon.getObjectId(),
+                                        mon.getClassId(),
+                                        mon.getDomain(),
+                                        getConnectionContext());
+
+                            beanSbz = mo.getBean();
+                            if (sbz.length() == 0){
+                                sbz = beanSbz.getProperty(FIELD__SBZ).toString();
+                            } else {
+                                sbz += ", " + beanSbz.getProperty(FIELD__SBZ).toString();
+                            }
                         }
                     }
-                }
-                
-            } catch (ConnectionException ex) {
-                Exceptions.printStackTrace(ex);
-            }   
+
+                } catch (ConnectionException ex) {
+                    Exceptions.printStackTrace(ex);
+                }   
+            }
         }
         return sbz;
     }
