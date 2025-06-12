@@ -252,7 +252,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     
     
     private static final String TITLE_NEW_VORHABEN = "ein neues Vorhaben anlegen...";
-    //private static final String MAIL_BB = "sandra.simmert@stadt.wuppertal.de";//buergerbeteiligung@stadt.wuppertal.de";
     private static final String KEIN_ABSENDER = "Es konnte Ihre Mailadresse nicht aus der Datenbank ermittelt werden. Deswegen ist der Absender: Vorhabenkarte";
 
     public static final String CHILD_TOSTRING_TEMPLATE = "%s";
@@ -3707,13 +3706,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                             .getMappingModel()
                             .getInitialBoundingBox();
                 final Point centerPoint = initialBoundingBox.getGeometry(srid).getCentroid();
-
+                
                 final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
                         CidsBeanSupport.DOMAIN_NAME,
                         TABLE_GEOM,
                         getConnectionContext());
                 final CidsBean newGeom = geomMetaClass.getEmptyInstance(getConnectionContext()).getBean();
-                newGeom.setProperty(FIELD__GEO_FIELD, centerPoint);
+                newGeom.setProperty(FIELD__GEO_FIELD, centerPoint.buffer(20));
                 panPreviewMap.initMap(newGeom, FIELD__GEO_FIELD, BUFFER);
             }
         } catch (final Exception ex) {
