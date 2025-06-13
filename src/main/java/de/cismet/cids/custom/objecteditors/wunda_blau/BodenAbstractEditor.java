@@ -196,7 +196,7 @@ public abstract class BodenAbstractEditor extends javax.swing.JPanel implements 
      * @return  DOCUMENT ME!
      */
     public String getFlurstueckReferenzGeometryPropertyName() {
-        return "fs_referenz.umschreibendes_rechteck.geo_field";
+        return "fs_referenz.umschreibendes_rechteck";
     }
 
     /**

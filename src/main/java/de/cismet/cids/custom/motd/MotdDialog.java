@@ -16,6 +16,9 @@ import de.cismet.cids.server.messages.CidsServerMessage;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListener;
 import de.cismet.cids.servermessage.CidsServerMessageNotifierListenerEvent;
 
+import de.cismet.tools.gui.DialogOpenedEvent;
+import de.cismet.tools.gui.DialogOpenedListener;
+import de.cismet.tools.gui.DialogSupport;
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -24,7 +27,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class MotdDialog extends javax.swing.JDialog implements CidsServerMessageNotifierListener {
+public class MotdDialog extends javax.swing.JDialog implements CidsServerMessageNotifierListener, DialogOpenedListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -45,6 +48,8 @@ public class MotdDialog extends javax.swing.JDialog implements CidsServerMessage
     private MotdDialog() {
         super((Frame)null, true);
         initComponents();
+        DialogSupport.addDialogListener(this);
+        getRootPane().setDefaultButton(jButton1);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -144,6 +149,28 @@ public class MotdDialog extends javax.swing.JDialog implements CidsServerMessage
                         }
                     });
             }
+        }
+    }
+
+    @Override
+    public void setVisible(final boolean b) {
+        super.setVisible(b);
+
+        if (b) {
+            setAlwaysOnTop(true);
+            toFront();
+            requestFocus();
+            setAlwaysOnTop(false);
+        }
+    }
+
+    @Override
+    public void DialogOpened(final DialogOpenedEvent e) {
+        if (isVisible()) {
+            setAlwaysOnTop(true);
+            toFront();
+            requestFocus();
+            setAlwaysOnTop(false);
         }
     }
 }
