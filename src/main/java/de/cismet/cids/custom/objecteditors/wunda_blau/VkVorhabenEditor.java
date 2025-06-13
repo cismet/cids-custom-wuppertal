@@ -1284,7 +1284,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelFoto.add(txtFotoHinweis, gridBagConstraints);
 
         txtFotoHinweisUrl.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
@@ -1295,7 +1295,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelFoto.add(txtFotoHinweisUrl, gridBagConstraints);
 
         txtFotoHinweisEndung.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
@@ -1306,7 +1306,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelFoto.add(txtFotoHinweisEndung, gridBagConstraints);
 
         scpFotos.setPreferredSize(new Dimension(80, 130));
@@ -1773,7 +1773,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelDokBeschluesse.add(txtBeschlussHinweis, gridBagConstraints);
 
         lblLadenBeschluss.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -2121,7 +2121,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 5);
         panDetails.add(lblKontaktHelp, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2195,7 +2195,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelDokLinks.add(txtLinkHinweis, gridBagConstraints);
 
         lblLadenLinks.setFont(new Font("Tahoma", 1, 11)); // NOI18N
@@ -2317,7 +2317,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelDokDokumente.add(txtDokumenteHinweis, gridBagConstraints);
 
         txtDokumenteHinweisUrl.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
@@ -2328,7 +2328,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelDokDokumente.add(txtDokumenteHinweisUrl, gridBagConstraints);
 
         txtDokumenteHinweisEndung.setFont(new Font("Noto Sans", 2, 11)); // NOI18N
@@ -2339,7 +2339,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(2, 5, 2, 2);
         jPanelDokDokumente.add(txtDokumenteHinweisEndung, gridBagConstraints);
 
         scpDokumente.setPreferredSize(new Dimension(80, 130));
