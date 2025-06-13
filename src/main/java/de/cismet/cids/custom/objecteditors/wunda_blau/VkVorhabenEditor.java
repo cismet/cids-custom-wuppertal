@@ -105,6 +105,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -3095,13 +3096,35 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             
         final String mail = (txtMail.getText() != null && !(txtMail.getText().isEmpty()))
             ? (txtMail.getText()) : null;
-        final String bemerkung = (taBemerkung.getText() != null && !(taBemerkung.getText().isEmpty()))
-            ? (taBemerkung.getText()) : null;
+        
+        String bemerkungUtf8 = null;
+            try {
+                bemerkungUtf8 = new String(taBemerkung.getText().getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        String bemerkung = null;
+        try {
+            bemerkung = (bemerkungUtf8 != null)
+                    ? new String(bemerkungUtf8.getBytes("UTF-8")) : ((taBemerkung.getText() != null)
+                    ? taBemerkung.getText() : null);
+        } catch (UnsupportedEncodingException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        
+        
         final Boolean mailBB = chMailBB.isSelected();
 
         if (getCidsBean().getProperty(FIELD__TITEL) != null && !getCidsBean().getProperty(FIELD__TITEL).toString().isEmpty()
                 && getCidsBean().getProperty(FIELD__THEMA) != null && !getCidsBean().getProperty(FIELD__THEMA).toString().isEmpty()){
-            String betreff =  txtBetreff.getText();
+            String betreffUtf8 = null;
+            try {
+                betreffUtf8 = new String(txtBetreff.getText().getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+            final String betreff = (betreffUtf8 != null)
+                    ? betreffUtf8 : (txtBetreff.getText());
             if (bemerkung != null){
                 if (!mailBB && mail == null){
                     try {
@@ -3767,6 +3790,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
                 @Override
                 protected Void doInBackground() throws Exception {
+                    //final MetaClass mcHnr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR)).getMetaObject().getMetaClass();
+                    //cbHNr.setMetaClass(mcHnr);
+                    //So wuerde sich die Liste der Hausnummern nicht mehr aktualisieren.
                     cbHNr.refreshModel();
                     return null;
                 }
