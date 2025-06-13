@@ -3098,19 +3098,22 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             ? (txtMail.getText()) : null;
         
         String bemerkungUtf8 = null;
+        String bemerkung = null;
+        if (taBemerkung.getText() != null && !taBemerkung.getText().isEmpty()){
             try {
                 bemerkungUtf8 = new String(taBemerkung.getText().getBytes("UTF-8"));
             } catch (UnsupportedEncodingException ex) {
                 Exceptions.printStackTrace(ex);
             }
-        String bemerkung = null;
-        try {
-            bemerkung = (bemerkungUtf8 != null)
-                    ? new String(bemerkungUtf8.getBytes("UTF-8")) : ((taBemerkung.getText() != null)
-                    ? taBemerkung.getText() : null);
-        } catch (UnsupportedEncodingException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+           
+            try {
+                bemerkung = (bemerkungUtf8 != null)
+                        ? (new String(taBemerkung.getText().getBytes("UTF-8"))) : ((taBemerkung.getText() != null)
+                        ? taBemerkung.getText() : null);
+            } catch (UnsupportedEncodingException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        } 
         
         
         final Boolean mailBB = chMailBB.isSelected();
