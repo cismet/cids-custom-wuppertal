@@ -410,7 +410,6 @@ public class VkFotoPanel extends javax.swing.JPanel implements Disposable,
         lblUrlCheck.setIcon(statusFalsch);
         lblUrlCheck.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         if (txtUrl.getText() != null && txtUrl.getText().length() > 5){
-            //final String foto = "https://www.wuppertal.de/geoportal/vorhabenkarte/fotos/".concat(txtUrl.getText());
             final String foto = PATH_FOTOS.concat(txtUrl.getText());
             EventQueue.invokeLater(new Thread("checkLinkThread") {
                 @Override

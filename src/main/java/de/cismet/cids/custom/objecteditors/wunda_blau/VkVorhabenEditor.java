@@ -16,7 +16,6 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
-//import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -3221,18 +3220,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             dlgMail.setVisible(false);
         }
     }//GEN-LAST:event_btnMenOkMailActionPerformed
-/*
-    protected DomainServerImpl waitForMetaService() {
-        DomainServerImpl metaService = null;
-        while (metaService == null) {
-            metaService = DomainServerImpl.getServerInstance();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-            }
-        }
-        return metaService;
-    }*/
+
 
     /**
      * DOCUMENT ME!
@@ -3298,15 +3286,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 getConnectionContext());
 
             setMapWindow();
-     /*       
-            if ((getCidsBean() != null)
-                        && (getCidsBean().getProperty(FIELD__QUARTAL) == null)) {
-                getCidsBean().setProperty(FIELD__QUARTAL, 1);
-            }
-            if ((getCidsBean() != null)
-                        && (getCidsBean().getProperty(FIELD__JAHR) == null)) {
-                getCidsBean().setProperty(FIELD__JAHR, 2025);
-            }*/
+    
             bindingGroup.bind();
             setBetreff();
             setUser(getCurrentUser());
@@ -3398,7 +3378,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
             beanHNr = ((CidsBean)getCidsBean().getProperty(FIELD__HNR));
-          //  cbHNr.setMetaClass(MC__HNR);
             stadtweitChoose();
             setHelp();
             setOnline();
@@ -3569,8 +3548,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtTitel);
-            // lblHNrRenderer.setVisible(true);
-            // RendererTools.makeReadOnly(cbHNr);
             RendererTools.makeReadOnly(cbThema);
             RendererTools.makeReadOnly(cbKontakt);
             RendererTools.makeReadOnly(chAbgeschlossen);
@@ -4111,7 +4088,6 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                             beanBeschluss.setProperty(FIELD__FK_VORHABEN, event.getPersistedBean());
                         }
                         try {
-        //beanBeschluss.getMetaObject().getStatus();
                             beanBeschluss = beanBeschluss.persist(getConnectionContext());
                         } catch (final Exception ex) {
                             LOG.error("Fehler bei der Speicher-Vorbereitung der Beschluesse.", ex);
