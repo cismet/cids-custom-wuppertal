@@ -83,6 +83,7 @@ import javax.swing.plaf.basic.ComboPopup;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.VkConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.VkDocumentLoader;
@@ -656,7 +657,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         /*  new SwingWorker<Void, Void>() {
          *
          * @Override   protected Void doInBackground() throws Exception {       mcHnr = ClassCacheMultiple.getMetaClass(
-         *               "WUNDA_BLAU",               "ADRESSE",               connectionContext);       return null;   }
+         *         "WUNDA_BLAU",               "ADRESSE",               connectionContext);       return null;   }
          *
          * @Override   protected void done() {       try {           get();           cbHNr.setMetaClass(mcHnr);       }
          * catch (final InterruptedException | ExecutionException ex) {           LOG.error(ex, ex);       }
@@ -885,6 +886,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         dlgMail.getContentPane().add(panMail, BorderLayout.CENTER);
 
+        setOpaque(false);
         setLayout(new GridBagLayout());
 
         panContent.setName(""); // NOI18N
@@ -2885,6 +2887,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         pnlCard1.add(jTabbedPane, gridBagConstraints);
+        jTabbedPane.setUI(new TabbedPaneUITransparent());
         jTabbedPane.getAccessibleContext().setAccessibleDescription("");
 
         gridBagConstraints = new GridBagConstraints();
@@ -3858,7 +3861,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                      * final int srid =
                      * CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getSrs().getCode()); final
                      * BoundingBox initialBoundingBox = CismapBroker.getInstance()           .getMappingComponent()
-                     *      .getMappingModel()           .getInitialBoundingBox();final Point centerPoint =
+                     * .getMappingModel()           .getInitialBoundingBox();final Point centerPoint =
                      * initialBoundingBox.getGeometry(srid).getCentroid();*/
                     if (((getCidsBean().getProperty(FIELD__STADT) == null)
                                     || Objects.equals(getCidsBean().getProperty(FIELD__STADT), false))) {
