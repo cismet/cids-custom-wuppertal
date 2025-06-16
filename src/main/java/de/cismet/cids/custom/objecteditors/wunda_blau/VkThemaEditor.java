@@ -33,6 +33,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.util.MissingResourceException;
 import java.util.concurrent.ExecutionException;
@@ -58,8 +60,6 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.utils.TableUtils.getOtherTableValue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * DOCUMENT ME!
@@ -77,9 +77,9 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
     private static final String TITLE_NEW_THEMA = "eine neues Thema anlegen...";
     private static final Logger LOG = Logger.getLogger(VkThemaEditor.class);
 
-    public static final String FIELD__NAME = "name"; // Thema
-    public static final String FIELD__ID = "id";     // Thema
-    public static final String FIELD__FARBE= "farbe";     // Thema
+    public static final String FIELD__NAME = "name";   // Thema
+    public static final String FIELD__ID = "id";       // Thema
+    public static final String FIELD__FARBE = "farbe"; // Thema
     public static final String TABLE_NAME = "vk_thema";
 
     public static final String BUNDLE_NONAME = "VkThemaEditor.prepareForSave().noName";
@@ -222,10 +222,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
 
         btnMenAbortColor.setText("Abbrechen");
         btnMenAbortColor.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenAbortColorActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenAbortColorActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -235,10 +237,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
 
         btnMenOkColor.setText("Ok");
         btnMenOkColor.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenOkColorActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenOkColorActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -260,14 +264,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
+        final GroupLayout panFillerUntenLayout = new GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
-        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUntenLayout.setHorizontalGroup(panFillerUntenLayout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(panFillerUntenLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                    .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -289,14 +291,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
+        final GroupLayout panFillerUnten1Layout = new GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
-        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten1Layout.setHorizontalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten1Layout.setVerticalGroup(panFillerUnten1Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -321,7 +321,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblName, gridBagConstraints);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.name}"), txtName, BeanProperty.create("text"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.name}"),
+                txtName,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -343,7 +348,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblIcon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.signatur}"), txtIcon, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.signatur}"),
+                txtIcon,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -368,7 +378,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         txtFarbe.setEnabled(false);
         txtFarbe.setMaximumSize(new Dimension(75, 2147483647));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.farbe}"), txtFarbe, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.farbe}"),
+                txtFarbe,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -379,13 +394,16 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtFarbe, gridBagConstraints);
 
-        btnChooseColor.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnChooseColor.setToolTipText(NbBundle.getMessage(VkThemaEditor.class, "TOOL_FARBE")); // NOI18N
+        btnChooseColor.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnChooseColor.setToolTipText(NbBundle.getMessage(VkThemaEditor.class, "TOOL_FARBE"));                 // NOI18N
         btnChooseColor.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnChooseColorActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnChooseColorActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
@@ -416,7 +434,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         spFuellung.setModel(new SpinnerNumberModel(0, 0, 100, 1));
         spFuellung.setPreferredSize(new Dimension(75, 25));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fuellung}"), spFuellung, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fuellung}"),
+                spFuellung,
+                BeanProperty.create("value"));
         binding.setSourceNullValue(0);
         binding.setSourceUnreadableValue(0);
         bindingGroup.addBinding(binding);
@@ -458,7 +481,12 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         taBeschreibung.setRows(8);
         taBeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibung.setViewportView(taBeschreibung);
@@ -505,21 +533,36 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnChooseColorActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnChooseColorActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnChooseColorActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnChooseColorActionPerformed
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(VkThemaEditor.this), dlgColor, true);
-    }//GEN-LAST:event_btnChooseColorActionPerformed
+    }                                                                   //GEN-LAST:event_btnChooseColorActionPerformed
 
-    private void btnMenAbortColorActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenAbortColorActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortColorActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenAbortColorActionPerformed
         dlgColor.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortColorActionPerformed
+    }                                                                     //GEN-LAST:event_btnMenAbortColorActionPerformed
 
-    private void btnMenOkColorActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnMenOkColorActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkColorActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkColorActionPerformed
         try {
             final java.awt.Color selColor = jColorChooser.getColor();
             final String hex_red = twoHexString(Integer.toHexString(selColor.getRed()));
-            final String hex_green= twoHexString(Integer.toHexString(selColor.getGreen()));
+            final String hex_green = twoHexString(Integer.toHexString(selColor.getGreen()));
             final String hex_blue = twoHexString(Integer.toHexString(selColor.getBlue()));
             this.getCidsBean().setProperty(FIELD__FARBE, '#' + hex_red + hex_green + hex_blue);
             txtFarbeZeigen.setBackground(selColor);
@@ -528,15 +571,22 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         } finally {
             dlgColor.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkColorActionPerformed
+    }                                                                  //GEN-LAST:event_btnMenOkColorActionPerformed
 
-    private String twoHexString (final String hex){
-        if (hex.length() == 1){
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   hex  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String twoHexString(final String hex) {
+        if (hex.length() == 1) {
             return '0' + hex;
         }
         return hex;
     }
-    
+
     @Override
     public boolean prepareForSave() {
         boolean save = true;
@@ -625,16 +675,19 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
             RendererTools.makeReadOnly(txtName);
             RendererTools.makeReadOnly(txtIcon);
             RendererTools.makeReadOnly(txtFarbe);
-            RendererTools.makeReadOnly(taBeschreibung); 
+            RendererTools.makeReadOnly(taBeschreibung);
             RendererTools.jSpinnerShouldLookLikeLabel(spFuellung);
             RendererTools.makeDoubleSpinnerWithoutButtons(spFuellung, 0);
-            RendererTools.makeReadOnly(spFuellung);  
-            btnChooseColor.setVisible(false);      
+            RendererTools.makeReadOnly(spFuellung);
+            btnChooseColor.setVisible(false);
         }
     }
-    
-    private void setFarbe(){
-        if (getCidsBean() != null && getCidsBean().getProperty(FIELD__FARBE) != null){
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setFarbe() {
+        if ((getCidsBean() != null) && (getCidsBean().getProperty(FIELD__FARBE) != null)) {
             final String hexColor = getCidsBean().getProperty(FIELD__FARBE).toString();
             final int rot = Integer.valueOf(hexColor.substring(1, 3), 16);
             final int gruen = Integer.valueOf(hexColor.substring(3, 5), 16);
