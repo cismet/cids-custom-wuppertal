@@ -3577,6 +3577,20 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 } catch (Exception e) {
                     LOG.error("Cannot set veroeffent", e);
                 }
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__JAHR,
+                        2025);
+                } catch (Exception e) {
+                    LOG.error("Cannot set ende geplant", e);
+                }
+                try {
+                    getCidsBean().setProperty(
+                        FIELD__QUARTAL,
+                        1);
+                } catch (Exception e) {
+                    LOG.error("Cannot set ende quartal", e);
+                }
             } else {
                 hatBB();
                 setStadtbezirke();
