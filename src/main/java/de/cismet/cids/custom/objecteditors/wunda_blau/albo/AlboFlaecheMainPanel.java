@@ -13,6 +13,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau.albo;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -49,6 +50,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.hooks.AfterSavingHook;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
@@ -66,7 +68,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
+public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements AfterSavingHook {
 
     //~ Methods ----------------------------------------------------------------
 
@@ -1063,53 +1065,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                     && alboFlaecheStofflichePanel1.prepareForSave()
                     && alboFlaecheAltablagerungPanel1.prepareForSave();
 
-        if (prepForSave) {
-            final CidsBeansTableModel model = (CidsBeansTableModel)jXTable1.getModel();
-
-            if (model != null) {
-                final List<CidsBean> vorgangList = model.getCidsBeans();
-
-                if (vorgangList != null) {
-                    for (final CidsBean vorgangBean : vorgangList) {
-                        final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
-                                vorgangBean,
-                                "arr_flaechen");
-
-                        if (flaechen != null) {
-                            if (!flaechen.contains(super.getCidsBean())) {
-                                flaechen.add(super.getCidsBean());
-
-                                try {
-                                    vorgangBean.persist(getConnectionContext());
-                                } catch (Exception e) {
-                                    LOG.error("Cannot persist dependent vorgang object", e);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                for (final CidsBean vorgangBean : originVorgangObjects) {
-                    if ((vorgangList == null) || !vorgangList.contains(vorgangBean)) {
-                        final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
-                                vorgangBean,
-                                "arr_flaechen");
-
-                        flaechen.remove(super.getCidsBean());
-
-                        try {
-                            vorgangBean.persist(getConnectionContext());
-                        } catch (Exception e) {
-                            LOG.error("Cannot persist dependent vorgang object", e);
-                        }
-                    }
-                }
-            }
-
-            return true;
-        } else {
-            return false;
-        }
+        return prepForSave;
     }
 
     @Override
@@ -1243,6 +1199,69 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel {
                             && !flaecheBeans.contains(vorgangBean)) {
                     ((FlaecheVorgangTableModel)jXTable1.getModel()).add(vorgangBean);
                     getCidsBean().setArtificialChangeFlag(true);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void afterSaving(final Event event) {
+        final CidsBeansTableModel model = (CidsBeansTableModel)jXTable1.getModel();
+
+        if (model != null) {
+            final List<CidsBean> vorgangList = model.getCidsBeans();
+
+            if (vorgangList != null) {
+                for (final CidsBean vorgangBeanFromList : vorgangList) {
+                    // be sure that the current object is used and not the object from the LightWeightMetaObject
+                    // cache
+                    final Sirius.server.newuser.User u = SessionManager.getSession().getUser();
+                    final String domain = vorgangBeanFromList.getMetaObject().getDomain();
+                    final Integer objectId = vorgangBeanFromList.getPrimaryKeyValue();
+                    final Integer classId = vorgangBeanFromList.getMetaObject().getClassID();
+                    MetaObject mo = null;
+
+                    try {
+                        mo = SessionManager.getProxy()
+                                    .getMetaObject(u, objectId, classId, domain, getConnectionContext());
+                    } catch (ConnectionException ex) {
+                        LOG.error("Cannot receive vorhaben object^");
+                    }
+
+                    final CidsBean vorgangBean = ((mo != null) ? mo.getBean() : vorgangBeanFromList);
+
+                    final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                            vorgangBean,
+                            "arr_flaechen");
+
+                    if (flaechen != null) {
+                        if (!flaechen.contains(event.getPersistedBean())) {
+                            flaechen.add(event.getPersistedBean());
+
+                            try {
+                                vorgangBean.persist(getConnectionContext());
+                                comboBoxFilterDialog1.refresh();
+                            } catch (Exception e) {
+                                LOG.error("Cannot persist dependent vorgang object", e);
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (final CidsBean vorgangBean : originVorgangObjects) {
+                if ((vorgangList == null) || !vorgangList.contains(vorgangBean)) {
+                    final List<CidsBean> flaechen = CidsBeanSupport.getBeanCollectionFromProperty(
+                            vorgangBean,
+                            "arr_flaechen");
+
+                    flaechen.remove(event.getPersistedBean());
+
+                    try {
+                        vorgangBean.persist(getConnectionContext());
+                    } catch (Exception e) {
+                        LOG.error("Cannot persist dependent vorgang object", e);
+                    }
                 }
             }
         }
