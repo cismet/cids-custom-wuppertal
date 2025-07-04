@@ -88,13 +88,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>9.0.5</version>
+                <version>9.0.6</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>9.0.5</version>
+                <version>9.0.6</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -510,7 +510,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.8</version>
+            <version>42.3.9</version>
             <scope>compile</scope>
             <type>jar</type>
         </dependency>
