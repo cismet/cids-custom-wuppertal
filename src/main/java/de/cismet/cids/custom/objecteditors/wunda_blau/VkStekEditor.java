@@ -148,16 +148,18 @@ public class VkStekEditor extends DefaultCustomObjectEditor implements CidsBeanR
         panFillerUnten1.setName(""); // NOI18N
         panFillerUnten1.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
+        final javax.swing.GroupLayout panFillerUnten1Layout = new javax.swing.GroupLayout(panFillerUnten1);
         panFillerUnten1.setLayout(panFillerUnten1Layout);
         panFillerUnten1Layout.setHorizontalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUnten1Layout.setVerticalGroup(
-            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         setAutoscrolls(true);
         setMinimumSize(new java.awt.Dimension(600, 646));
@@ -185,7 +187,12 @@ public class VkStekEditor extends DefaultCustomObjectEditor implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 5);
         panDaten.add(lblName, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -215,7 +222,12 @@ public class VkStekEditor extends DefaultCustomObjectEditor implements CidsBeanR
         taBeschreibung.setRows(2);
         taBeschreibung.setWrapStyleWord(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibung.setViewportView(taBeschreibung);
@@ -254,16 +266,18 @@ public class VkStekEditor extends DefaultCustomObjectEditor implements CidsBeanR
         panFillerUnten2.setName(""); // NOI18N
         panFillerUnten2.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUnten2Layout = new javax.swing.GroupLayout(panFillerUnten2);
+        final javax.swing.GroupLayout panFillerUnten2Layout = new javax.swing.GroupLayout(panFillerUnten2);
         panFillerUnten2.setLayout(panFillerUnten2Layout);
         panFillerUnten2Layout.setHorizontalGroup(
-            panFillerUnten2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUnten2Layout.setVerticalGroup(
-            panFillerUnten2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUnten2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -286,16 +300,18 @@ public class VkStekEditor extends DefaultCustomObjectEditor implements CidsBeanR
         panFillerUnten.setName(""); // NOI18N
         panFillerUnten.setOpaque(false);
 
-        javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
+        final javax.swing.GroupLayout panFillerUntenLayout = new javax.swing.GroupLayout(panFillerUnten);
         panFillerUnten.setLayout(panFillerUntenLayout);
         panFillerUntenLayout.setHorizontalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panFillerUntenLayout.setVerticalGroup(
-            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panFillerUntenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -308,7 +324,7 @@ public class VkStekEditor extends DefaultCustomObjectEditor implements CidsBeanR
         add(panFillerUnten, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {

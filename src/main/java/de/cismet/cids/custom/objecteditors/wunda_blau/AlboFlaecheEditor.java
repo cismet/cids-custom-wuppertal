@@ -96,6 +96,7 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.editors.SaveVetoable;
+import de.cismet.cids.editors.hooks.AfterSavingHook;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -128,6 +129,7 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     ConnectionContextStore,
     PropertyChangeListener,
     SaveVetoable,
+    AfterSavingHook,
     BeanInitializerProvider {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -1440,6 +1442,11 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
     @Override
     public BeanInitializer getBeanInitializer() {
         return new AlboFlaecheInitializer(cidsBean);
+    }
+
+    @Override
+    public void afterSaving(final Event event) {
+        panMain.afterSaving(event);
     }
 
     //~ Inner Classes ----------------------------------------------------------

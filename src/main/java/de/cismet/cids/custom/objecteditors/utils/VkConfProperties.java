@@ -41,7 +41,8 @@ public class VkConfProperties {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VkConfProperties.class);
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            VkConfProperties.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -161,7 +162,8 @@ public class VkConfProperties {
                 final User user = SessionManager.getSession().getUser();
                 final Object ret = SessionManager.getSession()
                             .getConnection()
-                            .executeTask(user,
+                            .executeTask(
+                                user,
                                 GetServerResourceServerAction.TASK_NAME,
                                 "WUNDA_BLAU",
                                 WundaBlauServerResources.VK_CONF_PROPERTIES.getValue(),

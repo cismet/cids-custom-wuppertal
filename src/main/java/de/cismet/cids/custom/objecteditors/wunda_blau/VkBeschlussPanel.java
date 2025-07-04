@@ -29,7 +29,9 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -38,15 +40,21 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.net.URL;
+
 import java.util.Date;
+import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -65,17 +73,11 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
-import java.awt.Cursor;
-import java.awt.EventQueue;
-import java.net.URL;
-import java.util.MissingResourceException;
-import java.util.concurrent.ExecutionException;
-import javax.swing.GroupLayout;
-import javax.swing.SwingWorker;
 
 /**
  * DOCUMENT ME!
@@ -91,18 +93,11 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
     private static final Logger LOG = Logger.getLogger(VkBeschlussPanel.class);
 
-
-    static {
-        final ConnectionContext connectionContext = ConnectionContext.create(ConnectionContext.Category.STATIC,
-                VkBeschlussPanel.class.getSimpleName());
-    }
-
-    public static final String FIELD__DATE = "datum";                           
-    public static final String FIELD__ANZEIGE = "anzeige";                              
-    public static final String FIELD__URL = "url";                          
-    public static final String FIELD__DATUM = "datum"; 
-    public static final String FIELD__FK_VORHABEN = "fk_vorhaben";                 
-
+    public static final String FIELD__DATE = "datum";
+    public static final String FIELD__ANZEIGE = "anzeige";
+    public static final String FIELD__URL = "url";
+    public static final String FIELD__DATUM = "datum";
+    public static final String FIELD__FK_VORHABEN = "fk_vorhaben";
 
     public static final String TABLE__NAME = "vk_vorhaben_beschluesse";
 
@@ -115,11 +110,101 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
     public static final String BUNDLE_PANE_PREFIX = "VkBeschlussPanel.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "VkBeschlussPanel.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "VkBeschlussPanel.isOkForSaving().JOptionPane.title";
-    
+
     public static final String BUNDLE_NOSAVE_MESSAGE = "VkBeschlussPanel.noSave().message";
     public static final String BUNDLE_NOSAVE_TITLE = "VkBeschlussPanel.noSave().title";
-    
+
     private static final int MAX_ZEICHEN = 75;
+
+    @Getter @Setter private static Exception errorNoSave = null;
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final boolean editor;
+    @Getter private final VkDocumentLoader vkDocumentLoader;
+    private CidsBean cidsBean;
+    private String saveAnzeige;
+    private String saveUrl;
+    private Date saveDatum;
+
+    private final ImageIcon statusFalsch = new ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
+    private final ImageIcon statusOk = new ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
+
+    private SwingWorker worker_url;
+
+    private final PropertyChangeListener changeListener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                switch (evt.getPropertyName()) {
+                    case FIELD__ANZEIGE: {
+                        if (evt.getNewValue() != saveAnzeige) {
+                            setChangeFlag();
+                        }
+                        break;
+                    }
+                    case FIELD__DATUM: {
+                        if (evt.getNewValue() != saveDatum) {
+                            setChangeFlag();
+                        }
+                        break;
+                    }
+                    case FIELD__URL: {
+                        if (evt.getNewValue() != saveUrl) {
+                            setChangeFlag();
+                            checkBeschluss();
+                        }
+                        break;
+                    }
+                    default: {
+                        setChangeFlag();
+                    }
+                }
+            }
+        };
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    DefaultBindableDateChooser dcDatum;
+    JLabel lblAnzeige;
+    JLabel lblDatum;
+    JLabel lblUrl;
+    JLabel lblUrlCheck;
+    JPanel panBeschluss;
+    JPanel panDaten;
+    JPanel panFillerUnten4;
+    JPanel panUrl;
+    JTextField txtAnzeige;
+    JTextField txtUrl;
+    private BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new VkBeschlussPanel object.
+     */
+    public VkBeschlussPanel() {
+        this(null);
+    }
+
+    /**
+     * Creates new VkBeschlussPanel.
+     *
+     * @param  vdlInstance  DOCUMENT ME!
+     */
+    public VkBeschlussPanel(final VkDocumentLoader vdlInstance) {
+        this.vkDocumentLoader = vdlInstance;
+        if (vdlInstance != null) {
+            this.editor = vdlInstance.getParentOrganizer().isEditor();
+        } else {
+            this.editor = false;
+        }
+        initComponents();
+    }
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -157,9 +242,11 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         panBeschluss.setPreferredSize(new Dimension(520, 270));
         panBeschluss.setLayout(new GridBagLayout());
 
-        lblDatum.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblDatum, NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblDatum.text")); // NOI18N
-        lblDatum.setName("lblDatum"); // NOI18N
+        lblDatum.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
+        Mnemonics.setLocalizedText(
+            lblDatum,
+            NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblDatum.text")); // NOI18N
+        lblDatum.setName("lblDatum");                                                       // NOI18N
         lblDatum.setRequestFocusEnabled(false);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -172,7 +259,12 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         dcDatum.setEnabled(false);
         dcDatum.setName("dcDatum"); // NOI18N
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.datum}"), dcDatum, BeanProperty.create("date"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.datum}"),
+                dcDatum,
+                BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(dcDatum.getConverter());
@@ -187,10 +279,14 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 0, 2, 2);
         panBeschluss.add(dcDatum, gridBagConstraints);
 
-        lblAnzeige.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        Mnemonics.setLocalizedText(lblAnzeige, NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblAnzeige.text")); // NOI18N
-        lblAnzeige.setToolTipText(NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblAnzeige.toolTipText")); // NOI18N
-        lblAnzeige.setName("lblAnzeige"); // NOI18N
+        lblAnzeige.setFont(new Font("Tahoma", 1, 11));                                        // NOI18N
+        Mnemonics.setLocalizedText(
+            lblAnzeige,
+            NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblAnzeige.text")); // NOI18N
+        lblAnzeige.setToolTipText(NbBundle.getMessage(
+                VkBeschlussPanel.class,
+                "VkBeschlussPanel.lblAnzeige.toolTipText"));                                  // NOI18N
+        lblAnzeige.setName("lblAnzeige");                                                     // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -203,7 +299,12 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         txtAnzeige.setEnabled(false);
         txtAnzeige.setName("txtAnzeige"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anzeige}"), txtAnzeige, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anzeige}"),
+                txtAnzeige,
+                BeanProperty.create("text"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -217,9 +318,9 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panBeschluss.add(txtAnzeige, gridBagConstraints);
 
-        lblUrl.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblUrl.setFont(new Font("Tahoma", 1, 11));                                                                       // NOI18N
         Mnemonics.setLocalizedText(lblUrl, NbBundle.getMessage(VkBeschlussPanel.class, "VkBeschlussPanel.lblUrl.text")); // NOI18N
-        lblUrl.setName("lblUrl"); // NOI18N
+        lblUrl.setName("lblUrl");                                                                                        // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -232,7 +333,12 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         txtUrl.setEnabled(false);
         txtUrl.setName("txtUrl"); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.url}"), txtUrl, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.url}"),
+                txtUrl,
+                BeanProperty.create("text"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -250,8 +356,9 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
-        lblUrlCheck.setName("lblUrlCheck"); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setName("lblUrlCheck");                                                                  // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -269,14 +376,12 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         panFillerUnten4.setName(""); // NOI18N
         panFillerUnten4.setOpaque(false);
 
-        GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
+        final GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
         panFillerUnten4.setLayout(panFillerUnten4Layout);
-        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -305,98 +410,9 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         add(panDaten, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
-
-    @Getter @Setter private static Exception errorNoSave = null;
-
-    //~ Instance fields --------------------------------------------------------
-
-    private final boolean editor;
-    @Getter private final VkDocumentLoader vkDocumentLoader;
-    private CidsBean cidsBean;
-    private String saveAnzeige;
-    private String saveUrl;
-    private Date saveDatum;
-    
-    private final ImageIcon statusFalsch = new ImageIcon(
-            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
-    private final ImageIcon statusOk = new ImageIcon(
-            getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
-    
-    private SwingWorker worker_url;
-
-    private final PropertyChangeListener changeListener = new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(final PropertyChangeEvent evt) {
-                switch (evt.getPropertyName()) {
-                    case FIELD__ANZEIGE: {
-                        if (evt.getNewValue() != saveAnzeige) {
-                            setChangeFlag();
-                        }
-                        break;
-                    }
-                    case FIELD__DATUM: {
-                        if (evt.getNewValue() != saveDatum) {
-                            setChangeFlag();
-                        }
-                        break;
-                    }
-                    case FIELD__URL: {
-                        if (evt.getNewValue() != saveUrl) {
-                            setChangeFlag();
-                            checkBeschluss();
-                        }
-                        break;
-                    }
-                    default: {
-                        setChangeFlag();
-                    }
-                }
-            }
-        };
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    DefaultBindableDateChooser dcDatum;
-    JLabel lblAnzeige;
-    JLabel lblDatum;
-    JLabel lblUrl;
-    JLabel lblUrlCheck;
-    JPanel panBeschluss;
-    JPanel panDaten;
-    JPanel panFillerUnten4;
-    JPanel panUrl;
-    JTextField txtAnzeige;
-    JTextField txtUrl;
-    private BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
-
-    //~ Constructors -----------------------------------------------------------
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
-     * Creates a new VkBeschlussPanel object.
-     */
-    public VkBeschlussPanel() {
-        this(null);
-    }
-
-    /**
-     * Creates new VkBeschlussPanel.
-     *
-     * @param  vdlInstance DOCUMENT ME!
-     */
-    public VkBeschlussPanel(final VkDocumentLoader vdlInstance) {
-        this.vkDocumentLoader = vdlInstance;
-        if (vdlInstance != null) {
-            this.editor = vdlInstance.getParentOrganizer().isEditor();
-        } else {
-            this.editor = false;
-        }
-        initComponents();
-    }
-
-   /**
      * DOCUMENT ME!
      *
      * @param   args  DOCUMENT ME!
@@ -427,7 +443,6 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
         return this.editor;
     }
 
-
     /**
      * DOCUMENT ME!
      */
@@ -441,58 +456,67 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
             txtUrl.setEnabled(true);
         }
     }
-    
-    private void checkBeschluss(){
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkBeschluss() {
         lblUrlCheck.setIcon(statusFalsch);
         lblUrlCheck.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        if (txtUrl.getText() != null && txtUrl.getText().length() > 10){
+        if ((txtUrl.getText() != null) && (txtUrl.getText().length() > 10)) {
             EventQueue.invokeLater(new Thread("checkBeschlussThread") {
-                @Override
-                public void run() {
-                    checkUrl(txtUrl.getText(), lblUrlCheck);
-                }
-            }); 
+
+                    @Override
+                    public void run() {
+                        checkUrl(txtUrl.getText(), lblUrlCheck);
+                    }
+                });
         }
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url        DOCUMENT ME!
+     * @param  showLabel  DOCUMENT ME!
+     */
     private void checkUrl(final String url, final JLabel showLabel) {
         showLabel.setIcon(statusFalsch);
         showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 
-            @Override
-            protected Boolean doInBackground() throws Exception {
-                return WebAccessManager.getInstance().checkIfURLaccessible(new URL(url));
-            }
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    return WebAccessManager.getInstance().checkIfURLaccessible(new URL(url));
+                }
 
-            @Override
-            protected void done() {
-                final Boolean check;
-                try {
-                    if(isCancelled()){
-                        return;
-                    }
-                    check = get();
-                    if (check) {
-                        showLabel.setIcon(statusOk);
-                        showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                    } else {
+                @Override
+                protected void done() {
+                    final Boolean check;
+                    try {
+                        if (isCancelled()) {
+                            return;
+                        }
+                        check = get();
+                        if (check) {
+                            showLabel.setIcon(statusOk);
+                            showLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        } else {
+                            showLabel.setIcon(statusFalsch);
+                            showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
                         showLabel.setIcon(statusFalsch);
                         showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        LOG.warn("URL Check Problem in Worker.", e);
                     }
-                } catch (InterruptedException | ExecutionException e) {
-                    showLabel.setIcon(statusFalsch);
-                    showLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                    LOG.warn("URL Check Problem in Worker.", e);
                 }
-            }
-        };
-        if (worker_url != null && !worker_url.isCancelled()) {
+            };
+        if ((worker_url != null) && !worker_url.isCancelled()) {
             worker_url.cancel(true);
         }
         worker_url = worker;
         worker_url.execute();
-        
     }
 
     /**
@@ -535,13 +559,11 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
     private void setSaveValues() {
         saveAnzeige = (getCidsBean().getProperty(FIELD__ANZEIGE) != null)
             ? ((String)getCidsBean().getProperty(FIELD__ANZEIGE)) : null;
-        saveUrl = (getCidsBean().getProperty(FIELD__URL) != null)
-            ? ((String)getCidsBean().getProperty(FIELD__URL)) : null;
-        saveDatum = (getCidsBean().getProperty(FIELD__DATUM) != null) ? 
-                (Date)getCidsBean().getProperty(FIELD__DATUM) : null;
+        saveUrl = (getCidsBean().getProperty(FIELD__URL) != null) ? ((String)getCidsBean().getProperty(FIELD__URL))
+                                                                  : null;
+        saveDatum = (getCidsBean().getProperty(FIELD__DATUM) != null) ? (Date)getCidsBean().getProperty(FIELD__DATUM)
+                                                                      : null;
     }
-    
-    
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
@@ -560,10 +582,10 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
                         bindingGroup,
                         getCidsBean(),
                         getConnectionContext());
-                } 
+                }
                 bindingGroup.bind();
                 checkBeschluss();
-                
+
                 if (isEditor() && (getCidsBean() != null)) {
                     getCidsBean().addPropertyChangeListener(changeListener);
                 }
@@ -624,8 +646,8 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
 
             // datum vorhanden
             try {
-                if (saveBeschlussBean.getProperty(FIELD__DATUM) == null || 
-                        saveBeschlussBean.getProperty(FIELD__DATUM).toString().trim().isEmpty()) {
+                if ((saveBeschlussBean.getProperty(FIELD__DATUM) == null)
+                            || saveBeschlussBean.getProperty(FIELD__DATUM).toString().trim().isEmpty()) {
                     LOG.warn("No datum specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NODATE));
                     save = false;
@@ -634,11 +656,11 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
                 LOG.warn("Datum not given.", ex);
                 save = false;
             }
-            
+
             // url vorhanden
             try {
-                if (saveBeschlussBean.getProperty(FIELD__URL) == null || 
-                        saveBeschlussBean.getProperty(FIELD__URL).toString().trim().isEmpty()) {
+                if ((saveBeschlussBean.getProperty(FIELD__URL) == null)
+                            || saveBeschlussBean.getProperty(FIELD__URL).toString().trim().isEmpty()) {
                     LOG.warn("No datum specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_NOURL));
                     save = false;
@@ -647,18 +669,17 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
                 LOG.warn("url not given.", ex);
                 save = false;
             }
-            
-            
+
             // Zeichenanzahl Anzeige
             try {
-                if (saveBeschlussBean.getProperty(FIELD__ANZEIGE) != null && 
-                        !saveBeschlussBean.getProperty(FIELD__ANZEIGE).toString().isEmpty()) {
-                    if(saveBeschlussBean.getProperty(FIELD__ANZEIGE).toString().length() > MAX_ZEICHEN){
+                if ((saveBeschlussBean.getProperty(FIELD__ANZEIGE) != null)
+                            && !saveBeschlussBean.getProperty(FIELD__ANZEIGE).toString().isEmpty()) {
+                    if (saveBeschlussBean.getProperty(FIELD__ANZEIGE).toString().length() > MAX_ZEICHEN) {
                         LOG.warn("Long Anzeige specified. Skip persisting.");
                         errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_ANZEIGE));
                         save = false;
                     } else {
-                        if(saveBeschlussBean.getProperty(FIELD__ANZEIGE).toString().trim().isEmpty()){
+                        if (saveBeschlussBean.getProperty(FIELD__ANZEIGE).toString().trim().isEmpty()) {
                             LOG.warn("Empty Anzeige specified. Skip persisting.");
                             errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_ANZEIGE_EMPTY));
                             save = false;
@@ -678,7 +699,7 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
                 if (vkDocumentLoader.getParentOrganizer() instanceof VkVorhabenEditor) {
                     errorMessage.append(NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_WHICH))
                             .append(saveBeschlussBean.getPrimaryKeyValue());
-                } 
+                }
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     NbBundle.getMessage(VkBeschlussPanel.class, BUNDLE_PANE_PREFIX)
                             + errorMessage.toString()
@@ -689,9 +710,4 @@ public class VkBeschlussPanel extends javax.swing.JPanel implements Disposable,
             return save;
         }
     }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-
-
 }

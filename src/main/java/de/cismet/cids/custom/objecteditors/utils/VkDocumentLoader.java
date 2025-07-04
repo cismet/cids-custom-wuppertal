@@ -15,7 +15,6 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaObjectNode;
-import de.cismet.cids.custom.objecteditors.wunda_blau.VkParentPanel;
 
 import lombok.Getter;
 
@@ -27,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.VkParentPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.VkDocumentLightweightSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -69,7 +69,7 @@ public class VkDocumentLoader {
     /**
      * Creates a new VkDocumentLoader object.
      *
-     * @param vkOrganizer
+     * @param  vkOrganizer  DOCUMENT ME!
      */
     public VkDocumentLoader(final VkParentPanel vkOrganizer) {
         searchDocument = new VkDocumentLightweightSearch(
@@ -85,7 +85,7 @@ public class VkDocumentLoader {
     /**
      * DOCUMENT ME!
      *
-     * @param   idVorhaben           DOCUMENT ME!
+     * @param   idVorhaben         DOCUMENT ME!
      * @param   connectionContext  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -126,7 +126,17 @@ public class VkDocumentLoader {
         }
         return true;
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   idVorhaben         DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
     public boolean loadChildrenLinks(final Integer idVorhaben, final ConnectionContext connectionContext)
             throws ConnectionException {
         final Collection<MetaObjectNode> mons;
@@ -159,8 +169,17 @@ public class VkDocumentLoader {
         }
         return true;
     }
-    
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   idVorhaben         DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
     public boolean loadChildrenFotos(final Integer idVorhaben, final ConnectionContext connectionContext)
             throws ConnectionException {
         final Collection<MetaObjectNode> mons;
@@ -193,8 +212,17 @@ public class VkDocumentLoader {
         }
         return true;
     }
-    
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   idVorhaben         DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
     public boolean loadChildrenDokumente(final Integer idVorhaben, final ConnectionContext connectionContext)
             throws ConnectionException {
         final Collection<MetaObjectNode> mons;
@@ -206,7 +234,7 @@ public class VkDocumentLoader {
             mons = SessionManager.getProxy().customServerSearch(
                     searchDocument,
                     connectionContext);
-            final List<CidsBean> beansDokumente= new ArrayList<>();
+            final List<CidsBean> beansDokumente = new ArrayList<>();
             if (!mons.isEmpty()) {
                 for (final MetaObjectNode mon : mons) {
                     beansDokumente.add(SessionManager.getProxy().getMetaObject(
@@ -227,7 +255,17 @@ public class VkDocumentLoader {
         }
         return true;
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   id                 DOCUMENT ME!
+     * @param   connectionContext  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
     public boolean loadChildren(final Integer id, final ConnectionContext connectionContext)
             throws ConnectionException {
         if (loadChildrenBeschluesse(id, connectionContext)) {
@@ -277,7 +315,7 @@ public class VkDocumentLoader {
     public List<CidsBean> getMapValueLinks(final Integer key) {
         return mapLinks.get(key);
     }
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -298,7 +336,6 @@ public class VkDocumentLoader {
     public List<CidsBean> getMapValueFotos(final Integer key) {
         return mapFotos.get(key);
     }
-    
 
     /**
      * DOCUMENT ME!
@@ -328,16 +365,15 @@ public class VkDocumentLoader {
     /**
      * DOCUMENT ME!
      *
-     * @param   idVorhaben  DOCUMENT ME!
-     * @param   beanBeschluesse    DOCUMENT ME!
+     * @param   idVorhaben       DOCUMENT ME!
+     * @param   beanBeschluesse  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public boolean removeBeschluesse(final Integer idVorhaben, final CidsBean beanBeschluesse) {
         return removeFromMap(idVorhaben, beanBeschluesse, mapBeschluesse);
     }
-    
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -346,41 +382,38 @@ public class VkDocumentLoader {
      *
      * @return  DOCUMENT ME!
      */
-    public boolean removeLinks (final Integer idVorhaben, final CidsBean beanLinks ) {
-        return removeFromMap(idVorhaben, beanLinks , mapLinks );
+    public boolean removeLinks(final Integer idVorhaben, final CidsBean beanLinks) {
+        return removeFromMap(idVorhaben, beanLinks, mapLinks);
     }
-    
-    
+
     /**
      * DOCUMENT ME!
      *
-     * @param   idVorhaben  DOCUMENT ME!
-     * @param beanDokumente
+     * @param   idVorhaben     DOCUMENT ME!
+     * @param   beanDokumente  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public boolean removeDokumente(final Integer idVorhaben, final CidsBean beanDokumente) {
         return removeFromMap(idVorhaben, beanDokumente, mapDokumente);
     }
-    
-    
+
     /**
      * DOCUMENT ME!
      *
      * @param   idVorhaben  DOCUMENT ME!
-     * @param beanFotos
+     * @param   beanFotos   DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public boolean removeFotos (final Integer idVorhaben, final CidsBean beanFotos ) {
-        return removeFromMap(idVorhaben, beanFotos, mapFotos );
+    public boolean removeFotos(final Integer idVorhaben, final CidsBean beanFotos) {
+        return removeFromMap(idVorhaben, beanFotos, mapFotos);
     }
-
 
     /**
      * DOCUMENT ME!
      *
-     * @param  idVorhaben    DOCUMENT ME!
+     * @param  idVorhaben       DOCUMENT ME!
      * @param  beanBeschluesse  DOCUMENT ME!
      */
     public void addBeschluesse(final Integer idVorhaben, final CidsBean beanBeschluesse) {
@@ -390,8 +423,8 @@ public class VkDocumentLoader {
     /**
      * DOCUMENT ME!
      *
-     * @param  idVorhaben    DOCUMENT ME!
-     * @param  beanLinks  DOCUMENT ME!
+     * @param  idVorhaben  DOCUMENT ME!
+     * @param  beanLinks   DOCUMENT ME!
      */
     public void addLinks(final Integer idVorhaben, final CidsBean beanLinks) {
         addToMap(idVorhaben, beanLinks, mapLinks);
@@ -399,8 +432,8 @@ public class VkDocumentLoader {
     /**
      * DOCUMENT ME!
      *
-     * @param  idVorhaben    DOCUMENT ME!
-     * @param beanDokumente
+     * @param  idVorhaben     DOCUMENT ME!
+     * @param  beanDokumente  DOCUMENT ME!
      */
     public void addDokumente(final Integer idVorhaben, final CidsBean beanDokumente) {
         addToMap(idVorhaben, beanDokumente, mapDokumente);
@@ -409,8 +442,8 @@ public class VkDocumentLoader {
     /**
      * DOCUMENT ME!
      *
-     * @param  idVorhaben    DOCUMENT ME!
-     * @param beanFotos
+     * @param  idVorhaben  DOCUMENT ME!
+     * @param  beanFotos   DOCUMENT ME!
      */
     public void addFotos(final Integer idVorhaben, final CidsBean beanFotos) {
         addToMap(idVorhaben, beanFotos, mapFotos);
@@ -470,11 +503,8 @@ public class VkDocumentLoader {
         return listeners.remove(listener);
     }
 
-
     /**
      * DOCUMENT ME!
-     *
-     * @param  primaryKeyValue  DOCUMENT ME!
      */
     private void fireLoadingCompleteLinks() {
         for (final Listener listener : listeners) {
@@ -495,8 +525,6 @@ public class VkDocumentLoader {
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  primaryKeyValue  DOCUMENT ME!
      */
     private void fireLoadingCompleteBeschluesse() {
         for (final Listener listener : listeners) {
@@ -517,8 +545,6 @@ public class VkDocumentLoader {
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  primaryKeyValue  DOCUMENT ME!
      */
     private void fireLoadingCompleteDokumente() {
         for (final Listener listener : listeners) {
@@ -539,8 +565,6 @@ public class VkDocumentLoader {
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  primaryKeyValue  DOCUMENT ME!
      */
     private void fireLoadingCompleteFotos() {
         for (final Listener listener : listeners) {
@@ -572,13 +596,11 @@ public class VkDocumentLoader {
 
         /**
          * DOCUMENT ME!
-         *
          */
         void loadingCompleteBeschluesse();
 
         /**
          * DOCUMENT ME!
-         *
          */
         void loadingCompleteLinks();
 
@@ -592,18 +614,16 @@ public class VkDocumentLoader {
         /**
          * DOCUMENT ME!
          *
-         * @param  idVorhaben DOCUMENT ME!
+         * @param  idVorhaben  DOCUMENT ME!
          */
         void loadingErrorLinks(Integer idVorhaben);
         /**
          * DOCUMENT ME!
-         *
          */
         void loadingCompleteDokumente();
 
         /**
          * DOCUMENT ME!
-         *
          */
         void loadingCompleteFotos();
 
@@ -617,9 +637,8 @@ public class VkDocumentLoader {
         /**
          * DOCUMENT ME!
          *
-         * @param  idVorhaben DOCUMENT ME!
+         * @param  idVorhaben  DOCUMENT ME!
          */
         void loadingErrorFotos(Integer idVorhaben);
-
     }
 }
