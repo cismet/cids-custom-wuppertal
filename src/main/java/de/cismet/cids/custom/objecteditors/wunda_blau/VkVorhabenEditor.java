@@ -125,6 +125,7 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.nio.charset.Charset;
 /**
  * DOCUMENT ME!
  *
@@ -2706,7 +2707,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panIntern.add(txtMail, gridBagConstraints);
 
         lblBetreff.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBetreff.setText("Betreff::");
+        lblBetreff.setText("Betreff:");
         lblBetreff.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2728,7 +2729,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panIntern.add(txtBetreff, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBemerkung.setText("Mailtext::");
+        lblBemerkung.setText("Mailtext:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -2927,15 +2928,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBeschluesseMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstBeschluesseMouseEntered
-    }                                                               //GEN-LAST:event_lstBeschluesseMouseEntered
+    private void lstBeschluesseMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstBeschluesseMouseEntered
+    }//GEN-LAST:event_lstBeschluesseMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewBeschlussActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewBeschlussActionPerformed
+    private void btnAddNewBeschlussActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewBeschlussActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -2964,14 +2965,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnAddNewBeschlussActionPerformed
+    }//GEN-LAST:event_btnAddNewBeschlussActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBeschlussActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBeschlussActionPerformed
+    private void btnRemoveBeschlussActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveBeschlussActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstBeschluesse.getSelectedValue();
@@ -3005,22 +3006,22 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveBeschlussActionPerformed
+    }//GEN-LAST:event_btnRemoveBeschlussActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLinksMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstLinksMouseEntered
-    }                                                         //GEN-LAST:event_lstLinksMouseEntered
+    private void lstLinksMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstLinksMouseEntered
+    }//GEN-LAST:event_lstLinksMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewLinkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewLinkActionPerformed
+    private void btnAddNewLinkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewLinkActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3049,14 +3050,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnAddNewLinkActionPerformed
+    }//GEN-LAST:event_btnAddNewLinkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLinkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveLinkActionPerformed
+    private void btnRemoveLinkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveLinkActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstLinks.getSelectedValue();
@@ -3088,14 +3089,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveLinkActionPerformed
+    }//GEN-LAST:event_btnRemoveLinkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveDokumentActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveDokumentActionPerformed
+    private void btnRemoveDokumentActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveDokumentActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstDokumente.getSelectedValue();
@@ -3129,14 +3130,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveDokumentActionPerformed
+    }//GEN-LAST:event_btnRemoveDokumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewDokumentActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewDokumentActionPerformed
+    private void btnAddNewDokumentActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewDokumentActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3165,14 +3166,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnAddNewDokumentActionPerformed
+    }//GEN-LAST:event_btnAddNewDokumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewFotoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewFotoActionPerformed
+    private void btnAddNewFotoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewFotoActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3201,14 +3202,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnAddNewFotoActionPerformed
+    }//GEN-LAST:event_btnAddNewFotoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFotoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveFotoActionPerformed
+    private void btnRemoveFotoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveFotoActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstFotos.getSelectedValue();
@@ -3240,38 +3241,39 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveFotoActionPerformed
+    }//GEN-LAST:event_btnRemoveFotoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstFotosMouseEntered
-    }                                                         //GEN-LAST:event_lstFotosMouseEntered
+    private void lstFotosMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstFotosMouseEntered
+    }//GEN-LAST:event_lstFotosMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
         if (isEditor() && (getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
         }
-    }                                                              //GEN-LAST:event_cbStrasseActionPerformed
+    }//GEN-LAST:event_cbStrasseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSendMailActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnSendMailActionPerformed
+    private void btnSendMailActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnSendMailActionPerformed
         final StringBuilder userFeedback = new StringBuilder();
         // Ermitteln der Mailadresse des Users
         String userMail = "vk";
+        final String clientEncoding = Charset.defaultCharset().toString();
         final UserMailSearch search = new UserMailSearch(getUser());
         final Collection<ArrayList> al;
         try {
@@ -3353,11 +3355,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                         LOG.error("Cannot found bemerkung", e);
                     }
                 } else {
-                    if (mailBB) {
-                        final Object ret = sendMail(userMail, MAIL_BB, betreff, bemerkung);
-                        // Rückgabe user feedback
+                    if (mailBB){ 
+                        final Object ret = sendMail(userMail, MAIL_BB, betreff, bemerkung, clientEncoding);
+                        //Rückgabe user feedback
                         userFeedback.append(String.format(
-                                "Beim Versand an %s kam es zu folgenden Meldungen: \n",
+                                "Beim Versand an %s kam es zu folgenden Meldungen: \n", 
                                 MAIL_BB));
                         userFeedback.append(ret.toString());
                     }
@@ -3368,7 +3370,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                             // System.out.println(mailAdr);
                             final String mailtext = String.format("%s \n\n %s", bemerkung, HINWEIS_MAILVERSAND);
                             final String toAdresse = mailAdr.trim();
-                            final Object ret = sendMail(userMail, toAdresse, betreff, mailtext);
+                            final Object ret = sendMail(userMail, toAdresse, betreff, mailtext, clientEncoding);
                             // Rückgabe user feedback
                             userFeedback.append(String.format(
                                     "Beim Versand an %s kam es zu folgenden Meldungen: \n",
@@ -3398,34 +3400,28 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.error("Cannot found titel thema", e);
             }
         }
-    } //GEN-LAST:event_btnSendMailActionPerformed
+    }//GEN-LAST:event_btnSendMailActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   userMail   DOCUMENT ME!
-     * @param   mail       DOCUMENT ME!
-     * @param   betreff    DOCUMENT ME!
-     * @param   bemerkung  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Object sendMail(final String userMail, final String mail, final String betreff, final String bemerkung) {
+    
+    private Object sendMail(final String userMail, final String mail, final String betreff, final String bemerkung, final String clientEncoding){
         final ServerActionParameter[] param = new ServerActionParameter[] {
-                new ServerActionParameter<>(
-                    VkSendMailServerAction.Parameter.ABSENDER.toString(),
-                    userMail),
-                new ServerActionParameter<>(
-                    VkSendMailServerAction.Parameter.MAIL_ADRESS.toString(),
-                    mail),
-                new ServerActionParameter<>(
-                    VkSendMailServerAction.Parameter.BETREFF.toString(),
-                    betreff),
-                new ServerActionParameter<>(
-                    VkSendMailServerAction.Parameter.CONTENT.toString(),
-                    bemerkung),
-            };
-
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.ENCODING.toString(),
+                        clientEncoding
+                    ),
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.ABSENDER.toString(),
+                        userMail),
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.MAIL_ADRESS.toString(),
+                        mail),
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.BETREFF.toString(),
+                       betreff),
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.CONTENT.toString(),
+                        bemerkung),
+                };
         try {
             return SessionManager.getProxy()
                         .executeTask(
@@ -3445,7 +3441,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkMailActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkMailActionPerformed
+    private void btnMenOkMailActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkMailActionPerformed
         try {
             dlgMail.setVisible(false);
         } catch (Exception ex) {
@@ -3453,7 +3449,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         } finally {
             dlgMail.setVisible(false);
         }
-    }                                                                 //GEN-LAST:event_btnMenOkMailActionPerformed
+    }//GEN-LAST:event_btnMenOkMailActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -4465,11 +4461,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             }
             if ((getCidsBean().getMetaObject().getStatus() == MetaObject.NEW) && NEU_VORHABEN.equals("JA")) {
                 try {
+                    final String clientEncoding = Charset.defaultCharset().toString();
                     final String mailtext = String.format(
                             "Es wurde ein neues Vorhaben (%s) beim Thema %s angelegt.",
                             getCidsBean().getProperty(FIELD__TITEL).toString(),
                             getCidsBean().getProperty(FIELD__THEMA).toString());
-                    final Object ret = sendMail(MAIL_NEU, MAIL_NEU, TITLE_NEW_VORHABEN, mailtext);
+                    final Object ret = sendMail(MAIL_NEU, MAIL_NEU, TITLE_NEW_VORHABEN, mailtext, clientEncoding);
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(ret);
                     }
