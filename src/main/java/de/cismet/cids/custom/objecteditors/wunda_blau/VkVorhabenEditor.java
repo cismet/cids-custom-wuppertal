@@ -106,6 +106,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -2561,7 +2562,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panIntern.add(txtMail, gridBagConstraints);
 
         lblBetreff.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBetreff.setText("Betreff::");
+        lblBetreff.setText("Betreff:");
         lblBetreff.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2583,7 +2584,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panIntern.add(txtBetreff, gridBagConstraints);
 
         lblBemerkung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblBemerkung.setText("Mailtext::");
+        lblBemerkung.setText("Mailtext:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -3058,6 +3059,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         final StringBuilder userFeedback = new StringBuilder();
         //Ermitteln der Mailadresse des Users
         String userMail = "vk";
+        final String clientEncoding = Charset.defaultCharset().toString();
         final UserMailSearch search = new UserMailSearch(getUser());
         final Collection<ArrayList> al;
         try {
@@ -3137,7 +3139,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                     }
                 } else {
                     if (mailBB){ 
-                        final Object ret = sendMail(userMail, MAIL_BB, betreff, bemerkung);
+                        final Object ret = sendMail(userMail, MAIL_BB, betreff, bemerkung, clientEncoding);
                         //Rückgabe user feedback
                         userFeedback.append(String.format("Beim Versand an %s kam es zu folgenden Meldungen: \n", MAIL_BB));
                         userFeedback.append(ret.toString());
@@ -3149,7 +3151,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                                 //System.out.println(mailAdr);
                                 final String mailtext = String.format("%s \n\n %s", bemerkung, HINWEIS_MAILVERSAND);
                                 final String toAdresse = mailAdr.trim();
-                                final Object ret = sendMail(userMail, toAdresse, betreff, mailtext);
+                                final Object ret = sendMail(userMail, toAdresse, betreff, mailtext, clientEncoding);
                                 //Rückgabe user feedback
                                 userFeedback.append(String.format("Beim Versand an %s kam es zu folgenden Meldungen: \n", toAdresse));
                                 userFeedback.append(ret.toString());
@@ -3180,8 +3182,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     }//GEN-LAST:event_btnSendMailActionPerformed
 
     
-    private Object sendMail(final String userMail, final String mail, final String betreff, final String bemerkung){
+    private Object sendMail(final String userMail, final String mail, final String betreff, final String bemerkung, final String clientEncoding){
         final ServerActionParameter[] param = new ServerActionParameter[] {
+                    new ServerActionParameter<>(
+                        VkSendMailServerAction.Parameter.ENCODING.toString(),
+                        clientEncoding
+                    ),
                     new ServerActionParameter<>(
                         VkSendMailServerAction.Parameter.ABSENDER.toString(),
                         userMail),
@@ -4192,7 +4198,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                     final String mailtext = String.format("Es wurde ein neues Vorhaben (%s) beim Thema %s angelegt."
                             ,getCidsBean().getProperty(FIELD__TITEL).toString()
                             ,getCidsBean().getProperty(FIELD__THEMA).toString());
-                    final Object ret = sendMail(MAIL_NEU, MAIL_NEU, TITLE_NEW_VORHABEN, mailtext);
+                    final String clientEncoding = Charset.defaultCharset().toString();
+                    final Object ret = sendMail(MAIL_NEU, MAIL_NEU, TITLE_NEW_VORHABEN, mailtext, clientEncoding);
                     LOG.debug(ret);
                 } catch (Exception ex) {
                     LOG.warn("problem in sen mail new", ex);
