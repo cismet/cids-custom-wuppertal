@@ -170,7 +170,6 @@
                     <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
                   </AccessibilityProperties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jTabbedPane.setUI(new TabbedPaneUITransparent());"/>
                     <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="false"/>
                   </AuxValues>
                   <Constraints>
