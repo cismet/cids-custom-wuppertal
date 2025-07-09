@@ -657,7 +657,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         /*  new SwingWorker<Void, Void>() {
          *
          * @Override   protected Void doInBackground() throws Exception {       mcHnr = ClassCacheMultiple.getMetaClass(
-         *   "WUNDA_BLAU",               "ADRESSE",               connectionContext);       return null;   }
+         * "WUNDA_BLAU",               "ADRESSE",               connectionContext);       return null;   }
          *
          * @Override   protected void done() {       try {           get();           cbHNr.setMetaClass(mcHnr);       }
          * catch (final InterruptedException | ExecutionException ex) {           LOG.error(ex, ex);       }
@@ -2926,15 +2926,15 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBeschluesseMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstBeschluesseMouseEntered
-    }//GEN-LAST:event_lstBeschluesseMouseEntered
+    private void lstBeschluesseMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstBeschluesseMouseEntered
+    }                                                               //GEN-LAST:event_lstBeschluesseMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewBeschlussActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewBeschlussActionPerformed
+    private void btnAddNewBeschlussActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewBeschlussActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -2963,14 +2963,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewBeschlussActionPerformed
+    } //GEN-LAST:event_btnAddNewBeschlussActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBeschlussActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveBeschlussActionPerformed
+    private void btnRemoveBeschlussActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBeschlussActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstBeschluesse.getSelectedValue();
@@ -3004,22 +3004,22 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBeschlussActionPerformed
+    } //GEN-LAST:event_btnRemoveBeschlussActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLinksMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstLinksMouseEntered
-    }//GEN-LAST:event_lstLinksMouseEntered
+    private void lstLinksMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstLinksMouseEntered
+    }                                                         //GEN-LAST:event_lstLinksMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewLinkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewLinkActionPerformed
+    private void btnAddNewLinkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewLinkActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3048,14 +3048,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewLinkActionPerformed
+    } //GEN-LAST:event_btnAddNewLinkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLinkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveLinkActionPerformed
+    private void btnRemoveLinkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveLinkActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstLinks.getSelectedValue();
@@ -3087,14 +3087,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveLinkActionPerformed
+    } //GEN-LAST:event_btnRemoveLinkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveDokumentActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveDokumentActionPerformed
+    private void btnRemoveDokumentActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveDokumentActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstDokumente.getSelectedValue();
@@ -3128,14 +3128,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveDokumentActionPerformed
+    } //GEN-LAST:event_btnRemoveDokumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewDokumentActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewDokumentActionPerformed
+    private void btnAddNewDokumentActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewDokumentActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3164,14 +3164,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewDokumentActionPerformed
+    } //GEN-LAST:event_btnAddNewDokumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewFotoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewFotoActionPerformed
+    private void btnAddNewFotoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewFotoActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3200,14 +3200,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewFotoActionPerformed
+    } //GEN-LAST:event_btnAddNewFotoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFotoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveFotoActionPerformed
+    private void btnRemoveFotoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveFotoActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstFotos.getSelectedValue();
@@ -3239,35 +3239,35 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveFotoActionPerformed
+    } //GEN-LAST:event_btnRemoveFotoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstFotosMouseEntered
-    }//GEN-LAST:event_lstFotosMouseEntered
+    private void lstFotosMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstFotosMouseEntered
+    }                                                         //GEN-LAST:event_lstFotosMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
         if (isEditor() && (getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
         }
-    }//GEN-LAST:event_cbStrasseActionPerformed
+    }                                                              //GEN-LAST:event_cbStrasseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSendMailActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnSendMailActionPerformed
+    private void btnSendMailActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnSendMailActionPerformed
         final StringBuilder userFeedback = new StringBuilder();
         // Ermitteln der Mailadresse des Users
         String userMail = "vk";
@@ -3290,7 +3290,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                             break;
                         }
                     }
-                } //else {
+                } // else {
                 if (txtAbsender.getText().isEmpty() || txtAbsender.getText().equals(KEIN_ABSENDER)) {
                     userMail = KEIN_ABSENDER;
                     txtAbsender.setText(KEIN_ABSENDER);
@@ -3400,7 +3400,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.error("Cannot found titel thema", e);
             }
         }
-    }//GEN-LAST:event_btnSendMailActionPerformed
+    } //GEN-LAST:event_btnSendMailActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3454,7 +3454,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkMailActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkMailActionPerformed
+    private void btnMenOkMailActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkMailActionPerformed
         try {
             dlgMail.setVisible(false);
         } catch (Exception ex) {
@@ -3462,7 +3462,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         } finally {
             dlgMail.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkMailActionPerformed
+    }                                                                 //GEN-LAST:event_btnMenOkMailActionPerformed
 
     /**
      * DOCUMENT ME!
