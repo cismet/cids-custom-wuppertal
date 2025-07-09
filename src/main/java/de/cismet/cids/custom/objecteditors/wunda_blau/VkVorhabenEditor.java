@@ -85,7 +85,6 @@ import javax.swing.plaf.basic.ComboPopup;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.VkConfProperties;
 import de.cismet.cids.custom.objecteditors.utils.VkDocumentLoader;
@@ -253,8 +252,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_PANE_ADMIN = "VkVorhabenEditor.afterSaving().JOptionPane.admin";
 
     private static final String TITLE_NEW_VORHABEN = "ein neues Vorhaben anlegen...";
-    private static final String KEIN_ABSENDER =
-        "Es konnte Ihre Mailadresse nicht aus der Datenbank ermittelt werden. Deswegen ist der Absender: Vorhabenkarte";
+    private static final String KEIN_ABSENDER = "VorhabenkarteInWuNDa@stadt.wuppertal.de";
 
     public static final String CHILD_TOSTRING_TEMPLATE = "%s";
     public static final String[] CHILD_TOSTRING_FIELDS = { "id" };
@@ -3292,11 +3290,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                             break;
                         }
                     }
-                } else {
+                } //else {
+                if (txtAbsender.getText().isEmpty() || txtAbsender.getText().equals(KEIN_ABSENDER)) {
                     userMail = KEIN_ABSENDER;
+                    txtAbsender.setText(KEIN_ABSENDER);
                     try {
                         lblNoMail.setText(
-                            "Ihre Mailadresse konnte in der Datenbank leider nicht gefunden werden. Die Mail(s) werden aber verschickt. Stattdessen erscheint \"Vorhabenkarte\". An diesen Absender kann jedoch nicht geantwortet werden.");
+                            "Ihre Mailadresse konnte nicht gefunden werden. Die Mail(s) werden aber verschickt. Stattdessen erscheint \"VorhabenkarteInWuNDa@stadt.wuppertal.de\". An diesen Absender kann jedoch nicht geantwortet werden.");
                         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(VkVorhabenEditor.this),
                             dlgMail,
                             true);
