@@ -453,7 +453,7 @@ public class VkThemaEditor extends DefaultCustomObjectEditor implements CidsBean
         panName.add(spFuellung, gridBagConstraints);
 
         lblProzent.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblProzent.setText("% Transparenz");
+        lblProzent.setText("%");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
