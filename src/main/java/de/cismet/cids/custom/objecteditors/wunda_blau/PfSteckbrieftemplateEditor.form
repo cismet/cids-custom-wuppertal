@@ -70,15 +70,15 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="fastBindableReferenceCombo1">
+        <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cbKategorie">
           <Properties>
-            <Property name="name" type="java.lang.String" value="fastBindableReferenceCombo1" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="cbKategorie" noResource="true"/>
             <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new KategorieListCellRenderer()" type="code"/>
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_kampagne}" target="fastBindableReferenceCombo1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fk_kampagne}" target="cbKategorie" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
           </BindingProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.editors.FastBindableReferenceCombo(&quot;%1$2s&quot;,new String[] {&quot;bezeichnung&quot;})"/>
