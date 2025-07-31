@@ -42,6 +42,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.editors.hooks.AfterSavingHook;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -59,7 +60,8 @@ import de.cismet.layout.WrapLayout;
 public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     ConnectionContextStore,
     RequestsFullSizeComponent,
-    EditorSaveListener {
+    EditorSaveListener,
+    AfterSavingHook {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -73,7 +75,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
     private ConnectionContext connectionContext = ConnectionContext.createDummy();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.editors.FastBindableReferenceCombo fastBindableReferenceCombo1;
+    private de.cismet.cids.editors.FastBindableReferenceCombo cbKategorie;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -123,9 +125,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        fastBindableReferenceCombo1 = new de.cismet.cids.editors.FastBindableReferenceCombo(
-                "%1$2s",
-                new String[] { "bezeichnung" });
+        cbKategorie = new de.cismet.cids.editors.FastBindableReferenceCombo("%1$2s", new String[] { "bezeichnung" });
         jLabel9 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
@@ -178,14 +178,14 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
 
-        fastBindableReferenceCombo1.setName("fastBindableReferenceCombo1"); // NOI18N
-        fastBindableReferenceCombo1.setRenderer(new KategorieListCellRenderer());
+        cbKategorie.setName("cbKategorie"); // NOI18N
+        cbKategorie.setRenderer(new KategorieListCellRenderer());
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_kampagne}"),
-                fastBindableReferenceCombo1,
+                cbKategorie,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
@@ -194,7 +194,7 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(fastBindableReferenceCombo1, gridBagConstraints);
+        jPanel1.add(cbKategorie, gridBagConstraints);
 
         jLabel9.setText("Report-Pfad:");
         jLabel9.setName("jLabel9"); // NOI18N
@@ -422,7 +422,29 @@ public class PfSteckbrieftemplateEditor extends javax.swing.JPanel implements Ci
             LOG.error(ex, ex);
             return false;
         }
+
         return true;
+    }
+
+    @Override
+    public void afterSaving(final Event event) {
+        if (event.getStatus().equals(AfterSavingHook.Status.SAVE_SUCCESS)) {
+            final Object kategorie = cbKategorie.getSelectedItem();
+
+            if ((kategorie != null) && (kategorie instanceof CidsBean)) {
+                final CidsBean kampagne = (CidsBean)kategorie;
+
+                if (kampagne.getProperty("haupt_steckbrieftemplate_id") == null) {
+                    try {
+                        kampagne.setProperty(
+                            "haupt_steckbrieftemplate_id",
+                            event.getPersistedBean().getPrimaryKeyValue());
+                    } catch (Exception e) {
+                        LOG.error("Error while setting haupt_steckbrieftemplate_id", e);
+                    }
+                }
+            }
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
