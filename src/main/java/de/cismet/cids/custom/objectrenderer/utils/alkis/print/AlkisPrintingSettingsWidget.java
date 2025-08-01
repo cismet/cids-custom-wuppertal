@@ -16,6 +16,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
+
+import org.openide.util.NbBundle;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -1532,7 +1535,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         for (int i = 0; i < cidsObjectListModel.size(); ++i) {
             final Object o = cidsObjectListModel.get(i);
             if (isObjekte && (o instanceof CidsBean)) {
-                if (((CidsBean)o).getMetaObject().getMetaClass().getTableName().equals(ALKIS_LANDPARCEL_TABLE)) {
+                if (((CidsBean)o).getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                                ALKIS_LANDPARCEL_TABLE)) {
                     landParcelCode = AlkisProducts.getLandparcelCodeFromParcelBeanObject(o);
                     break;
                 } else if (((CidsBean)o).getMetaObject().getMetaClass().getTableName().equals(
@@ -1543,9 +1547,65 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             }
         }
 
+        final Point center = geom.getEnvelope().getCentroid();
         final String objectLandparcel = landParcelCode;
 
-        final Point center = geom.getEnvelope().getCentroid();
+        try {
+            final CidsAlkisSearchStatement search = new CidsAlkisSearchStatement(
+                    CidsAlkisSearchStatement.Resulttyp.FLURSTUECK,
+                    CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,
+                    "%",
+                    center);
+            final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                        .customServerSearch(search, getConnectionContext());
+
+            if ((mons != null) && !mons.isEmpty()) {
+                final MetaObjectNode mon = mons.iterator().next();
+
+                if (!mon.objectSet()) {
+                    final MetaObject mo = SessionManager.getProxy()
+                                .getMetaObject(SessionManager.getSession().getUser(),
+                                    mon.getObjectId(),
+                                    mon.getClassId(),
+                                    mon.getDomain(),
+                                    connectionContext);
+                    mon.setObject(mo);
+                }
+
+                final String landparcelCode = AlkisProducts.getLandparcelCodeFromParcelBeanObject(mon.getObject()
+                                .getBean());
+
+                if ((objectLandparcel != null) && !landparcelCode.equals(objectLandparcel)) {
+                    // todo: Meldung anzeigen, dass
+                    JOptionPane.showMessageDialog(
+                        mappingComponent,
+                        NbBundle.getMessage(
+                            AlkisPrintingSettingsWidget.class,
+                            "AlkisPrintingSettingsWidget.downloadProduct.other.message",
+                            objectLandparcel,
+                            landparcelCode),
+                        NbBundle.getMessage(
+                            AlkisPrintingSettingsWidget.class,
+                            "AlkisPrintingSettingsWidget.downloadProduct.other.title"),
+                        JOptionPane.WARNING_MESSAGE);
+                } else {
+                    // todo: Nachricht anzeigen
+                    JOptionPane.showMessageDialog(
+                        mappingComponent,
+                        NbBundle.getMessage(
+                            AlkisPrintingSettingsWidget.class,
+                            "AlkisPrintingSettingsWidget.downloadProduct.none.message",
+                            landparcelCode),
+                        NbBundle.getMessage(
+                            AlkisPrintingSettingsWidget.class,
+                            "AlkisPrintingSettingsWidget.downloadProduct.none.title"),
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error during flurstueck search", e);
+        }
+
         final AlkisProductDownloadHelper.AlkisKarteDownloadInfoCreator creator =
             new AlkisProductDownloadHelper.AlkisKarteDownloadInfoCreator() {
 
