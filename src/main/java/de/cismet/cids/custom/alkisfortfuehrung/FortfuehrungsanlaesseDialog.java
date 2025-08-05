@@ -25,23 +25,30 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Frame;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 import de.cismet.cids.server.search.CidsServerSearch;
 
@@ -126,7 +133,31 @@ public abstract class FortfuehrungsanlaesseDialog extends javax.swing.JDialog im
 
         jXTable1.setModel(new FortfuehrungenTableModel());
 
-        jXTable1.getColumnModel().getColumn(0).setCellRenderer(jXTable1.getDefaultRenderer(String.class));
+        jXTable1.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+
+                @Override
+                public Component getTableCellRendererComponent(final JTable table,
+                        final Object value,
+                        final boolean isSelected,
+                        final boolean hasFocus,
+                        final int row,
+                        final int column) {
+                    final Component res = super.getTableCellRendererComponent(
+                            table,
+                            value,
+                            isSelected,
+                            hasFocus,
+                            row,
+                            column);
+
+                    if ((value instanceof Date) && (res instanceof JLabel)) {
+                        ((JLabel)res).setText(new SimpleDateFormat("dd.MM.yyyy").format((Date)value));
+                        return res;
+                    }
+
+                    return res;
+                }
+            });
         jXTable1.getColumnModel().getColumn(1).setCellRenderer(jXTable1.getDefaultRenderer(String.class));
         jXTable1.getColumnModel().getColumn(2).setCellRenderer(jXTable1.getDefaultRenderer(String.class));
         jXTable1.getColumnModel().getColumn(3).setCellRenderer(jXTable1.getDefaultRenderer(String.class));

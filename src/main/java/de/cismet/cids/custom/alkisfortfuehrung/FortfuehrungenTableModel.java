@@ -10,6 +10,7 @@ package de.cismet.cids.custom.alkisfortfuehrung;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -34,7 +35,7 @@ public class FortfuehrungenTableModel extends AbstractTableModel {
         };
 
     private static final Class[] COLUMN_CLASSES = {
-            String.class,
+            Date.class,
             String.class,
             String.class,
             String.class
@@ -92,7 +93,8 @@ public class FortfuehrungenTableModel extends AbstractTableModel {
                 try {
                     final Date date = item.getBeginn();
                     if (date != null) {
-                        return new SimpleDateFormat("dd.MM.yyyy").format(date);
+//                        return new SimpleDateFormat("dd.MM.yyyy").format(date);
+                        return date;
                     } else {
                         return "";
                     }
