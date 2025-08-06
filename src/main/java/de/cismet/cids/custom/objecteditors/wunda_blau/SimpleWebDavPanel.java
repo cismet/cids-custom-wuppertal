@@ -172,9 +172,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         jspFotoList.setMinimumSize(new Dimension(250, 130));
         jspFotoList.setName("jspFotoList"); // NOI18N
 
-        lstFotos.setMinimumSize(new Dimension(250, 130));
         lstFotos.setName("lstFotos"); // NOI18N
-        lstFotos.setPreferredSize(new Dimension(250, 130));
 
         final ELProperty eLProperty = ELProperty.create("${cidsBean." + beanCollProp + "}");
         final JListBinding jListBinding = SwingBindings.createJListBinding(
@@ -277,11 +275,6 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         FormListener() {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void actionPerformed(final ActionEvent evt) {
             if (evt.getSource() == btnAddImg) {
@@ -291,11 +284,6 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
             }
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseClicked(final MouseEvent evt) {
             if (evt.getSource() == lstFotos) {
@@ -303,47 +291,22 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
             }
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseEntered(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseExited(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mousePressed(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void mouseReleased(final MouseEvent evt) {
         }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  evt  DOCUMENT ME!
-         */
         @Override
         public void valueChanged(final ListSelectionEvent evt) {
             if (evt.getSource() == lstFotos) {
