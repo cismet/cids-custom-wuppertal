@@ -155,7 +155,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     private javax.swing.JLabel lblAuftragsnummer;
     private javax.swing.JLabel lblGeomBuffer;
     private javax.swing.JLabel lblType;
-    private de.cismet.cids.custom.nas.NasFeePreviewPanel nasFeePreviewPanel1;
     private javax.swing.JPanel pnlControls;
     private javax.swing.JPanel pnlFee;
     private javax.swing.JPanel pnlMap;
@@ -364,7 +363,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
         lblAuftragsnummer = new javax.swing.JLabel();
         tfAuftragsnummer = new javax.swing.JTextField();
         pnlFee = new javax.swing.JPanel();
-        nasFeePreviewPanel1 = new de.cismet.cids.custom.nas.NasFeePreviewPanel(getConnectionContext());
         jPanel2 = new javax.swing.JPanel();
         lblGeomBuffer = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -522,8 +520,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
         pnlFee.setMinimumSize(new java.awt.Dimension(144, 100));
         pnlFee.setPreferredSize(new java.awt.Dimension(144, 150));
         pnlFee.setLayout(new java.awt.BorderLayout());
-        pnlFee.add(nasFeePreviewPanel1, java.awt.BorderLayout.CENTER);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -756,31 +752,61 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener,
     private void doDownload(final String requestId, final NasProduct product) {
         if (DownloadManagerDialog.getInstance().showAskingForUserTitleDialog(
                         CismapBroker.getInstance().getMappingComponent())) {
-            final String jobname = (!DownloadManagerDialog.getInstance().getJobName().equals(""))
-                ? DownloadManagerDialog.getInstance().getJobName() : null;
-            final String title = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString())
-                ? BASE_TITLE_DXF : BASE_TITLE_NAS;
-            DownloadManager.instance()
-                    .add(
-                        new NASDownload(
-                            title,
-                            "",
-                            jobname,
-                            requestId,
-                            product,
-                            generateSearchGeomCollection(),
-                            getConnectionContext()));
+            if ((product.getServer() != null) && (product.getTemplateContent() != null)) {
+                final String jobname = (!DownloadManagerDialog.getInstance().getJobName().equals(""))
+                    ? DownloadManagerDialog.getInstance().getJobName() : null;
+
+                DownloadManager.instance()
+                        .add(
+                            new CSVListDownload(
+                                "CSV-Download",
+                                "",
+                                jobname,
+                                requestId,
+                                product,
+                                generateSearchGeomCollection(),
+                                getConnectionContext()));
+            } else {
+                final String jobname = (!DownloadManagerDialog.getInstance().getJobName().equals(""))
+                    ? DownloadManagerDialog.getInstance().getJobName() : null;
+                final String title = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString())
+                    ? BASE_TITLE_DXF : BASE_TITLE_NAS;
+
+                DownloadManager.instance()
+                        .add(
+                            new NASDownload(
+                                title,
+                                "",
+                                jobname,
+                                requestId,
+                                product,
+                                generateSearchGeomCollection(),
+                                getConnectionContext()));
+            }
         } else {
-            DownloadManager.instance()
-                    .add(
-                        new NASDownload(
-                            "title",
-                            "",
-                            "",
-                            requestId,
-                            product,
-                            generateSearchGeomCollection(),
-                            getConnectionContext()));
+            if ((product.getServer() != null) && (product.getTemplateContent() != null)) {
+                DownloadManager.instance()
+                        .add(
+                            new CSVListDownload(
+                                "CSV-Download",
+                                "",
+                                "",
+                                requestId,
+                                product,
+                                generateSearchGeomCollection(),
+                                getConnectionContext()));
+            } else {
+                DownloadManager.instance()
+                        .add(
+                            new NASDownload(
+                                "title",
+                                "",
+                                "",
+                                requestId,
+                                product,
+                                generateSearchGeomCollection(),
+                                getConnectionContext()));
+            }
         }
     }
 
