@@ -69,6 +69,8 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
@@ -83,6 +85,9 @@ import de.cismet.cismap.commons.RetrievalServiceLayer;
 import de.cismet.cismap.commons.ServiceLayer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.printing.AbstractPrintingInscriber;
+import de.cismet.cismap.commons.gui.printing.FileNameChangedEvent;
+import de.cismet.cismap.commons.gui.printing.FilenamePrintingInscriber;
+import de.cismet.cismap.commons.gui.printing.FilenamePrintingInscriberListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.rasterservice.MapService;
 
@@ -96,7 +101,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class A4HMapMultiPicture extends AbstractPrintingInscriber implements DropTargetListener {
+public class A4HMapMultiPicture extends AbstractPrintingInscriber implements DropTargetListener,
+    FilenamePrintingInscriber {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -126,8 +132,10 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String lastPath = null;
     private CustomTableModel model = new CustomTableModel();
-    private final Map<String, String> copyrightMap = new HashMap<String, String>();
+    private final Map<String, String> copyrightMap = new HashMap<>();
     private DropTarget dropTarget;
+    private List<FilenamePrintingInscriberListener> listeners = new ArrayList<>();
+    private String oldText = "";
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboCopyright;
     private javax.swing.JPanel filePanel;
@@ -161,7 +169,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
                     + "multiPictureinscriberCache"; // NOI18N
         readInscriberCache();
 
-        this.chkDataSourcesList = new ArrayList<JCheckBox>();
+        this.chkDataSourcesList = new ArrayList<>();
 
         this.setUpDataSourceChks();
         this.setUpDataCbo();
@@ -209,6 +217,35 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
             });
         dropTarget = new DropTarget(this, this);
         new DropTarget(tabFile, this);
+        oldText = txtTitle.getText();
+
+        txtTitle.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                private void onChange(final DocumentEvent e) {
+                    final FileNameChangedEvent event = new FileNameChangedEvent(oldText, txtTitle.getText());
+
+                    for (final FilenamePrintingInscriberListener listener : listeners) {
+                        listener.fileNameChanged(event);
+                    }
+
+                    oldText = txtTitle.getText();
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -340,7 +377,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
      */
     @Override
     public HashMap<String, String> getValues() {
-        final HashMap<String, String> hm = new HashMap<String, String>();
+        final HashMap<String, String> hm = new HashMap<>();
         hm.put(KEY_NAME, txtName.getText());
         hm.put(KEY_HEAD, txtHead.getText());
         hm.put(KEY_DATE, txtDate.getText());
@@ -434,7 +471,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblHighlight, gridBagConstraints);
         lblHighlight.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -465,7 +502,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblSignature, gridBagConstraints);
         lblSignature.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -488,7 +525,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(15, 12, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 0);
         add(lblENr, gridBagConstraints);
         lblENr.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -512,7 +549,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblLocationDescription, gridBagConstraints);
         lblLocationDescription.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -537,7 +574,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblData, gridBagConstraints);
         lblData.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -560,7 +597,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         add(lblDataSources, gridBagConstraints);
         lblDataSources.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -597,7 +634,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblData1, gridBagConstraints);
 
         filePanel.setMaximumSize(new java.awt.Dimension(452, 70));
@@ -640,7 +677,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblHighlight1, gridBagConstraints);
 
         txtAuthor.addActionListener(new java.awt.event.ActionListener() {
@@ -755,8 +792,9 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
                     }
                     final BufferedReader br = new BufferedReader(new InputStreamReader(
                                 (InputStream)tr.getTransferData(flavors[i])));
-                    String tmp = null;
-                    final List<File> fileList = new ArrayList<File>();
+                    String tmp;
+                    final List<File> fileList = new ArrayList<>();
+
                     while ((tmp = br.readLine()) != null) {
                         if (tmp.trim().startsWith(FILE_PROTOCOL_PREFIX)) {
                             File f = new File(tmp.trim().substring(FILE_PROTOCOL_PREFIX.length()));
@@ -777,7 +815,7 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
                     }
                     br.close();
 
-                    if ((fileList != null) && (fileList.size() > 0)) {
+                    if (fileList.size() > 0) {
                         final int row = tabFile.rowAtPoint(dtde.getLocation());
                         setFile(fileList.get(0), row);
                         dtde.dropComplete(true);
@@ -798,12 +836,12 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
     private void readInscriberCache() {
         try {
             cache.load(new FileInputStream(cacheFile));
-            final String n = cache.getProperty(KEY_NAME).toString();
-            final String d = cache.getProperty(KEY_DATE).toString();
-            final String t = cache.getProperty(KEY_TITLE).toString();
-            final String h = cache.getProperty(KEY_HEAD).toString();
-            final String a = cache.getProperty(KEY_PUBLISHER).toString();
-            final String copyright = cache.getProperty(KEY_COPYRIGHT_NAME).toString();
+            final String n = cache.getProperty(KEY_NAME);
+            final String d = cache.getProperty(KEY_DATE);
+            final String t = cache.getProperty(KEY_TITLE);
+            final String h = cache.getProperty(KEY_HEAD);
+            final String a = cache.getProperty(KEY_PUBLISHER);
+            final String copyright = cache.getProperty(KEY_COPYRIGHT_NAME);
             txtName.setText(n);
             txtDate.setText(d);
             txtHead.setText(h);
@@ -831,6 +869,16 @@ public class A4HMapMultiPicture extends AbstractPrintingInscriber implements Dro
                 }
             };
         CismetThreadPool.execute(r);
+    }
+
+    @Override
+    public void addFilenameChangeListener(final FilenamePrintingInscriberListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public String getFileName() {
+        return txtTitle.getText();
     }
 
     //~ Inner Classes ----------------------------------------------------------

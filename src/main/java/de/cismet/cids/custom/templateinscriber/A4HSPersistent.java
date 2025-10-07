@@ -21,14 +21,18 @@ import java.io.InputStream;
 import java.util.*;
 
 import javax.swing.JCheckBox;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.cismet.cismap.commons.MappingModel;
 import de.cismet.cismap.commons.RetrievalServiceLayer;
 import de.cismet.cismap.commons.ServiceLayer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.printing.AbstractPrintingInscriber;
+import de.cismet.cismap.commons.gui.printing.FileNameChangedEvent;
+import de.cismet.cismap.commons.gui.printing.FilenamePrintingInscriber;
+import de.cismet.cismap.commons.gui.printing.FilenamePrintingInscriberListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.commons.raster.wms.WMSServiceLayer;
 import de.cismet.cismap.commons.rasterservice.MapService;
 
 import de.cismet.tools.CismetThreadPool;
@@ -39,7 +43,7 @@ import de.cismet.tools.CismetThreadPool;
  * @author   thorsten.hell@cismet.de
  * @version  $Revision$, $Date$
  */
-public class A4HSPersistent extends AbstractPrintingInscriber {
+public class A4HSPersistent extends AbstractPrintingInscriber implements FilenamePrintingInscriber {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -57,7 +61,8 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
     String cacheFile = ""; // NOI18N
     Properties cache = new Properties();
     private final ArrayList<JCheckBox> chkDataSourcesList;
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private List<FilenamePrintingInscriberListener> listeners = new ArrayList<>();
+    private String oldText = "";
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboData;
     private javax.swing.JScrollPane jScrollPane2;
@@ -85,10 +90,40 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
                     + "inscriberCache"; // NOI18N
         readInscriberCache();
 
-        this.chkDataSourcesList = new ArrayList<JCheckBox>();
+        this.chkDataSourcesList = new ArrayList<>();
 
         this.setUpDataSourceChks();
         this.setUpDataCbo();
+
+        oldText = txtHighlight.getText();
+
+        txtHighlight.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                private void onChange(final DocumentEvent e) {
+                    final FileNameChangedEvent event = new FileNameChangedEvent(oldText, txtHighlight.getText());
+
+                    for (final FilenamePrintingInscriberListener listener : listeners) {
+                        listener.fileNameChanged(event);
+                    }
+
+                    oldText = txtHighlight.getText();
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -193,7 +228,7 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
      */
     @Override
     public HashMap<String, String> getValues() {
-        final HashMap<String, String> hm = new HashMap<String, String>();
+        final HashMap<String, String> hm = new HashMap<>();
         hm.put(KEY_HIGHLIGHT, txtHighlight.getText());
         hm.put(KEY_SIGNATURE, txtSignature.getText());
         hm.put(KEY_E_NR, txtENr.getText());
@@ -377,16 +412,16 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
     private void readInscriberCache() {
         try {
             cache.load(new FileInputStream(cacheFile));
-            final String h = cache.getProperty(KEY_HIGHLIGHT).toString();
-            final String s = cache.getProperty(KEY_SIGNATURE).toString();
-            final String l = cache.getProperty(KEY_LOC_DESC).toString();
-            final String e = cache.getProperty(KEY_E_NR).toString();
+            final String h = cache.getProperty(KEY_HIGHLIGHT);
+            final String s = cache.getProperty(KEY_SIGNATURE);
+            final String l = cache.getProperty(KEY_LOC_DESC);
+            final String e = cache.getProperty(KEY_E_NR);
             txtHighlight.setText(h);
             txtSignature.setText(s);
             txtENr.setText(e);
             txtLocationDescription.setText(l);
         } catch (Throwable t) {
-            log.warn("Error while reading the InscriberCache", t); // NOI18N
+            LOG.warn("Error while reading the InscriberCache", t); // NOI18N
         }
     }
 
@@ -401,10 +436,20 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
                     try {
                         cache.store(new FileOutputStream(cacheFile), "Saved: " + System.currentTimeMillis()); // NOI18N
                     } catch (Throwable t) {
-                        log.warn("Error while writing the InscriberCache", t);                                // NOI18N
+                        LOG.warn("Error while writing the InscriberCache", t);                                // NOI18N
                     }
                 }
             };
         CismetThreadPool.execute(r);
+    }
+
+    @Override
+    public void addFilenameChangeListener(final FilenamePrintingInscriberListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public String getFileName() {
+        return txtHighlight.getText();
     }
 }
