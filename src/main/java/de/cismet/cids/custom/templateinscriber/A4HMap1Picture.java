@@ -44,18 +44,20 @@ import javax.imageio.ImageIO;
 
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.clientutils.ConversionUtils;
-
-import de.cismet.cismap.actions.MergeFeatureAction;
 
 import de.cismet.cismap.commons.MappingModel;
 import de.cismet.cismap.commons.RetrievalServiceLayer;
 import de.cismet.cismap.commons.ServiceLayer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.printing.AbstractPrintingInscriber;
+import de.cismet.cismap.commons.gui.printing.FileNameChangedEvent;
+import de.cismet.cismap.commons.gui.printing.FilenamePrintingInscriber;
+import de.cismet.cismap.commons.gui.printing.FilenamePrintingInscriberListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.commons.raster.wms.WMSServiceLayer;
 import de.cismet.cismap.commons.rasterservice.MapService;
 
 import de.cismet.tools.CismetThreadPool;
@@ -68,7 +70,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   thorsten.hell@cismet.de
  * @version  $Revision$, $Date$
  */
-public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTargetListener {
+public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTargetListener, FilenamePrintingInscriber {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -92,6 +94,8 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
     private DropTarget dropTarget;
     private String lastPath = null;
     private File file = null;
+    private List<FilenamePrintingInscriberListener> listeners = new ArrayList<>();
+    private String oldText = "";
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboData;
     private javax.swing.JPanel filePanel;
@@ -123,12 +127,41 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
                     + "inscriberCache"; // NOI18N
         readInscriberCache();
 
-        this.chkDataSourcesList = new ArrayList<JCheckBox>();
+        this.chkDataSourcesList = new ArrayList<>();
 
         this.setUpDataSourceChks();
         this.setUpDataCbo();
         dropTarget = new DropTarget(this, this);
         new DropTarget(lblFile, this);
+        oldText = txtHighlight.getText();
+
+        txtHighlight.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    onChange(e);
+                }
+
+                private void onChange(final DocumentEvent e) {
+                    final FileNameChangedEvent event = new FileNameChangedEvent(oldText, txtHighlight.getText());
+
+                    for (final FilenamePrintingInscriberListener listener : listeners) {
+                        listener.fileNameChanged(event);
+                    }
+
+                    oldText = txtHighlight.getText();
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -233,7 +266,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
      */
     @Override
     public HashMap<String, String> getValues() {
-        final HashMap<String, String> hm = new HashMap<String, String>();
+        final HashMap<String, String> hm = new HashMap<>();
         hm.put(KEY_HIGHLIGHT, txtHighlight.getText());
         hm.put(KEY_SIGNATURE, txtSignature.getText());
         hm.put(KEY_E_NR, txtENr.getText());
@@ -295,7 +328,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblHighlight, gridBagConstraints);
         lblHighlight.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -326,7 +359,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblSignature, gridBagConstraints);
         lblSignature.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -347,7 +380,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(15, 12, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 0);
         add(lblENr, gridBagConstraints);
         lblENr.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -371,7 +404,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblLocationDescription, gridBagConstraints);
         lblLocationDescription.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -394,7 +427,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblData, gridBagConstraints);
         lblData.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -417,7 +450,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         add(lblDataSources, gridBagConstraints);
         lblDataSources.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -452,7 +485,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         add(lblData1, gridBagConstraints);
 
         filePanel.setLayout(new java.awt.GridBagLayout());
@@ -520,10 +553,10 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
     private void readInscriberCache() {
         try {
             cache.load(new FileInputStream(cacheFile));
-            final String h = cache.getProperty(KEY_HIGHLIGHT).toString();
-            final String s = cache.getProperty(KEY_SIGNATURE).toString();
-            final String l = cache.getProperty(KEY_LOC_DESC).toString();
-            final String e = cache.getProperty(KEY_E_NR).toString();
+            final String h = cache.getProperty(KEY_HIGHLIGHT);
+            final String s = cache.getProperty(KEY_SIGNATURE);
+            final String l = cache.getProperty(KEY_LOC_DESC);
+            final String e = cache.getProperty(KEY_E_NR);
             txtHighlight.setText(h);
             txtSignature.setText(s);
             txtENr.setText(e);
@@ -591,8 +624,9 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
                     }
                     final BufferedReader br = new BufferedReader(new InputStreamReader(
                                 (InputStream)tr.getTransferData(flavors[i])));
-                    String tmp = null;
-                    final List<File> fileList = new ArrayList<File>();
+                    String tmp;
+                    final List<File> fileList = new ArrayList<>();
+
                     while ((tmp = br.readLine()) != null) {
                         if (tmp.trim().startsWith(FILE_PROTOCOL_PREFIX)) {
                             File f = new File(tmp.trim().substring(FILE_PROTOCOL_PREFIX.length()));
@@ -613,7 +647,7 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
                     }
                     br.close();
 
-                    if ((fileList != null) && (fileList.size() > 0)) {
+                    if (fileList.size() > 0) {
                         setFile(fileList.get(0));
                         dtde.dropComplete(true);
                         return;
@@ -662,5 +696,15 @@ public class A4HMap1Picture extends AbstractPrintingInscriber implements DropTar
                     null);
             JXErrorPane.showDialog(CismapBroker.getInstance().getMappingComponent(), errorInfo);
         }
+    }
+
+    @Override
+    public void addFilenameChangeListener(final FilenamePrintingInscriberListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public String getFileName() {
+        return txtHighlight.getText();
     }
 }
