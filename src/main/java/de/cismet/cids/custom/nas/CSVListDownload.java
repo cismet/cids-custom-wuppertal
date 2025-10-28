@@ -275,9 +275,9 @@ public class CSVListDownload extends AbstractCancellableDownload implements Conn
         final ServerActionParameter paramMethod = new ServerActionParameter(
                 NasCsvDataQueryAction.PARAMETER_TYPE.METHOD.toString(),
                 NasCsvDataQueryAction.METHOD_TYPE.CREATE);
-//        final ServerActionParameter paramRequest = new ServerActionParameter(
-//                NasCsvDataQueryAction.PARAMETER_TYPE.ORDER_ID.toString(),
-//                requestId);
+        final ServerActionParameter paramRequest = new ServerActionParameter(
+                NasCsvDataQueryAction.PARAMETER_TYPE.AUFTRAGSNUMMER.toString(),
+                requestId);
         try {
             final Object answer = SessionManager.getProxy()
                         .executeTask(
@@ -287,7 +287,8 @@ public class CSVListDownload extends AbstractCancellableDownload implements Conn
                             getConnectionContext(),
                             paramTemplate,
                             paramGeom,
-                            paramMethod);
+                            paramMethod,
+                            paramRequest);
 
             if (answer instanceof byte[]) {
                 return new String((byte[])answer, "CP1252");
