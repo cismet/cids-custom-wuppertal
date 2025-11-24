@@ -2253,6 +2253,9 @@ public class BerechtigungspruefungRenderer extends javax.swing.JPanel implements
 
     @Override
     public void dispose() {
+        if (bindingGroup != null) {
+            bindingGroup.unbind();
+        }
     }
 
     @Override

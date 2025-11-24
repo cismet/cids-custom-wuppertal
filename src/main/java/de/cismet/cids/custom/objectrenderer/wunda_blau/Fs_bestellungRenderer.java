@@ -1954,6 +1954,9 @@ public class Fs_bestellungRenderer extends javax.swing.JPanel implements CidsBea
 
     @Override
     public void dispose() {
+        if (bindingGroup != null) {
+            bindingGroup.unbind();
+        }
     }
 
     @Override
