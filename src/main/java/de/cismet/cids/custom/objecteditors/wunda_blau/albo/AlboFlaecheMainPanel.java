@@ -25,6 +25,7 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.swingx.JXTable;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -37,6 +38,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import de.cismet.cids.custom.clientutils.CidsBeansTableModel;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -90,20 +93,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
         panTop = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jTextField9 = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
-        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
         jLabel7 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
-        filler58 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        jLabel36 = new javax.swing.JLabel();
-        cbFlaechentyp = new DefaultBindableScrollableComboBox();
         jPanel2 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
@@ -225,48 +216,11 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         panTop.add(jTextField9, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, "Hauptnr.:");
-        jLabel9.setName("jLabel9"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(jLabel9, gridBagConstraints);
-
-        jTextField11.setName("jTextField11"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.landesregistriernummer}"),
-                jTextField11,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(jTextField11, gridBagConstraints);
-
-        filler69.setName("filler69"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 1.0;
-        panTop.add(filler69, gridBagConstraints);
-
         org.openide.awt.Mnemonics.setLocalizedText(jLabel7, "FISAlBo-Nr.:");
         jLabel7.setName("jLabel7"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
@@ -283,74 +237,12 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(jTextField6, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "lfd. Nr.:");
-        jLabel10.setName("jLabel10"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(jLabel10, gridBagConstraints);
-
-        jTextField12.setName("jTextField12"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"),
-                jTextField12,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(jTextField12, gridBagConstraints);
-
-        filler58.setName("filler58"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 75;
-        gridBagConstraints.weightx = 1.0;
-        panTop.add(filler58, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel36, "Gesamt-/Teilfläche:");
-        jLabel36.setName("jLabel36"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 2);
-        panTop.add(jLabel36, gridBagConstraints);
-
-        cbFlaechentyp.setName("cbFlaechentyp"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fk_typ}"),
-                cbFlaechentyp,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        panTop.add(cbFlaechentyp, gridBagConstraints);
-        ((DefaultBindableScrollableComboBox)cbFlaechentyp).setNullable(true);
+        panTop.add(jTextField6, gridBagConstraints);
 
         jPanel2.setName("jPanel2"); // NOI18N
         jPanel2.setOpaque(false);
@@ -402,7 +294,6 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
 
         jXTable1.setModel(new FlaecheVorgangTableModel());
         jXTable1.setName("jXTable1"); // NOI18N
-        jXTable1.setVisibleRowCount(4);
         jXTable1.addMouseListener(formListener);
         jScrollPane4.setViewportView(jXTable1);
 
@@ -684,21 +575,90 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
 
     private static final String[] COLUMN_PROPERTIES = new String[] {
             "schluessel",
-            "regal_nummer",
-            "fk_art.name",
-            "ordner_nummer"
+            "fk_strasse.name||\" \"||hausnummer",
+            "{gutachten || gutachten_digital}",
+            "[1]",
+            "ordner_nummer",
+            "[0]"
         };
     private static final String[] COLUMN_NAMES = new String[] {
             "Vorgang",
-            "Regal",
+            "Straße",
+            "Gutachten",
             "Ordner-Art",
-            "Ordner-Nummer"
+            "Ordner-Nummer",
+            "Auskunft"
         };
     private static final Class[] COLUMN_CLASSES = new Class[] {
-            String.class, // Schlüssel
-            String.class, // Regal
-            String.class, // Ordner-Nummer
-            String.class, // Ordner-Art
+            String.class,  // Schlüssel
+            String.class,  // Straße
+            Boolean.class, // Gutachten
+            String.class,  // Ordner-Art
+            String.class,  // Ordner-Nummer
+            Boolean.class  // Auskunft
+        };
+    private static final CidsBeansTableModel.PropertyRenderer[] PROPERTY_RENDERER = {
+            new CidsBeansTableModel.PropertyRenderer() {
+
+                @Override
+                public Object getValue(final CidsBean bean) {
+                    if (bean != null) {
+                        final List<CidsBean> bearbeitungen = CidsBeanSupport.getBeanCollectionFromProperty(
+                                bean,
+                                "n_bearbeitungen");
+                        Boolean onlyInfos = null;
+
+                        if (bearbeitungen != null) {
+                            for (final CidsBean bearbeitung : bearbeitungen) {
+                                if ((bearbeitung.getProperty("fk_geschaeft.schluessel") != null)
+                                            && bearbeitung.getProperty("fk_geschaeft.schluessel").equals("Auskünfte")) {
+                                    if (onlyInfos == null) {
+                                        onlyInfos = true;
+                                    }
+                                } else {
+                                    onlyInfos = false;
+                                }
+                            }
+
+                            if ((onlyInfos != null) && onlyInfos) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return null;
+                }
+            }
+            ,
+            new CidsBeansTableModel.PropertyRenderer() {
+
+                @Override
+                public Object getValue(final CidsBean bean) {
+                    if (bean != null) {
+                        final String[] prop = { "art_steh", "art_haenge", "art_digital" };
+                        final String[] name = { "Steh", "Hänge", "Digital" };
+                        String result = null;
+
+                        for (int i = 0; i < prop.length; ++i) {
+                            final Object propValue = (Boolean)bean.getProperty(prop[i]);
+
+                            if ((propValue instanceof Boolean) && (Boolean)propValue) {
+                                if (result == null) {
+                                    result = name[i];
+                                } else {
+                                    result += "/" + name[i];
+                                }
+                            }
+                        }
+
+                        return result;
+                    }
+
+                    return null;
+                }
+            }
         };
 
     //~ Instance fields --------------------------------------------------------
@@ -717,36 +677,28 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
         alboFlaecheStandortePanel1;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.AlboFlaecheMainStofflichePanel
         alboFlaecheStofflichePanel1;
-    private javax.swing.JComboBox<String> cbFlaechentyp;
     private de.cismet.cids.custom.objecteditors.wunda_blau.albo.ComboBoxFilterDialog comboBoxFilterDialog1;
     private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler29;
     private javax.swing.Box.Filler filler35;
     private javax.swing.Box.Filler filler39;
     private javax.swing.Box.Filler filler40;
-    private javax.swing.Box.Filler filler58;
-    private javax.swing.Box.Filler filler69;
     private javax.swing.Box.Filler filler7;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JList<CidsBean> jList2;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField9;
-    private org.jdesktop.swingx.JXTable jXTable1;
+    private javax.swing.JTable jXTable1;
     private javax.swing.JPanel panAltablagerung;
     private javax.swing.JPanel panBeschreibung;
     private javax.swing.JPanel panLinks;
@@ -768,8 +720,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
      */
     public AlboFlaecheMainPanel() {
         initComponents();
-        jLabel36.setVisible(false);
-        cbFlaechentyp.setVisible(false);
+        ((DroppedBeansTable)jXTable1).setVisibleRowCount(4);
     }
 
     /**
@@ -786,8 +737,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
     @Override
     protected void initGui() {
         initComponents();
-        jLabel36.setVisible(false);
-        cbFlaechentyp.setVisible(false);
+        ((DroppedBeansTable)jXTable1).setVisibleRowCount(4);
 
         if (isEditable()) {
             jButton1.setIcon(new ImageIcon(
@@ -816,8 +766,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
         } else {
             RendererTools.makeReadOnly(jTextField6);
             RendererTools.makeReadOnly(jTextField9);
-            RendererTools.makeReadOnly(jTextField11);
-            RendererTools.makeReadOnly(jTextField12);
+//            RendererTools.makeReadOnly(jTextField11);
+//            RendererTools.makeReadOnly(jTextField12);
 //            RendererTools.makeReadOnly(cbFlaechentyp);
         }
         RendererTools.makeReadOnly(jXTable1);
@@ -1023,8 +973,8 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
         if (isEditable()) {
             RendererTools.makeUneditable(jTextField6, !unlocked);
             RendererTools.makeUneditable(jTextField9, !unlocked);
-            RendererTools.makeUneditable(jTextField11, !unlocked);
-            RendererTools.makeUneditable(jTextField12, !unlocked);
+//            RendererTools.makeUneditable(jTextField11, !unlocked);
+//            RendererTools.makeUneditable(jTextField12, !unlocked);
 //            RendererTools.makeUneditable(cbFlaechentyp, !unlocked);
         }
     }
@@ -1091,6 +1041,26 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
         final FlaecheVorgangTableModel model = new FlaecheVorgangTableModel();
         model.setLoading(true);
         jXTable1.setModel(model);
+        jXTable1.getModel().addTableModelListener(new TableModelListener() {
+
+                @Override
+                public void tableChanged(final TableModelEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                if (jXTable1.getColumnCount() >= 6) {
+                                    jXTable1.getColumnModel().getColumn(0).setPreferredWidth(80);
+                                    jXTable1.getColumnModel().getColumn(2).setPreferredWidth(80);
+                                    jXTable1.getColumnModel().getColumn(5).setPreferredWidth(80);
+                                    jXTable1.getColumnModel().getColumn(0).setMaxWidth(75);
+                                    jXTable1.getColumnModel().getColumn(2).setMaxWidth(75);
+                                    jXTable1.getColumnModel().getColumn(5).setMaxWidth(75);
+                                }
+                            }
+                        });
+                }
+            });
 
         if (getCidsBean() != null) {
             new SwingWorker<List<CidsBean>, Void>() {
@@ -1297,7 +1267,7 @@ public class AlboFlaecheMainPanel extends AbstractAlboFlaechePanel implements Af
          * Creates a new FlaecheVorgangTableModel object.
          */
         public FlaecheVorgangTableModel() {
-            super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES);
+            super(COLUMN_PROPERTIES, COLUMN_NAMES, COLUMN_CLASSES, PROPERTY_RENDERER);
         }
     }
 

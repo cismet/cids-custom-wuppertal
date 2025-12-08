@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -44,6 +45,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
     private final String[] columnNames;
     private final String[] columnProperties;
     private final Boolean[] columnEditables;
+    private final CidsBeansTableModel.PropertyRenderer[] propertyRenderer;
 
     private final Boolean allColumnsEditable;
     private final Boolean allRowsEditable;
@@ -64,6 +66,21 @@ public class CidsBeansTableModel extends AbstractTableModel {
             final String[] columnNames,
             final Class[] columnClasses) {
         this(columnProperties, columnNames, columnClasses, false, false);
+    }
+
+    /**
+     * Creates a new CidsBeansTableModel object.
+     *
+     * @param  columnProperties  DOCUMENT ME!
+     * @param  columnNames       DOCUMENT ME!
+     * @param  columnClasses     DOCUMENT ME!
+     * @param  propertyRenderer  DOCUMENT ME!
+     */
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses,
+            final CidsBeansTableModel.PropertyRenderer[] propertyRenderer) {
+        this(columnProperties, columnNames, columnClasses, propertyRenderer, false, false);
     }
 
     /**
@@ -133,6 +150,25 @@ public class CidsBeansTableModel extends AbstractTableModel {
     /**
      * Creates a new CidsBeansTableModel object.
      *
+     * @param  columnProperties    DOCUMENT ME!
+     * @param  columnNames         DOCUMENT ME!
+     * @param  columnClasses       DOCUMENT ME!
+     * @param  propertyRenderer    DOCUMENT ME!
+     * @param  allColumnsEditable  DOCUMENT ME!
+     * @param  rowsSelectable      DOCUMENT ME!
+     */
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses,
+            final CidsBeansTableModel.PropertyRenderer[] propertyRenderer,
+            final boolean allColumnsEditable,
+            final boolean rowsSelectable) {
+        this(columnProperties, columnNames, columnClasses, propertyRenderer, allColumnsEditable, true, rowsSelectable);
+    }
+
+    /**
+     * Creates a new CidsBeansTableModel object.
+     *
      * @param  columnProperties  DOCUMENT ME!
      * @param  columnNames       DOCUMENT ME!
      * @param  columnClasses     DOCUMENT ME!
@@ -149,6 +185,7 @@ public class CidsBeansTableModel extends AbstractTableModel {
         this.columnProperties = columnProperties;
         this.columnNames = columnNames;
         this.columnClasses = columnClasses;
+        this.propertyRenderer = null;
         this.columnEditables = columnEditables;
         this.allColumnsEditable = null;
         this.allRowsEditable = allRowsEditable;
@@ -171,9 +208,31 @@ public class CidsBeansTableModel extends AbstractTableModel {
             final boolean allColumnsEditable,
             final boolean allRowsEditable,
             final boolean rowsSelectable) {
+        this(columnProperties, columnNames, columnClasses, null, allColumnsEditable, allRowsEditable, rowsSelectable);
+    }
+
+    /**
+     * Creates a new CidsBeansTableModel object.
+     *
+     * @param  columnProperties    DOCUMENT ME!
+     * @param  columnNames         DOCUMENT ME!
+     * @param  columnClasses       DOCUMENT ME!
+     * @param  propertyRenderer    DOCUMENT ME!
+     * @param  allColumnsEditable  DOCUMENT ME!
+     * @param  allRowsEditable     DOCUMENT ME!
+     * @param  rowsSelectable      DOCUMENT ME!
+     */
+    public CidsBeansTableModel(final String[] columnProperties,
+            final String[] columnNames,
+            final Class[] columnClasses,
+            final CidsBeansTableModel.PropertyRenderer[] propertyRenderer,
+            final boolean allColumnsEditable,
+            final boolean allRowsEditable,
+            final boolean rowsSelectable) {
         this.columnProperties = columnProperties;
         this.columnNames = columnNames;
         this.columnClasses = columnClasses;
+        this.propertyRenderer = propertyRenderer;
         this.columnEditables = null;
         this.allColumnsEditable = allColumnsEditable;
         this.allRowsEditable = allRowsEditable;
@@ -410,8 +469,92 @@ public class CidsBeansTableModel extends AbstractTableModel {
             final CidsBean cidsBean = getCidsBean(rowIndex);
             final String columnProperty = getColumnProperty(columnIndex);
 
-            return ((cidsBean != null) && (columnProperty != null)) ? cidsBean.getProperty(columnProperty) : null;
+            return getValue(cidsBean, columnProperty);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean        DOCUMENT ME!
+     * @param   columnProperty  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Object getValue(final CidsBean cidsBean, final String columnProperty) {
+        if ((cidsBean != null) && (columnProperty != null)) {
+            if (columnProperty.startsWith("[") && columnProperty.endsWith("]")) {
+                try {
+                    final String rendererValue = columnProperty.substring(1, columnProperty.length() - 1);
+
+                    final Integer index = Integer.parseInt(rendererValue);
+
+                    if ((propertyRenderer != null) && (index >= 0) && (index < propertyRenderer.length)) {
+                        return propertyRenderer[index].getValue(cidsBean);
+                    } else {
+                        LOG.error("renderer with index " + index + " does not exist");
+                    }
+                } catch (NumberFormatException e) {
+                    LOG.error("renderer index is not a number");
+                }
+            } else if (columnProperty.startsWith("{") && columnProperty.endsWith("}")
+                        && columnProperty.contains("||")) {
+                final String prop = columnProperty.substring(1, columnProperty.length() - 1);
+                final StringTokenizer st = new StringTokenizer(prop, "||");
+                final StringBuilder value = new StringBuilder();
+                Boolean result = null;
+
+                while (st.hasMoreTokens()) {
+                    final String token = st.nextToken();
+                    final Object property = cidsBean.getProperty(token.trim());
+
+                    if (property instanceof Boolean) {
+                        if (result == null) {
+                            result = (Boolean)property;
+                        } else {
+                            result = result || (Boolean)property;
+                        }
+                    }
+                }
+
+                return result;
+            } else if (columnProperty.contains("||")) {
+                final StringTokenizer st = new StringTokenizer(columnProperty, "||");
+                final StringBuilder value = new StringBuilder();
+
+                while (st.hasMoreTokens()) {
+                    String token = st.nextToken();
+
+                    if (Character.isLetter(token.charAt(0))) {
+                        final Object property = cidsBean.getProperty(token.trim());
+
+                        if (property != null) {
+                            value.append(String.valueOf(property));
+                        }
+                    } else {
+                        if (token.startsWith("\"")) {
+                            token = token.substring(1);
+                        }
+
+                        if (token.endsWith("\"")) {
+                            token = token.substring(0, token.length() - 1);
+                        }
+
+                        value.append(token);
+                    }
+                }
+
+                if (value.equals("")) {
+                    return null;
+                } else {
+                    return value.toString();
+                }
+            } else {
+                return cidsBean.getProperty(columnProperty);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -473,5 +616,26 @@ public class CidsBeansTableModel extends AbstractTableModel {
             return Boolean.class;
         }
         return isColumnWithinBounds(columnIndex) ? columnClasses[columnIndex - (isRowsSelectable() ? 1 : 0)] : null;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public abstract static class PropertyRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   bean  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public abstract Object getValue(CidsBean bean);
     }
 }

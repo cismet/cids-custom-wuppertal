@@ -74,13 +74,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>9.1.1</version>
+                <version>9.1.2</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismet-gui-commons</artifactId>
-                <version>9.1.1</version>
+                <version>9.1.2</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -88,13 +88,13 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>9.1.6</version>
+                <version>9.1.8</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>cismap-commons</artifactId>
-                <version>9.1.6</version>
+                <version>9.1.8</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -102,13 +102,13 @@
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>9.1.6</version>
+                <version>9.1.7</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>de.cismet.cids</groupId>
                 <artifactId>cids-server</artifactId>
-                <version>9.1.6</version>
+                <version>9.1.7</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -116,7 +116,7 @@
             <dependency>
                 <groupId>de.cismet.cids.custom.wupp.server</groupId>
                 <artifactId>cids-custom-server-wuppertal</artifactId>
-                <version>9.4.3</version>
+                <version>9.5.0</version>
                 <type>jar</type>
             </dependency>
             
@@ -138,7 +138,7 @@
             <dependency>
                 <groupId>de.cismet.cismap</groupId>
                 <artifactId>cismap-plugin</artifactId>
-                <version>9.0.3</version>
+                <version>9.0.4</version>
                 <type>jar</type>
             </dependency>
             
@@ -171,13 +171,13 @@
             <dependency>
                 <groupId>io.socket</groupId>
                 <artifactId>socket.io-client</artifactId>
-                <version>2.0.1</version>
+                <version>1.0.2</version>
                 <scope>compile</scope>                
             </dependency>    
             <dependency>
                 <groupId>io.socket</groupId>
                 <artifactId>engine.io-client</artifactId>
-                <version>2.0.0</version>
+                <version>1.0.2</version>
                 <scope>compile</scope>        
             </dependency>
         </dependencies>
