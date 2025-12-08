@@ -140,6 +140,16 @@ public class DmsUrlsPanel extends javax.swing.JPanel implements DropTargetListen
     /**
      * DOCUMENT ME!
      *
+     * @param  dmsUrl  DOCUMENT ME!
+     */
+    public void addDmsUrl(final CidsBean dmsUrl) {
+        this.dmsUrls.add(dmsUrl);
+        refresh();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  dmsUrls  DOCUMENT ME!
      */
     public void setDmsUrls(final Collection<CidsBean> dmsUrls) {

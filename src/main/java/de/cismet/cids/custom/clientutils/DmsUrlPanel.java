@@ -38,6 +38,7 @@ public class DmsUrlPanel extends javax.swing.JPanel {
 
     public static final int MAX_DESCRIPTION_LENGTH = 12;
     public static final String DELETE_ACTION_COMMAND = "DELETE_ACTION";
+    public static final int D3_TYPE = 100;
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DmsUrlPanel.class);
 
     //~ Instance fields --------------------------------------------------------
@@ -118,6 +119,21 @@ public class DmsUrlPanel extends javax.swing.JPanel {
                     } catch (Exception e) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("Fehler beim Suchen des Icons:" + type);
+                        }
+                        tryIcon = new javax.swing.ImageIcon(DmsUrlPanel.class.getResource(
+                                    "/de/cismet/cids/custom/clientutils/filetypes/dms_default.png"));
+                    }
+                    icon = tryIcon;
+                }
+                break;
+                case D3_TYPE: {
+                    ImageIcon tryIcon;
+                    try {
+                        tryIcon = new javax.swing.ImageIcon(DmsUrlPanel.class.getResource(
+                                    "/de/cismet/cids/custom/clientutils/filetypes/dms_d3.png"));
+                    } catch (Exception e) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Fehler beim Suchen des Icons: d3");
                         }
                         tryIcon = new javax.swing.ImageIcon(DmsUrlPanel.class.getResource(
                                     "/de/cismet/cids/custom/clientutils/filetypes/dms_default.png"));

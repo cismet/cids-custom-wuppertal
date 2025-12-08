@@ -23,8 +23,10 @@ import com.vividsolutions.jts.geom.Polygon;
 
 import org.jdesktop.beansbinding.BindingGroup;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
@@ -44,8 +46,11 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import static de.cismet.cids.custom.objecteditors.wunda_blau.albo.AbstractAlboFlaechePanel.LOG;
 
 /**
  * DOCUMENT ME!
@@ -65,6 +70,7 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JLabel labGrundwassermessstelle;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -125,6 +131,7 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        labGrundwassermessstelle = new javax.swing.JLabel();
 
         setName("Form"); // NOI18N
         setOpaque(false);
@@ -230,6 +237,14 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel1.add(jLabel4, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(labGrundwassermessstelle, "suche Messstellen");
+        labGrundwassermessstelle.setName("labGrundwassermessstelle"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel1.add(labGrundwassermessstelle, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -329,6 +344,78 @@ public class AlboFlaecheMainOrtPanel extends AbstractAlboFlaechePanel {
                                     jLabel2.setText((String)gemarkungBean.getProperty("gemarkung"));
                                 } else {
                                     jLabel2.setText("-");
+                                }
+                            } catch (final Exception ex) {
+                                LOG.warn("Geom Search Error.", ex);
+                            }
+                        }
+                    }.execute();
+
+                new SwingWorker<List<CidsBean>, Void>() {
+
+                        @Override
+                        protected List<CidsBean> doInBackground() throws Exception {
+                            // Suche ausführen
+                            final BufferingGeosearch mstSearch = new BufferingGeosearch();
+                            mstSearch.setValidClasses(Arrays.asList(
+                                    ClassCacheMultiple.getMetaClass(
+                                        CidsBeanSupport.DOMAIN_NAME,
+                                        "grundwassermessstelle",
+                                        getConnectionContext())));
+                            mstSearch.setGeometry(geom);
+                            mstSearch.setBuffer(100.0);
+
+                            final Collection<MetaObjectNode> mons = SessionManager.getProxy()
+                                        .customServerSearch(
+                                            SessionManager.getSession().getUser(),
+                                            mstSearch,
+                                            getConnectionContext());
+
+                            if ((mons != null) && !mons.isEmpty()) {
+                                final List<CidsBean> messstellen = new ArrayList<>();
+
+                                for (final MetaObjectNode mon : mons) {
+                                    final MetaObject mo = SessionManager.getProxy()
+                                                .getMetaObject(mon.getObjectId(),
+                                                    mon.getClassId(),
+                                                    mon.getDomain(),
+                                                    getConnectionContext());
+
+                                    messstellen.add(mo.getBean());
+                                }
+
+                                return messstellen;
+                            } else {
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                final List<CidsBean> messstellen = get();
+
+                                if ((messstellen != null) && !messstellen.isEmpty()) {
+                                    labGrundwassermessstelle.setText("Grundwassermessstellen vorhanden");
+
+                                    for (final CidsBean mst : messstellen) {
+                                        final StyledFeature dsf = new DefaultStyledFeature();
+                                        dsf.setGeometry((Geometry)mst.getProperty("geometrie.geo_field"));
+
+                                        try {
+                                            final FeatureAnnotationSymbol fas = new FeatureAnnotationSymbol(
+                                                    new javax.swing.ImageIcon(
+                                                        getClass().getResource(
+                                                            "/de/cismet/cids/custom/objecteditors/wunda_blau/blue_cross.png"))
+                                                                .getImage());
+                                            dsf.setPointAnnotationSymbol(fas);
+                                        } catch (final Exception ex) {
+                                            LOG.error(ex, ex);
+                                        }
+                                        mappingComponent1.getFeatureCollection().addFeature(dsf);
+                                    }
+                                } else {
+                                    labGrundwassermessstelle.setText("<html><b>---</b></html>");
                                 }
                             } catch (final Exception ex) {
                                 LOG.warn("Geom Search Error.", ex);

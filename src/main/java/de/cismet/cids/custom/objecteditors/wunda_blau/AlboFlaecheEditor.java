@@ -761,8 +761,6 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
             createLandesregistriernummer();
         } else {
             try {
-                cidsBean.setProperty("landesregistriernummer", null);
-                cidsBean.setProperty("laufende_nummer", null);
                 cidsBean.setProperty("geodaten_id", null);
             } catch (Exception e) {
                 LOG.error("Cannot remove landesregistriernummer", e);
@@ -776,21 +774,13 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
      */
     private void createLandesregistriernummer() {
         final String geom = String.valueOf(cidsBean.getProperty("fk_geom.geo_field"));
-        String landesRegNr = (String)cidsBean.getProperty("landesregistriernummer");
-
-        if ((landesRegNr == null) || landesRegNr.equals("")) {
-            landesRegNr = null;
-        }
-
-        final AlboFlaecheLandesRegNrSearch search = new AlboFlaecheLandesRegNrSearch(geom, landesRegNr);
+        final AlboFlaecheLandesRegNrSearch search = new AlboFlaecheLandesRegNrSearch(geom);
 
         try {
             final ArrayList<ArrayList<String>> number = (ArrayList<ArrayList<String>>)SessionManager
                         .getProxy().customServerSearch(search, connectionContext);
 
             if ((number != null) && (number.size() > 0) && (number.get(0) != null) && (number.get(0).size() > 1)) {
-                cidsBean.setProperty("landesregistriernummer", number.get(0).get(0));
-                cidsBean.setProperty("laufende_nummer", number.get(0).get(1));
                 cidsBean.setProperty(
                     "geodaten_id",
                     number.get(0).get(0).substring(1)
@@ -1006,37 +996,28 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 errorList.add("Die Geometrie muss entweder ein Polygon oder ein Multipolygon sein.");
             }
 
-            if ((cidsBean.getProperty("laufende_nummer") == null) || (cidsBean.getProperty("geodaten_id") == null)
-                        || (cidsBean.getProperty("landesregistriernummer") == null)
-                        || cidsBean.getProperty("laufende_nummer").equals("")
-                        || cidsBean.getProperty("geodaten_id").equals("")
-                        || cidsBean.getProperty("landesregistriernummer").equals("")) {
-                errorList.add("Die Hauptnummer, laufende Nummer und FISAlBo-Nr müssen gesetzt sein.");
+            if ((cidsBean.getProperty("geodaten_id") == null)
+                        || cidsBean.getProperty("geodaten_id").equals("")) {
+                errorList.add("Die FISAlBo-Nr müssen gesetzt sein.");
             } else {
-                final String lrnr = String.valueOf(cidsBean.getProperty("landesregistriernummer"));
-                final String lfdNr = String.valueOf(cidsBean.getProperty("laufende_nummer"));
                 final String geodaten_id = String.valueOf(cidsBean.getProperty("geodaten_id"));
 
-                if (!geodaten_id.equals(lrnr.substring(1) + lfdNr.substring(1))) {
-                    errorList.add("Die FISAlBo-Nr passt nicht zur Hauptnummer und der laufenden Nummer.");
-                } else {
-                    try {
-                        final AlboFlaecheNummerUniqueSearch search = new AlboFlaecheNummerUniqueSearch(
-                                geodaten_id,
-                                cidsBean.getMetaObject().getId(),
-                                false);
+                try {
+                    final AlboFlaecheNummerUniqueSearch search = new AlboFlaecheNummerUniqueSearch(
+                            geodaten_id,
+                            cidsBean.getMetaObject().getId(),
+                            false);
 
-                        final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
-                                    .customServerSearch(SessionManager.getSession().getUser(),
-                                            search,
-                                            getConnectionContext());
+                    final ArrayList<ArrayList> result = (ArrayList<ArrayList>)SessionManager.getProxy()
+                                .customServerSearch(SessionManager.getSession().getUser(),
+                                        search,
+                                        getConnectionContext());
 
-                        if ((result != null) && (result.size() > 0)) {
-                            errorList.add("Die FISAlBo-Nr ist nicht eindeutig.");
-                        }
-                    } catch (Exception e) {
-                        LOG.error("Error while checking erhebungsnummer", e);
+                    if ((result != null) && (result.size() > 0)) {
+                        errorList.add("Die FISAlBo-Nr ist nicht eindeutig.");
                     }
+                } catch (Exception e) {
+                    LOG.error("Error while checking erhebungsnummer", e);
                 }
             }
 
@@ -1287,24 +1268,18 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 }
             }
         } else if ((zuordnung != null) && zuordnung.equalsIgnoreCase("verzeichnisflaeche")) {
-            if (((cidsBean.getProperty("laufende_nummer") != null)
-                            && !cidsBean.getProperty("laufende_nummer").equals(""))
-                        || ((cidsBean.getProperty("geodaten_id") != null)
-                            && !cidsBean.getProperty("geodaten_id").equals(""))
-                        || ((cidsBean.getProperty("landesregistriernummer") != null)
-                            && !cidsBean.getProperty("landesregistriernummer").equals(""))) {
+            if (((cidsBean.getProperty("geodaten_id") != null)
+                            && !cidsBean.getProperty("geodaten_id").equals(""))) {
                 final int ans = JOptionPane.showConfirmDialog(StaticSwingTools.getParentFrame(this),
-                        "Wenn es sich um eine Verzeichnisfläche handelt, dann darf die Hauptnummer, laufende Nummer und FISAlBo-Nr. nicht gesetzt sein.\nSollen diese Nummern automatisch entfernt werden?",
+                        "Wenn es sich um eine Verzeichnisfläche handelt, dann darf die FISAlBo-Nr. nicht gesetzt sein.\nSollen diese Nummern automatisch entfernt werden?",
                         "Fehlerhafter Bearbeitungsstand",
                         JOptionPane.YES_NO_OPTION);
 
                 if (ans == JOptionPane.YES_OPTION) {
                     try {
-                        cidsBean.setProperty("laufende_nummer", null);
                         cidsBean.setProperty("geodaten_id", null);
-                        cidsBean.setProperty("landesregistriernummer", null);
                     } catch (Exception e) {
-                        LOG.error("Cannot set laufende_nummer, geodaten_id or landesregistriernummer", e);
+                        LOG.error("Cannot set geodaten_id", e);
                         return false;
                     }
                 } else {
