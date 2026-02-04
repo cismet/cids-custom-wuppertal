@@ -344,7 +344,9 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
                 hnrSearch.getRepresentationFields()
             );
         }
-        lblGeom = new JLabel();
+        if (isEditor()){
+            lblGeom = new JLabel();
+        }
         if (isEditor()){
             cbGeom = new DefaultCismapSimpleGeomComboBoxEditor();
             ((DefaultCismapSimpleGeomComboBoxEditor)cbGeom).setAllowedGeometryTypes(new Class[] { Point.class});
@@ -629,16 +631,20 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
             panDaten.add(cbHNr, gridBagConstraints);
         }
 
-        lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        lblGeom.setText("Geometrie:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
-        panDaten.add(lblGeom, gridBagConstraints);
+        if (isEditor()){
+            lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+            lblGeom.setText("Geometrie:");
+        }
+        if (isEditor()){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 10;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+            panDaten.add(lblGeom, gridBagConstraints);
+        }
 
         if (isEditor()){
             cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
@@ -1170,7 +1176,6 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
      */
     private void setReadOnly() {
         if (!(isEditor())) {
-            lblGeom.setVisible(isEditor());
             RendererTools.makeReadOnly(taStandort);
             RendererTools.makeReadOnly(cbStrasse);
             // lblHNrRenderer.setVisible(true);
@@ -1179,11 +1184,16 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(cbStatus);
             RendererTools.makeDoubleSpinnerWithoutButtons(spPunkte, 0);
             RendererTools.makeReadOnly(spPunkte);
+            RendererTools.makeDoubleSpinnerWithoutButtons(spSaeule, 0);
+            RendererTools.makeReadOnly(spSaeule);
             spPunkte.setEnabled(false);
+            spSaeule.setEnabled(false);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(xtStecker);
             panSteckerAdd.setVisible(isEditor());
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(chOnline);
+            RendererTools.makeReadOnly(chSchnell);
             RendererTools.makeReadOnly(txtIntern);
         }
         RendererTools.makeReadOnly(txtLetzte);

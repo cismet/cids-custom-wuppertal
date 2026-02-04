@@ -101,6 +101,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
     public static final String FIELD__ID = "id";
     public static final String TABLE_NAME = "ea_betreiber";
     public static final String FIELD__TEL = "telefon";
+    public static final String FIELD__HP = "homepage";
 
     public static final String BUNDLE_NONAME = "EaBetreiberEditor.isOkForSaving().noName";
     public static final String BUNDLE_DUPLICATENAME = "EaBetreiber.isOkForSaving().duplicateName";
@@ -126,7 +127,8 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
             TEL_MATCHING_PATTERN);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JFormattedTextField ftxtVTelefon;
+    private Box.Filler filler3;
+    private JFormattedTextField ftxtTelefon;
     private JLabel lblAStrasse;
     private JLabel lblBemerkung;
     private JLabel lblHNr;
@@ -240,25 +242,27 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
     public void initWithConnectionContext(final ConnectionContext connectionContext) {
         super.initWithConnectionContext(connectionContext);
         initComponents();
+        
+        if (isEditor()){
+            txtHomepage.getDocument().addDocumentListener(new DocumentListener() {
 
-        txtHomepage.getDocument().addDocumentListener(new DocumentListener() {
+                    // Immer, wenn das Foto geändert wird, wird dieses überprüft und neu geladen.
+                    @Override
+                    public void insertUpdate(final DocumentEvent e) {
+                        doWithUrl();
+                    }
 
-                // Immer, wenn das Foto geändert wird, wird dieses überprüft und neu geladen.
-                @Override
-                public void insertUpdate(final DocumentEvent e) {
-                    doWithUrl();
-                }
+                    @Override
+                    public void removeUpdate(final DocumentEvent e) {
+                        doWithUrl();
+                    }
 
-                @Override
-                public void removeUpdate(final DocumentEvent e) {
-                    doWithUrl();
-                }
-
-                @Override
-                public void changedUpdate(final DocumentEvent e) {
-                    doWithUrl();
-                }
-            });
+                    @Override
+                    public void changedUpdate(final DocumentEvent e) {
+                        doWithUrl();
+                    }
+                });
+        } 
         setReadOnly();
     }
 
@@ -286,7 +290,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         lblPlz = new JLabel();
         txtPlz = new JTextField();
         lblTelefon = new JLabel();
-        ftxtVTelefon = new JFormattedTextField(telPatternFormatter);
+        ftxtTelefon = new JFormattedTextField(telPatternFormatter);
         lblHomepage = new JLabel();
         txtHomepage = new JTextField();
         xhHomepage = new JXHyperlink();
@@ -299,6 +303,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         scpBemerkung = new JScrollPane();
         taBemerkung = new JTextArea();
         lblName1 = new JLabel();
+        filler3 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
         panFillerUnten1 = new JPanel();
 
         setAutoscrolls(true);
@@ -401,7 +406,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtHNr, gridBagConstraints);
 
@@ -445,7 +450,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtPlz, gridBagConstraints);
 
@@ -460,17 +465,17 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblTelefon, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtVTelefon, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.telefon}"), ftxtTelefon, BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
 
-        ftxtVTelefon.addFocusListener(new FocusAdapter() {
+        ftxtTelefon.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent evt) {
-                ftxtVTelefonFocusLost(evt);
+                ftxtTelefonFocusLost(evt);
             }
         });
-        ftxtVTelefon.addActionListener(new ActionListener() {
+        ftxtTelefon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                ftxtVTelefonActionPerformed(evt);
+                ftxtTelefonActionPerformed(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
@@ -481,7 +486,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.3;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        panName.add(ftxtVTelefon, gridBagConstraints);
+        panName.add(ftxtTelefon, gridBagConstraints);
 
         lblHomepage.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         lblHomepage.setText("Homepage:");
@@ -500,12 +505,15 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panName.add(txtHomepage, gridBagConstraints);
+
+        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.homepage}"), xhHomepage, BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         xhHomepage.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -515,7 +523,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -532,7 +540,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         panUrl.add(lblUrlCheck, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -619,6 +627,12 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panName.add(lblName1, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panName.add(filler3, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -667,20 +681,21 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void ftxtVTelefonFocusLost(final FocusEvent evt) {//GEN-FIRST:event_ftxtVTelefonFocusLost
+    private void ftxtTelefonFocusLost(final FocusEvent evt) {//GEN-FIRST:event_ftxtTelefonFocusLost
         refreshValidTel();
-    }//GEN-LAST:event_ftxtVTelefonFocusLost
+    }//GEN-LAST:event_ftxtTelefonFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void ftxtVTelefonActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_ftxtVTelefonActionPerformed
+    private void ftxtTelefonActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_ftxtTelefonActionPerformed
         refreshValidTel();
-    }//GEN-LAST:event_ftxtVTelefonActionPerformed
+    }//GEN-LAST:event_ftxtTelefonActionPerformed
 
     private void xhHomepageActionPerformed(ActionEvent evt) {//GEN-FIRST:event_xhHomepageActionPerformed
+       
         try {
             BrowserLauncher.openURL(xhHomepage.getText());
         } catch (final Exception e) {
@@ -701,7 +716,7 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
      * DOCUMENT ME!
      */
     private void refreshValidTel() {
-        ftxtVTelefon.setValue(telPatternFormatter.getLastValid());
+        ftxtTelefon.setValue(telPatternFormatter.getLastValid());
     }
 
     /**
@@ -730,6 +745,9 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
                     getConnectionContext());
             }
             bindingGroup.bind();
+            if (getCidsBean().getProperty(FIELD__HP) != null){
+                checkUrl(getCidsBean().getProperty(FIELD__HP).toString(), lblUrlCheck);
+            }
         } catch (final Exception ex) {
             LOG.warn("Error setCidsBean.", ex);
         }
@@ -751,11 +769,20 @@ public class EaBetreiberEditor extends DefaultCustomObjectEditor implements Cids
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtName);
+            RendererTools.makeReadOnly(txtPlz);
             RendererTools.makeReadOnly(txtStrasse);
             RendererTools.makeReadOnly(txtOrt);
-            RendererTools.makeReadOnly(ftxtVTelefon);
-            
-            RendererTools.makeReadOnly(xhHomepage);
+            RendererTools.makeReadOnly(ftxtTelefon);
+            RendererTools.makeReadOnly(txtMail);
+            RendererTools.makeReadOnly(txtOrt);
+            RendererTools.makeReadOnly(txtHNr);
+            RendererTools.makeReadOnly(txtStrasse);
+            RendererTools.makeReadOnly(txtHomepage);
+            RendererTools.makeReadOnly(taBemerkung);
+            //RendererTools.makeReadOnly(xhHomepage);
+            txtHomepage.setVisible(false);
+        } else {
+            xhHomepage.setVisible(false);
         }
     }
     
