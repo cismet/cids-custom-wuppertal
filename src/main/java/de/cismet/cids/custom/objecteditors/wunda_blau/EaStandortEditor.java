@@ -161,6 +161,7 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String BUNDLE_NOSTECKERTYP = "EaStandortEditor.isOkForSaving().noSteckerTyp";
     public static final String BUNDLE_NOANZAHL = "EaStandortEditor.isOkForSaving().noAnzahl";
     public static final String BUNDLE_WRONGANZAHL = "EaStandortEditor.isOkForSaving().wrongAnzahl";
+    public static final String BUNDLE_DIFANZAHL = "EaStandortEditor.isOkForSaving().differentAnzahl";
     public static final String BUNDLE_PANE_PREFIX = "EaStandortEditor.isOkForSaving().JOptionPane.message.prefix";
     public static final String BUNDLE_PANE_SUFFIX = "EaStandortEditor.isOkForSaving().JOptionPane.message.suffix";
     public static final String BUNDLE_PANE_TITLE = "EaStandortEditor.isOkForSaving().JOptionPane.title";
@@ -221,6 +222,7 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblBemerkung;
     private JLabel lblBetreiber;
     private JLabel lblGeom;
+    private JLabel lblHNrRenderer;
     private JLabel lblHnr;
     private JLabel lblIntern;
     private JLabel lblKarte;
@@ -343,6 +345,9 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
                 hnrSearch.getRepresentationPattern(),
                 hnrSearch.getRepresentationFields()
             );
+        }
+        if (!isEditor()){
+            lblHNrRenderer = new JLabel();
         }
         if (isEditor()){
             lblGeom = new JLabel();
@@ -631,6 +636,24 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
             panDaten.add(cbHNr, gridBagConstraints);
         }
 
+        if (!isEditor()){
+            lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
+
+            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
+            bindingGroup.addBinding(binding);
+
+        }
+        if (!isEditor()){
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new Insets(2, 5, 2, 5);
+            panDaten.add(lblHNrRenderer, gridBagConstraints);
+        }
+
         if (isEditor()){
             lblGeom.setFont(new Font("Tahoma", 1, 11)); // NOI18N
             lblGeom.setText("Geometrie:");
@@ -684,11 +707,6 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
         binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_betreiber}"), cbBetreiber, BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
-        cbBetreiber.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbBetreiberActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -1000,10 +1018,6 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
         }
     }//GEN-LAST:event_cbStrasseActionPerformed
 
-    private void cbBetreiberActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbBetreiberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbBetreiberActionPerformed
-
     private void btnAddSteckerActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnAddSteckerActionPerformed
         TableUtils.addObjectToTable(xtStecker, TABLE_NAME_STECKER, getConnectionContext());
     }//GEN-LAST:event_btnAddSteckerActionPerformed
@@ -1127,6 +1141,10 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
                     if ((null == listSteckerBeans.get(i).getProperty(FIELD__STECKER_ANZAHL))
                                 || "".equals(listSteckerBeans.get(i).getProperty(FIELD__STECKER_ANZAHL).toString())) {
                         return 6;
+                    }
+                    if (!(((int)listSteckerBeans.get(i).getProperty(FIELD__STECKER_ANZAHL) > 0) &&
+                            ((int)listSteckerBeans.get(i).getProperty(FIELD__STECKER_ANZAHL) <= 100))) {
+                        return 3;
                     }
                     // Redundante Einträge
                     if (listSteckerBeans.size() > (i + 1)) {
@@ -1364,6 +1382,12 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
                     save = false;
                     break;
                 }
+                case 3: {
+                    LOG.warn("Wrong socket specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(EaStandortEditor.class, BUNDLE_WRONGANZAHL));
+                    save = false;
+                    break;
+                }
                 case 4: {
                     LOG.warn("No power specified. Skip persisting.");
                     errorMessage.append(NbBundle.getMessage(EaStandortEditor.class, BUNDLE_NOLEISTUNG));
@@ -1384,8 +1408,9 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             } 
             if (!checkSteckerAnzahl(listSteckerBeans)){
-                LOG.warn("No socket count specified. Skip persisting.");
-                    errorMessage.append(NbBundle.getMessage(EaStandortEditor.class, BUNDLE_WRONGANZAHL));
+                LOG.warn("Dif socket count specified. Skip persisting.");
+                    errorMessage.append(NbBundle.getMessage(EaStandortEditor.class, BUNDLE_DIFANZAHL));
+                    save = false;
             }
         }
         
