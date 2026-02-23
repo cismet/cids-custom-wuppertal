@@ -1161,7 +1161,7 @@ public class EaStandortEditor extends DefaultCustomObjectEditor implements CidsB
                     }
                 }
                 if (getCidsBean().getProperty(FIELD__PLAETZE) != null &&
-                        (int)getCidsBean().getProperty(FIELD__PLAETZE) <= anzahl){
+                        (int)getCidsBean().getProperty(FIELD__PLAETZE) == anzahl){
                     return true;
                 }
             }
