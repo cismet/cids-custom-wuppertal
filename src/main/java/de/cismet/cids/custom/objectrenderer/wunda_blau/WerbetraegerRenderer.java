@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.graphics.ShadowRenderer;

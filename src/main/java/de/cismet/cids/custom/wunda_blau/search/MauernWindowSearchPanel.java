@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXDatePicker;
@@ -1622,18 +1622,18 @@ public class MauernWindowSearchPanel extends AbstractAbfragePanel<CidsMauernSear
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dcLetztePruefBisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dcLetztePruefBisActionPerformed
+    private void dcLetztePruefBisActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dcLetztePruefBisActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_dcLetztePruefBisActionPerformed
+    }//GEN-LAST:event_dcLetztePruefBisActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dcErstePruefBisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dcErstePruefBisActionPerformed
+    private void dcErstePruefBisActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dcErstePruefBisActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_dcErstePruefBisActionPerformed
+    }//GEN-LAST:event_dcErstePruefBisActionPerformed
 
     /**
      * DOCUMENT ME!

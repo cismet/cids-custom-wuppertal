@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.utils;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.awt.CardLayout;
@@ -45,6 +43,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor.adjustScale;
+import jakarta.ws.rs.WebApplicationException;
 
 /**
  * DOCUMENT ME!
@@ -368,7 +367,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
+    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadHighResImageActionPerformed
         try {
             if (
                 BillingPopup.doBilling(
@@ -396,37 +395,37 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
         } catch (Exception ex) {
             LOG.error("Error when trying to download an high res image", ex);
         }
-    }                                                                                           //GEN-LAST:event_btnDownloadHighResImageActionPerformed
+    }//GEN-LAST:event_btnDownloadHighResImageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
         stadtbildserieProvider.previousImageSelected();
-    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
+    }//GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
         stadtbildserieProvider.nextImageSelected();
-    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
+    }//GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnIsPreviewImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnIsPreviewImageActionPerformed
+    private void tbtnIsPreviewImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnIsPreviewImageActionPerformed
         if (tbtnIsPreviewImage.isSelected()) {
             stadtbildserieProvider.newPreviewImageSelected();
             tbtnIsPreviewImage.setEnabled(false);
         }
-    }                                                                                      //GEN-LAST:event_tbtnIsPreviewImageActionPerformed
+    }//GEN-LAST:event_tbtnIsPreviewImageActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -756,7 +755,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel implements Conn
             } catch (ExecutionException ex) {
                 image = null;
                 LOG.error(ex, ex);
-                if (ex.getCause() instanceof UniformInterfaceException) {
+                if (ex.getCause() instanceof WebApplicationException) {
                     indicateNotAvailable("");
                 } else {
                     indicateError(ex.getMessage());

@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -249,58 +249,58 @@ public class WerbetraegerFeatureRenderer extends CustomCidsFeatureRenderer {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewAMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewAMouseExited
+    private void lblImagePreviewAMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewAMouseExited
 // TODO add your handling code here:
-    } //GEN-LAST:event_lblImagePreviewAMouseExited
+    }//GEN-LAST:event_lblImagePreviewAMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewAMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewAMouseEntered
+    private void lblImagePreviewAMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewAMouseEntered
 // TODO add your handling code here:
-    } //GEN-LAST:event_lblImagePreviewAMouseEntered
+    }//GEN-LAST:event_lblImagePreviewAMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewAMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewAMouseClicked
+    private void lblImagePreviewAMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewAMouseClicked
         try {
             BrowserLauncher.openURL(fullUrlA);
         } catch (Exception e) {
         }
-    }                                                                                //GEN-LAST:event_lblImagePreviewAMouseClicked
+    }//GEN-LAST:event_lblImagePreviewAMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewBMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewBMouseExited
+    private void lblImagePreviewBMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewBMouseExited
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }                                                                               //GEN-LAST:event_lblImagePreviewBMouseExited
+    }//GEN-LAST:event_lblImagePreviewBMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewBMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewBMouseEntered
+    private void lblImagePreviewBMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewBMouseEntered
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-    }                                                                                //GEN-LAST:event_lblImagePreviewBMouseEntered
+    }//GEN-LAST:event_lblImagePreviewBMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewBMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewBMouseClicked
+    private void lblImagePreviewBMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewBMouseClicked
         try {
             BrowserLauncher.openURL(fullUrlB);
         } catch (Exception e) {
         }
-    }                                                                                //GEN-LAST:event_lblImagePreviewBMouseClicked
+    }//GEN-LAST:event_lblImagePreviewBMouseClicked
 }

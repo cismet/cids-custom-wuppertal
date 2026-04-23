@@ -18,7 +18,7 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
@@ -916,20 +916,20 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateDocumentActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateDocumentActionPerformed
+    private void btnCreateDocumentActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateDocumentActionPerformed
         if ((getLinkDocument() == null) || getLinkDocument().isEmpty()) {
             deleteFile();
         } else {
             createLinkFile();
         }
-    }                                                                                     //GEN-LAST:event_btnCreateDocumentActionPerformed
+    }//GEN-LAST:event_btnCreateDocumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPlatzhalterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlatzhalterActionPerformed
+    private void btnPlatzhalterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlatzhalterActionPerformed
         tfName.getDocument().removeDocumentListener(this);
         final String schluessel = (String)editor.getCidsBean().getProperty("schluessel");
         if (schluessel == null) {
@@ -940,7 +940,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         tfName.setText(url);
         tfName.getDocument().addDocumentListener(this);
         checkIfLinkDocumentExists();
-    }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
+    }//GEN-LAST:event_btnPlatzhalterActionPerformed
 
     @Override
     public final ConnectionContext getConnectionContext() {

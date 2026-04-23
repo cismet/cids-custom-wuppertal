@@ -12,7 +12,7 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaObjectNode;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;

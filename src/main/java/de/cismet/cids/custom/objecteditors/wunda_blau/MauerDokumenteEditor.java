@@ -11,7 +11,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
@@ -903,7 +903,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
+    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddImgActionPerformed
         ((DefaultBindableReferenceCombo)jComboBox1).reload();
         if (((DefaultBindableReferenceCombo)jComboBox1).getItemCount() == 0) {
             addForArt(null);
@@ -912,7 +912,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
         } else {
             StaticSwingTools.showDialog(this, jDialog1, true);
         }
-    }                                                                             //GEN-LAST:event_btnAddImgActionPerformed
+    }//GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1004,7 +1004,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
+    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveImgActionPerformed
         final List<CidsBean> selectedDocumentBeans = getSelectedDocumentBeans();
         if ((selectedDocumentBeans != null) && !selectedDocumentBeans.isEmpty()) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1040,7 +1040,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveImgActionPerformed
+    }//GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1116,7 +1116,7 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         final String document = rasterfariDocumentLoaderPanel1.getCurrentDocument();
         if (document == null) {
             return;
@@ -1145,14 +1145,14 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                     }
                 }
             });
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownActionPerformed
+    private void btnDownActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownActionPerformed
         final List<CidsBean> unremovedDocumentBeans = new ArrayList<>(getDocumentBeans());
         unremovedDocumentBeans.removeAll(removedDocumentBeans);
         final CidsBean selectedDocumentBean = getSelectedDocumentBean();
@@ -1180,14 +1180,14 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
             }
             ((TableRowSorter)jXTable2.getRowSorter()).sort();
         }
-    }                                                                           //GEN-LAST:event_btnDownActionPerformed
+    }//GEN-LAST:event_btnDownActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnUpActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnUpActionPerformed
+    private void btnUpActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpActionPerformed
         final List<CidsBean> otherDocumentBeans = getDocumentBeans();
         final CidsBean selectedDocumentBean = getSelectedDocumentBean();
         if (selectedDocumentBean != null) {
@@ -1214,26 +1214,26 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
             }
             ((TableRowSorter)jXTable2.getRowSorter()).sort();
         }
-    }                                                                         //GEN-LAST:event_btnUpActionPerformed
+    }//GEN-LAST:event_btnUpActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jDialog1.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         jDialog1.setVisible(false);
         addForArt((CidsBean)((DefaultBindableReferenceCombo)jComboBox1).getSelectedItem());
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
     /**
      * DOCUMENT ME!
      *
