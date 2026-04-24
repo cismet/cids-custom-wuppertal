@@ -13,7 +13,7 @@ package de.cismet.cids.custom.wupp.client.alkis;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * DOCUMENT ME!
