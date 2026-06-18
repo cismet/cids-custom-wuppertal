@@ -25,6 +25,9 @@ import java.io.StringWriter;
 
 import java.net.URL;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -36,6 +39,10 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ListDatasourcesAction;
 import de.cismet.cids.custom.wunda_blau.search.actions.RefreshDatasourceAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.commons.utils.datasource.DatasourcesUtils;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -212,16 +219,16 @@ public class DatasourceListAdminDialog extends javax.swing.JDialog implements Co
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
+    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         System.exit(0);
-    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangePasswordActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnChangePasswordActionPerformed
+    private void btnChangePasswordActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
         new SwingWorker<Object, Object>() {
 
                 @Override
@@ -249,14 +256,14 @@ public class DatasourceListAdminDialog extends javax.swing.JDialog implements Co
                     }
                 }
             }.execute();
-    } //GEN-LAST:event_btnChangePasswordActionPerformed
+    }//GEN-LAST:event_btnChangePasswordActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshCapabilitiesListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshCapabilitiesListActionPerformed
+    private void btnRefreshCapabilitiesListActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshCapabilitiesListActionPerformed
         final ConfigurationManager configurationManager = new ConfigurationManager();
 
         configurationManager.setDefaultFileName("defaultCismapProperties.xml");
@@ -279,16 +286,54 @@ public class DatasourceListAdminDialog extends javax.swing.JDialog implements Co
         configurationManager.setFolder(".cismap" + dirExtension);
         configurationManager.configure(this);
 
-//        final StringWriter writer = new StringWriter();
-//        final XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-//        try {
-//            xmlOutputter.output(masterConfig, writer);
-//            System.out.println(writer.toString());
-//        } catch (Exception e) {
-//        }
+        final Element variablesList = masterConfig.getChild("TextAliasList");
+
+        if (variablesList != null) {
+            final List aliasList = variablesList.getChildren("alias");
+            final Map<String, String> aliasVariables = new HashMap<>();
+
+            if (aliasList != null) {
+                for (final Object elem : aliasList) {
+                    if (elem instanceof Element) {
+                        final String name = ((Element)elem).getAttributeValue("name");
+                        final String url = ((Element)elem).getTextTrim();
+
+                        if ((name != null) && (url != null)) {
+                            aliasVariables.put(name, url);
+                        }
+                    }
+                }
+            }
+
+            CismapBroker.getInstance().setVariableMapping(aliasVariables);
+        }
+
+        final Element capsList = masterConfig.getChild("capabilitiesAliasList");
+
+        if (capsList != null) {
+            final List aliasList = capsList.getChildren("alias");
+            final Map<String, String> urlAliasMapping = new HashMap<>();
+
+            if (aliasList != null) {
+                for (final Object elem : aliasList) {
+                    if (elem instanceof Element) {
+                        final String name = ((Element)elem).getAttributeValue("name");
+                        final String url = ((Element)elem).getTextTrim();
+
+                        if ((name != null) && (url != null)) {
+                            urlAliasMapping.put(name, url);
+                        }
+                    }
+                }
+            }
+
+            CismapBroker.getInstance().setUrlAliasMapping(urlAliasMapping);
+        }
+
         final Document doc = new Document();
         final Element rootElement = new Element("root");
         // masterConfig.getChild("cismetConfigurationManager").getChild("cismapCapabilitiesPreferences")
+        setRealUrl(masterConfig.getChild("cismapCapabilitiesPreferences"));
         rootElement.addContent(masterConfig.getChild("cismapCapabilitiesPreferences").detach());
         doc.addContent(rootElement);
 
@@ -310,7 +355,34 @@ public class DatasourceListAdminDialog extends javax.swing.JDialog implements Co
         } catch (Exception ex) {
             LOG.error("error while write new Capabilities file", ex);
         }
-    } //GEN-LAST:event_btnRefreshCapabilitiesListActionPerformed
+    }//GEN-LAST:event_btnRefreshCapabilitiesListActionPerformed
+
+    /**
+     * Replace aliases
+     *
+     * @param  element  DOCUMENT ME!
+     */
+    private void setRealUrl(final Element element) {
+        for (final Element elem : (List<Element>)element.getChildren("capabilitiesList")) { // NOI18N
+            try {
+                final String type = elem.getAttribute("type").getValue();                   // NOI18N
+
+                if (type.equals("MENU")) {
+                    setRealUrl(elem);
+                } else {
+                    // CapabilitiesList-Eintrag erzeugen
+                    final String alias = elem.getAttributeValue("alias");
+
+                    if ((alias != null) && CismapBroker.getInstance().isAlias(alias)) {
+                        elem.setText(CismapBroker.getInstance().aliasToUrl(alias));
+                        elem.removeAttribute("alias");
+                    }
+                }
+            } catch (Throwable t) {
+                LOG.warn("Error while reading the CapabilityListPreferences.", t); // NOI18N
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!
