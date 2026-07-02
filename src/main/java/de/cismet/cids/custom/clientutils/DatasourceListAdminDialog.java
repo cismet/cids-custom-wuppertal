@@ -219,16 +219,16 @@ public class DatasourceListAdminDialog extends javax.swing.JDialog implements Co
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_btnCloseActionPerformed
+    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnChangePasswordActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
+    private void btnChangePasswordActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnChangePasswordActionPerformed
         new SwingWorker<Object, Object>() {
 
                 @Override
@@ -256,14 +256,14 @@ public class DatasourceListAdminDialog extends javax.swing.JDialog implements Co
                     }
                 }
             }.execute();
-    }//GEN-LAST:event_btnChangePasswordActionPerformed
+    } //GEN-LAST:event_btnChangePasswordActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshCapabilitiesListActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshCapabilitiesListActionPerformed
+    private void btnRefreshCapabilitiesListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshCapabilitiesListActionPerformed
         final ConfigurationManager configurationManager = new ConfigurationManager();
 
         configurationManager.setDefaultFileName("defaultCismapProperties.xml");
@@ -355,10 +355,10 @@ public class DatasourceListAdminDialog extends javax.swing.JDialog implements Co
         } catch (Exception ex) {
             LOG.error("error while write new Capabilities file", ex);
         }
-    }//GEN-LAST:event_btnRefreshCapabilitiesListActionPerformed
+    } //GEN-LAST:event_btnRefreshCapabilitiesListActionPerformed
 
     /**
-     * Replace aliases
+     * Replace aliases.
      *
      * @param  element  DOCUMENT ME!
      */

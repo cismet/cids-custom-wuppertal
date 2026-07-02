@@ -207,6 +207,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     public static final String FIELD__BB_TEXT = "bb_text";
     public static final String FIELD__LINK = "link";
     public static final String FIELD__STADT = "stadtweit";
+    public static final String FIELD__BUGA = "buga";
+    public static final String FIELD__NUTZUNG_W = "fk_nutzung_waehrend";
+    public static final String FIELD__NUTZUNG_N = "fk_nutzung_nach";
+    public static final String FIELD__TEILAREAL = "fk_teilareal";
     public static final String FIELD__FK_VORHABEN = "fk_vorhaben";
     // public static final String FIELD__FOTOS = "n_fotos";
     public static final String FIELD__STRASSE = "fk_strasse";
@@ -230,6 +234,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
     public static final String BUNDLE_NOGEOM = "VkVorhabenEditor.isOkForSaving().noGeom";
     public static final String BUNDLE_NOTHEMA = "VkVorhabenEditor.isOkForSaving().noThema";
+    public static final String BUNDLE_NONUTZUNGW = "VkVorhabenEditor.isOkForSaving().noNutzungW";
+    public static final String BUNDLE_NONUTZUNGN = "VkVorhabenEditor.isOkForSaving().noNutzungN";
+    public static final String BUNDLE_NOTEILAREAL = "VkVorhabenEditor.isOkForSaving().noTeilareal";
     public static final String BUNDLE_NOTITEL = "VkVorhabenEditor.isOkForSaving().noTitel";
     public static final String BUNDLE_NOBESCH = "VkVorhabenEditor.isOkForSaving().noBeschreibung";
     public static final String BUNDLE_NOTEXT = "VkVorhabenEditor.isOkForSaving().noText";
@@ -350,10 +357,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JComboBox cbGeom;
     private FastBindableReferenceCombo cbHNr;
     FastBindableReferenceCombo cbKontakt;
+    private DefaultBindableReferenceCombo cbNutzungN;
+    private DefaultBindableReferenceCombo cbNutzungW;
     FastBindableReferenceCombo cbStrasse;
+    private DefaultBindableReferenceCombo cbTeilareal;
     private DefaultBindableReferenceCombo cbThema;
     JCheckBox chAbgeschlossen;
     JCheckBox chBB;
+    JCheckBox chBuga;
     JCheckBox chMailBB;
     JCheckBox chStadtweit;
     JCheckBox chVeroeffentlicht;
@@ -361,7 +372,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private Box.Filler filler3;
     private Box.Filler filler4;
     private Box.Filler filler5;
+    private Box.Filler filler6;
     private JPanel jPanelAllgemein;
+    private JPanel jPanelBuga;
     private JPanel jPanelDetails;
     private JPanel jPanelDokBeschluesse;
     private JPanel jPanelDokDokumente;
@@ -381,14 +394,19 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblBeschluesse;
     private JLabel lblBeschreibung;
     private JLabel lblBetreff;
+    private JLabel lblBuga;
     private JLabel lblDokumente;
     private JLabel lblFeedback;
+    private JLabel lblFinanzierung;
     private JLabel lblFotos;
     private JLabel lblGeom;
     private JLabel lblHNrRenderer;
     private JLabel lblHnr;
+    private JLabel lblInhalt;
     private JLabel lblJahr;
     private JLabel lblKarte;
+    private JLabel lblKern;
+    private JLabel lblKernareal;
     private JLabel lblKontakt;
     private JLabel lblKontaktHelp;
     private JLabel lblLadenBeschluss;
@@ -402,19 +420,23 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JLabel lblLinks;
     private JLabel lblMail;
     private JLabel lblMailBB;
+    private JLabel lblNach;
     private JLabel lblNoMail;
+    private JLabel lblNutzung;
     private JLabel lblOrt;
     private JLabel lblQuartal;
     private JLabel lblStadtbezirke;
     private JLabel lblStadtweit;
     private JLabel lblStek;
     private JLabel lblStrasse;
+    private JLabel lblTeilareal;
     private JLabel lblText;
     private JLabel lblThema;
     private JLabel lblTitel;
     private JLabel lblUrl;
     private JLabel lblUrlCheck;
     private JLabel lblVeroeffentlicht;
+    private JLabel lblWaehrend;
     private JList lstBeschluesse;
     private JList lstDokumente;
     private JList lstFotos;
@@ -422,6 +444,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panAnhangHinweis;
     private JPanel panBemerkung;
     private JPanel panBeschreibung;
+    private JPanel panBuga;
     private JPanel panContent;
     private JPanel panControlsNewBeschluesse;
     private JPanel panControlsNewDokumente;
@@ -433,7 +456,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JPanel panFeedback;
     private JPanel panFeedbackHinweis;
     private JPanel panFillerUnten4;
+    private JPanel panFinanzierungN;
+    private JPanel panFinanzierungW;
     private JPanel panGeometrie;
+    private JPanel panInhaltN;
+    private JPanel panInhaltW;
     private JPanel panIntern;
     private JPanel panLink;
     private JPanel panMail;
@@ -455,7 +482,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JScrollPane scpDokumente;
     private JScrollPane scpFeedback;
     private JScrollPane scpFeedbackHinweis;
+    private JScrollPane scpFinanzierungN;
     private JScrollPane scpFotos;
+    private JScrollPane scpIFinanzierungW;
+    private JScrollPane scpInhaltN;
+    private JScrollPane scpInhaltW;
     private JScrollPane scpLinks;
     private JScrollPane scpMailHinweis;
     private JScrollPane scpOrt;
@@ -470,6 +501,10 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private JTextArea taBeschreibung;
     private JTextArea taFeedback;
     private JTextArea taFeedbackHinweis;
+    private JTextArea taFinanzierungN;
+    private JTextArea taFinanzierungW;
+    private JTextArea taInhaltN;
+    private JTextArea taInhaltW;
     private JTextArea taMailHinweis;
     private JTextArea taOrt;
     private JTextArea taOrtHinweis;
@@ -848,6 +883,34 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panFeedback = new JPanel();
         scpFeedback = new JScrollPane();
         taFeedback = new JTextArea();
+        jPanelBuga = new JPanel();
+        panBuga = new JPanel();
+        lblBuga = new JLabel();
+        chBuga = new JCheckBox();
+        lblTeilareal = new JLabel();
+        cbTeilareal = new DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION);
+        lblKernareal = new JLabel();
+        lblKern = new JLabel();
+        lblWaehrend = new JLabel();
+        lblNach = new JLabel();
+        lblNutzung = new JLabel();
+        cbNutzungW = new DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION);
+        cbNutzungN = new DefaultBindableReferenceCombo(NULLABLE_OPTION, MANAGEABLE_OPTION, SORTING_OPTION);
+        lblFinanzierung = new JLabel();
+        panFinanzierungW = new JPanel();
+        scpIFinanzierungW = new JScrollPane();
+        taFinanzierungW = new JTextArea();
+        panFinanzierungN = new JPanel();
+        scpFinanzierungN = new JScrollPane();
+        taFinanzierungN = new JTextArea();
+        lblInhalt = new JLabel();
+        panInhaltW = new JPanel();
+        scpInhaltW = new JScrollPane();
+        taInhaltW = new JTextArea();
+        filler6 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 0));
+        panInhaltN = new JPanel();
+        scpInhaltN = new JScrollPane();
+        taInhaltN = new JTextArea();
 
         dlgMail.setTitle("Mail versenden");
         dlgMail.setModal(true);
@@ -2879,6 +2942,382 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         jTabbedPane.addTab("Hilfe / Kommunikation", jPanelKommunikation);
 
+        jPanelBuga.setOpaque(false);
+        jPanelBuga.setLayout(new GridBagLayout());
+
+        panBuga.setOpaque(false);
+        panBuga.setLayout(new GridBagLayout());
+
+        lblBuga.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblBuga.setText("BuGa:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblBuga, gridBagConstraints);
+
+        chBuga.setContentAreaFilled(false);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.buga}"),
+                chBuga,
+                BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(chBuga, gridBagConstraints);
+
+        lblTeilareal.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblTeilareal.setText("Teilareal:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblTeilareal, gridBagConstraints);
+
+        cbTeilareal.setFont(new Font("Dialog", 0, 12)); // NOI18N
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_teilareal}"),
+                cbTeilareal,
+                BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(cbTeilareal, gridBagConstraints);
+
+        lblKernareal.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblKernareal.setText("Kernareal:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblKernareal, gridBagConstraints);
+
+        lblKern.setFont(new Font("Tahoma", 0, 11)); // NOI18N
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_teilareal.fk_kernareal.name}"),
+                lblKern,
+                BeanProperty.create("text"));
+        binding.setSourceNullValue(null);
+        binding.setSourceUnreadableValue(null);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblKern, gridBagConstraints);
+
+        lblWaehrend.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblWaehrend.setText("Während der BuGa:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblWaehrend, gridBagConstraints);
+
+        lblNach.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblNach.setText("Nach der BuGa:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblNach, gridBagConstraints);
+
+        lblNutzung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblNutzung.setText("Nutzung:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblNutzung, gridBagConstraints);
+
+        cbNutzungW.setFont(new Font("Dialog", 0, 12)); // NOI18N
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_nutzung_waehrend}"),
+                cbNutzungW,
+                BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(cbNutzungW, gridBagConstraints);
+
+        cbNutzungN.setFont(new Font("Dialog", 0, 12)); // NOI18N
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_nutzung_nach}"),
+                cbNutzungN,
+                BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(cbNutzungN, gridBagConstraints);
+
+        lblFinanzierung.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblFinanzierung.setText("Finanzierung:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblFinanzierung, gridBagConstraints);
+
+        panFinanzierungW.setOpaque(false);
+        panFinanzierungW.setLayout(new GridBagLayout());
+
+        taFinanzierungW.setColumns(20);
+        taFinanzierungW.setLineWrap(true);
+        taFinanzierungW.setRows(3);
+        taFinanzierungW.setToolTipText("");
+        taFinanzierungW.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.finanzierung_waehrend}"),
+                taFinanzierungW,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpIFinanzierungW.setViewportView(taFinanzierungW);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFinanzierungW.add(scpIFinanzierungW, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(panFinanzierungW, gridBagConstraints);
+
+        panFinanzierungN.setOpaque(false);
+        panFinanzierungN.setLayout(new GridBagLayout());
+
+        taFinanzierungN.setColumns(20);
+        taFinanzierungN.setLineWrap(true);
+        taFinanzierungN.setRows(3);
+        taFinanzierungN.setToolTipText("");
+        taFinanzierungN.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.finanzierung_nach}"),
+                taFinanzierungN,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpFinanzierungN.setViewportView(taFinanzierungN);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panFinanzierungN.add(scpFinanzierungN, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(panFinanzierungN, gridBagConstraints);
+
+        lblInhalt.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        lblInhalt.setText("Beschreibung:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(2, 0, 2, 5);
+        panBuga.add(lblInhalt, gridBagConstraints);
+
+        panInhaltW.setOpaque(false);
+        panInhaltW.setLayout(new GridBagLayout());
+
+        taInhaltW.setColumns(20);
+        taInhaltW.setLineWrap(true);
+        taInhaltW.setRows(3);
+        taInhaltW.setToolTipText("");
+        taInhaltW.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.inhalt_waehrend}"),
+                taInhaltW,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpInhaltW.setViewportView(taInhaltW);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panInhaltW.add(scpInhaltW, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(panInhaltW, gridBagConstraints);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+        panBuga.add(filler6, gridBagConstraints);
+
+        panInhaltN.setOpaque(false);
+        panInhaltN.setLayout(new GridBagLayout());
+
+        taInhaltN.setColumns(20);
+        taInhaltN.setLineWrap(true);
+        taInhaltN.setRows(3);
+        taInhaltN.setToolTipText("");
+        taInhaltN.setWrapStyleWord(true);
+
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.inhalt_nach}"),
+                taInhaltN,
+                BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpInhaltN.setViewportView(taInhaltN);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panInhaltN.add(scpInhaltN, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        panBuga.add(panInhaltN, gridBagConstraints);
+
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+        jPanelBuga.add(panBuga, gridBagConstraints);
+
+        jTabbedPane.addTab("BuGa", null, jPanelBuga, "");
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -3581,6 +4020,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
                 try {
                     getCidsBean().setProperty(
+                        FIELD__BUGA,
+                        false);
+                } catch (Exception e) {
+                    LOG.error("Cannot set buga", e);
+                }
+                try {
+                    getCidsBean().setProperty(
                         FIELD__VEROEFFENTLICHT,
                         false);
                 } catch (Exception e) {
@@ -3607,6 +4053,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 checkLink();
                 setAbgeschlossenText();
             }
+            setBugaEdit();
             txtAngelegtAm.setText(DATE_FORMAT.format(cidsBean.getProperty(FIELD__ANGELEGT)));
             setEnde();
             if (cidsBean.getProperty(FIELD__AKTUALISIERT) != null) {
@@ -3809,10 +4256,37 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     /**
      * DOCUMENT ME!
      */
+    private void setBugaEdit() {
+        if (((getCidsBean().getProperty(FIELD__BUGA) == null)
+                        || Objects.equals(getCidsBean().getProperty(FIELD__BUGA), false))) {
+            cbTeilareal.setEnabled(false);
+            cbNutzungN.setEnabled(false);
+            cbNutzungW.setEnabled(false);
+            taInhaltN.setEnabled(false);
+            taInhaltW.setEnabled(false);
+            taFinanzierungN.setEnabled(false);
+            taFinanzierungW.setEnabled(false);
+        } else {
+            cbTeilareal.setEnabled(true);
+            cbNutzungN.setEnabled(true);
+            cbNutzungW.setEnabled(true);
+            taInhaltN.setEnabled(true);
+            taInhaltW.setEnabled(true);
+            taFinanzierungN.setEnabled(true);
+            taFinanzierungW.setEnabled(true);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     private void setReadOnly() {
         if (!(isEditor())) {
             RendererTools.makeReadOnly(txtTitel);
             RendererTools.makeReadOnly(cbThema);
+            RendererTools.makeReadOnly(cbNutzungW);
+            RendererTools.makeReadOnly(cbNutzungN);
+            RendererTools.makeReadOnly(cbTeilareal);
             RendererTools.makeReadOnly(cbKontakt);
             RendererTools.makeReadOnly(chAbgeschlossen);
             RendererTools.makeReadOnly(blpStek);
@@ -3832,7 +4306,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             RendererTools.makeReadOnly(chMailBB);
             RendererTools.makeReadOnly(taBemerkung);
             RendererTools.makeReadOnly(taBeschreibung);
+            RendererTools.makeReadOnly(taInhaltN);
+            RendererTools.makeReadOnly(taInhaltW);
+            RendererTools.makeReadOnly(taFinanzierungN);
+            RendererTools.makeReadOnly(taFinanzierungW);
             RendererTools.makeReadOnly(chBB);
+            RendererTools.makeReadOnly(chBuga);
             RendererTools.makeReadOnly(txtLink);
             RendererTools.makeReadOnly(taText);
             RendererTools.makeReadOnly(txtUrl);
@@ -4295,6 +4774,9 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         if (evt.getPropertyName().equals(FIELD__BB_URL)) {
             checkBB();
         }
+        if (evt.getPropertyName().equals(FIELD__BUGA)) {
+            setBugaEdit();
+        }
         if (evt.getPropertyName().equals(FIELD__LINK)) {
             checkLink();
         }
@@ -4644,6 +5126,31 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("Geom not given.", ex);
                 save = false;
             }
+
+            // wenn buga, dann müssen teilareal und nutzungen gefüllt sein
+            try {
+                if (Objects.equals(getCidsBean().getProperty(FIELD__BUGA), true)) {
+                    if (getCidsBean().getProperty(FIELD__NUTZUNG_W) == null) {
+                        LOG.warn("No beschreibung specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NONUTZUNGW));
+                        save = false;
+                    }
+                    if (getCidsBean().getProperty(FIELD__NUTZUNG_N) == null) {
+                        LOG.warn("No beschreibung specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NONUTZUNGN));
+                        save = false;
+                    }
+                    if (getCidsBean().getProperty(FIELD__TEILAREAL) == null) {
+                        LOG.warn("No beschreibung specified. Skip persisting.");
+                        errorMessage.append(NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_NOTEILAREAL));
+                        save = false;
+                    }
+                }
+            } catch (final MissingResourceException ex) {
+                LOG.warn("buga not given.", ex);
+                save = false;
+            }
+
             if (errorMessage.length() > 0) {
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_PREFIX)
