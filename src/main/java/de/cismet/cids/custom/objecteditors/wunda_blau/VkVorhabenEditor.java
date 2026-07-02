@@ -767,15 +767,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lblStrasse = new JLabel();
         cbStrasse = new FastBindableReferenceCombo();
         lblHnr = new JLabel();
-        if (!isEditor()){
+        if (!isEditor()) {
             lblHNrRenderer = new JLabel();
         }
-        if (isEditor()){
+        if (isEditor()) {
             cbHNr = new FastBindableReferenceCombo(
-                hnrSearch,
-                hnrSearch.getRepresentationPattern(),
-                hnrSearch.getRepresentationFields()
-            );
+                    hnrSearch,
+                    hnrSearch.getRepresentationPattern(),
+                    hnrSearch.getRepresentationFields());
         }
         lblOrt = new JLabel();
         panOrt = new JPanel();
@@ -788,7 +787,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         scpSbz = new JScrollPane();
         taSbz = new JTextArea();
         lblGeom = new JLabel();
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom = new DefaultCismapGeometryComboBoxEditor();
             ;
         }
@@ -918,7 +917,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         panMail.setLayout(new GridBagLayout());
 
-        lblNoMail.setText("Ihre Mailadresse konnte in der Datenbank leider nicht gefunden werden. Die Mail(s) werden aber verschickt. Stattdessen erscheint \"Vorhabenkarte\". An diesen Absender kann jedoch nicht geantwortet werden."); // NOI18N
+        lblNoMail.setText(
+            "Ihre Mailadresse konnte in der Datenbank leider nicht gefunden werden. Die Mail(s) werden aber verschickt. Stattdessen erscheint \"Vorhabenkarte\". An diesen Absender kann jedoch nicht geantwortet werden."); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
         panMail.add(lblNoMail, gridBagConstraints);
@@ -928,10 +928,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         btnMenOkMail.setText("Ok");
         btnMenOkMail.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnMenOkMailActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnMenOkMailActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -970,7 +972,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         chVeroeffentlicht.setContentAreaFilled(false);
 
-        Binding binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.veroeffentlicht}"), chVeroeffentlicht, BeanProperty.create("selected"));
+        Binding binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.veroeffentlicht}"),
+                chVeroeffentlicht,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1018,7 +1025,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         txtAnleger.setMinimumSize(new Dimension(10, 24));
         txtAnleger.setPreferredSize(new Dimension(10, 24));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.anleger}"), txtAnleger, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.anleger}"),
+                txtAnleger,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1067,7 +1079,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         txtLetzterB.setMinimumSize(new Dimension(10, 24));
         txtLetzterB.setPreferredSize(new Dimension(10, 24));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.letzter_bearbeiter}"), txtLetzterB, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.letzter_bearbeiter}"),
+                txtLetzterB,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1114,7 +1131,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDaten.add(lblTitel, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.titel}"), txtTitel, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.titel}"),
+                txtTitel,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1140,7 +1162,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         cbThema.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_thema}"), cbThema, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_thema}"),
+                cbThema,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1179,7 +1206,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         blpStek.setOpaque(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.arr_vorhaben_stek}"), blpStek, BeanProperty.create("selectedElements"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.arr_vorhaben_stek}"),
+                blpStek,
+                BeanProperty.create("selectedElements"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1206,7 +1238,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         spQuartal.setModel(new SpinnerNumberModel(1, 1, 4, 1));
         spQuartal.setPreferredSize(new Dimension(75, 20));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ende_quartal}"), spQuartal, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ende_quartal}"),
+                spQuartal,
+                BeanProperty.create("value"));
         binding.setSourceNullValue(1);
         binding.setSourceUnreadableValue(1);
         bindingGroup.addBinding(binding);
@@ -1234,7 +1271,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         spJahr.setModel(new SpinnerNumberModel(2025, 2025, 2100, 1));
         spJahr.setPreferredSize(new Dimension(75, 20));
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ende_jahr}"), spJahr, BeanProperty.create("value"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ende_jahr}"),
+                spJahr,
+                BeanProperty.create("value"));
         binding.setSourceNullValue(2025);
         binding.setSourceUnreadableValue(2025);
         bindingGroup.addBinding(binding);
@@ -1262,7 +1304,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         chAbgeschlossen.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.abgeschlossen}"), chAbgeschlossen, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.abgeschlossen}"),
+                chAbgeschlossen,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1366,10 +1413,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lstFotos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstFotos.setFixedCellWidth(75);
         lstFotos.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                lstFotosMouseEntered(evt);
-            }
-        });
+
+                @Override
+                public void mouseEntered(final MouseEvent evt) {
+                    lstFotosMouseEntered(evt);
+                }
+            });
         scpFotos.setViewportView(lstFotos);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1393,7 +1442,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         jPanelFoto.add(lblLadenFotos, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstFotos, ELProperty.create("${selectedElement}"), vkFotoPanel, BeanProperty.create("cidsBean"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                lstFotos,
+                ELProperty.create("${selectedElement}"),
+                vkFotoPanel,
+                BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1408,32 +1462,38 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewFotos.setOpaque(false);
         panControlsNewFotos.setLayout(new GridBagLayout());
 
-        btnAddNewFoto.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewFoto.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewFoto.setEnabled(false);
         btnAddNewFoto.setMaximumSize(new Dimension(39, 20));
         btnAddNewFoto.setMinimumSize(new Dimension(39, 20));
         btnAddNewFoto.setPreferredSize(new Dimension(25, 20));
         btnAddNewFoto.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddNewFotoActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddNewFotoActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewFotos.add(btnAddNewFoto, gridBagConstraints);
 
-        btnRemoveFoto.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveFoto.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveFoto.setEnabled(false);
         btnRemoveFoto.setMaximumSize(new Dimension(39, 20));
         btnRemoveFoto.setMinimumSize(new Dimension(39, 20));
         btnRemoveFoto.setPreferredSize(new Dimension(25, 20));
         btnRemoveFoto.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveFotoActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveFotoActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -1469,10 +1529,11 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panOrtHinweis.setLayout(new GridBagLayout());
 
         taOrtHinweis.setColumns(20);
-        taOrtHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
+        taOrtHinweis.setFont(new Font("Noto Sans", 2, 12));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    // NOI18N
         taOrtHinweis.setLineWrap(true);
         taOrtHinweis.setRows(3);
-        taOrtHinweis.setText("Damit eine Bearbeitung einfacher ist, laufen einige Dinge automatisch ab:\n   • Bei einem neuen Vorhaben wird bei der Auswahl (Änderung) der Hausnummer die Geometrie aus dieser übernommen. Sollte die Geometrie schon vorhanden sein, so wird gefragt, ob diese geändert werden soll.\n   • Bei bestehenden Vorhaben passiert dies nicht automatisch. Über den Zauberstab kann jedoch jederzeit die Adressgeometrie übernommen werden.\n   • Wird das Häkchen bei stadtweit gesetzt, so wird die ausgewählte Adresse entfernt und die Auswahllisten grauen aus. Ist keine Geometrie vorhanden, so wird ein Punkt am Rathaus gesetzt. Ist eine Geometrie vorhanden wird diese nicht verändert.\n   • Wird das Häkchen bei stadtweit entfernt, so ist wieder eine Auswahl der Adresse möglich. Es erfolgt keine Änderung der Geometrie.\nDie Geometrie kann unabhängig von Adresse bzw. stadtweit angepasst bzw. auch gelöscht werden. Deswegen ist diese ein Pflichtattribut."); // NOI18N
+        taOrtHinweis.setText(
+            "Damit eine Bearbeitung einfacher ist, laufen einige Dinge automatisch ab:\n   • Bei einem neuen Vorhaben wird bei der Auswahl (Änderung) der Hausnummer die Geometrie aus dieser übernommen. Sollte die Geometrie schon vorhanden sein, so wird gefragt, ob diese geändert werden soll.\n   • Bei bestehenden Vorhaben passiert dies nicht automatisch. Über den Zauberstab kann jedoch jederzeit die Adressgeometrie übernommen werden.\n   • Wird das Häkchen bei stadtweit gesetzt, so wird die ausgewählte Adresse entfernt und die Auswahllisten grauen aus. Ist keine Geometrie vorhanden, so wird ein Punkt am Rathaus gesetzt. Ist eine Geometrie vorhanden wird diese nicht verändert.\n   • Wird das Häkchen bei stadtweit entfernt, so ist wieder eine Auswahl der Adresse möglich. Es erfolgt keine Änderung der Geometrie.\nDie Geometrie kann unabhängig von Adresse bzw. stadtweit angepasst bzw. auch gelöscht werden. Deswegen ist diese ein Pflichtattribut."); // NOI18N
         taOrtHinweis.setWrapStyleWord(true);
         scpOrtHinweis.setViewportView(taOrtHinweis);
 
@@ -1513,14 +1574,21 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         cbStrasse.setMaximumRowCount(20);
         cbStrasse.setModel(new LoadModelCb());
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_strasse}"), cbStrasse, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_strasse}"),
+                cbStrasse,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbStrasse.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbStrasseActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    cbStrasseActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -1541,16 +1609,20 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDatenOrt.add(lblHnr, gridBagConstraints);
 
-        if (!isEditor()){
+        if (!isEditor()) {
             lblHNrRenderer.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse.hausnummer}"), lblHNrRenderer, BeanProperty.create("text"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_adresse.hausnummer}"),
+                    lblHNrRenderer,
+                    BeanProperty.create("text"));
             binding.setSourceNullValue("----");
             binding.setSourceUnreadableValue("----");
             bindingGroup.addBinding(binding);
-
         }
-        if (!isEditor()){
+        if (!isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 4;
             gridBagConstraints.gridy = 4;
@@ -1561,17 +1633,21 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             panDatenOrt.add(lblHNrRenderer, gridBagConstraints);
         }
 
-        if (isEditor()){
+        if (isEditor()) {
             cbHNr.setMaximumRowCount(20);
             cbHNr.setEnabled(false);
             cbHNr.setMinimumSize(new Dimension(100, 19));
             cbHNr.setPreferredSize(new Dimension(100, 19));
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_adresse}"), cbHNr, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_adresse}"),
+                    cbHNr,
+                    BeanProperty.create("selectedItem"));
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 4;
             gridBagConstraints.gridy = 4;
@@ -1600,7 +1676,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taOrt.setTabSize(9);
         taOrt.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.ortsbeschreibung}"), taOrt, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.ortsbeschreibung}"),
+                taOrt,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpOrt.setViewportView(taOrt);
@@ -1641,7 +1722,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         chStadtweit.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.stadtweit}"), chStadtweit, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.stadtweit}"),
+                chStadtweit,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -1707,15 +1793,19 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDatenOrt.add(lblGeom, gridBagConstraints);
 
-        if (isEditor()){
+        if (isEditor()) {
             cbGeom.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-            binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_geom}"), cbGeom, BeanProperty.create("selectedItem"));
+            binding = Bindings.createAutoBinding(
+                    AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    ELProperty.create("${cidsBean.fk_geom}"),
+                    cbGeom,
+                    BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
             bindingGroup.addBinding(binding);
-
         }
-        if (isEditor()){
+        if (isEditor()) {
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 5;
@@ -1846,10 +1936,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lstBeschluesse.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstBeschluesse.setFixedCellWidth(75);
         lstBeschluesse.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                lstBeschluesseMouseEntered(evt);
-            }
-        });
+
+                @Override
+                public void mouseEntered(final MouseEvent evt) {
+                    lstBeschluesseMouseEntered(evt);
+                }
+            });
         scpBeschluesse.setViewportView(lstBeschluesse);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1860,7 +1952,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 0, 0);
         jPanelDokBeschluesse.add(scpBeschluesse, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstBeschluesse, ELProperty.create("${selectedElement}"), vkBeschlussPanel, BeanProperty.create("cidsBean"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                lstBeschluesse,
+                ELProperty.create("${selectedElement}"),
+                vkBeschlussPanel,
+                BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -1875,32 +1972,38 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewBeschluesse.setOpaque(false);
         panControlsNewBeschluesse.setLayout(new GridBagLayout());
 
-        btnAddNewBeschluss.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewBeschluss.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewBeschluss.setEnabled(false);
         btnAddNewBeschluss.setMaximumSize(new Dimension(39, 20));
         btnAddNewBeschluss.setMinimumSize(new Dimension(39, 20));
         btnAddNewBeschluss.setPreferredSize(new Dimension(25, 20));
         btnAddNewBeschluss.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddNewBeschlussActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddNewBeschlussActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewBeschluesse.add(btnAddNewBeschluss, gridBagConstraints);
 
-        btnRemoveBeschluss.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveBeschluss.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveBeschluss.setEnabled(false);
         btnRemoveBeschluss.setMaximumSize(new Dimension(39, 20));
         btnRemoveBeschluss.setMinimumSize(new Dimension(39, 20));
         btnRemoveBeschluss.setPreferredSize(new Dimension(25, 20));
         btnRemoveBeschluss.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveBeschlussActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveBeschlussActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -1946,7 +2049,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taBeschreibung.setToolTipText("");
         taBeschreibung.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.beschreibung}"), taBeschreibung, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.beschreibung}"),
+                taBeschreibung,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBeschreibung.setViewportView(taBeschreibung);
@@ -1985,7 +2093,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 0, 2, 5);
         panDetails.add(lblLink, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.link}"), txtLink, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.link}"),
+                txtLink,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2000,7 +2113,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panLink.setOpaque(false);
         panLink.setLayout(new GridBagLayout());
 
-        lblLinkCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblLinkCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -2028,7 +2142,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         chBB.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.buergerbeteiligung}"), chBB, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.buergerbeteiligung}"),
+                chBB,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -2063,7 +2182,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taText.setWrapStyleWord(true);
         taText.setEnabled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bb_text}"), taText, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bb_text}"),
+                taText,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpText.setViewportView(taText);
@@ -2105,7 +2229,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         txtUrl.setEnabled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.bb_url}"), txtUrl, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.bb_url}"),
+                txtUrl,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2120,7 +2249,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panUrl.setOpaque(false);
         panUrl.setLayout(new GridBagLayout());
 
-        lblUrlCheck.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
+        lblUrlCheck.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"))); // NOI18N
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -2149,9 +2279,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         cbKontakt.setMaximumRowCount(20);
         cbKontakt.setModel(new LoadModelCb());
-        cbKontakt.setRepresentationFields(new String[] {"mail"});
+        cbKontakt.setRepresentationFields(new String[] { "mail" });
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_kontakt}"), cbKontakt, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_kontakt}"),
+                cbKontakt,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2197,7 +2332,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taAnhangHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
         taAnhangHinweis.setLineWrap(true);
         taAnhangHinweis.setRows(3);
-        taAnhangHinweis.setText("Text Jonathan"); // NOI18N
+        taAnhangHinweis.setText("Text Jonathan");              // NOI18N
         taAnhangHinweis.setWrapStyleWord(true);
         scpAnhangHinweis.setViewportView(taAnhangHinweis);
 
@@ -2268,10 +2403,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         lstLinks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstLinks.setFixedCellWidth(75);
         lstLinks.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                lstLinksMouseEntered(evt);
-            }
-        });
+
+                @Override
+                public void mouseEntered(final MouseEvent evt) {
+                    lstLinksMouseEntered(evt);
+                }
+            });
         scpLinks.setViewportView(lstLinks);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2282,7 +2419,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 0, 0);
         jPanelDokLinks.add(scpLinks, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstLinks, ELProperty.create("${selectedElement}"), vkLinkPanel, BeanProperty.create("cidsBean"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                lstLinks,
+                ELProperty.create("${selectedElement}"),
+                vkLinkPanel,
+                BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2297,32 +2439,38 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewLinks.setOpaque(false);
         panControlsNewLinks.setLayout(new GridBagLayout());
 
-        btnAddNewLink.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewLink.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewLink.setEnabled(false);
         btnAddNewLink.setMaximumSize(new Dimension(39, 20));
         btnAddNewLink.setMinimumSize(new Dimension(39, 20));
         btnAddNewLink.setPreferredSize(new Dimension(25, 20));
         btnAddNewLink.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddNewLinkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddNewLinkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewLinks.add(btnAddNewLink, gridBagConstraints);
 
-        btnRemoveLink.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveLink.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveLink.setEnabled(false);
         btnRemoveLink.setMaximumSize(new Dimension(39, 20));
         btnRemoveLink.setMinimumSize(new Dimension(39, 20));
         btnRemoveLink.setPreferredSize(new Dimension(25, 20));
         btnRemoveLink.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveLinkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveLinkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -2408,7 +2556,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(1, 0, 0, 0);
         jPanelDokDokumente.add(scpDokumente, gridBagConstraints);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, lstDokumente, ELProperty.create("${selectedElement}"), vkDokumentPanel, BeanProperty.create("cidsBean"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                lstDokumente,
+                ELProperty.create("${selectedElement}"),
+                vkDokumentPanel,
+                BeanProperty.create("cidsBean"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2436,32 +2589,38 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panControlsNewDokumente.setOpaque(false);
         panControlsNewDokumente.setLayout(new GridBagLayout());
 
-        btnAddNewDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddNewDokument.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddNewDokument.setEnabled(false);
         btnAddNewDokument.setMaximumSize(new Dimension(39, 20));
         btnAddNewDokument.setMinimumSize(new Dimension(39, 20));
         btnAddNewDokument.setPreferredSize(new Dimension(25, 20));
         btnAddNewDokument.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnAddNewDokumentActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnAddNewDokumentActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         panControlsNewDokumente.add(btnAddNewDokument, gridBagConstraints);
 
-        btnRemoveDokument.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveDokument.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveDokument.setEnabled(false);
         btnRemoveDokument.setMaximumSize(new Dimension(39, 20));
         btnRemoveDokument.setMinimumSize(new Dimension(39, 20));
         btnRemoveDokument.setPreferredSize(new Dimension(25, 20));
         btnRemoveDokument.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnRemoveDokumentActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnRemoveDokumentActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -2488,14 +2647,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         panFillerUnten4.setName(""); // NOI18N
         panFillerUnten4.setOpaque(false);
 
-        GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
+        final GroupLayout panFillerUnten4Layout = new GroupLayout(panFillerUnten4);
         panFillerUnten4.setLayout(panFillerUnten4Layout);
-        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        panFillerUnten4Layout.setHorizontalGroup(panFillerUnten4Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+        panFillerUnten4Layout.setVerticalGroup(panFillerUnten4Layout.createParallelGroup(
+                GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2521,7 +2678,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taMailHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
         taMailHinweis.setLineWrap(true);
         taMailHinweis.setRows(2);
-        taMailHinweis.setText("Text Hinweis\n"); // NOI18N
+        taMailHinweis.setText("Text Hinweis\n");             // NOI18N
         taMailHinweis.setWrapStyleWord(true);
         scpMailHinweis.setViewportView(taMailHinweis);
 
@@ -2675,16 +2832,19 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         panIntern.add(panBemerkung, gridBagConstraints);
 
-        btnSendMail.setIcon(new ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/mail_new.png"))); // NOI18N
+        btnSendMail.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/mail_new.png"))); // NOI18N
         btnSendMail.setToolTipText("Mail versenden");
         btnSendMail.setMaximumSize(new Dimension(198, 150));
         btnSendMail.setMinimumSize(new Dimension(20, 19));
         btnSendMail.setPreferredSize(new Dimension(66, 48));
         btnSendMail.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                btnSendMailActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final ActionEvent evt) {
+                    btnSendMailActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
@@ -2710,7 +2870,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taFeedbackHinweis.setFont(new Font("Noto Sans", 2, 12)); // NOI18N
         taFeedbackHinweis.setLineWrap(true);
         taFeedbackHinweis.setRows(2);
-        taFeedbackHinweis.setText("Text Protokoll"); // NOI18N
+        taFeedbackHinweis.setText("Text Protokoll");             // NOI18N
         taFeedbackHinweis.setWrapStyleWord(true);
         scpFeedbackHinweis.setViewportView(taFeedbackHinweis);
 
@@ -2801,7 +2961,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         chBuga.setContentAreaFilled(false);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.buga}"), chBuga, BeanProperty.create("selected"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.buga}"),
+                chBuga,
+                BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -2827,7 +2992,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         cbTeilareal.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_teilareal}"), cbTeilareal, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_teilareal}"),
+                cbTeilareal,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2851,7 +3021,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         lblKern.setFont(new Font("Tahoma", 0, 11)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_teilareal.fk_kernareal.name}"), lblKern, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_teilareal.fk_kernareal.name}"),
+                lblKern,
+                BeanProperty.create("text"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -2900,7 +3075,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         cbNutzungW.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_nutzung_waehrend}"), cbNutzungW, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_nutzung_waehrend}"),
+                cbNutzungW,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2914,7 +3094,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
 
         cbNutzungN.setFont(new Font("Dialog", 0, 12)); // NOI18N
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.fk_nutzung_nach}"), cbNutzungN, BeanProperty.create("selectedItem"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.fk_nutzung_nach}"),
+                cbNutzungN,
+                BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new GridBagConstraints();
@@ -2946,7 +3131,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taFinanzierungW.setToolTipText("");
         taFinanzierungW.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.finanzierung_waehrend}"), taFinanzierungW, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.finanzierung_waehrend}"),
+                taFinanzierungW,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpIFinanzierungW.setViewportView(taFinanzierungW);
@@ -2982,7 +3172,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taFinanzierungN.setToolTipText("");
         taFinanzierungN.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.finanzierung_nach}"), taFinanzierungN, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.finanzierung_nach}"),
+                taFinanzierungN,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpFinanzierungN.setViewportView(taFinanzierungN);
@@ -3030,7 +3225,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taInhaltW.setToolTipText("");
         taInhaltW.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.inhalt_waehrend}"), taInhaltW, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.inhalt_waehrend}"),
+                taInhaltW,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpInhaltW.setViewportView(taInhaltW);
@@ -3073,7 +3273,12 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         taInhaltN.setToolTipText("");
         taInhaltN.setWrapStyleWord(true);
 
-        binding = Bindings.createAutoBinding(AutoBinding.UpdateStrategy.READ_WRITE, this, ELProperty.create("${cidsBean.inhalt_nach}"), taInhaltN, BeanProperty.create("text"));
+        binding = Bindings.createAutoBinding(
+                AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                ELProperty.create("${cidsBean.inhalt_nach}"),
+                taInhaltN,
+                BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpInhaltN.setViewportView(taInhaltN);
@@ -3153,22 +3358,22 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         add(panContent, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBeschluesseMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstBeschluesseMouseEntered
-    }//GEN-LAST:event_lstBeschluesseMouseEntered
+    private void lstBeschluesseMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstBeschluesseMouseEntered
+    }                                                               //GEN-LAST:event_lstBeschluesseMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewBeschlussActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewBeschlussActionPerformed
+    private void btnAddNewBeschlussActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewBeschlussActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3197,14 +3402,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewBeschlussActionPerformed
+    } //GEN-LAST:event_btnAddNewBeschlussActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBeschlussActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveBeschlussActionPerformed
+    private void btnRemoveBeschlussActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveBeschlussActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstBeschluesse.getSelectedValue();
@@ -3238,22 +3443,22 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBeschlussActionPerformed
+    } //GEN-LAST:event_btnRemoveBeschlussActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLinksMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstLinksMouseEntered
-    }//GEN-LAST:event_lstLinksMouseEntered
+    private void lstLinksMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstLinksMouseEntered
+    }                                                         //GEN-LAST:event_lstLinksMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewLinkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewLinkActionPerformed
+    private void btnAddNewLinkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewLinkActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3282,14 +3487,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewLinkActionPerformed
+    } //GEN-LAST:event_btnAddNewLinkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLinkActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveLinkActionPerformed
+    private void btnRemoveLinkActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveLinkActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstLinks.getSelectedValue();
@@ -3321,14 +3526,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveLinkActionPerformed
+    } //GEN-LAST:event_btnRemoveLinkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveDokumentActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveDokumentActionPerformed
+    private void btnRemoveDokumentActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveDokumentActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstDokumente.getSelectedValue();
@@ -3362,14 +3567,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveDokumentActionPerformed
+    } //GEN-LAST:event_btnRemoveDokumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewDokumentActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewDokumentActionPerformed
+    private void btnAddNewDokumentActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewDokumentActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3398,14 +3603,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewDokumentActionPerformed
+    } //GEN-LAST:event_btnAddNewDokumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddNewFotoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnAddNewFotoActionPerformed
+    private void btnAddNewFotoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnAddNewFotoActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 try {
@@ -3434,14 +3639,14 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnAddNewFotoActionPerformed
+    } //GEN-LAST:event_btnAddNewFotoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFotoActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnRemoveFotoActionPerformed
+    private void btnRemoveFotoActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnRemoveFotoActionPerformed
         if (getVkDocumentLoader().getLoadingCompletedWithoutError()) {
             if (getCidsBean() != null) {
                 final Object selectedObject = lstFotos.getSelectedValue();
@@ -3473,35 +3678,35 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveFotoActionPerformed
+    } //GEN-LAST:event_btnRemoveFotoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosMouseEntered(final MouseEvent evt) {//GEN-FIRST:event_lstFotosMouseEntered
-    }//GEN-LAST:event_lstFotosMouseEntered
+    private void lstFotosMouseEntered(final MouseEvent evt) { //GEN-FIRST:event_lstFotosMouseEntered
+    }                                                         //GEN-LAST:event_lstFotosMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbStrasseActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_cbStrasseActionPerformed
+    private void cbStrasseActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_cbStrasseActionPerformed
         if (isEditor() && (getCidsBean() != null) && (getCidsBean().getProperty(FIELD__STRASSE_SCHLUESSEL) != null)) {
             cbHNr.setSelectedItem(null);
             cbHNr.setEnabled(true);
             refreshHnr();
         }
-    }//GEN-LAST:event_cbStrasseActionPerformed
+    }                                                              //GEN-LAST:event_cbStrasseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSendMailActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnSendMailActionPerformed
+    private void btnSendMailActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnSendMailActionPerformed
         final StringBuilder userFeedback = new StringBuilder();
         // Ermitteln der Mailadresse des Users
         String userMail = "vk";
@@ -3634,7 +3839,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.error("Cannot found titel thema", e);
             }
         }
-    }//GEN-LAST:event_btnSendMailActionPerformed
+    } //GEN-LAST:event_btnSendMailActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3688,7 +3893,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkMailActionPerformed(final ActionEvent evt) {//GEN-FIRST:event_btnMenOkMailActionPerformed
+    private void btnMenOkMailActionPerformed(final ActionEvent evt) { //GEN-FIRST:event_btnMenOkMailActionPerformed
         try {
             dlgMail.setVisible(false);
         } catch (Exception ex) {
@@ -3696,7 +3901,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
         } finally {
             dlgMail.setVisible(false);
         }
-    }//GEN-LAST:event_btnMenOkMailActionPerformed
+    }                                                                 //GEN-LAST:event_btnMenOkMailActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -4047,13 +4252,13 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
     private void checkLink() {
         checkUrl(txtLink.getText(), lblLinkCheck, whichUrl.link);
     }
-    
+
     /**
      * DOCUMENT ME!
      */
     private void setBugaEdit() {
         if (((getCidsBean().getProperty(FIELD__BUGA) == null)
-                            || Objects.equals(getCidsBean().getProperty(FIELD__BUGA), false))) {
+                        || Objects.equals(getCidsBean().getProperty(FIELD__BUGA), false))) {
             cbTeilareal.setEnabled(false);
             cbNutzungN.setEnabled(false);
             cbNutzungW.setEnabled(false);
@@ -4069,7 +4274,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
             taInhaltW.setEnabled(true);
             taFinanzierungN.setEnabled(true);
             taFinanzierungW.setEnabled(true);
-        }    
+        }
     }
 
     /**
@@ -4921,8 +5126,8 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("Geom not given.", ex);
                 save = false;
             }
-            
-            //wenn buga, dann müssen teilareal und nutzungen gefüllt sein
+
+            // wenn buga, dann müssen teilareal und nutzungen gefüllt sein
             try {
                 if (Objects.equals(getCidsBean().getProperty(FIELD__BUGA), true)) {
                     if (getCidsBean().getProperty(FIELD__NUTZUNG_W) == null) {
@@ -4945,7 +5150,7 @@ public class VkVorhabenEditor extends DefaultCustomObjectEditor implements CidsB
                 LOG.warn("buga not given.", ex);
                 save = false;
             }
-            
+
             if (errorMessage.length() > 0) {
                 JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     NbBundle.getMessage(VkVorhabenEditor.class, BUNDLE_PANE_PREFIX)
