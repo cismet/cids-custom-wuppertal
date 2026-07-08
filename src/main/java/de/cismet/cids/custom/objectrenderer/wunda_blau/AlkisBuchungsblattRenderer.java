@@ -1834,9 +1834,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                             try {
                                 selectedFlurstuecke = get();
                                 hlBaulastBescheinigung.setText("Baulastbescheinigung");
-                                if ((selectedFlurstuecke != null) && !selectedFlurstuecke.isEmpty()) {
-                                    hlBaulastBescheinigung.setEnabled(true);
-                                }
                             } catch (final Exception ex) {
                                 LOG.warn(ex, ex);
                             }
