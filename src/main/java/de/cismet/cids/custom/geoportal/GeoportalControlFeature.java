@@ -26,20 +26,20 @@ import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
-import org.deegree.io.geotiff.GeoTiffReader;
-
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 
-import java.io.File;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -446,8 +446,31 @@ public class GeoportalControlFeature extends DefaultStyledFeature implements XSt
      */
     private double getElevation(final double lon, final double lat) { // 49.3,7.1
         try {
-            final BufferedImage image = ImageIO.read(getClass().getResourceAsStream(
-                        "/de/cismet/cids/custom/geoportal/DEM20x20.tiff"));
+            // ensure that the image reader from twelve monkeys is not used
+            final Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("TIFF");
+
+            ImageReader tiffReader = null;
+            ImageReader reader = null;
+
+            while (readers.hasNext()) {
+                reader = readers.next();
+
+                if (
+                    !reader.getClass().getName().equalsIgnoreCase(
+                                "com.twelvemonkeys.imageio.plugins.tiff.TIFFImageReader")) {
+                    tiffReader = reader;
+                    break;
+                }
+            }
+
+            if (tiffReader == null) {
+                return 142;
+            }
+
+            final InputStream is = getClass().getResourceAsStream("/de/cismet/cids/custom/geoportal/DEM20x20.tiff");
+            tiffReader.setInput(ImageIO.createImageInputStream(is));
+
+            final BufferedImage image = tiffReader.read(0);
 
             final Raster raster = image.getRaster();
             final double minLon = 7.0436100;
@@ -462,8 +485,14 @@ public class GeoportalControlFeature extends DefaultStyledFeature implements XSt
             final int y = (int)((maxLat - lat) / (maxLat - minLat) * height);
 
             final double elevation = raster.getSampleDouble(x, y, 0);
+            tiffReader.dispose();
 
 //            System.out.println("Höhe: " + elevation);
+
+            if (elevation < 2.0) {
+                // then the reader could not read the tiff properly
+                return 142;
+            }
 
             return elevation;
         } catch (Exception e) {
