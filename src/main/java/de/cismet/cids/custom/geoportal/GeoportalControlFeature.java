@@ -26,12 +26,20 @@ import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
+import org.deegree.io.geotiff.GeoTiffReader;
+
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -353,11 +361,10 @@ public class GeoportalControlFeature extends DefaultStyledFeature implements XSt
                     * 1.10;
         double groundPosX = point.getX();
         double groundPosY = point.getY();
-        final double groundPosZ = 192.2062;
+        point = CrsTransformer.transformToGivenCrs(point, "EPSG:4326");
+        final double groundPosZ = getElevation(point.getX(), point.getY()) + 50; // 192.2062;
         final int heading = headings[rotationIndex];
         final double pitch = 60.0;
-        final double camPosX = groundPosX;
-        final double camPosY = groundPosY;
         final double camPosZ = groundPosZ + distance;
         final int currentSrid = CrsTransformer.extractSridFromCrs(mappingComponent.getMappingModel().getSrs()
                         .getCode());
@@ -366,7 +373,6 @@ public class GeoportalControlFeature extends DefaultStyledFeature implements XSt
         final Boolean withJwt = properties.isWithJWT();
         String url;
 
-        point = CrsTransformer.transformToGivenCrs(point, "EPSG:4326");
         groundPosX = point.getX();
         groundPosY = point.getY();
 
@@ -377,9 +383,10 @@ public class GeoportalControlFeature extends DefaultStyledFeature implements XSt
                     jwt,
                     String.valueOf(groundPosY),
                     String.valueOf(groundPosX),
-                    String.valueOf(heading),
+                    String.valueOf(zoom),
+                    String.valueOf(heading), // bearing
                     String.valueOf(pitch),
-                    String.valueOf(camPosZ));
+                    String.valueOf(groundPosZ));
         } else {
             url = String.format(
                     properties.getUrlTemplate(),
@@ -429,36 +436,42 @@ public class GeoportalControlFeature extends DefaultStyledFeature implements XSt
         }
     }
 
-//    /**
-//     * DOCUMENT ME!
-//     *
-//     * @param   x  DOCUMENT ME!
-//     * @param   y  DOCUMENT ME!
-//     *
-//     * @return  DOCUMENT ME!
-//     */
-//    private double getElevation(final double x, final double y) { // 49.3,7.1
-//        try {
-//            final String urlString = String.format(
-//                    "https://api.open-elevation.com/api/v1/lookup?locations=%s,%s",
-//                    y,
-//                    x);
-//            final InputStream response = WebAccessManager.getInstance().doRequest(new URL(urlString));
-//            JsonNode rootNode = OBJECT_MAPPER.readTree(response);
-//            rootNode = rootNode.get("results");
-//
-//            if (rootNode.isArray()) {
-//                if ((rootNode.get(0) != null) && (rootNode.get(0).get("elevation") != null)
-//                            && rootNode.get(0).get("elevation").isDouble()) {
-//                    return rootNode.get(0).get("elevation").asDouble();
-//                }
-//            }
-//        } catch (Exception e) {
-//            LOG.error("Error while determining the elevation", e);
-//        }
-//
-//        return 230;
-//    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   lon  x DOCUMENT ME!
+     * @param   lat  y DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private double getElevation(final double lon, final double lat) { // 49.3,7.1
+        try {
+            final BufferedImage image = ImageIO.read(getClass().getResourceAsStream(
+                        "/de/cismet/cids/custom/geoportal/DEM20x20.tiff"));
+
+            final Raster raster = image.getRaster();
+            final double minLon = 7.0436100;
+            final double maxLon = 7.4219510;
+            final double minLat = 51.1354160;
+            final double maxLat = 51.3430520;
+
+            final int width = 1250;
+            final int height = 1095;
+
+            final int x = (int)((lon - minLon) / (maxLon - minLon) * width);
+            final int y = (int)((maxLat - lat) / (maxLat - minLat) * height);
+
+            final double elevation = raster.getSampleDouble(x, y, 0);
+
+//            System.out.println("Höhe: " + elevation);
+
+            return elevation;
+        } catch (Exception e) {
+            LOG.error("Error while determining the elevation", e);
+        }
+
+        return 142;
+    }
 
     /**
      * DOCUMENT ME!
