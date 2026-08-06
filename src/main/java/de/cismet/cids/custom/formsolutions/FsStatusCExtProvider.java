@@ -11,11 +11,15 @@
  */
 package de.cismet.cids.custom.formsolutions;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.types.treenode.PureTreeNode;
 import Sirius.navigator.types.treenode.RootTreeNode;
 
+import Sirius.server.localserver.user.LoginRestrictionHelper;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.newuser.LoginRestrictionUserException;
 
 import org.apache.log4j.Logger;
 
@@ -73,6 +77,21 @@ public class FsStatusCExtProvider implements CExtProvider<CidsBeanAction>, Conne
     @Override
     public Collection<? extends CidsBeanAction> provideExtensions(final CExtContext context) {
         final List<CidsBeanAction> actions = new ArrayList<CidsBeanAction>(1);
+
+        try {
+            final String activeOpeningHours = SessionManager.getProxy()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "activeOpeningHours", connectionContext);
+
+            if (activeOpeningHours != null) {
+                try {
+                    LoginRestrictionHelper.getInstance().checkLoginRestriction(activeOpeningHours.trim().split("\n"));
+                } catch (LoginRestrictionUserException e) {
+                    return actions;
+                }
+            }
+        } catch (ConnectionException e) {
+            return actions;
+        }
 
         if (context != null) {
             final Object ctxReference = context.getProperty(CExtContext.CTX_REFERENCE);
