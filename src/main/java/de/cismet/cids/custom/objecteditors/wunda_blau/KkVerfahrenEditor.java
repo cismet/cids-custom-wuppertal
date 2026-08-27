@@ -184,6 +184,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblFlaeche;
     private javax.swing.JLabel lblForw;
+    private javax.swing.JLabel lblIntern;
     private javax.swing.JLabel lblLastInMap1;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstFlaechen;
@@ -197,6 +198,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panFooterLeft;
     private javax.swing.JPanel panFooterRight;
+    private javax.swing.JPanel panIntern;
     private javax.swing.JPanel panMain;
     private javax.swing.JPanel panOben;
     private javax.swing.JPanel panTitle;
@@ -206,11 +208,13 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
     private de.cismet.tools.gui.RoundedPanel rpFlaecheninfo;
     private de.cismet.tools.gui.RoundedPanel rpFlaechenliste;
     private de.cismet.tools.gui.RoundedPanel rpLaufendeNummern;
+    private javax.swing.JScrollPane scpIntern;
     private javax.swing.JScrollPane scpLaufendeNummern;
     private javax.swing.JScrollPane scpLaufendeNummern1;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel5;
+    private javax.swing.JTextArea taIntern;
     private javax.swing.JTextField txtBezeichnung;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtTraeger;
@@ -327,6 +331,10 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         dcRechtskraft = new de.cismet.cids.editors.DefaultBindableDateChooser();
         cbStatus = new DefaultBindableScrollableComboBox();
         cbGrundlage = new DefaultBindableScrollableComboBox();
+        lblIntern = new javax.swing.JLabel();
+        panIntern = new javax.swing.JPanel();
+        scpIntern = new javax.swing.JScrollPane();
+        taIntern = new javax.swing.JTextArea();
         panVerfahrenskosten = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -717,6 +725,9 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
@@ -733,6 +744,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
@@ -749,6 +761,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
@@ -758,6 +771,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             jLabel6,
             org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.jLabel6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 13, 3, 3);
         panVerfahrenInfo.add(jLabel6, gridBagConstraints);
@@ -766,7 +781,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             jLabel7,
             org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 13, 3, 3);
@@ -786,8 +801,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             jLabel9,
             org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.jLabel9.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 13, 3, 3);
         panVerfahrenInfo.add(jLabel9, gridBagConstraints);
@@ -801,6 +816,8 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 0);
@@ -974,7 +991,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 0);
@@ -989,11 +1006,62 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 0);
         panVerfahrenInfo.add(cbGrundlage, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblIntern,
+            org.openide.util.NbBundle.getMessage(KkVerfahrenEditor.class, "KkVerfahrenEditor.lblIntern.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 13, 3, 3);
+        panVerfahrenInfo.add(lblIntern, gridBagConstraints);
+
+        panIntern.setOpaque(false);
+        panIntern.setLayout(new java.awt.GridBagLayout());
+
+        taIntern.setColumns(20);
+        taIntern.setLineWrap(true);
+        taIntern.setRows(2);
+        taIntern.setTabSize(9);
+        taIntern.setWrapStyleWord(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.intern}"),
+                taIntern,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        scpIntern.setViewportView(taIntern);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panIntern.add(scpIntern, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 0);
+        panVerfahrenInfo.add(panIntern, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1931,6 +1999,7 @@ public class KkVerfahrenEditor extends javax.swing.JPanel implements DisposableC
             makeReadOnly(chkAusgleich);
             makeReadOnly(chkErsatzzahlung);
             makeReadOnly(chkErstattung);
+            RendererTools.makeReadOnly(taIntern);
         } else {
             new CidsBeanDropTarget(this);
         }
