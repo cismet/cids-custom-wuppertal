@@ -33,7 +33,6 @@ import org.jdesktop.swingx.calendar.DatePickerFormatter;
 import org.jfree.util.Log;
 
 import org.openide.util.Exceptions;
-import org.openide.util.WeakListeners;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -1246,6 +1245,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     public void setCidsBean(final CidsBean cidsBean) {
         try {
             bindingGroup.unbind();
+
+            if ((this.cidsBean != null) && (listener != null)) {
+                this.cidsBean.removePropertyChangeListener(listener);
+            }
+
             if (cidsBean != null) {
                 final int[] belIdx = lstFlurstueckeBelastet.getSelectedIndices();
                 final int[] begIdx = lstFlurstueckeBeguenstigt.getSelectedIndices();
@@ -1279,9 +1283,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                                 && propstring.equals(cidsBean.getMetaObject().getPropertyString());
 
                     chkGeprueft.setEnabled(finalCheckEnable);
-                    cidsBean.addPropertyChangeListener(WeakListeners.propertyChange(
-                            listener = new CidsBeanListener(),
-                            cidsBean));
+                    cidsBean.addPropertyChangeListener(listener = new CidsBeanListener());
                 } else {
                     final Object geprueftObj = cidsBean.getProperty("geprueft");
                     if ((geprueftObj instanceof Boolean) && ((Boolean)geprueftObj)) {
@@ -1337,6 +1339,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     @Override
     public void dispose() {
         bindingGroup.unbind();
+        if ((listener != null) && (cidsBean != null)) {
+            cidsBean.removePropertyChangeListener(listener);
+        }
         listener = null;
         dlgAddBaulastArt.dispose();
         fsDialoge.dispose();
@@ -1387,6 +1392,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      */
     private class CidsBeanListener implements PropertyChangeListener {
 
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean fromInsidePropertyChanged = false;
+
         //~ Methods ------------------------------------------------------------
 
         // Object lastEvt = null;
@@ -1395,6 +1404,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             /*if(evt == lastEvt)
              *  return; else lastEvt = evt;*/
             final String propName = evt.getPropertyName();
+
+            if (fromInsidePropertyChanged) {
+                return;
+            }
+
             if (propName.equals("geprueft_von") || propName.equals("pruefdatum")
                         || propName.equals("pruefkommentar") || propName.equals("bearbeitet_von")
                         || propName.equals("bearbeitungsdatum")) {
@@ -1442,11 +1456,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                                         Exceptions.printStackTrace(ex);
                                     }
                                 } else {
-                                    chkGeprueft.setSelected(false);
-                                    cidsBean.addPropertyChangeListener(
-                                        WeakListeners.propertyChange(
-                                            listener = new CidsBeanListener(),
-                                            cidsBean));
+                                    fromInsidePropertyChanged = true;
+                                    try {
+                                        chkGeprueft.setSelected(false);
+                                    } finally {
+                                        fromInsidePropertyChanged = false;
+                                    }
                                 }
                             }
                         });
