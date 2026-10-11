@@ -16,12 +16,16 @@ import Sirius.navigator.connection.SessionManager;
 import java.io.StringReader;
 
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.utils.StaticProperties;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
+
+import de.cismet.cids.utils.serverresources.ServerResourcesLoader;
 
 import de.cismet.connectioncontext.AbstractConnectionContext;
 import de.cismet.connectioncontext.ConnectionContext;
@@ -43,6 +47,15 @@ public final class ClientStaticProperties extends StaticProperties {
      */
     protected ClientStaticProperties(final Properties properties) {
         super(properties);
+
+        final Timer t = new Timer();
+        t.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    refresh();
+                }
+            }, 60000, 60000);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -54,6 +67,37 @@ public final class ClientStaticProperties extends StaticProperties {
      */
     public static ClientStaticProperties getInstance() {
         return LazyInitialiser.INSTANCE;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    protected synchronized void refresh() {
+        final Properties properties = new Properties();
+
+        try {
+            final ConnectionContext connectionContext = ConnectionContext.create(
+                    AbstractConnectionContext.Category.STATIC,
+                    ClientAlkisConf.class.getSimpleName());
+            final Object ret = SessionManager.getSession()
+                        .getConnection()
+                        .executeTask(SessionManager.getSession().getUser(),
+                            GetServerResourceServerAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            WundaBlauServerResources.URLCONFIG_PROPERTIES.getValue(),
+                            connectionContext);
+            if (ret instanceof Exception) {
+                return;
+            }
+
+            properties.load(new StringReader((String)ret));
+
+            if (properties != null) {
+                refresh(properties);
+            }
+        } catch (Exception e) {
+            // nothing to do
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
