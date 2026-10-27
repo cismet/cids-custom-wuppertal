@@ -49,7 +49,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -84,7 +83,6 @@ import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
-import de.cismet.cids.custom.actions.wunda_blau.SetTIMNoteAction;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.actions.AltlastenWebDavTunnelAction;
 
@@ -95,15 +93,12 @@ import de.cismet.cids.dynamics.Disposable;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.commons.concurrency.CismetConcurrency;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -195,7 +190,6 @@ public class SimpleAltlastWebDavPanel extends javax.swing.JPanel implements Cids
 
         lstFotos.setMinimumSize(new Dimension(250, 130));
         lstFotos.setName("lstFotos"); // NOI18N
-        lstFotos.setPreferredSize(new Dimension(250, 130));
 
         final ELProperty eLProperty = ELProperty.create("${cidsBean." + beanCollProp + "}");
         final JListBinding jListBinding = SwingBindings.createJListBinding(

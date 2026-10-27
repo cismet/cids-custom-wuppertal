@@ -180,6 +180,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     javax.swing.JButton btnReport;
     javax.swing.JButton btnReport1;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox ckBauportal;
     private javax.swing.JCheckBox ckDigital;
     private javax.swing.JCheckBox ckHaenge;
     private javax.swing.JCheckBox ckSteh;
@@ -326,6 +327,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        ckBauportal = new javax.swing.JCheckBox();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -878,7 +880,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jLabel2.setName("jLabel2");    // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel7.add(jLabel2, gridBagConstraints);
@@ -895,7 +897,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel7.add(jTextField2, gridBagConstraints);
@@ -935,6 +937,28 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         jPanel7.add(filler2, gridBagConstraints);
+
+        ckBauportal.setText("Bauportal (d.3.)");
+        ckBauportal.setContentAreaFilled(false);
+        ckBauportal.setName("ckBauportal"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_bauportal}"),
+                ckBauportal,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanel7.add(ckBauportal, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
