@@ -15,8 +15,11 @@ import java.io.IOException;
 
 import java.util.concurrent.Future;
 
+import de.cismet.cids.server.actions.GetAsyncTaskProgressAction;
+import de.cismet.cids.server.actions.GetAsyncTaskResultAction;
 import de.cismet.cids.server.actions.PreparedAsyncByteAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.actions.StartAsyncTaskAction;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -299,15 +302,67 @@ public class ByteArrayActionDownload extends AbstractCancellableDownload impleme
         if ((paramsFuture != null) && (params == null)) {
             params = paramsFuture.get();
         }
+        Object ret;
 
-        final Object ret = SessionManager.getProxy()
-                    .executeTask(
-                        taskname,
-                        domain,
-                        body,
-                        getConnectionContext(),
-                        false,
-                        params);
+        if (true) {
+            final ServerActionParameter[] newParams =
+                new ServerActionParameter[((params != null) ? (params.length + 1) : 1)];
+
+            if (params != null) {
+                for (int i = 0; i < params.length; ++i) {
+                    newParams[i] = params[i];
+                }
+            }
+
+            newParams[((params != null) ? params.length : 0)] = new ServerActionParameter(
+                    StartAsyncTaskAction.Parameter.TASKNAME.name(),
+                    taskname);
+
+            final String uuid = (String)SessionManager.getProxy()
+                        .executeTask(
+                                StartAsyncTaskAction.TASK_NAME,
+                                domain,
+                                body,
+                                getConnectionContext(),
+                                false,
+                                newParams);
+
+            Integer progress = 0;
+
+            do {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    // nothing to do
+                }
+
+                progress = (Integer)SessionManager.getProxy()
+                            .executeTask(
+                                    GetAsyncTaskProgressAction.TASK_NAME,
+                                    domain,
+                                    body,
+                                    getConnectionContext(),
+                                    false,
+                                    new ServerActionParameter(GetAsyncTaskProgressAction.Parameter.UUID.name(), uuid));
+            } while (progress != 100);
+
+            ret = SessionManager.getProxy()
+                        .executeTask(
+                                GetAsyncTaskResultAction.TASK_NAME,
+                                domain,
+                                body,
+                                getConnectionContext(),
+                                false,
+                                new ServerActionParameter(GetAsyncTaskProgressAction.Parameter.UUID.name(), uuid));
+        } else {
+            ret = SessionManager.getProxy().executeTask(
+                    taskname,
+                    domain,
+                    body,
+                    getConnectionContext(),
+                    false,
+                    params);
+        }
 
         if (ret instanceof Exception) {
             final Exception ex = (Exception)ret;

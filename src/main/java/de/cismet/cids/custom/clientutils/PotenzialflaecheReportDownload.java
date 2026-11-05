@@ -22,7 +22,10 @@ import de.cismet.cids.custom.wunda_blau.search.actions.PotenzialflaecheReportSer
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.server.actions.GetAsyncTaskProgressAction;
+import de.cismet.cids.server.actions.GetAsyncTaskResultAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.actions.StartAsyncTaskAction;
 
 import de.cismet.cids.utils.serverresources.PropertiesServerResource;
 
@@ -205,18 +208,83 @@ public class PotenzialflaecheReportDownload extends AbstractSecresDownload {
                 isZip() ? PotenzialflaecheReportServerAction.ResultType.ZIP
                         : PotenzialflaecheReportServerAction.ResultType.PDF));
 
-        final Object ret = SessionManager.getProxy()
-                    .executeTask(
-                        PotenzialflaecheReportServerAction.TASK_NAME,
-                        "WUNDA_BLAU",
-                        null,
-                        getConnectionContext(),
-                        params.toArray(new ServerActionParameter[0]));
+        final Object ret = asyncDownload(params.toArray(new ServerActionParameter[0]),
+                PotenzialflaecheReportServerAction.TASK_NAME);
+
+//        final Object ret = SessionManager.getProxy()
+//                    .executeTask(
+//                        PotenzialflaecheReportServerAction.TASK_NAME,
+//                        "WUNDA_BLAU",
+//                        null,
+//                        getConnectionContext(),
+//                        params.toArray(new ServerActionParameter[0]));
         if (ret instanceof Exception) {
             final Exception ex = (Exception)ret;
             throw ex;
         }
         return (String)ret;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   params    DOCUMENT ME!
+     * @param   taskname  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private Object asyncDownload(final ServerActionParameter[] params, final String taskname) throws Exception {
+        final ServerActionParameter[] newParams =
+            new ServerActionParameter[((params != null) ? (params.length + 1) : 1)];
+
+        if (params != null) {
+            for (int i = 0; i < params.length; ++i) {
+                newParams[i] = params[i];
+            }
+        }
+
+        newParams[((params != null) ? params.length : 0)] = new ServerActionParameter(
+                StartAsyncTaskAction.Parameter.TASKNAME.name(),
+                taskname);
+
+        final String uuid = (String)SessionManager.getProxy()
+                    .executeTask(
+                            StartAsyncTaskAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            (Object)null,
+                            getConnectionContext(),
+                            false,
+                            newParams);
+
+        Integer progress = 0;
+
+        do {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // nothing to do
+            }
+
+            progress = (Integer)SessionManager.getProxy()
+                        .executeTask(
+                                GetAsyncTaskProgressAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                (Object)null,
+                                getConnectionContext(),
+                                false,
+                                new ServerActionParameter(GetAsyncTaskProgressAction.Parameter.UUID.name(), uuid));
+        } while (progress != 100);
+
+        return SessionManager.getProxy()
+                    .executeTask(
+                        GetAsyncTaskResultAction.TASK_NAME,
+                        "WUNDA_BLAU",
+                        (Object)null,
+                        getConnectionContext(),
+                        false,
+                        new ServerActionParameter(GetAsyncTaskProgressAction.Parameter.UUID.name(), uuid));
     }
 
     @Override

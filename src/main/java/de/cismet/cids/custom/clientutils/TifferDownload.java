@@ -25,7 +25,10 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
 import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 
+import de.cismet.cids.server.actions.GetAsyncTaskProgressAction;
+import de.cismet.cids.server.actions.GetAsyncTaskResultAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
+import de.cismet.cids.server.actions.StartAsyncTaskAction;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
@@ -137,19 +140,31 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
                 blickrichtung);
 
         try {
-            final byte[] result = (byte[])SessionManager.getProxy()
-                        .executeTask(
-                                TifferAction.ACTION_NAME,
-                                "WUNDA_BLAU",
-                                (Object)null,
-                                getConnectionContext(),
-                                paramNummer,
-                                paramScale,
-                                paramFormat,
-                                paramSubdir,
-                                paramArt,
-                                paramJahr,
-                                paramBlickrichtung);
+            final ServerActionParameter[] params = new ServerActionParameter[7];
+
+            params[0] = paramNummer;
+            params[1] = paramScale;
+            params[2] = paramFormat;
+            params[3] = paramSubdir;
+            params[4] = paramArt;
+            params[5] = paramJahr;
+            params[6] = paramBlickrichtung;
+
+            final byte[] result = (byte[])asyncDownload(params, TifferAction.ACTION_NAME);
+
+//            final byte[] result = (byte[])SessionManager.getProxy()
+//                        .executeTask(
+//                                TifferAction.ACTION_NAME,
+//                                "WUNDA_BLAU",
+//                                (Object)null,
+//                                getConnectionContext(),
+//                                paramNummer,
+//                                paramScale,
+//                                paramFormat,
+//                                paramSubdir,
+//                                paramArt,
+//                                paramJahr,
+//                                paramBlickrichtung);
             if (result != null) {
                 final RenderedImage image = ImageIO.read(
                         new ByteArrayInputStream(result));
@@ -170,6 +185,68 @@ public class TifferDownload extends AbstractDownload implements ConnectionContex
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   params    DOCUMENT ME!
+     * @param   taskname  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private Object asyncDownload(final ServerActionParameter[] params, final String taskname) throws Exception {
+        final ServerActionParameter[] newParams =
+            new ServerActionParameter[((params != null) ? (params.length + 1) : 1)];
+
+        if (params != null) {
+            for (int i = 0; i < params.length; ++i) {
+                newParams[i] = params[i];
+            }
+        }
+
+        newParams[((params != null) ? params.length : 0)] = new ServerActionParameter(
+                StartAsyncTaskAction.Parameter.TASKNAME.name(),
+                taskname);
+
+        final String uuid = (String)SessionManager.getProxy()
+                    .executeTask(
+                            StartAsyncTaskAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            (Object)null,
+                            getConnectionContext(),
+                            false,
+                            newParams);
+
+        Integer progress = 0;
+
+        do {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // nothing to do
+            }
+
+            progress = (Integer)SessionManager.getProxy()
+                        .executeTask(
+                                GetAsyncTaskProgressAction.TASK_NAME,
+                                "WUNDA_BLAU",
+                                (Object)null,
+                                getConnectionContext(),
+                                false,
+                                new ServerActionParameter(GetAsyncTaskProgressAction.Parameter.UUID.name(), uuid));
+        } while (progress != 100);
+
+        return SessionManager.getProxy()
+                    .executeTask(
+                        GetAsyncTaskResultAction.TASK_NAME,
+                        "WUNDA_BLAU",
+                        (Object)null,
+                        getConnectionContext(),
+                        false,
+                        new ServerActionParameter(GetAsyncTaskProgressAction.Parameter.UUID.name(), uuid));
     }
 
     @Override
