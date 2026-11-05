@@ -614,6 +614,7 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
                 null);
         JXErrorPane.showDialog(parent, ei);
     }
+
     @Override
     public void editorClosed(final EditorClosedEvent event) {
         if (EditorSaveStatus.SAVE_SUCCESS == event.getStatus()) {
@@ -688,21 +689,49 @@ public class SimpleWebDavPanel extends javax.swing.JPanel implements CidsBeanSto
         @Override
         protected Collection<CidsBean> doInBackground() throws Exception {
             final Collection<CidsBean> newBeans = new ArrayList<>();
+
             for (final File dokument : dokumente) {
-                webdavHelper.uploadFileToWebDAV(dokument.getName(),
-                    dokument,
-                    SimpleWebDavPanel.this,
-                    getConnectionContext());
+                final String webDavName = getFreeWebDavName(dokument.getName());
+
+                webdavHelper.uploadFileToWebDAV(webDavName, dokument, SimpleWebDavPanel.this, getConnectionContext());
 
                 final CidsBean newDokument = CidsBean.createNewCidsBeanFromTableName(
                         "WUNDA_BLAU",
                         bildClassName,
                         getConnectionContext());
-                newDokument.setProperty(nameProp, dokument.getName());
+
+                newDokument.setProperty(nameProp, webDavName);
                 newDokument.setProperty("messstelle", cidsBean.getProperty("id"));
                 newBeans.add(newDokument);
             }
             return newBeans;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   name  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
+        private String getFreeWebDavName(final String name) throws Exception {
+            if (!webdavHelper.checkFileOnWebDAV(name, getConnectionContext())) {
+                return name;
+            }
+
+            final int extIndex = name.lastIndexOf('.');
+            final String base = (extIndex >= 0) ? name.substring(0, extIndex) : name;
+            final String ext = (extIndex >= 0) ? name.substring(extIndex) : "";
+            int i = 1;
+            String candidate;
+
+            do {
+                candidate = base + "_" + i++ + ext;
+            } while (webdavHelper.checkFileOnWebDAV(candidate, getConnectionContext()));
+
+            return candidate;
         }
 
         @Override
