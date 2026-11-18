@@ -27,14 +27,11 @@ import java.util.stream.Collectors;
 import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.TreppeEditor;
+import de.cismet.cids.custom.wunda_blau.search.actions.WundaBlauWebDavTunnelAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.connectioncontext.ConnectionContext;
-
-import de.cismet.netutil.ProxyHandler;
-
-import de.cismet.tools.PasswordEncrypter;
 
 /**
  * DOCUMENT ME!
@@ -52,20 +49,8 @@ public class TreppenReportBean extends ReportBeanWithMapAndTwoWebDavImages {
 
     static {
         final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
-        String pass = webDavBundle.getString("password");
-
-        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-            pass = PasswordEncrypter.decryptString(pass);
-        }
-
-        final String webDavPassword = pass;
-        final String webDavUser = webDavBundle.getString("user");
-        WEBDAV_HELPER = new WebDavTunnelHelper(
-                "WUNDA_BLAU",
-                ProxyHandler.getInstance().getProxy(),
-                webDavUser,
-                webDavPassword,
-                false);
+        // the credentials are only known by the server
+        WEBDAV_HELPER = new WebDavTunnelHelper("WUNDA_BLAU", WundaBlauWebDavTunnelAction.TASK_NAME);
         WEBDAV_DIRECTORY = webDavBundle.getString("url_treppen");
     }
 

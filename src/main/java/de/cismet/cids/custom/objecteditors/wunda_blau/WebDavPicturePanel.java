@@ -102,6 +102,7 @@ import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
+import de.cismet.cids.custom.wunda_blau.search.actions.WundaBlauWebDavTunnelAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
@@ -124,11 +125,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
 
-import de.cismet.netutil.Proxy;
-import de.cismet.netutil.ProxyHandler;
-
 import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.PasswordEncrypter;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
@@ -572,20 +569,10 @@ public class WebDavPicturePanel extends javax.swing.JPanel implements CidsBeanSt
         WebDavTunnelHelper webdavHelper = null;
         try {
             final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-            String pass = bundle.getString("password");
-
-            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-                pass = PasswordEncrypter.decryptString(pass);
-            }
-            final String user = bundle.getString("user");
             webdavDirectory = bundle.getString(urlProp);
 
-            webdavHelper = new WebDavTunnelHelper(
-                    "WUNDA_BLAU",
-                    ProxyHandler.getInstance().getProxy(),
-                    user,
-                    pass,
-                    false);
+            // the credentials are only known by the server
+            webdavHelper = new WebDavTunnelHelper("WUNDA_BLAU", WundaBlauWebDavTunnelAction.TASK_NAME);
         } catch (final Exception ex) {
             final String message = "Fehler beim Initialisieren der Bilderablage.";
             LOG.error(message, ex);

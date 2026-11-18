@@ -50,15 +50,6 @@ public class OrbitviewerProperties extends Properties {
      *
      * @return  DOCUMENT ME!
      */
-    public String getOpenChannelsSecret() {
-        return getProperty("openChannelsSecret");
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     public String getOpenChannelTimeout() {
         return getProperty("openChannelTimeout");
     }
