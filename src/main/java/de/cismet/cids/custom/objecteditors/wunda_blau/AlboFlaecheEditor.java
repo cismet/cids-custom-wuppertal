@@ -1453,11 +1453,19 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         public void initializeBean(final CidsBean beanToInit) throws Exception {
             super.initializeBean(beanToInit);
 
-            EventQueue.invokeLater(new Thread("") {
+            // This initializer was created by the editor of the copied object, so AlboFlaecheEditor.this is
+            // the (usually already disposed) source editor. The editor that displays beanToInit has to be
+            // refreshed instead. Editable AlboFlaecheEditor instances register themselves as listener of their
+            // bean, so the target editor can be found there.
+            EventQueue.invokeLater(new Runnable() {
 
                     @Override
                     public void run() {
-                        setCidsBean(beanToInit);
+                        for (final PropertyChangeListener listener : beanToInit.getPropertyChangeListeners()) {
+                            if (listener instanceof AlboFlaecheEditor) {
+                                ((AlboFlaecheEditor)listener).setCidsBean(beanToInit);
+                            }
+                        }
                     }
                 });
         }
@@ -1493,7 +1501,9 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
         protected void processComplexProperty(final CidsBean beanToInit,
                 final String propertyName,
                 final CidsBean complexValueToProcess) throws Exception {
-            if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(GEOM_TABLE_NAME)) {
+            final String tableName = complexValueToProcess.getMetaObject().getMetaClass().getTableName();
+
+            if (tableName.equalsIgnoreCase(GEOM_TABLE_NAME)) {
                 final CidsBean geomBean = complexValueToProcess.getMetaObject()
                             .getMetaClass()
                             .getEmptyInstance(getConnectionContext())
@@ -1506,11 +1516,11 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
 
                 geomBean.setProperty(GEOM_FIELD_NAME, g);
                 beanToInit.setProperty(propertyName, geomBean);
-            } else if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+            } else if (tableName.equalsIgnoreCase(
                             "albo_massnahmen")) {
                 final CidsBean maBean = CidsBeanSupport.cloneBean(complexValueToProcess, connectionContext);
                 beanToInit.setProperty(propertyName, maBean);
-            } else if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+            } else if (tableName.equalsIgnoreCase(
                             "albo_altablagerung")) {
                 final CidsBean abBean = CidsBeanSupport.cloneBean(complexValueToProcess, connectionContext);
                 final List<CidsBean> beans = complexValueToProcess.getBeanCollectionProperty(
@@ -1525,6 +1535,11 @@ public class AlboFlaecheEditor extends JPanel implements CidsBeanRenderer,
                 }
 
                 beanToInit.setProperty(propertyName, abBean);
+            } else if (tableName.equalsIgnoreCase("albo_rcl")
+                        || tableName.equalsIgnoreCase("albo_stoffliche")) {
+                beanToInit.setProperty(
+                    propertyName,
+                    CidsBeanSupport.cloneBean(complexValueToProcess, connectionContext));
             } else {
                 // flat copy
                 beanToInit.setProperty(propertyName, complexValueToProcess);

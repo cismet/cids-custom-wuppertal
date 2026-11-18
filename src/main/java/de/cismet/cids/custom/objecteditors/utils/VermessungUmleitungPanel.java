@@ -53,6 +53,7 @@ import de.cismet.cids.client.tools.WebDavTunnelHelper;
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel.MODE;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungPictureFinderClientUtils;
+import de.cismet.cids.custom.wunda_blau.search.actions.WundaBlauWebDavTunnelAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -62,10 +63,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import de.cismet.netutil.ProxyHandler;
-
-import de.cismet.tools.PasswordEncrypter;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -86,8 +83,6 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     private static final String SEP = "/";
     private static String VERMESSUNG_DIRECTORY;
     private static String GRENZNIEDERSCHRIFT_DIRECTORY;
-    private static String WEB_DAV_USER;
-    private static String WEB_DAV_PASSWORD;
     private static boolean initError = false;
 //    private static final String VERMESSUNG_PREFIX = "VR_";
     private static String GRENZNIEDERSCHRIFT_PREFIX = "GN_";
@@ -95,22 +90,12 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     static {
         try {
             final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-            String pass = bundle.getString("password");
-
-            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-                pass = PasswordEncrypter.decryptString(pass);
-            }
-
-            WEB_DAV_PASSWORD = pass;
-            WEB_DAV_USER = bundle.getString("user");
             VERMESSUNG_DIRECTORY = bundle.getString("url_vermessungsrisse");
             GRENZNIEDERSCHRIFT_DIRECTORY = bundle.getString("url_grenzniederschriften");
         } catch (Exception ex) {
             LOG.error(
                 "Could not read WebDav properties from property file. The umleitungsmechanism for Vermessungrisse will not work",
                 ex);
-            WEB_DAV_PASSWORD = "";
-            WEB_DAV_USER = "";
             VERMESSUNG_DIRECTORY = "";
             GRENZNIEDERSCHRIFT_DIRECTORY = "";
             initError = true;
@@ -221,12 +206,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         jXBusyLabel1.setSize(16, 16);
         tfName.getDocument().addDocumentListener(this);
         if (!initError) {
-            webDavHelper = new WebDavTunnelHelper(
-                    "WUNDA_BLAU",
-                    ProxyHandler.getInstance().getProxy(),
-                    WEB_DAV_USER,
-                    WEB_DAV_PASSWORD,
-                    false);
+            // the credentials are only known by the server
+            webDavHelper = new WebDavTunnelHelper("WUNDA_BLAU", WundaBlauWebDavTunnelAction.TASK_NAME);
         }
         new CidsBeanDropTarget(this);
         new CidsBeanDropTarget(tfName);

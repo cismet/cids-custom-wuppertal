@@ -39,9 +39,6 @@ public final class VzkatProperties extends Properties {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final String webdavUploadUrl;
-    private final String webdavUploadUsername;
-    private final String webdavUploadPassword;
     private final String ovOverviewUrl;
 
     //~ Constructors -----------------------------------------------------------
@@ -54,9 +51,6 @@ public final class VzkatProperties extends Properties {
     private VzkatProperties(final Properties properties) {
         super(properties);
 
-        webdavUploadUrl = properties.getProperty("WEBDAV_UPLOAD_URL");
-        webdavUploadUsername = properties.getProperty("WEBDAV_UPLOAD_USERNAME");
-        webdavUploadPassword = properties.getProperty("WEBDAV_UPLOAD_PASSWORD");
         ovOverviewUrl = properties.getProperty("OV_OVERVIEW_URL");
     }
 

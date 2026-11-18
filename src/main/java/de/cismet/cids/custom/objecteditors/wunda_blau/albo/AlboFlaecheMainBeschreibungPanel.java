@@ -768,6 +768,7 @@ public class AlboFlaecheMainBeschreibungPanel extends AbstractAlboFlaechePanel {
                                         getConnectionContext()));
                             }
                         }
+                        break;
                         case "stoffliche": {
                             if (cidsBean.getProperty("fk_stoffliche") == null) {
                                 cidsBean.setProperty(

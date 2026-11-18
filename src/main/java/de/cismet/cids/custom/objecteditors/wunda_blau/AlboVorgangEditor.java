@@ -31,8 +31,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import org.jfree.util.Log;
 
-import org.openide.util.Exceptions;
-
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
@@ -43,7 +41,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EventObject;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
@@ -70,7 +70,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSe
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultBindableComboboxCellEditor;
-import de.cismet.cids.editors.DefaultBindableScrollableComboBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -231,6 +230,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
@@ -323,6 +323,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
         jTextField3 = new javax.swing.JTextField();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -911,6 +912,12 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel7.add(jLabel3, gridBagConstraints);
 
+        jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane4.setViewportBorder(null);
+        jScrollPane4.setName("jScrollPane4"); // NOI18N
+        jScrollPane4.setOpaque(false);
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(100, 45));
+
         jTextField3.setName("jTextField3"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -921,13 +928,15 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        jScrollPane4.setViewportView(jTextField3);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel7.add(jTextField3, gridBagConstraints);
+        jPanel7.add(jScrollPane4, gridBagConstraints);
 
         filler2.setName("filler2"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1018,6 +1027,7 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(452, 45));
 
         jXTable1.setModel(new VorgangFlaecheTableModel());
         jXTable1.setName("jXTable1"); // NOI18N
@@ -1033,7 +1043,6 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jScrollPane3, gridBagConstraints);
 
@@ -1722,6 +1731,15 @@ public class AlboVorgangEditor extends javax.swing.JPanel implements CidsBeanRen
         for (final CidsBean bean : new ArrayList<>(origBeans)) {
             if (!arrFlaechen.contains(bean)
                         && ((bean.getProperty("loeschen") == null) || !(Boolean)bean.getProperty("loeschen"))) {
+                origBeans.remove(bean);
+            }
+        }
+
+        // remove multiple assignments of the same flaeche
+        final Set<CidsBean> assignedBeans = new HashSet<>();
+
+        for (final CidsBean bean : new ArrayList<>(origBeans)) {
+            if (!assignedBeans.add(bean)) {
                 origBeans.remove(bean);
             }
         }
