@@ -68,6 +68,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.MauernProperties;
 import de.cismet.cids.custom.utils.WundaBlauServerResources;
+import de.cismet.cids.custom.wunda_blau.search.actions.MauernWebDavTunnelAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -82,10 +83,7 @@ import de.cismet.cismap.commons.gui.RasterfariDocumentLoaderPanel;
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
-import de.cismet.netutil.ProxyHandler;
-
 import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.PasswordEncrypter;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.Download;
@@ -261,19 +259,8 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
             properties = (MauernProperties)ServerResourcesLoaderClient.getInstance()
                         .get((PropertiesServerResource)WundaBlauServerResources.MAUERN_PROPERTIES.getValue(), true);
 
-            String pass = properties.getWebdavPassword();
-
-            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-                pass = PasswordEncrypter.decryptString(pass);
-            }
-
-            final String user = properties.getWebdavUser();
-            webdavHelper = new WebDavTunnelHelper(
-                    "WUNDA_BLAU",
-                    ProxyHandler.getInstance().getProxy(),
-                    user,
-                    pass,
-                    false);
+            // the webdav url and the credentials are only known by the server
+            webdavHelper = new WebDavTunnelHelper("WUNDA_BLAU", MauernWebDavTunnelAction.TASK_NAME);
         } catch (final Exception ex) {
             final String message = "Fehler beim Initialisieren der Bilderablage.";
             LOG.error(message, ex);
@@ -307,10 +294,8 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
     private void deleteDocumentBeans(final Collection<CidsBean> documentBeans) {
         for (final CidsBean deleteBean : documentBeans) {
             final String fileName = (String)deleteBean.getProperty("url_object_name");
-            final String webdavUrl = properties.getWebdavUrl();
             try {
-                webdavHelper.deleteFileFromWebDAV(fileName,
-                    webdavUrl, getConnectionContext());
+                webdavHelper.deleteFileFromWebDAV(fileName, getConnectionContext());
                 deleteBean.delete();
             } catch (final Exception ex) {
                 LOG.error(ex, ex);
@@ -1369,11 +1354,9 @@ public class MauerDokumenteEditor extends javax.swing.JPanel implements Rasterfa
                 final String filename = ((mauerNummer == null)
                         ? "____" : new DecimalFormat("#0000").format(Integer.parseInt(mauerNummer))) + "-"
                             + RandomStringUtils.randomAlphanumeric(8) + "_" + imageFile.getName();
-                final String webdavUrl = properties.getWebdavUrl();
                 webdavHelper.uploadFileToWebDAV(
                     filename,
                     imageFile,
-                    webdavUrl,
                     MauerDokumenteEditor.this,
                     getConnectionContext());
 

@@ -22,6 +22,8 @@ import de.cismet.cids.custom.utils.WundaBlauServerResources;
 
 import de.cismet.cids.server.actions.GetServerResourceServerAction;
 
+import de.cismet.cids.utils.PasswordUtils;
+
 import de.cismet.connectioncontext.ConnectionContext;
 
 /**
@@ -131,7 +133,7 @@ public class VCMProperties extends Properties {
      * @return  DOCUMENT ME!
      */
     public String getPassword() {
-        return getProperty(PROP_PASSWORD);
+        return PasswordUtils.decrypt(getProperty(PROP_PASSWORD));
     }
 
     /**

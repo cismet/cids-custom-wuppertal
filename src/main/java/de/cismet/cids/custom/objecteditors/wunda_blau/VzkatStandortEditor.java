@@ -80,6 +80,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.VzkatProperties;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.ClientAlkisConf;
 import de.cismet.cids.custom.orbit.OrbitControlFeature;
+import de.cismet.cids.custom.wunda_blau.search.actions.VzkatWebDavTunnelAction;
 import de.cismet.cids.custom.wunda_blau.search.server.StrAdrStrasseLightweightSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VzkatSchilderSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VzkatStandortNextSchluesselServerSearch;
@@ -110,7 +111,6 @@ import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
 
 import de.cismet.netutil.Proxy;
-import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.security.WebAccessManager;
 
@@ -196,12 +196,10 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
 
     //~ Instance fields --------------------------------------------------------
 
+    // the webdav url and the credentials are only known by the server
     final WebDavTunnelHelper webdavHelper = new WebDavTunnelHelper(
             "WUNDA_BLAU",
-            ProxyHandler.getInstance().getProxy(),
-            VzkatProperties.getInstance().getWebdavUploadUsername(),
-            VzkatProperties.getInstance().getWebdavUploadPassword(),
-            false);
+            VzkatWebDavTunnelAction.TASK_NAME);
 
     boolean refreshingSchildPanels = false;
 
@@ -1937,8 +1935,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                         protected Image doInBackground() throws Exception {
                             final InputStream is = webdavHelper.getFileFromWebDAV(
                                     origFileName,
-                                    VzkatProperties.getInstance().getWebdavUploadUrl()
-                                            + "/",
                                     getConnectionContext());
                             return ImageIO.read(is);
                         }
@@ -2497,8 +2493,6 @@ public class VzkatStandortEditor extends javax.swing.JPanel implements CidsBeanR
                                 webdavHelper.uploadFileToWebDAV(
                                     fileName,
                                     is,
-                                    VzkatProperties.getInstance().getWebdavUploadUrl()
-                                            + "/",
                                     VzkatStandortEditor.this,
                                     getConnectionContext());
                             }

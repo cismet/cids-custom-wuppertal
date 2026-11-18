@@ -43,14 +43,10 @@ import de.cismet.cids.client.tools.WebDavTunnelHelper;
 
 import de.cismet.cids.custom.objectrenderer.utils.WebAccessBaulastenPictureFinder;
 import de.cismet.cids.custom.utils.alkis.BaulastenPictureFinder;
+import de.cismet.cids.custom.wunda_blau.search.actions.WundaBlauWebDavTunnelAction;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextProvider;
-
-import de.cismet.netutil.Proxy;
-import de.cismet.netutil.ProxyHandler;
-
-import de.cismet.tools.PasswordEncrypter;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -73,28 +69,17 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     private static final String LAGEPLAN_ENDUNG = "p";
     private static final String TEXTBLATT_ENDUNG = "b";
     private static final String BAULASTEN_DIRECTORY;
-    private static final String WEB_DAV_USER;
-    private static final String WEB_DAV_PASSWORD;
 
     static {
-        String user = "";
-        String pass = "";
         String dir = "";
 
         try {
             final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-            pass = bundle.getString("password");
-            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-                pass = PasswordEncrypter.decryptString(pass);
-            }
-            user = bundle.getString("user");
             dir = bundle.getString("url_baulasten");
         } catch (final Exception ex) {
             LOG.warn("could not load props from bundle", ex);
         }
 
-        WEB_DAV_PASSWORD = pass;
-        WEB_DAV_USER = user;
         BAULASTEN_DIRECTORY = dir;
     }
 
@@ -132,12 +117,10 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                 }
             });
     private long lastChange = 0;
+    // the credentials are only known by the server
     private final WebDavTunnelHelper webDavHelper = new WebDavTunnelHelper(
             "WUNDA_BLAU",
-            ProxyHandler.getInstance().getProxy(),
-            WEB_DAV_USER,
-            WEB_DAV_PASSWORD,
-            false);
+            WundaBlauWebDavTunnelAction.TASK_NAME);
     private boolean firstDocumentChange = true;
     private String escapeText;
 
